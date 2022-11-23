@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "skipLibCheck": "true",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "batch"]
+}

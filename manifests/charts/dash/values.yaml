@@ -1,0 +1,151 @@
+image:
+  registry: m9sweeper
+  repository: dash
+  tag: latest
+  pullPolicy: Always
+  credentials:
+    create: false
+    username: ""
+    password: ""
+    secretRef: ""
+
+kubesec:
+  registry: m9sweeper
+  repository: kubesec
+  tag: latest
+  pullPolicy: Always
+  credentials:
+    create: false
+    username: ""
+    password: ""
+    secretRef: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+service:
+  type: ClusterIP
+  port: 3000
+
+prometheusOperator:
+  enabled: true
+
+replicaCount: 1
+
+init:
+  clusterGroupName: ""
+  clusterName: ""
+  clusterApiKey: ""
+  superAdminEmail: ""
+  superAdminPassword: ""
+  licenseKey: ""
+  instanceKey: ""
+  namespaceExceptions:
+    - kube-system
+  docker:
+    registries:
+      - name: Dockerhub
+        hostname: docker.io
+        aliases:
+          - index.docker.io
+        login_required: false
+
+# install validating webhook by default
+validatingWebhook:
+  enabled: true
+
+###########
+# Ingress #
+###########
+# Kubernetes native ingress and Istio are supported, only enable one or neither of them.
+# If you enable neither you will need to port-forward to dash
+ingress:
+  hosts:
+    # Add lists of hosts
+    # - example.local
+    - "localhost"
+  path: /
+
+  # Deploys a Kubernetes Ingress resource, defaults to nginx ingress controller.
+  # If networking.k8s.io/v1 is available in your cluster m9sweeper will use that,
+  # otherwise fall back to networking.k8s.io/v1
+  k8sIngress:
+    enabled: false
+    annotations:
+      # kubernetes.io/ingress.class: gce
+      kubernetes.io/ingress.class: nginx
+      # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      # kubernetes.io/ingress.allow-http: false
+      # kubernetes.io/tls-acme: true
+    tls: []
+      # Secrets must be manually created in the namespace.
+      # - secretName: dash-certificate
+      #   hosts:
+      #     - example.local
+
+############
+# CronJobs #
+############
+# Cluster scraping is done with CronJobs, enable/disable here
+clusterScraping:
+  # Scrapes current running images in all clusters, and queues any new images to be scanned by Trawler
+  # Set schedule to scrape more often for more precise metrics
+  scheduled:
+    enabled: true
+    schedule: "30 * * * *" # every 30 min
+  # Scrapes history of images deployed for dashboards, set schedule to any time, but only once per day
+  history:
+    enabled: true
+    schedule: "1 0 * * *" # every day 12.01 am
+  # Calculating gatekeeper exception block
+  gatekeeperExceptionBlock:
+    enabled: true
+    schedule: "30 * * * *" # every 30 min
+  # Updating exception status
+  updateExceptionStatus:
+    enabled: true
+    schedule: "1 0 * * *" # every day 12.01 am
+
+################
+# Email Config #
+################
+email:
+  # Email method options are SMTP or SENDGRID
+  method: SMTP
+  # Required for SMTP method
+  smtp:
+    host: ""
+    port: "465"
+    tlsRequired: true
+    user: ""
+    password: ""
+  # Required for SENDGRID method
+  sendgridApiKey: ""
+  senderEmail: ""
+  # Enable/disable system error email notifications
+  enableSystemErrorEmail: false
+  # The email address to send system error emails to
+  systemErrorMailTo: ""
+
+################
+# Extra Config #
+################
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Addtional key/value pairs to be included in Dash's environment,
+# which gets loaded into env vars
+extraConfigVars: {}
+
+extraSecretVars: {}

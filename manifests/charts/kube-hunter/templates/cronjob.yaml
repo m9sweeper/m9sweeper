@@ -1,0 +1,84 @@
+{{- if .Values.cronjob.enabled }}
+---
+{{- if .Capabilities.APIVersions.Has "batch/v1/CronJob" -}}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: {{ template "kube-hunter.fullname" . }}
+  labels:
+    app: {{ template "kube-hunter.name" . }}
+    chart: {{ template "kube-hunter.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+{{ toYaml .Values.cronjob.annotations | indent 4 }}
+spec:
+  schedule: "{{ .Values.cronjob.schedule }}"
+  {{- with .Values.cronjob.concurrencyPolicy }}
+  concurrencyPolicy: {{ . }}
+  {{- end }}
+  {{- with .Values.cronjob.failedJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.cronjob.successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ . }}
+  {{- end }}
+  jobTemplate:
+    metadata:
+      labels:
+        app: {{ template "kube-hunter.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ template "kube-hunter.name" . }}
+            release: {{ .Release.Name }}
+          annotations:
+{{ toYaml .Values.pod.annotations | indent 12 }}
+        spec:
+          serviceAccount: {{ include "kube-hunter.name" . }}-sa
+{{- if .Values.securityContext.enabled }}
+          securityContext:
+            fsGroup: {{ .Values.securityContext.fsGroup }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+{{- end }}
+          restartPolicy: Never
+{{- if .Values.priorityClassName }}
+          priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command: ["kube-hunter"]
+              args:
+                - "--pod"
+                - "--report=json"
+                - "--dispatch=http"
+                {{- with .Values.customArguments }}
+{{ toYaml . | indent 16 }}
+                {{- end }}
+              env:
+              - name: KUBEHUNTER_HTTP_DISPATCH_URL
+                value: "{{ .Values.dispatchUrl }}"
+              resources:
+{{ toYaml .Values.resources | indent 16 }}
+    {{- with .Values.nodeSelector }}
+          nodeSelector:
+{{ toYaml . | indent 12 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+          affinity:
+{{ toYaml . | indent 12 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+          tolerations:
+{{ toYaml . | indent 12 }}:
+{{- end }}
+{{- end }}

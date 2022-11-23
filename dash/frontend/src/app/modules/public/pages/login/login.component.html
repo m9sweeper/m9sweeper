@@ -1,0 +1,69 @@
+<div class="login-container">
+  <div class="login-form-card" id="login-form-loader">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <img class="site-logo" src="assets/images/m9sweeper-logo.png" alt="m9sweeper"/>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="fill">
+            <mat-label>Authentication Method</mat-label>
+            <mat-select name="auth-method-selector"
+                        id="authenticationmethod"
+                        (selectionChange)="onInSiteAuthMethodSelection($event)"
+                        [(ngModel)]="selectedInSiteCredentialAuthenticationMethod"
+                        [ngModelOptions]="{standalone: true}">
+              <mat-option [value]="iscam" *ngFor="let iscam of inSiteCredentialAuthenticationMethods">{{iscam.label}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH'">
+            <mat-form-field appearance="fill">
+              <mat-label>Email</mat-label>
+              <input id="email" matInput type="email" formControlName="username" [autocomplete]="'username-local-'+randomFromNamePostfix">
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LDAP'">
+            <mat-form-field appearance="fill">
+              <mat-label>User Name</mat-label>
+              <input id="username" matInput type="text" formControlName="username" [autocomplete]="'username-ldap-'+randomFromNamePostfix">
+            </mat-form-field>
+          </ng-container>
+          <mat-form-field appearance="fill" *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH' || selectedInSiteCredentialAuthenticationMethod?.type === 'LDAP'">
+            <mat-label>Password</mat-label>
+            <input id="password" matInput type="password" formControlName="password">
+          </mat-form-field>
+          <div class="form-action-button" *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH' || selectedInSiteCredentialAuthenticationMethod?.type === 'LDAP'">
+            <button id="submit'" mat-raised-button type="submit">Login</button>
+          </div>
+          <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH'">
+            <div class="reset-password">
+              Forgot your password? Click <a [routerLink]="['/public','reset-password']">here</a> to reset it.
+            </div>
+          </ng-container>
+        </form>
+        <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'GOOGLE'">
+          <mat-card-actions>
+              <div class="external-auth-buttons-holder">
+                <a mat-raised-button color="accent"
+                   [href]="selectedInSiteCredentialAuthenticationMethod.requestHandlerPath">
+                  {{selectedInSiteCredentialAuthenticationMethod.label}}
+                </a>
+              </div>
+          </mat-card-actions>
+        </ng-container>
+        <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'OAUTH2'">
+          <mat-card-actions>
+            <div class="external-auth-buttons-holder">
+              <a mat-raised-button color="accent"
+                 [href]="selectedInSiteCredentialAuthenticationMethod.requestHandlerPath">
+                {{selectedInSiteCredentialAuthenticationMethod.label}}
+              </a>
+            </div>
+          </mat-card-actions>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

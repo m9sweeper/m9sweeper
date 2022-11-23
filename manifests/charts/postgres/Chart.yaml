@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: '11.10'
+description: PostgreSQL is an open-source object-relational database management system
+  (ORDBMS) emphasizing extensibility and technical standards compliance.
+home: https://www.postgresql.org/
+icon: https://en.wikipedia.org/wiki/PostgreSQL#/media/File:Postgresql_elephant.svg
+keywords:
+- postgresql
+- postgres
+- database
+maintainers:
+- name: m9sweeper Support
+  email: support@m9sweeper.io
+name: postgresql
+version: 0.0.0

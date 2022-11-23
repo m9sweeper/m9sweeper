@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: m9sweeper
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+{{- if .Values.image.credentials.create }}
+imagePullSecrets:
+- name: {{ .Chart.Name }}-registry-secret
+{{- else if ne .Values.image.credentials.secretRef "" }}
+imagePullSecrets:
+- name: {{ .Values.image.credentials.secretRef }}
+{{- end }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: m9sweeper
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces","pods","nodes"]
+    verbs: ["get","watch","list"]
+  - apiGroups: [ "" ]
+    resources: ["events"]
+    verbs: ["get","watch","list","create"]
+  - apiGroups: [ "constraints.gatekeeper.sh" ]
+    resources: ["*"]
+    verbs: ["get","watch","list","create","update","patch","delete"]
+  - apiGroups: [ "templates.gatekeeper.sh" ]
+    resources: ["constrainttemplates"]
+    verbs: ["get","watch","list","create","update","patch","delete"]
+  - apiGroups: [ "templates.gatekeeper.sh" ]
+    resources: ["constrainttemplates/finalizers"]
+    verbs: ["get","watch","list","create","update","patch","delete"]
+  - apiGroups: [ "templates.gatekeeper.sh" ]
+    resources: ["constrainttemplates/status"]
+    verbs: ["get","watch","list","create","update","patch","delete"]
+  - apiGroups: [ "apiregistration.k8s.io" ]
+    resources: [ "apiservices" ]
+    verbs: [ "get","watch","list" ]
+  - apiGroups: [ "admissionregistration.k8s.io" ]
+    resources: [ "validatingwebhookconfigurations" ]
+    verbs: [ "get", "watch", "list", "create", "update", "patch", "delete" ]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: m9sweeper
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: m9sweeper
+subjects:
+- kind: ServiceAccount
+  name: m9sweeper
+  namespace: {{ .Release.Namespace }}

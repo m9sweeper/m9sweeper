@@ -1,0 +1,154 @@
+<div class="vulnerability-container">
+  <div class="vulnerability-list page">
+    <div class="col-lg-4 col-xs-12 page-title">
+      <span>Running Vulnerabilities</span>
+    </div>
+    <div class="filter-card">
+      <mat-card>
+        <mat-card-header>
+          <div class="row filter-header">
+            <div class="col-xs-12 filter-header-title">
+              <h2>Report Settings</h2>
+            </div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="filter-content">
+            <form (ngSubmit)="rebuildWithFilters()" [formGroup]="filterForm">
+              <div class="row report-header">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Entries to preview</mat-label>
+                    <input matInput type="number" formControlName="limit">
+                  </mat-form-field>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Compliant</mat-label>
+                    <mat-select formControlName="isCompliant">
+                      <mat-option>--</mat-option>
+                      <mat-option [value]="true">Yes</mat-option>
+                      <mat-option [value]="false">No</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                  <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Enter a date</mat-label>
+                    <input matInput [matDatepicker]="dp3" disabled formControlName="date">
+                    <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+                    <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xs-12">
+                  <mat-form-field class="namespace-input" appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Namespaces</mat-label>
+                    <mat-select formControlName="namespaces"
+                                multiple>
+                      <mat-option *ngFor="let namespace of clusterNamespaces"
+                                  [value]="namespace">
+                        {{namespace}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row filter-button">
+                <button [disabled]="!filtersValid"
+                        mat-raised-button
+                        color="primary"
+                        type="submit">
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="vulnerability-card">
+      <mat-card>
+        <mat-card-header>
+          <div class="row report-header">
+            <div class="col-xs-9 vulnerability-count">
+              <h2>Displaying {{limit}} out of {{vulnerabilityCount}} vulnerabilities</h2>
+            </div>
+            <div class="col-xs-3 download-button">
+              <button (click)="downloadReport()"
+                      mat-raised-button
+                      color="primary"
+                      type="button">Download Report
+              </button>
+            </div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="vulnerability-table">
+            <mat-table [dataSource]="dataSource">
+              <ng-container matColumnDef="image" class="column-word-break">
+                <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.image}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="namespaces">
+                <mat-header-cell *matHeaderCellDef>Namespace(s)</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.namespaces}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="scanResults">
+                <mat-header-cell *matHeaderCellDef>Compliance</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.scanResults}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="lastScanned" class="column-word-break">
+                <mat-header-cell *matHeaderCellDef>Date Scanned</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.lastScanned | date: 'M/d/yyyy'}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalCritical" class="column-word-break">
+                <mat-header-cell *matHeaderCellDef>Critical</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalCritical}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalMajor">
+                <mat-header-cell *matHeaderCellDef>Major</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalMajor}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalMedium">
+                <mat-header-cell *matHeaderCellDef>Medium</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalMedium}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalLow">
+                <mat-header-cell *matHeaderCellDef>Low</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalLow}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalNegligible">
+                <mat-header-cell *matHeaderCellDef>Negligible</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalNegligible}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalFixableCritical" class="column-word-break">
+                <mat-header-cell *matHeaderCellDef>Critical Fixable</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableCritical}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalFixableMajor">
+                <mat-header-cell *matHeaderCellDef>Major Fixable</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableMajor}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalFixableMedium">
+                <mat-header-cell *matHeaderCellDef>Medium Fixable</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableMedium}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalFixableLow">
+                <mat-header-cell *matHeaderCellDef>Low Fixable</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableLow}}</mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="totalFixableNegligible">
+                <mat-header-cell *matHeaderCellDef>Negligible Fixable</mat-header-cell>
+                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableNegligible}}</mat-cell>
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

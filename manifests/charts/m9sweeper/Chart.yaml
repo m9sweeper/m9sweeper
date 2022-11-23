@@ -1,0 +1,34 @@
+apiVersion: v2
+name: m9sweeper
+version: 0.0.0
+kubeVersion: '>=1.16.0-0'
+description: "m9sweeper: a tool to secure your kubernetes cluster and images"
+type: application
+keywords:
+  - m9sweeper
+  - analysis
+  - docker
+  - image
+  - security
+  - vulnerability
+  - scanner
+home: "https://m9sweeper.io"
+dependencies:
+  - name: dash
+    dash_version: 0.0.0
+    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+  - name: trawler
+    trawler_version: 0.0.0
+    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+  - name: rabbitmq
+    rabbitmq_version: 0.0.0
+    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    condition: global.rabbitmq.enabled
+  - name: postgresql
+    postgres_version: 0.0.0
+    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    condition: global.postgres.enabled
+maintainers:
+  - name: m9sweeper Support Team
+    email: info@m9sweeper.io
+appVersion: 0.0.0

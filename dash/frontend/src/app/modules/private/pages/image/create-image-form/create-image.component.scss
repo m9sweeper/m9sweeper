@@ -1,0 +1,30 @@
+div {
+  &.image-cluster-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    form.image-form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+.create-registry {
+  float: right;
+  color: red;
+  a {
+    padding-left: 10px;
+  }
+}
+.create-image-form-container {
+  display: flex;
+}
+.menu_bar {
+  flex: 1;
+}

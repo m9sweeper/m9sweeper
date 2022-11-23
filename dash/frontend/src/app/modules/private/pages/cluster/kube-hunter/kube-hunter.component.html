@@ -1,0 +1,120 @@
+<div id="kube-hunter-container">
+  <div class="row page">KubeHunter</div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10">
+      <mat-card class="card-height">
+        <mat-card-header>
+          <mat-card-title>Penetration Test Status:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="text-style-red font-size-em" *ngIf="daysPassed > 10"> Report Outdated </p>
+              <p *ngIf="daysPassed < 10" class="font-size-em"> Report still valid</p>
+              <p class="text-style-red font-size-em" *ngIf="!allReportsForCluster"></p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10">
+      <mat-card class="card-height">
+        <mat-card-header>
+          <mat-card-title>Vulnerabilities in Last Run:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="last-result">
+          <table>
+            <tr>
+              <th>Low</th>
+              <th>Medium</th>
+              <th>High</th>
+            </tr>
+            <tr>
+              <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : ''}}</td>
+              <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : ''}}</td>
+              <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : ''}}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-top-10">
+      <mat-card class="card-height">
+        <mat-card-header>
+          <mat-card-title>Our Advice:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8">
+              <p *ngIf="daysPassed >= 90">
+                It has been {{daysPassed}} days since you ran Kube Hunter. You should run it again soon.
+              </p>
+              <p *ngIf="daysPassed < 90">
+                It has been {{daysPassed}} days since you last ran Kube Hunter. The current report is still valid.
+              </p>
+              <p *ngIf="!allReportsForCluster">
+                Run Kube Hunter to find vulnerabilities within your cluster.
+              </p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 text-align-end">
+              <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <mat-card class="card-height margin-top-bottom-15" id="hunter-table-card">
+        <mat-card-header id="hunter-audit-header">
+          <mat-card-title>
+            Past Audits
+          </mat-card-title>
+          <div id="hunter-audit-header-button">
+            <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+          </div>
+        </mat-card-header>
+        <mat-card-content *ngIf="allReportsForCluster">
+          <div class="row">
+            <div class="col-xs-12 description">
+              Click on an audit to learn more about this cluster's vulnerabilities<br>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </td>
+                </ng-container>
+                <ng-container matColumnDef="time">
+                  <th mat-header-cell *matHeaderCellDef> Time </th>
+                  <td mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="numVulnerabilities">
+                  <th mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </th>
+                  <td mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"
+                    class="report-click"></tr>
+              </table>
+            </div>
+          </div>
+          <div class="paginator">
+            <mat-paginator
+              [length]="reportCount"
+              [pageSize]="limit"
+              [pageSizeOptions]="[ 20, 50, 100]"
+              (page)="pageEvent($event)"
+              showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+  </div>
+</div>
+

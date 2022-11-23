@@ -1,0 +1,228 @@
+<div class="image-scan-result-container">
+  <div class="image-scan-content">
+    <div class="image-scan-list" *ngIf="dataSource">
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <div class="col-lg-9 col-xs-12">
+            <span class="subnav-title" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
+          </div>
+          <div class="col-lg-2 col-lg-offset-1 col-xs-12">
+            <div class="mr-15px">
+              <mat-spinner *ngIf="displayImageScanSpinner$ | async" [diameter]="30"></mat-spinner>
+            </div>
+            <a color="primary" *ngIf="dataSource || !dataSource" mat-raised-button [disabled]="displayImageScanSpinner$ | async" (click)="scanImage()">{{ scanButtonText }}</a>
+          </div>
+        </mat-toolbar-row>
+        <mat-toolbar-row class="image-id-row">
+          <div class="col-xs-12">
+            <span [matTooltip]="dataSource.dockerImageId"
+                  matTooltipClass="image-id-tooltip"
+            >Image ID: {{dataSource.dockerImageId.length > 15 ?
+              dataSource.dockerImageId.substring(0, 15) + '...' : dataSource.dockerImageId}}</span>
+          </div>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <div class="mat-elevation-z8 image-details">
+        <div class="left-elements">
+          <div class="elements">
+            <h4>Scan Result</h4>
+            <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>
+          </div>
+          <div class="elements">
+            <h4>Last Scanned</h4>
+            <div *ngIf="dataSource.lastScanned; else elseBlock">
+              <p>{{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}</p>
+            </div>
+            <ng-template #elseBlock>
+              <p>Not Scanned</p>
+            </ng-template>
+          </div>
+          <div class="elements">
+            <h4>Running</h4>
+            <p >{{dataSource.runningInCluster}}</p>
+          </div>
+        </div>
+        <div class="right-elements" >
+          <div class="elements">
+            <h4>Critical</h4>
+            <p>{{dataSource.criticalIssues}}</p>
+          </div>
+          <div class="elements">
+            <h4>Major</h4>
+            <p >{{dataSource.majorIssues}}</p>
+          </div>
+          <div class="elements">
+            <h4>Medium</h4>
+            <p >{{dataSource.mediumIssues}}</p>
+          </div>
+          <div class="elements">
+            <h4>Low</h4>
+            <p >{{dataSource.lowIssues}}</p>
+          </div>
+          <div class="elements">
+            <h4>Negligible</h4>
+            <p >{{dataSource.negligibleIssues}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scanner-error mat-elevation-z8" *ngIf="lastScanReport?.encounterError">
+      <h2 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h2>
+      <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
+    </div>
+    <div class="image-scan-result-list" *ngIf="displayComplianceAndIssueTable">
+      <mat-toolbar>
+        <span class="subnav-title" matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
+        <div class="advanced-search" *ngIf="imageScanDates">
+          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" >
+            <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
+          </mat-select>
+        </div>
+      </mat-toolbar>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="scannerComplianceReport" #complianceSort="matSort" matSort  matSortActive="policy" matSortDisableClear matSortDirection="asc">
+          <ng-container matColumnDef="policy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Policy</th>
+            <td mat-cell *matCellDef="let result"> {{result.policyName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Passed/Failed</th>
+            <td mat-cell *matCellDef="let result">  {{result.policyStatus ? 'Passed' : 'Failed' }} </td>
+          </ng-container>
+          <ng-container matColumnDef="required">
+            <th mat-header-cell *matHeaderCellDef> Required</th>
+            <td mat-cell *matCellDef="let result"> {{result.policyRequirement ? 'Yes' : 'No' }} </td>
+          </ng-container>
+          <ng-container matColumnDef="compliant">
+            <th mat-header-cell *matHeaderCellDef > Compliant</th>
+            <td mat-cell *matCellDef="let result"> {{result.policyStatus ? 'Yes' : 'No'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="critical_issues">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Critical</th>
+            <td mat-cell *matCellDef="let result"> {{result.criticalIssues}} </td>
+          </ng-container>
+          <ng-container matColumnDef="major_issues">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Major</th>
+            <td mat-cell *matCellDef="let result"> {{result.majorIssues}} </td>
+          </ng-container>
+          <ng-container matColumnDef="medium_issues" >
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Medium</th>
+            <td mat-cell *matCellDef="let result"> {{result.mediumIssues}} </td>
+          </ng-container>
+          <ng-container matColumnDef="low_issues">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Low</th>
+            <td mat-cell *matCellDef="let result" > {{result.lowIssues}} </td>
+          </ng-container>
+          <ng-container matColumnDef="negligible_issues">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Negl</th>
+            <td mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getIssuesByPolicy(row)" class="scan-report-row"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="totalCount"
+        [pageSize]="limit"
+        [pageSizeOptions]="[10, 20, 50, 100, 200, 500, 1000]"
+        (page)="scannerPageEvent($event)"
+        showFirstLastButtons #compliancePaginator></mat-paginator>
+    </div>
+    <div class="issues-list" *ngIf="displayComplianceAndIssueTable">
+      <mat-toolbar>
+        <div>
+          <span class="subnav-title">Issues</span>
+        </div>
+      </mat-toolbar>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="imageScanResultIssueData" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
+          <ng-container matColumnDef="scanner">
+            <th style="width: 7%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</th>
+            <td style="width: 7%;" mat-cell *matCellDef="let issue"> {{issue.scannerName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th style="width: 39%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</th>
+            <td style="width: 39%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
+              {{issue.name}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="severity">
+            <th style="width: 4%;" mat-header-cell *matHeaderCellDef mat-sort-header="severity" disableClear> Severity </th>
+            <td style="width: 4%;" mat-cell *matCellDef="let issue"> {{issue.severity}} </td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header="type" disableClear> Type </th>
+            <td style="width: 15%;" mat-cell *matCellDef="let issue">
+              <ng-container *ngIf="issue.vulnerabilityDescUrl">
+                <a [href]="issue.vulnerabilityDescUrl" target="_blank"> {{issue.type}} </a>
+              </ng-container>
+              <ng-container *ngIf="!issue.vulnerabilityDescUrl">
+                {{issue.type}}
+              </ng-container>
+              <button mat-icon-button (click)="searchCVE(issue.type)">
+                <mat-icon>search</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="isCompliant">
+            <th style="width: 3%;" mat-header-cell *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</th>
+            <td style="width: 3%;" mat-cell *matCellDef="let issue">
+              <div class="row pad-left-20">
+                <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="issue.isCompliant" class="pad-right-5">
+                </mat-checkbox>
+                <mat-icon *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="isFixable" >
+            <th style="width: 12%;" mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </th>
+            <td style="width: 12%;" mat-cell *matCellDef="let issue">
+              <mat-checkbox  disableRipple (click)="$event.preventDefault()"  [checked]="issue.isFixable"></mat-checkbox>
+              <span *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="packageName">
+            <th style="width: 7%;" mat-header-cell *matHeaderCellDef mat-sort-header="package_name" disableClear> Package </th>
+            <td style="width: 7%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.packageName">
+              {{ issue.packageName ? issue.packageName : 'N/A' }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="installedVersion">
+            <th style="width: 8%;" mat-header-cell *matHeaderCellDef mat-sort-header="installed_version" disableClear> Installed </th>
+            <td style="width: 8%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.installedVersion">
+              {{ issue.installedVersion ? issue.installedVersion : 'N/A' }}
+            </td>
+          </ng-container>
+<!--          <ng-container matColumnDef="request_exception">-->
+<!--            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Request Exception </th>-->
+<!--            <td mat-cell *matCellDef="let issue">-->
+<!--              <a color="primary" mat-raised-button *ngIf="issue.isFixable"-->
+<!--                 [routerLink]="['/private', 'exceptions','create']"-->
+<!--                 [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"-->
+<!--              > Request Exception</a>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+          <ng-container matColumnDef="more">
+            <th style="width: 6%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
+            <td style="width: 6%;" mat-cell *matCellDef="let issue">
+              <a mat-button (click)="showMoreIssueDetails(issue)">+more</a>
+              <a color="primary" mat-raised-button *ngIf="issue.isFixable"
+                 [routerLink]="['/private', 'exceptions','create']"
+                 [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"
+              > Request Exception</a>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="issuesDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: issuesDisplayedColumns;"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="totalImageScanResultData"
+        [pageSize]="imageScanResultLimit"
+        [pageSizeOptions]="[10, 20, 50, 100, 200, 500, 1000]"
+        (page)="pageIssues($event)"
+        showFirstLastButtons #issuePaginator></mat-paginator>
+    </div>
+  </div>
+</div>
+

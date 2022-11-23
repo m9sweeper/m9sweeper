@@ -1,0 +1,67 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8spspprivilegedcontainer
+  annotations:
+    description: Controls running of privileged containers.
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Pod"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPSPPrivilegedContainer
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spspprivileged
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg, "details": {}}] {
+            c := input_containers[_]
+            c.securityContext.privileged
+            msg := sprintf("Privileged container is not allowed: %v, securityContext: %v", [c.name, c.securityContext])
+        }
+
+        input_containers[c] {
+            c := input.review.object.spec.containers[_]
+        }
+
+        input_containers[c] {
+            c := input.review.object.spec.initContainers[_]
+        }

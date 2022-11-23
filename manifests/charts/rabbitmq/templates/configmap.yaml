@@ -1,0 +1,10 @@
+{{ if .Values.configData }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rabbitmq.fullname" . }}
+  labels:
+    {{- include "rabbitmq.labels" . | nindent 4 }}
+data:
+{{ toYaml .Values.configData | indent 2 }}
+{{ end }}

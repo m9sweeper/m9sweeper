@@ -1,0 +1,69 @@
+.form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.form-field-full-width {
+  width: 100%;
+}
+
+h3 {
+  font-weight: bold;
+  display: inline;
+}
+
+mat-card-title {
+  margin-bottom: 50px;
+}
+
+#action-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  margin-bottom: -10px;
+}
+
+#edit-k8s-manifest-btn {
+  margin-top: 37px;
+}
+
+.right-content {
+  display:flex;
+  flex-direction:column;
+  max-height: 100%;
+  mat-card {
+    margin-bottom: 20px;
+    width: 310px !important;
+  }
+  .close-button{
+    float: right;
+    top: -16px;
+    right: -31px;
+  }
+
+  .close-icon {
+    transition: 1s ease-in-out;
+  }
+
+  .close-icon:hover {
+    transform: rotate(180deg);
+  }
+
+  ::ng-deep .icon-outside .close-button {
+    float: right;
+    top:-52px;
+    right:-52px;
+  }
+
+  ::ng-deep .icon-outside .mat-dialog-container {
+    overflow: unset
+  }
+  .scrollable-right-content {
+    //position: fixed;
+    //overflow-y: auto;
+    //max-height: 40%;
+    width: 100%;
+  }
+
+}

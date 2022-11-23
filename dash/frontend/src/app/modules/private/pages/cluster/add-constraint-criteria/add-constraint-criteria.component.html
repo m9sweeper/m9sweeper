@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-xs-offset-11 col-xs-1">
+    <button mat-icon-button class="close-button" [mat-dialog-close]="true">
+      <mat-icon class="close-icon" color="warn">close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<form class="form" [formGroup]="addConstraintCriteria" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-xs-12">
+      <mat-form-field class="form-field-full-width" appearance="fill">
+        <mat-label>Kinds (comma separated)</mat-label>
+        <input matInput type="text" formControlName="kinds">
+      </mat-form-field>
+      <mat-form-field class="form-field-full-width" appearance="fill">
+        <mat-label>Api Groups (comma seperated)</mat-label>
+        <input matInput type="text" formControlName="apiGroups">
+      </mat-form-field>
+      <button [disabled]="!addConstraintCriteria.valid" mat-raised-button color="primary" type="submit">Add</button>
+    </div>
+  </div>
+</form>

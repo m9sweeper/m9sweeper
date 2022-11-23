@@ -1,0 +1,61 @@
+{{- if .Values.clusterScraping.scheduled.enabled }}
+---
+{{- if .Capabilities.APIVersions.Has "batch/v1/CronJob" -}}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: {{ .Chart.Name }}-scheduled-scrape
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+spec:
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            checksum/{{ include "dash.fullname" . }}-secrets: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+            checksum/{{ include "dash.fullname" . }}-config-extra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
+{{- end }}
+{{ if .Values.extraSecretVars }}
+            checksum/{{ include "dash.fullname" . }}-secrets-extra: {{ include (print $.Template.BasePath "/secret-extra.yaml") . | sha256sum }}
+{{- end }}
+{{- end }}
+{{- if eq .Values.ingress.istio.mtlsMode "STRICT"}}
+            sidecar.istio.io/inject: "true"
+{{- end }}
+        spec:
+          serviceAccount: m9sweeper
+          containers:
+            - name: {{ .Chart.Name }}-scheduled-scrape
+              image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command: ["npm"]
+              args:
+                - "run"
+                - "cli"
+                - "cluster:sync"
+                - "all"
+              env:
+                - name: CLI_PATH
+                  value: "./cli.js"
+              envFrom:
+                - secretRef:
+                    name: {{ include "dash.fullname" . }}-secrets
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+                - configMapRef:
+                    name: {{ include "dash.fullname" . }}-config-extra
+{{- end }}
+{{ if .Values.extraSecretVars }}
+                - secretRef:
+                    name: {{ include "dash.fullname" . }}-secrets-extra
+{{- end }}
+{{- end }}
+          restartPolicy: OnFailure
+  schedule: {{ .Values.clusterScraping.scheduled.schedule | quote }}
+{{- end }}

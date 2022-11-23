@@ -1,0 +1,185 @@
+<div class="kubesec-container">
+  <div class="kubesec-content">
+    <div class="title">KubeSec</div>
+    <mat-card>
+      <mat-horizontal-stepper linear>
+        <mat-step [editable]="isCompleted">
+          <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
+          <div class="pod-selection-container">
+            <h2>Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</h2>
+            <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group" [(ngModel)]="podSelectionOpt">
+              <mat-radio-button class="file-radio-button" [value]="1"
+                                (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
+                Upload a file
+              </mat-radio-button>
+              <mat-radio-button class="cluster-pod-radio-button" [value]="2" (click)="podFile = null;">
+                Choose pods from your cluster
+              </mat-radio-button>
+            </mat-radio-group>
+            <div class="upload-file-content" *ngIf="podSelectionOpt === 1">
+              <input type="file" style="display: none;" #podFileInput (change)="onFileChange($event)"/>
+              <button type="button" class="file-upload-button" mat-raised-button color="accent" (click)="podFileInput.click()">
+                Select Pod File
+              </button>
+              <h3 *ngIf="podFile">You've uploaded {{podFile.name}}</h3>
+            </div>
+            <div class="select-pod-content row" *ngIf="podSelectionOpt === 2">
+              <mat-form-field appearance="fill" class="margin-right" *ngIf="currentNamespaces">
+                <mat-label>Select namespaces</mat-label>
+                <form [formGroup]="namespaceForm">
+                  <mat-select formControlName="namespaceFormControl" multiple>
+                    <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All items</mat-option>
+                    <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name" (click)="togglePerOne(mySelBranch, true)">
+                      {{namespace.metadata.name}}
+                    </mat-option>
+                  </mat-select>
+                </form>
+              </mat-form-field>
+              <div *ngIf="namespaceForm.controls.namespaceFormControl.value">
+                <mat-form-field appearance="fill">
+                  <mat-label>Select a pod</mat-label>
+                  <form [formGroup]="podForm">
+                    <mat-select formControlName="podFormControl" multiple>
+                      <mat-option
+                        *ngIf="currentPods.length > 0"
+                        #podAll  [value]="'podAll'"
+                        (click)="toggleAllSelection(podAll, false)">
+                        All items
+                      </mat-option>
+                      <mat-option *ngFor="let pod of currentPods" [value]="pod.metadata" (click)="togglePerOne(null, false)">
+                        {{pod.metadata.name}}
+                      </mat-option>
+                    </mat-select>
+                  </form>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
+            <button type="button" class="run-kubesec-button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
+              Run Kubesec
+            </button>
+          </div>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Kubesec Report</ng-template>
+          <div class="kubesec-popup" *ngIf="kubesecReport">
+            <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReport.length > 1">
+              <mat-toolbar>
+                <div>
+                  <span class="subnav-title">Reports</span>
+                </div>
+              </mat-toolbar>
+              <mat-table [dataSource]="kubesecReport">
+                <ng-container matColumnDef="podNames">
+                  <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
+                  <mat-cell *matCellDef="let report; let i = index">
+                    <a (click)="clickEvent(i)">
+                      {{report.object.substring(4)}}
+                    </a>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="score">
+                  <mat-header-cell *matHeaderCellDef disableClear> Score </mat-header-cell>
+                  <mat-cell *matCellDef="let report"> {{report.score}} </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; let i=index; columns: displayedColumns;" (click)="clickEvent(i)"></mat-row>
+              </mat-table>
+            </div>
+            <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
+              <div class="pod-score row">
+                <div class="col-lg-9 col-xs-9 pod-name">
+                  <h1> {{displayName}} </h1>
+                </div>
+                <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': decideScoreColor(score)}">
+                  <span> {{score}} </span>
+                </div>
+              </div>
+              <div class="message-download row">
+                <h3> {{message}}. </h3>
+                <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)">
+                  Download Report
+                </a>
+              </div>
+              <div class="tables">
+                <div class="mat-elevation-z8 critical-table" *ngIf="critical.length > 0">
+                  <mat-toolbar>
+                    <div>
+                      <span class="subnav-title">Critical Issues</span>
+                    </div>
+                  </mat-toolbar>
+                  <mat-table [dataSource]="criticalDataSource">
+                    <ng-container matColumnDef="criticalId">
+                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
+                      <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="criticalPoints">
+                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.points}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="criticalReason">
+                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
+                      <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.reason}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="criticalDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: criticalDisplayedColumns;"></mat-row>
+                  </mat-table>
+                </div>
+                <div class="mat-elevation-z8 advise-table" *ngIf="advise.length > 0">
+                  <mat-toolbar>
+                    <div>
+                      <span class="subnav-title"> Advice </span>
+                    </div>
+                  </mat-toolbar>
+                  <mat-table [dataSource]="adviseDataSource">
+                    <ng-container matColumnDef="adviseId">
+                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
+                      <mat-cell *matCellDef="let advice"> {{advice?.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="advisePoints">
+                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-cell *matCellDef="let advice"> {{advice?.points}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="adviseReason">
+                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
+                      <mat-cell *matCellDef="let advice"> {{advice?.reason}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="adviseDisplayColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: adviseDisplayColumns;"></mat-row>
+                  </mat-table>
+                </div>
+                <div class="mat-elevation-z8 passed-table" *ngIf="passed.length > 0">
+                  <mat-toolbar>
+                    <div>
+                      <span class="subnav-title">Passed</span>
+                    </div>
+                  </mat-toolbar>
+                  <mat-table [dataSource]="passedDataSource">
+                    <ng-container matColumnDef="passedId">
+                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
+                      <mat-cell *matCellDef="let pass"> {{pass?.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="passedPoints">
+                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-cell *matCellDef="let pass"> {{pass?.points}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="passedReason">
+                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
+                      <mat-cell *matCellDef="let pass"> {{pass?.reason}} </mat-cell>
+                    </ng-container>
+                    <mat-header-row></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="passedDisplayColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: passedDisplayColumns;"></mat-row>
+                  </mat-table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="margin-top" mat-raised-button matStepperPrevious>Back</button>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </mat-card>
+  </div>
+</div>

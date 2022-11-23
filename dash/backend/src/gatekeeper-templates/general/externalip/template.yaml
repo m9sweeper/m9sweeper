@@ -1,0 +1,72 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8sexternalips
+  annotations:
+    description: "Restricts Services from containing externalIPs except those in a provided allowlist."
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Service"
+
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sExternalIPs
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            allowedIPs:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sexternalips
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Service"
+          input.review.kind.group == ""
+          allowedIPs := {ip | ip := input.parameters.allowedIPs[_]}
+          externalIPs := {ip | ip := input.review.object.spec.externalIPs[_]}
+          forbiddenIPs := externalIPs - allowedIPs
+          count(forbiddenIPs) > 0
+          msg := sprintf("service has forbidden external IPs: %v", [forbiddenIPs])
+        }

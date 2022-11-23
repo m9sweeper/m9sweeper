@@ -1,0 +1,76 @@
+{{- if eq .Values.provider "eks" }}
+---
+{{- if eq .Values.cronjob.enabled false }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "kube-bench.fullname" . }}
+  labels:
+    app: {{ template "kube-bench.name" . }}
+    chart: {{ template "kube-bench.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+{{ toYaml .Values.pod.annotations | indent 4 }}
+spec:
+  template:
+    spec:
+      hostPID: true
+      serviceAccount: {{ include "kube-bench.name" . }}-sa
+{{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+{{- end }}
+      restartPolicy: Never
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/sh" ]
+          args: [ "-c", "kube-bench run --targets node --benchmark eks-1.0 --json | curl -s -H \"Content-Type: application/json\" -X POST --data-binary @- {{ .Values.reportsurl }}" ]
+            {{- with .Values.customArguments }}
+{{ toYaml . | indent 12 }}
+            {{- end }}
+          volumeMounts:
+            - name: var-lib-kubelet
+              mountPath: /var/lib/kubelet
+              readOnly: true
+            - name: etc-systemd
+              mountPath: /etc/systemd
+              readOnly: true
+            - name: etc-kubernetes
+              mountPath: /etc/kubernetes
+              readOnly: true
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+      volumes:
+        - name: var-lib-kubelet
+          hostPath:
+            path: "/var/lib/kubelet"
+        - name: etc-systemd
+          hostPath:
+            path: "/etc/systemd"
+        - name: etc-kubernetes
+          hostPath:
+            path: "/etc/kubernetes"
+  {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+  {{- end }}
+  {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+  {{- end }}
+  {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}:
+  {{- end }}
+{{- end }}
+{{- end }}

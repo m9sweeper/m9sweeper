@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Exception details:</h1>
+
+        <p>
+            Time: {{time}}
+        </p>
+
+        <p>
+            Context: {{root}}
+        </p>
+
+        <p>
+            Error reason: {{message}}
+        </p>
+
+        <p>
+            {{{data}}}
+        </p>
+
+        <h4>Stack Trace</h4>
+        <pre>
+            {{stackTrace}}
+        </pre>
+    </body>
+</html>

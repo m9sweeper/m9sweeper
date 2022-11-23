@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kube-hunter
+description: A Helm chart for kube-hunter in m9sweeper
+type: application
+home: https://m9sweeper.io/
+appVersion: 0.0.0
+version: 0.0.0
+kubeVersion: '>=1.16.0-0'
+maintainers:
+  - email: info@m9sweeper.io
+    name: m9sweeper Support Team

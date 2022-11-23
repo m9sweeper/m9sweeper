@@ -1,0 +1,10 @@
+apiVersion: v2
+name: trawler
+description: A Helm chart for the M9sweeper Trawler
+type: application
+version: 1.1.0
+appVersion: 1.1.0
+maintainers:
+  - email: info@m9sweeper.io
+    name: m9sweeper Support Team
+home: https://m9sweeper.io

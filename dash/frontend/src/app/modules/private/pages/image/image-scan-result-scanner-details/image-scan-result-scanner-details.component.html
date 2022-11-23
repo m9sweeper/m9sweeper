@@ -1,0 +1,55 @@
+<div class="image-scan-result-scanner-details-container">
+  <div class="details-content">
+    <div class="sub-navigation">
+      <div>
+        <p>Image Scan Result Scanner Details</p>
+      </div>
+    </div>
+    <mat-card>
+      <mat-card-content class="scanner-details">
+        <div class="details">
+          <mat-list class="header">
+            <mat-list-item> Scanner name</mat-list-item>
+            <mat-list-item> Policy</mat-list-item>
+            <mat-list-item> Scan result</mat-list-item>
+            <mat-list-item> Required</mat-list-item>
+            <mat-list-item> Compliant</mat-list-item>
+            <mat-list-item> Critical issues</mat-list-item>
+            <mat-list-item> Major issues</mat-list-item>
+            <mat-list-item> Medium issues</mat-list-item>
+          </mat-list>
+          <mat-list class="content" *ngIf="scanDetails">
+            <mat-list-item> {{scanDetails.scannerName}} </mat-list-item>
+            <mat-list-item> XYZ Policy Name</mat-list-item>
+            <mat-list-item> {{scanDetails.scanResult}} </mat-list-item>
+            <mat-list-item> No</mat-list-item>
+            <mat-list-item> Yes</mat-list-item>
+            <mat-list-item> {{scanDetails.criticalIssues}} </mat-list-item>
+            <mat-list-item> {{scanDetails.majorIssues}} </mat-list-item>
+            <mat-list-item> {{scanDetails.mediumIssues}} </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="details">
+          <mat-list class="header">
+            <mat-list-item> Low issues</mat-list-item>
+            <mat-list-item> Negligible issues</mat-list-item>
+            <mat-list-item> Created at</mat-list-item>
+            <mat-list-item> Issue title</mat-list-item>
+            <mat-list-item> Issue description</mat-list-item>
+            <mat-list-item> Issue level</mat-list-item>
+            <mat-list-item> Issue data</mat-list-item>
+          </mat-list>
+          <mat-list class="content" *ngIf="scanDetails">
+            <mat-list-item> {{scanDetails.lowIssues}} </mat-list-item>
+            <mat-list-item> {{scanDetails.negligibleIssues}} </mat-list-item>
+            <mat-list-item> {{formatDate(+scanDetails.createdAt)}} </mat-list-item>
+            <mat-list-item> {{scanDetails.issues.title}} </mat-list-item>
+            <mat-list-item> {{scanDetails.issues.description}} </mat-list-item>
+            <mat-list-item> {{scanDetails.issues.level}} </mat-list-item>
+            <mat-list-item> {{scanDetails.issues.data}} </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

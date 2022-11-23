@@ -1,0 +1,17 @@
+{{ if .Values.prometheusOperator.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dash.fullname" . }}
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - path: /api/v1/metrics
+    port: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "dash.name" . }}
+{{ end }}

@@ -1,0 +1,4 @@
+*/**/tests/**
+*/**/test
+*/**/packages/*/node_modules
+*/**/packages/*/test

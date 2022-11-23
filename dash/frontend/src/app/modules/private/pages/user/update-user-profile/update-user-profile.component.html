@@ -1,0 +1,26 @@
+<div class="update-user-form-container">
+  <form class="update-user-form" [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="Enter your first name" type="text" formControlName="firstName">
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Enter your last name" type="text" formControlName="lastName">
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field appearance="standard">
+        <mat-label>Phone</mat-label>
+        <input matInput placeholder="Enter phone number" type="text" formControlName="phone">
+      </mat-form-field>
+    </p>
+    <div mat-dialog-actions>
+      <button [disabled]="!updateUserForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+    </div>
+  </form>
+</div>

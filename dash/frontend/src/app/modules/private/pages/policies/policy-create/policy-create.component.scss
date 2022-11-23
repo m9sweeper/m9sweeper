@@ -1,0 +1,73 @@
+:root{
+  --organization-container-height: 981px;
+}
+div.policy-create-container {
+  height: calc(var(--organization-container-height) - 52px);
+  overflow: auto;
+
+  mat-form-field {
+    width: 100%;
+  }
+  .subnav-title{
+    font-weight: normal;
+    font-size: 26px;
+  }
+
+  & .scanner-list {
+    & .scanner-list-heading-row {
+      mat-toolbar {
+        flex-wrap: wrap;
+        height: fit-content;
+
+        & .col-lg-10 {
+          padding: 0px;
+        }
+        & .col-lg-2 {
+          padding: 0px;
+          display: flex;
+          flex-basis: auto;
+          margin-left: auto;
+        }
+      }
+    }
+
+    & .table-row {
+      padding: 0 16px;
+      & .mat-elevation-z8 {
+        width: 100%;
+        @media all and (max-width: 685px) {
+          overflow-x: scroll;
+        }
+        & .mat-column-enabled {
+          padding-right: 6px;
+          padding-left: 16px;
+        }
+        & .mat-column-required {
+          padding-right: 6px;
+        }
+        & .mat-column-name {
+          padding-right: 6px;
+        }
+        & .mat-column-description {
+          padding-right: 6px;
+        }
+        & .mat-column-actions {
+          padding-right: 16px;
+        }
+        table {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+.active-checkbox-row {
+  padding-bottom: 10px;
+}
+mat-checkbox {
+  ::ng-deep span {
+    white-space: normal;
+    line-height: 1 !important;
+  }
+}
+

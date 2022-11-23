@@ -1,0 +1,23 @@
+<h1>Advanced Image Search</h1>
+<form [formGroup]="searchForm">
+  <div>
+    <mat-form-field class="form-field-full-width" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" placeholder="Image Name" formControlName="name" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="form-field-full-width" appearance="fill">
+      <mat-label>CVE</mat-label>
+      <input matInput type="text" placeholder="CVE" formControlName="cve" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-checkbox matInput formControlName="onlyRunning">Only Running Images</mat-checkbox>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" type="submit" (click)="onSearch()">Search</button>
+    <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>
+

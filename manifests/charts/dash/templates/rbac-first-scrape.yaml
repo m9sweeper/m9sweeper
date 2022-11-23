@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: first-scrape-sa
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+    # "helm.sh/hook-delete-policy": hook-succeeded
+{{- if .Values.image.credentials.create }}
+imagePullSecrets:
+- name: {{ .Chart.Name }}-registry-secret
+{{- else if ne .Values.image.credentials.secretRef "" }}
+imagePullSecrets:
+- name: {{ .Values.image.credentials.secretRef }}
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: first-scrape
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+    # "helm.sh/hook-delete-policy": hook-succeeded
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get","watch","list"]
+  - apiGroups: ["batch"]
+    resources: ["*"]
+    verbs: ["create","get","watch","list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: first-scrape
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+    # "helm.sh/hook-delete-policy": hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: first-scrape
+subjects:
+- kind: ServiceAccount
+  name: first-scrape-sa
+  namespace: {{ .Release.Namespace }}

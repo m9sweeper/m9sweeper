@@ -1,0 +1,135 @@
+.padding-left{
+  padding-left: 3%;
+}
+
+.row{
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.cluster-summary-container {
+  --cluster-summary-height: 300px;
+  --cluster-summary-widget-container-height: calc((var(--cluster-summary-height) - 10px) / 2);
+  height: calc(var(--cluster-details-height) - 52px);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.image-click:hover{
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}
+
+.mat-card{
+  padding: 0;
+  margin: 10px 10px 0 0;
+}
+
+.cluster-summary-card {
+  height: 100%;
+}
+
+.cluster-card {
+  width: 100%;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.label {
+  padding-top: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.total {
+  font-size: xx-large;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.header-font{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.edit-cluster-group-icon{
+  padding-bottom: 10px;
+}
+
+.mat-card-title {
+  padding-top: 10px;
+}
+
+.cluster-element {
+  display:flex;
+  margin-top:15px;
+}
+
+.namespaces-table {
+  margin: 10px 0 10px 0;
+  width: calc(100% - 5px);
+  @media all and (min-width: 280px) and (max-width: 842px) {
+    width: calc(100% - 10px);
+  }
+}
+
+.namespace-image-table {
+  overflow: auto;
+}
+
+.namespace-image-table table {
+  max-width: 99%;
+  overflow: auto;
+}
+
+.search-results {
+  height: 130px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  flex: none;
+  table {
+    width: 100%;
+    font-size: 11px;
+    td {
+      font-size: 11px;
+      font-family: "Courier New";
+      cursor: pointer;
+    }
+    .cluster-error-event {
+      color: rgb(155,17,30);
+    }
+    .cluster-info-event {
+      color: rgb(0,15,137);
+    }
+  }
+}
+
+.cluster-events-card {
+  position: absolute;
+  width: calc(100% - 20px);
+  left: 1px;
+  bottom: 0;
+}
+
+.cluster-events {
+  padding-top: 175px;
+  max-height: 50%;
+  position: sticky;
+  position: -webkit-sticky; /* Safari */
+  bottom: 0;
+  @media only screen and (min-width: 280px) and (max-width: 1024px) {
+    padding-top: 0;
+  }
+  width: calc(var(--cluster-container-width) - 10px);
+  margin: 0 0 0 10px;
+  height: 175px;
+  .mat-card:not([class*=mat-elevation-z]) {
+    box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
+  }
+}
+

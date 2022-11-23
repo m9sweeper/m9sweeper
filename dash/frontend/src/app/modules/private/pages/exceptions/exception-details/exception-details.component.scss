@@ -1,0 +1,106 @@
+:root{
+  --organization-container-height: 981px;
+}
+div.exception-details-container {
+  height: calc(var(--organization-container-height) - 52px);
+  overflow: auto;
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: space-around;
+
+  .exceptions-container {
+
+    margin: 10px 20px 0 20px;
+    height: 1024px;
+
+    .sub-navigation {
+      @media (min-width: 500px) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .sub-title {
+        font-weight: 500;
+        font-size: 20px;
+      }
+
+      .action-btn {
+        margin-left: auto;
+      }
+    }
+
+    .cluster-details-mat-card {
+      > .mat-card-content {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        @media all and (max-width: 855px) {
+          display: inline-block;
+        }
+
+        > .left-column {
+          flex-grow: 1;
+          flex-shrink: 1;
+          flex-basis: 500px;
+        }
+
+        > .right-column {
+          flex-basis: 500px;
+          flex-grow: 1;
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    .display-comments {
+      //overflow: auto;
+
+      > mat-list-item {
+        //overflow: auto;
+
+        .comments-content {
+          margin-left: 10px;
+
+          .username {
+            font-weight: 600;
+            font-size: 12px;
+            margin: 0;
+            color: #555555;
+            .date-format {
+              font-style: italic;
+              font-weight: 400;
+            }
+            mat-icon {
+              display: inline-flex;
+              vertical-align: middle;
+              margin-left: 20px;
+            }
+            mat-icon:hover {
+              cursor: pointer;
+            }
+          }
+          .comment {
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    .comment-input {
+      width: 50%;
+    }
+  }
+
+  .mat-card-actions {
+    margin-left: 0;
+  }
+
+  mat-card-header {
+    margin-left: -17px;
+  }
+
+  mat-card {
+    margin-bottom: 10px;
+  }
+}

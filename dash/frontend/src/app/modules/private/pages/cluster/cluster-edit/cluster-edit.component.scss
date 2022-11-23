@@ -1,0 +1,24 @@
+div {
+  &.create-cluster-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+      form.cluster-form {
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  }
+
+mat-form-field {
+  width: 100%;
+}
+
+.cluster-create-container {
+  display: flex;
+}
+.menu_bar {
+  flex: 1;
+}

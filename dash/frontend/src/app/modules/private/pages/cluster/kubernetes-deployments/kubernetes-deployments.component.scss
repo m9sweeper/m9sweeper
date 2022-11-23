@@ -1,0 +1,100 @@
+:root{
+  --cluster-details-height: 981px;
+}
+div.kubernetes-deployments-container {
+  height:calc(var(--cluster-details-height) - 52px);
+  overflow: auto;
+  > div {
+    &.deployment-list {
+      margin: 20px 25px;
+      > div {
+        &.deployment-list-sub-navigation {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          > div {
+            &.k8-header {
+              flex-direction: column;
+              div.content-name {
+                display: inline-block;
+                height: 35px;
+                p {
+                  font-size: 26px;
+                  margin-top: 15px;
+                }
+                > ol {
+                  display: flex;
+                  flex-direction: row;
+                  list-style-type: none;
+                  padding-inline-start: 0;
+                  font-size: 12px;
+                  text-transform: lowercase;
+                  li:not(:first-child):before {
+                    content: ">";
+                    padding-right: 5px;
+                    padding-left: 5px;
+                  }
+
+                  > li.breadcrumb-item {
+                    > span:hover{
+                      text-decoration: underline;
+                      cursor: pointer;
+                    }
+                    &:first-child {
+                      padding-left: -5px;
+                    }
+                    a {
+                      font-size: 12px;
+                    }
+                  }
+                }
+              }
+
+              div.header {
+                > p {
+                  font-size: 26px;
+                  margin-top: 15px;
+                }
+              }
+            }
+          }
+          mat-form-field {
+            margin-right: 10px;
+          }
+        }
+      }
+      > mat-toolbar {
+        display: flex;
+        justify-content: space-between;
+
+        > mat-icon-button {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+table {
+  width: 100%;
+}
+.deployment-list-table {
+  min-width: 800px;
+}
+mat-form-field {
+  margin-right: 10px;
+  width: 130px;
+  .mat-datepicker-input {
+    width: 100%;
+  }
+  mat-icon {
+    position: relative;
+    float: right;
+    margin-top: -21px;
+    cursor: pointer;
+  }
+}
+
+.click-event:hover {
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}

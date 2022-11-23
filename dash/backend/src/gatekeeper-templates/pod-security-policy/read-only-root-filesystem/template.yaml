@@ -1,0 +1,78 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8spspreadonlyrootfilesystem
+  annotations:
+    description: Requires the use of a read only root file system.
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Pod"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPSPReadOnlyRootFilesystem
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spspreadonlyrootfilesystem
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg, "details": {}}] {
+            c := input_containers[_]
+            input_read_only_root_fs(c)
+            msg := sprintf("only read-only root filesystem container is allowed: %v", [c.name])
+        }
+
+        input_read_only_root_fs(c) {
+            not has_field(c, "securityContext")
+        }
+        input_read_only_root_fs(c) {
+            not c.securityContext.readOnlyRootFilesystem == true
+        }
+
+        input_containers[c] {
+            c := input.review.object.spec.containers[_]
+        }
+        input_containers[c] {
+            c := input.review.object.spec.initContainers[_]
+        }
+
+        # has_field returns whether an object has a field
+        has_field(object, field) = true {
+            object[field]
+        }

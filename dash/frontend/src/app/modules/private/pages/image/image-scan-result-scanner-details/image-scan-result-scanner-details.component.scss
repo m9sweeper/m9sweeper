@@ -1,0 +1,76 @@
+:root{
+  --cluster-details-height: 981px;
+}
+div.image-scan-result-scanner-details-container {
+  height:calc(var(--cluster-details-height) - 52px);
+  overflow: auto;
+  > div {
+    &.details-content {
+      margin: 20px 25px;
+
+      > div {
+        &.sub-navigation {
+          display: flex;
+          justify-content: space-between;
+
+          > div {
+            display: flex;
+            flex-direction: row;
+
+            > p {
+              margin-right: 15px;
+              margin-top: 10px;
+              font-weight: bold;
+              font-size: 26px;
+            }
+          }
+
+          > div {
+            > mat-form-field {
+              margin-right: 10px;
+            }
+
+            > button {
+              height: 40px;
+            }
+          }
+        }
+      }
+
+      > mat-toolbar {
+        display: flex;
+        justify-content: space-between;
+
+        > mat-icon-button {
+          margin-left: 5px;
+        }
+      }
+
+      > mat-card {
+        > mat-card-content {
+          &.scanner-details {
+            display: flex;
+            flex-direction: row;
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              flex: 1;
+
+              .header {
+                flex: 1;
+                font-weight: 500;
+              }
+
+              .content {
+                flex: 2;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+

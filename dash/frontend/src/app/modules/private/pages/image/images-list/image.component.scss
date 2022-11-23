@@ -1,0 +1,125 @@
+:root{
+  --cluster-details-height: 981px;
+}
+div.image-container {
+  height:calc(var(--cluster-details-height) - 52px);
+  overflow: auto;
+  > div {
+    &.image-list {
+      margin: 15px 15px 10px 15px;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(var(--cluster-details-height) - 110px);
+      height: 100%;
+      >div.sub-navigation {
+        margin: 0 0 0 0;
+        > div.col-lg-4 {
+          padding: 0px;
+          > span {
+            margin-right: 15px;
+            font-size: 26px;
+          }
+        }
+      }
+    }
+    > mat-toolbar {
+      display: flex;
+      justify-content: space-between;
+      > mat-icon-button {
+        margin-left: 5px;
+        padding-bottom: 10px;
+      }
+    }
+    mat-paginator {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.image-click:hover{
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}
+.scan-images-button {
+  height: 40px;
+}
+.mr-10px {
+  margin-right: 10px;
+}
+.plus-button {
+  padding-bottom: 10px;
+}
+.search-scan-col {
+  justify-content: flex-end;
+}
+
+.image-table {
+  // flex: 1;
+  overflow: auto;
+  background: #F9F9F9;
+
+  mat-table {
+    min-width: 800px;
+
+    mat-cell, mat-header-cell, mat-footer-cell {
+      overflow: visible;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      padding-right: 5px;
+    }
+
+    & .mat-column-date {
+      width: 150px;
+      max-width: 150px;
+    }
+
+    & .mat-column-runningCluster {
+      width: 120px;
+      max-width: 120px;
+      text-align: center;
+    }
+
+    & .mat-column-scanResult {
+      width: 100px;
+      max-width: 100px;
+      text-align: center;
+    }
+
+    & .mat-column-Crt, & .mat-column-Maj, & .mat-column-Med, & .mat-column-Min, & .mat-column-Neg {
+      width: 50px;
+      max-width: 50px;
+      text-align: center;
+    }
+  }
+}
+
+@media print {
+  div {
+    &.image-container {
+      height: auto !important;
+      overflow: auto !important;
+
+      .image-list {
+        height: unset !important;
+        max-height: unset !important;
+        overflow: auto !important;
+
+        .search-scan-col, .image-create-btn, .paginator {
+          display: none !important;
+        }
+
+        div.image-table {
+          margin-top: 10px !important;
+          overflow: unset !important;
+          height: auto !important;
+
+          mat-table {
+            height: auto !important;
+            min-width: 100% !important;
+          }
+        }
+      }
+    }
+  }
+}

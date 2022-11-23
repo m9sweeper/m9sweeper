@@ -1,0 +1,20 @@
+{
+  "/api/*": {
+    "target": "https://dev-m9sweeper.intelletive.com",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/auth/*": {
+    "target": "https://dev-m9sweeper.intelletive.com",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/common/*": {
+    "target": "https://dev-m9sweeper.intelletive.com",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

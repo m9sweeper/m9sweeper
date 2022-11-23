@@ -1,0 +1,43 @@
+image:
+  registry: m9sweeper
+  repository: trawler
+  tag: latest
+  pullPolicy: Always
+  credentials:
+    create: false
+    username: ""
+    password: ""
+    secretRef: ""
+
+replicaCount: 1
+
+# Set to true to set log level to debug
+enableDebugLogs: false
+
+dashUrl: ""
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+livenessProbe: {}
+
+readinessProbe: {}
+
+################
+# Extra Config #
+################
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+extraConfigVars: {}
+
+extraSecretVars: {}

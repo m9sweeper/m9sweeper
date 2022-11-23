@@ -1,0 +1,82 @@
+div.kubesec-popup {
+  & .kubesec-popup-contents {
+    & .pod-score {
+      width: 100%;
+      margin: 0px;
+      .pod-name {
+        padding: 0px;
+      }
+      .score {
+        margin-right: 0px;
+        padding: 0px;
+      }
+    }
+    .message-download {
+      width: 100%;
+      margin: 0px;
+      h3 {
+        margin-right: 10px;
+      }
+    }
+    & .tables {
+      .critical-table {
+        .mat-column-criticalId {
+          max-width: 25%;
+        }
+        .mat-column-criticalPoints {
+          max-width: 5%;
+        }
+      }
+      .advise-table {
+        .mat-column-adviseId {
+          max-width: 25%;
+        }
+        .mat-column-advisePoints {
+          max-width: 5%;
+        }
+      }
+      .passed-table {
+        .mat-column-passedId {
+          max-width: 25%;
+        }
+        .mat-column-passedPoints {
+          max-width: 5%;
+        }
+      }
+    }
+  }
+}
+
+.score{
+  height: 44px;
+  width: 50px;
+  background-color: cadetblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: white;
+  > span {
+    font-size: xx-large;
+  }
+}
+
+.critical-table {
+  margin-bottom: 5px;
+}
+.advise-table {
+  margin-bottom: 5px;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+.margin-top {
+  margin-top: 10px;
+}

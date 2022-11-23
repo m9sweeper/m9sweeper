@@ -1,0 +1,29 @@
+
+
+        <div class="row button-row ng-star-inserted">
+          <div class="col-xs-6 padding-top-15">Run Falco using the following CLI special command:</div>
+          <div class="col-xs-6 copy-to-button">
+            <app-copy-to-clipboard-button
+              successMessage="Command copied to clipboard!"
+              errorMessage="Command could not be copied"
+              [text]="run.value">
+            </app-copy-to-clipboard-button>
+          </div>
+        </div>
+        <div>
+          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts
+              helm repo update
+              helm install falco falcosecurity/falco \
+                --namespace falco --create-namespace \
+                --set falco.driver.enabled=true \
+                --set-string falco.driver.kind=ebpf \
+                --set falco.tty=true \
+                --set falco.json_output=true \
+                --set falco.http_output.enabled=true \
+                --set-string falco.http_output.url=https:'{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}'
+          </textarea>
+        </div>
+        <div class="row row-reverse">
+          <button mat-raised-button matDialogClose color="primary">Done</button>
+        </div>
+

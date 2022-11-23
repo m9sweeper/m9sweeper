@@ -1,0 +1,94 @@
+<div class="vulnerability-container">
+  <div class="vulnerability-list page">
+    <div class="col-lg-4 col-xs-12 page-title">
+      <span>Worst CVE by Image</span>
+    </div>
+    <div class="filter-card">
+      <mat-card>
+        <mat-card-header>
+          <div class="row filter-header">
+            <div class="col-xs-12 filter-header-title">
+              <h2>Report Settings</h2>
+            </div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="filter-content">
+            <form class="filter-form" (ngSubmit)="rebuildWithFilters()">
+              <div class="row report-header">
+                <div class="col-xs-12 col-sm-6">
+                  <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Start Date</mat-label>
+                    <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-label>End date</mat-label>
+                    <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endPicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-xs-12">
+                  <mat-form-field class="namespace-input" appearance="fill" [formGroup]="filterForm">
+                    <mat-label>Namespaces</mat-label>
+                    <mat-select formControlName="namespaces"
+                                multiple>
+                      <mat-option *ngFor="let namespace of clusterNamespaces"
+                                  [value]="namespace">
+                        {{namespace}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row filter-button">
+                <button [disabled]="!filtersValid"
+                        mat-raised-button
+                        color="primary"
+                        type="submit">Search
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="graph-card">
+      <mat-card>
+        <mat-card-content>
+          <div class="row graph-component">
+            <div class="col-xs-12 graph dark-theme">
+              <ngx-charts-bar-vertical-stacked
+                [view]="barChartAttributes.view"
+                [scheme]="barChartAttributes.colorScheme"
+                [results]="barChartAttributes.results"
+                [legend]="barChartAttributes.showLegend"
+                [legendPosition]="barChartAttributes.legendPosition"
+                [gradient]="barChartAttributes.gradient"
+                [xAxis]="barChartAttributes.showXAxis"
+                [yAxis]="barChartAttributes.showYAxis"
+                [barPadding]="barChartAttributes.barPadding"
+                [showXAxisLabel]="barChartAttributes.showXAxis"
+                [showYAxisLabel]="barChartAttributes.showYAxis"
+                [xAxisLabel]="barChartAttributes.xAxisLabel"
+                [yAxisLabel]="barChartAttributes.yAxisLabel"
+                [xAxisTickFormatting]="scanXTickFormatting">
+                <ng-template #tooltipTemplate let-model="model">
+                  <span>Date: {{ model.series | date: 'mediumDate' }}</span>
+                  <br/>
+                  <span>Type: {{ model.name }}</span>
+                  <br/>
+                  <span>Images: {{ model.value }}</span>
+                </ng-template>
+              </ngx-charts-bar-vertical-stacked>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

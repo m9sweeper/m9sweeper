@@ -1,0 +1,131 @@
+# m9sweeper values and configuration
+
+#################
+# Global Config #
+#################
+global:
+  # A postgres DB is required, you can either have this chart deploy a minimal postgres DB for you, or bring your own
+  postgres:
+    # set to false to use an external postgres DB
+    enabled: true
+    # Uncomment and set to your own values if you bring your own external postgres
+    # host: m9sweeper-postgresql
+    # username: postgres
+    # password: postgres
+    # database: postgres
+    # port: "5432"
+
+  # RabbitMQ is required, you can either have this chart deploy a minimal rabbit instance, or bring your own
+  rabbitmq:
+    # set to false to use external rabbitmq
+    enabled: true
+    # Uncomment and set to your own values if you bring your own external rabbitmq
+    # host: m9sweeper-rabbitmq
+    # port: "5672"
+    # username: guest
+    # password: guest
+    # queueName: trawler_queue
+
+  # Provide a secret string that will be used to sign JWT tokens, it is highly recommended that you set this to your own secret
+  jwtSecret: "this-is-not-secret"
+  # This URL will be used in email templates to reference a http link to Dash
+  baseUrl: "http://localhost:3000/"
+  # Provide a secret string that will be set as the trawler service account's API key.
+  # It will also be passed to trawler so that it can auth with Dash. You will not need it
+  # after the initial installation as it will be loaded into the DB.
+  apiKey: ""
+
+###############
+# Dash Config #
+###############
+dash:
+  image:
+    registry: m9sweeper
+    repository: dash
+    tag: 0.0.0
+
+  kubesec:
+    registry: m9sweeper
+    repository: kubesec
+    tag: 0.0.0
+
+  # values that will be used to initialize the Dash database during installation
+  init:
+    clusterGroupName: default-cluster-group
+    clusterName: default-cluster
+    superAdminEmail: ""
+    superAdminPassword: ""
+    licenseKey: ""
+    instanceKey: ""
+    docker:
+      registries:
+        - name: Dockerhub
+          hostname: docker.io
+          aliases:
+            - index.docker.io
+          login_required: false
+
+  # Kubernetes native ingress and Istio are supported, only enable one or neither of them.
+  # If you enable neither you will need to port-forward to dash
+  ingress:
+    hosts:
+      # Add lists of hosts
+      # - example.local
+    path: /
+
+    # Deploys a Kubernetes Ingress resource, defaults to nginx ingress controller.
+    # If networking.k8s.io/v1 is available in your cluster m9sweeper will use that,
+    # otherwise fall back to networking.k8s.io/v1
+    k8sIngress:
+      enabled: false
+      annotations:
+        # kubernetes.io/ingress.class: gce
+        kubernetes.io/ingress.class: nginx
+        # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        # kubernetes.io/ingress.allow-http: false
+        # kubernetes.io/tls-acme: true
+      tls: []
+        # Secrets must be manually created in the namespace.
+        # - secretName: dash-certificate
+        #   hosts:
+        #     - example.local
+
+  email:
+    # Email method options are SMTP or SENDGRID
+    method: SMTP
+    # Required for SMTP method
+    smtp:
+      host: ""
+      port: "465"
+      tlsRequired: true
+      user: ""
+      password: ""
+    # Required for SENDGRID method
+    sendgridApiKey: ""
+    # The email address that emails sent from Dash will be from
+    senderEmail: ""
+    # Enable/disable system error email notifications
+    enableSystemErrorEmail: false
+    # The email address to send system error emails to
+    systemErrorMailTo: ""
+
+  prometheusOperator:
+    enabled: false
+
+##################
+# Trawler Config #
+##################
+trawler:
+  image:
+    registry: m9sweeper
+    repository: trawler
+    tag: 0.0.0
+  enableDebugLogs: false
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 256Mi

@@ -1,0 +1,40 @@
+:root{
+  --organization-container-height: 981px;
+}
+div.create-exception-container {
+  height:calc(var(--organization-container-height) - 52px);
+  overflow: auto;
+  .subnav-title {
+  font-size: 26px;
+  font-weight: normal;
+  }
+  > div {
+    mat-form-field {
+      width: 100%;
+    }
+
+    .button-space {
+      margin-right: 10px;
+    }
+  }
+}
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  border-top-color: #000000;
+  animation: spinner .8s linear infinite;
+}
+

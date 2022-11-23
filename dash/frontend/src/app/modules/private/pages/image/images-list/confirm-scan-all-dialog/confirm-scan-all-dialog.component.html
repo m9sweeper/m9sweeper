@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Scan selected images?</h1>
+<mat-dialog-content>
+  <mat-selection-list class="image-selection-list" [(ngModel)]="selectedImages">
+    <mat-list-option *ngFor="let image of data.images" [value]="image.id">
+      {{image.url}}/{{image.name}}:{{image.tag}}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+<div mat-dialog-actions>
+  <button [disabled]="selectedImages.length === 0"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="onConfirm()"
+  >Scan</button>
+  <button mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+  >Cancel</button>
+</div>

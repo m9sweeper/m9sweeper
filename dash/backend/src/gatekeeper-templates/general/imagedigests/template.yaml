@@ -1,0 +1,67 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8simagedigests
+  annotations:
+    description: Requires container images to contain a digest.
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Pod"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sImageDigests
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8simagedigests
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          satisfied := [re_match("@[a-z0-9]+([+._-][a-z0-9]+)*:[a-zA-Z0-9=_-]+", container.image)]
+          not all(satisfied)
+          msg := sprintf("container <%v> uses an image without a digest <%v>", [container.name, container.image])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.initContainers[_]
+          satisfied := [re_match("@[a-z0-9]+([+._-][a-z0-9]+)*:[a-zA-Z0-9=_-]+", container.image)]
+          not all(satisfied)
+          msg := sprintf("initContainer <%v> uses an image without a digest <%v>", [container.name, container.image])
+        }

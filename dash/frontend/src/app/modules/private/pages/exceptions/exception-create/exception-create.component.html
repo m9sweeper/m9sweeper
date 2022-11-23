@@ -1,0 +1,138 @@
+<div class="create-exception-container">
+    <div class="mat-toolbar">
+      <mat-toolbar>
+          <span class="subnav-title">{{subMenuTitle}}</span>
+      </mat-toolbar>
+    </div>
+    <div class="create-policy-form-card">
+      <mat-card>
+        <mat-card-content>
+          <form class="exception-form" [formGroup]="exceptionForm">
+            <p>
+              <mat-form-field appearance="standard">
+              <mat-label>Title</mat-label>
+              <input matInput placeholder="Exception Title" type="text" formControlName="title" required>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="type" (selectionChange)="displayExceptionFields($event)" required>
+                  <mat-option value="policy">Policy</mat-option>
+                  <mat-option value="gatekeeper">GateKeeper</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label #issueIdentifierLabel>Issue</mat-label>
+                <input
+                  matInput
+                  placeholder="Issue"
+                  type="text"
+                  formControlName="issueIdentifier"
+                  [matAutocomplete]="autocomplete"
+                >
+                <mat-autocomplete #autocomplete="matAutocomplete">
+                  <mat-option *ngFor="let constraint of filteredGatekeeperConstraints | async" [value]="constraint.metadata.name">
+                      {{constraint.metadata.name}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="issueIdentifier.errors?.gatekeeperAndClusterSelected"> Please select a cluster to select a gatekeeper constraint. </mat-error>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Reason</mat-label>
+                <textarea matInput placeholder="Reason" type="text" formControlName="reason"></textarea>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Start Date</mat-label>
+                <input matInput placeholder="Start Date" [matDatepicker]="startDatePicker" formControlName="startDate" [readonly]="editMode"  required>
+                <mat-datepicker-toggle matPrefix [for]="startDatePicker" [disabled]="editMode"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+                <mat-error *ngIf="startDate.errors?.inputDateIsToday">Start date must be current date or a future date.</mat-error>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>End Date</mat-label>
+                <input matInput placeholder="End Date" [matDatepicker]="endDatePicker" formControlName="endDate">
+                <mat-datepicker-toggle matPrefix [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+                <mat-error *ngIf="exceptionForm.errors?.checkEndDateIsGreaterThanStartDate">End date must be greater than Start Date.</mat-error>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Exception Status</mat-label>
+                <mat-select formControlName="status" required>
+                  <mat-option  value="review">In Review</mat-option>
+                  <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="active">Active</mat-option>
+                  <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="inactive">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p *ngIf="scannersLoaded && exceptionForm.value.type !== 'gatekeeper'">
+              <mat-form-field appearance="standard">
+                <mat-label>Scanner</mat-label>
+                <mat-select formControlName="scannerId" [value]="origException?.scanner?.id.toString()">
+                  <mat-option value="">Any Scanner</mat-option>
+                  <mat-option *ngFor="let scanner of scanners" value="{{scanner.id}}" matTooltip="{{scanner.description}}">{{scanner.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p *ngIf="policiesLoaded && exceptionForm.value.type !== 'gatekeeper'">
+              <mat-form-field appearance="standard">
+                <mat-label>Policies (Select none if exception applies to all)</mat-label>
+                <mat-select formControlName="policies" multiple>
+                  <mat-option *ngFor="let policy of policies" value="{{policy.id}}">{{policy.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p *ngIf="clustersLoaded">
+              <mat-form-field appearance="standard">
+                <mat-label>Clusters (Select none if exception applies to all)</mat-label>
+                <mat-select formControlName="clusters"
+                            (selectionChange)="onClusterChange($event)"
+                            multiple>
+                  <mat-option
+                    *ngFor="let cluster of clusters"
+                    value="{{cluster.id}}"
+                  >
+                    {{cluster.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p *ngIf="namespacesLoaded">
+              <mat-form-field appearance="standard">
+                <mat-label>Namespaces (Select none if exception applies to all)</mat-label>
+                <mat-select formControlName="namespaces" multiple>
+                  <mat-select-trigger>
+                    {{formatNamespaceDisplay()}}
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let namespace of namespacesToBeDisplayed" value="{{ namespace.name + ':' + namespace.clusterId}}">{{namespace.name}}<i style="font-size: x-small"> (cluster: {{namespace.clusterName}})</i></mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Image URL Pattern</mat-label>
+                <input matInput placeholder="%" type="text" formControlName="imageMatch">
+              </mat-form-field>
+            </p>
+          </form>
+          <div mat-dialog-actions>
+            <button class="button-space" [class.spinner]="loading" [disabled]="!exceptionForm.valid || loading" mat-raised-button color="primary" type="submit"
+                    (click)="onSubmit()"> {{submitButtonText}}
+            </button>
+            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+</div>

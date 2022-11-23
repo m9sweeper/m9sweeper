@@ -1,0 +1,25 @@
+<div class="kubesec-popup" *ngIf="kubesecReport">
+  <div class="mat-elevation-z8 report-tables">
+    <mat-toolbar>
+      <div>
+        <span class="subnav-title">Reports</span>
+      </div>
+    </mat-toolbar>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="podNames">
+        <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
+        <mat-cell *matCellDef="let report">
+          <a (click)="clickEvent()">
+            {{report.object.substring(4)}}
+          </a>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="score">
+        <mat-header-cell *matHeaderCellDef disableClear> Score </mat-header-cell>
+        <mat-cell *matCellDef="let report"> {{report.score}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>

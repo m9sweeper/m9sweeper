@@ -1,0 +1,54 @@
+<mat-toolbar class="fixed">
+  <mat-toolbar-row class="header-bar">
+    <div class="loader-row">
+      <a [routerLink]="defaultRouteLink">
+        <img src="assets/images/m9sweeper-logo.png" alt="m9sweeper" style="margin: 15px 0 10px; max-height: 45px;"/>
+      </a>
+      <div class="loader-container">
+        <ngx-ui-loader [loaderId]="'http-loader'" [bgsType]="httpLoaderConfig.bgsType"
+                       [bgsPosition]="httpLoaderConfig.bgsPosition">
+        </ngx-ui-loader>
+      </div>
+    </div>
+    <div class="right">
+      <!-- Dashboard search bar functionality is not implemented -->
+      <span class="search-bar" hidden="true">
+        <mat-form-field [ngClass]="{'search-box' : isSmallDevice}">
+          <input #searchInput matInput autocomplete="off" type="search" />
+          <mat-icon matSuffix [ngStyle]="{'cursor': 'pointer'}">search</mat-icon>
+        </mat-form-field>
+      </span>
+      <span [matMenuTriggerFor]="menu" [ngStyle]="{'cursor': 'pointer'}" aria-label="navbar icon-button with a menu">
+        <img appUserProfileImage src="assets/images/defaultLogo.png" alt="profile-image" class="profile"/>
+      </span>
+    </div>
+  </mat-toolbar-row>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>face</mat-icon>
+      <span>Hi, {{loggedInUserName}}</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button (click)="openAddGroupDialog()" mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Update Profile</span>
+    </button>
+    <button *ngIf="isLocalAuthUser" mat-menu-item [routerLink]="['/private', 'change-password']">
+      <mat-icon>vpn_key</mat-icon>
+      <span>Change password</span>
+    </button>
+    <div class="theme-changer-container">
+      <mat-icon class="nights-stay-icon" color="primary">nights_stay</mat-icon>
+      <mat-slide-toggle color="primary" [checked]="isDarkMode" (change)="changeTheme($event)" (click)="$event.stopPropagation()">
+      </mat-slide-toggle>
+    </div>
+    <mat-divider style="margin-top: 15px"></mat-divider>
+    <button mat-menu-item (click)="userSignOut()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Sign Out</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<div class="main-content">
+  <router-outlet></router-outlet>
+</div>

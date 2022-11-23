@@ -1,0 +1,67 @@
+<div class="kubernetes-object-container">
+  <div class="kubernetes-object-list">
+    <div class="kubernetes-object-sub-navigation">
+      <div class="kubernetes-object-header">
+        <div class="content-breadcrumbs">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              namespaces
+            </li>
+          </ol>
+        </div>
+        <div class="content-name">
+          <p>Namespaces</p>
+        </div>
+      </div>
+      <div class="calendar-date-picker">
+        <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [initialDate]="date"></app-datepicker-component>
+      </div>
+    </div>
+    <mat-card>
+      <div class="namespaces-table">
+        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
+            <mat-cell *matCellDef="let namespace">
+              <span class="mobile-label">K8s Namespaces:</span>
+              {{namespace?.name}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="compliant">
+            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
+            <mat-cell *matCellDef="let namespace">
+              <span class="mobile-label">Compliant:</span>
+              {{namespace?.compliant ? 'Yes' : 'No'}}
+            </mat-cell>
+          </ng-container>
+  <!--          this field has been disabled.-->
+          <ng-container matColumnDef="imagesScanned">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Number of Images Scanned</mat-header-cell>
+            <mat-cell *matCellDef="let namespace">
+              <span class="mobile-label">NO. of Images Scanned:</span>
+              {{namespace?.kubernetesImages? namespace.kubernetesImages : 0}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="pod">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
+            <mat-cell *matCellDef="let namespace" >
+              <span class="mobile-label">Total Pods:</span>
+              {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
+            </mat-cell>
+          </ng-container>
+          <mat-header-row ></mat-header-row>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="click-event"></mat-row>
+        </mat-table>
+      </div>
+      <div class="paginator">
+        <mat-paginator
+          [length]="totalData"
+          [pageSize]="limit"
+          [pageSizeOptions]="[10, 20, 50, 100]"
+          (page)="pageEvent($event)"
+          showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card>
+  </div>
+</div>

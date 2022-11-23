@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+
+@mixin sub-navigation-dark-theme($theme) {
+  app-sub-navigation {
+    .policy-sub-navigation {
+      color: map-get($mat-grey, 50);
+    }
+  }
+}

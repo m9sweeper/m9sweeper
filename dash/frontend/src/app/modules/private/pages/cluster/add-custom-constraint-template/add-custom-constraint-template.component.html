@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-title>
+    Edit {{this.data ? this.data.subDir + ' Template' : 'Constraint Template'}}
+  </mat-card-title>
+  <mat-card-content>
+    <ngx-codemirror #codemirror
+                    [options]="codeMirrorOptions"
+                    [(ngModel)]="rawTemplate"
+                    (ngModelChange)="setEditorContent($event)">
+
+    </ngx-codemirror>
+
+  </mat-card-content>
+  <div class="buttons">
+    <div mat-dialog-actions class="action-btn-left">
+      <button [disabled]="true" mat-raised-button color="primary" type="submit" style="display: none;">REgo IDE</button>
+    </div>
+    <div mat-dialog-actions class="action-btn-right">
+      <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
+      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+    </div>
+  </div>
+</mat-card>

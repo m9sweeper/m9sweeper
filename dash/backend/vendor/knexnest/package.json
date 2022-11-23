@@ -1,0 +1,46 @@
+{
+  "name": "knexnest",
+  "version": "0.1.0",
+  "description": "Given a Knex select object will provide a hydrated object using promises.",
+  "keywords": [
+    "Hydration",
+    "Tabular Data",
+    "Arrays",
+    "Table",
+    "Object",
+    "Nested",
+    "Knex",
+    "Knex.js",
+    "Postgres",
+    "SQLite"
+  ],
+  "license": "MIT",
+  "main": "knexnest.js",
+  "scripts": {
+    "coverage": "nyc jasmine",
+    "coverage:travis": "nyc npm run test:travis",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test": "jasmine",
+    "test:travis": "jasmine && node test/postgres.js",
+    "lint": "eslint knexnest.js spec/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CoursePark/KnexNest.git"
+  },
+  "engine": {
+    "node": ">=0.12"
+  },
+  "dependencies": {
+	"knex": "^2.0.0",
+    "nesthydrationjs": "^2.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.1",
+    "eslint": "^4.19.1",
+    "jasmine": "^3.1.0",
+    "nyc": "^11.7.3",
+    "pg": "^7.4.3"
+  },
+  "author": "Bluedrop Peformance Learning"
+}

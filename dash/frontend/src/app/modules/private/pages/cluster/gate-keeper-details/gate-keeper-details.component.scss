@@ -1,0 +1,161 @@
+:root {
+  --gatekeeper-details-height: 1000px;
+  --gatekeeper-details-width: 981px;
+}
+
+div {
+  margin: 5px 0 5px 0;
+
+  &.gate-keeper-details-dashboard-container {
+    div {
+      .action-buttons {
+        margin: -10px -54px -30px 0;
+      }
+
+      &.sub-navigation-in-small-device {
+        div.gate-keeper-details-sub-title {
+          font-weight: 500;
+          font-size: 20px;
+        }
+
+        mat-card-actions {
+          margin-left: 3px;
+        }
+      }
+
+      &.gatekeeper-details-sub-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      &.gate-keeper-details-dashboard-header-card-item {
+        div {
+          margin: 5px 0px;
+
+          mat-card {
+            height: 100px;
+
+            mat-card-title {
+              font-weight: bold;
+            }
+
+            mat-card-content {
+              padding-top: 20px;
+
+              .text-style-red {
+                padding-left: 17px;
+                color: red;
+              }
+
+              .text-style-orange {
+                padding-left: 17px;
+                color: orange;
+              }
+
+              .text-style-green {
+                padding-left: 17px;
+                color: green;
+              }
+
+              .description-text {
+                margin-left: 15px;
+              }
+            }
+
+            .recommendation-text {
+              margin-left: 1px;
+              > p {
+                margin-left: 15px;
+              }
+            }
+          }
+
+          @media screen and (max-width: 315px) and (min-width: 100px) {
+            .recommendation-card {
+              height: 300px
+            }
+          }
+
+          @media screen and (max-width: 987px) and (min-width: 316px) {
+            .recommendation-card {
+              height: 200px;
+            }
+          }
+
+          @media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+            .recommendation-text {
+              margin-top: -35px;
+            }
+            .add-more-btn {
+              margin-left: 16px;
+            }
+          }
+
+          @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2) {
+            .recommendation-text {
+              margin-top: -35px;
+            }
+            .add-more-btn {
+              margin-left: 16px;
+            }
+          }
+
+        }
+      }
+
+      &.constraint-section {
+        div {
+          mat-card {
+            #constraint-header {
+              font-weight: bold;
+              margin-left: -30px;
+            }
+
+            .add-more-btn {
+              margin-left: -31px;
+            }
+
+            @media only screen and (min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2) {
+              .add-more-btn {
+                margin-left: 16px;
+              }
+            }
+
+            @media screen and (max-width: 987px) and (min-width: 200px) {
+              .add-more-btn {
+                margin-left: 0px;
+              }
+            }
+
+            @media screen and (max-width: 1731px) and (min-width: 993px) {
+              .add-more-btn {
+                margin-left: -72px;
+              }
+            }
+
+            .constraint-table-root {
+              margin: 10px 0 10px 5px;
+              width: 99.5%;
+
+              .constraint-table {
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+              }
+            }
+
+            table {
+              width: 100%;
+
+              .constraint-click:hover {
+                background-color: rgba(0, 0, 0, .05);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

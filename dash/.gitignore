@@ -1,0 +1,71 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
+
+# dependencies
+/node_modules
+
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# IDE - WebStorm
+**/.idea
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+/backend/src/config/misc.ts
+
+# System Files
+.DS_Store
+Thumbs.db
+/frontend/ng
+/frontend/node_modules/
+/backend/node_modules/
+/backend/vendor/**/node_modules
+/backend/build/
+/frontend/.angular
+/backend/.env
+/backend/local.env
+/backend/dev-db.env
+/backend/src/static/
+/backend/auth_config.yml
+/build
+.env
+/backend/dist/
+/backend/test.js
+/test/
+/backend/test.auth.yml
+!backend/vendor/knexnest/.gitignore
+
+# clusterwise gatekeeper templates
+/backend/src/cluster-*-gatekeeper-templates

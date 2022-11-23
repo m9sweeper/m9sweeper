@@ -1,0 +1,84 @@
+:root{
+  --organization-container-height: 981px;
+}
+div.kubernetes-images-container {
+  height:calc(var(--cluster-details-height) - 52px);
+  overflow: auto;
+  > div {
+    &.k8s-image-list {
+      margin: 20px 25px;
+      > div {
+        &.k8s-image-sub-navigation {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          > div {
+            &.k8-header {
+              div.content-name {
+                display: inline-block;
+                  height: 35px;
+                  > ol {
+                    display: flex;
+                    flex-direction: row;
+                    list-style-type: none;
+                    padding-inline-start: 0;
+                    font-size: 12px;
+                    text-transform: lowercase;
+                    li:not(:last-child):after {
+                      content: ">";
+                      padding-right: 5px;
+                      padding-left: 5px;
+                    }
+                    > li.breadcrumb-item {
+                     > span:hover{
+                        text-decoration: underline;
+                        cursor: pointer;
+                      }
+                      &:first-child {
+                        margin-left: 5px;
+                      }
+                      a {
+                        font-size: 12px;
+                        text-decoration: none;
+                      }
+                    }
+                }
+              }
+              div.header {
+                p {
+                  font-size: 26px;
+                  margin-top: 15px;
+                }
+              }
+            }
+          }
+          mat-form-field {
+            margin-right: 10px;
+            width: 130px;
+            .mat-datepicker-input {
+              width: 100%;
+            }
+            mat-icon {
+              position: relative;
+              float: right;
+              margin-top: -21px;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.k8s-images-table {
+  min-width: 800px;
+}
+.image-click:hover{
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}

@@ -1,0 +1,23 @@
+{{- if .Values.validatingWebhook.enabled }}
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "m9sweeper-webhook"
+webhooks:
+  - name: "m9sweeper-validation-hook.m9sweeper.io"
+    rules:
+    - apiGroups: ["*"]
+      apiVersions: ["v1", "v1beta1"]
+      operations: ["CREATE"]
+      resources: ["pods"]
+      scope: "*"
+    clientConfig:
+      url: "https://{{ index .Values.ingress.hosts 0 }}/api/clusters/1/validation"
+    admissionReviewVersions: ["v1", "v1beta1"]
+    failurePolicy: Ignore
+    sideEffects: None
+    timeoutSeconds: 10
+
+{{- end }}

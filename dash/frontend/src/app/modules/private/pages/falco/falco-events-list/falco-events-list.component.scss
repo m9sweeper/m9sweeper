@@ -1,0 +1,115 @@
+.page {
+  padding: 20px 15px 10px 15px;
+  font-size: 26px;
+}
+
+.page-title {
+  margin-bottom: 15px;
+  padding-left: 0;
+  justify-content: left;
+}
+
+.falco-container{
+  height: 100%;
+  overflow-y: auto;
+}
+
+.falco-filter-card {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.falco-filter-content {
+  display: flex;
+  padding-left: 15px;
+}
+
+.report-header {
+  width: 100%
+}
+
+.falco-events-table {
+  display: flex;
+  flex-direction: row;
+  max-width: 1000px;
+  overflow-x: scroll;
+}
+
+.table-card-header{
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  padding-left: 0;
+}
+
+.filter-button {
+  display: flex;
+  justify-content: left;
+  padding-left: 14px;
+  align-content: center;
+}
+
+.button {
+  display: flex;
+  justify-content: right;
+  padding-right: 5px;
+  align-content: center;
+  min-width: 15rem;
+}
+
+.card-list-header {
+  width: 100%
+}
+
+.event-row:hover {
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}
+
+
+  .mat-column-calendarDate {
+    max-width: 6rem;
+    white-space: nowrap;
+  }
+
+  .mat-column-namespace {
+    max-width: 7%;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  .mat-column-pod {
+    max-width: 7%;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  .mat-column-image {
+    max-width: 7%;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  .mat-column-priority {
+    max-width: 6rem;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  .mat-column-message {
+    max-width: 60%;
+    white-space: nowrap;
+    margin-right: 10px;
+  }
+
+  .mat-form-field {
+    margin-right: 10px;
+  }
+
+  mat-paginator {
+    display: flex;
+    justify-content: center;
+  }
+
+
+

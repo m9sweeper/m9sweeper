@@ -1,0 +1,53 @@
+.kube-hunter-report {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-top: 5px;
+  padding-left: 15px;
+}
+
+.header {
+  margin: 10px 5px 10px 0;
+}
+
+.report-table-root {
+  display: block;
+  width: 100%;
+}
+
+.report-details-table {
+  margin-bottom: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
+  min-width: 500px;
+}
+
+mat-table {
+  min-width: 500px;
+}
+
+.column-severity {
+  padding-right: 1%;
+  flex: 4%;
+}
+
+.column-category {
+  padding: 0 1%;
+  flex: 13%;
+}
+
+.column-vulnerability {
+  padding-right: 1%;
+  flex: 24%;
+}
+
+.column-description {
+  padding-right: 1%;
+  flex: 34%;
+}
+
+.column-additionalInfo {
+  padding-right: 1%;
+  flex: 19%;
+}
+

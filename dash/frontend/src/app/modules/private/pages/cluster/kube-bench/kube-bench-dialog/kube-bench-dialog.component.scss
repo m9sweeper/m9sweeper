@@ -1,0 +1,67 @@
+mat-form-field {
+  margin-right: 10px;
+}
+
+.row-pad-left{
+  padding-left: 155px;
+}
+
+.button-row {
+  display: flex;
+}
+
+.flex-child:nth-child(1) {
+  flex: 60%;
+}
+
+.flex-child:nth-child(2){
+  flex: 40%;
+  display: flex;
+  justify-content: end;
+}
+
+.padding-top-17{
+  padding-top: 17px;
+}
+.margin-left-10{
+  margin-left: 10px;
+}
+.row-reverse{
+  flex-direction: row-reverse;
+}
+.cli-command{
+  margin-top: 20px;
+  border: solid black 2px;
+  overflow-y: auto;
+  max-height: 400px;
+}
+.pad-left-20{
+  padding-left: 20px;
+}
+.pad-left-10{
+  padding-left: 10px;
+}
+.padding-top-10{
+  padding-top: 10px;
+}
+.cronjob-radio-button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.code-snippet {
+  width: 100%;
+  max-height: 400px;
+  resize: none;
+  margin: 8px 0 16px  0;
+  // Styles below replicate StackOverflow
+  background-color: #f6f6f6;
+  padding: 8px;
+  border: none;
+  color: #2f3337;
+  font-size: 13px;
+  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}

@@ -1,0 +1,58 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "dash.fullname" . }}-init
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccount: m9sweeper
+      containers:
+      - name: {{ .Chart.Name }}-init
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["npm"]
+        args:
+          - "run"
+          - "cli:init:all"
+        env:
+          - name: FIRST_CLUSTER_GROUP_NAME
+            value: {{ .Values.init.clusterGroupName }}
+          - name: FIRST_CLUSTER_NAME
+            value: {{ .Values.init.clusterName }}
+          - name: CLUSTER_API_KEY
+            value: {{ .Values.global.apiKey | quote }}
+          - name: SUPER_ADMIN_EMAIL
+            value: {{ .Values.init.superAdminEmail | quote }}
+          - name: SUPER_ADMIN_PASSWORD
+            value: {{ .Values.init.superAdminPassword | quote }}
+          - name: LICENSE_KEY
+            value: {{ .Values.init.licenseKey | quote }}
+          - name: INSTANCE_KEY
+            value: {{ .Values.init.instanceKey | quote }}
+          - name: INITIAL_REGISTRIES_JSON
+            value: {{ .Values.init.docker | toJson | b64enc | quote }}
+          - name: DEFAULT_NAMESPACE_EXCEPTIONS
+            value: {{ join "," .Values.init.namespaceExceptions }}
+          - name: TRAWLER_API_KEY
+            value: {{ .Values.global.apiKey | quote }}
+          - name: CLI_PATH
+            value: ./cli.js
+        envFrom:
+          - secretRef:
+              name: {{ include "dash.fullname" . }}-secrets
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+          - configMapRef:
+              name: {{ include "dash.fullname" . }}-config-extra
+{{- end }}
+{{ if .Values.extraSecretVars }}
+          - secretRef:
+              name: {{ include "dash.fullname" . }}-secrets-extra
+{{- end }}
+{{- end }}
+      restartPolicy: Never
+  backoffLimit: 0

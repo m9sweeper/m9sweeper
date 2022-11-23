@@ -1,0 +1,105 @@
+mat-toolbar.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%  !important;
+  min-height: 50px;
+  > mat-toolbar-row{
+    &.header-bar{
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: #b0aeaf 1px solid;
+      .right {
+        margin-top: 5px;
+      }
+    }
+  }
+  img {
+    &.profile {
+      border-radius: 100%;
+      height: 35px;
+      width: 35px;
+      margin-bottom: -6px;
+    }
+  }
+  .search-bar {
+    margin-right: 30px;
+    mat-form-field {
+      font-size: 15px;
+      line-height: 0.125;
+      margin-right: -4px;
+      input {
+        font-size: 14px;
+      }
+      mat-icon {
+        margin-right: -4px;
+      }
+      .icon-size {
+        transform: scale(0.8);
+        padding-bottom: 20px;
+      }
+    }
+    .search-box {
+      max-width: 140px;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: blue;
+  }
+  #logo {
+    color: #298ddb;
+    font-size: 16px;
+  }
+  #logo:hover {
+    color: #2b5797;
+  }
+}
+.main-content{
+  margin-top: 50px;
+  overflow-x: hidden;
+  //height: 100%;
+}
+.theme-changer-container {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.nights-stay-icon {
+  padding-right: 15px;
+}
+.loader-row {
+  display: flex;
+  flex-direction: row;
+
+  .loader-container {
+    position: relative;
+    width: 100%;
+    margin-left: -15px;
+  }
+
+  @media only screen and (max-width: 576px) {
+    flex-direction: column;
+    margin-top: -15px;
+    .loader-container {
+      // Counteracts the loader's padding
+      margin-left: -30px;
+      margin-top: -15px;
+    }
+  }
+}
+
+@media print {
+  .main-content{
+    overflow: auto;
+  }
+
+  mat-toolbar {
+    &.fixed {
+      display: none !important;
+    }
+  }
+}

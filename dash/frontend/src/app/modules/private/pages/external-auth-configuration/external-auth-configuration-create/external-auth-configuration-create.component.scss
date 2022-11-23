@@ -1,0 +1,42 @@
+div {
+  &.create-external-auth-configuration-form {
+    display: flex;
+    flex-direction: row;
+    height: calc(var(--organization-container-height) - 200px);
+    max-height: 400px;
+    form.external-configuration-form {
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &.extend-create-external-auth-configuration-form{
+    display: flex;
+    flex-direction: row;
+    max-height: 700px;
+    height: calc(var(--organization-container-height) - 200px);
+    form.external-configuration-form {
+      width: 600px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.subnav-title{
+  font-size: 26px;
+  font-weight: normal;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.menu_bar {
+  flex: 1;
+}
+
+.checkbox-margin {
+  margin: 0 12px 0 0;
+}

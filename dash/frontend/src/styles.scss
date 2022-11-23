@@ -1,0 +1,200 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@import '~@angular/material/theming';
+@import './app/modules/private/private.component.theme';
+@import '~flexboxgrid/css/flexboxgrid.min.css';
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';
+
+@include mat-core();
+
+//Default theme
+$ms-default-primary: mat-palette($mat-indigo, 800, 300, 900);
+$ms-default-accent: mat-palette($mat-light-blue);
+$ms-default-warn: mat-palette($mat-pink, 600);
+
+$ms-default-theme: mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
+
+//Dark theme
+$ms-black-primary: mat-palette($mat-grey, 700, 300, 900);
+$ms-black-accent: mat-palette($mat-blue-grey, 400);
+$ms-black-warn: mat-palette($mat-red, 500);
+
+$ms-black-theme: mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
+
+
+//Light theme
+$ms-light-primary: mat-palette($mat-grey, 200, 500, 300);
+$ms-light-accent: mat-palette($mat-brown, 200);
+$ms-light-warn: mat-palette($mat-deep-orange, 200);
+
+$ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
+// $ms-toolbar-light-theme: mat-light-theme-for-toolbar($ms-light-primary, $ms-light-accent, $ms-light-warn);
+
+
+//<app-root></app-root> theme
+@import "./app/app.component.theme";
+@import './app/modules/private/pages/dashboard/dashboard.component.theme';
+@import './app/modules/private/pages/cluster/cluster-details/cluster-details.component.theme';
+@import './app/modules/private/pages/cluster/cluster-list/cluster-list.component.theme';
+@import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
+@import './app/modules/shared/subnavigation/sub-navigation.component.theme';
+@import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
+@import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
+@import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
+
+@mixin custom-components-theme($theme) {
+  @include app-root-theme($theme);
+}
+
+@mixin custom-dashboard-component-theme($theme) {
+  @include dashboard-component-light-theme($theme);
+}
+
+@mixin custom-dashboard-component-dark-theme($theme) {
+  @include dashboard-component-dark-theme($theme);
+}
+
+@mixin custom-cluster-details-component-theme($theme){
+  @include cluster-details-component-light-theme($theme);
+}
+
+@mixin custom-cluster-details-component-dark-theme($theme) {
+  @include cluster-details-component-dark-theme($theme);
+}
+
+@mixin custom-toolbar-light-theme($theme) {
+  @include toolbar-light-theme($theme);
+}
+
+@mixin custom-toolbar-dark-theme($theme) {
+  @include toolbar-dark-theme($theme);
+}
+
+@mixin custom-cluster-list-chart-font-color-dark-theme($theme) {
+  @include cluster-list-component-chart-font-dark-theme($theme);
+}
+
+@mixin custom-organization-settings-dark-theme($theme) {
+  @include organization-settings-component-dark-theme($theme);
+}
+
+@mixin custom-organization-settings-light-theme($theme) {
+  @include organization-settings-component-light-theme($theme)
+}
+
+@mixin custom-sub-navigation-dark-theme($theme) {
+  @include sub-navigation-dark-theme($theme);
+}
+
+@mixin custom-cluster-summary-dark-theme($theme) {
+  @include cluster-summary-chart-dark-theme($theme);
+}
+
+@mixin custom-kubernetes-pods-dark-theme($theme) {
+  @include kubernetes-pods-dark-theme($theme);
+}
+
+@mixin custom-kubernetes-pods-details-dark-theme($theme) {
+  @include kubernetes-pods-details-dark-theme($theme);
+}
+
+.default-theme {
+  @include angular-material-theme($ms-default-theme);
+  @include custom-components-theme($ms-default-theme);
+  @include custom-dashboard-component-theme($ms-default-theme);
+  @include custom-cluster-details-component-theme($ms-default-theme);
+  @include custom-toolbar-light-theme($ms-default-theme);
+  @include custom-organization-settings-light-theme($ms-default-theme);
+}
+
+.light-theme {
+  @include angular-material-theme($ms-light-theme);
+  @include custom-components-theme($ms-light-theme);
+}
+
+.dark-theme {
+  @include angular-material-theme($ms-black-theme);
+  @include custom-components-theme($ms-black-theme);
+  @include custom-toolbar-dark-theme($ms-black-theme);
+  @include custom-dashboard-component-dark-theme($ms-black-theme);
+  @include custom-cluster-list-chart-font-color-dark-theme($ms-black-theme);
+  @include custom-cluster-details-component-dark-theme($ms-black-theme);
+  @include custom-organization-settings-dark-theme($ms-black-theme);
+  @include custom-sub-navigation-dark-theme($ms-black-theme);
+  @include custom-cluster-summary-dark-theme($ms-black-theme);
+  @include custom-kubernetes-pods-dark-theme($ms-black-theme);
+  @include custom-kubernetes-pods-details-dark-theme($ms-black-theme);
+}
+
+.remove-dialog-padding .mat-dialog-container {
+  padding: 0;
+}
+
+.organization-settings-text {
+  font-size: 14px !important;
+}
+
+@media print {
+  html, body {
+    height: auto;
+    color-adjust: exact !important;
+    -webkit-print-color-adjust:exact !important
+  }
+}
+
+.no-padding{
+  padding: 0;
+}
+
+.margin-top-10{
+  margin-top: 10px;
+}
+
+.padding-top-10{
+  padding-top: 10px;
+}
+
+.negative-margin-bottom-20{
+  margin-bottom: -20px;
+}
+
+.margin-right-10{
+  margin-right: 10px;
+}
+
+.text-align-right{
+  text-align: right;
+}
+
+.margin-bottom-20{
+  margin-bottom: 20px;
+}
+
+.margin-bottom-2{
+  margin-bottom: 2px;
+}
+
+.font-size-20{
+  font-size: 20px;
+}
+
+.margin-left-7{
+  margin-left: 7px;
+}
+
+.justify-content-center{
+  justify-content: center;
+}
+
+.margin-bottom-6{
+  margin-bottom: 6px;
+}
+
+.image-id-tooltip {
+  word-break: break-all !important;
+  white-space: normal !important;
+}

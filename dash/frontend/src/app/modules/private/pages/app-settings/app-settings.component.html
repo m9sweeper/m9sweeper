@@ -1,0 +1,19 @@
+<div class="app-settings-container">
+  <div class="app-settings-content">
+    <ng-container>
+      <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
+                          [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
+    </ng-container>
+    <button mat-raised-button (click)="openAddSettingDialog()">{{buttonText}}</button>
+    <mat-divider></mat-divider>
+    <div class="logo-name">
+      <p *ngIf="organizationName">Organization Name: {{organizationName}}</p>
+      <ng-container *ngIf="displayLogo">
+        <p>
+          Organization Logo:
+        </p>
+        <img class="organization-logo" [src]="organizationLogo"/>
+      </ng-container>
+    </div>
+  </div>
+</div>

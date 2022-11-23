@@ -1,0 +1,36 @@
+<p>{{user}},</p>
+
+{{#if multipleExceptions}}
+    <p>Exceptions have been Created by {{exceptionCreatorFullName}}</p>
+{{else}}
+    <p>An Exception has been Created by {{exceptionCreatorFullName}}</p>
+{{/if}}
+
+<table>
+    <tr>
+        <th>Namespace(s)</th>
+        <th>Cluster(s)</th>
+        <th>Exception</th>
+        <th>Scanner(s)</th>
+        <th>Issue CVE Code</th>
+        <th>Expiration Date</th>
+        <th>More Info</th>
+    </tr>
+    {{#each exceptions}}
+        <tr>
+            <td>{{namespaces}}</td>
+            <td>{{clusterName}}</td>
+            <td>{{exceptionTitle}}</td>
+            <td>{{scanners}}</td>
+            <td>{{issueIdentifier}}</td>
+            {{#if hasEndDate}}
+                <td>{{expiryDate}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+            <td><a href="{{url}}">More</a></td>
+        </tr>
+    {{/each}}
+</table>
+
+<p>Thank you for using M9Sweeper.</p>

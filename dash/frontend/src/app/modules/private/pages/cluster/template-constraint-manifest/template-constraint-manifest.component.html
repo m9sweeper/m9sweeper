@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-title>
+    Edit Manifest
+  </mat-card-title>
+  <mat-card-content>
+    <ngx-codemirror #codemirror
+                    [options]="codeMirrorOptions"
+                    [(ngModel)]="rawTemplate"
+                    (ngModelChange)="setEditorContent($event)">
+
+    </ngx-codemirror>
+
+  </mat-card-content>
+  <div class="buttons">
+    <div mat-dialog-actions class="action-btn-right">
+      <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="saveManifest()">Save Changes</button>
+      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+    </div>
+  </div>
+</mat-card>

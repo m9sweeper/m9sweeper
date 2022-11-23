@@ -1,0 +1,173 @@
+@import '~@angular/material/theming';
+
+@mixin cluster-list-component-chart-font-dark-theme($theme) {
+  app-cluster-list {
+    .cluster-list-container {
+      color: map-get($mat-grey, A100);
+      .cluster-group-chart-list {
+        .cluster-chart-item {
+          text {
+            fill: map-get($mat-grey, A100)!important;
+          }
+        }
+      }
+    }
+    .dark-theme {
+      /**
+      * Backgrounds
+      */
+      $color-bg-darkest: #13141b;
+      $color-bg-darker: #1b1e27;
+      $color-bg-dark: #232837;
+      $color-bg-med: #2f3646;
+      $color-bg-light: #455066;
+      $color-bg-lighter: #5b6882;
+      $color-bg-white: #d9dce1;
+
+      /**
+      * Text
+      */
+      $color-text-dark: #72809b;
+      $color-text-med-dark: #919db5;
+      $color-text-med: #A0AABE;
+      $color-text-med-light: #d9dce1;
+      $color-text-light: #f0f1f6;
+      $color-text-lighter: #fff;
+
+      background: $color-bg-darker;
+
+      .ngx-charts {
+        text {
+          fill: $color-text-light;
+        }
+
+        .tooltip-anchor {
+          fill: rgb(255, 255, 255);
+        }
+
+        .gridline-path {
+          stroke: $color-bg-white;
+        }
+
+        .refline-path {
+          stroke: $color-bg-white;
+        }
+
+        .reference-area {
+          fill: #fff;
+        }
+
+        .grid-panel {
+          &.odd {
+            rect {
+              fill: rgba(255, 255, 255, 0.05);
+            }
+          }
+        }
+
+        .force-directed-graph {
+          .edge {
+            stroke: $color-bg-lighter;
+          }
+        }
+
+        .number-card {
+          p {
+            color: $color-text-light;
+          }
+        }
+
+        .gauge {
+          .background-arc {
+            path {
+              fill: $color-bg-med;
+            }
+          }
+
+          .gauge-tick {
+            path {
+              stroke: $color-text-light;
+            }
+
+            text {
+              fill: $color-text-light;
+            }
+          }
+        }
+
+        .linear-gauge {
+          .background-bar {
+            path {
+              fill: $color-bg-light;
+            }
+          }
+
+          .units {
+            fill: $color-text-dark;
+          }
+        }
+
+        .timeline {
+          .brush-background {
+            fill: rgba(255, 255, 255, 0.05);
+          }
+
+          .brush {
+            .selection {
+              fill: rgba(255, 255, 255, 0.1);
+              stroke: #aaa;
+            }
+          }
+        }
+
+        .polar-chart .polar-chart-background {
+          fill: rgb(30, 34, 46);
+        }
+
+      }
+
+      .chart-legend {
+        .legend-labels {
+          background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .legend-item {
+          &:hover {
+            color: #fff;
+          }
+        }
+
+        .legend-label {
+          &:hover {
+            color: #fff !important;
+          }
+
+          .active {
+            .legend-label-text {
+              color: #fff !important;
+            }
+          }
+        }
+
+        .scale-legend-label {
+          color: $color-text-med;
+        }
+      }
+
+      .advanced-pie-legend {
+        color: $color-text-med;
+
+        .legend-item {
+          &:hover {
+            color: #fff !important;
+          }
+        }
+      }
+
+      .number-card .number-card-label {
+        font-size: 0.8em;
+        color: $color-text-med;
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+<mat-card-title>
+  Add Template Constraint
+</mat-card-title>
+
+<mat-card>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-6">
+      <h3>Basic Details</h3>
+      <form class="form" [formGroup]="addTemplateConstraintForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="form-field-full-width" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" placeholder="Constraint Name" formControlName="name">
+          <mat-error *ngIf="addTemplateConstraintForm.controls.name.errors">Invalid constraint name.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-field-full-width" appearance="fill">
+          <mat-label>Category</mat-label>
+          <input matInput formControlName="kind" readonly>
+        </mat-form-field>
+        <mat-form-field class="form-field-full-width" appearance="fill">
+          <mat-label>Description</mat-label>
+          <input matInput type="text" placeholder="" formControlName="description">
+        </mat-form-field>
+        <mat-form-field class="form-field-full-width" appearance="fill">
+          <mat-label>Excluded Namespaces</mat-label>
+          <mat-select multiple formControlName="excludedNamespaces">
+            <mat-option *ngFor="let namespace of k8sNamespaces" value="{{namespace}}">{{namespace}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-field-full-width" appearance="fill">
+          <mat-label>Mode</mat-label>
+          <mat-select formControlName="mode">
+            <mat-option value="dryrun">Audit</mat-option>
+            <mat-option value="deny">Enforce</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+      <button mat-raised-button color="primary" (click)="editRawKubernetesManifest()">Edit Raw Kubernetes Manifest
+      </button>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-6 right-content">
+      <div class="scrollable-right-content">
+        <div>
+          <h3>Match Criteria</h3>
+          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="AddConstraintCriteriaDialog()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <mat-card *ngFor="let criteria of templateConstraintCriteria; index as i">
+          <div class="col-xs-offset-11 col-xs-1">
+            <button mat-icon-button class="close-button" (click)="removeCriteria(i)">
+              <mat-icon class="close-icon" color="warn">close</mat-icon>
+            </button>
+          </div>
+          <mat-card-content>
+            <p>kinds: [{{criteria.kinds}}]</p>
+            <p>apiGroups:
+              [{{(criteria.apiGroups[0] === ' ' || criteria.apiGroups[0] === '') ? '*' : criteria.apiGroups }}]</p>
+          </mat-card-content>
+        </mat-card>
+
+
+        <h3>Properties</h3>
+        <json-schema-form #propertyFields *ngIf="generateFormFromSchema"
+                          loadExternalAssets="true"
+                          framework="material-design"
+                          [schema]="formSchema"
+                          id="schema_form"
+                          (onChanges)="saveSchemaFormValue($event)"
+        >
+        </json-schema-form>
+        <br>
+        <json-schema-form #propertyFieldsJsonData *ngIf="!generateFormFromSchema"
+                          loadExternalAssets="true"
+                          framework="material-design"
+                          [(ngModel)]="generateFormFromJsonData"
+                          id="schema_form_edit"
+                          (onChanges)="saveSchemaFormJsonValue($event)"
+                          ngDefaultControl
+        >
+        </json-schema-form>
+      </div>
+    </div>
+    <div class="action">
+      <mat-dialog-actions id="action-btn">
+        <button [disabled]="!addTemplateConstraintForm.valid" (click)="onSubmit()" mat-raised-button color="primary"
+                type="submit">
+          Save Changes
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+
+</mat-card>

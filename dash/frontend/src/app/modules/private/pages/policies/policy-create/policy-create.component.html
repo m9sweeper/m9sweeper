@@ -1,0 +1,172 @@
+<div class="policy-create-container">
+  <div class="create-policy-form">
+    <div class="mat-toolbar">
+      <mat-toolbar>
+        <div>
+          <span class="subnav-title">{{subMenuTitle}}</span>
+        </div>
+      </mat-toolbar>
+    </div>
+    <div class="create-policy-form-card">
+      <mat-card>
+        <mat-card-content>
+          <form [formGroup]="policyForm" class="policy-form">
+            <div>
+              <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Name*</mat-label>
+                    <input matInput placeholder="Policy Name" type="text" formControlName="name" required>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Description</mat-label>
+                    <textarea matInput placeholder="Description" type="textarea" formControlName="description" required></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row active-checkbox-row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-checkbox formControlName="tempExceptionEnabled"
+                                [ngModel]="checkboxDefault"
+                  >Enable Temporary Exceptions: Create short-term exceptions
+                    for any newly discovered policy violations
+                  </mat-checkbox>
+                </div>
+              </div>
+              <div class="row" *ngIf="policyForm.controls.tempExceptionEnabled.value">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Temporary Exception Grace Period (Days)</mat-label>
+                    <input matInput placeholder="None" type="text" formControlName="new_scan_grace_period">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row active-checkbox-row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-checkbox formControlName="rescanEnabled"
+                                [ngModel]="checkboxDefault"
+                  >Rescan Images Regularly: Rescan Images regularly to ensure
+                    scan results are up to date with latest CVE definitions.
+                  </mat-checkbox>
+                </div>
+              </div>
+              <div class="row" *ngIf="policyForm.controls.rescanEnabled.value">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Image Rescan Period (Days)</mat-label>
+                    <input matInput placeholder="None" type="text" formControlName="rescan_grace_period">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row active-checkbox-row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-checkbox formControlName="enabled" [ngModel]="checkboxDefault">Active: Run and summarize all active
+                    scanners in this policy
+                  </mat-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-xs-12 required-checkbox">
+                  <mat-checkbox formControlName="enforcement" [ngModel]="checkboxDefault">Required: All required, active
+                    scanners must pass to consider an image valid
+                  </mat-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 col-xs-12">
+                  <mat-form-field appearance="standard">
+                    <mat-label>Clusters</mat-label>
+                    <mat-select formControlName="clusters" multiple required (selectionChange)="handleRelevantForAllClusters($event)">
+                      <mat-option value="all" [disabled]="relevantForAllClusters === false">For All Clusters</mat-option>
+                      <mat-optgroup *ngFor="let cg of clusterGroups" [label]="cg.name">
+                        <mat-option *ngFor="let c of cg.clusters" [value]="c.id" [disabled]="relevantForSpecificClusters === false">{{c.name}}</mat-option>
+                      </mat-optgroup>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!--<app-scanner-list></app-scanner-list>-->
+          <!-- Scanner List Table -->
+          <div class="scanner-list">
+            <div class="row scanner-list-heading-row">
+              <mat-toolbar>
+                <div class="col-lg-10 col-xs-12">
+                  <span class="subnav-title">{{scannerSubmenuTitle}}</span>
+                </div>
+                <div class="col-lg-2 col-xs-12">
+                  <span>
+                  <button mat-raised-button color="primary" class="create-scanner-button" type="button"
+                          (click)="openAddScannerDialog()"><mat-icon mat-list-icon>add</mat-icon>Create Scanner</button>
+                </span>
+                </div>
+              </mat-toolbar>
+            </div>
+            <div class="row table-row">
+              <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource">
+                  <ng-container matColumnDef="enabled">
+                    <th mat-header-cell *matHeaderCellDef>Active</th>
+                    <td mat-cell *matCellDef="let scanner">
+                      <mat-checkbox [checked]="scanner.enabled"
+                                    disabled="true">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="required">
+                    <th mat-header-cell *matHeaderCellDef>Required</th>
+                    <td mat-cell *matCellDef="let scanner">
+                      <mat-checkbox [checked]="scanner.required"
+                                    disabled="true">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let scanner"> {{scanner?.name}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                    <td mat-cell *matCellDef="let scanner"> {{scanner?.description}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>Type</th>
+                    <td mat-cell *matCellDef="let scanner">{{scanner?.type}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-icon>more_vert</mat-icon>
+                    </th>
+                    <td mat-cell *matCellDef="let scanner; let i =index" >
+                      <button mat-icon-button (click)="editScanner(scanner, i)">
+                        <mat-icon>create</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="alertDeletePolicy(scanner.id, i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- Scanner List Table End -->
+          <p></p>
+          <div mat-dialog-actions>
+            <button class="button-space" [disabled]="!policyForm.valid" mat-raised-button color="primary" type="submit"
+                    (click)="onSubmit()">Submit
+            </button>
+            <button mat-raised-button color="warn" type="button" (click)="cancelPolicyForm()">Cancel</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

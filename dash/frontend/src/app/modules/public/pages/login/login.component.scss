@@ -1,0 +1,58 @@
+div {
+  &.login-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    background-color: rgba(50,108,229,255);
+    > div {
+      &.login-form-card {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        > mat-card {
+          width: 350px;
+          > mat-card-header{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            img.site-logo {
+              max-height: 65px;
+              margin: 15px 0 10px;
+            }
+          }
+          form.login-form {
+            display: flex;
+            flex-direction: column;
+            > div {
+              &.form-action-button {
+                display: flex;
+                flex-direction: row-reverse;
+                margin: 5px 0;
+                button{
+                  width: 100%;
+                }
+              }
+              &.reset-password{
+                margin-top: 10px;
+                text-align: center;
+              }
+            }
+          }
+          div.external-auth-buttons-holder {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin: 10px 0 0 0;
+            padding: 10px;
+            > a {
+              margin-right: 5px;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

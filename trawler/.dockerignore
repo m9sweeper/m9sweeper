@@ -1,0 +1,8 @@
+Dockerfile
+.gitignore
+.git
+.idea
+pipelines/
+*.iml
+charts/
+*-azure-pipeline.yml

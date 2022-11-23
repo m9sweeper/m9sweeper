@@ -1,0 +1,57 @@
+{
+  "name": "url-shim",
+  "version": "1.0.1",
+  "repository": "lukeed/url-shim",
+  "description": "A 1.53kB browser polyfill for the Node.js `URL` and `URLSearchParams` classes",
+  "module": "dist/urlshim.mjs",
+  "unpkg": "dist/urlshim.min.js",
+  "main": "dist/urlshim.js",
+  "types": "urlshim.d.ts",
+  "umd:name": "urlshim",
+  "license": "MIT",
+  "author": {
+    "name": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com"
+  },
+  "files": [
+    "*.d.ts",
+    "dist"
+  ],
+  "engines": {
+    "node": ">= 6"
+  },
+  "scripts": {
+    "build": "bundt",
+    "pretest": "npm run build",
+    "test": "jest --coverage"
+  },
+  "keywords": [
+    "nodejs",
+    "polyfill",
+    "shim",
+    "url",
+    "urlsearchparams"
+  ],
+  "devDependencies": {
+    "bundt": "0.4.0"
+  },
+  "jest": {
+    "cacheDirectory": "<rootDir>/.jestcache",
+    "coverageDirectory": "<rootDir>/coverage/",
+    "collectCoverageFrom": [
+      "src/**"
+    ],
+    "testMatch": [
+      "<rootDir>/test/*"
+    ],
+    "transform": {
+      "\\.js$": "babel-jest"
+    }
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
+    ]
+  }
+}

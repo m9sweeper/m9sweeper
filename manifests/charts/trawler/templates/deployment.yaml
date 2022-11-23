@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "trawler.fullname" . }}
+  labels:
+    {{- include "trawler.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "trawler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/{{ include "trawler.fullname" . }}-secrets: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+        checksum/{{ include "trawler.fullname" . }}-config-extra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
+{{- end }}
+{{ if .Values.extraSecretVars }}
+        checksum/{{ include "trawler.fullname" . }}-secrets-extra: {{ include (print $.Template.BasePath "/secret-extra.yaml") . | sha256sum }}
+{{- end }}
+{{- end }}
+      labels:
+        {{- include "trawler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccount: trawler-sa
+      containers:
+        - name: "{{ .Chart.Name }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          command: ["trawler"]
+          env:
+            - name: DEBUG
+              value: "{{ .Values.enableDebugLogs | ternary 1 0 | toString }}"
+            - name: TRAWLER_RUN_MODE
+              value: rabbitmq
+            - name: M9SWEEPER_URL
+              value: "{{ .Values.dashUrl | default "http://m9sweeper-dash:3000" }}"
+          envFrom:
+            - secretRef:
+                name: {{ include "trawler.fullname" . }}-secrets
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+            - configMapRef:
+                name: {{ include "trawler.fullname" . }}-config-extra
+{{- end }}
+{{ if .Values.extraSecretVars }}
+            - secretRef:
+                name: {{ include "trawler.fullname" . }}-secrets-extra
+{{- end }}
+{{- end }}
+          resources:
+{{- toYaml .Values.resources | nindent 12 }}
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml . | nindent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{- toYaml . | nindent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{- toYaml . | nindent 8 }}
+{{- end }}

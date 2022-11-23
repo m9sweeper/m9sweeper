@@ -1,0 +1,98 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredlabels
+  annotations:
+    description: Requires all resources to contain a specified label with a value
+      matching a provided regular expression.
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Pod"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredLabels
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            message:
+              type: string
+            labels:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  allowedRegex:
+                    type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredlabels
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        get_message(parameters, _default) = msg {
+          not parameters.message
+          msg := _default
+        }
+
+        get_message(parameters, _default) = msg {
+          msg := parameters.message
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg, "details": {"missing_labels": missing}}] {
+          provided := {label | input.review.object.metadata.labels[label]}
+          required := {label | label := input.parameters.labels[_].key}
+          missing := required - provided
+          count(missing) > 0
+          def_msg := sprintf("you must provide labels: %v", [missing])
+          msg := get_message(input.parameters, def_msg)
+        }
+
+        violation[{"msg": msg}] {
+          value := input.review.object.metadata.labels[key]
+          expected := input.parameters.labels[_]
+          expected.key == key
+          # do not match if allowedRegex is not defined, or is an empty string
+          expected.allowedRegex != ""
+          not re_match(expected.allowedRegex, value)
+          def_msg := sprintf("Label <%v: %v> does not satisfy allowed regex: %v", [key, value, expected.allowedRegex])
+          msg := get_message(input.parameters, def_msg)
+        }

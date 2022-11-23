@@ -1,0 +1,18 @@
+<div class="cluster-group-create-form">
+  <form [formGroup]="clusterGroupCreateForm" class="cluster-group-create-form">
+    <p *ngIf="errorMsg">{{errorMsg}}</p>
+    <p *ngIf="successMsg">{{successMsg}}</p>
+    <div>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Enter cluster group name" type="text" formControlName="name">
+        </mat-form-field>
+      </p>
+    </div>
+    <div mat-dialog-actions align="end">
+      <button class="mat-raised-button button-space" (click)="closeClusterGroup()">Close</button>
+      <button class="mat-raised-button mat-primary" [disabled]="!clusterGroupCreateForm.valid" (click)="saveClusterGroup()">Save</button>
+    </div>
+  </form>
+</div>

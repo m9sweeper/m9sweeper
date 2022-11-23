@@ -1,0 +1,23 @@
+<div class="license-details-container">
+  <div class="license-details">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title class="license-details-sub-title">License Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}">
+        <p>License Key: {{licenseKey}}</p>
+        <p>Instance Key: {{instanceKey}}</p>
+        <p>Max CPU Cores: {{ maxNode }}</p>
+        <p>Max CPU Count: {{ maxCpu }}</p>
+        <p>Max RAM (bytes): {{ maxRam }}</p>
+        <p>Features: {{ displayFeatures() }}</p>
+        <p>Expiration Date: {{ expirationDate | date: 'medium' }}</p>
+        <p>Validity: {{isLicenseValid ? 'Valid' : 'Not Valid'}}</p>
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openCheckLicenseDialog()">
+          <mat-icon>check</mat-icon>
+          Enter License Key
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

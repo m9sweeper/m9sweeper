@@ -1,0 +1,11 @@
+{{ if .Values.extraConfigVars }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "trawler.fullname" . }}-config-extra
+  labels:
+    {{- include "trawler.labels" . | nindent 4 }}
+data:
+{{ toYaml .Values.extraConfigVars | indent 2 }}
+{{ end }}

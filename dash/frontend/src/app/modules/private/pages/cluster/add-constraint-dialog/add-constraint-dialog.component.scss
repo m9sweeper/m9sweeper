@@ -1,0 +1,111 @@
+remove-dialog-padding .mat-dialog-container {
+  padding: 3px !important;
+}
+
+.header-left {
+  border-right: solid 1px rgba(0, 0, 0, 0.12);
+  padding: 17px 157px 16px 29px;
+  box-shadow: 5px 0 5px -5px #333;;
+}
+
+.header-right {
+  padding-left: 20px;
+}
+
+.example-container {
+  height: 91%;
+}
+
+.sidenav-content {
+  display: flex;
+  margin: 20px 0 0 20px;
+  height: auto;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  mat-card-title {
+    margin-bottom: 0;
+    padding-bottom: 20px;
+  }
+
+  .checkbox-style {
+    padding-right: 0;
+    margin-right: -17px;
+  }
+
+  .right-content {
+    padding-left: 0;
+    padding-bottom: 10px;
+  }
+
+  #category-text {
+    padding-bottom: 10px;
+  }
+
+  #btn {
+    padding-top: 10px;
+  }
+
+  .action-btn {
+    align-self: flex-end;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 50px 20px 0;
+  }
+}
+
+.action-btn {
+  display: flex;
+  justify-content: flex-end;
+  //margin-right: 10px;
+  z-index: 999;
+  //position: relative;
+  height: 10%;
+}
+
+.check-item-list {
+  height: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidenav {
+  width: 265px;
+  user-select: none;
+  box-shadow: 3px 0 5px -3px #333;
+  overflow-x: auto;
+  .submenu-color {
+    background-color: #d1d9de;
+    padding-left: 10px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.menu-button {
+  transition: 300ms ease-in-out;
+  transform: rotate(0deg);
+}
+
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  overflow-y: hidden;
+  transition: transform 300ms ease;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.submenu.expanded {
+  transform: scaleY(1);
+}
+
+.constraints-header {
+  padding-left: 20px;
+}

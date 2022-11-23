@@ -1,0 +1,78 @@
+:root{
+  --cluster-details-height: 981px;
+}
+div.kubernetes-object-container {
+  height: calc(var(--cluster-details-height) - 52px);
+  overflow: auto;
+  > div {
+    &.kubernetes-object-list {
+      margin: 0 15px !important;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(var(--cluster-details-height) - 110px);
+      height: 100%;
+      > div {
+        &.kubernetes-object-sub-navigation {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          > div {
+            &.kubernetes-object-header {
+              flex-direction: column;
+              div.content-name {
+                font-size: 26px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  .namespaces-table {
+    // flex: 1;
+    overflow: auto;
+    background: #F9F9F9;
+    > mat-table {
+       min-width: 800px;
+    }
+  }
+
+  .click-event:hover {
+    background-color: rgba(0, 0, 0, .08);
+    cursor: pointer;
+  }
+  mat-paginator {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media print {
+  div {
+    &.kubernetes-object-container {
+      height: auto !important;
+      overflow: auto !important;
+      width: 100% !important;
+
+      .kubernetes-object-list {
+        max-height: auto !important;
+        height: auto !important;
+        width: 100% !important;
+
+        .namespaces-table {
+          overflow: auto !important;
+          background: #F9F9F9;
+          mat-table {
+             min-width: 100% !important;
+          }
+        }
+
+        .paginator {
+          display: none !important;
+        }
+      }
+    }
+  }
+}

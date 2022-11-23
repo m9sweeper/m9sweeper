@@ -1,0 +1,11 @@
+{{ if .Values.extraConfigVars }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "dash.fullname" . }}-config-extra
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+data:
+{{ toYaml .Values.extraConfigVars | indent 2 }}
+{{ end }}

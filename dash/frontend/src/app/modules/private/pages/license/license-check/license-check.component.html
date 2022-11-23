@@ -1,0 +1,22 @@
+<div>
+  <form [formGroup]="checkLicenseValidityForm"  (ngSubmit)="onSubmit()">
+    <div>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>License Key</mat-label>
+          <input matInput placeholder="Enter your license key" type="text" formControlName="licenseKey">
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="fill">
+          <mat-label>Instance Key</mat-label>
+          <input matInput placeholder="Enter your instance key" type="text" formControlName="instanceKey">
+        </mat-form-field>
+      </p>
+      <div mat-dialog-actions>
+        <button [disabled]="!checkLicenseValidityForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>

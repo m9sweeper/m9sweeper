@@ -1,0 +1,31 @@
+{{#if multipleExceptions}}
+    <p>Multiple issues have been detected in the cluster. Exceptions have been automatically generated.</p>
+{{else}}
+    <p>An issue has been detected in the cluster. An exception has been automatically generated.</p>
+{{/if}}
+
+
+<table>
+    <tr>
+        <th>Image Name</th>
+        <th>Namespace(s)</th>
+        <th>Scanner(s)</th>
+        <th>CVE</th>
+        <th>Severity</th>
+        <th>Expiration Date</th>
+    </tr>
+    {{#each exceptions}}
+        <tr>
+            <td>{{imageName}}</td>
+            <td>{{namespaces}}</td>
+            <td>{{scanners}}</td>
+            <td>{{issueIdentifier}}</td>
+            <td>{{severity}}</td>
+            {{#if endDate}}
+                <td>{{endDate}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+        </tr>
+    {{/each}}
+</table>

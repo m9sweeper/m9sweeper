@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+
+@mixin kubernetes-pods-dark-theme($theme) {
+  app-kubernetes-pods {
+    #breadcrumbs-url {
+      color: map-get($mat-grey, A100);
+    }
+  }
+}

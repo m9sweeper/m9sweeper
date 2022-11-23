@@ -1,0 +1,21 @@
+# source
+lib
+tests
+sample
+index.ts
+package-lock.json
+yarn.lock
+tsconfig.json
+.prettierrc
+docs
+website
+
+# misc
+.commitlintrc.json
+.release-it.json
+.eslintignore
+.eslintrc.js
+renovate.json
+.prettierignore
+.prettierrc
+publish.sh

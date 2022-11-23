@@ -1,0 +1,57 @@
+div {
+  display: flex;
+  //height: 60px;
+  justify-content: space-between;
+  flex-direction: row;
+  > div {
+    &.policy-sub-navigation {
+      display: flex;
+      flex-direction: column;
+
+      div.policy-name {
+        font-size: 26px;
+        vertical-align: bottom;
+        line-height: 60px;
+      }
+    }
+  }
+
+  > div {
+    &.policy-create {
+      > div {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+
+        &.policy-create-button {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+
+          button.new-policy {
+            background-color: #0078d4;
+            padding: 2px 25px;
+            border-radius: 2px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+          }
+
+          mat-icon.more-policy {
+            background-color: #e9e5ee;
+            padding: 8px;
+            margin-left: 10px;
+            cursor: pointer;
+          }
+
+        }
+      }
+
+      div.policy-search {
+        margin-top: 15px;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,52 @@
+<div class="docker-registries-list-container">
+  <div class="docker-registries-list">
+    <app-sub-navigation [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click)="openDockerRegistryDialog(false)"></app-sub-navigation>
+    <app-sub-navigation [allowedRoles]="['READ_ONLY']" [title]="subNavigationTitle" ></app-sub-navigation>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</th>
+          <td mat-cell *matCellDef="let dockerRegistry"> {{dockerRegistry?.name}} </td>
+        </ng-container>
+        <ng-container matColumnDef="hostname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Host Name</th>
+          <td mat-cell *matCellDef="let dockerRegistry">{{dockerRegistry?.hostname}}</td>
+        </ng-container>
+        <ng-container matColumnDef="authType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Authorization Type</th>
+          <td mat-cell *matCellDef="let dockerRegistry">{{dockerRegistry?.authType | dockerRegistryAuthType}}</td>
+        </ng-container>
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Username</th>
+          <td mat-cell *matCellDef="let dockerRegistry">{{dockerRegistry?.username}}</td>
+        </ng-container>
+        <ng-container matColumnDef="password">
+          <th mat-header-cell *matHeaderCellDef>Password</th>
+          <td mat-cell *matCellDef="let dockerRegistry">******</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let dockerRegistry" >
+            <ng-container>
+              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click) = "openDockerRegistryDialog(true, dockerRegistry)">
+                <mat-icon>create</mat-icon>
+              </button>
+            </ng-container>
+            <ng-container>
+              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="alertDeleteDockerRegistry(dockerRegistry.id)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef = "displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+                   [length]="totalCount"
+                   [pageSize]="limit"
+                   (page)="pageEvent($event)"
+                   showFirstLastButtons></mat-paginator>
+  </div>
+</div>

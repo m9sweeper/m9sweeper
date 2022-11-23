@@ -1,0 +1,64 @@
+# D:efault values for elasticsearch-curator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#Please specify k8s provider acronym. Allowed values are aks, eks, gke, openshift, tkg, tkgi, k8s
+# aks = Azure Kubernetes Service
+# gke = Google kubernetes Engine
+# eks = Elastic kubernetes Service
+# eksasf = Elastic kubernetes Service with own kube-config provided
+# ack = Alibaba Cloud Container Service
+# unmanaged = run on nodes
+# unmanaged = run on master
+# commonjob = run on both
+
+provider: "aks"
+
+#### URL of your kube-bench api of app to send reports
+reportsurl: ""
+
+cronjob:
+  enabled: true
+  # At 01:00 every day
+  schedule: "0 0 * * *"
+  annotations: {}
+  concurrencyPolicy: "Forbid"
+  failedJobsHistoryLimit: "3"
+  successfulJobsHistoryLimit: "1"
+
+podSecurityPolicy:
+  enabled: false
+
+customArguments: []
+
+pod:
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation
+
+image:
+  repository: m9sweeper/kube-bench
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+priorityClassName: ""
+
+securityContext:
+  enabled: true
+  fsGroup: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000

@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<p>
+  {{message}}
+</p>
+<mat-dialog-actions align="end">
+  <button [mat-dialog-close]="true" class="mat-focus-indicator mat-button mat-raised-button mat-button-base mat-primary"
+          type="submit" (click)="close()">
+    {{btnText}}
+  </button>
+</mat-dialog-actions>
+

@@ -1,0 +1,92 @@
+<div class="image-container">
+  <div class="image-list">
+    <div class="sub-navigation row">
+      <div class="col-lg-4 col-xs-12">
+        <span>Images</span>
+        <button class="image-create-btn" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="openImageCreateDialog()">
+          <mat-icon class="plus-button">add</mat-icon>
+        </button>
+      </div>
+      <div class="col-lg-8 col-xs-12">
+        <div class="row search-scan-col">
+          <mat-form-field class="mr-10px">
+            <mat-label>Search image</mat-label>
+            <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
+          </mat-form-field>
+          <button class="scan-images-button mr-10px" (click)="openAdvancedSearchDialog()" mat-raised-button color="primary">
+            Advanced
+          </button>
+          <button
+            class="scan-images-button"
+            [style.display]="(userIsAdmin)? 'block': 'none'"
+            [disabled]="!(dataSource && dataSource.data)"
+            (click)="openConfirmScanDialog()"
+            mat-raised-button
+            color="primary">
+            Scan displayed images
+          </button>
+        </div>
+      </div>
+    </div>
+    <mat-card>
+      <div class="image-table">
+        <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="date">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Date Scanned</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <ng-container *ngIf="image.lastScanned; else elseBlock">
+                {{image.lastScanned | date: 'MM/dd/yyyy hh:mma'}}
+              </ng-container>
+              <ng-template #elseBlock></ng-template>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="runningCluster">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Running on Cluster</mat-header-cell>
+            <mat-cell *matCellDef="let image">{{image.runningInCluster}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="scanResult">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Scan Result</mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.scanResults}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Crt">
+            <mat-header-cell *matHeaderCellDef  disableClear> Crt </mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.criticalIssues}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Maj">
+            <mat-header-cell *matHeaderCellDef  disableClear> Maj </mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.majorIssues}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Med">
+            <mat-header-cell *matHeaderCellDef  disableClear> Med </mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.mediumIssues}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Min">
+            <mat-header-cell *matHeaderCellDef  disableClear> Min </mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.lowIssues}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Neg">
+            <mat-header-cell *matHeaderCellDef  disableClear> Neg</mat-header-cell>
+            <mat-cell *matCellDef="let image"> {{image.negligibleIssues}} </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"
+                   (click)="getImageScannerDetails(row)" class="image-click">
+          </mat-row>
+        </mat-table>
+      </div>
+      <div class="paginator">
+        <mat-paginator [length]="totalCount"
+                       [pageSize]="limit"
+                       [pageSizeOptions]="[10, 20, 50, 100]"
+                       (page)="pageEvent($event)"
+                       showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </mat-card>
+  </div>
+</div>

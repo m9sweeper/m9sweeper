@@ -1,0 +1,15 @@
+<div>
+  <div class="policy-sub-navigation">
+    <div class="policy-name">
+      {{ title }}
+    </div>
+  </div>
+  <div class="policy-create">
+    <div class="policy-create-button" *ngIf="buttonTitle || buttonUrl || clickFunction">
+      <button mat-button class="new-policy" [routerLink]="buttonUrl">{{buttonTitle}}</button>
+      <!--      <mat-icon mat-list-icon class="more-policy">more_vert</mat-icon>-->
+    </div>
+    <div class="policy-search">
+    </div>
+  </div>
+</div>

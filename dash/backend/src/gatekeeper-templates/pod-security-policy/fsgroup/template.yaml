@@ -1,0 +1,113 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8spspfsgroup
+  annotations:
+    description: Controls allocating an FSGroup that owns the Pod's volumes.
+    minesweeper.io/exceptions: "true"
+    minesweeper.io/apiGroup: ""
+    minesweeper.io/kinds: "Pod"
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPSPFSGroup
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            rule:
+              type: string
+            ranges:
+              type: array
+              items:
+                type: object
+                properties:
+                  min:
+                    type: integer
+                  max:
+                    type: integer
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spspfsgroup
+
+        m9s_exception_pod(pod) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 1#
+           true
+          # END M9S EXCEPTION BLOCK 1#
+          ]
+          result := x
+        }
+
+        m9s_exception_pod_and_image(pod, container) = result {
+          x :=
+          [
+          # START M9S EXCEPTION BLOCK 2#
+          {true, true}
+          # END M9S EXCEPTION BLOCK 2#
+          ]
+          result := x
+        }
+
+        violation[{"msg": msg}] {
+          result_from_pod := m9s_exception_pod(input.review.object)
+          check := [x | x := result_from_pod[_]; x == true]
+          not count(check) > 0
+          msg := sprintf("This image namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          result_from_pod_and_image := m9s_exception_pod_and_image(input.review.object, container)
+          check := [x | x := result_from_pod_and_image[_]; x == {true, true}]
+          not count(check) > 0
+          msg := sprintf("This image name and namespace is not in m9sweeper exception list: %v.", [check])
+        }
+
+        violation[{"msg": msg, "details": {}}] {
+          spec := input.review.object.spec
+          not input_fsGroup_allowed(spec)
+          msg := sprintf("The provided pod spec fsGroup is not allowed, pod: %v. Allowed fsGroup: %v", [input.review.object.metadata.name, input.parameters])
+        }
+
+        input_fsGroup_allowed(spec) {
+          # RunAsAny - No range is required. Allows any fsGroup ID to be specified.
+          input.parameters.rule == "RunAsAny"
+        }
+        input_fsGroup_allowed(spec) {
+          # MustRunAs - Validates pod spec fsgroup against all ranges
+          input.parameters.rule == "MustRunAs"
+          fg := spec.securityContext.fsGroup
+          count(input.parameters.ranges) > 0
+          range := input.parameters.ranges[_]
+          value_within_range(range, fg)
+        }
+        input_fsGroup_allowed(spec) {
+            # MayRunAs - Validates pod spec fsgroup against all ranges or allow pod spec fsgroup to be left unset
+            input.parameters.rule == "MayRunAs"
+            not has_field(spec, "securityContext")
+        }
+        input_fsGroup_allowed(spec) {
+            # MayRunAs - Validates pod spec fsgroup against all ranges or allow pod spec fsgroup to be left unset
+            input.parameters.rule == "MayRunAs"
+            not spec.securityContext.fsGroup
+        }
+        input_fsGroup_allowed(spec) {
+          # MayRunAs - Validates pod spec fsgroup against all ranges or allow pod spec fsgroup to be left unset
+          input.parameters.rule == "MayRunAs"
+          fg := spec.securityContext.fsGroup
+          count(input.parameters.ranges) > 0
+          range := input.parameters.ranges[_]
+          value_within_range(range, fg)
+        }
+        value_within_range(range, value) {
+          range.min <= value
+          range.max >= value
+        }
+        # has_field returns whether an object has a field
+        has_field(object, field) = true {
+          object[field]
+        }

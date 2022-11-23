@@ -1,0 +1,69 @@
+<div class="kubernetes-deployments-container">
+  <div class="deployment-list">
+    <div class="deployment-list-sub-navigation">
+      <div class="k8-header">
+        <div class="content-name">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <span (click)="routePages(['/private', 'clusters', clusterId, 'kubernetes-namespaces'])">
+                {{namespace}}
+               </span>
+              </li>
+              <li class="breadcrumb-item">
+                deployments
+              </li>
+            </ol>
+        </div>
+        <div class="header">
+          <p>Kubernetes Deployments</p>
+        </div>
+      </div>
+      <div>
+        <mat-form-field appearance="fill">
+          <input class="mat-datepicker-input" (focus)="picker.open()" matInput [matDatepicker]="picker"
+                 (dateInput)="searchDeploymentsByDate($event)"
+                 [(ngModel)]="date"
+                 readonly>
+          <mat-icon *ngIf="!isDatePicker" matDatepickerToggleIcon (click)="clearDate($event)">clear</mat-icon>
+          <mat-datepicker-toggle *ngIf="isDatePicker" matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="mat-elevation-z8 deployment-list-table">
+      <table [dataSource]="dataSource" mat-table matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Deployment</th>
+          <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="namespace">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Namespace</th>
+          <td mat-cell *matCellDef="let element">{{element.namespace}}</td>
+        </ng-container>
+        <ng-container matColumnDef="generation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Generation</th>
+          <td mat-cell *matCellDef="let element">{{element.generation}}</td>
+        </ng-container>
+        <ng-container matColumnDef="compliant" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Compliant</th>
+          <td mat-cell *matCellDef="let element">
+            {{element?.compliant ? 'Yes' : 'No'}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="creationTime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Creation Time</th>
+          <td mat-cell *matCellDef="let element">{{formatData(element.creationTimestamp)}}</td>
+        </ng-container>
+        <tr mat-header-row ></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sImages(row)" class="click-event"></tr>
+      </table>
+      <mat-paginator
+        [length]="totalData"
+        [pageSize]="limit"
+        [pageSizeOptions]="[10, 20, 50, 100, 200, 300, 400, 500]"
+        (page)="pageEvent($event)"
+        showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

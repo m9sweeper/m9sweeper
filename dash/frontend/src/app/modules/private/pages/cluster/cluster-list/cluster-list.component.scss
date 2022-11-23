@@ -1,0 +1,73 @@
+.row{
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.mat-card{
+  padding: 0;
+  height: 100%;
+  margin: 10px 10px 0 0;
+}
+
+.cluster-card {
+  width: 100%;
+}
+
+.cluster-name-short {
+  height: 44px;
+  width: 50px;
+  background-color: cadetblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: white;
+  margin-left: 6px;
+}
+
+.cluster-item-details {
+  overflow: hidden;
+  width: inherit;
+  div.cluster-content{
+    margin-left: 15px;
+  }
+  div.cluster-header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+  div.cluster-scanned-date {
+    margin-left: 15px;
+    p {
+      font-style: italic;
+    }
+  }
+}
+
+
+.pointer{
+  cursor: pointer;
+}
+
+.header-font{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.edit-cluster-group-icon{
+  padding-bottom: 10px;
+}
+
+.rescan{
+  background-color: lightyellow;
+}
+
+.mat-card-title {
+  padding-top: 10px;
+}
+
+.cluster-element {
+  display:flex;
+  margin-top:15px;
+}
