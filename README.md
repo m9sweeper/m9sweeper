@@ -8,7 +8,7 @@ cluster as well as the apps running on the cluster.
 
 # Features
 
-M9sweeper makes securing a cluster easy with: 
+m9sweeper makes securing a cluster easy with: 
 
  - CVE Scanning
  - Enforcement of CVE Scanning Rules
