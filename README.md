@@ -54,3 +54,33 @@ with helm.
 
 All documentation can be found on [m9sweeper.io](https://m9sweeper.io/docs/latest/docs/)
 
+## Contributors
+
+The initial project was created by team members at [Intelletive Consulting](https://intelletive.com/)
+at times when projects were slow or to train new members, but we hope others will contribute as well. 
+
+ - [Jacob Beasley](https://github.com/jacobbeasley)
+ - [Jason Woodman](https://github.com/jasonWoodman)
+ - [Kyle Berndt](https://github.com/KBerndt10)
+ - [Becky Saunders](https://github.com/beckysaunders94) 
+ - [Farhan Tanvir](https://github.com/sunny1304int)
+ - [Jon Shoberg](https://github.com/jshoberg)
+ - [Charis Prose](https://github.com/charisprose)
+ - [Gazi Tarique](https://github.com/tarique313)
+ - [Brandan Schmitz](https://github.com/brandan-schmitz)
+ - [Shibly Forkani](https://github.com/sforkani)
+ - [Sabbir Ali](https://github.com/sabbirali)
+ - [Grant Keiner](https://github.com/GrantWK)
+ - [Grant Toenges]()
+ - [Maggie Tian]()
+ - [Rakibul Rushel]()
+ - [Jobayer Ahmed]()
+ - [Steve Gagnon]()
+ - [Khorshed Alam]()
+ - [Koti Vellanki]()
+ - [Sahil Narang]()
+ - [Shahriya Siddique]()
+ - [Raiyan Prodhan]()
+ - [Kristin Sandness]()
+ - [Samer Sarker]()
+
