@@ -26,12 +26,6 @@ export class FalcoDao {
             .from('project_falco_logs')
             .where('cluster_id', clusterId);
 
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
-
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
@@ -82,6 +76,13 @@ export class FalcoDao {
         if (endDate) {
             query = query.andWhere('calendar_date', '<=', endDate);
         }
+
+        const findCount = await knex
+            .select( [knex.raw( 'count (*)')])
+            .from(query.as("q"));
+
+        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
+
         if (limit){
             query = query.limit(limit).offset(page * limit)
         }
