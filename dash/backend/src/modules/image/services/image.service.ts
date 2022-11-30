@@ -312,12 +312,7 @@ export class ImageService {
                                     limit = 10,
                                     sort: { field: string; direction: string; } = {field: 'id', direction: 'asc'}):
         Promise<{ totalCount: number, list: ImageDto[] }> {
-        const list = await this.imageDao.searchImageUnderClusterId(clusterId, searchTerm, page, limit, sort, {cve, onlyRunning});
-        const totalCount = await this.imageDao.countImage({'i.deleted_at': null, 'i.cluster_id': clusterId});
-        return {
-            totalCount: +totalCount,
-            list: list
-        }
+        return this.imageDao.searchImageUnderClusterId(clusterId, searchTerm, page, limit, sort, {cve, onlyRunning});
     }
 
     async getScanImageScannerDetails(clusterId: number, imageId: number, scannerId: number): Promise<ImageScanResultScannerDto> {
