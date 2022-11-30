@@ -23,9 +23,10 @@ export class FalcoService {
                selectedPriorityLevels?: string [],
                selectedOrderBy?: string,
                startDate?: string,
-               endDate?: string
+               endDate?: string,
+               namespaces?: string []
   ): Observable<IServerResponse<{logCount: number, list: IFalcoLog[]}>> {
-    const params = this.buildParams(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate);
+    const params = this.buildParams(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate, namespaces);
     return this.httpClient.get('/api/falco', {params});
   }
 
@@ -42,7 +43,8 @@ export class FalcoService {
               selectedPriorityLevels?: string [],
               selectedOrderBy?: string,
               startDate?: string,
-              endDate?: string
+              endDate?: string,
+              namespaces?: string []
   ): HttpParams {
     let params: HttpParams = new HttpParams();
     params = params.set('cluster-id', clusterId.toString());
@@ -71,6 +73,13 @@ export class FalcoService {
     if (endDate) {
       params = params.set('endDate', endDate.toString());
     }
+
+    if (namespaces) {
+      namespaces.forEach((namespace: string) => {
+        params = params.append('namespace[]', namespace);
+      });
+    }
+
     return params;
   }
 

@@ -17,6 +17,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
+import {NamespaceService} from '../../../../../core/services/namespace.service';
 
 
 
@@ -41,6 +42,7 @@ export class FalcoEventsListComponent implements OnInit {
   page: number;
   startDate: string;
   endDate: string;
+  clusterNamespaces: Array<string>;
 
   constructor(
     private falcoService: FalcoService,
@@ -51,6 +53,7 @@ export class FalcoEventsListComponent implements OnInit {
     private customValidatorService: CustomValidatorService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
+    private namespaceService: NamespaceService
   ) {}
 
   ngOnInit() {
@@ -58,7 +61,8 @@ export class FalcoEventsListComponent implements OnInit {
       selectedPriorityLevels: [[]],
       selectedOrderBy: [],
       startDate: [],
-      endDate: []
+      endDate: [],
+      namespaces: [[]],
     });
 
     this.route.parent.parent.params
@@ -66,6 +70,16 @@ export class FalcoEventsListComponent implements OnInit {
       .subscribe(param => {
         this.clusterId = param.id;
         this.getEvents();
+      });
+
+    this.namespaceService.getAllK8sNamespaces(this.clusterId)
+      .pipe(take(1))
+      .subscribe((response) => {
+        this.clusterNamespaces = new Array<string>();
+        for (const namespace of response.data) {
+          this.clusterNamespaces.push(namespace.name);
+        }
+        this.clusterNamespaces.sort();
       });
   }
 
@@ -91,7 +105,9 @@ export class FalcoEventsListComponent implements OnInit {
       this.filterForm.get('selectedPriorityLevels').value,
       this.filterForm.get('selectedOrderBy').value,
       this.startDate,
-      this.endDate)
+      this.endDate,
+      this.filterForm.get('namespaces').value
+    )
       .pipe(take(1))
       .subscribe(response => {
         this.dataSource = new MatTableDataSource(response.data.list);
