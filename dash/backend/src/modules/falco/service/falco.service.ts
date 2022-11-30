@@ -22,10 +22,11 @@ export class FalcoService {
         priorities?: string [],
         orderBy?: string,
         startDate?: string,
-        endDate?: string
+        endDate?: string,
+        namespaces?: string []
     ): Promise<{  logCount: number, list: FalcoDto[] }> {
 
-       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate);
+       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespaces);
 
     }
 

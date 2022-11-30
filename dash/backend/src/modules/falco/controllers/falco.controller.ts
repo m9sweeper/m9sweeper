@@ -36,9 +36,10 @@ export class FalcoController {
         @Query('orderBy') orderBy?: string,
         @Query('startDate') startDate?: string,
         @Query('endDate') endDate?: string,
+        @Query('namespace') namespaces?: string [],
     ): Promise<{ logCount: number, list: FalcoDto[]}>
     {
-        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate );
+        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespaces );
     }
 
     @Get('/apiKey')

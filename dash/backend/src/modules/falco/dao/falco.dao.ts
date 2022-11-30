@@ -18,7 +18,8 @@ export class FalcoDao {
         priorities?: string [],
         orderBy?: string,
         startDate?: string,
-        endDate?: string
+        endDate?: string,
+        namespaces?: string []
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -75,6 +76,10 @@ export class FalcoDao {
         }
         if (endDate) {
             query = query.andWhere('calendar_date', '<=', endDate);
+        }
+
+        if (namespaces) {
+            query = query.whereIn('namespace', namespaces);
         }
 
         const findCount = await knex
