@@ -19,7 +19,8 @@ export class FalcoDao {
         orderBy?: string,
         startDate?: string,
         endDate?: string,
-        namespaces?: string []
+        namespaces?: string [],
+        pods?: string []
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -80,6 +81,10 @@ export class FalcoDao {
 
         if (namespaces) {
             query = query.whereIn('namespace', namespaces);
+        }
+
+        if (pods) {
+            query = query.whereIn('container', pods );
         }
 
         const findCount = await knex
