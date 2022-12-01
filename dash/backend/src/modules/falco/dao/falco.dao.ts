@@ -19,8 +19,9 @@ export class FalcoDao {
         orderBy?: string,
         startDate?: string,
         endDate?: string,
-        namespaces?: string [],
-        pods?: string []
+        namespace?: string,
+        pod?: string,
+        image?: string
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -79,12 +80,16 @@ export class FalcoDao {
             query = query.andWhere('calendar_date', '<=', endDate);
         }
 
-        if (namespaces) {
-            query = query.whereIn('namespace', namespaces);
+        if (namespace) {
+            query = query.whereRaw(`namespace LIKE ?`, [`%${namespace.trim()}%`]);
         }
 
-        if (pods) {
-            query = query.whereIn('container', pods );
+        if (pod) {
+            query = query.whereRaw(`container LIKE ?`, [`%${pod.trim()}%`]);
+        }
+
+        if (image) {
+            query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
         }
 
         const findCount = await knex
