@@ -60,21 +60,28 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search namespace</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="namespaceInput">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search pod</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="podInput">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search image</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="imageInput">
+                      </mat-form-field>
+                    </div>
+
                 </div>
-                <div>
-                  <div class="col-xs-12 col-sm-6 col-md-3">
-                    <mat-form-field appearance="fill" [formGroup]="filterForm">
-                      <mat-label>Namespaces</mat-label>
-                      <mat-select formControlName="namespaces"
-                                  multiple>
-                        <mat-option *ngFor="let namespace of clusterNamespaces"
-                                    [value]="namespace">
-                          {{namespace}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div>
+
                 <div class="row filter-button">
                   <div class="col-xs-12 col-sm-6 col-md-3  text-align-left no-padding">
                   <button [disabled]="!filtersValid"

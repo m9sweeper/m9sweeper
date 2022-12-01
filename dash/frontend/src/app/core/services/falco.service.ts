@@ -24,9 +24,11 @@ export class FalcoService {
                selectedOrderBy?: string,
                startDate?: string,
                endDate?: string,
-               namespaces?: string []
+               namespace?: string,
+               pod?: string,
+               image?: string
   ): Observable<IServerResponse<{logCount: number, list: IFalcoLog[]}>> {
-    const params = this.buildParams(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate, namespaces);
+    const params = this.buildParams(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate, namespace, pod, image);
     return this.httpClient.get('/api/falco', {params});
   }
 
@@ -44,7 +46,9 @@ export class FalcoService {
               selectedOrderBy?: string,
               startDate?: string,
               endDate?: string,
-              namespaces?: string []
+              namespace?: string,
+              pod?: string,
+              image?: string
   ): HttpParams {
     let params: HttpParams = new HttpParams();
     params = params.set('cluster-id', clusterId.toString());
@@ -74,10 +78,16 @@ export class FalcoService {
       params = params.set('endDate', endDate.toString());
     }
 
-    if (namespaces) {
-      namespaces.forEach((namespace: string) => {
-        params = params.append('namespace[]', namespace);
-      });
+    if (namespace) {
+      params = params.set('namespace', namespace.toString());
+    }
+
+    if (pod) {
+      params = params.set('pod', pod.toString());
+    }
+
+    if (image) {
+      params = params.set('image', image.toString());
     }
 
     return params;
