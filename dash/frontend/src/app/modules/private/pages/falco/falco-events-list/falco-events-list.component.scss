@@ -9,6 +9,10 @@
   justify-content: left;
 }
 
+.mat-card-title{
+  padding-left: 30px;
+  padding-right: 20px;
+}
 .falco-container{
   height: 100%;
   overflow-y: auto;
@@ -31,7 +35,7 @@
 .falco-events-table {
   display: flex;
   flex-direction: row;
-  max-width: 1000px;
+  max-width: 100%;
   overflow-x: scroll;
 }
 
@@ -49,17 +53,11 @@
   align-content: center;
 }
 
-.button {
-  display: flex;
-  justify-content: right;
-  padding-right: 5px;
-  align-content: center;
-  min-width: 15rem;
-}
-
 .card-list-header {
-  width: 100%
-}
+  width: 100%;
+  white-space: nowrap;
+  display: block;
+  }
 
 .event-row:hover {
   background-color: rgba(0, 0, 0, .05);
