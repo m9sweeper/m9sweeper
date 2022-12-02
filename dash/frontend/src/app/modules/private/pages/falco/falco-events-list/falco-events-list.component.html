@@ -1,11 +1,11 @@
 <div class="falco-container">
-  <div class="falco-events-list page">
-    <div class="row card-list-header">
-      <div class="col-xs-6 falco-log-list" >
-        <h1>Project Falco</h1>
+  <div class="falco-events-list">
+    <div class="row mat-card-title">
+      <div class="col-xs-4 col-xs-12 falco-log-list no-padding" >
+        <div class="margin-top-10 header-font">Project Falco </div>
       </div>
-      <div class="col-xs-6 button">
-        <button mat-raised-button color="primary" (click)="openDialog()">Install</button>
+      <div class="col-xs-8 col-xs-12  text-align-right no-padding">
+        <button class="margin-right-10 margin-top-10" mat-raised-button color="primary" (click)="openDialog()">Install</button>
       </div>
     </div>
     <div class="falco-filter-card">
@@ -60,13 +60,36 @@
                       </mat-select>
                     </mat-form-field>
                   </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search namespace</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="namespaceInput">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search pod</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="podInput">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                      <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                        <mat-label>Search image</mat-label>
+                        <input matInput autocomplete="off" type="text" formControlName="imageInput">
+                      </mat-form-field>
+                    </div>
+
                 </div>
+
                 <div class="row filter-button">
+                  <div class="col-xs-12 col-sm-6 col-md-3  text-align-left no-padding">
                   <button [disabled]="!filtersValid"
                           mat-raised-button
                           color="primary"
                           type="submit">Search
                   </button>
+                  </div>
                 </div>
               </form>
           </div>
@@ -78,10 +101,10 @@
       <mat-card >
         <mat-card-header>
           <div class="row card-list-header">
-            <div class="col-xs-6 falco-log-list" >
+            <div class="falco-log-list no-padding" >
               <h2>Recent Events</h2>
             </div>
-            <div class="col-xs-6 button">
+            <div class="col-xs-12  text-align-right no-padding">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"
@@ -95,13 +118,13 @@
             </div>
           </div>
         </mat-card-header>
-        <mat-card-content>
-          <div class="falco-events-table">
+        <div class ="falco-table">
             <mat-table [dataSource]="dataSource">
-              <ng-container matColumnDef="calendarDate">
-                <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
-              </ng-container>
+
+                <ng-container matColumnDef="calendarDate">
+                  <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                  <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+                </ng-container>
 
               <ng-container matColumnDef="namespace">
                 <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
@@ -132,10 +155,11 @@
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"
-                       (click)="displayEventDetails(row)" class="event-row"></mat-row>
+                       (click)="displayEventDetails(row)" class="event-row">
+              </mat-row>
             </mat-table>
-          </div>
-        </mat-card-content>
+    </div>
+
       <div class="paginator">
         <mat-paginator
           [length]="logCount"
@@ -147,4 +171,5 @@
       </div>
     </mat-card>
   </div>
+</div>
 </div>

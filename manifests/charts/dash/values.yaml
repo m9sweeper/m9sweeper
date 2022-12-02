@@ -91,6 +91,12 @@ ingress:
       #   hosts:
       #     - example.local
 
+  # Deploys an Istio VirtualService, DestinationRule, Gateway (optional), PeerAuthentication (optional)
+  istio:
+    enabled: false
+    loadBalancerType: ROUND_ROBIN
+    mtlsMode: "PERMISSIVE"
+
 ############
 # CronJobs #
 ############

@@ -29,7 +29,7 @@ global:
   # Provide a secret string that will be used to sign JWT tokens, it is highly recommended that you set this to your own secret
   jwtSecret: "this-is-not-secret"
   # This URL will be used in email templates to reference a http link to Dash
-  baseUrl: "http://localhost:3000/"
+  baseUrl: "http://m9sweeper-dash:3000/"
   # Provide a secret string that will be set as the trawler service account's API key.
   # It will also be passed to trawler so that it can auth with Dash. You will not need it
   # after the initial installation as it will be loaded into the DB.
