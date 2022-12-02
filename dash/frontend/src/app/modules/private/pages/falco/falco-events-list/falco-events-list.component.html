@@ -1,5 +1,5 @@
 <div class="falco-container">
-  <div class="falco-events-list page">
+  <div class="falco-events-list">
     <div class="row mat-card-title">
       <div class="col-xs-4 col-xs-12 falco-log-list no-padding" >
         <div class="margin-top-10 header-font">Project Falco </div>
@@ -118,13 +118,13 @@
             </div>
           </div>
         </mat-card-header>
-        <mat-card-content>
-          <div class="falco-events-table">
+        <div class ="falco-table">
             <mat-table [dataSource]="dataSource">
-              <ng-container matColumnDef="calendarDate">
-                <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
-              </ng-container>
+
+                <ng-container matColumnDef="calendarDate">
+                  <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+                  <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+                </ng-container>
 
               <ng-container matColumnDef="namespace">
                 <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
@@ -155,10 +155,11 @@
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"
-                       (click)="displayEventDetails(row)" class="event-row"></mat-row>
+                       (click)="displayEventDetails(row)" class="event-row">
+              </mat-row>
             </mat-table>
-          </div>
-        </mat-card-content>
+    </div>
+
       <div class="paginator">
         <mat-paginator
           [length]="logCount"
@@ -170,4 +171,5 @@
       </div>
     </mat-card>
   </div>
+</div>
 </div>

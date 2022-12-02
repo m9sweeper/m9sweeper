@@ -9,10 +9,6 @@
   justify-content: left;
 }
 
-.mat-card-title{
-  padding-left: 30px;
-  padding-right: 20px;
-}
 .falco-container{
   height: 100%;
   overflow-y: auto;
@@ -30,13 +26,6 @@
 
 .report-header {
   width: 100%
-}
-
-.falco-events-table {
-  display: flex;
-  flex-direction: row;
-  max-width: 100%;
-  overflow-x: scroll;
 }
 
 .table-card-header{
@@ -64,42 +53,6 @@
   cursor: pointer;
 }
 
-
-  .mat-column-calendarDate {
-    max-width: 6rem;
-    white-space: nowrap;
-  }
-
-  .mat-column-namespace {
-    max-width: 7%;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
-
-  .mat-column-pod {
-    max-width: 7%;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
-
-  .mat-column-image {
-    max-width: 7%;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
-
-  .mat-column-priority {
-    max-width: 6rem;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
-
-  .mat-column-message {
-    max-width: 60%;
-    white-space: nowrap;
-    margin-right: 10px;
-  }
-
   .mat-form-field {
     margin-right: 10px;
   }
@@ -109,5 +62,68 @@
     justify-content: center;
   }
 
+  .mat-card-title{
+    padding-left: 30px;
+    padding-right: 20px;
+  }
 
+.falco-table {
+  // flex: 1;
+  overflow: auto;
+
+  mat-table {
+    min-width: 800px;
+
+    mat-cell, mat-header-cell, mat-footer-cell {
+      overflow: visible;
+    }
+
+    .mat-column-calendarDate {
+      width: 100px;
+      min-width: 50px;
+      max-width: 100px;
+      margin-right: 5px;
+    }
+
+    .mat-column-namespace {
+      width: 120px;
+      min-width: 100px;
+      max-width: 120px;;
+      margin-right: 10px;
+    }
+
+    .mat-column-pod {
+      width: 120px;
+      min-width: 100px;
+      max-width:120px;;
+      //max-width: 7%;
+      margin-right: 10px;
+    }
+
+    .mat-column-image {
+      //max-width: 7%;
+      width: 150px;
+      min-width: 100px;
+      max-width: 150px;;
+      margin-right: 10px;
+     //white-space: nowrap;
+    }
+
+    .mat-column-priority {
+      width: 100px;
+      min-width: 50px;
+      max-width:100px;
+      margin-right: 10px;
+    }
+
+    .mat-column-message {
+      //max-width: 60%;
+      width: 200px;
+      min-width: 100px;
+      max-width:200px;;
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+}
 

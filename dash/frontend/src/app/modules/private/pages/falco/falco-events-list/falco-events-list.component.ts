@@ -17,7 +17,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
-import {NamespaceService} from '../../../../../core/services/namespace.service';
+
 
 
 
@@ -42,7 +42,6 @@ export class FalcoEventsListComponent implements OnInit {
   page: number;
   startDate: string;
   endDate: string;
-  namespace: string;
 
   constructor(
     private falcoService: FalcoService,
@@ -90,7 +89,7 @@ export class FalcoEventsListComponent implements OnInit {
     if (this.filterForm.get('endDate').value) {
       this.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
     }
-    console.log('namespace input:  ', this.filterForm.get('namespaceInput').value );
+
     this.falcoService.getFalcoLogs(
       this.clusterId,
       this.limit,
