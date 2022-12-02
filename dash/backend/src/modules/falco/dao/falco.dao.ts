@@ -18,19 +18,16 @@ export class FalcoDao {
         priorities?: string [],
         orderBy?: string,
         startDate?: string,
-        endDate?: string
+        endDate?: string,
+        namespace?: string,
+        pod?: string,
+        image?: string
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
         let query = knex.select()
             .from('project_falco_logs')
             .where('cluster_id', clusterId);
-
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
 
         if (priorities) {
             query = query.whereIn('level', priorities);
@@ -82,6 +79,25 @@ export class FalcoDao {
         if (endDate) {
             query = query.andWhere('calendar_date', '<=', endDate);
         }
+
+        if (namespace) {
+            query = query.whereRaw(`namespace LIKE ?`, [`%${namespace.trim()}%`]);
+        }
+
+        if (pod) {
+            query = query.whereRaw(`container LIKE ?`, [`%${pod.trim()}%`]);
+        }
+
+        if (image) {
+            query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        const findCount = await knex
+            .select( [knex.raw( 'count (*)')])
+            .from(query.as("q"));
+
+        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
+
         if (limit){
             query = query.limit(limit).offset(page * limit)
         }

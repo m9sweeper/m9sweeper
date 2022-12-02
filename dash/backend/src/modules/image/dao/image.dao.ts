@@ -750,7 +750,7 @@ export class ImageDao {
                                     page = 0, limit = 10,
                                     sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
                                     options?: {cve?: string, onlyRunning?: boolean}):
-      Promise<ImageDto[]>{
+      Promise<{totalCount: number, list: ImageDto[]}>{
         const knex = await this.databaseService.getConnection();
         const sortFieldMap = {
             'id':'i.id',
@@ -764,24 +764,24 @@ export class ImageDao {
         sort.direction = sort.direction === 'desc' ? 'desc' : 'asc';
         const query = knex
           .select([
-              'i.id as _id',
-              'i.url as _url',
-              'i.cluster_id as _clusterId',
-              'i.name as _name',
-              'i.tag as _tag',
-              'i.docker_image_id as _dockerImageId',
-              'i.summary as _summary',
-              'i.last_scanned as _lastScanned',
-              knex.raw(`CASE WHEN i.running_in_cluster IS TRUE THEN 'YES' ELSE 'NO' END as "_runningInCluster"`),
-              'i.scan_results as _scanResults',
-              'i.scan_queued as _scanQueued',
-              'i.scan_results as _scanResults',
-              'i.scan_queued as _scanQueued',
-              knex.raw(`COALESCE(i.critical_issues, 0) as "_criticalIssues"`),
-              knex.raw(`COALESCE(i.major_issues, 0) as "_majorIssues"`),
-              knex.raw(`COALESCE(i.medium_issues, 0) as "_mediumIssues"`),
-              knex.raw(`COALESCE(i.low_issues, 0) as "_lowIssues"`),
-              knex.raw(`COALESCE(i.negligible_issues, 0) as "_negligibleIssues"`),
+              'i.id as id',
+              'i.url as url',
+              'i.cluster_id as clusterId',
+              'i.name as name',
+              'i.tag as tag',
+              'i.docker_image_id as dockerImageId',
+              'i.summary as summary',
+              'i.last_scanned as lastScanned',
+              knex.raw(`CASE WHEN i.running_in_cluster IS TRUE THEN 'YES' ELSE 'NO' END as "runningInCluster"`),
+              'i.scan_results as scanResults',
+              'i.scan_queued as scanQueued',
+              'i.scan_results as scanResults',
+              'i.scan_queued as scanQueued',
+              knex.raw(`COALESCE(i.critical_issues, 0) as "criticalIssues"`),
+              knex.raw(`COALESCE(i.major_issues, 0) as "majorIssues"`),
+              knex.raw(`COALESCE(i.medium_issues, 0) as "mediumIssues"`),
+              knex.raw(`COALESCE(i.low_issues, 0) as "lowIssues"`),
+              knex.raw(`COALESCE(i.negligible_issues, 0) as "negligibleIssues"`),
           ])
           .from('images as i')
           // .whereRaw(`i.url ~* ? and i.cluster_id = ?`, [searchTerm.trim(), clusterId])
@@ -800,13 +800,29 @@ export class ImageDao {
                 .where('imi.type', 'ilike', `%${options?.cve}%`)
                 .groupBy('i.id');
         }
+
         query.where('i.cluster_id', clusterId)
-          .andWhereRaw(`i.cluster_id IN (select id from clusters as c where c.deleted_at IS NULL)`)
-          .limit(limit)
-          .offset(page * limit)
-          .orderByRaw(`${sort.field} ${sort.direction} nulls last`);
-        return knexnest(query)
-          .then(image => plainToInstance(ImageDto, image));
+            .andWhereRaw(`i.cluster_id IN (select id from clusters as c where c.deleted_at IS NULL)`)
+
+        const findCount = await knex
+            .select( [knex.raw( 'count (*)')])
+            .from(query.as("q"));
+        const totalCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
+
+        if (limit) {
+            query.limit(limit)
+                .offset(page * limit)
+                .orderByRaw(`${sort.field} ${sort.direction} nulls last`);
+        }
+
+        const list = await query.then(data => {
+            return plainToInstance(ImageDto, data);
+        });
+
+        return {
+            list: list,
+            totalCount: +totalCount
+        }
     }
 
     async getScanImageScannerDetails(searchClause: any): Promise<ImageScanResultScannerDto[]>{

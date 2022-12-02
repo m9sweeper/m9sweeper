@@ -20,6 +20,7 @@ import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 
 
 
+
 @Component({
   selector: 'app-falco-events-list',
   templateUrl: './falco-events-list.component.html',
@@ -39,6 +40,8 @@ export class FalcoEventsListComponent implements OnInit {
   logCount: number;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   page: number;
+  startDate: string;
+  endDate: string;
 
   constructor(
     private falcoService: FalcoService,
@@ -49,22 +52,26 @@ export class FalcoEventsListComponent implements OnInit {
     private customValidatorService: CustomValidatorService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
+
   ) {}
 
   ngOnInit() {
+    this.filterForm = this.formBuilder.group({
+      selectedPriorityLevels: [[]],
+      selectedOrderBy: [],
+      startDate: [],
+      endDate: [],
+      namespaceInput: [],
+      podInput: [],
+      imageInput: [],
+    });
+
     this.route.parent.parent.params
       .pipe(take(1))
       .subscribe(param => {
         this.clusterId = param.id;
         this.getEvents();
       });
-
-    this.filterForm = this.formBuilder.group({
-      selectedPriorityLevels: [[]],
-      selectedOrderBy: [],
-      startDate: [],
-      endDate: []
-    });
 
   }
 
@@ -76,7 +83,25 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   getEvents() {
-    this.falcoService.getFalcoLogs(this.clusterId, this.limit, this.page)
+    if (this.filterForm.get('startDate').value) {
+      this.startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
+    }
+    if (this.filterForm.get('endDate').value) {
+      this.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
+    }
+
+    this.falcoService.getFalcoLogs(
+      this.clusterId,
+      this.limit,
+      this.page,
+      this.filterForm.get('selectedPriorityLevels').value,
+      this.filterForm.get('selectedOrderBy').value,
+      this.startDate,
+      this.endDate,
+      this.filterForm.get('namespaceInput').value,
+      this.filterForm.get('podInput').value,
+      this.filterForm.get('imageInput').value
+    )
       .pipe(take(1))
       .subscribe(response => {
         this.dataSource = new MatTableDataSource(response.data.list);
@@ -85,25 +110,6 @@ export class FalcoEventsListComponent implements OnInit {
           alert(err);
       });
 
-  }
-
-  getEventsWithFilters(
-    clusterId: number,
-    limit?: number,
-    page?: number,
-    selectedPriorityLevels?: string [],
-    selectedOrderBy?: string,
-    startDate?: string,
-    endDate?: string
-  ){
-    this.falcoService.getFalcoLogs(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate)
-      .pipe(take(1))
-      .subscribe(response => {
-        this.dataSource = new MatTableDataSource(response.data.list);
-        this.logCount = response.data.logCount;
-      }, (err) => {
-        alert(err);
-      });
   }
 
   displayEventDetails(event: IFalcoLog) {
@@ -116,14 +122,7 @@ export class FalcoEventsListComponent implements OnInit {
 
   downloadReport() {
     this.loaderService.start('csv-download');
-    let startDate;
-    let endDate;
-    if (this.filterForm.get('startDate').value) {
-      startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
-    }
-    if (this.filterForm.get('endDate').value) {
-      endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
-    }
+
     this.falcoService.downloadFalcoExport(this.clusterId)
         .pipe(take(1))
         .subscribe((response) => {
@@ -136,30 +135,11 @@ export class FalcoEventsListComponent implements OnInit {
         });
     }
 
-
   rebuildWithFilters(){
     if (!this.filtersValid) {
       alert('Invalid filter settings; please recheck filter values');
     }else {
-
-      let startDate;
-      let endDate;
-      if (this.filterForm.get('startDate').value) {
-        startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
-      }
-      if (this.filterForm.get('endDate').value) {
-        endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
-      }
-
-      this.getEventsWithFilters(
-        this.clusterId,
-        this.limit,
-        this.page,
-        this.filterForm.get('selectedPriorityLevels').value,
-        this.filterForm.get('selectedOrderBy').value,
-        startDate,
-        endDate
-      );
+        this.getEvents();
     }
   }
 
