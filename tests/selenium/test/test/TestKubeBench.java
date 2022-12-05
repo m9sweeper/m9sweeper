@@ -55,8 +55,8 @@ public final class TestKubeBench {
         Thread.sleep(2000);
         // click on choosing environment dropdown
         driver.findElement(By.xpath("//app-kube-bench-dialog/mat-horizontal-stepper/div/div/div/mat-form-field/div/div/div/mat-select[@role='combobox']")).click();
-        // click on Plain Job - Scan Node
-        driver.findElement(By.xpath("//mat-option/span[contains(normalize-space(), 'Plain Job - Scan Node')]")).click();
+        // click on "Plain Job"
+        driver.findElement(By.xpath("//mat-option/span[normalize-space(text())='Plain Job']")).click();
         // click next
         driver.findElement(By.xpath("//button/span[contains(text(),'Next')]")).click();
         // sleep to load
