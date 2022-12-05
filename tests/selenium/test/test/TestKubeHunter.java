@@ -57,18 +57,23 @@ public final class TestKubeHunter {
         driver.findElement(By.xpath("//mat-radio-group/mat-radio-button[2]/label/span[1]")).click();
         // sleep to load
         Thread.sleep(2000);
+
         // click on Copy to Clipboard
-        driver.findElement(By.xpath("//button/span[@class='mat-button-wrapper']/mat-icon[contains(text(), 'content_copy')]")).click();
+        // driver.findElement(By.xpath("//button/span[@class='mat-button-wrapper']/mat-icon[contains(text(), 'content_copy')]")).click();
         // sleep
-        Thread.sleep(2000);
+        // Thread.sleep(2000);
         // paste copied text from cliboard
-        String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-        System.out.println("******copied Text:*******  "+ copiedText);
+        // String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+        // System.out.println("******copied Text:*******  "+ copiedText);
+
+        // get helm command from the html element
+        String helmText = driver.findElement(By.xpath("//textarea")).getText();
+        System.out.println("******Helm Text:*******  "+ helmText);
 
         // *** It takes about 2 minutes to populate the report ***
         // Run pasted text (helm command) on command line
         ProcessBuilder builder = new ProcessBuilder();
-        builder.command("bash", "-c", copiedText);
+        builder.command("bash", "-c", helmText);
         builder.redirectErrorStream(true);
         // print command line output
         Process process = builder.start();
@@ -81,6 +86,7 @@ public final class TestKubeHunter {
         }
         // print exit code if any
         System.out.println("*** Process excited with code: *** "+ exitCode);
+
 
         // close the modal by Esc
         actions.sendKeys(Keys.ESCAPE).perform();
