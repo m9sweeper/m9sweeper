@@ -56,7 +56,7 @@ public final class TestKubeBench {
         // click on choosing environment dropdown
         driver.findElement(By.xpath("//app-kube-bench-dialog/mat-horizontal-stepper/div/div/div/mat-form-field/div/div/div/mat-select[@role='combobox']")).click();
         // click on "Plain Job"
-        driver.findElement(By.xpath("//mat-option/span[normalize-space(text())='Plain Job']")).click();
+        driver.findElement(By.xpath("//mat-option/span[normalize-space(text())='Common Job Kubernetes Environment']")).click();
         // click next
         driver.findElement(By.xpath("//button/span[contains(text(),'Next')]")).click();
         // sleep to load
@@ -74,14 +74,6 @@ public final class TestKubeBench {
         // paste copied text from cliboard to comman line
         String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
         System.out.println("******copied Text:*******  "+ copiedText);
-
-        // String clipboardText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-        // System.out.println("******copied Text:*******  "+ clipboardText);
-
-        // replace reportsurl with dispatchUrl
-        // String copiedText = clipboardText.replace("reportsurl", "dispatchUrl");
-        // System.out.println("******NEW Text:*******  "+ copiedText);
-
 
         // *** It takes about 2 minutes to populate the report ***
         // Run pasted text (helm command) on command line
@@ -107,7 +99,7 @@ public final class TestKubeBench {
 
 
         // verify there's data in the report
-        String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div/div/table/tbody/tr/td[contains(normalize-space(),'2022')]")).getText();
+        String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div/div/mat-table/mat-row/mat-cell[contains(text(),'2022')]")).getText();
         if (lastReportDate.length()> 0){
             System.out.println("*** KB returned results on: ***" + lastReportDate);
         } else {
