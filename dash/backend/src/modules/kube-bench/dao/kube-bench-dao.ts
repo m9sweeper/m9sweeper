@@ -100,9 +100,9 @@ export class KubeBenchDao {
         # eks = Elastic kubernetes Service
         # eksasf = Elastic kubernetes Service with own kube-config provided
         # ack = Alibaba Cloud Container Service
-        # node = run on nodes
-        # master = run on master
-        # all = run on both nodes
+        # unmanaged = run on nodes
+        # unmanaged = run on master
+        # commonjob = run on both
         */
         return [
             {name: 'Azure Kubernetes Service', value: 'aks'},
@@ -110,9 +110,8 @@ export class KubeBenchDao {
             {name: 'Elastic kubernetes Service', value: 'eks'},
             {name: 'Elastic kubernetes Service with own kube-config provided', value: 'eksasf'},
             {name: 'Alibaba Cloud Container Service', value: 'ack'},
-            {name: 'Plain Job - Scan Node', value: 'node'},
-            {name: 'Plain Job - Scan Master', value: 'master'},
-            {name: 'Plain Job', value: 'all'},
+            {name: 'Unmanaged Kubernetes Environment', value: 'unmanaged'},
+            {name: 'Common Job Kubernetes Environment', value: 'commonjob'},
         ];
     }
 

@@ -12,7 +12,7 @@
 # unmanaged = run on master
 # commonjob = run on both
 
-provider: "aks"
+provider: "commonjob"
 
 #### URL of your kube-bench api of app to send reports
 reportsurl: ""
