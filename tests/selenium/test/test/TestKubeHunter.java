@@ -91,7 +91,7 @@ public final class TestKubeHunter {
         // close the modal by Esc
         actions.sendKeys(Keys.ESCAPE).perform();
         // sleep to load
-        Thread.sleep(1000);
+        Thread.sleep(5000);
 
         // verify there's data in the report
         String lastReportDate = driver.findElement(By.xpath("//*[@id='hunter-table-card']/mat-card-content/div/div/table/tbody/tr/td[contains(normalize-space(),'2022')]")).getText();

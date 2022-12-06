@@ -98,7 +98,7 @@ public final class TestKubeBench {
         // click Done
         driver.findElement(By.xpath("//button/span[contains(text(),'Done')]")).click();
         // sleep to load
-        Thread.sleep(1000);
+        Thread.sleep(5000);
 
 
         // verify there's data in the report
