@@ -45,11 +45,8 @@ public final class TestKubeSec {
         driver.findElement(By.xpath("//mat-card/div/span[contains(text(),'default-cluster')]")).click();
 
         // go to KS
-        driver.findElement(By.xpath("//mat-list/a[@title='Kube Sec']")).click();
-        // click on Run Audit button to open modal
-        driver.findElement(By.xpath("//*[@id='Sec-audit-header-button']/button")).click();
-        // sleep to load
-        Thread.sleep(2000);
+        driver.findElement(By.xpath("//mat-list/a[@title='KubeSec']")).click();
+
 
 
     }
