@@ -12,6 +12,9 @@
 .falco-container{
   height: 100%;
   overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
 }
 
 .falco-filter-card {
@@ -45,7 +48,7 @@
 .card-list-header {
   width: 100%;
   white-space: nowrap;
-  display: block;
+  display: flex;
   }
 
 .event-row:hover {
@@ -54,7 +57,8 @@
 }
 
   .mat-form-field {
-    margin-right: 10px;
+    //margin-right: 10px;
+    width: 100%;
   }
 
   mat-paginator {
@@ -63,16 +67,27 @@
   }
 
   .mat-card-title{
-    padding-left: 30px;
-    padding-right: 20px;
+    //padding-left: 30px;
+    //padding-right: 20px;
+    width: 100%;
+    white-space: nowrap;
+    display: flex;
   }
 
 .falco-table {
   // flex: 1;
-  overflow: auto;
+  overflow-y: auto !important;
 
   mat-table {
     min-width: 800px;
+
+    mat-row {
+      min-height: 24px !important
+    }
+
+    mat-header {
+      min-height: 32px !important
+    }
 
     mat-cell, mat-header-cell, mat-footer-cell {
       overflow: visible;
@@ -83,6 +98,8 @@
       min-width: 50px;
       max-width: 100px;
       margin-right: 5px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .mat-column-namespace {
@@ -90,6 +107,8 @@
       min-width: 100px;
       max-width: 120px;;
       margin-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .mat-column-pod {
@@ -98,6 +117,8 @@
       max-width:120px;;
       //max-width: 7%;
       margin-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .mat-column-image {
@@ -107,6 +128,8 @@
       max-width: 150px;;
       margin-right: 10px;
      //white-space: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .mat-column-priority {
@@ -114,14 +137,17 @@
       min-width: 50px;
       max-width:100px;
       margin-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .mat-column-message {
       //max-width: 60%;
-      width: 200px;
-      min-width: 100px;
-      max-width:200px;;
+      //width: 200px;
+      min-width: 200px;
       text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
       white-space: nowrap;
     }
   }
