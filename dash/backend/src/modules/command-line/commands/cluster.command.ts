@@ -254,8 +254,8 @@ export class ClusterCommand {
                 const policy = new PolicyDto();
                 policy.name = 'No High or Critical with fixes';
                 policy.description = "No high or critical CVE's with vendor fixes available";
-                policy.newScanGracePeriod = 30;
-                policy.rescanGracePeriod = 7;
+                policy.newScanGracePeriod = 0; // disable temporary exceptions by default!
+                policy.rescanGracePeriod = 7; // rescan once a week by default
                 policy.enabled = true;
                 policy.enforcement = true;
 
