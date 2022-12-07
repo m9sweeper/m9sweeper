@@ -75,8 +75,8 @@ public final class TestKubeBench {
         // System.out.println("******copied Text:*******  "+ copiedText);
 
         // get helm command from the html element
-        String helmText = driver.findElement(By.xpath("//textarea")).getText();
-        System.out.println("******Helm Text:*******  "+ helmText);
+        String helmText = driver.findElement(By.xpath("//textarea")).getText().trim();
+        System.out.println("******Helm Text:*******"+ helmText);
 
         // *** It takes about 2 minutes to populate the report ***
         // Run pasted text (helm command) on command line
@@ -93,7 +93,7 @@ public final class TestKubeBench {
             System.out.println("*** command line: *** "+ outLine);
         }
         // print exit code if any
-        System.out.println("*** Process excited with code: *** "+ exitCode);
+        System.out.println("*** Process exited with code: *** "+ exitCode);
 
         // click Done
         driver.findElement(By.xpath("//button/span[contains(text(),'Done')]")).click();
@@ -101,12 +101,27 @@ public final class TestKubeBench {
         Thread.sleep(5000);
 
 
-        // verify there's data in the report
-        String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div/div/mat-table/mat-row/mat-cell[contains(text(),'2022')]")).getText();
-        if (lastReportDate.length()> 0){
-            System.out.println("*** KB returned results on: ***" + lastReportDate);
-        } else {
-            System.out.println("*** No report results! ***");
+
+        // Give 5 attempts to try finding data until it works
+        boolean anyData = false;
+        // retry for up to 1 minute
+        for (int i=0; i<6 && !anyData; i++){
+            try {
+                // verify there's data in the report
+                String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div[2]/div/mat-table/mat-row[1]/mat-cell[contains(text(),'2022')]")).getText();
+                if (lastReportDate.length() > 0) {
+                    System.out.println("*** KB returned results on: ***" + lastReportDate);
+                }
+                anyData = true;
+            } catch(Exception e){
+                e.printStackTrace();
+                System.out.println("*** No report results! ***");
+                // sleep for 10 seconds
+                Thread.sleep(10000);
+            }
+            // refresh browser
+            driver.navigate().refresh();
+
         }
 
         // click on profile and log out
