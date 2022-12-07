@@ -4,15 +4,15 @@
 
 # Create CA certificate and key
 openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/CN=M9sweeper Proxy" \
-  -addext "subjectAltName = DNS:m9sweeper-proxy.m9sweeper-system.svc"
+  -addext "subjectAltName = DNS:m9sweeper-proxy.$1.svc"
 
 # Generate the private key for the reverse proxy
 openssl genrsa -out key.pem 2048
 
 # Generate a Certificate Signing Request (CSR) for the private key, and sign it with the private key of the CA.
 openssl req -new -key key.pem \
-       	-subj "/CN=m9sweeper-proxy.m9sweeper-system.svc" \
-	-addext "subjectAltName = DNS:m9sweeper-proxy.m9sweeper-system.svc" \
+       	-subj "/CN=m9sweeper-proxy.$1.svc" \
+	-addext "subjectAltName = DNS:m9sweeper-proxy.$1.svc" \
     | openssl x509 -req -extfile /etc/ssl/openssl.cnf -extensions v3_req -CA ca.crt -CAkey ca.key -CAcreateserial -out cert.pem
 
 # The API server requires the B64 encoded CA certificate to ensure that request is originating from the correct source.
@@ -54,22 +54,12 @@ KEY=$(cat /key.pem | base64 | tr -d '\n')
 
 # Read the cert bundle
 CABUNDLE=$(cat /b64ca-formatted.crt)
-clear
 
-# Ask for the M9sweeper url, set to http://m9sweeper-dash.m9sweeper-system.svc.cluster.local:3000 if left empty
-echo "What BASE URL should the validating webhook reverse proxy to? [http://m9sweeper-dash.m9sweeper-system.svc.cluster.local:3000]"
-echo "If you are proxying to a remote instance of m9sweeper, please enter the full url (Example: https://m9sweeper.yourdomain.com)"
+#set m9sweeper url
+M9SWEEPER_URL=${2}
 
-echo "If you have M9sweeper running in the local cluster, please just press ENTER:"
-
-read M9SWEEPER_URL
-M9SWEEPER_URL=${M9SWEEPER_URL:-"http://m9sweeper-dash.m9sweeper-system.svc.cluster.local:3000"}
-
-# Ask for the cluster id, set to 1 if left empty
-clear
-echo "What is the ID of the m9sweeper cluster? [1]"
-read M9SWEEPER_CLUSTER_ID
-M9SWEEPER_CLUSTER_ID="${M9SWEEPER_CLUSTER_ID:-1}"
+# Set the m9sweeper clusterid
+M9SWEEPER_CLUSTER_ID=${3}
 
 # base64 encode the m9sweeper url
 M9SWEEPER_URL=$(echo $M9SWEEPER_URL | base64)
@@ -80,22 +70,22 @@ M9SWEEPER_URL_B64=$(echo $M9SWEEPER_URL | tr -d " ")
 ##############################
 
 # Create the k8s secret with the m9sweeper URL and CA bundle
-curl --cacert ${CACERT} --header 'Content-Type: application/json' --header "Authorization: Bearer ${TOKEN}" -X POST ${APISERVER}/api/v1/namespaces/m9sweeper-system/secrets --data-raw '{
+curl --cacert ${CACERT} --header 'Content-Type: application/json' --header "Authorization: Bearer ${TOKEN}" -X POST ${APISERVER}/api/v1/namespaces/$1/secrets --data-raw '{
  "apiVersion": "v1",
  "kind": "Secret",
- "metadata": {"namespace":"m9sweeper-system","name":"m9sweeper-proxy-secrets"},
+ "metadata": {"namespace":"'$1'","name":"m9sweeper-proxy-secrets"},
  "type": "Opaque",
  "data": {"caBundle":"'$CABUNDLE'","m9sweeperURL":"'$M9SWEEPER_URL_B64'","cert":"'$CERT'","key":"'$KEY'"}
 }'
 
 # Create the deployment for the nginx reverse proxy
-curl --cacert ${CACERT} --header 'Content-Type: application/yaml' --header "Authorization: Bearer ${TOKEN}" -X POST ${APISERVER}/apis/apps/v1/namespaces/m9sweeper-system/deployments --data \
+curl --cacert ${CACERT} --header 'Content-Type: application/yaml' --header "Authorization: Bearer ${TOKEN}" -X POST ${APISERVER}/apis/apps/v1/namespaces/$1/deployments --data \
 '
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: m9sweeper-reverse-proxy
-  namespace: m9sweeper-system
+  namespace: '$1'
 spec:
   replicas: 1
   selector:
@@ -138,14 +128,14 @@ spec:
           - key: key
             path: key.pem
 '
-
+echo
 # Create the m9sweeper-proxy service
 curl --cacert ${CACERT} --header 'Content-Type: application/yaml' --header "Authorization: Bearer ${TOKEN}" -X POST ${APISERVER}/api/v1/namespaces/m9sweeper-system/services --data '
 kind: Service
 apiVersion: v1
 metadata:
   name: m9sweeper-proxy
-  namespace: m9sweeper-system
+  namespace: '$1'
 spec:
   ports:
     - name: https
@@ -167,7 +157,7 @@ webhooks:
    clientConfig:
      service:
        name: m9sweeper-proxy
-       namespace: m9sweeper-system
+       namespace: '$1'
        path: "/api/clusters/'${M9SWEEPER_CLUSTER_ID}'/validation"
        port: 443
      caBundle: "'$CABUNDLE'"

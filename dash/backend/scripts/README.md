@@ -22,11 +22,14 @@ Prerequisites:
     
     And then run:
     
-    `./auto-setup.sh`
-2. This will eventually prompt you to enter the URL for m9sweeper. If this is a remote instance, please enter in the full url (e.g https://M9SWEEPER.example.com).
-    If this is a local instance, just press enter.
-3. Then, you will be prompted to enter the cluster ID that is reflected in M9sweeper. The default is set to "1"
-4. Setup will continue, and if there are no errors the proxy will be up and running.
+    `./auto-setup.sh -n NAMESPACE -u M9SWEEPER URL -c CLUSTERID`
+2. Setup will continue, and if there are no errors the proxy will be up and running.
+## NOTE:
+* You can run the command as ./auto-setup.sh without the options for a default installation.
+* You can run ./auto-setup.sh -h for a breif help line. 
+* -n should be the same namespace m9sweeper is installed into. The default is m9sweeper-system
+* -u takes the BASE URL that the reverse proxy should direct to (e.g Example: https://m9sweeper.yourdomain.com) the default is for a local cluster install at http://m9sweeper-dash.m9sweeper-system.svc.cluster.local:3000
+* -c this is the clusterID of your cluster. The default is 1
 
 
 
@@ -42,7 +45,7 @@ Prerequisites:
 This script does most of the grunt work. Here is a summary:
 
 * Parses inputs for the nginx config.
-* This creates three kubernetes resources:
+* This creates four kubernetes resources:
 
 
 1. A secret named "m9sweeper-proxy-secrets" that is to be mounted as files in the reverse proxy.
