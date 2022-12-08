@@ -46,7 +46,7 @@ policies, you will need the validating webhook. This installs automatically and 
 
 However, **if you are running in Azure Kubernetes Service** OR have the kubernetes api firewalled in such a way that it
 cannot reach out to a remote url for the validating webhook, then you will need to 
-[setup an nginx reverse proxy](https://github.com/m9sweeper/m9sweeper/blob/main/backend/scripts/README.md) 
+[setup an nginx reverse proxy](https://github.com/m9sweeper/m9sweeper/blob/main/dash/backend/scripts/proxy-webhook/README.md) 
 using our reverse proxy self-installer. This script will generate a CA Certificate Bundle and Nginx configuration
 to enable the reverse proxy to work in Azure Kubernetes Service. 
 
