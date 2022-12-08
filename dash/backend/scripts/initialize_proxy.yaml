@@ -28,28 +28,17 @@ subjects:
     name: m9sweeper-proxy-sa
     namespace: m9sweeper-system
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: m9sweeper-proxy
   namespace: m9sweeper-system
-  labels:
-    app: m9sweeper-proxy
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: m9sweeper-proxy
-  template:
-    metadata:
-      labels:
-        app: m9sweeper-proxy
-    spec:
-      serviceAccountName: m9sweeper-proxy-sa
-      automountServiceAccountToken: true
-      containers:
-      - name: m9sweeper-proxy
-        image: owasp/modsecurity:nginx
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
+  serviceAccountName: m9sweeper-proxy-sa
+  automountServiceAccountToken: true
+  containers:
+  - name: m9sweeper-proxy
+    image: owasp/modsecurity:nginx
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 80

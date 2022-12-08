@@ -1,10 +1,10 @@
 <div class="falco-container">
   <div class="falco-events-list">
     <div class="row mat-card-title">
-      <div class="col-xs-4 col-xs-12 falco-log-list no-padding" >
-        <div class="margin-top-10 header-font">Project Falco </div>
+      <div class="col-sm-6 falco-log-list" >
+        <div class="row page">Project Falco </div>
       </div>
-      <div class="col-xs-8 col-xs-12  text-align-right no-padding">
+      <div class="col-sm-6 text-align-right no-padding">
         <button class="margin-right-10 margin-top-10" mat-raised-button color="primary" (click)="openDialog()">Install</button>
       </div>
     </div>
@@ -101,10 +101,10 @@
       <mat-card >
         <mat-card-header>
           <div class="row card-list-header">
-            <div class="falco-log-list no-padding" >
+            <div class="col-sm-6 falco-log-list no-padding" >
               <h2>Recent Events</h2>
             </div>
-            <div class="col-xs-12  text-align-right no-padding">
+            <div class="col-sm-6  text-align-right">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"
@@ -144,7 +144,7 @@
               <ng-container matColumnDef="message">
                 <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
                 <mat-cell *matCellDef="let log">
-                  {{log.message.length > 152 ? log.message.substring(0, 150) + '...' : log.message}}
+                  {{log.message}}
                 </mat-cell>
               </ng-container>
 
