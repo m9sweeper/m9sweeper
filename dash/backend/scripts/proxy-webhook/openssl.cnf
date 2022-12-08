@@ -226,7 +226,7 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = m9sweeper-proxy.m9sweeper-dev.svc 
+DNS.1 = m9sweeper-proxy.m9sweeper-system.svc 
 
 [ v3_ca ]
 
