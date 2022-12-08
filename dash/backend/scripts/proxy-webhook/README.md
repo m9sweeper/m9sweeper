@@ -13,8 +13,7 @@ The auto-setup.sh script is an easy way to get a reverse proxy running in a ngin
 Prerequisites: 
 
  - This assumes you have kubectl and bash/zsh setup locally
- - This assumes you have m9sweeper installed in the m9sweeper-system namespace
- - Delete the "m9sweeper-webhook" ValidatingWebhookConfiguration in your Kubernetes cluster
+ - This assumes you have m9sweeper installed (the script defaults to the m9sweeper-system namespace but can be changed with option flags)
 
 1. Change the permission of the auto-setup.sh file:
     
@@ -22,7 +21,7 @@ Prerequisites:
     
     And then run:
     
-    `./auto-setup.sh -n NAMESPACE -u M9SWEEPER URL -c CLUSTERID`
+    `./auto-setup.sh -n NAMESPACE -u M9SWEEPER_URL -c CLUSTERID`
 2. Setup will continue, and if there are no errors the proxy will be up and running.
 ## NOTE:
 * You can run the command as ./auto-setup.sh without the options for a default installation.
@@ -37,7 +36,9 @@ Prerequisites:
 
 1. The initalize_proxy.yaml is applied to the cluster using kubectl. This creates a ServiceAccount, ClusterRole, ClusterRolebinding, and Deployment.
     These resources are needed to gain the access necessary for creating the reverse proxy resources.
-2. Then, we copy the reverse_proxy_setup.sh script into the new *m9sweeper-proxy* pod and execute it. The script creates the certificates, reverse proxy deployment/service, and validating webhook.
+2. Deletes the existing m9sweeper-webhook validating webhook configuration.
+3. Then, we copy the reverse_proxy_setup.sh script and openssl.cnf files into the new *m9sweeper-proxy* pod and executes the reverse_proxy_setup.sh. The script creates the certificates, reverse proxy deployment, service, and validating webhook.
+4. Deletes the initalize_proxy.yaml resources.
 
 
 
