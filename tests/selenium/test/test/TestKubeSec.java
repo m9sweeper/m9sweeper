@@ -43,11 +43,54 @@ public final class TestKubeSec {
 
         // go to the default-cluster
         driver.findElement(By.xpath("//mat-card/div/span[contains(text(),'default-cluster')]")).click();
-
         // go to KS
         driver.findElement(By.xpath("//mat-list/a[@title='KubeSec']")).click();
+        // sleep to load
+        Thread.sleep(2000);
 
+        // select Choose pods from your cluster
+        driver.findElement(By.xpath("//mat-radio-group/mat-radio-button[2]/label/span[1]")).click();
+        // sleep to load
+        Thread.sleep(1000);
 
+        // click on Select namespace dropdown
+        driver.findElement(By.xpath("//mat-select[@formcontrolname='namespaceFormControl']")).click();
+        // select m9sweeper-system namespace
+        driver.findElement(By.xpath("//mat-option/span[contains(text(), 'm9sweeper-system')]")).click();
+        // close the modal by Esc
+        actions.sendKeys(Keys.ESCAPE).perform();
+        // sleep to load
+        Thread.sleep(1000);
+
+        // click on Select a pod dropdown
+        driver.findElement(By.xpath("//mat-select[@formcontrolname='podFormControl']")).click();
+        // Select one pod - the first m9sweeper dash pod
+        driver.findElement(By.xpath("(//mat-option/span[contains(text(), 'm9sweeper-dash')])[1]")).click();
+        // close the modal by Esc
+        actions.sendKeys(Keys.ESCAPE).perform();
+        // sleep to load
+        Thread.sleep(1000);
+
+        // click Run Kubesec button to get report
+        driver.findElement(By.xpath("//button/span[normalize-space(text())='Run Kubesec']")).click();
+        // sleep to load
+        Thread.sleep(4000);
+
+        // verify Advice table data existed
+        String adviceTableData = driver.findElement(By.xpath("//div[1]/mat-table/mat-row[1]/mat-cell[1]")).getText();
+        if (adviceTableData.length() > 0) {
+            System.out.println("*** KS Advice table data exists: ***" + adviceTableData);
+        }
+
+        // verify Passed table data existed
+        String passedTableData = driver.findElement(By.xpath("//div[2]/mat-table/mat-row[1]/mat-cell[1]")).getText();
+        if (passedTableData.length() > 0) {
+            System.out.println("*** KS Passed table data exists: ***" + passedTableData);
+        }
+
+        // click on profile and log out
+        driver.findElement(By.xpath("//span[contains(@class, 'mat-menu-trigger')]/img[contains(@class, 'profile')]")).click();
+        driver.findElement(By.xpath("//span[contains(normalize-space(), 'Sign Out')]")).click();
 
     }
 }
