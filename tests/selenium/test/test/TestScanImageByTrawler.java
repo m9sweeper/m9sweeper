@@ -35,7 +35,7 @@ public final class TestScanImageByTrawler {
 
       // pull trawler docker image if not already exists, then scan image alpine:latest with trawler CLI
       // *** url used here might need to be changed in pipeline ***
-      builder.command("bash", "-c","docker run --network=host "+ SeleniumTestRunner.trawlerImageUrl +" trawler scan --url="+SeleniumTestRunner.baseURL+" --api-key='myapikey123456' --debug --parallel-scans=1 --cluster-name='default-cluster' --image-url='docker.io/alpine:latest' || true");
+      builder.command("bash", "-c","docker run --network=host "+ SeleniumTestRunner.trawlerImageUrl +" trawler scan --url="+SeleniumTestRunner.altDockerBaseUrl+" --api-key='myapikey123456' --debug --parallel-scans=1 --cluster-name='default-cluster' --image-url='docker.io/alpine:latest' || true");
       builder.redirectErrorStream(true);
 
       Process process = builder.start();

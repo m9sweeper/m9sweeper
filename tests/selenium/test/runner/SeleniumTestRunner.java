@@ -26,6 +26,7 @@ public class SeleniumTestRunner extends Runner {
 
   //*** base url may need to be updated locally (ngrok) or in pipeline ***
   public static String baseURL = System.getenv().getOrDefault("BASE_URL", "http://localhost:5000");
+  public static String altDockerBaseUrl = System.getenv().getOrDefault("DOCKER_BASE_URL", "http://host.docker.internal:5000"); // use when running on local machine
   public static String localpath = java.nio.file.Paths.get(".").toAbsolutePath().normalize().toString();
   public static String filepath = System.getenv().getOrDefault("FILEPATH", localpath + "/screenshots/");
   public static String trawlerImageUrl = System.getenv().getOrDefault("TRAWLERIMAGEURL", "docker.io/m9sweeper/trawler:latest");
