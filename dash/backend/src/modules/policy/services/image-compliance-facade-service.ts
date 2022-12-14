@@ -49,6 +49,15 @@ export class ImageComplianceFacadeService {
         return { compliant: complianceMap.isCompliant, complianceMap };
     }
 
+    public async applyOverrideSeverity(
+        clusterId: number,
+        policyId: number [],
+        imageName: string,
+        results: ImageScanResultPerPolicyFacadeDto[]
+    ){
+
+    }
+
     public async isImageNamespaceCompliant(clusterId: number,
         imageData: ListOfImagesDto,
         namespaceName: string,

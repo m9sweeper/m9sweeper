@@ -114,36 +114,44 @@ export class ExceptionsDao {
         clusterId: number, policyIds: number[],
         namespace: string, imageName: string
       ): Promise<ExceptionQueryDto[]> {
-          const knex = await this.databaseService.getConnection();
-          const today = new Date().toISOString().slice(0, 10); // @TODO: Eventually make this a utility function, perhaps with timezone/locality considered
-          let sql = knex.distinct('ex.id as _id', 
-          'ex.issue_identifier as _issueIdentifier', 
-          'ex.title AS _title',
-          'ex.type as _type',
-          'ex.reason AS _reason',
-          knex.raw(`to_char(ex.start_date, 'YYYY-MM-DD') AS "_startDate"`),
-          knex.raw(`to_char(ex.end_date, 'YYYY-MM-DD') AS "_endDate"`),
-          'ex.status AS _status',
-          'ex.relevant_for_all_policies AS _relevantForAllPolicies',
-          'ex.relevant_for_all_kubernetes_namespaces AS _relevantForAllKubernetesNamespaces',
-          'ex.relevant_for_all_clusters AS _relevantForAllClusters',
-          'ex.image_match AS _imageMatch',
-          'ex.is_temp_exception as _isTempException',
-          'exceptions_policies.policy_id AS _policyId')
+       return this.getAllFilteredExceptionsByTypes('policy', clusterId, policyIds, imageName, namespace);
+      }
+
+    async getAllFilteredExceptionsByTypes( type: string,
+        clusterId: number, policyIds: number[],
+        imageName: string,  namespace?: string
+    ): Promise<ExceptionQueryDto[]> {
+        const knex = await this.databaseService.getConnection();
+        const today = new Date().toISOString().slice(0, 10); // @TODO: Eventually make this a utility function, perhaps with timezone/locality considered
+        let sql = knex.distinct('ex.id as _id',
+            'ex.issue_identifier as _issueIdentifier',
+            'ex.title AS _title',
+            'ex.type as _type',
+            'ex.reason AS _reason',
+            knex.raw(`to_char(ex.start_date, 'YYYY-MM-DD') AS "_startDate"`),
+            knex.raw(`to_char(ex.end_date, 'YYYY-MM-DD') AS "_endDate"`),
+            'ex.status AS _status',
+            'ex.relevant_for_all_policies AS _relevantForAllPolicies',
+            'ex.relevant_for_all_kubernetes_namespaces AS _relevantForAllKubernetesNamespaces',
+            'ex.relevant_for_all_clusters AS _relevantForAllClusters',
+            'ex.image_match AS _imageMatch',
+            'ex.is_temp_exception as _isTempException',
+            'exceptions_policies.policy_id AS _policyId',
+            'ex.alternate_severity AS _altSeverity')
             .from('exceptions AS ex')
             .leftOuterJoin('exceptions_clusters', 'ex.id', 'exceptions_clusters.exception_id')
             .leftOuterJoin('exceptions_policies', 'ex.id', 'exceptions_policies.exception_id')
             .leftOuterJoin('exceptions_kubernetes_namespaces', 'ex.id', 'exceptions_kubernetes_namespaces.exception_id')
             .whereNull('ex.deleted_at')
             .andWhere('status', 'active')
-            .andWhere('ex.type', 'like', 'policy')
+            .andWhere('ex.type', 'like', type)
             .andWhere(function() {
                 this.whereNull('ex.start_date')
-                  .orWhere('ex.start_date', '<=', today);
+                    .orWhere('ex.start_date', '<=', today);
             })
             .andWhere(function() {
                 this.whereNull('ex.end_date')
-                  .orWhere('ex.end_date', '>', today);
+                    .orWhere('ex.end_date', '>', today);
             })
             .andWhere(function() {
                 let cond = this.where({
@@ -169,7 +177,7 @@ export class ExceptionsDao {
                 let cond = this.where({
                     'ex.relevant_for_all_kubernetes_namespaces': true
                 });
-                
+
                 if (namespace) {
                     cond.orWhere({
                         'exceptions_kubernetes_namespaces.namespace_name': namespace
@@ -177,21 +185,20 @@ export class ExceptionsDao {
                 }
             })
 
-            // if (imageName) {
-            //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
-            // }
+        // if (imageName) {
+        //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
+        // }
 
-            //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
-          
-            return await knexnest(sql).then(data => data);
-      }
+        //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
+
+        return await knexnest(sql).then(data => data);
+    }
 
     async getAllFilteredOverrideExceptions(
-        clusterId: number, policyIds: number[],
-        namespace: string, imageName: string
+        clusterId: number, policyIds: number[], imageName: string
     ): Promise<ExceptionQueryDto[]> {
 
-        return ;
+        return this.getAllFilteredExceptionsByTypes('override', clusterId, policyIds, imageName);
     }
 
     async getAllCommonExceptions(): Promise<ExceptionDto[]> {
