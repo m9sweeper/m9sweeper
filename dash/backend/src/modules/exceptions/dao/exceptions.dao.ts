@@ -28,7 +28,8 @@ export class ExceptionsDao {
             scanner_id: exception.scannerId || null,
             type: exception.type,
             image_match: exception.imageMatch? exception.imageMatch.trim() : null,
-            is_temp_exception: exception?.isTempException ?? false
+            is_temp_exception: exception?.isTempException ?? false,
+            alternate_severity: exception.altSeverity
         }
         const knex = await this.databaseService.getConnection();
         const id = await knex.insert(row, 'id').into('exceptions')
@@ -328,7 +329,7 @@ export class ExceptionsDao {
             'pol.name AS _policies__name',
             'cl.name AS _clusters__name',
             'cl.id AS _clusters__id',
-            'ex.alternate_severity AS _alt__severity',)
+            'ex.alternate_severity AS _altSeverity',)
             .from('exceptions AS ex')
             .leftJoin('scanners AS sc', 'ex.scanner_id', 'sc.id')
             .leftJoin('exceptions_kubernetes_namespaces AS namespace_ex', 'namespace_ex.exception_id', 'ex.id')
@@ -370,6 +371,7 @@ export class ExceptionsDao {
             type: exception.type,
             image_match: exception.imageMatch?.trim(),
             is_temp_exception: exception.isTempException || false,
+            alternate_severity: exception.altSeverity
         }
 
         let namespaceRows = null;

@@ -110,7 +110,7 @@ export class ExceptionDto {
 
     @Expose({name: 'alternate_severity', toPlainOnly: true})
     @IsOptional()
-    alternate_severity: string;
+    altSeverity: string;
 }
 
 export class ExceptionQueryDto extends ExceptionDto {

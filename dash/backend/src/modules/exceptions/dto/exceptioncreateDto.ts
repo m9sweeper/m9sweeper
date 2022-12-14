@@ -81,4 +81,9 @@ export class ExceptionCreateDto {
     @IsOptional()
     @ApiProperty({name: 'isTempException'})
     isTempException: boolean;
+
+    @Expose({name: 'alternative_severity', toPlainOnly: true})
+    @IsOptional()
+    @ApiProperty({name: 'altSeverity'})
+    altSeverity: string;
 }
