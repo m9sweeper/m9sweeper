@@ -101,7 +101,8 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
       clusters: [''],
       namespaces: [''],
       type: [''],
-      imageMatch: ['%', Validators.nullValidator]
+      imageMatch: ['%', Validators.nullValidator],
+      altSeverity: ['']
     },
       {
       validators: [CustomValidators.checkEndDateIsGreaterThanStartDate()],
@@ -211,6 +212,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
         this.loadGatekeeperConstraints(this.origException.clusters.map(cluster => String(cluster.id)));
       }
     }
+    this.exceptionForm.controls.altSeverity.setValue(this.origException.altSeverity);
   }
 
   onSubmit() {

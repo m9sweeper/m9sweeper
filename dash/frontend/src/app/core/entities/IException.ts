@@ -1,3 +1,5 @@
+import {VulnerabilitySeverity} from '../enum/VulnerabilitySeverity';
+
 export interface IException {
   title: string;
   reason: string;
@@ -30,4 +32,7 @@ export interface IException {
   namespaces: {
     name: string;
   }[];
+
+  altSeverity: VulnerabilitySeverity;
+
 }
