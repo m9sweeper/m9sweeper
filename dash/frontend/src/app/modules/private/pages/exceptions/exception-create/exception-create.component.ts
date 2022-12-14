@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Location} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {DatePipe, Location} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '@full-fledged/alerts';
@@ -19,7 +19,7 @@ import {IException} from '../../../../../core/entities/IException';
 import {forkJoin, Observable, of} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {DatePipe} from '@angular/common';
+import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
 
 @Component({
   selector: 'exception-create',
@@ -54,6 +54,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
   @ViewChild('issueIdentifierLabel') issueIdentifierLabel;
   loading = false;
   submitButtonText = 'Submit';
+
+  severityLevels = [ VulnerabilitySeverity.NEGLIGIBLE,
+                    VulnerabilitySeverity.LOW,
+                    VulnerabilitySeverity.MEDIUM,
+                    VulnerabilitySeverity.MAJOR,
+                    VulnerabilitySeverity.CRITICAL];
 
   constructor(
     private exceptionsService: ExceptionsService,
@@ -280,6 +286,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
         if (getSelectedClusters instanceof Array && getSelectedClusters.length > 0) {
           this.loadGatekeeperConstraints(getSelectedClusters);
         }
+        break;
+      case 'override':
+        this.exceptionForm.controls.policies.enable();
+        this.changeCVELabel('Issue (Override Severity)');
+        this.issueIdentifier.markAsUntouched();
+        this.gatekeeperConstraintList = of([]);
         break;
     }
   }
