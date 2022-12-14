@@ -327,7 +327,8 @@ export class ExceptionsDao {
             'pol.id AS _policies__id',
             'pol.name AS _policies__name',
             'cl.name AS _clusters__name',
-            'cl.id AS _clusters__id',)
+            'cl.id AS _clusters__id',
+            'ex.alternate_severity AS _alt__severity',)
             .from('exceptions AS ex')
             .leftJoin('scanners AS sc', 'ex.scanner_id', 'sc.id')
             .leftJoin('exceptions_kubernetes_namespaces AS namespace_ex', 'namespace_ex.exception_id', 'ex.id')
