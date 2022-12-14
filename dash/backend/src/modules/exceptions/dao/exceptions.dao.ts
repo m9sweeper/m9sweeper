@@ -109,7 +109,7 @@ export class ExceptionsDao {
         return await knexnest(sql).then(data => data);
     }
 
-    async getAllFilteredExceptions(
+    async getAllFilteredPolicyExceptions(
         clusterId: number, policyIds: number[],
         namespace: string, imageName: string
       ): Promise<ExceptionQueryDto[]> {
@@ -180,10 +180,18 @@ export class ExceptionsDao {
             //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
             // }
 
-            //console.log('getAllFilteredExceptions: ', sql.toQuery());
+            //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
           
             return await knexnest(sql).then(data => data);
       }
+
+    async getAllFilteredOverrideExceptions(
+        clusterId: number, policyIds: number[],
+        namespace: string, imageName: string
+    ): Promise<ExceptionQueryDto[]> {
+
+        return ;
+    }
 
     async getAllCommonExceptions(): Promise<ExceptionDto[]> {
         const knex = await this.databaseService.getConnection();

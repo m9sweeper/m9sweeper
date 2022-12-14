@@ -31,7 +31,7 @@ export class ImageComplianceFacadeService {
         }
 
         const policyIdSet = new Set(results.map(result => result.policyId));
-        const exceptions = await this.exceptionService.getAllFilteredExceptions(clusterId,
+        const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
             Array.from(policyIdSet.keys()), undefined, imageData.name);
 
         // The compliance map will get mutated by
@@ -64,7 +64,7 @@ export class ImageComplianceFacadeService {
         }
 
         const policyIdSet = new Set(results.map(result => result.policyId));
-        const exceptions = await this.exceptionService.getAllFilteredExceptions(clusterId,
+        const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
             Array.from(policyIdSet.keys()), namespaceName, imageData.name);
 
         const complianceMap = new ComplianceResultMap();

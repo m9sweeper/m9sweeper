@@ -107,6 +107,10 @@ export class ExceptionDto {
     @Type(() => ExceptionScanner)
     @ValidateNested({ each: true })
     scanner: ExceptionScanner[];
+
+    @Expose({name: 'alternate_severity', toPlainOnly: true})
+    @IsOptional()
+    alternate_severity: string;
 }
 
 export class ExceptionQueryDto extends ExceptionDto {

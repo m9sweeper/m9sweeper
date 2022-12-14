@@ -187,9 +187,9 @@ async getAllActiveExceptions(): Promise<ExceptionDto[]> {
     return await this.exceptionsDao.getAllActiveExceptions();
 }
 
-async getAllFilteredExceptions(clusterId: number, policyIds: number[],
+async getAllFilteredPolicyExceptions(clusterId: number, policyIds: number[],
     namespace: string, imageName: string): Promise<ExceptionQueryDto[]> {
-    return await this.exceptionsDao.getAllFilteredExceptions(clusterId, policyIds, namespace, imageName);
+    return await this.exceptionsDao.getAllFilteredPolicyExceptions(clusterId, policyIds, namespace, imageName);
 }
 async getAllCommonExceptions(): Promise<ExceptionDto[]> {
     return await this.exceptionsDao.getAllCommonExceptions();
