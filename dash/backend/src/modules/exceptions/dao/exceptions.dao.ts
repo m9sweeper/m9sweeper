@@ -137,7 +137,8 @@ export class ExceptionsDao {
             'ex.image_match AS _imageMatch',
             'ex.is_temp_exception as _isTempException',
             'exceptions_policies.policy_id AS _policyId',
-            'ex.alternate_severity AS _altSeverity')
+            'ex.alternate_severity AS _altSeverity',
+            'ex.created_at AS _createdAt')
             .from('exceptions AS ex')
             .leftOuterJoin('exceptions_clusters', 'ex.id', 'exceptions_clusters.exception_id')
             .leftOuterJoin('exceptions_policies', 'ex.id', 'exceptions_policies.exception_id')
@@ -184,6 +185,7 @@ export class ExceptionsDao {
                     });
                 }
             })
+            .orderBy('ex.created_at', "asc");
 
         // if (imageName) {
         //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
