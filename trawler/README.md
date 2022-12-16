@@ -9,11 +9,14 @@ Trawler is the component of m9sweeper in charge of scanning
 More at https://github.com/graalvm/homebrew-tap
 
     brew install --cask graalvm/tap/graalvm-ce-lts-java11
+    
+Find the installed graalvm-ce-lts version
+ls /Library/Java/JavaVirtualMachines
 
 Then set java_home and path to match the version installed and install native-image.
 
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-javaV-XX.Y.Z/Contents/Home
-    export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-javaV-XX.Y.Z/Contents/Home/bin:"$PATH"
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-lts-java11-20.3.4/Contents/Home
+    export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-lts-java11-20.3.4/Contents/Home/bin:"$PATH"
     gu install native-image
 
 Then you can open the project with Intellij and compile like this:
