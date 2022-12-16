@@ -1,0 +1,15 @@
+<script>
+
+fetch('https://m9sweeper.io/docs/inventory.php')
+    .then(r => r.json())
+    .then(d => d.versions.forEach(v => 
+        document.getElementsByClassName('dropdown-menu')[0].appendChild(
+            Object.assign(document.createElement("a"), {
+                className: "dropdown-item",
+                href: 'https://m9sweeper.io/docs/' + v + "/docs",
+                innerHTML: v
+            })
+        )
+    ));
+
+</script>
