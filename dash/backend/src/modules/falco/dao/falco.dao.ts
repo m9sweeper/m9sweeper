@@ -21,7 +21,8 @@ export class FalcoDao {
         endDate?: string,
         namespace?: string,
         pod?: string,
-        image?: string
+        image?: string,
+        signature?: string
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -90,6 +91,10 @@ export class FalcoDao {
 
         if (image) {
             query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        if(signature){
+            query.where('anomaly_signature', signature);
         }
 
         const findCount = await knex

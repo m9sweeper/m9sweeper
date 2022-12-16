@@ -39,9 +39,10 @@ export class FalcoController {
         @Query('namespace') namespace?: string,
         @Query('pod') pod?: string,
         @Query('image') image?: string,
+        @Query('signature') signature?: string
     ): Promise<{ logCount: number, list: FalcoDto[]}>
     {
-        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image );
+        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     @Get('/apiKey')
