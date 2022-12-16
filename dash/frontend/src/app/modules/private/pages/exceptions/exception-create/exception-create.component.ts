@@ -86,7 +86,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
     this.exceptionForm = this.formBuilder.group({
       title: ['', [CustomValidators.requiredNoTrim, Validators.maxLength(255)]],
       reason: ['', []],
-      issueIdentifier: ['', [Validators.maxLength(255)]],
+      issueIdentifier: ['', [Validators.maxLength(255), Validators.required]],
       startDate: [new Date(),
         {
           validators: [Validators.required, CustomValidators.checkForCurrentDate()],
@@ -102,7 +102,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
       namespaces: [''],
       type: [''],
       imageMatch: ['%', Validators.nullValidator],
-      altSeverity: ['']
+      altSeverity: ['', [Validators.required]]
     },
       {
       validators: [CustomValidators.checkEndDateIsGreaterThanStartDate()],
