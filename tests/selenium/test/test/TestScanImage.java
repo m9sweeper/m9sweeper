@@ -41,7 +41,15 @@ public final class TestScanImage {
       driver.findElement(By.xpath("//mat-card/div/span[contains(text(),'default-cluster')]")).click();
       // select Images
       driver.findElement(By.xpath("//mat-list/a[@title='Images']")).click();
-      // select first image with hostname docker.io
+      // click on the Search bar
+      driver.findElement(By.xpath("(//div/input[@type='search'])[2]")).click();
+      // sleep to load
+      Thread.sleep(2000);
+      // type in an image name on Search Image
+      driver.findElement(By.xpath("(//div/input[@type='search'])[2]")).sendKeys("docker.io/postgres");
+      // sleep to load
+      Thread.sleep(2000);
+      // select first image
       driver.findElement(By.xpath("(//mat-cell[contains(text(),'docker.io')])[1]")).click();
       // click rescan
       driver.findElement(By.xpath("//span[contains(normalize-space(),'Rescan Image')]")).click();
