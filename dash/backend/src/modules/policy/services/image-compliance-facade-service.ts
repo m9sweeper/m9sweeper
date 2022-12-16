@@ -63,7 +63,7 @@ export class ImageComplianceFacadeService {
                 const override = exceptionsOverride.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
                 if(override?.altSeverity){
                     issue.severity = override.altSeverity
-                    issue.description = "overridden - "+ issue.description;
+                    issue.description = "overridden - "+ issue.name;
                 }
             }
         }
