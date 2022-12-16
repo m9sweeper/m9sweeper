@@ -2,12 +2,14 @@
   border: 1px solid black;
 }
 
-.related-event-table {
-  // flex: 1;
-  overflow-y: auto !important;
+
 
   mat-table {
+    overflow: auto !important;
     min-width: 800px;
+    height: 400px;
+
+
 
     mat-row {
       min-height: 24px !important
@@ -79,4 +81,4 @@
       white-space: nowrap;
     }
   }
-}
+
