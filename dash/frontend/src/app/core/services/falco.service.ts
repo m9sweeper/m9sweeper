@@ -8,6 +8,18 @@ import {IReportsCsv} from '../entities/IReportsCsv';
 import {IFalcoCsv} from '../entities/IFalcoCsv';
 import {IKubeBenchReport} from '../entities/IKubeBenchReport';
 
+export interface FalcoLogOptions {
+  limit?: number;
+  page?: number;
+  selectedPriorityLevels?: string [];
+  selectedOrderBy?: string;
+  startDate?: string;
+  endDate?: string;
+  namespace?: string;
+  pod?: string;
+  image?: string;
+  signature?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +29,9 @@ export class FalcoService {
     private httpClient: HttpClient,
   ) {}
 
-  getFalcoLogs(clusterId: number,
-               limit?: number,
-               page?: number,
-               selectedPriorityLevels?: string [],
-               selectedOrderBy?: string,
-               startDate?: string,
-               endDate?: string,
-               namespace?: string,
-               pod?: string,
-               image?: string
+  getFalcoLogs(clusterId: number, options?: FalcoLogOptions
   ): Observable<IServerResponse<{logCount: number, list: IFalcoLog[]}>> {
-    const params = this.buildParams(clusterId, limit, page, selectedPriorityLevels, selectedOrderBy, startDate, endDate, namespace, pod, image);
+    const params = this.buildParams(clusterId, options);
     return this.httpClient.get('/api/falco', {params});
   }
 
@@ -39,55 +42,50 @@ export class FalcoService {
     return this.httpClient.get('/api/falco/download', {params});
   }
 
-  buildParams(clusterId: number,
-              limit?: number,
-              page?: number,
-              selectedPriorityLevels?: string [],
-              selectedOrderBy?: string,
-              startDate?: string,
-              endDate?: string,
-              namespace?: string,
-              pod?: string,
-              image?: string
+  buildParams(clusterId: number, options?: FalcoLogOptions
   ): HttpParams {
     let params: HttpParams = new HttpParams();
     params = params.set('cluster-id', clusterId.toString());
 
-    if (limit){
-      params = params.set('limit', String(limit));
+    if (options?.limit){
+      params = params.set('limit', String(options?.limit));
     }
-    if (page){
-      params = params.set('page', String(page));
+    if (options?.page){
+      params = params.set('page', String(options?.page));
     }
 
-    if (selectedPriorityLevels) {
-      selectedPriorityLevels.forEach((priority: string) => {
+    if (options?.selectedPriorityLevels) {
+      options?.selectedPriorityLevels.forEach((priority: string) => {
         params = params.append('priority[]', priority);
       });
     }
 
-    if (selectedOrderBy) {
-      params = params.set('orderBy', selectedOrderBy.toString());
+    if (options?.selectedOrderBy) {
+      params = params.set('orderBy', options?.selectedOrderBy.toString());
     }
 
-    if (startDate) {
-      params = params.set('startDate', startDate.toString());
+    if (options?.startDate) {
+      params = params.set('startDate', options?.startDate.toString());
     }
 
-    if (endDate) {
-      params = params.set('endDate', endDate.toString());
+    if (options?.endDate) {
+      params = params.set('endDate', options?.endDate.toString());
     }
 
-    if (namespace) {
-      params = params.set('namespace', namespace.toString());
+    if (options?.namespace) {
+      params = params.set('namespace', options?.namespace.toString());
     }
 
-    if (pod) {
-      params = params.set('pod', pod.toString());
+    if (options?.pod) {
+      params = params.set('pod', options?.pod.toString());
     }
 
-    if (image) {
-      params = params.set('image', image.toString());
+    if (options?.image) {
+      params = params.set('image', options?.image.toString());
+    }
+
+    if (options?.signature) {
+      params = params.set('signature', options?.signature.toString());
     }
 
     return params;

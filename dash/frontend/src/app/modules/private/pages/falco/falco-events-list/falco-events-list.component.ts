@@ -42,6 +42,7 @@ export class FalcoEventsListComponent implements OnInit {
   page: number;
   startDate: string;
   endDate: string;
+  signature: string;
 
   constructor(
     private falcoService: FalcoService,
@@ -91,16 +92,17 @@ export class FalcoEventsListComponent implements OnInit {
     }
 
     this.falcoService.getFalcoLogs(
-      this.clusterId,
-      this.limit,
-      this.page,
-      this.filterForm.get('selectedPriorityLevels').value,
-      this.filterForm.get('selectedOrderBy').value,
-      this.startDate,
-      this.endDate,
-      this.filterForm.get('namespaceInput').value,
-      this.filterForm.get('podInput').value,
-      this.filterForm.get('imageInput').value
+      this.clusterId, {
+        limit: this.limit,
+        page: this.page,
+        selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+        selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        namespace: this.filterForm.get('namespaceInput').value,
+        pod: this.filterForm.get('podInput').value,
+        image: this.filterForm.get('imageInput').value,
+        signature: this.signature}
     )
       .pipe(take(1))
       .subscribe(response => {

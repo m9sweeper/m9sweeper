@@ -2,6 +2,11 @@ import {Component, Inject, OnInit} from '@angular/core';
 import { jsonToTableHtmlString } from 'json-table-converter';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DomSanitizer} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
+import {FalcoService} from '../../services/falco.service';
+import { MatTableDataSource } from '@angular/material/table';
+import {IFalcoLog} from '../../entities/IFalcoLog';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-show-json-data',
@@ -33,10 +38,6 @@ export class ShowJsonDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.header = this.data.header ? this.data.header : 'Json Data';
-  }
-
-  get tableHtml(): string {
-    return jsonToTableHtmlString(this.data.content);
     this.getFalcoEvents();
   }
 
