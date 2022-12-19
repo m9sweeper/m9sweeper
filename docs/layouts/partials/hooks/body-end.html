@@ -7,7 +7,7 @@ fetch('https://m9sweeper.io/docs/inventory.php')
             Object.assign(document.createElement("a"), {
                 className: "dropdown-item",
                 href: 'https://m9sweeper.io/docs/' + v + "/docs",
-                innerHTML: v
+                innerHTML: "v" + (v.replace(/-/g, "."))
             })
         )
     ));
