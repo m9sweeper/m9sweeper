@@ -26,11 +26,18 @@ export class FalcoService {
         namespace?: string,
         pod?: string,
         image?: string,
-        signature?: string
+        signature?: string,
+        eventId?: number
     ): Promise<{  logCount: number, list: FalcoDto[] }> {
 
-       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
+       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
 
+    }
+
+    async getFalcoLogByEventId(
+        eventId: number
+    ): Promise<FalcoDto > {
+        return this.falcoDao.getFalcoLogByEventId(eventId);
     }
 
     async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {

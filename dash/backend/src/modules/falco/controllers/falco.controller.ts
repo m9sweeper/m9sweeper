@@ -39,10 +39,25 @@ export class FalcoController {
         @Query('namespace') namespace?: string,
         @Query('pod') pod?: string,
         @Query('image') image?: string,
-        @Query('signature') signature?: string
+        @Query('signature') signature?: string,
+        @Query('eventId') eventId?: number
     ): Promise<{ logCount: number, list: FalcoDto[]}>
     {
-        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
+        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+    }
+
+
+    @Get('/:eventId')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 201
+    })
+    async getFalcoLogByEventId(
+        @Param('eventId') eventId: number
+    ): Promise< FalcoDto>
+    {
+        return this.falcoService.getFalcoLogByEventId(eventId);
     }
 
     @Get('/apiKey')

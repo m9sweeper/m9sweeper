@@ -22,7 +22,8 @@ export class FalcoDao {
         namespace?: string,
         pod?: string,
         image?: string,
-        signature?: string
+        signature?: string,
+        eventId?: number
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -116,6 +117,18 @@ export class FalcoDao {
             list: list,
             logCount: +logCount
         }
+    }
+
+    async getFalcoLogByEventId(
+       eventId: number
+    ): Promise<FalcoDto> {
+        const knex = await this.databaseService.getConnection();
+
+        return knex.select()
+            .from('project_falco_logs')
+            .where('id', eventId)
+            .then(results => results[0]);
+
     }
 
     async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
