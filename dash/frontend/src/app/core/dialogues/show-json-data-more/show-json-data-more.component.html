@@ -1,0 +1,96 @@
+<div>
+  <h1 mat-dialog-title></h1> Event Details <div>
+  <div>
+    <button mat-button (click)="onClickShare()">Share</button>
+  </div>
+</div>
+
+<div mat-dialog-content>
+    <div class="event-div">
+      <h1>Basic Details</h1>
+      <div>
+        <table>
+          <tr>
+            <th>Namespace</th> <td>{{namespace}}</td>
+          </tr>
+          <tr>
+            <th>Date</th> <td>{{date}}</td>
+          </tr>
+          <tr>
+            <th>Pod</th> <td>{{pod}}</td>
+          </tr>
+          <tr>
+            <th>Image</th> <td>{{image}}</td>
+          </tr>
+          <tr>
+            <th>Message</th> <td>{{message}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="event-div">
+      <h1>Incidence Rate</h1>
+      <div>Add graph</div>
+    </div>
+  </div>
+
+<br>
+
+  <div class="event-div">
+    <h1>Related Event</h1> <div>Signature:</div><div>{{signature}}</div>
+  </div>
+  <div>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="calendarDate">
+        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+        <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="namespace">
+        <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
+        <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pod">
+        <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
+        <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="image">
+        <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+        <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="message">
+        <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+        <mat-cell *matCellDef="let log">
+          {{log.message}}
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
+
+    </mat-table>
+    <div class="paginator">
+      <mat-paginator
+        [length]="logCount"
+        [pageSize]="limit"
+        [pageSizeOptions]="[ 20, 50, 100]"
+        (page)="pageEvent($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+
+  <div class="event-div">
+    <h1>Raw Data</h1>
+    <div> {{message}}   </div>
+    <div>
+      <button mat-button (click)="onClickYaml()">Yaml</button>
+      <button mat-button (click)="onClickJson()">Json</button>
+      <button mat-button (click)="onClickTable()">Table</button>
+    </div>
+
+  </div>
+
+</div>

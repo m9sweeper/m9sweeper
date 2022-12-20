@@ -1,55 +1,81 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
-import {ShowJsonDataMoreComponent} from '../show-json-data-more/show-json-data-more.component';
+
+// display: basic details, Incidence Rate, Related Events with pagination
+// Add functions: Share,Raw Data ( yaml, Json, Table)
 
 @Component({
-  selector: 'app-show-json-data',
-  templateUrl: './show-json-data.component.html',
-  styleUrls: ['./show-json-data.component.scss']
+  selector: 'app-show-json-data-more',
+  templateUrl: './show-json-data-more.component.html',
+  styleUrls: ['./show-json-data-more.component.scss']
 })
-export class ShowJsonDataComponent implements OnInit {
+export class ShowJsonDataMoreComponent implements OnInit {
   header: string;
 
-  constructor(public dialogRef: MatDialogRef<ShowJsonDataMoreComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
+  constructor(
               private route: ActivatedRoute,
-              private router: Router,
-              private falcoService: FalcoService,
+              private falcoService: FalcoService
   ) { }
 
   dataSource: MatTableDataSource<IFalcoLog>;
   displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
-  namespace = this.data.content.namespace;
-  date = this.data.content.calendarDate;
-  pod = this.data.content.container;
-  image = this.data.content.image;
-  message = this.data.content.message;
-  signature = this.data.content.anomalySignature;
-  clusterId = this.data.content.clusterId;
-  eventId = this.data.content.id;
+
+  signature: string;
+  clusterId: number;
+  eventId: number;
+
+  namespace: string;
+  date: string;
+  pod: string;
+  image: string;
+  message: string;
 
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   logCount: number;
   page: number;
 
   ngOnInit(): void {
-    this.header = this.data.header ? this.data.header : 'Json Data';
-    this.getFalcoEvents();
+
+    this.clusterId = this.route.parent.parent.snapshot.params.id;
+    this.eventId = this.route.snapshot.params.eventId;
+    this.signature = this.route.snapshot.params.signature;
+
+    this.getEventById();
+    this.getRelatedEvents();
   }
 
   pageEvent(pageEvent: any) {
     this.limit = pageEvent.pageSize;
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
-    this.getFalcoEvents();
+    this.getEventById();
+    this.getRelatedEvents();
+
   }
 
-  getFalcoEvents(){
+  getEventById(){
+    console.log('eventid =', this.eventId);
+    this.falcoService.getFalcoLogByEventId( this.eventId )
+      .pipe(take(1))
+      .subscribe(response => {
+        console.log('response:', response);
+        this.namespace = response.data.namespace;
+        this.date = response.data.calendarDate;
+        console.log('*** calendar date ***', this.date);
+        this.pod = response.data.container;
+        this.image = response.data.image;
+        this.message = response.data.message;
+
+      }, (err) => {
+        alert(err);
+      });
+  }
+
+  getRelatedEvents(){
     this.falcoService.getFalcoLogs(this.clusterId,  { limit: this.limit, page: this.page, signature: this.signature})
       .pipe(take(1))
       .subscribe(response => {
@@ -81,13 +107,17 @@ export class ShowJsonDataComponent implements OnInit {
     localStorage.setItem('falco_table_limit', String(limit));
   }
 
-  onClickMore(){
-    this.dialogRef.close();
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'more', this.eventId, 'signature', this.signature]);
+  onClickShare(){
+
   }
 
-  onClose() {
-    this.dialogRef.close();
-  }
+  onClickYaml(){
 
+  }
+  onClickJson(){
+
+  }
+  onClickTable(){
+
+  }
 }

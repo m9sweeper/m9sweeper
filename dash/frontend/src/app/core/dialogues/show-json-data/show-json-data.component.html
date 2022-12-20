@@ -1,71 +1,85 @@
+
 <h1 mat-dialog-title>{{ header }}</h1>
+
 <div mat-dialog-content>
-  <table>
-    <tr>
-      <th>Namespace</th> <td>{{namespace}}</td>
-    </tr>
-    <tr>
-      <th>Date</th> <td>{{date}}</td>
-    </tr>
-    <tr>
-      <th>Pod</th> <td>{{pod}}</td>
-    </tr>
-    <tr>
-      <th>Image</th> <td>{{image}}</td>
-    </tr>
-    <tr>
-      <th>Message</th> <td>{{message}}</td>
-    </tr>
-  </table>
-</div>
-<div>
-  <h1>Related Event</h1> <div>Signature:</div><div>{{signature}}</div>
-</div>
-<div>
-  <mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="calendarDate">
-      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-      <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
-    </ng-container>
+  <div class ="event-div">
+    <table>
+      <tr>
+        <th>Namespace</th> <td>{{namespace}}</td>
+      </tr>
+      <tr>
+        <th>Date</th> <td>{{date}}</td>
+      </tr>
+      <tr>
+        <th>Pod</th> <td>{{pod}}</td>
+      </tr>
+      <tr>
+        <th>Image</th> <td>{{image}}</td>
+      </tr>
+      <tr>
+        <th>Message</th> <td>{{message}}</td>
+      </tr>
+    </table>
+  </div>
 
-    <ng-container matColumnDef="namespace">
-      <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-      <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
-    </ng-container>
+  <br>
 
-    <ng-container matColumnDef="pod">
-      <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-      <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
-    </ng-container>
+  <div class = "event-div">
+    <div>
+      <h1>Related Event</h1> <div>Signature:</div><div>{{signature}}</div>
+    </div>
 
-    <ng-container matColumnDef="image">
-      <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-      <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
-    </ng-container>
+    <div>
+      <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="calendarDate">
+          <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="namespace">
+          <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pod">
+          <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="image">
+          <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+          <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="message">
+          <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+          <mat-cell *matCellDef="let log">
+            {{log.message}}
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
+      </mat-table>
 
-    <ng-container matColumnDef="message">
-      <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-      <mat-cell *matCellDef="let log">
-        {{log.message}}
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
+      <div class="paginator">
+        <mat-paginator
+          [length]="logCount"
+          [pageSize]="limit"
+          [pageSizeOptions]="[ 20, 50, 100]"
+          (page)="pageEvent($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
 
-  </mat-table>
-  <div class="paginator">
-    <mat-paginator
-      [length]="logCount"
-      [pageSize]="limit"
-      [pageSizeOptions]="[ 20, 50, 100]"
-      (page)="pageEvent($event)"
-      showFirstLastButtons>
-    </mat-paginator>
+    </div>
+
+    <div mat-dialog-actions style="justify-content: left;">
+      <button mat-button (click)="onClickMore()">More</button>
+      <button mat-button (click)="onClose()">Close</button>
+    </div>
+
+    <br>
+
   </div>
 </div>
 
-<div mat-dialog-actions style="justify-content: flex-end;">
-  <button mat-button (click)="onClickMore()">More</button>
-  <button mat-button (click)="onClose()">Close</button>
-</div>
+
+
+
 

@@ -122,6 +122,7 @@ import {
 } from './pages/reports/vulnerability-difference-by-date/vulnerability-difference-by-date.component';
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.component';
+import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
 
 
 @NgModule({
@@ -202,6 +203,7 @@ import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.comp
     WorstImagesComponent,
     AuditLogComponent,
     ShowJsonDataComponent,
+    ShowJsonDataMoreComponent,
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,

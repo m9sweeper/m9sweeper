@@ -19,6 +19,7 @@ export interface FalcoLogOptions {
   pod?: string;
   image?: string;
   signature?: string;
+  eventId?: number;
 }
 
 @Injectable({
@@ -35,6 +36,10 @@ export class FalcoService {
     return this.httpClient.get('/api/falco', {params});
   }
 
+  getFalcoLogByEventId(eventId: number
+  ): Observable<IServerResponse<IFalcoLog>> {
+    return this.httpClient.get(`/api/falco/${eventId}`);
+  }
 
   downloadFalcoExport(clusterId: number):
     Observable<IServerResponse<IFalcoCsv>> {
@@ -86,6 +91,10 @@ export class FalcoService {
 
     if (options?.signature) {
       params = params.set('signature', options?.signature.toString());
+    }
+
+    if (options?.eventId) {
+      params = params.set('eventId', options?.eventId.toString());
     }
 
     return params;
