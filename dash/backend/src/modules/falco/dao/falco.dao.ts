@@ -2,7 +2,6 @@ import {DatabaseService} from '../../shared/services/database.service';
 import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
-import {VulnerabilitySeverity} from "../../shared/enums/vulnerability-severity";
 
 
 @Injectable()
@@ -124,11 +123,14 @@ export class FalcoDao {
     ): Promise<FalcoDto> {
         const knex = await this.databaseService.getConnection();
 
-        return knex.select()
-            .from('project_falco_logs')
-            .where('id', eventId)
-            .then(results => results[0]);
+       const result= knex.select(
+            ['p.id as id', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
+                'p.image as image', 'p.message as message', 'p.anomaly_signature as anomalySignature', 'p.raw as raw'])
+            .from('project_falco_logs AS p')
+            .where('p.id', eventId)
+            .then(result => result[0]);
 
+         return result;
     }
 
     async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
