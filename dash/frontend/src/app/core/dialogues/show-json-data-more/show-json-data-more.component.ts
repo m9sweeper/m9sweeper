@@ -58,14 +58,11 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   getEventById(){
-    console.log('eventid =', this.eventId);
-    this.falcoService.getFalcoLogByEventId( this.eventId )
+      this.falcoService.getFalcoLogByEventId( this.eventId )
       .pipe(take(1))
       .subscribe(response => {
-        console.log('response:', response);
         this.namespace = response.data.namespace;
         this.date = response.data.calendarDate;
-        console.log('*** calendar date ***', this.date);
         this.pod = response.data.container;
         this.image = response.data.image;
         this.message = response.data.message;
