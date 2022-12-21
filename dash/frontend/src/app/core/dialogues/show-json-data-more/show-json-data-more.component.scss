@@ -3,6 +3,24 @@
   border: 1px solid black;
 }
 
+.falco-log-more-container{
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+}
+.page {
+  padding: 20px 15px 10px 15px;
+  font-size: 26px;
+}
+
+.mat-card-title{
+  width: 100%;
+  white-space: nowrap;
+  display: flex;
+}
+
 mat-paginator {
   display: flex;
   justify-content: center;
