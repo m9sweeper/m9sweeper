@@ -60,6 +60,19 @@ export class FalcoController {
         return this.falcoService.getFalcoLogByEventId(eventId);
     }
 
+    @Get('/count')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async getCountOfFalcoLogsBySignature(
+        @Query('cluster-id') clusterId: number,
+        @Query('signature') signature?: string
+    ): Promise< FalcoDto>
+    {
+        return this.falcoService.getCountOfFalcoLogsBySignature(clusterId, signature);
+    }
+
+
+
     @Get('/apiKey')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)

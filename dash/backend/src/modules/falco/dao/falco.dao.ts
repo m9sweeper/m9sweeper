@@ -133,6 +133,23 @@ export class FalcoDao {
          return result;
     }
 
+    async getCountOfFalcoLogsBySignature(
+        clusterId: number, signature: string
+    ): Promise<FalcoDto> {
+        const knex = await this.databaseService.getConnection();
+
+        const signatureLogs= knex.select()
+            .where('p.anomaly_signature', signature)
+
+        const signatureCount = await knex
+            .select( [knex.raw( 'count (*)')])
+            .from(signatureLogs.as("q"));
+
+        const result = ( signatureCount && signatureCount[0] && signatureCount[0].count) ? signatureCount[0].count : 0;
+
+        return result;
+    }
+
     async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
 
         const knex = await this.databaseService.getConnection();

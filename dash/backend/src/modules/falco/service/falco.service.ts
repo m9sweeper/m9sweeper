@@ -40,6 +40,12 @@ export class FalcoService {
         return this.falcoDao.getFalcoLogByEventId(eventId);
     }
 
+    async getCountOfFalcoLogsBySignature(
+        clusterId: number, signature: string
+    ): Promise<FalcoDto > {
+        return this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature);
+    }
+
     async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {
         const queryResponse = await this.falcoDao.getFalcoLogsForExport(clusterId);
         const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
