@@ -5,7 +5,7 @@ import {AuthGuard} from '../../../guards/auth.guard';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoService} from '../service/falco.service';
 import {ResponseTransformerInterceptor} from '../../../interceptors/response-transformer.interceptor';
-import {ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FalcoWebhookInputDto} from '../dto/falco-webhook-input.dto';
 import {Authority} from '../../user/enum/Authority';
 import {ApiKeyDao} from "../../api-key/dao/api-key.dao";
@@ -13,6 +13,7 @@ import {ApiKeyDto} from "../../api-key/dto/api-key-dto";
 import {UserDao} from "../../user/dao/user.dao";
 import {AuthService} from "../../auth/services/auth.service";
 import {AuthorityId} from "../../user/enum/authority-id";
+import {FalcoCountDto} from "../dto/falco-count.dto";
 
 @ApiTags('Project Falco')
 @Controller()
@@ -46,6 +47,19 @@ export class FalcoController {
         return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
     }
 
+    @Get('/count')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 200
+    })
+    async getCountOfFalcoLogsBySignature(
+        @Query('cluster-id') clusterId: number,
+        @Query('signature') signature?: string
+    ): Promise<FalcoCountDto[]>
+    {
+        return this.falcoService.getCountOfFalcoLogsBySignature(clusterId, signature);
+    }
 
     @Get('/:eventId')
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
@@ -60,16 +74,7 @@ export class FalcoController {
         return this.falcoService.getFalcoLogByEventId(eventId);
     }
 
-    @Get('/count')
-    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    async getCountOfFalcoLogsBySignature(
-        @Query('cluster-id') clusterId: number,
-        @Query('signature') signature?: string
-    ): Promise< FalcoDto>
-    {
-        return this.falcoService.getCountOfFalcoLogsBySignature(clusterId, signature);
-    }
+
 
 
 

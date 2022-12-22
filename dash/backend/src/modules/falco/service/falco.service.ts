@@ -7,6 +7,7 @@ import {instanceToPlain} from 'class-transformer';
 import {format} from 'date-fns';
 import {CsvService} from "../../shared/services/csv.service";
 import {FalcoCsvDto} from "../dto/falco-csv-dto";
+import {FalcoCountDto} from "../dto/falco-count.dto";
 
 @Injectable()
 export class FalcoService {
@@ -42,7 +43,7 @@ export class FalcoService {
 
     async getCountOfFalcoLogsBySignature(
         clusterId: number, signature: string
-    ): Promise<FalcoDto > {
+    ): Promise<FalcoCountDto[]> {
         return this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature);
     }
 

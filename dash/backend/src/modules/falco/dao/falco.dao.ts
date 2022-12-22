@@ -2,6 +2,8 @@ import {DatabaseService} from '../../shared/services/database.service';
 import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
+import {FalcoCountDto} from "../dto/falco-count.dto";
+import {format, set, sub} from "date-fns";
 
 
 @Injectable()
@@ -135,18 +137,31 @@ export class FalcoDao {
 
     async getCountOfFalcoLogsBySignature(
         clusterId: number, signature: string
-    ): Promise<FalcoDto> {
+    ): Promise<FalcoCountDto[]> {
+
+        const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
+        const endDate = format(currentDate, 'yyyy-MM-dd');
+        const startDate = format(sub(currentDate, {days: 28}), 'yyyy-MM-dd');
+
         const knex = await this.databaseService.getConnection();
 
+        // get all signature logs within 28 day from current date
         const signatureLogs= knex.select()
-            .where('p.anomaly_signature', signature)
+            .from('project_falco_logs')
+            .where('anomaly_signature', signature)
+            .andWhere('cluster_id', clusterId)
+            //.andWhere('calendar_date', '>=', startDate)
+            //.andWhere('calendar_date', '<=', endDate);
 
-        const signatureCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(signatureLogs.as("q"));
 
-        const result = ( signatureCount && signatureCount[0] && signatureCount[0].count) ? signatureCount[0].count : 0;
+        const signatureCountByDate = await knex
+            .select( [knex.raw( 'calendar_date, count (calendar_date)')])
+            .from(signatureLogs.as("q"))
+            .groupByRaw('calendar_date')
+            .orderBy('calendar_date', 'asc');
 
+        // handle no query result
+        const result = signatureCountByDate? signatureCountByDate : null;
         return result;
     }
 
@@ -156,6 +171,7 @@ export class FalcoDao {
 
         let query = knex.select()
             .from('project_falco_logs')
+
             .where('cluster_id', clusterId);
 
         // Find log count and full list for csv export
