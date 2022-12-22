@@ -7,6 +7,7 @@ import {VulnerabilitySeverity} from '../enum/VulnerabilitySeverity';
 import {IReportsCsv} from '../entities/IReportsCsv';
 import {IFalcoCsv} from '../entities/IFalcoCsv';
 import {IKubeBenchReport} from '../entities/IKubeBenchReport';
+import {IFalcoCount} from '../entities/IFalcoCount';
 
 export interface FalcoLogOptions {
   limit?: number;
@@ -42,9 +43,9 @@ export class FalcoService {
   }
 
   getCountOfFalcoLogsBySignature(clusterId: number, signature: string
-  ): Observable<IServerResponse<IFalcoLog>> {
+  ): Observable<IServerResponse<IFalcoCount[]>>{
     const params = this.buildParams(clusterId, {signature} );
-    return this.httpClient.get('/api/falco', {params});
+    return this.httpClient.get('/api/falco/count', {params});
   }
 
   downloadFalcoExport(clusterId: number):

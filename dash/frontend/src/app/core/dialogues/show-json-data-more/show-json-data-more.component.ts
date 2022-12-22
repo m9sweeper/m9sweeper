@@ -75,9 +75,6 @@ export class ShowJsonDataMoreComponent implements OnInit {
     this.getEventById();
     this.getRelatedEvents();
 
-    const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
-    this.endDate = format(currentDate, 'yyyy-MM-dd');
-    this.startDate = format(sub(currentDate, {days: 28}), 'yyyy-MM-dd');
     this.buildBarChartData();
   }
 
@@ -87,6 +84,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
     this.setLimitToLocalStorage(this.limit);
     this.getEventById();
     this.getRelatedEvents();
+    this.buildBarChartData();
 
   }
 
@@ -143,29 +141,17 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   buildBarChartData() {
-    const filters = {
-      clusterIds: [this.clusterId],
-      signature: [ this.signature],
-      startDate: this.startDate,
-      endDate: this.endDate,
-    };
-    this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
+      this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
       .pipe(take(1))
       .subscribe(response => {
         /*
-          this.barChartAttributes.results = response.data && response.data.length > 0 ? response.data.map(data => {
-            return {
-              name: data.savedAtDate.split('T')[0],
-              series: [
-                {
-                  name: VulnerabilitySeverity.CRITICAL,
-                  value: +data.criticalIssues
-                },
-              ]
-            };
-          }) : [];
+        this.barChartAttributes.results = response.data;
+          if (this.barChartAttributes.results && this.barChartAttributes.results.length === 0) {
+            return false;
+          }
 
          */
+          console.log('*** response data***' , response.data);
         },
         error => {
           this.alertService.danger(error.error.message);
