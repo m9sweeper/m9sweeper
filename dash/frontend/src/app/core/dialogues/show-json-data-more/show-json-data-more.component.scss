@@ -21,6 +21,13 @@
   display: flex;
 }
 
+:host ::ng-deep .jsonTable table {
+  width: 100%;
+}
+.graph-component {
+  display: flex;
+}
+
 mat-paginator {
   display: flex;
   justify-content: center;

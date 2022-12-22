@@ -38,7 +38,25 @@
     <div class="col-sm-6">
       <mat-card>
         <h1>Incidence Rate</h1>
-        <div>Add graph</div>
+        <div class="row graph-component">
+          <ngx-charts-bar-vertical-stacked
+            [view]="barChartAttributes.view"
+            [scheme]="barChartAttributes.colorScheme"
+            [results]="barChartAttributes.results"
+            [legend]="barChartAttributes.showLegend"
+            [legendPosition]="barChartAttributes.legendPosition"
+            [gradient]="barChartAttributes.gradient"
+            [xAxis]="barChartAttributes.showXAxis"
+            [yAxis]="barChartAttributes.showYAxis"
+            [barPadding]="barChartAttributes.barPadding"
+            [showXAxisLabel]="barChartAttributes.showXAxis"
+            [showYAxisLabel]="barChartAttributes.showYAxis"
+            [xAxisLabel]="barChartAttributes.xAxisLabel"
+            [yAxisLabel]="barChartAttributes.yAxisLabel"
+            [xAxisTickFormatting]="scanXTickFormatting">
+          </ngx-charts-bar-vertical-stacked>
+
+        </div>
       </mat-card>
     </div>
   </div>
@@ -114,7 +132,22 @@
         <button mat-raised-button color="primary"  (click)="onClickTable()">Table</button>
       </div>
     </div>
+    <b>Raw:</b>
     <div> {{message}}</div>
+    <br>
+    <b>Chosen format:</b>
+    <div>
+      <div *ngIf="format === 'json'; then displayInJson"></div>
+        <ng-template #displayInJson>
+          {{rawInFormat}}
+        </ng-template>
+    </div>
+    <div>
+      <div *ngIf="format === 'table'; then displayInTable"></div>
+        <ng-template #displayInTable>
+          <div class="jsonTable" [innerHTML]="rawInFormat"></div>
+        </ng-template>
+    </div>
   </mat-card>
 
 </div>

@@ -41,6 +41,12 @@ export class FalcoService {
     return this.httpClient.get(`/api/falco/${eventId}`);
   }
 
+  getCountOfFalcoLogsBySignature(clusterId: number, signature: string
+  ): Observable<IServerResponse<IFalcoLog>> {
+    const params = this.buildParams(clusterId, {signature} );
+    return this.httpClient.get('/api/falco', {params});
+  }
+
   downloadFalcoExport(clusterId: number):
     Observable<IServerResponse<IFalcoCsv>> {
     const params = this.buildParams(clusterId);
