@@ -5,8 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
-import {format, set, sub} from 'date-fns';
 import { jsonToTableHtmlString } from 'json-table-converter';
+import {IFalcoCount} from '../../entities/IFalcoCount';
 
 // display: basic details, Incidence Rate, Related Events with pagination
 // Add functions: Share,Raw Data ( yaml, Json, Table)
@@ -45,11 +45,10 @@ export class ShowJsonDataMoreComponent implements OnInit {
   logCount: number;
   page: number;
 
-  startDate: string;
-  endDate: string;
+  falcoCountData: IFalcoCount[];
 
   barChartAttributes = {
-    view: [],
+    view: [] = [700, 400],
     colorScheme: {
       domain: ['#f3865f']
     },
@@ -137,21 +136,44 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   scanXTickFormatting = (e: string) => {
-    return e.split('-')[2];
+    // return e.split('-')[2];
   }
 
   buildBarChartData() {
       this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
       .pipe(take(1))
       .subscribe(response => {
-        /*
-        this.barChartAttributes.results = response.data;
-          if (this.barChartAttributes.results && this.barChartAttributes.results.length === 0) {
+
+          this.falcoCountData = response.data;
+          console.log(' *** data *** ', this.falcoCountData);
+          if (this.falcoCountData && this.falcoCountData.length === 0) {
             return false;
           }
+          /*
+          this.barChartAttributes.results = [
+            {
+              name: '2022-11-01',
+              value: 50
+            },
+            {
+              name: '2022-12-01',
+              value: 10
+            },
+          ];
+          */
 
-         */
-          console.log('*** response data***' , response.data);
+          this.barChartAttributes.results = [
+            {
+              name: '',
+              series: this.falcoCountData.map(falcoData => {
+                return {
+                  name: falcoData.date, // .split('T')[0],
+                  value: +falcoData.count
+                };
+              })
+            }
+          ];
+          console.log(' *** results *** ', this.barChartAttributes.results);
         },
         error => {
           this.alertService.danger(error.error.message);

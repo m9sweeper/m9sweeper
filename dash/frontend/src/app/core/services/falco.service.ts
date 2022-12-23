@@ -111,4 +111,18 @@ export class FalcoService {
     return this.httpClient.get<IServerResponse<{api: string}[]>>(`/api/falco/apiKey`);
   }
 
+  calculateChartRange(falcoCounts: number[]): { yScaleMin: number, yAxisTicks: number[] } {
+    if (!falcoCounts.length) {
+      return {yScaleMin: 0, yAxisTicks: []};
+    }
+    const range = [];
+    const maxCount = Math.max(...falcoCounts);
+    let distance = Math.floor((maxCount) / 4);
+    distance = distance - (distance % 5);
+    for (let i = 0; i <= 4; i++) {
+      const e = (distance * i);
+      range.push(e);
+    }
+    return {yScaleMin: 0 , yAxisTicks: range};
+  }
 }

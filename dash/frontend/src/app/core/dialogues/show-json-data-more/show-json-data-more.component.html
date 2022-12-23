@@ -36,10 +36,10 @@
       </mat-card>
     </div>
     <div class="col-sm-6">
-      <mat-card>
+      <mat-card style="height:400px; display: grid; margin:7px 0px 7px 0px !important;">
         <h1>Incidence Rate</h1>
-        <div class="row graph-component">
-          <ngx-charts-bar-vertical-stacked
+        <div class="graph">
+          <ngx-charts-bar-vertical
             [view]="barChartAttributes.view"
             [scheme]="barChartAttributes.colorScheme"
             [results]="barChartAttributes.results"
@@ -54,8 +54,7 @@
             [xAxisLabel]="barChartAttributes.xAxisLabel"
             [yAxisLabel]="barChartAttributes.yAxisLabel"
             [xAxisTickFormatting]="scanXTickFormatting">
-          </ngx-charts-bar-vertical-stacked>
-
+          </ngx-charts-bar-vertical>
         </div>
       </mat-card>
     </div>
