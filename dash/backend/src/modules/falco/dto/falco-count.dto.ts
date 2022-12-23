@@ -9,9 +9,9 @@ export class FalcoCountDto {
     @IsOptional()
     count: number;
 
-    @Expose({name: 'date', toPlainOnly: true})
+    @Expose({name: 'calendar_date', toPlainOnly: true})
     @IsOptional()
     @ApiProperty()
-    date: bigint;
+    date: Date;
 }
 

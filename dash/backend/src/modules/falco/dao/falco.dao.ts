@@ -155,7 +155,7 @@ export class FalcoDao {
 
 
         const signatureCountByDate = await knex
-            .select( [knex.raw( 'calendar_date, count (calendar_date)')])
+            .select( [knex.raw( 'calendar_date as date, count (calendar_date)')])
             .from(signatureLogs.as("q"))
             .groupByRaw('calendar_date')
             .orderBy('calendar_date', 'asc');
