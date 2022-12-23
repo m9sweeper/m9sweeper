@@ -1,6 +1,6 @@
-.event-div
-{
-  border: 1px solid black;
+.page {
+  padding: 20px 15px 10px 15px;
+  font-size: 26px;
 }
 
 .falco-log-more-container{
@@ -9,10 +9,6 @@
   width: 100%;
   box-sizing: border-box;
   padding: 15px;
-}
-.page {
-  padding: 20px 15px 10px 15px;
-  font-size: 26px;
 }
 
 .mat-card-title{
@@ -24,21 +20,17 @@
 :host ::ng-deep .jsonTable table {
   width: 100%;
 }
-.graph-component {
-  display: flex;
-}
+.event-table {
+  overflow-y: auto !important;
 
-mat-paginator {
-  display: flex;
-  justify-content: center;
-}
+  mat-paginator {
+    display: flex;
+    justify-content: center;
+  }
 
   mat-table {
     overflow: auto !important;
-    min-width: 400px;
-    height: 400px;
-
-
+    min-width: 800px;
 
     mat-row {
       min-height: 20px !important
@@ -73,7 +65,7 @@ mat-paginator {
     .mat-column-pod {
       width: 120px;
       min-width: 100px;
-      max-width:120px;;
+      max-width: 120px;;
       //max-width: 7%;
       margin-right: 10px;
       overflow: hidden;
@@ -94,7 +86,7 @@ mat-paginator {
     .mat-column-priority {
       width: 100px;
       min-width: 50px;
-      max-width:100px;
+      max-width: 100px;
       margin-right: 10px;
       overflow: hidden;
       white-space: nowrap;
@@ -110,4 +102,5 @@ mat-paginator {
       white-space: nowrap;
     }
   }
+}
 

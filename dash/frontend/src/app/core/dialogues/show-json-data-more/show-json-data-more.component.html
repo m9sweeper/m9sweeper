@@ -1,6 +1,6 @@
 <div class ="falco-log-more-container">
 
-  <div>
+  <div >
     <div class=" row mat-card-title">
       <div class="col-sm-6" >
         <div class="row page"> Event Details</div>
@@ -9,12 +9,12 @@
         <button mat-raised-button color="primary"  (click)="onClickShare()">Share</button>
       </div>
     </div>
-  </div>
+  </div >
   <div class="row">
-    <div class="col-sm-6">
+    <div class="event-table col-sm-6">
       <mat-card>
         <h1>Basic Details</h1>
-        <div>
+        <div class="event-table">
           <table>
             <tr>
               <th>Namespace</th> <td>{{namespace}}</td>
@@ -35,10 +35,10 @@
         </div>
       </mat-card>
     </div>
-    <div class="col-sm-6">
-      <mat-card style="height:400px; display: grid; margin:7px 0px 7px 0px !important;">
+    <div class="event-table col-sm-6">
+      <mat-card style="height:500px; display: grid;!important;">
         <h1>Incidence Rate</h1>
-        <div class="graph">
+        <div>
           <ngx-charts-bar-vertical
             [view]="barChartAttributes.view"
             [scheme]="barChartAttributes.colorScheme"
@@ -52,8 +52,7 @@
             [showXAxisLabel]="barChartAttributes.showXAxis"
             [showYAxisLabel]="barChartAttributes.showYAxis"
             [xAxisLabel]="barChartAttributes.xAxisLabel"
-            [yAxisLabel]="barChartAttributes.yAxisLabel"
-            [xAxisTickFormatting]="scanXTickFormatting">
+            [yAxisLabel]="barChartAttributes.yAxisLabel">
           </ngx-charts-bar-vertical>
         </div>
       </mat-card>
@@ -64,7 +63,7 @@
 
   <div>
     <mat-card>
-      <div class="row">
+      <div class="row event-table">
         <div class="col-sm-6">
           <h1>Related Event</h1>
         </div>
@@ -73,7 +72,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="event-table">
         <mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="calendarDate">
             <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
@@ -122,7 +121,7 @@
 
   <mat-card>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="event-table col-sm-6">
         <h1>Raw Data</h1>
       </div>
       <div class="col-sm-6 text-align-right">
@@ -131,21 +130,24 @@
         <button mat-raised-button color="primary"  (click)="onClickTable()">Table</button>
       </div>
     </div>
-    <b>Raw:</b>
-    <div> {{message}}</div>
-    <br>
-    <b>Chosen format:</b>
-    <div>
-      <div *ngIf="format === 'json'; then displayInJson"></div>
-        <ng-template #displayInJson>
-          {{rawInFormat}}
-        </ng-template>
-    </div>
-    <div>
-      <div *ngIf="format === 'table'; then displayInTable"></div>
-        <ng-template #displayInTable>
-          <div class="jsonTable" [innerHTML]="rawInFormat"></div>
-        </ng-template>
+    <div class="event-table">
+      <b>Raw:</b>
+      <div> {{message}}</div>
+      <br>
+      <b>Chosen format:</b>
+      <div>
+        <div *ngIf="format === 'json'; then displayInJson"></div>
+          <ng-template #displayInJson>
+            {{rawInFormat}}
+          </ng-template>
+      </div>
+
+      <div>
+        <div *ngIf="format === 'table'; then displayInTable"></div>
+          <ng-template #displayInTable>
+            <div class="jsonTable" [innerHTML]="rawInFormat"></div>
+          </ng-template>
+      </div>
     </div>
   </mat-card>
 

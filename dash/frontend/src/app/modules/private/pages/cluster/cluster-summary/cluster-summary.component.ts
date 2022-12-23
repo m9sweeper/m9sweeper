@@ -238,6 +238,8 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
           })
         }
       ];
+      console.log('result: ', this.lineChartAttributes.results);
+      console.log('result type: ', typeof(this.lineChartAttributes.results));
     }, error => {
       this.alertService.danger(error.error.message);
     });

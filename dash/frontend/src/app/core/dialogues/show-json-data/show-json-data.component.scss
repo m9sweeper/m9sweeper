@@ -2,7 +2,19 @@
 {
   border: 1px solid black;
 }
+.falco-log-more-container{
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+}
 
+.mat-card-title{
+  width: 100%;
+  white-space: nowrap;
+  display: flex;
+}
 mat-paginator {
   display: flex;
   justify-content: center;

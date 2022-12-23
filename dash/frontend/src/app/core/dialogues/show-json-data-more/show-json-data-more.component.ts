@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
@@ -7,9 +7,6 @@ import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
 import { jsonToTableHtmlString } from 'json-table-converter';
 import {IFalcoCount} from '../../entities/IFalcoCount';
-
-// display: basic details, Incidence Rate, Related Events with pagination
-// Add functions: Share,Raw Data ( yaml, Json, Table)
 
 @Component({
   selector: 'app-show-json-data-more',
@@ -48,7 +45,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
   falcoCountData: IFalcoCount[];
 
   barChartAttributes = {
-    view: [] = [700, 400],
+    view: [] = [500, 400],
     colorScheme: {
       domain: ['#f3865f']
     },
@@ -56,7 +53,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
     gradient: false,
     showXAxis: true,
     showYAxis: true,
-    barPadding: 2,
+    barPadding: 10,
     showLegend: false,
     legendPosition: 'below',
     showXAxisLabel: true,
@@ -135,45 +132,59 @@ export class ShowJsonDataMoreComponent implements OnInit {
     localStorage.setItem('falco_table_limit', String(limit));
   }
 
-  scanXTickFormatting = (e: string) => {
-    // return e.split('-')[2];
-  }
-
   buildBarChartData() {
       this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
       .pipe(take(1))
       .subscribe(response => {
 
           this.falcoCountData = response.data;
-          console.log(' *** data *** ', this.falcoCountData);
-          if (this.falcoCountData && this.falcoCountData.length === 0) {
+          if (this.falcoCountData && this.falcoCountData.length > 0) {
+            this.barChartAttributes.results = [
+              {
+                name: '',
+                series: this.falcoCountData.map(elem =>
+                {
+                  return {
+                    name: elem.date.toString().split('T')[0],
+                    value: Number(elem.count)
+                  };
+                })
+              }
+            ];
+            console.log('result: ', this.barChartAttributes.results);
+            console.log('result type: ', typeof(this.barChartAttributes.results));
+          } else{
             return false;
           }
-          /*
+/*
           this.barChartAttributes.results = [
             {
-              name: '2022-11-01',
+              name: 'Germany',
+              value: 89
+            },
+            {
+              name: 'USA',
               value: 50
             },
             {
-              name: '2022-12-01',
-              value: 10
-            },
-          ];
-          */
-
-          this.barChartAttributes.results = [
-            {
-              name: '',
-              series: this.falcoCountData.map(falcoData => {
-                return {
-                  name: falcoData.date, // .split('T')[0],
-                  value: +falcoData.count
-                };
-              })
+              name: 'France',
+              value: 1000
             }
           ];
-          console.log(' *** results *** ', this.barChartAttributes.results);
+*/
+
+          /*
+          this.falcoCountData.map(elem =>
+            this.barChartAttributes.results.push(
+              {
+                name: elem.date.toString().split('T')[0],
+                value: Number(elem.count)
+              }));
+           */
+
+          // console.log('result first ele: ', this.barChartAttributes.results[0].name);
+          // console.log('result first ele: ', this.barChartAttributes.results[0].value);
+
         },
         error => {
           this.alertService.danger(error.error.message);
