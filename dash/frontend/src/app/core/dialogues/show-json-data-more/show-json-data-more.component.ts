@@ -144,51 +144,15 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
           this.falcoCountData = response.data;
           if (this.falcoCountData && this.falcoCountData.length > 0) {
-            this.barChartAttributes.results = [
-              {
-                name: '',
-                series: this.falcoCountData.map(elem =>
-                {
-                  return {
-                    name: elem.date.toString().split('T')[0],
-                    value: Number(elem.count)
-                  };
-                })
-              }
-            ];
-            console.log('result: ', this.barChartAttributes.results);
-            console.log('result type: ', typeof(this.barChartAttributes.results));
+            this.barChartAttributes.results =  this.falcoCountData.map(elem => {
+              return {
+                name: elem.date.toString().split('T')[0],
+                value: Number(elem.count)
+              };
+            });
           } else{
             return false;
           }
-/*
-          this.barChartAttributes.results = [
-            {
-              name: 'Germany',
-              value: 89
-            },
-            {
-              name: 'USA',
-              value: 50
-            },
-            {
-              name: 'France',
-              value: 1000
-            }
-          ];
-*/
-
-          /*
-          this.falcoCountData.map(elem =>
-            this.barChartAttributes.results.push(
-              {
-                name: elem.date.toString().split('T')[0],
-                value: Number(elem.count)
-              }));
-           */
-
-          // console.log('result first ele: ', this.barChartAttributes.results[0].name);
-          // console.log('result first ele: ', this.barChartAttributes.results[0].value);
 
         },
         error => {
