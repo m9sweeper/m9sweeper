@@ -150,8 +150,8 @@ export class FalcoDao {
             .from('project_falco_logs')
             .where('anomaly_signature', signature)
             .andWhere('cluster_id', clusterId)
-            //.andWhere('calendar_date', '>=', startDate)
-            //.andWhere('calendar_date', '<=', endDate);
+            .andWhere('calendar_date', '>=', startDate)
+            .andWhere('calendar_date', '<=', endDate);
 
 
         const signatureCountByDate = await knex
