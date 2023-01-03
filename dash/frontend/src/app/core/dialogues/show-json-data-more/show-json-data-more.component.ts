@@ -196,11 +196,15 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   onClickYaml(){
-
+    this.format = 'yaml';
+    const YAML = require('json-to-pretty-yaml');
+    this.rawInFormat = YAML.stringify(this.raw);
+    console.log(this.rawInFormat);
   }
   onClickJson(){
     this.format = 'json';
-    this.rawInFormat = JSON.stringify(this.raw, null, '\t');
+    this.rawInFormat = JSON.stringify(this.raw, undefined, 4);
+    console.log(this.rawInFormat);
   }
 
   onClickTable(){

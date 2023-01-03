@@ -136,9 +136,16 @@
       <br>
       <b>Chosen format:</b>
       <div>
+        <div *ngIf="format === 'yaml'; then displayInYaml"></div>
+        <ng-template #displayInYaml>
+          <pre [innerHTML]="rawInFormat"></pre>
+        </ng-template>
+      </div>
+      <div>
         <div *ngIf="format === 'json'; then displayInJson"></div>
           <ng-template #displayInJson>
-            {{rawInFormat}}
+          <pre [innerHTML]="rawInFormat"></pre>
+
           </ng-template>
       </div>
 
