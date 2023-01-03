@@ -123,6 +123,7 @@ import {
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.component';
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
+import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/share-event.component';
 
 
 @NgModule({
@@ -204,6 +205,7 @@ import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-mor
     AuditLogComponent,
     ShowJsonDataComponent,
     ShowJsonDataMoreComponent,
+    ShareEventComponent,
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,

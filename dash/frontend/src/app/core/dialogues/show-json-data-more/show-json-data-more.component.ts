@@ -7,6 +7,8 @@ import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
 import { jsonToTableHtmlString } from 'json-table-converter';
 import {IFalcoCount} from '../../entities/IFalcoCount';
+import {ShareEventComponent} from './share-event.component';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-show-json-data-more',
@@ -20,6 +22,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
               private route: ActivatedRoute,
               private falcoService: FalcoService,
               private alertService: AlertService,
+              private dialog: MatDialog,
   ) { }
 
   dataSource: MatTableDataSource<IFalcoLog>;
@@ -43,6 +46,8 @@ export class ShowJsonDataMoreComponent implements OnInit {
   page: number;
 
   falcoCountData: IFalcoCount[];
+
+  dialogRef: MatDialogRef<ShareEventComponent>;
 
   barChartAttributes = {
     view: [] = [500, 400],
@@ -192,7 +197,9 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   onClickShare(){
-
+     this.dialogRef = this.dialog.open(ShareEventComponent, {
+      width: 'auto'
+    });
   }
 
   onClickYaml(){
