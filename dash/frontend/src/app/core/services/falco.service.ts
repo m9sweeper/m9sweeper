@@ -60,7 +60,8 @@ export class FalcoService {
     params = params.set('cluster-id', clusterId.toString());
 
     if (options?.limit){
-      params = params.set('limit', String(options?.limit));
+      const limitANumber = options?.limit * 1;
+      params = params.set('limit', String(limitANumber));
     }
     if (options?.page){
       params = params.set('page', String(options?.page));
