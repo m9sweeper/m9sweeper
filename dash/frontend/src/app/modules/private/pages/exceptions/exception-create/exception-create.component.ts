@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Location} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {DatePipe, Location} from '@angular/common';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '@full-fledged/alerts';
@@ -19,7 +19,7 @@ import {IException} from '../../../../../core/entities/IException';
 import {forkJoin, Observable, of} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {DatePipe} from '@angular/common';
+import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
 
 @Component({
   selector: 'exception-create',
@@ -55,6 +55,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
   loading = false;
   submitButtonText = 'Submit';
 
+  severityLevels = [ VulnerabilitySeverity.NEGLIGIBLE,
+                    VulnerabilitySeverity.LOW,
+                    VulnerabilitySeverity.MEDIUM,
+                    VulnerabilitySeverity.MAJOR,
+                    VulnerabilitySeverity.CRITICAL];
+
   constructor(
     private exceptionsService: ExceptionsService,
     private formBuilder: FormBuilder,
@@ -80,7 +86,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
     this.exceptionForm = this.formBuilder.group({
       title: ['', [CustomValidators.requiredNoTrim, Validators.maxLength(255)]],
       reason: ['', []],
-      issueIdentifier: ['', [Validators.maxLength(255)]],
+      issueIdentifier: ['', [Validators.maxLength(255), Validators.required]],
       startDate: [new Date(),
         {
           validators: [Validators.required, CustomValidators.checkForCurrentDate()],
@@ -95,7 +101,8 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
       clusters: [''],
       namespaces: [''],
       type: [''],
-      imageMatch: ['%', Validators.nullValidator]
+      imageMatch: ['%', Validators.nullValidator],
+      altSeverity: ['', [Validators.required]]
     },
       {
       validators: [CustomValidators.checkEndDateIsGreaterThanStartDate()],
@@ -205,6 +212,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
         this.loadGatekeeperConstraints(this.origException.clusters.map(cluster => String(cluster.id)));
       }
     }
+    this.exceptionForm.controls.altSeverity.setValue(this.origException.altSeverity);
   }
 
   onSubmit() {
@@ -280,6 +288,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
         if (getSelectedClusters instanceof Array && getSelectedClusters.length > 0) {
           this.loadGatekeeperConstraints(getSelectedClusters);
         }
+        break;
+      case 'override':
+        this.exceptionForm.controls.policies.enable();
+        this.changeCVELabel('Issue (Override Severity)');
+        this.issueIdentifier.markAsUntouched();
+        this.gatekeeperConstraintList = of([]);
         break;
     }
   }

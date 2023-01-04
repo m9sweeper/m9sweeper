@@ -337,6 +337,7 @@ export class ImageController {
                 const issueCompliance = results.complianceMap.getResultForCve(rsByPolicy.policyId, issue.scannerId, issue.type);
                 issue.isCompliant = issueCompliance.compliant;
                 issue.complianceReason = issueCompliance.complianceReason;
+                issue.severity = issueCompliance.severity;
                  return issue;
             });
 

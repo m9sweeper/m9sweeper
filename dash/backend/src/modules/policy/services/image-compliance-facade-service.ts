@@ -31,8 +31,10 @@ export class ImageComplianceFacadeService {
         }
 
         const policyIdSet = new Set(results.map(result => result.policyId));
-        const exceptions = await this.exceptionService.getAllFilteredExceptions(clusterId,
-            Array.from(policyIdSet.keys()), undefined, imageData.name);
+        const policyIds = Array.from(policyIdSet.keys());
+        await this.applyOverrideSeverity(clusterId, policyIds, imageData.name,results);
+        const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
+         policyIds, undefined, imageData.name);
 
         // The compliance map will get mutated by
         const complianceMap = new ComplianceResultMap();
@@ -47,6 +49,25 @@ export class ImageComplianceFacadeService {
 
         // Checking the compliance map's compliant property in case temporary exceptions made it compliant
         return { compliant: complianceMap.isCompliant, complianceMap };
+    }
+
+    public async applyOverrideSeverity(
+        clusterId: number,
+        policyId: number [],
+        imageName: string,
+        results: ImageScanResultPerPolicyFacadeDto[]
+    ){
+        const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId, imageName);
+        for(const result of results){
+            for(const issue of result.issues){
+                const override = exceptionsOverride.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
+                if(override?.altSeverity){
+                    issue.severity = override.altSeverity
+                    issue.name = "overridden - "+ issue.name;
+                }
+            }
+        }
+
     }
 
     public async isImageNamespaceCompliant(clusterId: number,
@@ -64,7 +85,7 @@ export class ImageComplianceFacadeService {
         }
 
         const policyIdSet = new Set(results.map(result => result.policyId));
-        const exceptions = await this.exceptionService.getAllFilteredExceptions(clusterId,
+        const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
             Array.from(policyIdSet.keys()), namespaceName, imageData.name);
 
         const complianceMap = new ComplianceResultMap();

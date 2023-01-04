@@ -20,6 +20,15 @@
                 <mat-select formControlName="type" (selectionChange)="displayExceptionFields($event)" required>
                   <mat-option value="policy">Policy</mat-option>
                   <mat-option value="gatekeeper">GateKeeper</mat-option>
+                  <mat-option value="override">Override</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </p>
+            <p *ngIf="exceptionForm.value.type == 'override'">
+              <mat-form-field appearance="standard">
+                <mat-label>Alternate Severity</mat-label>
+                <mat-select formControlName="altSeverity">
+                 <mat-option *ngFor="let severityLevel of severityLevels" [value]="severityLevel"> {{severityLevel}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </p>
@@ -107,7 +116,7 @@
                 </mat-select>
               </mat-form-field>
             </p>
-            <p *ngIf="namespacesLoaded">
+            <p *ngIf="namespacesLoaded && exceptionForm.value.type !== 'override'">
               <mat-form-field appearance="standard">
                 <mat-label>Namespaces (Select none if exception applies to all)</mat-label>
                 <mat-select formControlName="namespaces" multiple>
