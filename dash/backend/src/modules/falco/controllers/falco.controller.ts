@@ -74,10 +74,6 @@ export class FalcoController {
         return this.falcoService.getFalcoLogByEventId(eventId);
     }
 
-
-
-
-
     @Get('/apiKey')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)

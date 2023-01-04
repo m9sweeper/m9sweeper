@@ -35,45 +35,45 @@ export class FalcoDao {
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-
-        switch (orderBy) {
-            case 'Priority Desc':
-               query = query.orderByRaw(
-                   'CASE ' +
-                   ' WHEN level = \'Emergency\' then 1' +
-                   ' WHEN level = \'Alert\' then 2' +
-                   ' WHEN level = \'Critical\' then 3' +
-                   ' WHEN level = \'Error\' then 4' +
-                   ' WHEN level = \'Warning\' then 5' +
-                   ' WHEN level = \'Notice\' then 6' +
-                   ' WHEN level = \'Informational\' then 7' +
-                   ' WHEN level = \'Debug\' then 8' +
-                   'END'
-                   );
-               break;
-            case 'Priority Asc':
-                query = query.orderByRaw(
-                    'CASE ' +
-                    ' WHEN level = \'Debug\' then 1' +
-                    ' WHEN level = \'Informational\' then 2' +
-                    ' WHEN level = \'Notice\' then 3' +
-                    ' WHEN level = \'Warning\' then 4' +
-                    ' WHEN level = \'Error\' then 5' +
-                    ' WHEN level = \'Critical\' then 6' +
-                    ' WHEN level = \'Alert\' then 7' +
-                    ' WHEN level = \'Emergency\' then 8' +
-                    'END'
-                );
-                break;
-            case 'Date Desc':
-                query = query.orderBy([{column: 'calendar_date', order: 'desc'}]);
-                break;
-            case 'Date Asc':
-                query = query.orderBy([{column: 'calendar_date', order: 'asc'}]);
-                break;
-            default:
-                query = query.orderBy([{column: 'id', order: 'desc'}]);
-
+        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' || null) {
+            switch (orderBy) {
+                case 'Priority Desc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Emergency\' then 1' +
+                        ' WHEN level = \'Alert\' then 2' +
+                        ' WHEN level = \'Critical\' then 3' +
+                        ' WHEN level = \'Error\' then 4' +
+                        ' WHEN level = \'Warning\' then 5' +
+                        ' WHEN level = \'Notice\' then 6' +
+                        ' WHEN level = \'Informational\' then 7' +
+                        ' WHEN level = \'Debug\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Priority Asc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Debug\' then 1' +
+                        ' WHEN level = \'Informational\' then 2' +
+                        ' WHEN level = \'Notice\' then 3' +
+                        ' WHEN level = \'Warning\' then 4' +
+                        ' WHEN level = \'Error\' then 5' +
+                        ' WHEN level = \'Critical\' then 6' +
+                        ' WHEN level = \'Alert\' then 7' +
+                        ' WHEN level = \'Emergency\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Date Desc':
+                    query = query.orderBy([{column: 'calendar_date', order: 'desc'}]);
+                    break;
+                case 'Date Asc':
+                    query = query.orderBy([{column: 'calendar_date', order: 'asc'}]);
+                    break;
+                default:
+                    query = query.orderBy([{column: 'id', order: 'desc'}]);
+            }
         }
 
         if (startDate) {
