@@ -57,7 +57,7 @@ export class FalcoService {
         const newResultSet = [];
 
         for (let i = 0; i <=28; i++) {
-            resultSet.filter(result => newDate === result.date).forEach(result => value = result.count);
+            resultSet.filter(result => newDate.toString() === result.date.toString()).forEach(result => value = result.count);
 
             let newResult = new FalcoCountDto();
             newResult.date = newDate;
@@ -66,6 +66,7 @@ export class FalcoService {
             newDate = addDays(newDate,1);
 
             newResultSet.push(newResult);
+            value =0;
         }
 
         return newResultSet;
