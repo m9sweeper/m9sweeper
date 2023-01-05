@@ -20,8 +20,10 @@
 :host ::ng-deep .jsonTable table {
   width: 100%;
 }
+
 .event-table {
   overflow-y: auto !important;
+}
 
   mat-paginator {
     display: flex;
@@ -102,5 +104,5 @@
       white-space: nowrap;
     }
   }
-}
+
 

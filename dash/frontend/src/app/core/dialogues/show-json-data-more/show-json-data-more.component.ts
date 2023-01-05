@@ -50,7 +50,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
   dialogRef: MatDialogRef<ShareEventComponent>;
 
   barChartAttributes = {
-    view: [] = [500, 400],
+    view: [] = [400, 300],
     colorScheme: {
       domain: ['#f3865f']
     },
