@@ -35,7 +35,7 @@ export class FalcoDao {
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' || null) {
+        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
             switch (orderBy) {
                 case 'Priority Desc':
                     query = query.orderByRaw(

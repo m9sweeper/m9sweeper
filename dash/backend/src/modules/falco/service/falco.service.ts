@@ -4,7 +4,7 @@ import {FalcoDao} from '../dao/falco.dao';
 import {createHash} from 'crypto';
 import {FalcoWebhookInputDto} from '../dto/falco-webhook-input.dto';
 import {instanceToPlain} from 'class-transformer';
-import {format} from 'date-fns';
+import {addDays, format, set, sub} from 'date-fns';
 import {CsvService} from "../../shared/services/csv.service";
 import {FalcoCsvDto} from "../dto/falco-csv-dto";
 import {FalcoCountDto} from "../dto/falco-count.dto";
@@ -44,7 +44,31 @@ export class FalcoService {
     async getCountOfFalcoLogsBySignature(
         clusterId: number, signature: string
     ): Promise<FalcoCountDto[]> {
-        return this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature);
+        // set default as 0 if date has no return results
+
+        const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
+        const endDate = currentDate;
+        const startDate = sub(currentDate, {days: 28});
+        let newDate =sub(currentDate, {days: 28});
+
+        const resultSet = await this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature);
+
+        let value = 0;
+        const newResultSet = [];
+
+        for (let i = 0; i <=28; i++) {
+            resultSet.filter(result => newDate === result.date).forEach(result => value = result.count);
+
+            let newResult = new FalcoCountDto();
+            newResult.date = newDate;
+            newResult.count = value;
+
+            newDate = addDays(newDate,1);
+
+            newResultSet.push(newResult);
+        }
+
+        return newResultSet;
     }
 
     async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {
