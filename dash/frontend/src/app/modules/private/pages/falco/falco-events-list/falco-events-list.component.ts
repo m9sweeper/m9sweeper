@@ -3,7 +3,7 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
@@ -53,6 +53,7 @@ export class FalcoEventsListComponent implements OnInit {
     private customValidatorService: CustomValidatorService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
+    private router: Router,
 
   ) {}
 
@@ -193,5 +194,9 @@ export class FalcoEventsListComponent implements OnInit {
     } else if (group[2] === undefined){
       return '';
     }
+  }
+
+  onClickSettings(){
+    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'settings']);
   }
 }

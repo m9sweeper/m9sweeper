@@ -124,6 +124,7 @@ import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-ev
 import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.component';
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
 import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/share-event.component';
+import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 
 
 @NgModule({
@@ -170,6 +171,7 @@ import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/shar
     ExceptionDetailsComponent,
     FalcoEventsListComponent,
     FalcoDialogComponent,
+    FalcoSettingsComponent,
     AddClusterWizardComponent,
     GateKeeperComponent,
     GateKeeperDetailsComponent,

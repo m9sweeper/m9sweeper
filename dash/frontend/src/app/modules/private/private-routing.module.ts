@@ -55,6 +55,7 @@ import {
 } from './pages/reports/vulnerability-difference-by-date/vulnerability-difference-by-date.component';
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
+import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 
 const routes: Routes = [
   {
@@ -138,6 +139,13 @@ const routes: Routes = [
                 component: ShowJsonDataMoreComponent,
                 data: {
                   title: 'Project Falco Detail Logs'
+                }
+              },
+              {
+                path: 'settings',
+                component: FalcoSettingsComponent,
+                data: {
+                  title: 'Project Falco Settings'
                 }
               }
             ]
