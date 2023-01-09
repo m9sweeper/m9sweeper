@@ -1,0 +1,134 @@
+<div class ="falco-log-settings-container">
+
+  <div>
+    <div class=" row mat-card-title">
+      <div class="col-sm-6" >
+        <div class="row page"> Falco Settings</div>
+      </div>
+      <div class="col-sm-6 "></div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="event-table col-sm-6">
+      <mat-card style="height:780px; min-width: 400px; display: grid;!important;">
+        <h1>Notification Settings</h1>
+        <div class ="details-content">
+          <form [formGroup]="filterForm">
+
+              <div class="section-sublevel-1">
+                <div class="row">
+                  <div>
+                    <mat-checkbox matInput formControlName="notifyAnomalies"> </mat-checkbox>
+                  </div>&nbsp;&nbsp;
+                  <div>
+                    <h3>Notify about Anomalies</h3>
+                  </div>
+                </div>
+
+                <div class="section-sublevel-2">
+                  <div class ="row">
+                    <h3>Notify no more than once every</h3>
+                    &nbsp;&nbsp;
+                    <mat-form-field appearance="outline">
+                      <input matInput type="number" formControlName="dayInput">
+                    </mat-form-field>&nbsp;&nbsp;
+                    <h3>day(s)</h3>
+                  </div>
+
+                  <div class ="row">
+                    <h3>Severity Levels to Include</h3>
+                  </div>
+                    <ul>
+                      <li *ngFor="let level of priorityLevels">
+                        <mat-checkbox [ngModel]="isChecked" matInput formControlName="selectedPriorityLevels" [value]="level">
+                        {{level}}
+                        </mat-checkbox>
+                      </li>
+                    </ul>
+                </div>
+              </div>
+
+              <div class="section-sublevel-1">
+                <div class="row">
+                  <div>
+                    <mat-checkbox matInput formControlName="sendEmail"> </mat-checkbox>
+                  </div>&nbsp;&nbsp;
+                  <div>
+                    <h3>Send Summary Emails</h3>
+                  </div>
+                </div>
+                <div class ="section-sublevel-2">
+                  <mat-radio-group aria-label="SelectFrequency">
+                    <mat-radio-button value="1">Daily</mat-radio-button> <br><br>
+                    <mat-radio-button value="2">Weekly on</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <br>
+              <div class="section-sublevel-1">
+                <div class="row">
+                  <h3>Who to Notify</h3>
+                </div>
+                <div class="section-sublevel-2">
+                  <mat-radio-group aria-label="SelectPerson">
+                    <mat-radio-button value="1">All Admin</mat-radio-button> <br><br>
+                    <mat-radio-button value="2">Specific Email List</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <br>
+              <div>
+                <button mat-raised-button color="primary" type="submit" (click)="onClickSave()">Save Changes</button>
+              </div>
+
+          </form>
+        </div>
+
+      </mat-card>
+    </div>
+
+    <div class="event-table col-sm-6">
+      <mat-card style="height:780px; min-width: 400px; display: grid;!important;">
+        <h1>Rules</h1>
+        <div class ="details-content">
+          <div class="section-rules">
+            <div class="section-sublevel-1">
+              <h3>Ignore when following are true: </h3>
+              <div class="section-sublevel-2">
+                 <h3>Namespace is kube-system</h3>
+                <h3>Type is privilege escalation</h3>
+              </div>
+              <div>
+                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()">Edit</button> &nbsp;&nbsp;
+                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()">Delete</button>
+              </div>
+            </div>
+          </div>
+          <br><br>
+          <div class="section-rules">
+            <div class="section-sublevel-1">
+              <h3>Ignore when following are true: </h3>
+              <div class="section-sublevel-2">
+                <h3>Namespace is m9sweeper-system</h3>
+                <h3>Type is privilege escalation</h3>
+                <h3>Image is rabbitmq/ rabbitmq</h3>
+              </div>
+              <div>
+                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()">Edit</button> &nbsp;&nbsp;
+                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()">Delete</button>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div>
+            <button mat-raised-button color="primary" type="submit" (click)="onCickAddRule()">Edit</button>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+  </div>
+
+</div>

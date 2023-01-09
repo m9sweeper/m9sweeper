@@ -1,0 +1,162 @@
+<div class ="falco-log-more-container">
+
+  <div >
+    <div class=" row mat-card-title">
+      <div class="col-sm-6" >
+        <div class="row page"> Event Details</div>
+      </div>
+      <div class="col-sm-6 text-align-right no-padding">
+        <button mat-raised-button color="primary"  (click)="onClickShare()">Share</button>
+      </div>
+    </div>
+  </div >
+  <div class="row">
+    <div class="event-table col-sm-6">
+      <mat-card style="height:500px; min-width: 400px; display: grid;!important;">
+        <h1>Basic Details</h1>
+        <div >
+          <table>
+            <tr>
+              <th>Namespace</th> <td>{{namespace}}</td>
+            </tr>
+            <tr>
+              <th>Date</th> <td>{{date}}</td>
+            </tr>
+            <tr>
+              <th>Pod</th> <td>{{pod}}</td>
+            </tr>
+            <tr>
+              <th>Image</th> <td>{{image}}</td>
+            </tr>
+            <tr>
+              <th>Message</th> <td>{{message}}</td>
+            </tr>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+    <div class="event-table col-sm-6">
+      <mat-card style="height:500px; min-width: 400px; display: grid;!important;">
+        <h1>Incidence Rate</h1>
+        <div>
+          <ngx-charts-bar-vertical
+            [view]="barChartAttributes.view"
+            [scheme]="barChartAttributes.colorScheme"
+            [results]="barChartAttributes.results"
+            [legend]="barChartAttributes.showLegend"
+            [legendPosition]="barChartAttributes.legendPosition"
+            [gradient]="barChartAttributes.gradient"
+            [xAxis]="barChartAttributes.showXAxis"
+            [yAxis]="barChartAttributes.showYAxis"
+            [barPadding]="barChartAttributes.barPadding"
+            [showXAxisLabel]="barChartAttributes.showXAxis"
+            [showYAxisLabel]="barChartAttributes.showYAxis"
+            [xAxisLabel]="barChartAttributes.xAxisLabel"
+            [yAxisLabel]="barChartAttributes.yAxisLabel">
+          </ngx-charts-bar-vertical>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    <mat-card>
+      <div class="row event-table">
+        <div class="col-sm-6">
+          <h1>Related Event</h1>
+        </div>
+        <div class="col-sm-6 text-align-right">
+          <b>Signature: {{signature}}</b>
+        </div>
+      </div>
+
+      <div class="event-table">
+        <mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="calendarDate">
+            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+            <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="namespace">
+            <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
+            <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="pod">
+            <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
+            <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="image">
+            <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+            <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="message">
+            <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+            <mat-cell *matCellDef="let log">
+              {{log.message}}
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
+        </mat-table>
+
+        <div class="paginator">
+          <mat-paginator
+            [length]="logCount"
+            [pageSize]="limit"
+            [pageSizeOptions]="[ 20, 50, 100]"
+            (page)="pageEvent($event)"
+            showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+<br>
+
+  <mat-card>
+    <div class="row">
+      <div class="event-table col-sm-6">
+        <h1>Raw Data</h1>
+      </div>
+      <div class="col-sm-6 text-align-right">
+        <button mat-raised-button color="primary"  (click)="onClickYaml()">Yaml</button> &nbsp;&nbsp;
+        <button mat-raised-button color="primary"  (click)="onClickJson()">Json</button> &nbsp;&nbsp;
+        <button mat-raised-button color="primary"  (click)="onClickTable()">Table</button>
+      </div>
+    </div>
+    <div class="event-table">
+      <b>Raw:</b>
+      <div> {{message}}</div>
+      <br>
+      <b>Chosen format:</b>
+      <div>
+        <div *ngIf="format === 'yaml'; then displayInYaml"></div>
+        <ng-template #displayInYaml>
+          <pre [innerHTML]="rawInFormat"></pre>
+        </ng-template>
+      </div>
+      <div>
+        <div *ngIf="format === 'json'; then displayInJson"></div>
+          <ng-template #displayInJson>
+          <pre [innerHTML]="rawInFormat"></pre>
+
+          </ng-template>
+      </div>
+
+      <div>
+        <div *ngIf="format === 'table'; then displayInTable"></div>
+          <ng-template #displayInTable>
+            <div class="jsonTable" [innerHTML]="rawInFormat"></div>
+          </ng-template>
+      </div>
+    </div>
+  </mat-card>
+
+</div>
+

@@ -3,7 +3,7 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
@@ -42,6 +42,7 @@ export class FalcoEventsListComponent implements OnInit {
   page: number;
   startDate: string;
   endDate: string;
+  signature: string;
 
   constructor(
     private falcoService: FalcoService,
@@ -52,6 +53,7 @@ export class FalcoEventsListComponent implements OnInit {
     private customValidatorService: CustomValidatorService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
+    private router: Router,
 
   ) {}
 
@@ -91,16 +93,17 @@ export class FalcoEventsListComponent implements OnInit {
     }
 
     this.falcoService.getFalcoLogs(
-      this.clusterId,
-      this.limit,
-      this.page,
-      this.filterForm.get('selectedPriorityLevels').value,
-      this.filterForm.get('selectedOrderBy').value,
-      this.startDate,
-      this.endDate,
-      this.filterForm.get('namespaceInput').value,
-      this.filterForm.get('podInput').value,
-      this.filterForm.get('imageInput').value
+      this.clusterId, {
+        limit: this.limit,
+        page: this.page,
+        selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+        selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        namespace: this.filterForm.get('namespaceInput').value,
+        pod: this.filterForm.get('podInput').value,
+        image: this.filterForm.get('imageInput').value,
+        signature: this.signature}
     )
       .pipe(take(1))
       .subscribe(response => {
@@ -115,6 +118,8 @@ export class FalcoEventsListComponent implements OnInit {
   displayEventDetails(event: IFalcoLog) {
     this.dialogRef = this.dialog.open(ShowJsonDataComponent, {
       width: 'auto',
+      height: '100%',
+      autoFocus: false,
       data: {content: event, header: 'Event Log Details'}
     });
   }
@@ -189,5 +194,9 @@ export class FalcoEventsListComponent implements OnInit {
     } else if (group[2] === undefined){
       return '';
     }
+  }
+
+  onClickSettings(){
+    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'settings']);
   }
 }

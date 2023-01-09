@@ -2,7 +2,8 @@ import {DatabaseService} from '../../shared/services/database.service';
 import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
-import {VulnerabilitySeverity} from "../../shared/enums/vulnerability-severity";
+import {FalcoCountDto} from "../dto/falco-count.dto";
+import {format, set, sub} from "date-fns";
 
 
 @Injectable()
@@ -21,7 +22,9 @@ export class FalcoDao {
         endDate?: string,
         namespace?: string,
         pod?: string,
-        image?: string
+        image?: string,
+        signature?: string,
+        eventId?: number
     ): Promise<{ logCount: number, list: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
@@ -32,45 +35,45 @@ export class FalcoDao {
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-
-        switch (orderBy) {
-            case 'Priority Desc':
-               query = query.orderByRaw(
-                   'CASE ' +
-                   ' WHEN level = \'Emergency\' then 1' +
-                   ' WHEN level = \'Alert\' then 2' +
-                   ' WHEN level = \'Critical\' then 3' +
-                   ' WHEN level = \'Error\' then 4' +
-                   ' WHEN level = \'Warning\' then 5' +
-                   ' WHEN level = \'Notice\' then 6' +
-                   ' WHEN level = \'Informational\' then 7' +
-                   ' WHEN level = \'Debug\' then 8' +
-                   'END'
-                   );
-               break;
-            case 'Priority Asc':
-                query = query.orderByRaw(
-                    'CASE ' +
-                    ' WHEN level = \'Debug\' then 1' +
-                    ' WHEN level = \'Informational\' then 2' +
-                    ' WHEN level = \'Notice\' then 3' +
-                    ' WHEN level = \'Warning\' then 4' +
-                    ' WHEN level = \'Error\' then 5' +
-                    ' WHEN level = \'Critical\' then 6' +
-                    ' WHEN level = \'Alert\' then 7' +
-                    ' WHEN level = \'Emergency\' then 8' +
-                    'END'
-                );
-                break;
-            case 'Date Desc':
-                query = query.orderBy([{column: 'calendar_date', order: 'desc'}]);
-                break;
-            case 'Date Asc':
-                query = query.orderBy([{column: 'calendar_date', order: 'asc'}]);
-                break;
-            default:
-                query = query.orderBy([{column: 'id', order: 'desc'}]);
-
+        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
+            switch (orderBy) {
+                case 'Priority Desc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Emergency\' then 1' +
+                        ' WHEN level = \'Alert\' then 2' +
+                        ' WHEN level = \'Critical\' then 3' +
+                        ' WHEN level = \'Error\' then 4' +
+                        ' WHEN level = \'Warning\' then 5' +
+                        ' WHEN level = \'Notice\' then 6' +
+                        ' WHEN level = \'Informational\' then 7' +
+                        ' WHEN level = \'Debug\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Priority Asc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Debug\' then 1' +
+                        ' WHEN level = \'Informational\' then 2' +
+                        ' WHEN level = \'Notice\' then 3' +
+                        ' WHEN level = \'Warning\' then 4' +
+                        ' WHEN level = \'Error\' then 5' +
+                        ' WHEN level = \'Critical\' then 6' +
+                        ' WHEN level = \'Alert\' then 7' +
+                        ' WHEN level = \'Emergency\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Date Desc':
+                    query = query.orderBy([{column: 'calendar_date', order: 'desc'}]);
+                    break;
+                case 'Date Asc':
+                    query = query.orderBy([{column: 'calendar_date', order: 'asc'}]);
+                    break;
+                default:
+                    query = query.orderBy([{column: 'id', order: 'desc'}]);
+            }
         }
 
         if (startDate) {
@@ -90,6 +93,10 @@ export class FalcoDao {
 
         if (image) {
             query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        if(signature){
+            query.where('anomaly_signature', signature);
         }
 
         const findCount = await knex
@@ -113,12 +120,58 @@ export class FalcoDao {
         }
     }
 
+    async getFalcoLogByEventId(
+       eventId: number
+    ): Promise<FalcoDto> {
+        const knex = await this.databaseService.getConnection();
+
+       const result= knex.select(
+            ['p.id as id', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
+                'p.image as image', 'p.message as message', 'p.anomaly_signature as anomalySignature', 'p.raw as raw'])
+            .from('project_falco_logs AS p')
+            .where('p.id', eventId)
+            .then(result => result[0]);
+
+         return result;
+    }
+
+    async getCountOfFalcoLogsBySignature(
+        clusterId: number, signature: string
+    ): Promise<FalcoCountDto[]> {
+
+        const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
+        const endDate = format(currentDate, 'yyyy-MM-dd');
+        const startDate = format(sub(currentDate, {days: 28}), 'yyyy-MM-dd');
+
+        const knex = await this.databaseService.getConnection();
+
+        // get all signature logs within 28 day from current date
+        const signatureLogs= knex.select()
+            .from('project_falco_logs')
+            .where('anomaly_signature', signature)
+            .andWhere('cluster_id', clusterId)
+            .andWhere('calendar_date', '>=', startDate)
+            .andWhere('calendar_date', '<=', endDate);
+
+
+        const signatureCountByDate = await knex
+            .select( [knex.raw( 'calendar_date as date, count (calendar_date)')])
+            .from(signatureLogs.as("q"))
+            .groupByRaw('calendar_date')
+            .orderBy('calendar_date', 'asc');
+
+        // handle no query result
+        const result = signatureCountByDate? signatureCountByDate : null;
+        return result;
+    }
+
     async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
 
         const knex = await this.databaseService.getConnection();
 
         let query = knex.select()
             .from('project_falco_logs')
+
             .where('cluster_id', clusterId);
 
         // Find log count and full list for csv export
