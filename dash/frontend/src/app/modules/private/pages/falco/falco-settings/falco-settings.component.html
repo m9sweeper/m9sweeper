@@ -12,7 +12,7 @@
   <div class="row">
 
     <div class="event-table col-sm-6">
-      <mat-card style="height:780px; min-width: 400px; display: grid;!important;">
+      <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
         <h1>Notification Settings</h1>
         <div class ="details-content">
           <form [formGroup]="filterForm">
@@ -79,8 +79,11 @@
                 </div>
                 <div class="section-sublevel-2">
                   <mat-radio-group aria-label="SelectPerson">
-                    <mat-radio-button value="1">All Admin</mat-radio-button> <br><br>
-                    <mat-radio-button value="2">Specific Email List</mat-radio-button>
+                    <mat-radio-button value="1">All Admin</mat-radio-button> <br>
+                    <mat-radio-button value="2">Specific Email List</mat-radio-button> &nbsp;&nbsp;
+                    <mat-form-field appearance="outline">
+                      <textarea matInput formControlName="emailList"></textarea>
+                    </mat-form-field>
                   </mat-radio-group>
                 </div>
               </div>
@@ -96,7 +99,7 @@
     </div>
 
     <div class="event-table col-sm-6">
-      <mat-card style="height:780px; min-width: 400px; display: grid;!important;">
+      <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
         <h1>Rules</h1>
         <div class ="details-content">
           <div class="section-rules">
