@@ -62,7 +62,13 @@
                 <div class ="section-sublevel-2">
                   <mat-radio-group aria-label="SelectFrequency">
                     <mat-radio-button value="1">Daily</mat-radio-button> <br><br>
-                    <mat-radio-button value="2">Weekly on</mat-radio-button>
+                    <mat-radio-button value="2">Weekly on</mat-radio-button> &nbsp;&nbsp;
+                    <mat-label>Choose weekday(s)</mat-label>
+                    <mat-select class="weekDay" formControlName="selectedWeekDays" multiple>
+                      <mat-option *ngFor="let day of weekDays" [value]="day">
+                        {{day}}
+                      </mat-option>
+                    </mat-select>
                   </mat-radio-group>
                 </div>
               </div>

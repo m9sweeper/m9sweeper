@@ -13,6 +13,7 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   filterForm: FormGroup;
   isChecked = false;
+  weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,5 +44,6 @@ export class FalcoSettingsComponent implements OnInit {
   onCickAddRule(){
 
   }
+
 
 }
