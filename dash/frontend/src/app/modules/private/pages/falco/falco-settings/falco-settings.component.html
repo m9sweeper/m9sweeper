@@ -15,12 +15,12 @@
       <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
         <h1>Notification Settings</h1>
         <div class ="details-content">
-          <form [formGroup]="filterForm">
+          <form [formGroup]="settingForm">
 
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox matInput formControlName="notifyAnomalies"> </mat-checkbox>
+                    <mat-checkbox formControlName="sendNotificationAnomaly"> </mat-checkbox>
                   </div>&nbsp;&nbsp;
                   <div>
                     <h3>Notify about Anomalies</h3>
@@ -32,39 +32,42 @@
                     <h3>Notify no more than once every</h3>
                     &nbsp;&nbsp;
                     <mat-form-field appearance="outline">
-                      <input matInput type="number" formControlName="dayInput">
+                      <input matInput type="number" formControlName="anomalyFrequency">
                     </mat-form-field>&nbsp;&nbsp;
                     <h3>day(s)</h3>
                   </div>
 
                   <div class ="row">
-                    <h3>Severity Levels to Include</h3>
+                    <h3>Severity Levels to Include</h3>&nbsp;&nbsp;
+                    <mat-form-field appearance="fill" [formGroup]="settingForm">
+                      <mat-label>Priority Levels</mat-label>
+                        <mat-select formControlName="selectedPriorityLevels"
+                                    multiple>
+                          <mat-option *ngFor="let level of priorityLevels"
+                                      [value]="level">
+                            {{level}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                   </div>
-                    <ul>
-                      <li *ngFor="let level of priorityLevels">
-                        <mat-checkbox [ngModel]="isChecked" matInput formControlName="selectedPriorityLevels" [value]="level">
-                        {{level}}
-                        </mat-checkbox>
-                      </li>
-                    </ul>
                 </div>
               </div>
 
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox matInput formControlName="sendEmail"> </mat-checkbox>
+                    <mat-checkbox matInput formControlName="sendNotificationSummary"> </mat-checkbox>
                   </div>&nbsp;&nbsp;
                   <div>
                     <h3>Send Summary Emails</h3>
                   </div>
                 </div>
                 <div class ="section-sublevel-2">
-                  <mat-radio-group aria-label="SelectFrequency">
-                    <mat-radio-button value="1">Daily</mat-radio-button> <br><br>
-                    <mat-radio-button value="2">Weekly on</mat-radio-button> &nbsp;&nbsp;
+                  <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency">
+                    <mat-radio-button value="daily">Daily</mat-radio-button> <br><br>
+                    <mat-radio-button value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
                     <mat-label>Choose weekday(s)</mat-label>
-                    <mat-select class="weekDay" formControlName="selectedWeekDays" multiple>
+                    <mat-select class="weekDay" formControlName="selectedWeekDay">
                       <mat-option *ngFor="let day of weekDays" [value]="day">
                         {{day}}
                       </mat-option>
@@ -78,9 +81,9 @@
                   <h3>Who to Notify</h3>
                 </div>
                 <div class="section-sublevel-2">
-                  <mat-radio-group aria-label="SelectPerson">
-                    <mat-radio-button value="1">All Admin</mat-radio-button> <br>
-                    <mat-radio-button value="2">Specific Email List</mat-radio-button> &nbsp;&nbsp;
+                  <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
+                    <mat-radio-button value="allAdmin">All Admin</mat-radio-button> <br>
+                    <mat-radio-button value="specificEmail">Specific Email List</mat-radio-button> &nbsp;&nbsp;
                     <mat-form-field appearance="outline">
                       <textarea matInput formControlName="emailList"></textarea>
                     </mat-form-field>
@@ -132,7 +135,7 @@
           </div>
           <br>
           <div>
-            <button mat-raised-button color="primary" type="submit" (click)="onCickAddRule()">Edit</button>
+            <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()">Edit</button>
           </div>
         </div>
       </mat-card>

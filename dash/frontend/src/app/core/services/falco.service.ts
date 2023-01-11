@@ -8,6 +8,8 @@ import {IReportsCsv} from '../entities/IReportsCsv';
 import {IFalcoCsv} from '../entities/IFalcoCsv';
 import {IKubeBenchReport} from '../entities/IKubeBenchReport';
 import {IFalcoCount} from '../entities/IFalcoCount';
+import {IFalcoSettingPayload} from '../entities/IFalcoSettingPayload';
+import * as cluster from 'cluster';
 
 export interface FalcoLogOptions {
   limit?: number;
@@ -52,6 +54,11 @@ export class FalcoService {
     Observable<IServerResponse<IFalcoCsv>> {
     const params = this.buildParams(clusterId);
     return this.httpClient.get('/api/falco/download', {params});
+  }
+
+  addFalcoSetting(clusterId: number, settingPayload: IFalcoSettingPayload): Observable<IServerResponse<IFalcoSettingPayload>>{
+    console.log('falco service');
+    return this.httpClient.post(`/api/falco/${clusterId}/settings`, settingPayload);
   }
 
   buildParams(clusterId: number, options?: FalcoLogOptions
@@ -110,20 +117,5 @@ export class FalcoService {
 
   getFalcoApiKey(): Observable<IServerResponse<{api: string}[]>>{
     return this.httpClient.get<IServerResponse<{api: string}[]>>(`/api/falco/apiKey`);
-  }
-
-  calculateChartRange(falcoCounts: number[]): { yScaleMin: number, yAxisTicks: number[] } {
-    if (!falcoCounts.length) {
-      return {yScaleMin: 0, yAxisTicks: []};
-    }
-    const range = [];
-    const maxCount = Math.max(...falcoCounts);
-    let distance = Math.floor((maxCount) / 4);
-    distance = distance - (distance % 5);
-    for (let i = 0; i <= 4; i++) {
-      const e = (distance * i);
-      range.push(e);
-    }
-    return {yScaleMin: 0 , yAxisTicks: range};
   }
 }
