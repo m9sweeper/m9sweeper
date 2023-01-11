@@ -7,6 +7,9 @@ import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPa
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IUser} from '../../../../../core/entities/IUser';
 import {AlertService} from '@full-fledged/alerts';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatRadioChange} from '@angular/material/radio';
+
 
 @Component({
   selector: 'app-falco-settings',
@@ -18,7 +21,12 @@ export class FalcoSettingsComponent implements OnInit {
   clusterId: number;
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
-  isChecked = false;
+
+  isAnomalyDisabled = true;
+  isSummaryDisabled = true;
+  isWeeklyDisabled = true;
+  isSpecificEmailDisabled = true;
+
   weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   constructor(
@@ -75,8 +83,34 @@ export class FalcoSettingsComponent implements OnInit {
 
       this.alertService.warning('No setting is chosen');
 
+    } else if (falcoCreatePayload.sendNotificationAnomaly === true &&
+      (falcoCreatePayload.anomalyFrequency === null ||
+      falcoCreatePayload.severityLevel.length === 0)) {
+
+      this.alertService.warning('To notify about anomalies, must fill out both anomaly frequency and severity level!');
+
+    } else if (falcoCreatePayload.sendNotificationSummary === true &&
+      (falcoCreatePayload.summaryNotificationFrequency !== 'daily' &&
+        falcoCreatePayload.summaryNotificationFrequency !== 'weekly')) {
+
+      this.alertService.warning('To send summary emails, must chose one of the frequency options! If choose weekly, pick a weekday.');
+
+    } else if ( falcoCreatePayload.sendNotificationAnomaly === true &&
+      falcoCreatePayload.anomalyFrequency >= 0 &&
+      falcoCreatePayload.severityLevel.length !== 0 &&
+      (falcoCreatePayload.whoToNotify === null &&
+      falcoCreatePayload.emailList.length === 0)) {
+
+      this.alertService.warning('To notify about anomalies, must choose recipient!');
+
+    } else if ( falcoCreatePayload.sendNotificationSummary === true &&
+      (falcoCreatePayload.whoToNotify === null &&
+      falcoCreatePayload.emailList.length === 0)) {
+
+      this.alertService.warning('To send summary email, must choose recipient!');
+
     } else {
-      this.falcoService.addFalcoSetting(this.clusterId, falcoCreatePayload).subscribe((response: IServerResponse<IFalcoSettingPayload>) => {
+        this.falcoService.addFalcoSetting(this.clusterId, falcoCreatePayload).subscribe((response: IServerResponse<IFalcoSettingPayload>) => {
         this.alertService.success('Setting saved successfully.');
         // window.location.reload();
       }, (event) => {
@@ -85,13 +119,28 @@ export class FalcoSettingsComponent implements OnInit {
     }
   }
 
-  onClickEdit(){
+  enableAnomalySubLevelcheckbox(event: MatCheckboxChange): void{
+    this.isAnomalyDisabled = !this.isAnomalyDisabled;
+  }
+
+  enableSummarySubLevelcheckbox(event: MatCheckboxChange): void{
+    this.isSummaryDisabled = !this.isSummaryDisabled;
+  }
+
+  enableWeeklySubLevelcheckbox($event: MatRadioChange): void{
+    this.isWeeklyDisabled = !this.isWeeklyDisabled;
+  }
+
+  enableSpecificEmailSubLevelcheckbox($event: MatRadioChange): void{
+    this.isSpecificEmailDisabled = !this.isSpecificEmailDisabled;
+  }
+  onClickEdit() {
 
   }
-  onClickDelete(){
+  onClickDelete() {
 
   }
-  onClickAddRule(){
+  onClickAddRule() {
 
   }
 

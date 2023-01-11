@@ -20,7 +20,7 @@
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox formControlName="sendNotificationAnomaly"> </mat-checkbox>
+                    <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)" formControlName="sendNotificationAnomaly"> </mat-checkbox>
                   </div>&nbsp;&nbsp;
                   <div>
                     <h3>Notify about Anomalies</h3>
@@ -31,17 +31,15 @@
                   <div class ="row">
                     <h3>Notify no more than once every</h3>
                     &nbsp;&nbsp;
-                    <mat-form-field appearance="outline">
-                      <input matInput type="number" formControlName="anomalyFrequency">
+                    <mat-form-field appearance="outline" >
+                      <input [readonly]="isAnomalyDisabled" matInput type="number" formControlName="anomalyFrequency">
                     </mat-form-field>&nbsp;&nbsp;
                     <h3>day(s)</h3>
                   </div>
-
                   <div class ="row">
                     <h3>Severity Levels to Include</h3>&nbsp;&nbsp;
                     <mat-form-field appearance="fill" [formGroup]="settingForm">
-                      <mat-label>Priority Levels</mat-label>
-                        <mat-select formControlName="selectedPriorityLevels"
+                        <mat-select [disabled]="isAnomalyDisabled" formControlName="selectedPriorityLevels"
                                     multiple>
                           <mat-option *ngFor="let level of priorityLevels"
                                       [value]="level">
@@ -56,7 +54,7 @@
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox matInput formControlName="sendNotificationSummary"> </mat-checkbox>
+                    <mat-checkbox (change)="enableSummarySubLevelcheckbox($event)" matInput formControlName="sendNotificationSummary"> </mat-checkbox>
                   </div>&nbsp;&nbsp;
                   <div>
                     <h3>Send Summary Emails</h3>
@@ -64,10 +62,10 @@
                 </div>
                 <div class ="section-sublevel-2">
                   <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency">
-                    <mat-radio-button value="daily">Daily</mat-radio-button> <br><br>
-                    <mat-radio-button value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
-                    <mat-label>Choose weekday(s)</mat-label>
-                    <mat-select class="weekDay" formControlName="selectedWeekDay">
+                    <mat-radio-button [disabled]="isSummaryDisabled" value="daily">Daily</mat-radio-button> <br><br>
+                    <mat-radio-button [disabled]="isSummaryDisabled" (change)="enableWeeklySubLevelcheckbox($event)" value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
+
+                    <mat-select [disabled]="isWeeklyDisabled" class="weekDay" formControlName="selectedWeekDay">
                       <mat-option *ngFor="let day of weekDays" [value]="day">
                         {{day}}
                       </mat-option>
@@ -83,9 +81,9 @@
                 <div class="section-sublevel-2">
                   <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
                     <mat-radio-button value="allAdmin">All Admin</mat-radio-button> <br>
-                    <mat-radio-button value="specificEmail">Specific Email List</mat-radio-button> &nbsp;&nbsp;
+                    <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button> &nbsp;&nbsp;
                     <mat-form-field appearance="outline">
-                      <textarea matInput formControlName="emailList"></textarea>
+                      <textarea [readonly]="isSpecificEmailDisabled" matInput  formControlName="emailList"></textarea>
                     </mat-form-field>
                   </mat-radio-group>
                 </div>
