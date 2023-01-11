@@ -14,6 +14,7 @@ import {UserDao} from "../../user/dao/user.dao";
 import {AuthService} from "../../auth/services/auth.service";
 import {AuthorityId} from "../../user/enum/authority-id";
 import {FalcoCountDto} from "../dto/falco-count.dto";
+import {FalcoSettingDto} from "../dto/falco-setting.dto";
 
 @ApiTags('Project Falco')
 @Controller()
@@ -109,6 +110,17 @@ export class FalcoController {
                 return this.falcoService.createFalcoLog(clusterId, falcoLog);
             }
         }
+    }
+
+    @Post(':clusterid/settings')
+    async createFalcoSetting(
+        @Param('clusterid') clusterId: number,
+        @Body() falcoSetting: FalcoSettingDto
+    ): Promise <any> {
+        console.log('backend falco controller');
+        console.log('falcosetting:', falcoSetting);
+        const result = this.falcoService.createFalcoSetting(clusterId, falcoSetting);
+        return result;
     }
 
     @Get('/download')

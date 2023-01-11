@@ -8,6 +8,7 @@ import {addDays, format, set, sub} from 'date-fns';
 import {CsvService} from "../../shared/services/csv.service";
 import {FalcoCsvDto} from "../dto/falco-csv-dto";
 import {FalcoCountDto} from "../dto/falco-count.dto";
+import {FalcoSettingDto} from "../dto/falco-setting.dto";
 
 @Injectable()
 export class FalcoService {
@@ -121,5 +122,9 @@ export class FalcoService {
             .update(globalSignature)
             .digest('hex');
         return this.falcoDao.createFalcoLog(falcoLog);
+    }
+
+    async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise <any>{
+        return this.falcoDao.createFalcoSetting(clusterId, falcoSetting);
     }
 }

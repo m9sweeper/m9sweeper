@@ -4,6 +4,7 @@ import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {format, set, sub} from "date-fns";
+import {FalcoSettingDto} from "../dto/falco-setting.dto";
 
 
 @Injectable()
@@ -199,4 +200,15 @@ export class FalcoDao {
             .into('project_falco_logs')
             .returning(['id']);
     }
+
+        async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise<any>{
+            const knex = await this.databaseService.getConnection();
+            const result = knex
+                .insert(instanceToPlain(falcoSetting))
+                .into('falco_settings')
+                .returning(['*']);
+
+            return result;
+
+        }
 }
