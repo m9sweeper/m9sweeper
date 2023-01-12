@@ -134,7 +134,7 @@
       <b>Raw:</b>
       <div> {{message}}</div>
       <br>
-      <b>Chosen format:</b>
+      <b>Formatted:</b>
       <div>
         <div *ngIf="format === 'yaml'; then displayInYaml"></div>
         <ng-template #displayInYaml>
@@ -152,7 +152,13 @@
       <div>
         <div *ngIf="format === 'table'; then displayInTable"></div>
           <ng-template #displayInTable>
-            <div class="jsonTable" [innerHTML]="rawInFormat"></div>
+            <table class="table-format">
+              <tr *ngFor="let property of extractProperty" >
+                <td>{{property.key}}</td>
+                <td>{{property.value}}</td>
+              </tr>
+            </table>
+
           </ng-template>
       </div>
     </div>
