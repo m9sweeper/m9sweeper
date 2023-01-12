@@ -10,7 +10,15 @@
   width: 100%;
   white-space: nowrap;
   display: flex;
+  padding: 15px;
 }
+.falco-card{
+  min-width: 400px;
+}
+.details-table{
+  text-align: left;
+}
+
 mat-paginator {
   display: flex;
   justify-content: center;
@@ -18,10 +26,7 @@ mat-paginator {
 
   mat-table {
     overflow: auto !important;
-    min-width: 400px;
-    height: 400px;
-
-
+    height: 100%;
 
     mat-row {
       min-height: 20px !important
@@ -93,4 +98,9 @@ mat-paginator {
       white-space: nowrap;
     }
   }
+.date-link{
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
