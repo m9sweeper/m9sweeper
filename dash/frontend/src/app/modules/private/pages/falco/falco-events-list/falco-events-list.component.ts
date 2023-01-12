@@ -116,7 +116,7 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   displayEventDetails(event: IFalcoLog) {
-    this.dialogRef = this.dialog.open(ShowJsonDataComponent, {
+    this.dialog.open(ShowJsonDataComponent, {
       width: 'auto',
       height: '100%',
       autoFocus: false,

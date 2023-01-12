@@ -37,7 +37,7 @@
         <mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="calendarDate">
             <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-            <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+            <mat-cell *matCellDef="let log" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="namespace">
             <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>

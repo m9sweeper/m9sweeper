@@ -15,11 +15,12 @@ import {ShowJsonDataMoreComponent} from '../show-json-data-more/show-json-data-m
 export class ShowJsonDataComponent implements OnInit {
   header: string;
 
-  constructor(public dialogRef: MatDialogRef<ShowJsonDataMoreComponent>,
+  constructor(public dialogRef: MatDialogRef<ShowJsonDataComponent>,
               @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
               private route: ActivatedRoute,
               private router: Router,
               private falcoService: FalcoService,
+              private dialog: MatDialog,
   ) { }
 
   dataSource: MatTableDataSource<IFalcoLog>;
@@ -88,6 +89,15 @@ export class ShowJsonDataComponent implements OnInit {
 
   onClose() {
     this.dialogRef.close();
+  }
+  displayEventDetails(event: IFalcoLog){
+    this.dialogRef.close();
+    this.dialogRef = this.dialog.open(ShowJsonDataComponent, {
+      width: 'auto',
+      height: '100%',
+      autoFocus: false,
+      data: {content: event, header: 'Event Log Details'}
+    });
   }
 
 }
