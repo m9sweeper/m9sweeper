@@ -203,12 +203,19 @@ export class FalcoDao {
 
         async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise<any>{
             const knex = await this.databaseService.getConnection();
-            const result = knex
-                .insert(instanceToPlain(falcoSetting))
-                .into('falco_settings')
-                .returning(['*']);
+            const subquery = await knex.raw(`select exists( select 1 from falco_settings where cluster_id =? )`, [clusterId])
+                .then(res => res?.rows[0]?.exists);
 
-            return result;
+            if (!subquery){
+                const result = knex
+                    .insert(instanceToPlain(falcoSetting))
+                    .into('falco_settings')
+                    .returning(['*']);
 
+                return result;
+            }else {
+                const result = knex('falco_settings').update(instanceToPlain(falcoSetting)).where('cluster_id', clusterId);
+                return result;
+            }
         }
 }
