@@ -23,6 +23,7 @@
 
 .event-table {
   overflow-y: auto !important;
+  text-align: left;
 }
 
 mat-paginator {
@@ -109,6 +110,10 @@ mat-table {
   table,tr,td{
       border: 2px black solid ;
   }
-
 }
 
+.date-link{
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}

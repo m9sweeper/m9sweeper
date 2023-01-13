@@ -47,7 +47,6 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   falcoCountData: IFalcoCount[];
 
-  dialogRef: MatDialogRef<ShareEventComponent>;
 
   barChartAttributes = {
     view: [] = [400, 300],
@@ -161,8 +160,8 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   onClickShare(){
-     this.dialogRef = this.dialog.open(ShareEventComponent, {
-      width: 'auto'
+      this.dialog.open(ShareEventComponent, {
+      width: '100%'
     });
   }
 
@@ -194,5 +193,10 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   onClickTable(){
     this.format = 'table';
+  }
+
+  displayEventDetails(event: IFalcoLog) {
+    this.eventId = event.id;
+    this.getEventById();
   }
 }
