@@ -49,7 +49,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
 
   barChartAttributes = {
-    view: [] = [600, 300],
+    view: [] = [550, 300],
     colorScheme: {
       domain: ['#f3865f']
     },

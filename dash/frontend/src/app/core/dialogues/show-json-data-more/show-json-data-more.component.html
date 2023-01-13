@@ -11,9 +11,10 @@
     </div>
   </div >
   <div class="row">
-    <div class="event-table col-sm-6">
-      <mat-card style="height:350px; min-width: 400px; display: grid;!important;">
+    <div class=" col-sm-6">
+      <mat-card style="height:350px; display: grid;!important;">
         <h1>Basic Details</h1>
+        <div class="event-table">
         <div class="table-format">
           <table>
             <tr>
@@ -33,12 +34,13 @@
             </tr>
           </table>
         </div>
+        </div>
       </mat-card>
     </div>
-    <div class="event-table col-sm-6">
-      <mat-card style="height:350px; min-width: 400px; display: grid;!important;">
+    <div class=" col-sm-6">
+      <mat-card style="height:350px; display: grid;!important;">
         <h1>Incidence Rate</h1>
-        <div>
+        <div class="event-table">
           <ngx-charts-bar-vertical
             [view]="barChartAttributes.view"
             [scheme]="barChartAttributes.colorScheme"
