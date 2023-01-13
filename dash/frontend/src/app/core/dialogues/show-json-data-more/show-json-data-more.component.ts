@@ -5,7 +5,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
-import { jsonToTableHtmlString } from 'json-table-converter';
 import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
@@ -38,8 +37,9 @@ export class ShowJsonDataMoreComponent implements OnInit {
   image: string;
   message: string;
   raw: object;
-  format: string;
+  format = 'table';
   rawInFormat: string;
+  extractProperty: {key: string, value: string}[] = [];
 
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   logCount: number;
@@ -47,10 +47,9 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   falcoCountData: IFalcoCount[];
 
-  dialogRef: MatDialogRef<ShareEventComponent>;
 
   barChartAttributes = {
-    view: [] = [400, 300],
+    view: [] = [600, 300],
     colorScheme: {
       domain: ['#f3865f']
     },
@@ -99,7 +98,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
         this.image = response.data.image;
         this.message = response.data.message;
         this.raw = response.data.raw;
-
+        this.extractProperty = this.extractProperties(this.raw);
       }, (err) => {
         alert(err);
       });
@@ -146,7 +145,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
           if (this.falcoCountData && this.falcoCountData.length > 0) {
             this.barChartAttributes.results =  this.falcoCountData.map(elem => {
               return {
-                name: elem.date.toString().split('T')[0],
+                name: (elem.date.toString().split('T')[0]).split('-')[2],
                 value: Number(elem.count)
               };
             });
@@ -161,8 +160,8 @@ export class ShowJsonDataMoreComponent implements OnInit {
   }
 
   onClickShare(){
-     this.dialogRef = this.dialog.open(ShareEventComponent, {
-      width: 'auto'
+      this.dialog.open(ShareEventComponent, {
+      width: '100%'
     });
   }
 
@@ -174,16 +173,31 @@ export class ShowJsonDataMoreComponent implements OnInit {
       lineWidth: -1,
       skipInvalid: true
     });
-
   }
+
+  extractProperties(obj): {key: string; value: string }[]{
+    const arr = [];
+    for (const ele of Object.keys(obj)){
+      arr.push({
+        key: ele,
+        value: obj[ele]
+      });
+    }
+    return arr;
+  }
+
   onClickJson(){
     this.format = 'json';
     this.rawInFormat = JSON.stringify(this.raw, undefined, 4);
-    // console.log(this.rawInFormat);
   }
+
 
   onClickTable(){
     this.format = 'table';
-    this.rawInFormat = jsonToTableHtmlString(this.raw);
+  }
+
+  displayEventDetails(event: IFalcoLog) {
+    this.eventId = event.id;
+    this.getEventById();
   }
 }

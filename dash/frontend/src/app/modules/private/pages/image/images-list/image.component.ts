@@ -60,7 +60,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.searchTerm = localStorage.getItem('imageSearchTerm');
+    this.searchTerm = '';
     this.userIsAdmin = this.jwtAuthService.isAdmin();
     this.route.parent.parent.params
       .pipe(take(1))
@@ -188,7 +188,6 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getImageScannerDetails(row: IImage) {
-    localStorage.setItem('imageSearchTerm', this.imageInput.nativeElement.value);
     this.router.navigate(['/private', 'clusters', this.clusterId, 'images', 'image-scan', row.id]);
   }
 
@@ -199,13 +198,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     return localStorage.getItem('image_table_limit');
   }
 
-  updateImageSearch() {
-    if (this.imageInput.nativeElement.value.trim()) {
-      localStorage.setItem('imageSearchTerm', this.imageInput.nativeElement.value.trim());
-    } else {
-      localStorage.removeItem('imageSearchTerm');
-    }
-  }
+  updateImageSearch() {}
 
   ngOnDestroy() {
     this.unsubscribe$.next();

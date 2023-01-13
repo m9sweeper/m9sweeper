@@ -125,6 +125,8 @@ import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.comp
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
 import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/share-event.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 
 
 @NgModule({
@@ -189,6 +191,7 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
     KubeHunterReportDetailsComponent,
     ImageIssueMoreDataDialogComponent,
     SafeHtmlPipe,
+    TablifyPipe,
     KubeBenchComponent,
     KubeBenchReportDetailsComponent,
     KubeBenchDialogComponent,
@@ -254,7 +257,8 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
     MaterialDesignFrameworkModule,
     JsonSchemaFormModule,
     MatExpansionModule,
-    ],
+    MatButtonToggleModule,
+  ],
   providers: [
     DatePipe
   ],

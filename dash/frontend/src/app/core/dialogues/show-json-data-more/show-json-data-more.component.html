@@ -12,9 +12,9 @@
   </div >
   <div class="row">
     <div class="event-table col-sm-6">
-      <mat-card style="height:500px; min-width: 400px; display: grid;!important;">
+      <mat-card style="height:350px; min-width: 400px; display: grid;!important;">
         <h1>Basic Details</h1>
-        <div >
+        <div class="table-format">
           <table>
             <tr>
               <th>Namespace</th> <td>{{namespace}}</td>
@@ -36,7 +36,7 @@
       </mat-card>
     </div>
     <div class="event-table col-sm-6">
-      <mat-card style="height:500px; min-width: 400px; display: grid;!important;">
+      <mat-card style="height:350px; min-width: 400px; display: grid;!important;">
         <h1>Incidence Rate</h1>
         <div>
           <ngx-charts-bar-vertical
@@ -76,7 +76,7 @@
         <mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="calendarDate">
             <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-            <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
+            <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="namespace">
@@ -125,16 +125,18 @@
         <h1>Raw Data</h1>
       </div>
       <div class="col-sm-6 text-align-right">
-        <button mat-raised-button color="primary"  (click)="onClickYaml()">Yaml</button> &nbsp;&nbsp;
-        <button mat-raised-button color="primary"  (click)="onClickJson()">Json</button> &nbsp;&nbsp;
-        <button mat-raised-button color="primary"  (click)="onClickTable()">Table</button>
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+          <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
+          <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
+          <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
     </div>
     <div class="event-table">
       <b>Raw:</b>
       <div> {{message}}</div>
       <br>
-      <b>Chosen format:</b>
+      <b>Formatted:</b>
       <div>
         <div *ngIf="format === 'yaml'; then displayInYaml"></div>
         <ng-template #displayInYaml>
@@ -152,7 +154,7 @@
       <div>
         <div *ngIf="format === 'table'; then displayInTable"></div>
           <ng-template #displayInTable>
-            <div class="jsonTable" [innerHTML]="rawInFormat"></div>
+            <div [innerHTML]="raw | tablify" class="table-format"></div>
           </ng-template>
       </div>
     </div>

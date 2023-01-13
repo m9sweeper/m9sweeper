@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { jsonToTableHtmlString } from 'json-table-converter';
 import { IGatekeeperConstraintViolation } from '../../../../../core/entities/IGateKeeperConstraint';
 
 @Component({
@@ -14,10 +13,6 @@ export class GatekeeperViolationDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: {violations: IGatekeeperConstraintViolation}) { }
 
   ngOnInit(): void {
-  }
-
-  get tableHtml(): string {
-    return jsonToTableHtmlString(this.data.violations);
   }
 
   onClose() {

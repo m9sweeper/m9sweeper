@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { jsonToTableHtmlString } from 'json-table-converter';
 import { IImageScanResultIssue } from '../../../../../core/entities/IImageScanResultIssue';
 
 @Component({
@@ -14,10 +13,6 @@ export class ImageIssueMoreDataDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: {issue: IImageScanResultIssue}) { }
 
   ngOnInit(): void {
-  }
-
-  get tableHtml(): string {
-    return jsonToTableHtmlString(this.data.issue.extraData);
   }
 
   onClose() {
