@@ -49,7 +49,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
 
   barChartAttributes = {
-    view: [] = [400, 300],
+    view: [] = [600, 300],
     colorScheme: {
       domain: ['#f3865f']
     },
@@ -145,7 +145,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
           if (this.falcoCountData && this.falcoCountData.length > 0) {
             this.barChartAttributes.results =  this.falcoCountData.map(elem => {
               return {
-                name: elem.date.toString().split('T')[0],
+                name: (elem.date.toString().split('T')[0]).split('-')[2],
                 value: Number(elem.count)
               };
             });
