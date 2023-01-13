@@ -191,6 +191,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
     this.rawInFormat = JSON.stringify(this.raw, undefined, 4);
   }
 
+
   onClickTable(){
     this.format = 'table';
   }

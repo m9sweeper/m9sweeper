@@ -126,6 +126,7 @@ import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-mor
 import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/share-event.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 
 
 @NgModule({
@@ -190,6 +191,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     KubeHunterReportDetailsComponent,
     ImageIssueMoreDataDialogComponent,
     SafeHtmlPipe,
+    TablifyPipe,
     KubeBenchComponent,
     KubeBenchReportDetailsComponent,
     KubeBenchDialogComponent,

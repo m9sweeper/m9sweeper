@@ -14,7 +14,7 @@
     <div class="event-table col-sm-6">
       <mat-card style="height:350px; min-width: 400px; display: grid;!important;">
         <h1>Basic Details</h1>
-        <div >
+        <div class="table-format">
           <table>
             <tr>
               <th>Namespace</th> <td>{{namespace}}</td>
@@ -154,13 +154,7 @@
       <div>
         <div *ngIf="format === 'table'; then displayInTable"></div>
           <ng-template #displayInTable>
-            <table class="table-format">
-              <tr *ngFor="let property of extractProperty" >
-                <td>{{property.key}}</td>
-                <td>{{property.value}}</td>
-              </tr>
-            </table>
-
+            <div [innerHTML]="raw | tablify" class="table-format"></div>
           </ng-template>
       </div>
     </div>

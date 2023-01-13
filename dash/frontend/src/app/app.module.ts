@@ -25,6 +25,7 @@ import {SiteLogoDirective} from './modules/shared/directives/site-logo.directive
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {DatePipe} from '@angular/common';
+import { TablifyPipe } from './core/pipe/tablify.pipe';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
