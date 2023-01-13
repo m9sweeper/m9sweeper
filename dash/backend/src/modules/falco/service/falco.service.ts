@@ -96,7 +96,7 @@ export class FalcoService {
         }
     }
 
-    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto): Promise<number> {
+    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto): Promise<FalcoDto> {
         const falcoLog = new FalcoDto;
         falcoLog.clusterId = clusterId;
         falcoLog.rule = falcoWebhookLog.rule;
@@ -126,5 +126,9 @@ export class FalcoService {
 
     async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise <any>{
         return this.falcoDao.createFalcoSetting(clusterId, falcoSetting);
+    }
+
+    async sendFalcoEmail(clusterId: number, newFalcoLog: Promise <FalcoDto>){
+        return this.falcoDao.sendFalcoEmail(clusterId, newFalcoLog);
     }
 }

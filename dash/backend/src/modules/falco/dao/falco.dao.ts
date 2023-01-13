@@ -193,12 +193,12 @@ export class FalcoDao {
         }
     }
 
-        async createFalcoLog(falcoLog: FalcoDto): Promise<number> {
+        async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {
         const knex = await this.databaseService.getConnection();
         return knex
             .insert(instanceToPlain(falcoLog))
             .into('project_falco_logs')
-            .returning(['id']);
+            .returning(['*']);
     }
 
         async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise<any>{
@@ -218,4 +218,12 @@ export class FalcoDao {
                 return result;
             }
         }
+
+    async sendFalcoEmail(clusterId: number, newFalcoLog: Promise<FalcoDto>) {
+        const knex = await this.databaseService.getConnection();
+        const query =await knex.select().from('falco_settings').where('cluster_id', clusterId);
+        if(query.length > 0){
+
+        }
+    }
 }

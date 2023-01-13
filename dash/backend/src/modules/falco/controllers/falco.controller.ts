@@ -94,7 +94,7 @@ export class FalcoController {
         @Param('clusterid') clusterId: number,
         @Body() falcoLog: FalcoWebhookInputDto,
         @Query('key') key: string
-    ): Promise<number> {
+    ): Promise<FalcoDto> {
 
         //find user authority by user's apikey
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
@@ -107,7 +107,14 @@ export class FalcoController {
             // is the user a Falco user
             let isFalcoUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
             if (isFalcoUser) {
-                return this.falcoService.createFalcoLog(clusterId, falcoLog);
+                const newFalcoLog = this.falcoService.createFalcoLog(clusterId, falcoLog);
+                // add logic here:
+                // criteria match: cluster_id, level (severity_level)
+                this.falcoService.sendFalcoEmail(clusterId, newFalcoLog);
+                // timestamp (when to email)
+
+                return newFalcoLog;
+
             }
         }
     }
