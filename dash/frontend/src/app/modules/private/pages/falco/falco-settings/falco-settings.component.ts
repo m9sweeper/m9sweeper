@@ -63,12 +63,12 @@ export class FalcoSettingsComponent implements OnInit {
       clusterId: this.clusterId,
       sendNotificationAnomaly: this.settingForm.get('sendNotificationAnomaly').value,
       anomalyFrequency: this.settingForm.get('anomalyFrequency').value,
-      severityLevel: this.settingForm.get('selectedPriorityLevels').value,
+      severityLevel: JSON.stringify(this.settingForm.get('selectedPriorityLevels').value),
       sendNotificationSummary: this.settingForm.get('sendNotificationSummary').value,
       summaryNotificationFrequency: this.settingForm.get('selectedSummaryFrequency').value,
-      weekday: this.settingForm.get('selectedWeekDay').value,
+      weekday: JSON.stringify(this.settingForm.get('selectedWeekDay').value),
       whoToNotify: this.settingForm.get('whoToNotify').value,
-      emailList: this.settingForm.get('emailList').value
+      emailList: JSON.stringify(this.settingForm.get('emailList').value)
     };
 
     if (

@@ -15,6 +15,10 @@ import {AuthService} from "../../auth/services/auth.service";
 import {AuthorityId} from "../../user/enum/authority-id";
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
+import {SentMessageInfo} from "nodemailer";
+import {instanceToPlain} from "class-transformer";
+import {ConfigService} from "@nestjs/config";
+import {EmailService} from "../../shared/services/email.service";
 
 @ApiTags('Project Falco')
 @Controller()
@@ -25,6 +29,8 @@ export class FalcoController {
         private readonly apiKeyDao: ApiKeyDao,
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
+        private readonly configService: ConfigService,
+        private readonly email: EmailService,
     ) {}
 
     @Get()
@@ -107,13 +113,68 @@ export class FalcoController {
             // is the user a Falco user
             let isFalcoUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
             if (isFalcoUser) {
-                const newFalcoLog = this.falcoService.createFalcoLog(clusterId, falcoLog);
-                // add logic here:
-                // criteria match: cluster_id, level (severity_level)
-                this.falcoService.sendFalcoEmail(clusterId, newFalcoLog);
-                // timestamp (when to email)
+                const newFalcoLog =  await this.falcoService.createFalcoLog(clusterId, falcoLog);
+                const falcoSetting = await this.falcoService.findFalcoSetting(clusterId, newFalcoLog);
+                const allAdminEmail = await this.falcoService.getAllAdminsToMail();
+                console.log('allAdminEmail', allAdminEmail);
 
-                return newFalcoLog;
+                //console.log('falcosetting[0]', falcoSetting[0]);
+                const stringArraySeverityLevel = JSON.parse(falcoSetting[0].severity_level);
+                const stringArrayWeekDay = JSON.parse(falcoSetting[0].weekday);
+                const stringArrayEmailList = JSON.parse(falcoSetting[0].email_list);
+                //console.log('stringArrayWeekDay: ', stringArrayWeekDay);
+                // console.log('stringArrayEmailList: ',stringArrayEmailList);
+                //return;
+
+                //console.log('string array:', stringArraySeverityLevel);
+                //console.log('type of string array:', typeof (stringArraySeverityLevel));
+                // console.log('new falco log is :', newFalcoLog);
+                // console.log('new falco log severity level:', newFalcoLog[0].level);
+                // console.log('new log level type:', typeof(newFalcoLog[0].level));
+
+                stringArraySeverityLevel.forEach(element => {
+                    console.log('element:', element);
+
+                    // if new log severity level matches setting
+                    if (element === newFalcoLog[0].level){
+                        console.log('matched!');
+
+                        // if sent to all admin, get all admin email addresses
+                        if (falcoSetting[0].who_to_notify === 'allAdmin'){
+                            for (const user of allAdminEmail) {
+                                this.email.send({
+                                    to: user.email,
+                                    from: this.configService.get('email.default.sender'),
+                                    subject: `New $ Project Falco Alert in $namespace - $msg `,
+                                    context:
+                                        `A New Project Falco Event has been detected!
+                                        Namespace: {namespace}
+                                        Pod: {pod}
+                                        Image: {image}
+                                        Severity: {Severity}
+                                        Type: {Type}
+                                        Tags: {Tags}
+                                        {msg}
+                                        [View More Details]`
+
+                                }).catch(e => {
+                                    console.log('Error sending exception creation email: ' + e);
+                                });
+                            }
+
+
+                        }else{
+                            // send to specific list
+
+                        }
+
+
+              }else{
+                  console.log('not match!');
+              }
+              });
+                return;
+
 
             }
         }

@@ -5,6 +5,7 @@ import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {format, set, sub} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
+import * as knexnest from 'knexnest'
 
 
 @Injectable()
@@ -219,11 +220,37 @@ export class FalcoDao {
             }
         }
 
-    async sendFalcoEmail(clusterId: number, newFalcoLog: Promise<FalcoDto>) {
+    async findFalcoSetting(clusterId: number, newFalcoLog: FalcoDto): Promise<any> {
         const knex = await this.databaseService.getConnection();
+        // see if any settings matches the clusterid
         const query =await knex.select().from('falco_settings').where('cluster_id', clusterId);
+        //console.log('query', query);
+        // if there is, return the record
         if(query.length > 0){
-
+            return query;
         }
+        else{
+            const result = query? query : null;
+            return result;
+        }
+    }
+
+    async getAllAdminsToMail(): Promise<any> {
+        const knex = await this.databaseService.getConnection();
+        const query = knex
+            .select([
+                'u.email as _email',
+                knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as "_fullName"`)
+            ])
+            .from('users as u')
+            .leftJoin('user_authorities as ua', function(){
+                this.on('u.id','=','ua.user_id')
+            })
+            .whereIn('ua.authority_id', [1,2])
+        return knexnest(query)
+            .then(data => {
+                //console.log('admin data: ',data );
+                return data;
+            });
     }
 }

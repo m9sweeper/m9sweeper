@@ -128,7 +128,11 @@ export class FalcoService {
         return this.falcoDao.createFalcoSetting(clusterId, falcoSetting);
     }
 
-    async sendFalcoEmail(clusterId: number, newFalcoLog: Promise <FalcoDto>){
-        return this.falcoDao.sendFalcoEmail(clusterId, newFalcoLog);
+    async findFalcoSetting(clusterId: number, newFalcoLog: FalcoDto){
+        return this.falcoDao.findFalcoSetting(clusterId, newFalcoLog);
+    }
+
+    async getAllAdminsToMail(): Promise<any>{
+        return this.falcoDao.getAllAdminsToMail();
     }
 }
