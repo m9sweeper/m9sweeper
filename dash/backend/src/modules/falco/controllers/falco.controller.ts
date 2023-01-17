@@ -126,12 +126,6 @@ export class FalcoController {
                 // console.log('stringArrayEmailList: ',stringArrayEmailList);
                 //return;
 
-                //console.log('string array:', stringArraySeverityLevel);
-                //console.log('type of string array:', typeof (stringArraySeverityLevel));
-                // console.log('new falco log is :', newFalcoLog);
-                // console.log('new falco log severity level:', newFalcoLog[0].level);
-                // console.log('new log level type:', typeof(newFalcoLog[0].level));
-
                 stringArraySeverityLevel.forEach(element => {
                     console.log('element:', element);
 
@@ -145,36 +139,39 @@ export class FalcoController {
                                 this.email.send({
                                     to: user.email,
                                     from: this.configService.get('email.default.sender'),
-                                    subject: `New $ Project Falco Alert in $namespace - $msg `,
-                                    context:
-                                        `A New Project Falco Event has been detected!
-                                        Namespace: {namespace}
-                                        Pod: {pod}
-                                        Image: {image}
-                                        Severity: {Severity}
-                                        Type: {Type}
-                                        Tags: {Tags}
-                                        {msg}
-                                        [View More Details]`
-
+                                    subject: `New ${newFalcoLog[0].level} Project Falco Alert in ${newFalcoLog[0].namespace}`,
+                                    template: 'falco-log-email',
+                                    context: {
+                                        falcoLog: instanceToPlain(newFalcoLog[0]),
+                                        moreDetailsLink: ``,
+                                    }
                                 }).catch(e => {
-                                    console.log('Error sending exception creation email: ' + e);
+                                    console.log('Error sending falco email: ' + e);
+                                });
+                            }
+                        } else{
+                            // send to specific list
+                            for (const user of stringArrayEmailList) {
+                                this.email.send({
+                                    to: user,
+                                    from: this.configService.get('email.default.sender'),
+                                    subject: `New ${newFalcoLog[0].level} Project Falco Alert in ${newFalcoLog[0].namespace}`,
+                                    template: 'falco-log-email',
+                                    context: {
+                                        falcoLog: instanceToPlain(newFalcoLog[0]),
+                                        moreDetailsLink: ``,
+                                    }
+                                }).catch(e => {
+                                    console.log('Error sending falco email: ' + e);
                                 });
                             }
 
-
-                        }else{
-                            // send to specific list
-
                         }
-
-
-              }else{
+              } else{
                   console.log('not match!');
               }
               });
                 return;
-
 
             }
         }
