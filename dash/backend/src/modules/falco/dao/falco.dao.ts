@@ -221,19 +221,18 @@ export class FalcoDao {
             }
         }
 
-    async findFalcoSetting(clusterId: number, newFalcoLog: FalcoDto): Promise<any> {
+    async findFalcoSettingByClusterId(clusterId: number): Promise<FalcoSettingDto> {
         const knex = await this.databaseService.getConnection();
+
         // see if any settings matches the clusterid
-        const query =await knex.select().from('falco_settings').where('cluster_id', clusterId);
-        //console.log('query', query);
+        const query = await knex.select().from('falco_settings').where('cluster_id', clusterId);
+
         // if there is, return the record
-        if(query.length > 0){
-            return query;
+        if (query.length > 0){
+            return query[0];
         }
-        else{
-            const result = query? query : null;
-            return result;
-        }
+
+        return null;
     }
 
     async getAllAdminsToMail(): Promise<any> {
@@ -250,7 +249,6 @@ export class FalcoDao {
             .whereIn('ua.authority_id', [1,2])
         return knexnest(query)
             .then(data => {
-                //console.log('admin data: ',data );
                 return data;
             });
     }
@@ -269,5 +267,22 @@ export class FalcoDao {
             .into('falco_email')
             .returning(['*']);
     }
+    async falcoEmailAlreadySent(clusterId: number, falcoSignature: string): Promise<any> {
 
+        const knex = await this.databaseService.getConnection();
+        const query = await knex.raw(`select exists( select 1 from falco_email where cluster_id =? and anomaly_signature =? )`, [clusterId, falcoSignature])
+            .then(res => res?.rows[0]?.exists);
+
+        if (query){
+            const lastEmailSentTime = await knex
+                .select('creation_timestamp')
+                .from('falco_email')
+                .where('cluster_id', clusterId)
+                .andWhere('anomaly_signature', falcoSignature)
+                .returning('*');
+            return lastEmailSentTime[0].creation_timestamp;
+        } else {
+            return null;
+        }
+    }
 }

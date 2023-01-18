@@ -125,15 +125,19 @@ export class FalcoService {
         falcoLog.anomalySignatureGlobal = createHash('md5')
             .update(globalSignature)
             .digest('hex');
-        return this.falcoDao.createFalcoLog(falcoLog);
+        const createdLog = this.falcoDao.createFalcoLog(falcoLog);
+
+        // @TODO: Email alert logic should go here
+
+        return createdLog;
     }
 
     async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise <any>{
         return this.falcoDao.createFalcoSetting(clusterId, falcoSetting);
     }
 
-    async findFalcoSetting(clusterId: number, newFalcoLog: FalcoDto){
-        return this.falcoDao.findFalcoSetting(clusterId, newFalcoLog);
+    async findFalcoSettingByClusterId(clusterId: number): Promise<FalcoSettingDto>{
+        return this.falcoDao.findFalcoSettingByClusterId(clusterId);
     }
 
     async getAllAdminsToMail(): Promise<any>{
@@ -157,5 +161,9 @@ export class FalcoService {
 
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any>{
         return this.falcoDao.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
+    }
+
+    async falcoEmailAlreadySent(clusterId: number, falcoSignature: string): Promise<any>{
+        return this.falcoDao.falcoEmailAlreadySent( clusterId, falcoSignature);
     }
 }
