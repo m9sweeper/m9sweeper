@@ -66,9 +66,9 @@ export class FalcoSettingsComponent implements OnInit {
       severityLevel: JSON.stringify(this.settingForm.get('selectedPriorityLevels').value),
       sendNotificationSummary: this.settingForm.get('sendNotificationSummary').value,
       summaryNotificationFrequency: this.settingForm.get('selectedSummaryFrequency').value,
-      weekday: JSON.stringify(this.settingForm.get('selectedWeekDay').value),
+      weekday: this.settingForm.get('selectedWeekDay').value,
       whoToNotify: this.settingForm.get('whoToNotify').value,
-      emailList: JSON.stringify(this.settingForm.get('emailList').value)
+      emailList: this.settingForm.get('emailList').value
     };
 
     if (
