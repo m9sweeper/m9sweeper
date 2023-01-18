@@ -1,20 +1,31 @@
+<style>
+    td{
+        text-align: left;
+        width: 80%;
+    }
+    th {
+        text-align: left;
+        width: 20%;
+    }
+</style>
+
 <table>
         <tr>
-            <td>Namespace:</td> <td>{{falcoLog.namespace}}</td>
+            <th>Namespace:</th> <td>{{falcoLog.namespace}}</td>
         </tr>
         <tr>
-            <td>Pod:</td> <td>{{falcoLog.container}}</td>
+            <th>Pod:</th> <td>{{falcoLog.container}}</td>
         </tr>
         <tr>
-            <td>Image:</td> <td>{{falcoLog.image}}</td>
+            <th>Image:</th> <td>{{falcoLog.image}}</td>
         </tr>
         <tr>
-            <td>Severity</td> <td>{{falcoLog.level}}</td>
+            <th>Severity</th> <td>{{falcoLog.level}}</td>
         </tr>
         <tr>
-            <td>Message</td> <td>{{falcoLog.message}}</td>
+            <th>Message</th> <td>{{falcoLog.message}}</td>
         </tr>
-        <br><br>
-        <a href="{{moreDetailsLink}}" target="_blank">{{moreDetailsLink}}</a>
 
 </table>
+<br><br>
+<a href="{{moreDetailsLink}}" target="_blank">View More Details</a>

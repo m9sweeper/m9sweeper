@@ -17,8 +17,8 @@ import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {SentMessageInfo} from "nodemailer";
 import {instanceToPlain} from "class-transformer";
-import {ConfigService} from "@nestjs/config";
-import {EmailService} from "../../shared/services/email.service";
+
+
 
 @ApiTags('Project Falco')
 @Controller()
@@ -29,8 +29,7 @@ export class FalcoController {
         private readonly apiKeyDao: ApiKeyDao,
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
-        private readonly configService: ConfigService,
-        private readonly email: EmailService,
+
     ) {}
 
     @Get()
@@ -113,66 +112,67 @@ export class FalcoController {
             // is the user a Falco user
             let isFalcoUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
             if (isFalcoUser) {
+                // Saved new falco log
                 const newFalcoLog =  await this.falcoService.createFalcoLog(clusterId, falcoLog);
+                // Find saved setting
                 const falcoSetting = await this.falcoService.findFalcoSetting(clusterId, newFalcoLog);
+                // Get all admin email addresses
                 const allAdminEmail = await this.falcoService.getAllAdminsToMail();
-                console.log('allAdminEmail', allAdminEmail);
 
-                //console.log('falcosetting[0]', falcoSetting[0]);
+                const falcoId = newFalcoLog[0].id;
+                const falcoSignature = newFalcoLog[0].anomaly_signature;
+                const falcoNamespace = newFalcoLog[0].namespace;
+                const falcoSeverity = newFalcoLog[0].level;
+
                 const stringArraySeverityLevel = JSON.parse(falcoSetting[0].severity_level);
                 const stringArrayWeekDay = JSON.parse(falcoSetting[0].weekday);
                 const stringArrayEmailList = JSON.parse(falcoSetting[0].email_list);
+
                 //console.log('stringArrayWeekDay: ', stringArrayWeekDay);
                 // console.log('stringArrayEmailList: ',stringArrayEmailList);
                 //return;
 
-                stringArraySeverityLevel.forEach(element => {
-                    console.log('element:', element);
-
+                for (const element of stringArraySeverityLevel){
                     // if new log severity level matches setting
+                    console.log('element :', element);
                     if (element === newFalcoLog[0].level){
                         console.log('matched!');
-
+                    ///*
                         // if sent to all admin, get all admin email addresses
                         if (falcoSetting[0].who_to_notify === 'allAdmin'){
-                            for (const user of allAdminEmail) {
-                                this.email.send({
-                                    to: user.email,
-                                    from: this.configService.get('email.default.sender'),
-                                    subject: `New ${newFalcoLog[0].level} Project Falco Alert in ${newFalcoLog[0].namespace}`,
-                                    template: 'falco-log-email',
-                                    context: {
-                                        falcoLog: instanceToPlain(newFalcoLog[0]),
-                                        moreDetailsLink: ``,
-                                    }
-                                }).catch(e => {
-                                    console.log('Error sending falco email: ' + e);
-                                });
-                            }
-                        } else{
+
+                            //for (const user of allAdminEmail) {
+                               /* const emailSentTime = await this.falcoService.sendFalcoEmail(
+                                    'charis.prose@intelletive.com',
+                                    clusterId,
+                                    falcoId,
+                                    falcoSeverity,
+                                    falcoNamespace,
+                                    falcoSignature,
+                                    newFalcoLog);*/
+                                const emailSentTime = 1672362000000;
+                                this.falcoService.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
+                            //}
+                        }/*
+                         else {
                             // send to specific list
                             for (const user of stringArrayEmailList) {
-                                this.email.send({
-                                    to: user,
-                                    from: this.configService.get('email.default.sender'),
-                                    subject: `New ${newFalcoLog[0].level} Project Falco Alert in ${newFalcoLog[0].namespace}`,
-                                    template: 'falco-log-email',
-                                    context: {
-                                        falcoLog: instanceToPlain(newFalcoLog[0]),
-                                        moreDetailsLink: ``,
-                                    }
-                                }).catch(e => {
-                                    console.log('Error sending falco email: ' + e);
-                                });
+                                const emailSent = await this.falcoService.sendFalcoEmail(
+                                    'charis.prose@intelletive.com',
+                                    clusterId,
+                                    falcoId,
+                                    falcoSeverity,
+                                    falcoNamespace,
+                                    falcoSignature,
+                                    newFalcoLog);
+                                console.log('email sent', emailSent);
                             }
-
-                        }
-              } else{
-                  console.log('not match!');
-              }
-              });
+                        }*/
+                    } else{
+                      console.log('not match!');
+                    }
+                }
                 return;
-
             }
         }
     }

@@ -9,12 +9,16 @@ import {CsvService} from "../../shared/services/csv.service";
 import {FalcoCsvDto} from "../dto/falco-csv-dto";
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
+import {EmailService} from "../../shared/services/email.service";
+import {ConfigService} from "@nestjs/config";
 
 @Injectable()
 export class FalcoService {
     constructor(
         private readonly falcoDao: FalcoDao,
-        private readonly csvService: CsvService
+        private readonly csvService: CsvService,
+        private readonly email: EmailService,
+        private readonly configService: ConfigService,
     ) {}
 
     async getFalcoLogs(
@@ -134,5 +138,24 @@ export class FalcoService {
 
     async getAllAdminsToMail(): Promise<any>{
         return this.falcoDao.getAllAdminsToMail();
+    }
+
+    async sendFalcoEmail(emailReceiver: string, clusterId: number, falcoId: number, falcoSeverity: string, falcoNamespace: string, falcoSignature: string, newFalcoLog: FalcoDto): Promise<any>{
+        this.email.send({
+            to: `${emailReceiver}`,
+            from: this.configService.get('email.default.sender'),
+            subject: `New ${falcoSeverity} Project Falco Alert in ${falcoNamespace}`,
+            template: 'falco-log-email',
+            context: {
+                falcoLog: instanceToPlain(newFalcoLog[0]),
+                moreDetailsLink: `https://dev-m9sweeper.intelletive.com/private/clusters/${clusterId}/falco/more/${falcoId}/signature/${falcoSignature}`,
+            }
+        }).catch(e => {
+            console.log('Error sending falco email: ' + e);
+        });
+    }
+
+    async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any>{
+        return this.falcoDao.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
     }
 }

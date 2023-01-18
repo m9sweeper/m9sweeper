@@ -6,6 +6,7 @@ import {FalcoCountDto} from "../dto/falco-count.dto";
 import {format, set, sub} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
+import {FalcoEmailDto} from "../dto/falco-email.dto";
 
 
 @Injectable()
@@ -253,4 +254,20 @@ export class FalcoDao {
                 return data;
             });
     }
+    async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any> {
+        let falcoEmailObj = new FalcoEmailDto();
+        const emailSentDate = format(set(new Date(emailSentTime), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0}),'yyyy-MM-dd');
+
+        falcoEmailObj.creationTimestamp = emailSentTime;
+        falcoEmailObj.calendarDate = emailSentDate;
+        falcoEmailObj.clusterId = clusterId;
+        falcoEmailObj.anomalySignature = falcoSignature;
+
+        const knex = await this.databaseService.getConnection();
+        return knex
+            .insert(instanceToPlain(falcoEmailObj))
+            .into('falco_email')
+            .returning(['*']);
+    }
+
 }
