@@ -179,7 +179,7 @@ export class FalcoService {
         // get all admin email addresses
         const allAdminEmail = await this.getAllAdminsToMail();
         // To test email: const allAdminEmailArray = ['some_email_address'] and comment out forEach();
-        const allAdminEmailArray = [''];
+        const allAdminEmailArray = [];
         allAdminEmail.forEach( element => allAdminEmailArray.push(element.email));
 
         // Parse data from new falco log fields
