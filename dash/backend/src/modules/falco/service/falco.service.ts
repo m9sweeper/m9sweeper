@@ -152,6 +152,7 @@ export class FalcoService {
             template: 'falco-log-email',
             context: {
                 falcoLog: instanceToPlain(newFalcoLog[0]),
+                falcoLogTags: instanceToPlain(newFalcoLog[0].raw["tags"]),
                 moreDetailsLink: `https://dev-m9sweeper.intelletive.com/private/clusters/${clusterId}/falco/more/${falcoId}/signature/${falcoSignature}`,
             }
         }).catch(e => {
@@ -178,7 +179,7 @@ export class FalcoService {
         // get all admin email addresses
         const allAdminEmail = await this.getAllAdminsToMail();
         // To test email: const allAdminEmailArray = ['some_email_address'] and comment out forEach();
-        const allAdminEmailArray = [];
+        const allAdminEmailArray = [''];
         allAdminEmail.forEach( element => allAdminEmailArray.push(element.email));
 
         // Parse data from new falco log fields
