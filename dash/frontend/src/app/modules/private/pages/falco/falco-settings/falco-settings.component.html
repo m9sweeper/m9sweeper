@@ -12,7 +12,7 @@
   <div class="row">
 
     <div class="event-table col-sm-6">
-      <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
+      <mat-card style="height:600px; min-width: 400px; display: grid;!important;">
         <h1>Notification Settings</h1>
         <div class ="details-content">
           <form [formGroup]="settingForm">
@@ -50,18 +50,18 @@
                   </div>
                 </div>
               </div>
-
+              <!--
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox (change)="enableSummarySubLevelcheckbox($event)" matInput formControlName="sendNotificationSummary" disabled> </mat-checkbox>
+                    <mat-checkbox (change)="enableSummarySubLevelcheckbox($event)" matInput formControlName="sendNotificationSummary" > </mat-checkbox>
                   </div>&nbsp;&nbsp;
                   <div>
                     <h3>Send Summary Emails</h3>
                   </div>
                 </div>
                 <div class ="section-sublevel-2">
-                  <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency" disabled>
+                  <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency" >
                     <mat-radio-button [disabled]="isSummaryDisabled" value="daily">Daily</mat-radio-button> <br><br>
                     <mat-radio-button [disabled]="isSummaryDisabled" (change)="enableWeeklySubLevelcheckbox($event)" value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
 
@@ -73,6 +73,7 @@
                   </mat-radio-group>
                 </div>
               </div>
+              -->
               <br>
               <div class="section-sublevel-1">
                 <div class="row">
@@ -98,7 +99,7 @@
 
       </mat-card>
     </div>
-
+    <!--
     <div class="event-table col-sm-6">
       <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
         <h1>Rules</h1>
@@ -111,8 +112,8 @@
                 <h3>Type is privilege escalation</h3>
               </div>
               <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" disabled>Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" disabled>Delete</button>
+                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
+                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
               </div>
             </div>
           </div>
@@ -126,19 +127,19 @@
                 <h3>Image is rabbitmq/ rabbitmq</h3>
               </div>
               <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" disabled>Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" disabled>Delete</button>
+                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
+                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
               </div>
             </div>
           </div>
           <br>
           <div>
-            <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()" disabled>Edit</button>
+            <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()" >Edit</button>
           </div>
         </div>
       </mat-card>
     </div>
-
+-->
   </div>
 
 </div>
