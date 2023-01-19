@@ -12,7 +12,7 @@ export class EmailService {
   ) {}
 
   async send(mailData: ISendMailOptions): Promise<any> {
-    let dateTime = new Date();
+
     this.mineLoggerService.log('Sending email....', EmailService.name);
     try {
       if (this.configService.get('email.smtp.debug')) {
@@ -24,13 +24,17 @@ export class EmailService {
 
       if (this.configService.get('email.smtp.host')) {
         await this.mailerService.sendMail(mailData); // send async
+
+        return Date.now();
       }
-      return Date.now();
     } catch (e) {
       // ope this is a problem. we could end up with an infinite loop:
       // the email service fails, which logs an error, which tries to send an email, which fails, which logs an error, which tries to send an email...
       this.mineLoggerService.error({label: e.message, data: null}, e, EmailService.name);
+
+      return null;
     }
-    return null;
+
+
   }
 }

@@ -145,7 +145,7 @@ export class FalcoService {
     }
 
     async sendFalcoEmail(emailReceiver: string, clusterId: number, falcoId: number, falcoSeverity: string, falcoNamespace: string, falcoSignature: string, newFalcoLog: FalcoDto): Promise<any>{
-        this.email.send({
+        const savedTime = this.email.send({
             to: `${emailReceiver}`,
             from: this.configService.get('email.default.sender'),
             subject: `New ${falcoSeverity} Project Falco Alert in ${falcoNamespace}`,
@@ -157,6 +157,7 @@ export class FalcoService {
         }).catch(e => {
             console.log('Error sending falco email: ' + e);
         });
+        return savedTime;
     }
 
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any>{

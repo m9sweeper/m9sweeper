@@ -138,41 +138,42 @@ export class FalcoController {
 
         // get all admin email addresses
         const allAdminEmail = await this.falcoService.getAllAdminsToMail();
+        // To test email: const allAdminEmailArray = ['some_email_address'] and comment out forEach();
+        const allAdminEmailArray = [];
+        allAdminEmail.forEach( element => allAdminEmailArray.push(element.email));
 
-        // Parse data from falco settings json fields
+        // Parse data from new falco log fields
         const falcoId = newFalcoLog[0].id;
         const falcoSignature = newFalcoLog[0].anomaly_signature;
         const falcoNamespace = newFalcoLog[0].namespace;
         const falcoSeverity = newFalcoLog[0].level;
 
+        // Parse data from falco settings json fields
         const severityLevel = falcoSetting["severity_level"];
         const anomalyFrequency = (falcoSetting['anomaly_notification_frequency'] * 24 * 60 * 60 * 1000);
         const weekDay = falcoSetting['weekday'];
-        const emailList = falcoSetting['email_list'];
+        const emailList = falcoSetting['email_list'].split(',');
+        const cleanEmailList =[];
+        for(const ele of emailList){ cleanEmailList.push(ele.trim());}
+        const whoToNotify = falcoSetting['who_to_notify'];
 
-        console.log('severity level', severityLevel);
-        console.log('email list:', emailList );
 
         if (!severityLevel.includes(falcoSeverity)){
             return; // no need to send email - does not match the severity level we send emails for
         }
-        console.log("severity matched!")
 
         // Have we already sent an email ?
         const lastEmailSentTime = await this.falcoService.falcoEmailAlreadySent(clusterId, falcoSignature);
-        console.log("last email sent time", lastEmailSentTime);
 
         // if no email record then send an email now
-        if (!lastEmailSentTime || lastEmailSentTime <= Date.now() - lastEmailSentTime) {
-            // if send to all admin
-            const usersToSendTo = (falcoSetting.whoToNotify === 'allAdmin') ? allAdminEmail : emailList;
-            console.log('user to sent to', usersToSendTo );
+        if (lastEmailSentTime === null || lastEmailSentTime <= (Date.now() - lastEmailSentTime)) {
+            // send to all admin OR specific email list?
+            const usersToSendTo = (whoToNotify === 'allAdmin') ? allAdminEmailArray : emailList;
 
             for (const user of usersToSendTo) {
-                console.log('user', user);
-                /*
-                await this.falcoService.sendFalcoEmail(
-                     user.email,
+                ///*
+                const emailSentTime = await this.falcoService.sendFalcoEmail(
+                     user,
                      clusterId,
                      falcoId,
                      falcoSeverity,
@@ -181,22 +182,17 @@ export class FalcoController {
                      newFalcoLog
                 );
 
-                 */
+                // if email is sent then add a falco email record
+                if (emailSentTime !== null && emailSentTime !== undefined) {
+                  await this.falcoService.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
+                } else {
+                    console.log("Failed to send email!")
+                }
+
+                 //*/
+
             }
         }
-        /*else {
-        console.log("else: has it reached the frequency per time range?");
-        console.log("anomaly frequency", anomalyFrequency);
-        const currentTime = Date.now();
-        const timeDifference = currentTime - lastEmailSentTime;
-        // reach the frequency per time range
-        if (timeDifference >= anomalyFrequency) {
-            // send email now
-
-        } else {
-            // schedule to send email
-        }
-    }*/
     }
 
     @Post(':clusterid/settings')
