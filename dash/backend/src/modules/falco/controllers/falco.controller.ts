@@ -153,12 +153,14 @@ export class FalcoController {
         const anomalyFrequency = (falcoSetting['anomaly_notification_frequency'] * 24 * 60 * 60 * 1000);
         const weekDay = falcoSetting['weekday'];
         const emailList = falcoSetting['email_list'].split(',');
-        const cleanEmailList =[];
-        for(const ele of emailList){ cleanEmailList.push(ele.trim());}
+        const cleanEmailList = [];
+        for (const ele of emailList) {
+            cleanEmailList.push(ele.trim());
+        }
         const whoToNotify = falcoSetting['who_to_notify'];
 
 
-        if (!severityLevel.includes(falcoSeverity)){
+        if (!severityLevel.includes(falcoSeverity)) {
             return; // no need to send email - does not match the severity level we send emails for
         }
 
@@ -167,30 +169,40 @@ export class FalcoController {
 
         // if no email record then send an email now
         if (lastEmailSentTime === null || lastEmailSentTime <= (Date.now() - lastEmailSentTime)) {
-            // send to all admin OR specific email list?
-            const usersToSendTo = (whoToNotify === 'allAdmin') ? allAdminEmailArray : emailList;
+            await this.sendFalcoEmail(whoToNotify, allAdminEmailArray, emailList, clusterId, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog);
+        } else {
+            // when was the last email sent?
+            const timeDifference = Date.now() - lastEmailSentTime;
 
-            for (const user of usersToSendTo) {
-                ///*
-                const emailSentTime = await this.falcoService.sendFalcoEmail(
-                     user,
-                     clusterId,
-                     falcoId,
-                     falcoSeverity,
-                     falcoNamespace,
-                     falcoSignature,
-                     newFalcoLog
-                );
+            // if the last sent email was older than anomalyFrequency then send
+            if (timeDifference > anomalyFrequency) {
+                await this.sendFalcoEmail(whoToNotify, allAdminEmailArray, emailList, clusterId, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog);
+            } else {
+                console.log('Email notification was already sent for this anomaly!');
+            }
+        }
+    }
 
-                // if email is sent then add a falco email record
-                if (emailSentTime !== null && emailSentTime !== undefined) {
-                  await this.falcoService.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
-                } else {
-                    console.log("Failed to send email!")
-                }
+    private async sendFalcoEmail(whoToNotify, allAdminEmailArray: any[], emailList, clusterId: number, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog: FalcoDto) {
+        // send to all admin OR specific email list?
+        const usersToSendTo = (whoToNotify === 'allAdmin') ? allAdminEmailArray : emailList;
 
-                 //*/
+        for (const user of usersToSendTo) {
+            const emailSentTime = await this.falcoService.sendFalcoEmail(
+                user,
+                clusterId,
+                falcoId,
+                falcoSeverity,
+                falcoNamespace,
+                falcoSignature,
+                newFalcoLog
+            );
 
+            // if email is sent then add a falco email record
+            if (emailSentTime !== null && emailSentTime !== undefined) {
+                await this.falcoService.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
+            } else {
+                console.log("Failed to send email!")
             }
         }
     }
