@@ -25,7 +25,7 @@ export class FalcoSettingsComponent implements OnInit {
   isAnomalyDisabled = true;
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
-  isSpecificEmailDisabled = true;
+  isSpecificEmailHidden = true;
 
   weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -131,8 +131,11 @@ export class FalcoSettingsComponent implements OnInit {
     this.isWeeklyDisabled = !this.isWeeklyDisabled;
   }
 
+  notEnableSpecificEmailSubLevelcheckbox($event: MatRadioChange): void{
+    this.isSpecificEmailHidden = true;
+  }
   enableSpecificEmailSubLevelcheckbox($event: MatRadioChange): void{
-    this.isSpecificEmailDisabled = !this.isSpecificEmailDisabled;
+    this.isSpecificEmailHidden = false;
   }
   onClickEdit() {
 

@@ -57,7 +57,6 @@ export class FalcoService {
   }
 
   addFalcoSetting(clusterId: number, settingPayload: IFalcoSettingPayload): Observable<IServerResponse<IFalcoSettingPayload>>{
-    console.log('falco service');
     return this.httpClient.post(`/api/falco/${clusterId}/settings`, settingPayload);
   }
 

@@ -31,13 +31,12 @@
                   <div class ="row">
                     <h3>Notify no more than once every</h3>
                     &nbsp;&nbsp;
-                    <mat-form-field appearance="outline" >
-                      <input [readonly]="isAnomalyDisabled" matInput type="number" formControlName="anomalyFrequency">
-                    </mat-form-field>&nbsp;&nbsp;
+                      <input [readonly]="isAnomalyDisabled"  type="text" size= "5" formControlName="anomalyFrequency">
+                    &nbsp;&nbsp;
                     <h3>day(s)</h3>
                   </div>
-                  <div class ="row">
-                    <h3>Severity Levels to Include</h3>&nbsp;&nbsp;
+                  <div>
+                    <h3>Severity Levels to Include</h3>
                     <mat-form-field appearance="fill" [formGroup]="settingForm">
                         <mat-select [disabled]="isAnomalyDisabled" formControlName="selectedPriorityLevels"
                                     multiple>
@@ -81,11 +80,10 @@
                 </div>
                 <div class="section-sublevel-2">
                   <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
-                    <mat-radio-button value="allAdmin">All Admin</mat-radio-button> <br>
-                    <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button> &nbsp;&nbsp;
-                    <mat-form-field appearance="outline">
-                      <textarea [readonly]="isSpecificEmailDisabled" matInput  formControlName="emailList"></textarea>
-                    </mat-form-field>
+                    <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admin</mat-radio-button> <br>
+                    <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button>
+                    <br>
+                      <textarea [style.display]="isSpecificEmailHidden? 'none' :'block'" formControlName="emailList"></textarea>
                   </mat-radio-group>
                 </div>
               </div>
