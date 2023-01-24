@@ -154,8 +154,8 @@ export class FalcoService {
             subject: `New ${falcoSeverity} Project Falco Alert in ${falcoNamespace}`,
             template: 'falco-log-email',
             context: {
-                falcoLog: instanceToPlain(newFalcoLog[0]),
-                falcoLogTags: instanceToPlain(newFalcoLog[0].raw["tags"]),
+                falcoLog: instanceToPlain(newFalcoLog),
+                falcoLogTags: instanceToPlain(newFalcoLog.raw["tags"]),
                 moreDetailsLink: `https://dev-m9sweeper.intelletive.com/private/clusters/${clusterId}/falco/more/${falcoId}/signature/${falcoSignature}`,
             }
         }).catch(e => {
@@ -190,9 +190,6 @@ export class FalcoService {
         const falcoSignature = newFalcoLog.anomalySignature;
         const falcoNamespace = newFalcoLog.namespace;
         const falcoSeverity = newFalcoLog.level;
-
-        //console.log('new falco log fields', falcoId, falcoNamespace, falcoSignature, falcoSeverity);
-        //return;
 
         // Parse data from falco settings json fields
         const severityLevel = falcoSetting.severityLevel;
