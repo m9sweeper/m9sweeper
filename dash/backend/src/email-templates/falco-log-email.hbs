@@ -1,36 +1,41 @@
-<div class="width: 100%; background-color: #EEEEEE; padding-left: auto; padding-right: auto; padding-bottom: 50px; padding-top: 50px">
-    <div style="width: 100%; max-width: 1000px; border: 1px solid #AAAAAA; margin-left: 50px; margin-right: 50px; padding: 20px">
-        <p>Hello there,</p>
-        <p>A new {{falcoLog.rule}} error occurred in {{falcoLog.namespace}}.</p>
+<div style="width: 100%; background-color: #EEEEEE; padding-bottom: 40px; padding-top: 40px; box-sizing: border-box;">
+    <div style="padding-left: 40px;padding-right: 40px;width: 100%;box-sizing: border-box;">
+        <div style="width: 100%; max-width: 1000px; border: 1px solid #AAAAAA; margin-left: auto; margin-right: auto; padding: 20px; background-color: white; box-sizing: border-box;">
+            <p>Hello there,</p>
+            <p>A new {{falcoLog.rule}} error occurred in {{falcoLog.namespace}}.</p>
 
-        <table>
-            <tr>
-                <th style="text-align: left; width: 25px">Namespace:</th> <td style="text-align: left; ">{{falcoLog.namespace}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; width: 25px">Pod:</th> <td style="text-align: left; ">{{falcoLog.container}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; width: 25px">Image:</th> <td style="text-align: left; ">{{falcoLog.image}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; width: 25px">Severity:</th> <td style="text-align: left; ">{{falcoLog.level}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; width: 25px">Rule:</th> <td style="text-align: left; ">{{falcoLog.rule}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left; width: 25px">Tags:</th> <td style="text-align: left; ">{{falcoLogTags}}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left;">Message:</th>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <th style="text-align: left; width: 25px">Namespace:</th> <td style="text-align: left; ">{{falcoLog.namespace}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 25px">Pod:</th> <td style="text-align: left; ">{{falcoLog.container}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 25px">Image:</th> <td style="text-align: left; ">{{falcoLog.image}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 25px">Severity:</th> <td style="text-align: left; ">{{falcoLog.level}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 25px">Rule:</th> <td style="text-align: left; ">{{falcoLog.rule}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; width: 25px">Tags:</th> <td style="text-align: left; ">{{falcoLogTags}}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left;" colspan="2">Message:</th>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <code >{{falcoLog.message}}</code>
+                    </td>
+                </tr>
+            </table>
 
-        <blockquote >{{falcoLog.message}}</blockquote>
+            <br><br>
+            <a href="{{moreDetailsLink}}" target="_blank">View More Details</a>
 
-        <br><br>
-        <a href="{{moreDetailsLink}}" target="_blank">View More Details</a>
-
+        </div>
     </div>
 </div>

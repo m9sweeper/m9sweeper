@@ -275,6 +275,12 @@ export class FalcoDao {
             .into('falco_email')
             .returning(['*']);
     }
+
+    /**
+     * Finds when the falco email was las sent for a particular anomoly for a particular cluster
+     * @param clusterId
+     * @param falcoSignature signature of falco event. corresponds with anomoly_signature field.
+     */
     async falcoEmailAlreadySent(clusterId: number, falcoSignature: string): Promise<any> {
 
         const knex = await this.databaseService.getConnection();
