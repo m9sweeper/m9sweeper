@@ -1,4 +1,17 @@
-import {Body, Controller, Get, Header, HttpException, HttpStatus, Param, Post, Query, UseGuards, UseInterceptors} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Header,
+    HttpException,
+    HttpStatus,
+    Param,
+    Post,
+    Query,
+    UnauthorizedException,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {AllowedAuthorityLevels} from '../../../decorators/allowed-authority-levels.decorator';
 import {AuthorityGuard} from '../../../guards/authority.guard';
 import {AuthGuard} from '../../../guards/auth.guard';
@@ -14,6 +27,9 @@ import {UserDao} from "../../user/dao/user.dao";
 import {AuthService} from "../../auth/services/auth.service";
 import {AuthorityId} from "../../user/enum/authority-id";
 import {FalcoCountDto} from "../dto/falco-count.dto";
+import {FalcoSettingDto} from "../dto/falco-setting.dto";
+import {format, set, sub} from "date-fns";
+
 
 @ApiTags('Project Falco')
 @Controller()
@@ -24,6 +40,8 @@ export class FalcoController {
         private readonly apiKeyDao: ApiKeyDao,
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
+        // private readonly falcoEmailCommand: FalcoEmailCommand,
+
     ) {}
 
     @Get()
@@ -88,27 +106,49 @@ export class FalcoController {
 
 
     @Post(':clusterid/create')
-    // @TODO: Update to use same authorization method as kube-bench and kube-hunter
     async createFalcoLog(
         @Param('clusterid') clusterId: number,
         @Body() falcoLog: FalcoWebhookInputDto,
         @Query('key') key: string
-    ): Promise<number> {
-
-        //find user authority by user's apikey
+    ): Promise<FalcoDto> {
+        // look up user by api key
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
-        // if the current user's api is valid
-        if (currentUserAuthObj !== null && currentUserAuthObj != undefined ) {
-            // get all authorities from the current user
-            const currentUserAuth = currentUserAuthObj[0].authorities;
-            // get Falco authority from Authorityid
-            let authorityArr: AuthorityId [] = [AuthorityId.FALCO];
-            // is the user a Falco user
-            let isFalcoUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
-            if (isFalcoUser) {
-                return this.falcoService.createFalcoLog(clusterId, falcoLog);
-            }
+        if (!currentUserAuthObj) {
+            throw new UnauthorizedException('Access Denied!');
         }
+
+        // get all authorities from the current user
+        const currentUserAuth = currentUserAuthObj[0].authorities;
+        let isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
+        if (!isFalcoUser) {
+            throw new UnauthorizedException('Access Denied!');
+        }
+
+        // @TODO: Will implement falco filters/rules settings at a later time
+        // check if falco settings rules should be applied
+        /*
+            const rules = getFalcoSettingsRules(clusterId);
+            for (rules : rule) {
+                if (rule.isRelevant(event)) {
+                    if (rule.affect === 'ignore') {
+                        return; // don't save this event - it is being filtered out
+                    }
+                }
+            }
+        */
+
+        // Saved new falco log
+        return await this.falcoService.createFalcoLog(clusterId, falcoLog);
+    }
+
+
+    @Post(':clusterid/settings')
+    async createFalcoSetting(
+        @Param('clusterid') clusterId: number,
+        @Body() falcoSetting: FalcoSettingDto
+    ): Promise <any> {
+        const result = this.falcoService.createFalcoSetting(clusterId, falcoSetting);
+        return result;
     }
 
     @Get('/download')

@@ -4,6 +4,9 @@ import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {format, set, sub} from "date-fns";
+import {FalcoSettingDto} from "../dto/falco-setting.dto";
+import * as knexnest from 'knexnest'
+import {FalcoEmailDto} from "../dto/falco-email.dto";
 
 
 @Injectable()
@@ -192,11 +195,108 @@ export class FalcoDao {
         }
     }
 
-        async createFalcoLog(falcoLog: FalcoDto): Promise<number> {
+    async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {
         const knex = await this.databaseService.getConnection();
-        return knex
+        const query = plainToInstance(FalcoDto, await knex
             .insert(instanceToPlain(falcoLog))
             .into('project_falco_logs')
-            .returning(['id']);
+            .returning(['*']));
+
+        // if record is added, return the record
+        if (query.length > 0){
+            return query[0];
+        }
+
+        return null;
+    }
+
+    async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise<any>{
+        const knex = await this.databaseService.getConnection();
+        const subquery = await knex.raw(`select exists( select 1 from falco_settings where cluster_id =? )`, [clusterId])
+            .then(res => res?.rows[0]?.exists);
+
+        if (!subquery){
+            const result = knex
+                .insert(instanceToPlain(falcoSetting))
+                .into('falco_settings')
+                .returning(['*']);
+
+            return result;
+        } else {
+            const result = knex('falco_settings').update(instanceToPlain(falcoSetting)).where('cluster_id', clusterId);
+            return result;
+        }
+    }
+
+    async findFalcoSettingByClusterId(clusterId: number): Promise<FalcoSettingDto> {
+        const knex = await this.databaseService.getConnection();
+
+        // see if any settings matches the clusterid
+        const query = plainToInstance(FalcoSettingDto, await knex.select().from('falco_settings').where('cluster_id', clusterId));
+
+        // if there is, return the record
+        if (query.length > 0){
+            return query[0];
+        }
+
+        return null;
+    }
+
+    async getAllAdminsToMail(): Promise<any> {
+        const knex = await this.databaseService.getConnection();
+        const query = knex
+            .select([
+                'u.email as _email',
+                knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as "_fullName"`)
+            ])
+            .from('users as u')
+            .leftJoin('user_authorities as ua', function(){
+                this.on('u.id','=','ua.user_id')
+            })
+            .whereIn('ua.authority_id', [1,2])
+        return knexnest(query)
+            .then(data => {
+                return data;
+            });
+    }
+
+    async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any> {
+        let falcoEmailObj = new FalcoEmailDto();
+        const emailSentDate = format(set(new Date(emailSentTime), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0}),'yyyy-MM-dd');
+
+        falcoEmailObj.creationTimestamp = emailSentTime;
+        falcoEmailObj.calendarDate = emailSentDate;
+        falcoEmailObj.clusterId = clusterId;
+        falcoEmailObj.anomalySignature = falcoSignature;
+
+        const knex = await this.databaseService.getConnection();
+        return knex
+            .insert(instanceToPlain(falcoEmailObj))
+            .into('falco_email')
+            .returning(['*']);
+    }
+
+    /**
+     * Finds when the falco email was las sent for a particular anomoly for a particular cluster
+     * @param clusterId
+     * @param falcoSignature signature of falco event. corresponds with anomoly_signature field.
+     */
+    async falcoEmailAlreadySent(clusterId: number, falcoSignature: string): Promise<any> {
+
+        const knex = await this.databaseService.getConnection();
+        const query = await knex.raw(`select exists( select 1 from falco_email where cluster_id =? and anomaly_signature =? )`, [clusterId, falcoSignature])
+            .then(res => res?.rows[0]?.exists);
+
+        if (query){
+            const lastEmailSentTime = await knex
+                .select('creation_timestamp')
+                .from('falco_email')
+                .where('cluster_id', clusterId)
+                .andWhere('anomaly_signature', falcoSignature)
+                .returning('*');
+            return lastEmailSentTime[0].creation_timestamp;
+        } else {
+            return null;
+        }
     }
 }
