@@ -8,30 +8,40 @@
         width: 20%;
     }
 </style>
+<div class="width: 100%; background-color: #EEEEEE; padding-left: auto; padding-right: auto; padding-bottom: 50px; padding-top: 50px">
+    <div style="width: 100%; max-width: 1000px; border: 1px solid #AAAAAA; margin-left: 50px; margin-right: 50px; padding: 20px">
+        <p>Hello there,</p>
+        <p>A new {{falcoLog.rule}} error occurred in {{falcoLog.namespace}}</p>
 
-<table>
-        <tr>
-            <th>Namespace:</th> <td>{{falcoLog.namespace}}</td>
-        </tr>
-        <tr>
-            <th>Pod:</th> <td>{{falcoLog.container}}</td>
-        </tr>
-        <tr>
-            <th>Image:</th> <td>{{falcoLog.image}}</td>
-        </tr>
-        <tr>
-            <th>Severity</th> <td>{{falcoLog.level}}</td>
-        </tr>
-        <tr>
-            <th>Rule</th> <td>{{falcoLog.rule}}</td>
-        </tr>
-        <tr>
-            <th>Tags</th> <td>{{falcoLogTags}}</td>
-        </tr>
-        <tr>
-            <th>Message</th> <td>{{falcoLog.message}}</td>
-        </tr>
+        <table>
+            <tr>
+                <th>Namespace:</th> <td>{{falcoLog.namespace}}</td>
+            </tr>
+            <tr>
+                <th>Pod:</th> <td>{{falcoLog.container}}</td>
+            </tr>
+            <tr>
+                <th>Image:</th> <td>{{falcoLog.image}}</td>
+            </tr>
+            <tr>
+                <th>Severity:</th> <td>{{falcoLog.level}}</td>
+            </tr>
+            <tr>
+                <th>Rule:</th> <td>{{falcoLog.rule}}</td>
+            </tr>
+            <tr>
+                <th>Tags:</th> <td>{{falcoLogTags}}</td>
+            </tr>
+            <tr>
+                <th colspan="2">Message</th>
+            </tr>
+            <tr>
+                <td colspan="2">{{falcoLog.message}}</td>
+            </tr>
 
-</table>
-<br><br>
-<a href="{{moreDetailsLink}}" target="_blank">View More Details</a>
+        </table>
+        <br><br>
+        <a href="{{moreDetailsLink}}" target="_blank">View More Details</a>
+
+    </div>
+</div>

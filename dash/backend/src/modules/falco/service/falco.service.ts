@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, LoggerService} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoDao} from '../dao/falco.dao';
 import {createHash} from 'crypto';
@@ -11,6 +11,7 @@ import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
+import {MineLoggerService} from "../../shared/services/mine-logger.service";
 
 @Injectable()
 export class FalcoService {
@@ -19,6 +20,7 @@ export class FalcoService {
         private readonly csvService: CsvService,
         private readonly email: EmailService,
         private readonly configService: ConfigService,
+        private readonly loggerService: MineLoggerService,
     ) {}
 
     async getFalcoLogs(
@@ -125,9 +127,10 @@ export class FalcoService {
         falcoLog.anomalySignatureGlobal = createHash('md5')
             .update(globalSignature)
             .digest('hex');
-        const createdLog = this.falcoDao.createFalcoLog(falcoLog);
+        const createdLog = await this.falcoDao.createFalcoLog(falcoLog);
 
-        // @TODO: Email alert logic should go here
+        // look up falco settings in order to decide if we need to send email(s) to administrators
+        await this.sendFalcoEmailAlert(clusterId, createdLog);
 
         return createdLog;
     }
@@ -145,7 +148,7 @@ export class FalcoService {
     }
 
     async sendFalcoEmail(emailReceiver: string, clusterId: number, falcoId: number, falcoSeverity: string, falcoNamespace: string, falcoSignature: string, newFalcoLog: FalcoDto): Promise<any>{
-        const savedTime = this.email.send({
+        const emailSentTime = this.email.send({
             to: `${emailReceiver}`,
             from: this.configService.get('email.default.sender'),
             subject: `New ${falcoSeverity} Project Falco Alert in ${falcoNamespace}`,
@@ -158,7 +161,7 @@ export class FalcoService {
         }).catch(e => {
             console.log('Error sending falco email: ' + e);
         });
-        return savedTime;
+        return emailSentTime;
     }
 
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any>{
@@ -183,22 +186,21 @@ export class FalcoService {
         allAdminEmail.forEach( element => allAdminEmailArray.push(element.email));
 
         // Parse data from new falco log fields
-        const falcoId = newFalcoLog[0].id;
-        const falcoSignature = newFalcoLog[0].anomaly_signature;
-        const falcoNamespace = newFalcoLog[0].namespace;
-        const falcoSeverity = newFalcoLog[0].level;
+        const falcoId = newFalcoLog.id;
+        const falcoSignature = newFalcoLog.anomalySignature;
+        const falcoNamespace = newFalcoLog.namespace;
+        const falcoSeverity = newFalcoLog.level;
+
+        //console.log('new falco log fields', falcoId, falcoNamespace, falcoSignature, falcoSeverity);
+        //return;
 
         // Parse data from falco settings json fields
-        const severityLevel = falcoSetting["severity_level"];
-        const anomalyFrequency = (falcoSetting['anomaly_notification_frequency'] * 24 * 60 * 60 * 1000);
-        const weekDay = falcoSetting['weekday'];
-        const emailList = falcoSetting['email_list'].split(',');
-        const cleanEmailList = [];
-        for (const ele of emailList) {
-            cleanEmailList.push(ele.trim());
-        }
-        const whoToNotify = falcoSetting['who_to_notify'];
-
+        const severityLevel = falcoSetting.severityLevel;
+        const anomalyAlertFrequencyAsMilliseconds = (falcoSetting.anomalyFrequency * 24 * 60 * 60 * 1000);
+        const weekDay = falcoSetting.weekday;
+        const emailList = falcoSetting.emailList.split(',');
+        const cleanEmailList = emailList.map(e => e.trim()).filter(e => e !== '');
+        const whoToNotify = falcoSetting.whoToNotify;
 
         if (!severityLevel.includes(falcoSeverity)) {
             return; // no need to send email - does not match the severity level we send emails for
@@ -208,18 +210,10 @@ export class FalcoService {
         const lastEmailSentTime = await this.falcoEmailAlreadySent(clusterId, falcoSignature);
 
         // if no email record then send an email now
-        if (lastEmailSentTime === null || lastEmailSentTime <= (Date.now() - lastEmailSentTime)) {
-            await this.sendFalcoEmailAndAddFalcoEmailRecord(whoToNotify, allAdminEmailArray, emailList, clusterId, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog);
+        if (lastEmailSentTime === null || lastEmailSentTime <= (Date.now() - anomalyAlertFrequencyAsMilliseconds)) {
+            await this.sendFalcoEmailAndAddFalcoEmailRecord(whoToNotify, allAdminEmailArray, cleanEmailList, clusterId, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog);
         } else {
-            // when was the last email sent?
-            const timeDifference = Date.now() - lastEmailSentTime;
-
-            // if the last sent email was older than anomalyFrequency then send
-            if (timeDifference > anomalyFrequency) {
-                await this.sendFalcoEmailAndAddFalcoEmailRecord(whoToNotify, allAdminEmailArray, emailList, clusterId, falcoId, falcoSeverity, falcoNamespace, falcoSignature, newFalcoLog);
-            } else {
-                console.log('Email notification was already sent for this anomaly!');
-            }
+            this.loggerService.log('Email notification was already sent for this anomaly!');
         }
     }
 
@@ -242,7 +236,7 @@ export class FalcoService {
             if (emailSentTime !== null && emailSentTime !== undefined) {
                 await this.addFalcoEmail(emailSentTime, clusterId, falcoSignature);
             } else {
-                console.log("Failed to send email!")
+                this.loggerService.log("Failed to send email!");
             }
         }
     }

@@ -197,10 +197,17 @@ export class FalcoDao {
 
         async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {
         const knex = await this.databaseService.getConnection();
-        return knex
+        const query = plainToInstance(FalcoDto, await knex
             .insert(instanceToPlain(falcoLog))
             .into('project_falco_logs')
-            .returning(['*']);
+            .returning(['*']));
+
+        // if record is added, return the record
+        if (query.length > 0){
+            return query[0];
+        }
+
+        return null;
     }
 
         async createFalcoSetting(clusterId: number, falcoSetting: FalcoSettingDto): Promise<any>{
@@ -215,7 +222,7 @@ export class FalcoDao {
                     .returning(['*']);
 
                 return result;
-            }else {
+            } else {
                 const result = knex('falco_settings').update(instanceToPlain(falcoSetting)).where('cluster_id', clusterId);
                 return result;
             }
@@ -225,7 +232,7 @@ export class FalcoDao {
         const knex = await this.databaseService.getConnection();
 
         // see if any settings matches the clusterid
-        const query = await knex.select().from('falco_settings').where('cluster_id', clusterId);
+        const query = plainToInstance(FalcoSettingDto, await knex.select().from('falco_settings').where('cluster_id', clusterId));
 
         // if there is, return the record
         if (query.length > 0){
@@ -252,6 +259,7 @@ export class FalcoDao {
                 return data;
             });
     }
+
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any> {
         let falcoEmailObj = new FalcoEmailDto();
         const emailSentDate = format(set(new Date(emailSentTime), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0}),'yyyy-MM-dd');

@@ -1,4 +1,17 @@
-import {Body, Controller, Get, Header, HttpException, HttpStatus, Param, Post, Query, UseGuards, UseInterceptors} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    Header,
+    HttpException,
+    HttpStatus,
+    Param,
+    Post,
+    Query,
+    UnauthorizedException,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import {AllowedAuthorityLevels} from '../../../decorators/allowed-authority-levels.decorator';
 import {AuthorityGuard} from '../../../guards/authority.guard';
 import {AuthGuard} from '../../../guards/auth.guard';
@@ -101,14 +114,16 @@ export class FalcoController {
         // look up user by api key
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
         if (!currentUserAuthObj) {
-            return; // @TODO: Should throw access denied exception
+            throw new UnauthorizedException('Access Denied!');
+            return;
         }
 
         // get all authorities from the current user
         const currentUserAuth = currentUserAuthObj[0].authorities;
         let isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
         if (!isFalcoUser) {
-            return; // @TODO: Should throw access denied exception
+            throw new UnauthorizedException('Access Denied!');
+            return;
         }
 
         // check if falco settings rules should be applied
@@ -122,10 +137,7 @@ export class FalcoController {
         }*/
 
         // Saved new falco log
-        const newFalcoLog = await this.falcoService.createFalcoLog(clusterId, falcoLog);
-
-        // look up falco settings in order to decide if we need to send email(s) to administrators
-        await this.falcoService.sendFalcoEmailAlert(clusterId, newFalcoLog);
+        return await this.falcoService.createFalcoLog(clusterId, falcoLog);
     }
 
 
@@ -134,8 +146,6 @@ export class FalcoController {
         @Param('clusterid') clusterId: number,
         @Body() falcoSetting: FalcoSettingDto
     ): Promise <any> {
-        console.log('backend falco controller');
-        console.log('falcosetting:', falcoSetting);
         const result = this.falcoService.createFalcoSetting(clusterId, falcoSetting);
         return result;
     }

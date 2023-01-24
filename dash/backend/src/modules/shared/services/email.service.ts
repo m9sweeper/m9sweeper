@@ -25,7 +25,7 @@ export class EmailService {
       if (this.configService.get('email.smtp.host')) {
         await this.mailerService.sendMail(mailData); // send async
 
-        return Date.now();
+        return Date.now(); // time when the email is sent
       }
     } catch (e) {
       // ope this is a problem. we could end up with an infinite loop:
