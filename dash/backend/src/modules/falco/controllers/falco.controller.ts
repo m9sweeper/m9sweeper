@@ -115,7 +115,6 @@ export class FalcoController {
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
         if (!currentUserAuthObj) {
             throw new UnauthorizedException('Access Denied!');
-            return;
         }
 
         // get all authorities from the current user
@@ -123,18 +122,20 @@ export class FalcoController {
         let isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
         if (!isFalcoUser) {
             throw new UnauthorizedException('Access Denied!');
-            return;
         }
 
+        // @TODO: Will implement falco filters/rules settings at a later time
         // check if falco settings rules should be applied
-        /*const rules = getFalcoSettingsRules(clusterId);
-        for (rules : rule) {
-            if (rule.isRelevant(event)) {
-                if (rule.affect === 'ignore') {
-                    return; // don't save this event - it is being filtered out
+        /*
+            const rules = getFalcoSettingsRules(clusterId);
+            for (rules : rule) {
+                if (rule.isRelevant(event)) {
+                    if (rule.affect === 'ignore') {
+                        return; // don't save this event - it is being filtered out
+                    }
                 }
             }
-        }*/
+        */
 
         // Saved new falco log
         return await this.falcoService.createFalcoLog(clusterId, falcoLog);

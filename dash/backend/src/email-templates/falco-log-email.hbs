@@ -1,45 +1,34 @@
-<style>
-    td{
-        text-align: left;
-        width: 80%;
-    }
-    th {
-        text-align: left;
-        width: 20%;
-    }
-</style>
 <div class="width: 100%; background-color: #EEEEEE; padding-left: auto; padding-right: auto; padding-bottom: 50px; padding-top: 50px">
     <div style="width: 100%; max-width: 1000px; border: 1px solid #AAAAAA; margin-left: 50px; margin-right: 50px; padding: 20px">
         <p>Hello there,</p>
-        <p>A new {{falcoLog.rule}} error occurred in {{falcoLog.namespace}}</p>
+        <p>A new {{falcoLog.rule}} error occurred in {{falcoLog.namespace}}.</p>
 
         <table>
             <tr>
-                <th>Namespace:</th> <td>{{falcoLog.namespace}}</td>
+                <th style="text-align: left; width: 25px">Namespace:</th> <td style="text-align: left; ">{{falcoLog.namespace}}</td>
             </tr>
             <tr>
-                <th>Pod:</th> <td>{{falcoLog.container}}</td>
+                <th style="text-align: left; width: 25px">Pod:</th> <td style="text-align: left; ">{{falcoLog.container}}</td>
             </tr>
             <tr>
-                <th>Image:</th> <td>{{falcoLog.image}}</td>
+                <th style="text-align: left; width: 25px">Image:</th> <td style="text-align: left; ">{{falcoLog.image}}</td>
             </tr>
             <tr>
-                <th>Severity:</th> <td>{{falcoLog.level}}</td>
+                <th style="text-align: left; width: 25px">Severity:</th> <td style="text-align: left; ">{{falcoLog.level}}</td>
             </tr>
             <tr>
-                <th>Rule:</th> <td>{{falcoLog.rule}}</td>
+                <th style="text-align: left; width: 25px">Rule:</th> <td style="text-align: left; ">{{falcoLog.rule}}</td>
             </tr>
             <tr>
-                <th>Tags:</th> <td>{{falcoLogTags}}</td>
+                <th style="text-align: left; width: 25px">Tags:</th> <td style="text-align: left; ">{{falcoLogTags}}</td>
             </tr>
             <tr>
-                <th colspan="2">Message</th>
+                <th style="text-align: left;">Message:</th>
             </tr>
-            <tr>
-                <td colspan="2">{{falcoLog.message}}</td>
-            </tr>
-
         </table>
+
+        <blockquote >{{falcoLog.message}}</blockquote>
+
         <br><br>
         <a href="{{moreDetailsLink}}" target="_blank">View More Details</a>
 

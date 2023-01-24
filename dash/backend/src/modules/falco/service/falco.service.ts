@@ -159,7 +159,7 @@ export class FalcoService {
                 moreDetailsLink: `https://dev-m9sweeper.intelletive.com/private/clusters/${clusterId}/falco/more/${falcoId}/signature/${falcoSignature}`,
             }
         }).catch(e => {
-            console.log('Error sending falco email: ' + e);
+            this.loggerService.log('Error sending falco email: ' + e);
         });
         return emailSentTime;
     }
