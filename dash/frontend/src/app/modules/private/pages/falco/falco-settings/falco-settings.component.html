@@ -37,15 +37,13 @@
                   </div>
                   <div>
                     <h3>Severity Levels to Include</h3>
-                    <mat-form-field appearance="fill" [formGroup]="settingForm">
-                        <mat-select [disabled]="isAnomalyDisabled" formControlName="selectedPriorityLevels"
-                                    multiple>
-                          <mat-option *ngFor="let level of priorityLevels"
-                                      [value]="level">
+                      <ul>
+                          <li *ngFor="let level of priorityLevels" [value]="level">
+                            <mat-checkbox [disabled]="isAnomalyDisabled"  formControlName="selectedPriorityLevels">
                             {{level}}
-                          </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                            </mat-checkbox>
+                          </li>
+                      </ul>
                   </div>
                 </div>
               </div>

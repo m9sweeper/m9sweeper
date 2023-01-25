@@ -60,6 +60,10 @@ export class FalcoService {
     return this.httpClient.post(`/api/falco/${clusterId}/settings`, settingPayload);
   }
 
+  findFalcoSetting(clusterId: number): Observable<IServerResponse<IFalcoSettingPayload>>{
+    return this.httpClient.get(`/api/falco/${clusterId}/findsetting`);
+  }
+
   buildParams(clusterId: number, options?: FalcoLogOptions
   ): HttpParams {
     let params: HttpParams = new HttpParams();

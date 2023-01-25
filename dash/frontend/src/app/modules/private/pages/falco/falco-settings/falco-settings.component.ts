@@ -5,10 +5,11 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {IUser} from '../../../../../core/entities/IUser';
 import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
+import {IUser} from '../../../../../core/entities/IUser';
+
 
 
 @Component({
@@ -22,10 +23,11 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  isAnomalyDisabled = true;
+  isAnomalyDisabled = false;
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
   isSpecificEmailHidden = true;
+  falcoSettingData: IFalcoSettingPayload;
 
   weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -55,6 +57,8 @@ export class FalcoSettingsComponent implements OnInit {
         this.clusterId = param.id;
       });
 
+
+    this.displaySetting();
   }
 
   onClickSave() {
@@ -136,6 +140,22 @@ export class FalcoSettingsComponent implements OnInit {
   }
   enableSpecificEmailSubLevelcheckbox($event: MatRadioChange): void{
     this.isSpecificEmailHidden = false;
+  }
+  displaySetting(){
+    this.falcoService.findFalcoSetting(this.clusterId).subscribe( (response: IServerResponse <IFalcoSettingPayload>) => {
+        this.falcoSettingData = response.data;
+        this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
+        this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
+        this.settingForm.get('selectedPriorityLevels').setValue(this.falcoSettingData.severityLevel);
+        this.settingForm.get('sendNotificationSummary').setValue(this.falcoSettingData.sendNotificationSummary);
+        this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
+        this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
+        this.settingForm.get('whoToNotify').setValue(this.falcoSettingData.whoToNotify);
+        this.settingForm.get('emailList').setValue(this.falcoSettingData.emailList);
+
+      }, (err) => {
+        alert(err);
+      });
   }
   onClickEdit() {
 
