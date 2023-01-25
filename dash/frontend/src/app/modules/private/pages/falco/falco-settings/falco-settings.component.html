@@ -40,8 +40,7 @@
                     <mat-form-field appearance="fill" [formGroup]="settingForm">
                       <mat-select [disabled]="isSeverityLevelDisabled" formControlName="selectedPriorityLevels"
                                   multiple>
-                        <mat-option *ngFor="let level of priorityLevels"
-                                    [value]="level">
+                        <mat-option *ngFor="let level of priorityLevels" [value]="level" (select)="anySavedLevel(level)">
                           {{level}}
                         </mat-option>
                       </mat-select>

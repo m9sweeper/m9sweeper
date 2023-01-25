@@ -26,6 +26,7 @@ export class FalcoSettingsComponent implements OnInit {
   isNotifyAnomalyDisabled = true;
   isSeverityLevelDisabled = false;
   isSpecificEmailHidden = true;
+  savedSeverityLevel = false;
 
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
@@ -150,11 +151,6 @@ export class FalcoSettingsComponent implements OnInit {
         this.falcoSettingData = response.data;
         this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
         this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
-        // this.settingForm.get('selectedPriorityLevels').setValue(this.falcoSettingData.severityLevel);
-        //if (this.falcoSettingData.severityLevel.length !== 0){
-        //  this.settingForm.get('savedLevels').setValue(this.falcoSettingData.severityLevel);
-        //}
-        this.settingForm.get('sendNotificationSummary').setValue(this.falcoSettingData.sendNotificationSummary);
         this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
         this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
         this.settingForm.get('whoToNotify').setValue(this.falcoSettingData.whoToNotify);
@@ -166,6 +162,16 @@ export class FalcoSettingsComponent implements OnInit {
       }, (err) => {
         alert(err);
       });
+  }
+  anySavedLevel(level: string){
+    console.log(JSON.parse( this.falcoSettingData.severityLevel));
+    for (const savedlevel of JSON.parse( this.falcoSettingData.severityLevel)) {
+      console.log('saved level', savedlevel);
+      if (level === savedlevel) {
+        console.log('true');
+        return true;
+      }
+    }
   }
   onClickEdit() {
 
