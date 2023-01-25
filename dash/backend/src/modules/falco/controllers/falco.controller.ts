@@ -104,6 +104,19 @@ export class FalcoController {
         return apiKeyFalco;
     }
 
+    @Get('/:clusterid/findsetting')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 201
+    })
+    async findFalcoSettingByClusterId(
+        @Param('clusterid') clusterId: number,
+    ): Promise< FalcoSettingDto>
+    {
+        return this.falcoService.findFalcoSettingByClusterId(clusterId);
+    }
+
 
     @Post(':clusterid/create')
     async createFalcoLog(
@@ -140,7 +153,6 @@ export class FalcoController {
         // Saved new falco log
         return await this.falcoService.createFalcoLog(clusterId, falcoLog);
     }
-
 
     @Post(':clusterid/settings')
     async createFalcoSetting(
