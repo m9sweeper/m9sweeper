@@ -23,10 +23,13 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  isAnomalyDisabled = false;
+  isNotifyAnomalyDisabled = true;
+  isSeverityLevelDisabled = false;
+  isSpecificEmailHidden = true;
+
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
-  isSpecificEmailHidden = true;
+
   falcoSettingData: IFalcoSettingPayload;
 
   weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -124,7 +127,8 @@ export class FalcoSettingsComponent implements OnInit {
   }
 
   enableAnomalySubLevelcheckbox(event: MatCheckboxChange): void{
-    this.isAnomalyDisabled = !this.isAnomalyDisabled;
+    this.isNotifyAnomalyDisabled = !this.isNotifyAnomalyDisabled;
+    this.isSeverityLevelDisabled = !this.isSeverityLevelDisabled;
   }
 
   enableSummarySubLevelcheckbox(event: MatCheckboxChange): void{
@@ -146,11 +150,17 @@ export class FalcoSettingsComponent implements OnInit {
         this.falcoSettingData = response.data;
         this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
         this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
-        this.settingForm.get('selectedPriorityLevels').setValue(this.falcoSettingData.severityLevel);
+        // this.settingForm.get('selectedPriorityLevels').setValue(this.falcoSettingData.severityLevel);
+        //if (this.falcoSettingData.severityLevel.length !== 0){
+        //  this.settingForm.get('savedLevels').setValue(this.falcoSettingData.severityLevel);
+        //}
         this.settingForm.get('sendNotificationSummary').setValue(this.falcoSettingData.sendNotificationSummary);
         this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
         this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
         this.settingForm.get('whoToNotify').setValue(this.falcoSettingData.whoToNotify);
+        if (this.falcoSettingData.whoToNotify === 'specificEmail'){
+          this.isSpecificEmailHidden = false;
+        }
         this.settingForm.get('emailList').setValue(this.falcoSettingData.emailList);
 
       }, (err) => {
