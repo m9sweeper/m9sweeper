@@ -158,12 +158,13 @@ export class ClusterInfoComponent implements OnInit {
   changeImageScanningEnforcementValue($event: MatSlideToggleChange) {
     const changedValue = $event.checked;
     const displayText = changedValue ? 'enabled' : 'disabled';
-    this.clusterService.checkLicenseValidity().subscribe(response => {
-        const licenseData: ILicense = response.data.data;
-        const featureNames = licenseData ? licenseData.features.map(feature => feature.name) : [];
-        const licenseHasImageScanningEnforcement = featureNames.includes(LicenseFeatures.IMAGE_SCANNING_ENFORCEMENT);
-        if (response.success && licenseData && licenseData.isValid) {
-          if (licenseHasImageScanningEnforcement && changedValue !== this.isImageScanningEnforcementEnabled) {
+    // this.clusterService.checkLicenseValidity().subscribe(response => {
+        // const licenseData: ILicense = response.data.data;
+        // const featureNames = licenseData ? licenseData.features.map(feature => feature.name) : [];
+        // const licenseHasImageScanningEnforcement = featureNames.includes(LicenseFeatures.IMAGE_SCANNING_ENFORCEMENT);
+        // if (response.success && licenseData && licenseData.isValid) {
+
+    if (changedValue !== this.isImageScanningEnforcementEnabled) {
             this.cluster.isImageScanningEnforcementEnabled = changedValue;
             this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
                 if (clusterUpdateResponse.success) {
@@ -183,12 +184,14 @@ export class ClusterInfoComponent implements OnInit {
 
             }, 1000);
           }
+  /*
         } else {
           this.alertService.danger(`${response.data.message}`);
           setTimeout(() => {
             this.matSlideToggleForImageScanning.toggle();
           }, 1000);
         }
+
       },
       error => {
         this.alertService.danger('Could not Validate the License Key.');
@@ -197,6 +200,7 @@ export class ClusterInfoComponent implements OnInit {
 
         }, 1000);
       });
+    */
   }
 
   openClusterWizard() {
