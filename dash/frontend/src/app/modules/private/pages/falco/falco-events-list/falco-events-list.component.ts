@@ -17,6 +17,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 
 
@@ -43,6 +44,8 @@ export class FalcoEventsListComponent implements OnInit {
   startDate: string;
   endDate: string;
   signature: string;
+  isAllowed: boolean;
+  allowedRoles: string [] = ['ADMIN', 'SUPER_ADMIN'];
 
   constructor(
     private falcoService: FalcoService,
@@ -54,6 +57,7 @@ export class FalcoEventsListComponent implements OnInit {
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
     private router: Router,
+    private jwtAuthService: JwtAuthService,
 
   ) {}
 
@@ -74,6 +78,7 @@ export class FalcoEventsListComponent implements OnInit {
         this.clusterId = param.id;
         this.getEvents();
       });
+    this.getUserAuthority();
 
   }
 
@@ -113,6 +118,12 @@ export class FalcoEventsListComponent implements OnInit {
           alert(err);
       });
 
+  }
+  getUserAuthority() {
+    const currentUserRoles = this.jwtAuthService.currentUserAuthorities as string[];
+    this.isAllowed = this.allowedRoles.filter(role => currentUserRoles.includes(role))?.length > 0;
+    console.log('user role', currentUserRoles);
+    console.log('is allow', this.isAllowed);
   }
 
   displayEventDetails(event: IFalcoLog) {
