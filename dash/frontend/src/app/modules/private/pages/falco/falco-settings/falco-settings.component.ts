@@ -1,14 +1,15 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {IUser} from '../../../../../core/entities/IUser';
 import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
+import {IUser} from '../../../../../core/entities/IUser';
+
 
 
 @Component({
@@ -22,10 +23,16 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  isAnomalyDisabled = true;
+  savedSeverityLevel: string [];
+  isNotifyAnomalyDisabled = true;
+  isSeverityLevelDisabled = false;
+  isSpecificEmailHidden = true;
+  foundSavedSeverityLevel = false;
+
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
-  isSpecificEmailHidden = true;
+
+  falcoSettingData: IFalcoSettingPayload;
 
   weekDays: string [] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -46,7 +53,8 @@ export class FalcoSettingsComponent implements OnInit {
       selectedSummaryFrequency: [],
       selectedWeekDay: [],
       whoToNotify: [],
-      emailList: [[]]
+      emailList: [[]],
+      savedSeverityLevelArray: new FormArray([]),
     });
 
     this.route.parent.parent.params
@@ -55,6 +63,7 @@ export class FalcoSettingsComponent implements OnInit {
         this.clusterId = param.id;
       });
 
+    this.displaySetting();
   }
 
   onClickSave() {
@@ -120,7 +129,8 @@ export class FalcoSettingsComponent implements OnInit {
   }
 
   enableAnomalySubLevelcheckbox(event: MatCheckboxChange): void{
-    this.isAnomalyDisabled = !this.isAnomalyDisabled;
+    this.isNotifyAnomalyDisabled = !this.isNotifyAnomalyDisabled;
+    this.isSeverityLevelDisabled = !this.isSeverityLevelDisabled;
   }
 
   enableSummarySubLevelcheckbox(event: MatCheckboxChange): void{
@@ -137,6 +147,45 @@ export class FalcoSettingsComponent implements OnInit {
   enableSpecificEmailSubLevelcheckbox($event: MatRadioChange): void{
     this.isSpecificEmailHidden = false;
   }
+  displaySetting(){
+    this.falcoService.findFalcoSetting(this.clusterId).subscribe( (response: IServerResponse <IFalcoSettingPayload>) => {
+        this.falcoSettingData = response.data;
+        this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
+        this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
+        this.savedSeverityLevel = JSON.parse( this.falcoSettingData.severityLevel);
+        this.priorityLevels.forEach((level) => {
+          if (this.savedSeverityLevel.find( savedLevel => savedLevel === level)){
+            this.settingFormArray.push(new FormControl(true));
+          }
+          else {
+            this.settingFormArray.push(new FormControl(false));
+          }
+        });
+        // this.savedSeverityLevel.forEach(() => this.settingFormArray.push(new FormControl(true)));
+        console.log('setting form array', this.settingFormArray);
+        this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
+        this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
+        this.settingForm.get('whoToNotify').setValue(this.falcoSettingData.whoToNotify);
+        if (this.falcoSettingData.whoToNotify === 'specificEmail'){
+          this.isSpecificEmailHidden = false;
+        }
+        this.settingForm.get('emailList').setValue(this.falcoSettingData.emailList);
+
+      }, (err) => {
+        alert(err);
+      });
+  }
+  anySavedLevel(level: string){
+    console.log('level', level);
+    for (const savedlevel of this.savedSeverityLevel) {
+      console.log('saved level', savedlevel);
+      if (level === savedlevel) {
+        console.log('return true');
+        this.foundSavedSeverityLevel = true;
+        return this.foundSavedSeverityLevel;
+      }
+    }
+  }
   onClickEdit() {
 
   }
@@ -147,5 +196,12 @@ export class FalcoSettingsComponent implements OnInit {
 
   }
 
+// settingForm: FormGroup;
+// this.savedSeverityLevel
 
+// this.settingForm = this.formBuilder.group({
+//    savedSeverityLevels: new FormArray([]),
+  get settingFormArray(){
+    return this.settingForm.controls.savedSeverityLevelArray as FormArray;
+  }
 }
