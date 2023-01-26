@@ -158,43 +158,16 @@ export class ClusterInfoComponent implements OnInit {
   changeImageScanningEnforcementValue($event: MatSlideToggleChange) {
     const changedValue = $event.checked;
     const displayText = changedValue ? 'enabled' : 'disabled';
-    this.clusterService.checkLicenseValidity().subscribe(response => {
-        const licenseData: ILicense = response.data.data;
-        const featureNames = licenseData ? licenseData.features.map(feature => feature.name) : [];
-        const licenseHasImageScanningEnforcement = featureNames.includes(LicenseFeatures.IMAGE_SCANNING_ENFORCEMENT);
-        if (response.success && licenseData && licenseData.isValid) {
-          if (licenseHasImageScanningEnforcement && changedValue !== this.isImageScanningEnforcementEnabled) {
-            this.cluster.isImageScanningEnforcementEnabled = changedValue;
-            this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
-                if (clusterUpdateResponse.success) {
-                  this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);
-                }
-              },
-              error => {
-                this.alertService.danger('Something went wrong while saving Image Scanning Enforcement.');
-                setTimeout(() => {
-                  this.matSlideToggle.toggle();
-                }, 1000);
-              });
-          } else {
-            this.alertService.danger('License does not have Image Scanning Enforcement Feature.');
-            setTimeout(() => {
-              this.matSlideToggleForImageScanning.toggle();
-
-            }, 1000);
-          }
-        } else {
-          this.alertService.danger(`${response.data.message}`);
-          setTimeout(() => {
-            this.matSlideToggleForImageScanning.toggle();
-          }, 1000);
+    this.cluster.isImageScanningEnforcementEnabled = changedValue;
+    this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
+        if (clusterUpdateResponse.success) {
+          this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);
         }
       },
       error => {
-        this.alertService.danger('Could not Validate the License Key.');
+        this.alertService.danger('Something went wrong while saving Image Scanning Enforcement.');
         setTimeout(() => {
-          this.matSlideToggleForImageScanning.toggle();
-
+          this.matSlideToggle.toggle();
         }, 1000);
       });
   }
