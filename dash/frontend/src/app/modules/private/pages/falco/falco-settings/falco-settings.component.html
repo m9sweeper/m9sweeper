@@ -46,7 +46,7 @@
                       </mat-select>
                     </mat-form-field>
                     -->
-                    <label formArrayName="savedSeverityLevels" *ngFor="let level of settingFormArray.controls; let i = index">
+                    <label formArrayName="savedSeverityLevelArray" *ngFor="let level of settingFormArray.controls; let i = index">
                       <input type="checkbox" [formControlName]="i">
                       {{savedSeverityLevel[i]}}
                     </label>

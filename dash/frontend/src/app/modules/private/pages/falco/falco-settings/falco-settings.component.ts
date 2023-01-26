@@ -54,7 +54,7 @@ export class FalcoSettingsComponent implements OnInit {
       selectedWeekDay: [],
       whoToNotify: [],
       emailList: [[]],
-      savedSeverityLevels: new FormArray([]),
+      savedSeverityLevelArray: new FormArray([]),
     });
 
     this.route.parent.parent.params
@@ -153,8 +153,15 @@ export class FalcoSettingsComponent implements OnInit {
         this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
         this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
         this.savedSeverityLevel = JSON.parse( this.falcoSettingData.severityLevel);
-        console.log('from backend', this.savedSeverityLevel);
-        this.savedSeverityLevel.forEach(() => this.settingFormArray.push(new FormControl(true)));
+        this.priorityLevels.forEach((level) => {
+          if (this.savedSeverityLevel.find( savedLevel => savedLevel === level)){
+            this.settingFormArray.push(new FormControl(true));
+          }
+          else {
+            this.settingFormArray.push(new FormControl(false));
+          }
+        });
+        // this.savedSeverityLevel.forEach(() => this.settingFormArray.push(new FormControl(true)));
         console.log('setting form array', this.settingFormArray);
         this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
         this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
@@ -191,9 +198,10 @@ export class FalcoSettingsComponent implements OnInit {
 
 // settingForm: FormGroup;
 // this.savedSeverityLevel
+
 // this.settingForm = this.formBuilder.group({
 //    savedSeverityLevels: new FormArray([]),
   get settingFormArray(){
-    return this.settingForm.controls.savedSeverityLevels as FormArray;
+    return this.settingForm.controls.savedSeverityLevelArray as FormArray;
   }
 }
