@@ -62,14 +62,14 @@
           <img mat-icon mat-list-icon src="../../../../../assets/images/kube-bench-logo.png" class="kube-hunter-img"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Bench</span>
         </a>
-        <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+        <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active" title="Falco"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
           <img mat-list-icon src="../../../../../../assets/images/falco-icon-black.png" class="falco-img"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Falco</span>
         </a>
-        <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item
+        <a  mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'reports']"
            routerLinkActive="active" title="Reports"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
