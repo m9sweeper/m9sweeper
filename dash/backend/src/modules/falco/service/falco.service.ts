@@ -179,6 +179,11 @@ export class FalcoService {
             return; // no settings means there's no email to send!
         }
 
+        if(!falcoSetting.sendNotificationAnomaly){
+            console.log('notification is off');
+            return; // not to send any anomaly notification
+        }
+
         // get all admin email addresses
         const allAdminEmail = await this.getAllAdminsToMail();
         // To test email: const allAdminEmailArray = ['some_email_address'] and comment out forEach();
