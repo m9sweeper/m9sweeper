@@ -22,7 +22,6 @@ export class FalcoSettingsComponent implements OnInit {
 
   savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
-  isSeverityLevelDisabled = false;
   isSpecificEmailHidden = true;
   foundSavedSeverityLevel = false;
 
@@ -126,7 +125,6 @@ export class FalcoSettingsComponent implements OnInit {
 
   enableAnomalySubLevelcheckbox(event: MatCheckboxChange): void{
     this.isNotifyAnomalyDisabled = !this.isNotifyAnomalyDisabled;
-    this.isSeverityLevelDisabled = !this.isSeverityLevelDisabled;
   }
 
   enableSummarySubLevelcheckbox(event: MatCheckboxChange): void{
@@ -149,6 +147,9 @@ export class FalcoSettingsComponent implements OnInit {
     this.falcoService.findFalcoSetting(this.clusterId).subscribe( (response: IServerResponse <IFalcoSettingPayload>) => {
         this.falcoSettingData = response.data;
         this.settingForm.get('sendNotificationAnomaly').setValue(this.falcoSettingData.sendNotificationAnomaly);
+        if (this.falcoSettingData.sendNotificationAnomaly) {
+          this.isNotifyAnomalyDisabled = false;
+        }
         this.settingForm.get('anomalyFrequency').setValue(this.falcoSettingData.anomalyFrequency);
         this.settingForm.get('selectedSummaryFrequency').setValue(this.falcoSettingData.summaryNotificationFrequency);
         this.settingForm.get('selectedWeekDay').setValue(this.falcoSettingData.weekday);
