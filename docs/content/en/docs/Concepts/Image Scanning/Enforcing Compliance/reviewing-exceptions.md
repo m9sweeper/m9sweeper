@@ -48,3 +48,11 @@ exception. They would approve the exception by changing its status to Active.
 
 ![../img_4.png](../img_4.png)
 
+## Exception Types
+
+Exception types are available as options: Policy and Override.
+- Policy: Allow listed policy(s) to by be bypassed. When this type is chosen, user should also select scanner(s) and policy(s) for the desire exception.
+- Override: Allow to override a severity level that fits the organization's needs. When this type is chosen, user should select an alternate severity level for desire exception.
+
+
+
