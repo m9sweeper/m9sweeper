@@ -69,6 +69,8 @@ The following commands add the FalcoSideKick chart and then installs with the pa
 ### Anomaly Detaction:
 - Anomaly instrusion detection plays vital role in protecting networks against malicious activities.
 - It detects unusual behaviors or threats in cloud-native environments with about 100 out-of-the-box security rules.
+- Administrators can set up alert to receive email notification based on specific priority (severity) level(s) and email frequency that fits individual application needs.
+- Simply go to Falco > Settingsgi
 
 #### Here is an example of Non-authorized container namespace change violation:
     rule: change_thread_namespace
@@ -77,8 +79,6 @@ The following commands add the FalcoSideKick chart and then installs with the pa
     output: "Namespace change (setns) by unexpected program (user=%user.name command=%proc.cmdline container=%container.id)"
     priority: WARNING
 
-It is a important to be alert when a security rule is violated and take actions to protect our systems against the potential risks.
-- Administrators can set up alert to receive email notification based on specific priority (severity) level(s) and email frequency that fits individual application needs. 
-- Simply go to Falco > Settings 
+
 
 
