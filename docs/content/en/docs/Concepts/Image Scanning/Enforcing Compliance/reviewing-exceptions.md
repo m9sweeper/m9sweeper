@@ -51,8 +51,8 @@ exception. They would approve the exception by changing its status to Active.
 ## Exception Types
 
 Exception types are available as options: Policy and Override.
-- Policy: Allow listed policy(s) to be bypassed. When this type is chosen, user should also select scanner(s) and policy(s) for the desire exception.
-- Override: Allow to override a severity level that fits the organization's needs. When this type is chosen, user should select an alternate severity level for desire exception.
+- Policy: Allow listed policy(s) to be bypassed. When this type is chosen, user should also select scanner(s) and policy(s) for the desired exception.
+- Override: When this type is chosen, user should select an alternate severity level for desired exception.
 
 
 
