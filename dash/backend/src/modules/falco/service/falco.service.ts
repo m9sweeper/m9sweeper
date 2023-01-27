@@ -180,7 +180,7 @@ export class FalcoService {
         }
 
         if(!falcoSetting.sendNotificationAnomaly){
-            console.log('notification is off');
+            this.loggerService.log('Notification setting is off!');
             return; // not to send any anomaly notification
         }
 
