@@ -13,7 +13,7 @@
     </mat-form-field>
   </div>
   <div>
-    <mat-checkbox matInput formControlName="onlyRunning">Only Running Images</mat-checkbox>
+    <mat-checkbox matInput formControlName="onlyRunning"  (change)="onlyRunningImage($event)">Only Running Images</mat-checkbox>
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button color="primary" type="submit" (click)="onSearch()">Search</button>
