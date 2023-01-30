@@ -24,9 +24,18 @@ export class AdvancedSearchDialogComponent implements OnInit {
       cve: [''],
       onlyRunning: [true]
     });
+    const savedText = localStorage.getItem('text');
+    if (savedText){
+      this.searchForm.get('cve').setValue(savedText);
+    }
+
   }
 
   onSearch() {
+
+    const searchText = this.searchForm.get('cve').value;
+    localStorage.setItem('text', searchText);
+
     this.dialogRef.close(this.searchForm.value);
   }
 
