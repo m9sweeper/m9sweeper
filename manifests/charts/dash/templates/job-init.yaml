@@ -38,7 +38,13 @@ spec:
           - name: DEFAULT_NAMESPACE_EXCEPTIONS
             value: {{ join "," .Values.init.namespaceExceptions }}
           - name: TRAWLER_API_KEY
-            value: {{ .Values.global.apiKey | quote }}
+            value: {{ coalesce .Values.global.trawlerApiKey .Values.global.apiKey "" | quote }}
+          - name: KUBE_HUNTER_API_KEY
+            value: {{ coalesce .Values.global.kubeHunterApiKey .Values.global.apiKey "" | quote }}
+          - name: KUBE_BENCH_API_KEY
+            value: {{ coalesce .Values.global.kubeBenchApiKey .Values.global.apiKey "" | quote }}
+          - name: FALCO_API_KEY
+            value: {{ coalesce .Values.global.falcoApiKey .Values.global.apiKey "" | quote }}
           - name: CLI_PATH
             value: ./cli.js
         envFrom:
