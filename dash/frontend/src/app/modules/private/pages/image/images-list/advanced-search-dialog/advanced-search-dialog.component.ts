@@ -25,13 +25,13 @@ export class AdvancedSearchDialogComponent implements OnInit {
       onlyRunning: [true]
     });
 
-    const searchTexts = JSON.parse(localStorage.getItem('text'));
-
-    if (searchTexts[0]){
-      this.searchForm.get('name').setValue(searchTexts[0]);
+    const searchName = localStorage.getItem('image-search-name');
+    if (searchName){
+      this.searchForm.get('name').setValue(searchName);
     }
-    if (searchTexts[1]){
-      this.searchForm.get('cve').setValue(searchTexts[1]);
+    const searchCve = localStorage.getItem('image-search-cve');
+    if (searchCve){
+      this.searchForm.get('cve').setValue(searchCve);
     }
   }
 
@@ -39,10 +39,9 @@ export class AdvancedSearchDialogComponent implements OnInit {
     const storageArray = [];
 
     const searchImageText = this.searchForm.get('name').value;
-    storageArray.push(searchImageText);
+    localStorage.setItem('image-search-name', searchImageText);
     const searchCveText = this.searchForm.get('cve').value;
-    storageArray.push(searchCveText);
-    localStorage.setItem('text', JSON.stringify(storageArray));
+    localStorage.setItem('image-search-cve', searchCveText);
 
     this.dialogRef.close(this.searchForm.value);
   }
