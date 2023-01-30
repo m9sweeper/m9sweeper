@@ -24,17 +24,25 @@ export class AdvancedSearchDialogComponent implements OnInit {
       cve: [''],
       onlyRunning: [true]
     });
-    const savedText = localStorage.getItem('text');
-    if (savedText){
-      this.searchForm.get('cve').setValue(savedText);
-    }
 
+    const searchTexts = JSON.parse(localStorage.getItem('text'));
+
+    if (searchTexts[0]){
+      this.searchForm.get('name').setValue(searchTexts[0]);
+    }
+    if (searchTexts[1]){
+      this.searchForm.get('cve').setValue(searchTexts[1]);
+    }
   }
 
   onSearch() {
+    const storageArray = [];
 
-    const searchText = this.searchForm.get('cve').value;
-    localStorage.setItem('text', searchText);
+    const searchImageText = this.searchForm.get('name').value;
+    storageArray.push(searchImageText);
+    const searchCveText = this.searchForm.get('cve').value;
+    storageArray.push(searchCveText);
+    localStorage.setItem('text', JSON.stringify(storageArray));
 
     this.dialogRef.close(this.searchForm.value);
   }
