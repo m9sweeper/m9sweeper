@@ -179,7 +179,6 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
         switchMap((response) => {
           if (response?.success) {
             this.alertService.success('Image Scan queued');
-            return this.searchImages();
           }
           return of(null);
         }),
