@@ -87,7 +87,11 @@ The following table lists the configurable parameters of the chart and the defau
 | `global.rabbitmq.queueName`                                                 | rabbitmq queue name                                                                                                | `trawler_queue`                 |
 | `global.jwtSecret`                                                          | Provide a secret string that will be used to sign JWT tokens                                                       | `asdfasdfasd`                   |
 | `global.baseUrl`                                                            | URL will be used in email templates to reference a http link to Dash                                               | `localhost:3000`                |
-| `global.apiKey`                                                             | Provide a secret string that will be set as the first Dash user's API key                                          | `1234567890`                    |
+| `global.apiKey`                                                             | Provide a secret string that will be the default api key used for integrations                                          | `1234567890`                    |
+| `global.trawlerApiKey`                                                             | Provide a secret string that will be the default api key for trawler                                          | `1234567890`                    |
+| `global.kubeBenchApiKey`                                                             | Provide a secret string that will be the default kube bench api key                                          | `1234567890`                    |
+| `global.kubeHunterApiKey`                                                             | Provide a secret string that will be the default kube hunter api key                                          | `1234567890`                    |
+| `global.falcoApiKey`                                                             | Provide a secret string that will be the default falco API key                                          | `1234567890`                    |
 |
 | **Dash Properties**                                                          |
 |
