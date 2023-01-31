@@ -201,12 +201,12 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 
 .table-format table {
   width: 100%;
-  border: 1px black solid ;
+  border: 1px #AAA solid ;
   border-collapse: collapse
 }
 
 .table-format td, .table-format th {
-  border: 1px black solid ;
+  border: 1px #AAA solid ;
   margin: 0px;
   padding: 2px;
   border-collapse: collapse
