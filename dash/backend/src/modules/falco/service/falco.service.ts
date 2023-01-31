@@ -151,7 +151,7 @@ export class FalcoService {
         const emailSentTime = this.email.send({
             to: `${emailReceiver}`,
             from: this.configService.get('email.default.sender'),
-            subject: `New ${falcoSeverity} Project Falco Alert in ${falcoNamespace}`,
+            subject: `New Falco Alert ${newFalcoLog.rule} in ${falcoNamespace}`,
             template: 'falco-log-email',
             context: {
                 falcoLog: instanceToPlain(newFalcoLog),

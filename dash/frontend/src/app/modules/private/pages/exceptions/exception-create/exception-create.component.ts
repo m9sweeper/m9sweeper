@@ -291,7 +291,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
         break;
       case 'override':
         this.exceptionForm.controls.policies.enable();
-        this.changeCVELabel('Issue (Override Severity)');
+        this.changeCVELabel('Issue (CVE Type Code)');
         this.issueIdentifier.markAsUntouched();
         this.gatekeeperConstraintList = of([]);
         break;

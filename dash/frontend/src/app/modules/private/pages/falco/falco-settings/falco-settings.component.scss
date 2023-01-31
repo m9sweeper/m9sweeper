@@ -46,6 +46,11 @@ ul {
   width: 100%;
 }
 
+textarea {
+  width: 250px;
+  height: 100px;
+}
+
 mat-table {
   overflow: auto !important;
   min-width: 800px;
