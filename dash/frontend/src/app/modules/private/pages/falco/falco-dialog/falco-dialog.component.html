@@ -11,16 +11,24 @@
           </div>
         </div>
         <div>
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts
-              helm repo update
-              helm install falco falcosecurity/falco \
-                --namespace falco --create-namespace \
-                --set falco.driver.enabled=true \
-                --set-string falco.driver.kind=ebpf \
-                --set falco.tty=true \
-                --set falco.json_output=true \
-                --set falco.http_output.enabled=true \
-                --set-string falco.http_output.url=https:'{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}'
+          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
+helm repo update && \
+helm install falcosidekick \
+ --create-namespace \
+ --namespace falco \
+ --set-string config.webhook.address='{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}' \
+ --set-string config.webhook.minimumpriority='error' \
+ --set config.webhook.checkcert=true \
+ falcosecurity/falcosidekick \
+ && \
+helm install falco falcosecurity/falco \
+  --namespace falco --create-namespace \
+  --set falco.driver.enabled=true \
+  --set-string falco.driver.kind=ebpf \
+  --set falco.tty=true \
+  --set falco.json_output=true \
+  --set falco.http_output.enabled=true \
+  --set-string falco.http_output.url='http://falcosidekick:2801/'
           </textarea>
         </div>
         <div class="row row-reverse">
