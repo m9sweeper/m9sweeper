@@ -79,6 +79,18 @@ export class FalcoController {
         return this.falcoService.getCountOfFalcoLogsBySignature(clusterId, signature);
     }
 
+    @Get('/apiKey')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 201
+    })
+    async getApiKey(): Promise<ApiKeyDto[]> {
+        const apiKeyFalco = await this.apiKeyDao.getApiKeyByUserEmail('Falco');
+        if (!apiKeyFalco) throw new HttpException(`Falco APi key ${apiKeyFalco} not found`, HttpStatus.NOT_FOUND);
+        return apiKeyFalco;
+    }
+
     @Get('/:eventId')
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -90,18 +102,6 @@ export class FalcoController {
     ): Promise< FalcoDto>
     {
         return this.falcoService.getFalcoLogByEventId(eventId);
-    }
-
-    @Get('/apiKey')
-    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201
-    })
-    async getApiKey(): Promise<ApiKeyDto[]> {
-        const apiKeyFalco = await this.apiKeyDao.getApiKeyByUserEmail('Falco');
-        if (!apiKeyFalco) throw new HttpException(`Falco APi key ${apiKeyFalco} not found`, HttpStatus.NOT_FOUND);
-        return apiKeyFalco;
     }
 
     @Get('/:clusterid/findsetting')
