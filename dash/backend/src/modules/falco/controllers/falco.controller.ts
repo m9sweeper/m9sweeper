@@ -91,6 +91,22 @@ export class FalcoController {
         return apiKeyFalco;
     }
 
+    @Get('/download')
+    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @Header('Content-Type', 'text/csv')
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async downloadFalcoExport(
+        @Query('cluster-id') clusterId: number,
+        @Query('limit') limit?: number,
+        @Query('page') page?: number,
+        @Query('priority') priorities?: string [],
+        @Query('orderBy') orderBy?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string
+    ) {
+        return this.falcoService.getFalcoCsv(clusterId);
+    }
+
     @Get('/:eventId')
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -161,22 +177,6 @@ export class FalcoController {
     ): Promise <any> {
         const result = this.falcoService.createFalcoSetting(clusterId, falcoSetting);
         return result;
-    }
-
-    @Get('/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
-    @Header('Content-Type', 'text/csv')
-    @UseGuards(AuthGuard, AuthorityGuard)
-    async downloadFalcoExport(
-        @Query('cluster-id') clusterId: number,
-        @Query('limit') limit?: number,
-        @Query('page') page?: number,
-        @Query('priority') priorities?: string [],
-        @Query('orderBy') orderBy?: string,
-        @Query('startDate') startDate?: string,
-        @Query('endDate') endDate?: string
-    ) {
-        return this.falcoService.getFalcoCsv(clusterId);
     }
 
 }
