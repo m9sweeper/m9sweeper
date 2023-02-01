@@ -60,7 +60,7 @@ export class ImageComplianceFacadeService {
         const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId, imageName);
         for(const result of results){
             for(const issue of result.issues){
-                const override = exceptionsOverride.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
+                const override = exceptionsOverride?.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
                 if(override?.altSeverity){
                     issue.severity = override.altSeverity
                     issue.name = "overridden - "+ issue.name;

@@ -193,7 +193,8 @@ export class ExceptionsDao {
 
         //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
 
-        return await knexnest(sql).then(data => data);
+        const resultsql = sql? sql : [];
+        return await knexnest(resultsql).then(data => data);
     }
 
     async getAllFilteredOverrideExceptions(
