@@ -1,7 +1,7 @@
 #####################
 ## STAGE 1 - BUILD ##
 #####################
-FROM node:16-buster-slim as builder
+FROM node:18-buster-slim as builder
 
 # Install Python3 used in dependencies for building
 RUN apt update && \
