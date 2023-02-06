@@ -13,10 +13,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -77,17 +75,18 @@ public final class TestScanImageByTrawler {
       // click on the search bar
       driver.findElement(By.xpath("//div/mat-form-field/div/div[1]/div/input[@type='search']")).click();
       // enter image name on search bar
-      driver.findElement(By.xpath("//div/mat-form-field/div/div[1]/div/input[@type='search']")).sendKeys("alpine:latest");
+      driver.findElement(By.xpath("//div/mat-form-field/div/div[1]/div/input[@type='search']")).sendKeys("alpine");
       // sleep to load search result
       Thread.sleep(1000);
-      // click om the scanned image and see image details
-      driver.findElement(By.xpath("(//mat-cell[contains(text(),'alpine:latest')])")).click();
+      // click on the scanned image and see image details
+      driver.findElement(By.xpath("(//mat-cell[contains(text(),'alpine')])")).click();
       // sleep to load search result
       // scan maybe still running, sleep to load page
-      //Thread.sleep(15000);
+      Thread.sleep(15000);
+
 
       // Is there a date in Date Scanned
-      String lastScannedDateTime = driver.findElement(By.xpath("//div/div/div/p[contains(normalize-space(),'2022')]")).getText();
+      String lastScannedDateTime = driver.findElement(By.xpath("//div/div/div/p[contains(normalize-space(), "+ Year.now().getValue()+")]")).getText();
       if (lastScannedDateTime.length()> 0){
           System.out.println("*** The image was scanned at ***:" + lastScannedDateTime);
       } else {
