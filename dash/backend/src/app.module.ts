@@ -41,7 +41,6 @@ import {KubeBenchModule} from "./modules/kube-bench/kube-bench.module";
 import {KubeHunterModule} from "./modules/kube-hunter/kube-hunter.module";
 import { ReportsModule } from './modules/reports/reports.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import {M9sweeperCronJobService} from './cron-jobs/m9sweeper_cron_jobs.service';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
 
@@ -140,7 +139,6 @@ const myFormatter = info => {
             enabled: true
           },
         }),
-      M9sweeperCronJobService
   ],
 })
 export class AppModule implements NestModule {
