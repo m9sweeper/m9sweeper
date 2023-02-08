@@ -25,6 +25,11 @@
               "path": "./custom-webpack.config.ts",
               "replaceDuplicatePlugins": true
             },
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "./node_modules"
+              ]
+            },
             "allowedCommonJsDependencies": ["url"],
             "outputPath": "../backend/dist/public",
             "index": "src/index.html",

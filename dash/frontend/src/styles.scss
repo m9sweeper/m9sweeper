@@ -3,11 +3,11 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 @import './app/modules/private/private.component.theme';
 @import '~flexboxgrid/css/flexboxgrid.min.css';
-@import '~codemirror/lib/codemirror';
-@import '~codemirror/theme/material';
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/theme/material';
 
 @include mat-core();
 

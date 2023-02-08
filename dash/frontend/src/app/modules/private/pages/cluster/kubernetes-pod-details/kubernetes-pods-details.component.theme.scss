@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 
 @mixin kubernetes-pods-details-dark-theme($theme) {
   app-kubernetes-pod-details {
