@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {take} from 'rxjs/operators';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 

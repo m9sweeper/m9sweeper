@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {Subject} from 'rxjs';
@@ -10,8 +10,8 @@ import {take, takeUntil} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute} from '@angular/router';
 import {KubesecDialogComponent} from './kubesec-dialog/kubesec-dialog.component';
-import {MatOption} from '@angular/material/core';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyOption as MatOption} from '@angular/material/legacy-core';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({

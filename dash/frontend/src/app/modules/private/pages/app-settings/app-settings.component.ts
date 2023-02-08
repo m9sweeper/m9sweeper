@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../../core/services/app-settings.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { CreateAppSettingsComponent } from './create-app-settings/create-app-settings.component';
 import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
 import { Subscription } from 'rxjs';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AlertService} from '@full-fledged/alerts';
 import {LicenseCheckComponent} from '../license-check/license-check.component';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';

@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {IKubeBenchReport} from '../../../../../../core/entities/IKubeBenchReport';
 import {UntypedFormBuilder} from '@angular/forms';
 import {KubeBenchService} from '../../../../../../core/services/kube-bench.service';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA} from '@angular/material/legacy-dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CommonService} from '../../../../../../core/services/common.service';
 import {take} from 'rxjs/operators';

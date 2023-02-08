@@ -3,7 +3,7 @@ import {take} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {IKubeHunterReport, IKubeHunterVulnerabilities} from '../../../../../../core/entities/IKubeHunterReport';
 import {KubeHunterService} from '../../../../../../core/services/kube-hunter.service';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {ClusterService} from '../../../../../../core/services/cluster.service';
 import {ICluster} from '../../../../../../core/entities/ICluster';
 

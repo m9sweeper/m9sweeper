@@ -5,8 +5,8 @@ import {KubeHunterService} from '../../../../../core/services/kube-hunter.servic
 import {AlertService} from '@full-fledged/alerts';
 import {IKubeHunterReport} from '../../../../../core/entities/IKubeHunterReport';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {KubeHunterDialogComponent} from './kube-hunter-dialog/kube-hunter-dialog.component';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

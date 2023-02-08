@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {AlertService} from '@full-fledged/alerts';
 import {UntypedFormBuilder, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {take} from 'rxjs/operators';
 

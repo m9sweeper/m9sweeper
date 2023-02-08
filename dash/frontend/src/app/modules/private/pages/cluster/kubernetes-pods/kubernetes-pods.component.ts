@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IPod} from '../../../../../core/entities/IPod';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {AlertService} from '@full-fledged/alerts';
 import {PodService} from '../../../../../core/services/pod.service';
 import {FormatDate} from '../../../../shared/format-date/format-date';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 
 
 @Component({

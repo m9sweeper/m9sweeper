@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {AlertService} from "@full-fledged/alerts";
 

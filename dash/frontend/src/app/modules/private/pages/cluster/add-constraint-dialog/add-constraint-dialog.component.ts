@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {IGatekeeperTemplate, IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
-import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
+import {MatLegacyCheckbox as MatCheckbox, MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
 
 @Component({
   selector: 'app-add-constraint-dialog',

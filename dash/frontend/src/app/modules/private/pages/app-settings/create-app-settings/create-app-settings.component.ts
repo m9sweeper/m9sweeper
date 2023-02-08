@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
 import {FileManagementService} from '../../../../../core/services/file-management.service';

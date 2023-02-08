@@ -5,7 +5,7 @@ import {UserService} from '../../../../../core/services/user.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {AlertService} from '@full-fledged/alerts';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {FileManagementService} from '../../../../../core/services/file-management.service';
 import {IFile} from '../../../../../core/entities/IFile';

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {CommonService} from '../../../../../../core/services/common.service';
 import {switchMap, take, takeUntil, takeWhile} from 'rxjs/operators';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Subject, timer} from 'rxjs';
 import {IKubeHunterReport} from '../../../../../../core/entities/IKubeHunterReport';

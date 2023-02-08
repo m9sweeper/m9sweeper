@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { JwtAuthService } from '../../core/services/jwt-auth.service';
 import { ClusterGroupService } from '../../core/services/cluster-group.service';
 import { IClusterGroup } from '../../core/entities/IClusterGroup';
 import { ClusterService } from '../../core/services/cluster.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleChange as MatSlideToggleChange } from '@angular/material/legacy-slide-toggle';
 import { ITheme } from '../../core/entities/ITheme';
 import { ThemeService } from '../../core/services/theme.service';
 import {fromEvent, Subject, Subscription} from 'rxjs';

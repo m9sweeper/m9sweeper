@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/api/auth.service';
 import { IAuthenticationMethod } from '../../../../core/entities/IAuthenticationMethod';
 import { AlertService } from '@full-fledged/alerts';
-import { MatSelectChange } from '@angular/material/select';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { IServerResponse } from '../../../../core/entities/IServerResponse';
 import { IAuth } from '../../../../core/entities/IAuth';

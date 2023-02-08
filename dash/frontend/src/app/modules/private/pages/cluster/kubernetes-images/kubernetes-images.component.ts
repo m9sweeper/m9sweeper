@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import { Title } from '@angular/platform-browser';
 import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

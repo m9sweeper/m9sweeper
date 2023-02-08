@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { AlertService } from '@full-fledged/alerts';
 import { DeploymentService } from '../../../../../core/services/deployment.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { ClusterService } from '../../../../../core/services/cluster.service';
 import { INamespaceTotalVulnerability } from '../../../../../core/entities/INamespaceTotalVulnerability';
 import { IClusterEvent } from '../../../../../core/entities/IClusterEvent';
 import { FormatDate } from '../../../../shared/format-date/format-date';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ClusterEventComponent } from '../cluster-event/cluster-event.component';
 import {SharedSubscriptionService} from '../../../../../core/services/shared.subscription.service';
 import {merge, Subscription, Subject} from 'rxjs';

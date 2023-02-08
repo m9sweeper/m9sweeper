@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {ApiKeyService} from '../../../../../core/services/api-key.service';
 import {IApiKey} from '../../../../../core/entities/IApiKey';
-import {MatDialog} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {merge} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';

@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClusterService } from '../../../../core/services/cluster.service';
 import { IClusterGroup } from '../../../../core/entities/IClusterGroup';

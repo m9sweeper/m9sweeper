@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import { Observable } from 'rxjs';
 import {IGateKeeperConstraint, IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
 import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 
 @Component({
   selector: 'app-gate-keeper',

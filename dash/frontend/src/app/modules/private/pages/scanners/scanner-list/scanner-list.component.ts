@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ScannerService } from '../../../../../core/services/scanner.service';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { IScanner, ScannerData } from '../../../../../core/entities/IScanner';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { MatSort } from '@angular/material/sort';
 import { ScannerCreateComponent } from '../scanner-create/scanner-create.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-scanner-list',

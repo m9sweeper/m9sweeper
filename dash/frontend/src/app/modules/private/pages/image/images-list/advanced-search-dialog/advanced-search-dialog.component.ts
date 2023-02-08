@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@full-fledged/alerts';
-import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
 
 @Component({
   selector: 'app-advanced-search-dialog',

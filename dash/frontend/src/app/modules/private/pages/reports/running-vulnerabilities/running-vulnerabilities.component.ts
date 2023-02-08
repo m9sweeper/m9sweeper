@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ReportsService} from '../../../../../core/services/reports.service';
 import {ActivatedRoute} from '@angular/router';
 import {take} from 'rxjs/operators';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';

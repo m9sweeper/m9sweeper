@@ -1,13 +1,13 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
 import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-show-json-data-more',

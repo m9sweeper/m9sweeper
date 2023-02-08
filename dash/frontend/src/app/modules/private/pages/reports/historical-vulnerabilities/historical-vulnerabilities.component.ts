@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {IHistoricalVulnerabilities} from '../../../../../core/entities/IRunningVulnerabilitiesPreview';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ReportsService} from '../../../../../core/services/reports.service';
 import {ActivatedRoute} from '@angular/router';

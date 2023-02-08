@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -18,7 +18,7 @@ import {
 import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import {NgxMatFileInputModule} from '@angular-material-components/file-input';
 import { UserProfileImageDirective } from './modules/shared/directives/user-profile-image.directive';
 import {SiteLogoDirective} from './modules/shared/directives/site-logo.directive';

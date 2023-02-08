@@ -2,7 +2,7 @@ import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Observable, throwError} from 'rxjs';
 import {parse as YmlParse} from 'yaml';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {IKubeConfig} from '../../../../../core/entities/IKubeConfig';
 import { URL } from 'url';
@@ -14,8 +14,8 @@ import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CommonService} from '../../../../../core/services/common.service';
 import {ServiceAccountWizardComponent} from '../service-account-wizard/service-account-wizard.component';
 import {take} from 'rxjs/operators';
-import {MatSelectChange} from '@angular/material/select';
-import {MatRadioChange} from '@angular/material/radio';
+import {MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
+import {MatLegacyRadioChange as MatRadioChange} from '@angular/material/legacy-radio';
 
 @Component({
   selector: 'app-add-cluster-wizard',

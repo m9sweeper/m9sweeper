@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {KubeBenchDialogComponent} from './kube-bench-dialog/kube-bench-dialog.component';
 import {UntypedFormBuilder} from '@angular/forms';
 import {KubeBenchService} from '../../../../../core/services/kube-bench.service';

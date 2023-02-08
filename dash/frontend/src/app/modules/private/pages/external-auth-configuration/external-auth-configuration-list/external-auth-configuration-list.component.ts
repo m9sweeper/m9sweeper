@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {ExternalAuthConfigurationCreateComponent} from '../external-auth-configuration-create/external-auth-configuration-create.component';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IAuthConfig} from '../../../../../core/entities/IAuth';

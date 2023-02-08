@@ -3,7 +3,7 @@ import { ClusterService } from '../../../../../core/services/cluster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ClusterGroupService } from '../../../../../core/services/cluster-group.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ClusterGroupCreateComponent } from '../../cluster-group/cluster-group-create/cluster-group-create.component';
 import { DeploymentService } from '../../../../../core/services/deployment.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';

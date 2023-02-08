@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {take} from 'rxjs/operators';
 import {Subject} from 'rxjs';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {CommonService} from '../../../../../core/services/common.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {KubeHunterService} from '../../../../../core/services/kube-hunter.service';

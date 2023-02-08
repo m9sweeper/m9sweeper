@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {ShowJsonDataMoreComponent} from '../show-json-data-more/show-json-data-more.component';

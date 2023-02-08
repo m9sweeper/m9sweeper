@@ -7,14 +7,14 @@ import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IImage, IImageScanData} from '../../../../../core/entities/IImage';
 import {IImageScanResultIssue} from '../../../../../core/entities/IImageScanResultIssue';
 import {FormatDate} from '../../../../shared/format-date/format-date';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {MatSort} from '@angular/material/sort';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {UntypedFormControl} from '@angular/forms';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {Title} from '@angular/platform-browser';
-import {MatSelectChange} from '@angular/material/select';
-import { MatDialog } from '@angular/material/dialog';
+import {MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 
