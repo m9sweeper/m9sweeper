@@ -17,7 +17,7 @@
   "dependencies": {
     "@ajsf/core": "~0.7.0",
     "@ajsf/material": "~0.7.0",
-    "@angular-material-components/file-input": "^7.0.0",
+    "@angular-material-components/file-input": "^8.0.0",
     "@angular/animations": "^14.2.12",
     "@angular/cdk": "^13.3.5",
     "@angular/common": "^14.2.12",
