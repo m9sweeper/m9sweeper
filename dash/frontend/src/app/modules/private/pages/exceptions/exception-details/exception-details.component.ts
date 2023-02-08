@@ -6,7 +6,7 @@ import { ExceptionsService } from '../../../../../core/services/exceptions.servi
 import { IException } from '../../../../../core/entities/IException';
 import { ConfirmationDialogComponent } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { CommentService } from '../../../../../core/services/comment.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { IComment } from '../../../../../core/entities/IComment';
 import { Observable } from 'rxjs';
@@ -21,7 +21,7 @@ import {tap} from 'rxjs/operators';
 export class ExceptionDetailsComponent implements OnInit {
   exceptionId: number;
   exception: IException;
-  commentForm: FormGroup;
+  commentForm: UntypedFormGroup;
   comments$: Observable<IComment[]>;
   isSubmitting = false;
 
@@ -31,7 +31,7 @@ export class ExceptionDetailsComponent implements OnInit {
     private alertService: AlertService,
     private exceptionsService: ExceptionsService,
     private commentService: CommentService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private jwtAuthService: JwtAuthService,
     public dialog: MatDialog) {
     this.commentForm = this.formBuilder.group({

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DatePipe, Location} from '@angular/common';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '@full-fledged/alerts';
@@ -27,7 +27,7 @@ import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySever
   styleUrls: ['./exception-create.component.scss']
 })
 export class ExceptionCreateComponent implements OnInit, AfterViewInit {
-  exceptionForm: FormGroup;
+  exceptionForm: UntypedFormGroup;
   subMenuTitle: string;
   editMode: boolean;
   exceptionId: number;
@@ -63,7 +63,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
 
   constructor(
     private exceptionsService: ExceptionsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
     private router: Router,
     private route: ActivatedRoute,

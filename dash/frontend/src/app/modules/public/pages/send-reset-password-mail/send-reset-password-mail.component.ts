@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../core/services/user.service';
@@ -13,10 +13,10 @@ import { take } from 'rxjs/operators';
 })
 export class SendResetPasswordMailComponent {
 
-  resetForm: FormGroup;
+  resetForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private alertService: AlertService,
     private router: Router,

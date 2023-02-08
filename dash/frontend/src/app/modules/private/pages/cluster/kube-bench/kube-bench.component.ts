@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {KubeBenchDialogComponent} from './kube-bench-dialog/kube-bench-dialog.component';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {KubeBenchService} from '../../../../../core/services/kube-bench.service';
 import {take} from 'rxjs/operators';
 import {IKubeBenchLog, IKubeBenchReport} from '../../../../../core/entities/IKubeBenchReport';
@@ -35,7 +35,7 @@ export class KubeBenchComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private kubeBenchService: KubeBenchService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
