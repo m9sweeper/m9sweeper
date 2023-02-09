@@ -20,6 +20,9 @@ kubesec:
     password: ""
     secretRef: ""
 
+falco:
+  bulkhead: false
+
 nameOverride: ""
 fullnameOverride: ""
 
