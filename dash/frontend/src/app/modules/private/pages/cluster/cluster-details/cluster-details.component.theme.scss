@@ -1,13 +1,13 @@
-@import '@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin cluster-details-component-light-theme($theme) {
   app-cluster-details {
     .cluster-details-container {
       .cluster-menu {
-        background-color: map-get($mat-grey, A100);
+        background-color: map-get(mat.$mat-grey, A100);
       }
       .cluster-details-dashboard{
-        background-color: mat-color($mat-grey, 300);
+        background-color: mat.mat-color(mat.$mat-grey, 300);
       }
     }
   }
@@ -16,7 +16,7 @@
 @mixin cluster-details-component-dark-theme($theme) {
   app-cluster-details {
     .cluster-details-container {
-      color: map-get($mat-grey, A100);
+      color: map-get(mat.$mat-grey, A100);
       .cluster-menu {
         background-color: #201f1e;
         mat-list {
@@ -26,16 +26,16 @@
           }
           a:hover {
             background-color: #252423 !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
           }
           a.active {
             background-color: #497ebf !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
             border-left: #0078d4 3px solid;
           }
           a.active:hover {
             background-color: #497ebf !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
           }
         }
       }
@@ -44,7 +44,7 @@
       }
       .cluster-chart {
         text {
-          fill: map-get($mat-grey, A100)!important;
+          fill: map-get(mat.$mat-grey, A100)!important;
         }
       }
     }
@@ -53,7 +53,7 @@
       mat-list {
         a:hover {
           background-color: #252423;
-          color: map-get($mat-grey, A100);
+          color: map-get(mat.$mat-grey, A100);
         }
         .expanded-item {
           &:hover {
@@ -61,7 +61,7 @@
           }
         }
         button fa-icon {
-          color: map-get($mat-grey, A100);
+          color: map-get(mat.$mat-grey, A100);
         }
         .expand-hover {
           &:hover {

@@ -1,4 +1,4 @@
-@import '@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin cluster-summary-chart-dark-theme($theme) {
   app-cluster-summary {

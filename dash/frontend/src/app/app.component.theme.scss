@@ -1,4 +1,4 @@
-@import'@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin app-root-theme($theme) {
   $primary: map-get($theme, primary);
@@ -8,10 +8,10 @@
 
   app-root {
     .app-container {
-      background-color: mat-color($background, background);
+      background-color: mat.mat-color($background, background);
       > div {
         &.theme-changer-container {
-          background: mat-color($accent, accent);
+          background: mat.mat-color($accent, accent);
         }
       }
     }

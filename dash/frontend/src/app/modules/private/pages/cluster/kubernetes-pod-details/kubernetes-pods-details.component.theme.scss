@@ -1,10 +1,10 @@
-@import '@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin kubernetes-pods-details-dark-theme($theme) {
   app-kubernetes-pod-details {
     .breadcrumb-item {
       a.link {
-        color: map-get($mat-grey, A100) !important;
+        color: map-get(mat.$mat-grey, A100) !important;
       }
     }
   }

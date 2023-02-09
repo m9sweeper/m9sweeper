@@ -1,13 +1,13 @@
-@import '@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin cluster-list-component-chart-font-dark-theme($theme) {
   app-cluster-list {
     .cluster-list-container {
-      color: map-get($mat-grey, A100);
+      color: map-get(mat.$mat-grey, A100);
       .cluster-group-chart-list {
         .cluster-chart-item {
           text {
-            fill: map-get($mat-grey, A100)!important;
+            fill: map-get(mat.$mat-grey, A100)!important;
           }
         }
       }

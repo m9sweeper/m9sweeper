@@ -1,9 +1,9 @@
-@import '@angular/material/theming';
+@use '@angular/material/theming' as mat;
 
 @mixin organization-settings-component-dark-theme($theme) {
   app-organization-settings {
     .organization-settings-container {
-      color: map-get($mat-grey, A100);
+      color: map-get(mat.$mat-grey, A100);
       .left-nav {
         background-color: #201f1e;
         mat-list {
@@ -11,20 +11,20 @@
             display: block;
             text-decoration: none;
             background-color: #201f1e;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
           }
           a:hover {
             background-color: #252423 !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
           }
           a.active {
             background-color: #497ebf !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
             border-left: #0078d4 3px solid;
           }
           a.active:hover {
             background-color: #497ebf !important;
-            color: map-get($mat-grey, A100) !important;
+            color: map-get(mat.$mat-grey, A100) !important;
           }
         }
       }
@@ -36,7 +36,7 @@
   app-organization-settings {
     .organization-settings-container {
       .left-nav {
-        background-color: map-get($mat-gray, A100);
+        background-color: map-get(mat.$mat-gray, A100);
       }
     }
   }

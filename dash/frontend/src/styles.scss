@@ -1,37 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material/theming' as mat;
+
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import '@angular/material/theming';
 @import './app/modules/private/private.component.theme';
 @import '~flexboxgrid/css/flexboxgrid.min.css';
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/material';
-
-@include mat-core();
+//@include mat.core();
 
 //Default theme
-$ms-default-primary: mat-palette($mat-indigo, 800, 300, 900);
-$ms-default-accent: mat-palette($mat-light-blue);
-$ms-default-warn: mat-palette($mat-pink, 600);
+$ms-default-primary: mat.mat-palette(mat.$mat-indigo, 800, 300, 900);
+$ms-default-accent: mat.mat-palette(mat.$mat-light-blue);
+$ms-default-warn: mat.mat-palette(mat.$mat-pink, 600);
 
-$ms-default-theme: mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
+$ms-default-theme: mat.mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
 
 //Dark theme
-$ms-black-primary: mat-palette($mat-grey, 700, 300, 900);
-$ms-black-accent: mat-palette($mat-blue-grey, 400);
-$ms-black-warn: mat-palette($mat-red, 500);
+$ms-black-primary: mat.mat-palette(mat.$mat-grey, 700, 300, 900);
+$ms-black-accent: mat.mat-palette(mat.$mat-blue-grey, 400);
+$ms-black-warn: mat.mat-palette(mat.$mat-red, 500);
 
-$ms-black-theme: mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
+$ms-black-theme: mat.mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
 
 
 //Light theme
-$ms-light-primary: mat-palette($mat-grey, 200, 500, 300);
-$ms-light-accent: mat-palette($mat-brown, 200);
-$ms-light-warn: mat-palette($mat-deep-orange, 200);
+$ms-light-primary: mat.mat-palette(mat.$mat-grey, 200, 500, 300);
+$ms-light-accent: mat.mat-palette(mat.$mat-brown, 200);
+$ms-light-warn: mat.mat-palette(mat.$mat-deep-orange, 200);
 
-$ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
+$ms-light-theme: mat.mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
 // $ms-toolbar-light-theme: mat-light-theme-for-toolbar($ms-light-primary, $ms-light-accent, $ms-light-warn);
 
 
@@ -103,7 +103,7 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 }
 
 .default-theme {
-  @include angular-material-theme($ms-default-theme);
+  // @include angular-material-theme($ms-default-theme);
   @include custom-components-theme($ms-default-theme);
   @include custom-dashboard-component-theme($ms-default-theme);
   @include custom-cluster-details-component-theme($ms-default-theme);
@@ -112,12 +112,12 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 }
 
 .light-theme {
-  @include angular-material-theme($ms-light-theme);
+  @include mat.angular-material-theme($ms-light-theme);
   @include custom-components-theme($ms-light-theme);
 }
 
 .dark-theme {
-  @include angular-material-theme($ms-black-theme);
+  @include mat.angular-material-theme($ms-black-theme);
   @include custom-components-theme($ms-black-theme);
   @include custom-toolbar-dark-theme($ms-black-theme);
   @include custom-dashboard-component-dark-theme($ms-black-theme);
