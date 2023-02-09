@@ -1,37 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material/theming' as mat;
 
-
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import './app/modules/private/private.component.theme';
-@import '~flexboxgrid/css/flexboxgrid.min.css';
+@import 'flexboxgrid/css/flexboxgrid.min.css';
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/material';
-//@include mat.core();
+
 
 //Default theme
-$ms-default-primary: mat.mat-palette(mat.$mat-indigo, 800, 300, 900);
-$ms-default-accent: mat.mat-palette(mat.$mat-light-blue);
-$ms-default-warn: mat.mat-palette(mat.$mat-pink, 600);
+$ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
+$ms-default-accent: mat.define-palette(mat.$light-blue-palette);
+$ms-default-warn: mat.define-palette(mat.$pink-palette, 600);
 
-$ms-default-theme: mat.mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
+$ms-default-theme: mat.define-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
 
 //Dark theme
-$ms-black-primary: mat.mat-palette(mat.$mat-grey, 700, 300, 900);
-$ms-black-accent: mat.mat-palette(mat.$mat-blue-grey, 400);
-$ms-black-warn: mat.mat-palette(mat.$mat-red, 500);
+$ms-black-primary: mat.define-palette(mat.$gray-palette, 700, 300, 900);
+$ms-black-accent: mat.define-palette(mat.$blue-gray-palette, 400);
+$ms-black-warn: mat.define-palette(mat.$red-palette, 500);
 
-$ms-black-theme: mat.mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
+$ms-black-theme: mat.define-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
 
 
 //Light theme
-$ms-light-primary: mat.mat-palette(mat.$mat-grey, 200, 500, 300);
-$ms-light-accent: mat.mat-palette(mat.$mat-brown, 200);
-$ms-light-warn: mat.mat-palette(mat.$mat-deep-orange, 200);
+$ms-light-primary: mat.define-palette(mat.$gray-palette, 200, 500, 300);
+$ms-light-accent: mat.define-palette(mat.$brown-palette, 200);
+$ms-light-warn: mat.define-palette(mat.$deep-orange-palette, 200);
 
-$ms-light-theme: mat.mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
+$ms-light-theme: mat.define-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
 // $ms-toolbar-light-theme: mat-light-theme-for-toolbar($ms-light-primary, $ms-light-accent, $ms-light-warn);
 
 
@@ -45,7 +44,7 @@ $ms-light-theme: mat.mat-light-theme($ms-light-primary, $ms-light-accent, $ms-li
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
-
+@include mat.core();
 @mixin custom-components-theme($theme) {
   @include app-root-theme($theme);
 }
