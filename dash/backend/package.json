@@ -41,7 +41,7 @@
   "dependencies": {
     "@kubernetes/client-node": "^0.12.0",
     "@nestjs-modules/mailer": "file:vendor/nestjs-mailer",
-    "@nestjs/axios": "^2.0.0",
+    "@nestjs/axios": "1.0.1",
     "@nestjs/common": "^9.3.3",
     "@nestjs/config": "^2.3.0",
     "@nestjs/core": "^9.3.3",

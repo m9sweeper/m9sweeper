@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@use '@angular/material/theming' as mat;
+/*@use '@angular/material/theming' as mat;
+*/
+@use '@angular/material' as mat;
+@include mat.core();
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -44,7 +47,7 @@ $ms-light-theme: mat.define-light-theme($ms-light-primary, $ms-light-accent, $ms
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
-@include mat.core();
+
 @mixin custom-components-theme($theme) {
   @include app-root-theme($theme);
 }
@@ -101,8 +104,10 @@ $ms-light-theme: mat.define-light-theme($ms-light-primary, $ms-light-accent, $ms
   @include kubernetes-pods-details-dark-theme($theme);
 }
 
+/*@include mat.angular-material-theme($ms-default-theme);*/
+
 .default-theme {
-  // @include angular-material-theme($ms-default-theme);
+  /*@include angular-material-theme($ms-default-theme);*/
   @include custom-components-theme($ms-default-theme);
   @include custom-dashboard-component-theme($ms-default-theme);
   @include custom-cluster-details-component-theme($ms-default-theme);
@@ -111,12 +116,12 @@ $ms-light-theme: mat.define-light-theme($ms-light-primary, $ms-light-accent, $ms
 }
 
 .light-theme {
-  @include mat.angular-material-theme($ms-light-theme);
+  /*@include mat.angular-material-theme($ms-light-theme);*/
   @include custom-components-theme($ms-light-theme);
 }
 
 .dark-theme {
-  @include mat.angular-material-theme($ms-black-theme);
+  /*@include mat.angular-material-theme($ms-black-theme);*/
   @include custom-components-theme($ms-black-theme);
   @include custom-toolbar-dark-theme($ms-black-theme);
   @include custom-dashboard-component-dark-theme($ms-black-theme);
