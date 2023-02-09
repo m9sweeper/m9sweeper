@@ -41,7 +41,7 @@
                   Install Gatekeeper
                 </button>
                 <ng-template #recommendationButton>
-                  <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard('setup')" *ngIf="(gatekeeperConstraintTemplates$ | async).length === 0">
+                  <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openAddConstraintDialog()" *ngIf="(gatekeeperConstraintTemplates$ | async).length === 0">
                     Setup Wizard
                   </button>
                 </ng-template>
