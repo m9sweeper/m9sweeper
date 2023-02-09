@@ -25,7 +25,7 @@ dispatchUrl: ""
 
 image:
   repository: aquasec/kube-hunter
-  tag: latest
+  tag: 0.6.8
   pullPolicy: IfNotPresent
 
 resources:

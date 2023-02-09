@@ -12,7 +12,7 @@ image:
 kubesec:
   registry: m9sweeper
   repository: kubesec
-  tag: latest
+  tag: 2.12.0
   pullPolicy: Always
   credentials:
     create: false
