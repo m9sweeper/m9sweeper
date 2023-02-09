@@ -21,7 +21,8 @@ kubesec:
     secretRef: ""
 
 falco:
-  bulkhead: false
+  bulkhead: true
+  replicas: 1
 
 nameOverride: ""
 fullnameOverride: ""

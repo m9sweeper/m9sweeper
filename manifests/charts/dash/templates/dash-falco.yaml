@@ -1,15 +1,21 @@
+{{ if .Values.falco.bulkhead }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "dash.fullname" . }}-falco
   labels:
-    {{- include "dash.labels" . | nindent 4 }}
+    helm.sh/chart: {{ include "dash.chart" . }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.falco.replicas }}
   selector:
     matchLabels:
-      {{- include "dash.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       annotations:
@@ -23,7 +29,8 @@ spec:
 {{- end }}
 {{- end }}
       labels:
-        {{- include "dash.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccount: dash-sa
       containers:
@@ -84,3 +91,24 @@ spec:
       tolerations:
 {{- toYaml . | nindent 8 }}
 {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dash.fullname" . }}-falco
+  labels:
+    helm.sh/chart: {{ include "dash.chart" . }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end}}
