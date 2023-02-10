@@ -8,7 +8,9 @@ metadata:
     helm.sh/chart: {{ include "dash.chart" . }}
     app.kubernetes.io/name: {{ include "dash.name" . }}-falco
     app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Chart.AppVersion }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.falco.replicas }}
@@ -100,7 +102,9 @@ metadata:
     helm.sh/chart: {{ include "dash.chart" . }}
     app.kubernetes.io/name: {{ include "dash.name" . }}-falco
     app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Chart.AppVersion }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   type: {{ .Values.service.type }}
@@ -111,4 +115,28 @@ spec:
   selector:
     app.kubernetes.io/name: {{ include "dash.name" . }}-falco
     app.kubernetes.io/instance: {{ .Release.Name }}
+
+{{ if .Values.prometheusOperator.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dash.fullname" . }}-falco
+  labels:
+    helm.sh/chart: {{ include "dash.chart" . }}
+  {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+spec:
+  endpoints:
+  - path: /api/v1/metrics
+    port: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+{{ end }}
 {{- end}}
