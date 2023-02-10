@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
 
 @mixin toolbar-dark-theme($theme) {
   app-private {
@@ -11,7 +11,7 @@
 @mixin toolbar-light-theme($theme) {
   app-private {
     .mat-toolbar {
-      background-color: map-get($mat-grey, A100);
+      background-color: map-get(mat.$gray-palette, A100);
     }
   }
 }
