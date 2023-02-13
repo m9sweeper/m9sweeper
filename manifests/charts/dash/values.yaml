@@ -20,6 +20,8 @@ kubesec:
     password: ""
     secretRef: ""
 
+# Creates another deployment of M9sweeper, a service, and alters the ingress.
+# All requests sent to /api/falco will route to this instance. Useful for environments with many Falco alerts.
 falco:
   bulkhead: false
   replicas: 1

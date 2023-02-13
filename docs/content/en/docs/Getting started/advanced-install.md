@@ -50,6 +50,20 @@ cannot reach out to a remote url for the validating webhook, then you will need 
 using our reverse proxy self-installer. This script will generate a CA Certificate Bundle and Nginx configuration
 to enable the reverse proxy to work in Azure Kubernetes Service. 
 
+## Falco bulkhead Deployment
+
+Depending on your environment, Falco can send an immense amount of alerts to M9sweeper. This could overload the application
+and cause it to crash. To avoid this, there is an option to deploy multiple instances of M9sweeper that only take api requests sent to /api/falco.
+
+```yaml
+falco:
+  bulkhead: true
+  replicas: 1
+```
+
+When set to true, this will create a seperate deployment appended with "-falco", a service, and when applicable, a service monitor. 
+This also edits ingress, routing all API calls from Falco, into the bulkhead deployment. 
+
 
 ## Configuration Options
 
