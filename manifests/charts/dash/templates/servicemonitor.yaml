@@ -12,6 +12,5 @@ spec:
     port: http
   selector:
     matchLabels:
-      app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/name: {{ include "dash.name" . }}
+    {{- include "dash.selectorLabels" . | nindent 6 }}
 {{ end }}

@@ -1,0 +1,142 @@
+{{ if .Values.falco.bulkhead }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dash.fullname" . }}-falco
+  labels:
+    helm.sh/chart: {{ include "dash.chart" . }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.falco.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        checksum/{{ include "dash.fullname" . }}-secrets: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+        checksum/{{ include "dash.fullname" . }}-config-extra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
+{{- end }}
+{{ if .Values.extraSecretVars }}
+        checksum/{{ include "dash.fullname" . }}-secrets-extra: {{ include (print $.Template.BasePath "/secret-extra.yaml") . | sha256sum }}
+{{- end }}
+{{- end }}
+      labels:
+        app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccount: dash-sa
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SERVER_BASE_URL
+              value: "{{ .Values.global.baseUrl }}"
+          envFrom:
+            - secretRef:
+                name: {{ include "dash.fullname" . }}-secrets
+{{- if or .Values.extraConfigVars .Values.extraSecretVars }}
+{{- if .Values.extraConfigVars }}
+            - configMapRef:
+                name: {{ include "dash.fullname" . }}-config-extra
+{{- end }}
+{{ if .Values.extraSecretVars }}
+            - secretRef:
+                name: {{ include "dash.fullname" . }}-secrets-extra
+{{- end }}
+{{- end }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          livenessProbe:
+            httpGet:
+              path: /api/info
+              port: {{ .Values.service.port }}
+              scheme: HTTP
+            initialDelaySeconds: 60
+            timeoutSeconds: 2
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.service.port }}
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+            periodSeconds: 10
+          resources:
+{{- toYaml .Values.resources | nindent 12 }}
+        - name: kubesec
+          image: "{{ .Values.kubesec.registry }}/{{ .Values.kubesec.repository }}:{{ .Values.kubesec.tag }}"
+          ports:
+            - containerPort: 8080
+          resources:
+{{- toYaml .Values.resources | nindent 12 }}
+{{- with .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml . | nindent 8 }}
+{{- end }}
+{{- with .Values.affinity }}
+      affinity:
+{{- toYaml . | nindent 8 }}
+{{- end }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{- toYaml . | nindent 8 }}
+{{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dash.fullname" . }}-falco
+  labels:
+    helm.sh/chart: {{ include "dash.chart" . }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
+{{ if .Values.prometheusOperator.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "dash.fullname" . }}-falco
+  labels:
+    helm.sh/chart: {{ include "dash.chart" . }}
+  {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+  {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+spec:
+  endpoints:
+  - path: /api/v1/metrics
+    port: http
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "dash.name" . }}-falco
+{{ end }}
+{{- end}}

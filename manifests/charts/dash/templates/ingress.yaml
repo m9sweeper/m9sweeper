@@ -46,6 +46,21 @@ spec:
             serviceName: {{ template "dash.fullname" $ }}
             servicePort: {{ $.Values.service.port }}
         {{- end }}
+      {{- if $.Values.falco.bulkhead}}
+        - path: /api/falco
+        {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ template "dash.fullname" $ }}-falco
+              port:
+                number: {{ $.Values.service.port }}
+        {{- else }}
+          backend:
+            serviceName: {{ template "dash.fullname" $ }}-falco
+            servicePort: {{ $.Values.service.port }}
+        {{- end }}
+      {{- end }}
     {{- end }}
   {{- end }}
 {{- end -}}
