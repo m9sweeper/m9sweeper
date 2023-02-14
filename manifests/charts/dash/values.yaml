@@ -12,7 +12,7 @@ image:
 kubesec:
   registry: docker.io
   repository: kubesec/kubesec
-  tag: 2.12.0
+  tag: v2.12.0
   pullPolicy: Always
   credentials:
     create: false
