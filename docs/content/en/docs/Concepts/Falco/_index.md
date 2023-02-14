@@ -23,25 +23,10 @@ For more information, see the [Falco Documentation](https://falco.org/docs/).
 M9sweeper consumes HTTP requests from Falco in JSON format to present readable information in our UI.
 
 To accomplish this, [FalcoSideKick](https://github.com/falcosecurity/falcosidekick) is deployed to give us more control over Falco's output.
-
-### Deploy FalcoSideKick
-The following commands add the FalcoSideKick chart and then installs with the passed configuration. This will deploy into the "falco" namespace, and will be created if it doesn't exist.
-
-#### Add the Helm Chart Repository then install FalcoSideKick:
-    helm repo add falcosecurity https://falcosecurity.github.io/charts
-    helm repo update
-
-    helm install -n falco falcosidekick \
-     --create-namespace \
-     --set-string config.webhook.address="https://m9sweeper.domain.com/api/falco/CLUSTER_ID/create" \
-     --set-string config.webhook.minimumpriority="error" \
-     --set config.webhook.checkcert=true \
-     falcosecurity/falcosidekick
-
 ### Configuration Notes:
 - Set the config.webhook.address value to your instance of M9sweeper. 
 - Depending on how you are deploying M9sweeper, you might need to set config.webhook.checkcert=false.
-- We recommend setting the minimum priorty to "error". This filters the noise from Falco's warnings. However, you can change this as needed. The order is as following:
+- We recommend setting the minimum priority to "error". This filters the noise from Falco's warnings. However, you can change this as needed. The order is as following:
     
     emergency|alert|critical|error|warning|notice|informational|debug
 ### Deploy Falco
@@ -59,18 +44,22 @@ The following commands add the FalcoSideKick chart and then installs with the pa
      --set falco.json_output=true \
      --set falco.json_include_output_property=true \
      --set falco.http_output.enabled=true \
-     --set-string falco.http_output.url=http://falcosidekick:2801/
+     --set-string falco.http_output.url=http://falcosidekick:2801/ \
+     --set falcosidekick.enabled=true \
+     --set-string falcosidekick.config.webhook.address= 'https://M9SWEEPER/api/falco/CLUSTERID/create/?key=FALCO_API_KEY' \
+     --set falcosidekick.config.webhook.checkcert=true \
+     --set-string falcosidekick.config.webhook.minimumpriority='error'
 
 ### Notes: 
 - Make sure to change the URL value to point to your M9sweeper instance as well as enter the CLUSTER_ID of whatever cluster it is supposed to save to.
 
 - We recommend using the EBPF driver, however, if you have issues please refer to to the [installation page](https://falco.org/docs/getting-started/installation/#install-driver). Or you may try to use the kernel driver and set "falco.driver.kind=module" above.
 
-### Anomaly Detaction:
+### Anomaly Detection:
 - Anomaly instrusion detection plays vital role in protecting networks against malicious activities.
 - It detects unusual behaviors or threats in cloud-native environments with about 100 out-of-the-box security rules.
 - Administrators can set up alert to receive email notification based on specific priority (severity) level(s) and email frequency that fits individual application needs.
-- Simply go to Falco > Settingsgi
+- Simply go to Falco > Settings
 
 #### Here is an example of Non-authorized container namespace change violation:
     rule: change_thread_namespace
