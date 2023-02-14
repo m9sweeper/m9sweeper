@@ -38,8 +38,8 @@ pod:
     "helm.sh/hook-delete-policy": before-hook-creation
 
 image:
-  repository: m9sweeper/kube-bench
-  tag: latest
+  repository: aquasec/kube-bench
+  tag: v0.6.11
   pullPolicy: IfNotPresent
 
 resources:

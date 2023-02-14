@@ -1,1 +1,0 @@
-FROM kubesec/kubesec:v2
