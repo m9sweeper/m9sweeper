@@ -10,9 +10,9 @@ image:
     secretRef: ""
 
 kubesec:
-  registry: m9sweeper
-  repository: kubesec
-  tag: latest
+  registry: docker.io
+  repository: kubesec/kubesec
+  tag: v2.12.0
   pullPolicy: Always
   credentials:
     create: false
