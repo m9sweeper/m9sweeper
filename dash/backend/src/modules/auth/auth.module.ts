@@ -13,8 +13,6 @@ import {LdapFactory} from './factories/LdapFactory';
 import LoggedInUserFactory from '../../providers/LoggedInUserFactory';
 import {ResetPasswordService} from './services/reset-password.service';
 import {ResetPasswordDao} from './dao/reset-password.dao';
-import {AppSettingsService} from '../settings/services/app-settings.service';
-import {AppSettingsDao} from '../settings/dao/app-settings.dao';
 import {
   makeCounterProvider,
 } from '@willsoto/nestjs-prometheus';
@@ -42,8 +40,6 @@ import {AuthService} from './services/auth.service'
       }),
       inject: [ConfigService],
     }),
-    AppSettingsDao,
-    AppSettingsService,
   ],
   exports: [
     JwtUtilityService,
