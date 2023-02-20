@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@nestjs/testing": "^9.3.9",
     "moment": "^2.29.1"
   }
 }

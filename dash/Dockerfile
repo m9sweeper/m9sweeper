@@ -13,6 +13,7 @@ COPY ./backend/package.json /usr/src/app/backend
 COPY ./backend/package-lock.json /usr/src/app/backend
 RUN mkdir /usr/src/app/backend/vendor
 COPY ./backend/vendor /usr/src/app/backend/vendor
+RUN node --version && npm --version
 RUN npm ci
 
 COPY /backend /usr/src/app/backend/
