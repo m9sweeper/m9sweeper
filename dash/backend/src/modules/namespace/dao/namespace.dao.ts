@@ -95,7 +95,12 @@ export class NamespaceDao {
         sort.field = sortFieldMap[sort.field] !== undefined ? sortFieldMap[sort.field] : sortFieldMap['id'];
         sort.direction = sort.direction === 'desc' ? 'desc' : 'asc';
 
-        return await knexnest(knex
+        const subquery = knex('history_kubernetes_pods').select('namespace', 'history_kubernetes_pods.saved_date', knex.raw('count(*) as ??', ['name']))
+            .where('cluster_id', clusterId)
+            .andWhere('pod_status', 'Running')
+            .groupBy('namespace', 'saved_date').as('p')
+
+        const result = await knexnest(knex
             .select([
                 'n.id as _id',
                 'n.name as _name',
@@ -113,14 +118,11 @@ export class NamespaceDao {
                     .select('namespace', knex.raw('count(*) as ??', ['name']))
                     .where('cluster_id', clusterId).groupBy('namespace').as('i'),
                 'i.namespace',
-                'n.name'
+                'n.name',
             )
-            .leftJoin(knex('history_kubernetes_pods')
-                    .select('namespace', knex.raw('count(*) as ??', ['name']))
-                    .where('cluster_id', clusterId).groupBy('namespace').as('p'),
-                'p.namespace',
-                'n.name'
-            )
+            .leftJoin(subquery, function(){
+                this.on('p.namespace', '=', 'n.name')
+                this.andOn('p.saved_date', '=', 'n.saved_date')})
             .where('n.cluster_id', clusterId)
             .andWhere('n.saved_date', '>=', startTime)
             .andWhere('n.saved_date', '<=', endTime)
@@ -128,6 +130,10 @@ export class NamespaceDao {
             .offset(page * limit)
             .orderByRaw(`${sort.field} ${sort.direction}`))
             .then(namespaces => plainToInstance(NamespaceDto, namespaces));
+
+            //console.log(result.sql);
+
+        return result;
     }
 
     async getAllNamespacesHistoryByDate(dayStr: string) : Promise<NamespaceComplianceDto[]> {
