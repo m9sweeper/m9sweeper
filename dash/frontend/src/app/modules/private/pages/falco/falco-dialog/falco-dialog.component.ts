@@ -20,6 +20,7 @@ export class FalcoDialogComponent implements OnInit {
   clusterId: number;
   private unsubscribe$ = new Subject<void>();
   apiKey: string;
+  level = 'none';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { clusterId: number },
