@@ -26,9 +26,8 @@ To accomplish this, [FalcoSideKick](https://github.com/falcosecurity/falcosideki
 ### Configuration Notes:
 - Set the config.webhook.address value to your instance of M9sweeper. 
 - Depending on how you are deploying M9sweeper, you might need to set config.webhook.checkcert=false.
-- We recommend setting the minimum priority to "error". This filters the noise from Falco's warnings. However, you can change this as needed. The order is as following:
-    
-    emergency|alert|critical|error|warning|notice|informational|debug
+- We recommend setting the minimum priority to "error". For more information see [Minimum Priority](#minimum-priority)
+
 ### Deploy Falco
 
 ##### Add the Helm Chart Repo then install Falco:
@@ -67,6 +66,19 @@ To accomplish this, [FalcoSideKick](https://github.com/falcosecurity/falcosideki
     condition: syscall.type = setns and not proc.name in (docker, sysdig, dragent)
     output: "Namespace change (setns) by unexpected program (user=%user.name command=%proc.cmdline container=%container.id)"
     priority: WARNING
+
+### Minimum Priority
+  Falco Alerts can get very noisy. This option lets you choose which levels of alerts you want to include/exclude. Once set, all rules having a priority more severe than this level will be loaded/run. The default is an empty string and includes all alerts. The order is as follows:
+  - Emergency
+  - Alert
+  - Critical
+  - Error
+  - Warning
+  - Notice
+  - Info
+  - Debug
+
+  For more information on Priority please refer to [Falco Docs - Priorities](https://falco.org/docs/rules/basic-elements/#priority)
 
 
 
