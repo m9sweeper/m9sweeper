@@ -20,7 +20,7 @@ export class FalcoDialogComponent implements OnInit {
   clusterId: number;
   private unsubscribe$ = new Subject<void>();
   apiKey: string;
-  level = 'none';
+  level = 'Error';
   priorityLevels: string [] = ['','Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
 
   constructor(
