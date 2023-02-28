@@ -9,15 +9,15 @@ RUN apt update && \
 
 # BUILD BACK END
 WORKDIR /usr/src/app/backend
-COPY ./backend/package.json /usr/src/app/backend
-COPY ./backend/package-lock.json /usr/src/app/backend
+COPY ./dash/backend/package.json /usr/src/app/backend
+COPY ./dash/backend/package-lock.json /usr/src/app/backend
 RUN mkdir /usr/src/app/backend/vendor
-COPY ./backend/vendor /usr/src/app/backend/vendor
+COPY ./dash/backend/vendor /usr/src/app/backend/vendor
 RUN node --version && npm --version
 RUN npm install -g npm@9.5.0
 RUN npm ci
 
-COPY /backend /usr/src/app/backend/
+COPY /dash/backend /usr/src/app/backend/
 RUN npm run prebuild
 
 RUN cp src/config/licensing-portal-config/misc.prod.ts src/config/misc.ts
@@ -31,21 +31,36 @@ RUN rm -f node_modules/@nestjs-modules/mailer && rm -f node_modules/knexnest && 
 
 # BUILD FRONT END
 WORKDIR /usr/src/app/frontend
-COPY ./frontend/package.json /usr/src/app/frontend
-COPY ./frontend/package-lock.json /usr/src/app/frontend
+COPY ./dash/frontend/package.json /usr/src/app/frontend
+COPY ./dash/frontend/package-lock.json /usr/src/app/frontend
 WORKDIR /usr/src/app/frontend/vendor
-COPY ./frontend/vendor /usr/src/app/frontend/vendor
+COPY ./dash/frontend/vendor /usr/src/app/frontend/vendor
 RUN npm ci
 
 WORKDIR /usr/src/app
-COPY ./frontend /usr/src/app/frontend
+COPY ./dash/frontend /usr/src/app/frontend
 
 WORKDIR /usr/src/app/frontend
 RUN npm run build:prod
 RUN npm prune --production
 
+#########################
+## Stage 2: Build Docs ##
+#########################
+FROM klakegg/hugo:ext-alpine as docs-builder
+RUN apk add git && \
+  git config --global --add safe.directory /src
+
+WORKDIR /usr/src/
+
+COPY ./docs/ /usr/src/
+COPY ./.git /usr/src/.git
+
+RUN hugo --config config-local.toml
+
+
 ######################
-## Stage 2: DELIVER ##
+## Stage 3: DELIVER ##
 ######################
 FROM node:16-alpine
 
@@ -56,6 +71,7 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/backend/dist /usr/src/app
 COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/node_modules
 COPY --from=builder /usr/src/app/backend/vendor /usr/src/app/vendor
+COPY --from=docs-builder /usr/src/public /usr/src/app/public/docs
 
 # Upgrade npm
 RUN npm install -g npm
