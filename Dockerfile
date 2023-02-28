@@ -47,7 +47,7 @@ RUN npm prune --production
 #########################
 ## Stage 2: Build Docs ##
 #########################
-FROM klakegg/hugo:ext-alpine as docs-builder
+FROM klakegg/hugo:0.107.0-ext-alpine as docs-builder
 RUN apk add git && \
   git config --global --add safe.directory /src
 
