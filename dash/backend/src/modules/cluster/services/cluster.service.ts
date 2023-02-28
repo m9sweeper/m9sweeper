@@ -29,6 +29,8 @@ import {
 } from "../dto/gatekeeper-constraint-dto";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import {ApiregistrationV1beta1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1beta1Api";
+import {ApiregistrationApi} from "@kubernetes/client-node/dist/gen/api/apiregistrationApi";
+import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
 import {PrometheusService} from "../../shared/services/prometheus.service";
@@ -336,9 +338,9 @@ export class ClusterService {
     return dirStructure;
   }
 
-  async checkGatekeeperInstallationStatus(clusterId: number): Promise<{status: boolean, message: string}> {
+  async checkGatekeeperInstallationStatus(clusterId: number): Promise<{status: boolean, message: string, error: any}> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const apiRegistration = kubeConfig.makeApiClient(ApiregistrationV1beta1Api);
+    const apiRegistration = kubeConfig.makeApiClient(ApiregistrationV1Api);
     let installationStatus = false;
     try {
       const resource = await apiRegistration.readAPIService('v1beta1.templates.gatekeeper.sh');
@@ -351,17 +353,17 @@ export class ClusterService {
         const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
         const templates: any[] = templateListResponse.body['items'];
         if (templates.length) {
-          return {status: installationStatus, message: 'Setup'};
+          return {status: installationStatus, message: 'Setup', error: null};
         } else {
-          return {status: installationStatus, message: 'Not Setup'};
+          return {status: installationStatus, message: 'Not Setup', error: null};
         }
       } else {
-        return {status: installationStatus, message: 'Not Installed'};
+        return {status: installationStatus, message: 'Not Installed', error: null};
       }
     }
     catch(e) {
       console.log(e);
-      return {status: installationStatus, message: 'Not Installed'};
+      return {status: installationStatus, message: 'Not Installed', error: e.message};
     }
   }
 
