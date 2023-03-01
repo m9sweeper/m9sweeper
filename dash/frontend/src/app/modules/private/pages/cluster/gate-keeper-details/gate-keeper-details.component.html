@@ -73,7 +73,7 @@
               <mat-card-header id="constraint-header">Constraints</mat-card-header>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 add-more-btn">
-              <button mat-raised-button color="primary" (click)="openAddConstraintTemplate()"><mat-icon>add</mat-icon>Add More</button>
+              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openAddConstraintTemplate()"><mat-icon>add</mat-icon>Add More</button>
             </div>
           </div>
           <div class="row constraint-table-root">
