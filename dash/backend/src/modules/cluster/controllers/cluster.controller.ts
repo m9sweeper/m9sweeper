@@ -246,7 +246,7 @@ export class ClusterController {
 
 
     @Get('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
         status: 201,
@@ -258,7 +258,7 @@ export class ClusterController {
     }
 
     @Get('/opa/:clusterId/gatekeeper-constraint-templates/:templateName/raw')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
         status: 201,
@@ -333,7 +333,7 @@ export class ClusterController {
     }
 
     @Get('/opa/:clusterId/:templateName/constraints')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
         status: 201,
@@ -395,7 +395,7 @@ export class ClusterController {
     }
 
     @Get('/opa/:clusterId/gatekeeper/installation-status')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
         status: 201,

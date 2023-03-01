@@ -78,6 +78,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-skinny add-more-btn">
               <button mat-raised-button color="primary"
+                      [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                       [disabled]="!gatekeeperStatusLoaded || !gatekeeperInstallationStatus.status"
                       (click)="openAddConstraintDialog()">
                 <mat-icon>add</mat-icon>
