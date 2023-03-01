@@ -51,7 +51,7 @@ public final class TestGateKeeper {
         driver.findElement(By.xpath("//mat-list/a[@title='GateKeeper']")).click();
         // sleep to load
         Thread.sleep(2000);
-/*
+
         // Run helm command to install GateKeeper
         String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts\n" +
                 "helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version 3.9.2";
@@ -85,7 +85,7 @@ public final class TestGateKeeper {
         // sleep to load
         Thread.sleep(5000);
 
- */
+
         // verify the status
         String statusText = driver.findElement(By.xpath("//mat-card-content/h1")).getText();
         String notSetupText = "Not Setup";
@@ -113,12 +113,12 @@ public final class TestGateKeeper {
         // Save changes
         driver.findElement(By.xpath("//span[contains(text(), 'Save Changes')]")).click();
         // sleep to load
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         // refresh browser
         driver.navigate().refresh();
         // sleep to load
-        Thread.sleep(5000);
+        Thread.sleep(7000);
 
         // verify the status
         String updatedStatusText = driver.findElement(By.xpath("//mat-card-content/h1")).getText();
@@ -160,16 +160,15 @@ public final class TestGateKeeper {
         // Save changes
         driver.findElement(By.xpath("//span[contains(text(), 'Save Changes')]")).click();
         // sleep to load
-        Thread.sleep(5000);
+        Thread.sleep(3000);
 
         // refresh browser
         driver.navigate().refresh();
         // sleep to load
-        Thread.sleep(5000);
+        Thread.sleep(7000);
 
         // Should find the saved testing-limit constraint
-        driver.findElement(By.xpath("//td[contains(text(), 'k8scontainerlimits')]"));
-
+        driver.findElement(By.xpath("//td[contains(text(), 'testing-limit')]"));
 
 
         // click on profile and log out
