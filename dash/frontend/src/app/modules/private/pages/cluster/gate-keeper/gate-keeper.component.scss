@@ -15,150 +15,45 @@ div {
   &.gate-keeper-dashboard-container {
     height:calc(var(--cluster-details-height) - 55px);
     overflow: auto;
-    div {
-      &.gate-keeper-dashboard-header-card-item {
-        div {
-          margin: 5px 0;
-          mat-card {
-            height: 100px;
-            mat-card-content {
-              .text-style-red {
-                padding-left: 17px;
-                color: red;
-              }
-              .text-style-orange {
-                padding-left: 17px;
-                color: orange;
-              }
-              .text-style-green {
-                padding-left: 17px;
-                color: green;
-              }
-              .license-text {
-                margin-left: 15px;
-              }
-            }
-            .recommendation-text {
-              margin-top: 0px;
-              margin-left: 1px;
-            }
-          }
 
-          .install-gatekeeper-btn {
-            margin-left: -35px;
-          }
+    .constraint-table-root {
+      width: 100%;
+      overflow-x: auto;
 
-          @media screen and (max-width: 315px) and (min-width: 100px){
-            .recommendation-card {
-              height: 300px
-            }
-          }
-          @media screen and (max-width: 1731px) and (min-width: 993px){
-            .setup-wizard-btn {
-              margin-left: -40px;
-            }
-            .install-gatekeeper-btn {
-              margin-left: -40px;
-              //margin-top: 10px;
-            }
-          }
-          @media screen and (max-width: 987px) and (min-width: 316px){
-            .recommendation-card {
-              height: 200px;
-            }
-            .setup-wizard-btn {
-              margin-left: 0px;
-            }
-            .install-gatekeeper-btn {
-              margin-left: 0;
-            }
-          }
-          @media screen and (max-width: 382px){
-            .setup-wizard-btn {
-              margin-top: -18px;
-            }
-            .install-gatekeeper-btn {
-
-            }
-          }
-
-          @media only screen
-          and (min-device-width: 834px)
-          and (max-device-width: 1112px)
-          and (-webkit-min-device-pixel-ratio: 2) {
-            .recommendation-text {
-              margin-top: -35px;
-            }
-            .add-more-btn {
-              margin-left: 16px;
-            }
-          }
-
-          @media only screen
-          and (min-device-width: 1024px)
-          and (max-device-width: 1366px)
-          and (-webkit-min-device-pixel-ratio: 2) {
-            .recommendation-text {
-              margin-top: -35px;
-            }
-            .add-more-btn {
-              margin-left: 16px;
-            }
-          }
-
-        }
+      table {
+        min-width: 800px;
+        width: 100%
       }
+    }
 
-      &.constraint-templates-section {
-        div {
-          mat-card {
-            #constraint-templates-header {
-              font-weight: bold;
-              margin-left: -30px;
-            }
-            .add-more-btn {
-              margin-left: -31px;
-            }
+    .text-style-red {
+      color: red;
+    }
+    .text-style-orange {
+      color: orange;
+    }
+    .text-style-green {
+      color: green;
+    }
 
-            @media only screen
-            and (min-device-width: 834px)
-            and (max-device-width: 1112px)
-            and (-webkit-min-device-pixel-ratio: 2) {
-              .add-more-btn {
-                margin-left: 16px;
-              }
-            }
-
-            @media screen and (max-width: 987px) and (min-width: 200px){
-              .add-more-btn {
-                margin-left: 0px;
-              }
-            }
-
-            @media screen and (max-width: 1731px) and (min-width: 993px){
-              .add-more-btn {
-                //margin-left: -72px;
-              }
-            }
-            .constraint-table-root {
-              margin: 10px 0 10px 5px;
-              width: 99.5%;
-              .constraint-table {
-                width: 100%;
-                height: 100%;
-                overflow-x: scroll;
-              }
-            }
-            table {
-              width: 100%;
-              .constraint-click:hover {
-                background-color: rgba(0, 0, 0, .05);
-                cursor: pointer;
-              }
-            }
-          }
-        }
+    .top-header-row {
+      mat-card {
+        height: 140px
       }
+    }
+
+    .mat-card-title {
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+
+    .col-skinny {
+      padding-left: 0px;
+      padding-right: 0px
+    }
+
+    .add-more-btn {
+      text-align: right
     }
   }
 }
