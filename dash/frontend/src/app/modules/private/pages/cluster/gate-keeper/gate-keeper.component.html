@@ -37,7 +37,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 end-text-align col-skinny">
               <mat-card-content class="setup-wizard-btn">
-                <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard('install')" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
+                <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
                   Install
                 </button>
                 <ng-template #recommendationButton>

@@ -127,6 +127,7 @@ import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/shar
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
+import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 
 
 @NgModule({
@@ -177,6 +178,7 @@ import {TablifyPipe} from '../../core/pipe/tablify.pipe';
     AddClusterWizardComponent,
     GateKeeperComponent,
     GateKeeperDetailsComponent,
+    GateKeeperInstallWizardDialogComponent,
     LicensesComponent,
     LicenseCheckComponent,
     AddConstraintDialogComponent,
