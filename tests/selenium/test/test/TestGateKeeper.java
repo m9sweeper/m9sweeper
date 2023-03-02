@@ -53,8 +53,8 @@ public final class TestGateKeeper {
         Thread.sleep(2000);
 
         // Run helm command to install GateKeeper
-        String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts\n" +
-                "helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version 3.9.2";
+        String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts && " +
+                "helm install gatekeeper/gatekeeper --wait --timeout 10m --debug --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version "+ SeleniumTestRunner.gateKeeperVersion;
 
         System.out.println("****** Helm Text: *******");
         System.out.println(helmText);
@@ -71,7 +71,7 @@ public final class TestGateKeeper {
                 new InputStreamReader(process.getInputStream()));
         String outLine;
         while ((outLine = bufferedReader.readLine()) != null) {
-            System.out.println("*** command line: ***"+ outLine);
+            System.out.println("*** command line: *** "+ outLine);
         }
         // print exit code if any
         System.out.println("*** Process exited with code: ***"+ exitCode);
