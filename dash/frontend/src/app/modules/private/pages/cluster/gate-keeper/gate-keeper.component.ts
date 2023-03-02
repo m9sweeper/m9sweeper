@@ -9,6 +9,8 @@ import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTempl
 import {MatDialog} from '@angular/material/dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
+import {FalcoDialogComponent} from '../../falco/falco-dialog/falco-dialog.component';
+import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 
 @Component({
   selector: 'app-gate-keeper',
@@ -50,11 +52,16 @@ export class GateKeeperComponent implements OnInit {
   //   this.router.navigate(['/private', 'clusters', this.clusterId, 'gatekeeper', constraint.name]);
   // }
 
-  openInstallWizard(status: string) {
-    if (status === 'install') {
-      window.open('https://open-policy-agent.github.io/gatekeeper/website/docs/install/#installation', '_blank');
-    }
-    return null;
+  openInstallWizard() {
+   this.dialog.open(GateKeeperInstallWizardDialogComponent, {
+      maxWidth: '800px',
+      maxHeight: '80vh',
+      closeOnNavigation: true,
+      disableClose: false,
+      data: {
+        clusterId: this.clusterId,
+      }
+    });
   }
 
   viewTemplateDetails(template: IGatekeeperTemplate) {

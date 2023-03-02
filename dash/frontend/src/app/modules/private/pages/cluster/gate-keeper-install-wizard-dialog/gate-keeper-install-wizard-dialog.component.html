@@ -1,0 +1,25 @@
+<a mat-list-item href="https://open-policy-agent.github.io/gatekeeper/website/docs/install/#installation">
+  <mat-icon mat-list-icon>info</mat-icon>
+</a>
+
+<div class="row button-row ng-star-inserted">
+  <div class="col-xs-9 padding-top-15">Run GateKeeper (3.9.2) using the following CLI command:</div>
+  <div class="col-xs-3 copy-to-button">
+    <app-copy-to-clipboard-button
+      successMessage="Command copied to clipboard!"
+      errorMessage="Command could not be copied"
+      [text]="run.value">
+    </app-copy-to-clipboard-button>
+  </div>
+</div>
+
+<div>
+  <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
+helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version 3.9.2
+  </textarea>
+</div>
+
+<div class="row row-reverse">
+  <button mat-raised-button matDialogClose color="primary">Done</button>
+</div>
+
