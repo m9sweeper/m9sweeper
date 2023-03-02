@@ -54,7 +54,7 @@ public final class TestGateKeeper {
 
         // Run helm command to install GateKeeper
         String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts && " +
-                "helm install gatekeeper/gatekeeper --wait --timeout 10m --debug --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version g"+ SeleniumTestRunner.gateKeeperVersion;
+                "helm install gatekeeper/gatekeeper --wait --timeout 10m --debug --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version "+ SeleniumTestRunner.gateKeeperVersion;
 
         System.out.println("****** Helm Text: *******");
         System.out.println(helmText);
