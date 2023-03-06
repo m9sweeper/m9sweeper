@@ -1,25 +1,109 @@
-# m9sweeper
+<!--
+Hey, thanks for using the awesome-readme-template template.  
+If you have any enhancements, then fork this project and create a pull request 
+or just open an issue with the label "enhancement".
 
-Kubernetes Security for Everyone!
+Don't forget to give this project a star for additional support ;)
+Maybe you can mention me or this repo in the acknowledgements too
+-->
+<div align="center">
 
-m9sweeper is a free and easy kubernetes security platform. It integrates industry standard open source utilities into a one-stop-shop kubernetes security tool
-that can walk most kubernetes adminstrators through securing a kubernetes
-cluster as well as the apps running on the cluster.
+  <img src="assets/logo.png" alt="logo" width="200" height="auto" />
+  <h1>m9sweeper</h1>
+  
+  <p>
+    Kubernetes Security for Everyone! 
+  </p>
+  
+  <p>
+  
+</p>
 
-# Features
+<!-- Badges -->
+<p>
+  <a href="https://github.com/m9sweeper/m9sweeper/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/m9sweeper/m9sweeper" alt="contributors" />
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/github/last-commit/m9sweeper/m9sweeper" alt="last update" />
+  </a>
+  <a href="https://github.com/m9sweeper/m9sweeper/network/members">
+    <img src="https://img.shields.io/github/forks/m9sweeper/m9sweeper" alt="forks" />
+  </a>
+  <a href="https://github.com/m9sweeper/m9sweeper/stargazers">
+    <img src="https://img.shields.io/github/stars/m9sweeper/m9sweeper" alt="stars" />
+  </a>
+  <a href="https://github.com/m9sweeper/m9sweeper/issues/">
+    <img src="https://img.shields.io/github/issues/m9sweeper/m9sweeper" alt="open issues" />
+  </a>
+  
+  <a href="https://github.com/m9sweeper/m9sweeper/blob/main/LICENSE">
+    <img src="assets/license.svg" alt="license" />
+  </a>
+</p>
+   
+<h4>
+    <a href="https://youtu.be/5sIqnYSZWAc/">View Demo</a>
+  <span> · </span>
+    <a href="https://m9sweeper.io/docs/latest/docs/">Documentation</a>
+  <span> · </span>
+    <a href="https://github.com/m9sweeper/m9sweeper/issues/">Report Bug</a>
+  <span> · </span>
+    <a href="https://github.com/m9sweeper/m9sweeper/issues/">Request Feature</a>
+  </h4>
+</div>
+
+<br />
+
+<!-- Table of Contents -->
+# :notebook_with_decorative_cover: Table of Contents
+
+- [About the Project](#star2-about-the-project)
+  * [Features in Action](#camera-features-in-action)
+  * [Features List](#dart-features)
+  * [Prerequisites](#bangbang-prerequisites)
+  * [Tool Box](#toolbox-toolbox)
+  * [Quick Install](#gear-installation)
+  * [Code of Conduct](#scroll-code-of-conduct)
+
+- [Contributors](#wave-contributing)
+- [License](#warning-license)
+- [Contact](#handshake-contact)
+  
+
+<!-- About the Project -->
+## :star2: About the Project
+
+ m9sweeper is a free and easy kubernetes security platform. It integrates industry standard open source utilities into a one-stop-shop kubernetes security tool that can walk most kubernetes adminstrators through securing a kubernetes cluster as well as the apps running on the cluster.
+
+
+<!-- Screenshots -->
+### :camera: Features in Action
+
+<div align="center"> 
+  <img src="assets/m9sweeper-features.gif" alt="m9sweeper-features-gif" />
+</div>
+
+
+
+
+<!-- Features -->
+### :dart: Features
 
 m9sweeper makes securing a cluster easy with:
 
- - CVE Scanning
- - Enforcement of CVE Scanning Rules
- - Reports and Dashboards, including historical reporting to see how your security posture has changed over time
- - CIS Security Benchmarking
- - Pen Testing
- - Deployment Coaching
- - Intrusion Detection
- - Gatekeeper Policy Management
+- CVE Scanning
+- Enforcement of CVE Scanning Rules
+- Reports and Dashboards, including historical reporting to see how your security posture has changed over time
+- CIS Security Benchmarking
+- Pen Testing
+- Deployment Coaching
+- Intrusion Detection
+- Gatekeeper Policy Management
 
-# Toolbox
+
+<!-- Getting Started -->
+## 	:toolbox: Toolbox
 
 m9sweeper makes it easy to orchestrate the implementation of a number of free security tools:
 
@@ -35,7 +119,32 @@ m9sweeper makes it easy to orchestrate the implementation of a number of free se
 
 [Project Falco](https://falco.org/): Intrusion Detection
 
-# Quick Install
+
+<!-- Prerequisites -->
+### :bangbang: Prerequisites
+
+This project requires a Kubernetes Cluster and uses helm as package manager
+
+```bash
+Installing Kubernetes Locally with Minikube
+Mac: Install from terminal
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+
+Windows: Install with chocolatey and install a bash client
+choco install minikube
+choco install git
+
+Both: Start Kubernetes
+minikube start --cni calico --kubernetes-version=v1.23.16
+kubectl get pods --all-namespaces
+
+More at  https://minikube.sigs.k8s.io/docs/start/
+
+```
+
+<!-- Installation -->
+### :gear: Quick Installation
 
 While our documentation has more details, installing m9sweeper can be as simple
 as running a few CLI commands to install it into your own kubernetes cluster
@@ -49,12 +158,14 @@ with helm.
       --set-string dash.init.superAdminPassword="password" \
       --set-string global.jwtSecret="changeme" \
       --set-string global.apiKey="YOUR-API-KEY"
+   
 
-## Docs
+<!-- Contributing -->
+## :wave: Contributing
 
-All documentation can be found on [m9sweeper.io](https://m9sweeper.io/docs/latest/docs/)
-
-## Contributors ✨
+<a href="https://github.com/vellankikoti/awesome-readme-template/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vellankikoti/awesome-readme-template" />
+</a>
 
 The initial project was created by team members at Intelletive Consulting at times when projects were slow or to train new members, but we hope others will contribute as well. Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -104,3 +215,17 @@ The initial project was created by team members at Intelletive Consulting at tim
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+
+<!-- License -->
+## :warning: License
+
+Distributed under the no License. See LICENSE.txt for more information.
+
+
+<!-- Contact -->
+## :handshake: Contact
+
+Official website - [@official_website](https://m9sweeper.io/)
+
+Project Link: [https://github.com/m9sweeper/m9sweeper](https://github.com/m9sweeper/m9sweeper)
