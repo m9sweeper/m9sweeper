@@ -159,7 +159,7 @@ with helm.
       --set-string dash.init.superAdminPassword="password" \
       --set-string global.jwtSecret="changeme" \
       --set-string global.apiKey="YOUR-API-KEY"
-
+   
 <!-- Contributing -->
 
 ## :wave: Contributing
