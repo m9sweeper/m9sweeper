@@ -16,7 +16,7 @@ FROM debian:buster-slim as runner
 
 # Install Trivy
 RUN apt-get update && apt-get install -y wget procps
-RUN wget -O - https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.27.1
+RUN wget -O - https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.38.1
 
 # Install
 COPY --from=0 /usr/app/target/trawler /usr/local/bin/trawler
