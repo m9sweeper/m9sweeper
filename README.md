@@ -17,7 +17,7 @@ Maybe you can mention me or this repo in the acknowledgements too
   
   <p>
   
-  [![Koti's GitHub stats](https://github-readme-stats.vercel.app/api?username=m9sweeper)](https://github.com/m9sweeper/github-readme-stats)
+  [![m9sweeper's GitHub stats](https://github-readme-stats.vercel.app/api?username=m9sweeper)](https://github.com/m9sweeper/github-readme-stats)
 </p>
 
 <!-- Badges -->
