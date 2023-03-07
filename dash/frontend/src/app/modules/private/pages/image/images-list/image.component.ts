@@ -45,6 +45,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
   cve: string;
   onlyRunning = false;
   userIsAdmin = false;
+  imageName: string;
 
   constructor(
     private imageService: ImageService,
@@ -57,6 +58,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cve = this.router.getCurrentNavigation().extras.state?.cve;
     const running = this.router.getCurrentNavigation().extras.state?.onlyRunning;
     this.onlyRunning = running !== 'NO';
+    this.imageName = this.router.getCurrentNavigation().extras.state?.imageName;
   }
 
   ngOnInit(): void {
@@ -80,8 +82,8 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
         return merge(this.route.queryParams, this.sort.sortChange);
       }),
       switchMap(() => {
-        return this.cve && this.onlyRunning !== undefined
-          ? this.searchImages('', this.cve, this.onlyRunning)
+        return this.imageName && this.cve && this.onlyRunning !== undefined
+          ? this.searchImages(this.imageName, this.cve, this.onlyRunning)
           : this.searchImages();
       }),
       takeUntil(this.unsubscribe$)
@@ -136,7 +138,8 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     const openAdvancedSearch = this.dialog.open(AdvancedSearchDialogComponent, {
       width: 'fit-content',
       closeOnNavigation: true,
-      disableClose: false
+      disableClose: false,
+      data: { imageName: this.imageName, cve: this.cve, onlyRunning: this.onlyRunning}
     });
     openAdvancedSearch.afterClosed()
       .pipe(switchMap((result) => {

@@ -313,7 +313,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
 
   searchCVE(cve: string) {
     this.router.navigate(['/private/clusters', this.clusterId, 'images'],
-      {state: {cve, onlyRunning: this.dataSource.runningInCluster}});
+      {state: {cve, onlyRunning: this.dataSource.runningInCluster, imageName: this.dataSource.name}});
   }
 
   ngOnDestroy() {

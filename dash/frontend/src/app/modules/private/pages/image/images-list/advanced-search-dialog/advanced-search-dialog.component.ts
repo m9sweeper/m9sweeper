@@ -15,10 +15,11 @@ export class AdvancedSearchDialogComponent implements OnInit {
   isChecked = false;
 
   constructor(private dialogRef: MatDialogRef<AdvancedSearchDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: {imageName: string, cve: string, onlyRunning: boolean},
               private formBuilder: FormBuilder,
               private alertService: AlertService,
               protected dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data: any) { }
+              ) { }
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
@@ -26,6 +27,18 @@ export class AdvancedSearchDialogComponent implements OnInit {
       cve: [''],
       onlyRunning: []
     });
+
+    // if data is available from the image scan detail page with cve, fill in the fields
+    if ( this.data.imageName ){
+      localStorage.setItem('image-search-name', this.data.imageName);
+    }
+    if ( this.data.cve ){
+      localStorage.setItem('image-search-cve', this.data.cve);
+    }
+    if ( !this.data.onlyRunning ) {
+      localStorage.setItem('image-search-running-image', JSON.stringify(this.data.onlyRunning));
+      this.searchForm.get('onlyRunning').setValue(this.data.onlyRunning);
+    }
 
     const searchName = localStorage.getItem('image-search-name');
     if (searchName){
