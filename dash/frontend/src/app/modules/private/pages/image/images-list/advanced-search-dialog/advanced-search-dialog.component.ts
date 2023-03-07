@@ -35,7 +35,8 @@ export class AdvancedSearchDialogComponent implements OnInit {
     if ( this.data.cve ){
       localStorage.setItem('image-search-cve', this.data.cve);
     }
-    if ( !this.data.onlyRunning ) {
+
+    if ( this.data.onlyRunning !== undefined ) {
       localStorage.setItem('image-search-running-image', JSON.stringify(this.data.onlyRunning));
       this.searchForm.get('onlyRunning').setValue(this.data.onlyRunning);
     }
