@@ -18,6 +18,9 @@
 .details-table{
   text-align: left;
 }
+th, td{
+  vertical-align: baseline;
+}
 
 mat-paginator {
   display: flex;
