@@ -69,10 +69,10 @@ export class FalcoDao {
                     );
                     break;
                 case 'Date Desc':
-                    query = query.orderBy([{column: 'calendar_date', order: 'desc'}]);
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
                     break;
                 case 'Date Asc':
-                    query = query.orderBy([{column: 'calendar_date', order: 'asc'}]);
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
                     break;
                 default:
                     query = query.orderBy([{column: 'id', order: 'desc'}]);
