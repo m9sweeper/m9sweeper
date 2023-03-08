@@ -55,7 +55,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
   passedDataSource: MatTableDataSource<any>;
   adviseDataSource: MatTableDataSource<any>;
   criticalDataSource: MatTableDataSource<any>;
-  scoreColors = ['#ff0000', '#eeee00', '#ffa500', '#00ff00'];
   kubesecReportDownloadHref: string;
 
   constructor(
@@ -175,18 +174,15 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   decideScoreColor(score: string): string {
     const scoreNum = +score;
+    const scoreColors = { red: '#ff0000', yellow: '#eeee00', orange: '#ffa500', green: '#00ff00'};
     if (scoreNum <= 0) {
-      // red
-      return this.scoreColors[0];
+      return scoreColors.red;
     } else if (0 < scoreNum && scoreNum <= 3) {
-      // yellow
-      return this.scoreColors[1];
+      return scoreColors.yellow;
     } else if (3 < scoreNum && scoreNum <= 6) {
-      // orange
-      return this.scoreColors[2];
+      return scoreColors.orange;
     } else {
-      // green
-      return this.scoreColors[3];
+      return scoreColors.green;
     }
   }
 
