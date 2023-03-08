@@ -176,12 +176,16 @@ export class KubesecComponent implements OnInit, OnDestroy {
   decideScoreColor(score: string): string {
     const scoreNum = +score;
     if (scoreNum <= 0) {
+      // red
       return this.scoreColors[0];
     } else if (0 < scoreNum && scoreNum <= 3) {
+      // yellow
       return this.scoreColors[1];
     } else if (3 < scoreNum && scoreNum <= 6) {
+      // orange
       return this.scoreColors[2];
     } else {
+      // green
       return this.scoreColors[3];
     }
   }
