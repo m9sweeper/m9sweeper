@@ -221,7 +221,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## :warning: License
 
-Distributed under the no License. See LICENSE.txt for more information.
+Distributed under the Apache License v2. See LICENSE.txt for more information.
 
 <!-- Contact -->
 
