@@ -37,6 +37,7 @@ export class ShowJsonDataComponent implements OnInit {
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   logCount: number;
   page: number;
+  newDataList: IFalcoLog[] = [];
 
   ngOnInit(): void {
     this.header = this.data.header ? this.data.header : 'Json Data';
@@ -54,8 +55,22 @@ export class ShowJsonDataComponent implements OnInit {
     this.falcoService.getFalcoLogs(this.clusterId,  { limit: this.limit, page: this.page, signature: this.signature})
       .pipe(take(1))
       .subscribe(response => {
-        this.dataSource = new MatTableDataSource(response.data.list);
+        const dataList = response.data.list;
         this.logCount = response.data.logCount;
+
+        // create a new data list without the current event log
+        for (let count = 0; count < this.logCount; count++){
+          if ( dataList[count] !== undefined) {
+              if (dataList[count].id !== this.data.content.id) {
+                this.newDataList.push(dataList[count]);
+              }
+          }
+        }
+
+        // one less log count - without the current event log
+        this.logCount = this.logCount - 1;
+        this.dataSource = new MatTableDataSource(this.newDataList);
+
       }, (err) => {
         alert(err);
       });

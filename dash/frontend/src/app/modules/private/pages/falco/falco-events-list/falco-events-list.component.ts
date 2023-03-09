@@ -195,8 +195,8 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   stripDomainName(image: string): string {
-    if (!image) return image; 
-    
+    if (!image) { return image; }
+
     const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
     const group = image.split(regex);
     // strip domain, only image
