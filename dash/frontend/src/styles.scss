@@ -209,5 +209,6 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   border: 1px #AAA solid ;
   margin: 0px;
   padding: 2px;
-  border-collapse: collapse
+  border-collapse: collapse;
+  vertical-align: baseline;
 }
