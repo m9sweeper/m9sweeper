@@ -1,9 +1,11 @@
 <div class="gate-keeper-details-dashboard-container">
+  
   <div class="row">
     <div class="col-xs-12 action-buttons">
       <div class="box">
         <div [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'gatekeeper-details-sub-navigation'">
           <div class="gate-keeper-details-sub-title">
+            {{templateName}}
           </div>
           <div class="cluster-info-button-item">
             <mat-card-actions>
