@@ -112,19 +112,16 @@ export class ShowJsonDataMoreComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         const dataList = response.data.list;
-        this.logCount = response.data.logCount;
+        // one less log count - without the current event log
+        this.logCount = response.data.logCount - 1;
 
         // create a new data list without the current event log
         for (let count = 0; count < this.logCount; count++) {
-          if (dataList[count] !== undefined) {
-            if (dataList[count].id !== this.eventData.id) {
-              this.newDataList.push(dataList[count]);
-            }
-          }
+          this.newDataList = dataList.filter(i => i.id !== this.eventData.id);
         }
-        // one less log count - without the current event log
-        this.logCount = this.logCount - 1;
+
         this.dataSource = new MatTableDataSource(this.newDataList);
+        // clear out previous data
         this.newDataList = [];
       }, (err) => {
         alert(err);
