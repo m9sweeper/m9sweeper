@@ -63,7 +63,7 @@
           <mat-form-field appearance="standard">
             <mat-label>Port</mat-label>
             <label>
-              <input matInput placeholder="Port" type="tel" formControlName="port" [readonly]="!!this.createClusterForm.get('kubeConfig').value">
+              <input matInput placeholder="Port" type="number" formControlName="port" [readonly]="!!this.createClusterForm.get('kubeConfig').value">
             </label>
           </mat-form-field>
         </p>

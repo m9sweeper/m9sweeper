@@ -1,7 +1,7 @@
 <div class="gate-keeper-dashboard-container">
   <div class="row page">GateKeeper</div>
   <div class="gate-keeper-dashboard-header-card-item">
-    <div class="row">
+    <div class="row top-header-row">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
         <mat-card class="box">
           <mat-card-header>
@@ -20,7 +20,7 @@
             <mat-card-title>Recommendation:</mat-card-title>
           </mat-card-header>
           <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-skinny">
               <mat-card-content>
                 <p class="recommendation-text" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationText">
                   We recommend you install Gatekeeper so that you can use M9sweeper to manager policies in your Kubernetes cluster.
@@ -35,14 +35,14 @@
                 </ng-template>
               </mat-card-content>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 end-text-align">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 end-text-align col-skinny">
               <mat-card-content class="setup-wizard-btn">
-                <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard('install')" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
-                  Install Gatekeeper
+                <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
+                  Install
                 </button>
                 <ng-template #recommendationButton>
                   <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openAddConstraintDialog()" *ngIf="(gatekeeperConstraintTemplates$ | async).length === 0">
-                    Setup Wizard
+                    Setup
                   </button>
                 </ng-template>
               </mat-card-content>
@@ -69,11 +69,16 @@
       <div class="col-xs-12">
         <mat-card class="box">
           <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-11">
-              <mat-card-header id="constraint-templates-header">Constraint Templates</mat-card-header>
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-skinny">
+              <mat-card-header id="constraint-templates-header">
+                <mat-card-title>
+                  Constraint Templates
+                </mat-card-title>
+              </mat-card-header>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-1 add-more-btn">
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-skinny add-more-btn">
               <button mat-raised-button color="primary"
+                      [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                       [disabled]="!gatekeeperStatusLoaded || !gatekeeperInstallationStatus.status"
                       (click)="openAddConstraintDialog()">
                 <mat-icon>add</mat-icon>
@@ -82,34 +87,32 @@
             </div>
           </div>
           <div class="row constraint-table-root">
-            <div class="constraint-table">
-              <table mat-table [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc" >
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</th>
-                  <td mat-cell *matCellDef="let gatekeeperTemplate">{{ gatekeeperTemplate.metadata.name }}</td>
-                </ng-container>
-                <ng-container matColumnDef="category">
-                  <th mat-header-cell *matHeaderCellDef > Category</th>
-                  <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.kind}} </td>
-                </ng-container>
-                <ng-container matColumnDef="description">
-                  <th mat-header-cell *matHeaderCellDef > Description</th>
-                  <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.metadata.annotations.description}} </td>
-                </ng-container>
-                <ng-container matColumnDef="constraints">
-                  <th mat-header-cell *matHeaderCellDef style="width: 10%"> Constraints</th>
-                  <td mat-cell *matCellDef="let gatekeeperTemplate" style="width: 10%"> {{gatekeeperTemplate.constraintsCount}} </td>
-                </ng-container>
-                <ng-container matColumnDef="enforced">
-                  <th mat-header-cell *matHeaderCellDef style="width: 10%"> Enforced</th>
-                  <td mat-cell *matCellDef="let gatekeeperTemplate">
-                    <mat-checkbox [checked]="gatekeeperTemplate.enforced"></mat-checkbox>
-                  </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="constraint-click"></tr>
-              </table>
-            </div>
+            <table mat-table [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc" >
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</th>
+                <td mat-cell *matCellDef="let gatekeeperTemplate">{{ gatekeeperTemplate.metadata.name }}</td>
+              </ng-container>
+              <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef > Category</th>
+                <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.kind}} </td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef > Description</th>
+                <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.metadata.annotations.description}} </td>
+              </ng-container>
+              <ng-container matColumnDef="constraints">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%"> Constraints</th>
+                <td mat-cell *matCellDef="let gatekeeperTemplate" style="width: 10%"> {{gatekeeperTemplate.constraintsCount}} </td>
+              </ng-container>
+              <ng-container matColumnDef="enforced">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%"> Enforced</th>
+                <td mat-cell *matCellDef="let gatekeeperTemplate">
+                  <mat-checkbox [checked]="gatekeeperTemplate.enforced"></mat-checkbox>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="constraint-click"></tr>
+            </table>
           </div>
 
         </mat-card>

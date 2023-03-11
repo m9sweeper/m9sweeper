@@ -1,5 +1,16 @@
 
-
+        <mat-form-field appearance="fill">
+          <mat-label>Minimum Priority</mat-label>
+          <mat-select [(value)]="level">
+            <mat-option *ngFor="let level of priorityLevels"
+                        [value]="level">
+            {{level}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <a mat-list-item href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
+          <mat-icon mat-list-icon>info</mat-icon>
+        </a>
         <div class="row button-row ng-star-inserted">
           <div class="col-xs-6 padding-top-15">Run Falco using the following CLI command:</div>
           <div class="col-xs-6 copy-to-button">
@@ -24,6 +35,7 @@ helm install falco falcosecurity/falco \
   --set falcosidekick.enabled=true \
   --set-string falcosidekick.config.webhook.address='{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}' \
   --set falcosidekick.config.webhook.checkcert=true \
+  --set-string falcosidekick.config.webhook.minimumpriority='{{level.toLowerCase()}}'
           </textarea>
         </div>
         <div class="row row-reverse">
