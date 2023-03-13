@@ -129,7 +129,7 @@ export class FalcoEventsListComponent implements OnInit {
   displayEventDetails(event: IFalcoLog) {
     this.dialog.open(ShowJsonDataComponent, {
       width: 'auto',
-      height: '100%',
+      height: 'auto',
       autoFocus: false,
       data: {content: event, header: 'Event Log Details'}
     });
@@ -195,6 +195,7 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   stripDomainName(image: string): string {
+
     if (!image) { return image; }
 
     const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
