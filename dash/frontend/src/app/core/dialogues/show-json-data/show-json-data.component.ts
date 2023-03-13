@@ -60,14 +60,9 @@ export class ShowJsonDataComponent implements OnInit {
         this.logCount = response.data.logCount - 1;
 
         // create a new data list without the current event log
-        for (let count = 0; count < this.logCount; count++){
-          this.newDataList = dataList.filter(i => i.id !== this.data.content.id);
-        }
-
+        this.newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        // use the new data list to display related events
         this.dataSource = new MatTableDataSource(this.newDataList);
-        // clear out previous data
-        this.newDataList = [];
-
       }, (err) => {
         alert(err);
       });
