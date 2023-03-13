@@ -37,7 +37,6 @@ export class ShowJsonDataComponent implements OnInit {
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   logCount: number;
   page: number;
-  newDataList: IFalcoLog[] = [];
 
   ngOnInit(): void {
     this.header = this.data.header ? this.data.header : 'Json Data';
@@ -60,9 +59,9 @@ export class ShowJsonDataComponent implements OnInit {
         this.logCount = response.data.logCount - 1;
 
         // create a new data list without the current event log
-        this.newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        const newDataList = dataList.filter(i => i.id !== this.data.content.id);
         // use the new data list to display related events
-        this.dataSource = new MatTableDataSource(this.newDataList);
+        this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
         alert(err);
       });
