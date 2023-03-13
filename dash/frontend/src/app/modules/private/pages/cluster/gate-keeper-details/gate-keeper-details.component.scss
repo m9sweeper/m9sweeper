@@ -16,13 +16,18 @@ div {
         div.gate-keeper-details-sub-title {
           font-weight: 500;
           font-size: 20px;
-        }
+        }       
 
         mat-card-actions {
           margin-left: 3px;
         }
       }
-
+      &.gatekeeper-details-sub-navigation {
+        div.gate-keeper-details-sub-title {
+          font-weight: 500;
+          font-size: 26px !important;
+        }
+      }
       &.gatekeeper-details-sub-navigation {
         display: flex;
         justify-content: space-between;
