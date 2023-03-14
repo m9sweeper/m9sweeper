@@ -27,7 +27,7 @@ export class ShowJsonDataComponent implements OnInit {
   displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
   namespace = this.data.content.namespace;
   date = this.data.content.calendarDate;
-  dateTime  = new Date(this.date);
+  dateTime  = new Date(+(this.data.content.timestamp));
   pod = this.data.content.container;
   image = this.data.content.image;
   message = this.data.content.message;
