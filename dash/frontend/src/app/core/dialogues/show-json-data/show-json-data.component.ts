@@ -55,8 +55,14 @@ export class ShowJsonDataComponent implements OnInit {
     this.falcoService.getFalcoLogs(this.clusterId,  { limit: this.limit, page: this.page, signature: this.signature})
       .pipe(take(1))
       .subscribe(response => {
-        this.dataSource = new MatTableDataSource(response.data.list);
-        this.logCount = response.data.logCount;
+        const dataList = response.data.list;
+        // one less log count - without the current event log
+        this.logCount = response.data.logCount - 1;
+
+        // create a new data list without the current event log
+        const newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        // use the new data list to display related events
+        this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
         alert(err);
       });
