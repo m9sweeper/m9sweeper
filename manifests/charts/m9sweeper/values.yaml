@@ -64,7 +64,9 @@ dash:
           aliases:
             - index.docker.io
           login_required: false
-
+        - name: gcr.io
+          hostname: registry.k8s.io
+          login_required: false
   # Kubernetes native ingress and Istio are supported, only enable one or neither of them.
   # If you enable neither you will need to port-forward to dash
   ingress:
