@@ -3,7 +3,7 @@ import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {FalcoCountDto} from "../dto/falco-count.dto";
-import {format, set, sub} from "date-fns";
+import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
@@ -102,12 +102,6 @@ export class FalcoDao {
             query.where('anomaly_signature', signature);
         }
 
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
-
         if (limit){
             query = query.limit(limit).offset(page * limit)
         }
@@ -116,6 +110,14 @@ export class FalcoDao {
         const list = await query.then(data => {
             return plainToInstance(FalcoDto, data);
         });
+
+        // "fake" the calculation of the logCount since count queries in
+        // postgresql are slow with WHERE clauses on large tables
+        // https://wiki.postgresql.org/wiki/Count_estimate
+        let logCount = limit * page + list?.length;
+        if (list?.length === limit) {
+            logCount += 1; // this implies that there probably is another page of results
+        }
 
         return {
             list: list,
@@ -139,33 +141,35 @@ export class FalcoDao {
     }
 
     async getCountOfFalcoLogsBySignature(
-        clusterId: number, signature: string
+        clusterId: number, signature: string, daysBack: number
     ): Promise<FalcoCountDto[]> {
 
         const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
-        const endDate = format(currentDate, 'yyyy-MM-dd');
-        const startDate = format(sub(currentDate, {days: 28}), 'yyyy-MM-dd');
+        const dates = [];
+        for (let date = sub(currentDate, {days: daysBack});
+             format(date, 'yyyy-MM-dd') !== format(add(currentDate, {days: 1}), 'yyyy-MM-dd');
+             date = add(date, {days: 1})) {
+            dates.push(format(date, 'yyyy-MM-dd'));
+        }
 
         const knex = await this.databaseService.getConnection();
 
-        // get all signature logs within 28 day from current date
-        const signatureLogs= knex.select()
+        // get all signature logs within the date period
+        const signatureCountByDate = await knex
+          .select( [knex.raw( 'calendar_date as date, count (calendar_date)')])
+          .from(
+            knex.select()
             .from('project_falco_logs')
             .where('anomaly_signature', signature)
             .andWhere('cluster_id', clusterId)
-            .andWhere('calendar_date', '>=', startDate)
-            .andWhere('calendar_date', '<=', endDate);
-
-
-        const signatureCountByDate = await knex
-            .select( [knex.raw( 'calendar_date as date, count (calendar_date)')])
-            .from(signatureLogs.as("q"))
-            .groupByRaw('calendar_date')
-            .orderBy('calendar_date', 'asc');
+            .andWhere('calendar_date', 'IN', dates)
+            .as("q")
+          )
+          .groupByRaw('calendar_date')
+          .orderBy('calendar_date', 'asc');
 
         // handle no query result
-        const result = signatureCountByDate? signatureCountByDate : null;
-        return result;
+        return signatureCountByDate || null;
     }
 
     async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
@@ -174,7 +178,6 @@ export class FalcoDao {
 
         let query = knex.select()
             .from('project_falco_logs')
-
             .where('cluster_id', clusterId);
 
         // Find log count and full list for csv export
