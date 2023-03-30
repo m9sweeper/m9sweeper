@@ -11,7 +11,7 @@ import {
     RbacAuthorizationV1Api,
     V1ClusterRole,
     V1ObjectMeta, V1PodList,
-    V1PolicyRule, V1RoleBinding, V1RoleRef, V1ServiceAccount, V1Subject
+    V1PolicyRule, V1RoleBinding, V1RoleRef, V1Secret, V1ServiceAccount, V1Subject
 } from "@kubernetes/client-node";
 import {V1Pod} from "@kubernetes/client-node/dist/gen/model/v1Pod";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
@@ -336,7 +336,7 @@ export class KubernetesApiService {
 
         const serviceAccountInDefault = await this.getExistingM9sweeperServiceAccountOfANamespace(coreApi, 'default');
         const serviceAccountInM9sweeperSystem = await this.getExistingM9sweeperServiceAccountOfANamespace(coreApi, m9sweeperSystemNamespaceName);
-
+        
         if (!serviceAccountInDefault.length && !serviceAccountInM9sweeperSystem.length) {
             // does not exist in either so have to create it
             newServiceAccount = true;
@@ -377,6 +377,20 @@ export class KubernetesApiService {
         } else {
             // already exists, so no need to patch it (nothing ever changes here).
             console.log(`${existingServiceAccount?.metadata.name} already exists at ${serviceAccountNamespace} namespace.`);
+        }
+
+        //Build the secret
+        console.log(`Creating a secret in ${serviceAccountNamespace}`);
+        const secret : V1Secret = new V1Secret();
+        secret.kind = "Secret";
+        secret.metadata = new V1ObjectMeta();
+        secret.metadata.name = "m9sweeper";
+        secret.metadata.namespace = serviceAccountNamespace;
+        secret.metadata.annotations={'kubernetes.io/service-account.name': "m9sweeper"};        
+        canContinue = !!(await this.applyK8sObject(secret, config));
+        if (!canContinue) {
+            console.log(`Failed to create cluster Secret`);
+            return null;
         }
 
         // Build the clusterRole w/the rules 
