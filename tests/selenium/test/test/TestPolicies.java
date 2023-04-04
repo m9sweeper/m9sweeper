@@ -35,10 +35,12 @@ public final class TestPolicies {
     driver.findElement(By.id("submit\'")).click();
 
     // sleep to load page
-    Thread.sleep(5000);
+    Thread.sleep(6000);
 
     // select organization setting
     driver.findElement(By.cssSelector(".organization-settings-text")).click();
+    // sleep to load page
+    Thread.sleep(2000);
     // select Policies
     driver.findElement(By.xpath("//span[contains(@class, 'mat-list-text')]/span[contains(text(),'Policies')]")).click();
     // click New Policy
