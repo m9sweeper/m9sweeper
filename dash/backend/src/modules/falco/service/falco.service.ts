@@ -37,9 +37,7 @@ export class FalcoService {
         signature?: string,
         eventId?: number
     ): Promise<{  logCount: number, list: FalcoDto[] }> {
-
        return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
-
     }
 
     async getFalcoLogByEventId(
@@ -55,15 +53,16 @@ export class FalcoService {
 
         const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
         const endDate = currentDate;
-        const startDate = sub(currentDate, {days: 28});
-        let newDate =sub(currentDate, {days: 28});
+        const daysBack = 14;
+        const startDate = sub(currentDate, {days: daysBack});
+        let newDate =sub(currentDate, {days: daysBack});
 
-        const resultSet = await this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature);
+        const resultSet = await this.falcoDao.getCountOfFalcoLogsBySignature(clusterId, signature, daysBack);
 
         let value = 0;
         const newResultSet = [];
 
-        for (let i = 0; i <=28; i++) {
+        for (let i = 0; i <= daysBack; i++) {
             resultSet.filter(result => newDate.toString() === result.date.toString()).forEach(result => value = result.count);
 
             let newResult = new FalcoCountDto();
