@@ -4,6 +4,15 @@ metadata:
   name: m9sweeper-proxy-sa
   namespace: m9sweeper-system
 ---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: m9sweeper
+  namespace: m9sweeper-system
+  annotations:
+    kubernetes.io/service-account.name: m9sweeper
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:

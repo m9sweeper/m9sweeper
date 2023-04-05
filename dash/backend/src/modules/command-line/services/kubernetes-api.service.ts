@@ -11,7 +11,7 @@ import {
     RbacAuthorizationV1Api,
     V1ClusterRole,
     V1ObjectMeta, V1PodList,
-    V1PolicyRule, V1RoleBinding, V1RoleRef, V1ServiceAccount, V1Subject
+    V1PolicyRule, V1RoleBinding, V1RoleRef, V1Secret, V1ServiceAccount, V1Subject
 } from "@kubernetes/client-node";
 import {V1Pod} from "@kubernetes/client-node/dist/gen/model/v1Pod";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
@@ -279,8 +279,9 @@ export class KubernetesApiService {
 
     /** Retrieves a namespace's token from a cluster & decodes it*/
     async getServiceAccountToken(coreApi: CoreV1Api, serviceAccountName: string, namespaceName: string): Promise<string | null> {
-        try {
-            const secretName = (await coreApi.readNamespacedServiceAccount(serviceAccountName, namespaceName)).body.secrets[0].name;
+        try {           
+            //const secretName = (await coreApi.readNamespacedServiceAccount(serviceAccountName, namespaceName)).body.secrets[0].name;
+            const secretName = "m9sweeper"
             const rawToken = (await coreApi.readNamespacedSecret(secretName, namespaceName)).body.data['token'];
             // We will retrieve the token base 64 encoded, and it will only be useful decoded
             return Buffer.from(rawToken, 'base64').toString('utf-8');
@@ -377,6 +378,21 @@ export class KubernetesApiService {
         } else {
             // already exists, so no need to patch it (nothing ever changes here).
             console.log(`${existingServiceAccount?.metadata.name} already exists at ${serviceAccountNamespace} namespace.`);
+        }
+
+        //Build the secret
+        console.log(`Creating a secret in ${serviceAccountNamespace}`);
+        const secret : V1Secret = new V1Secret();
+        secret.kind = "Secret";
+        secret.metadata = new V1ObjectMeta();
+        secret.metadata.name = "m9sweeper";
+        secret.type = "kubernetes.io/service-account-token"
+        secret.metadata.namespace = serviceAccountNamespace;
+        secret.metadata.annotations={'kubernetes.io/service-account.name': "m9sweeper"};     
+        const secretResponse = await this.applyK8sObject(secret, config)
+        if (!secretResponse){
+            console.log("secret response", secretResponse);
+            
         }
 
         // Build the clusterRole w/the rules 
