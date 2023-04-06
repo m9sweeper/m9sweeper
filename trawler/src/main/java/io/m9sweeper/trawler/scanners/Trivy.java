@@ -8,16 +8,13 @@ import com.amazonaws.services.ecr.AmazonECR;
 import com.amazonaws.services.ecr.AmazonECRClientBuilder;
 import com.amazonaws.services.ecr.model.GetAuthorizationTokenRequest;
 import com.amazonaws.services.ecr.model.GetAuthorizationTokenResult;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import io.m9sweeper.trawler.TrawlerConfiguration;
 import io.m9sweeper.trawler.framework.docker.DockerRegistry;
 import io.m9sweeper.trawler.framework.scans.*;
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -101,6 +98,25 @@ public class Trivy implements Scanner {
                 e.printStackTrace();
             }
 
+        } else if (registry.getAuthType().equals("GCR")) {
+            // Create a temporary auth file for Trivy to use for authentication with GCR
+            File gcrAuthFile = File.createTempFile("gcrAuthFile-", ".json");
+
+            // Fetch the authentication details from the registry details
+            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
+
+            // Write the auth JSON to the temp JSON file
+            try (FileWriter writer = new FileWriter(gcrAuthFile)) {
+                writer.write(authDetails.get("gcrAuthJson").toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Ensure that the file is deleted upon exiting so that we do not leave credentials lying around.
+            gcrAuthFile.deleteOnExit();
+
+            // Export the location of this file so that Trivy can utilize it
+            trivyScanCommandBuilder.append("export GOOGLE_APPLICATION_CREDENTIALS='").append(gcrAuthFile.getAbsolutePath()).append("'; ");
         } else if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append("export TRIVY_USERNAME='").append(escapeXsi(registry.getUsername())).append("'; ");
             trivyScanCommandBuilder.append("export TRIVY_PASSWORD='").append(escapeXsi(registry.getPassword())).append("'; ");
@@ -115,7 +131,7 @@ public class Trivy implements Scanner {
         clearCacheProcess.waitFor();
         
         // run trivy scan
-        trivyScanCommandBuilder.append("trivy -q image --timeout 30m --security-checks vuln -f json '");
+        trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
         trivyScanCommandBuilder.append(escapeXsi(
                 registry.getHostname() + "/" + config.getImage().getName() + ":" + config.getImage().getTag()
         ));

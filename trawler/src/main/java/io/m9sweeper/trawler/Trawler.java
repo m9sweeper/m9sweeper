@@ -121,7 +121,6 @@ public class Trawler extends AbstractCommand implements Runnable {
      */
     @Override
     public void run() {
-        // TODO: Update config and verify it
         updateConfig();
         TrawlerConfiguration.getInstance().setTrawlerRunMode(TrawlerRunMode.RABBITMQ);
         TrawlerConfiguration.getInstance().verifyConfig();
@@ -189,7 +188,7 @@ public class Trawler extends AbstractCommand implements Runnable {
 
                         payload.setRegistry(registry);
                     } catch (Exception e) {
-                        // @TODO: Should save that it faileda nd why it failed back (the exception message)
+                        // TODO: Should save that it failed and why it failed back (the exception message)
                         e.printStackTrace(); 
                     } 
 
@@ -205,7 +204,7 @@ public class Trawler extends AbstractCommand implements Runnable {
                                 throw new Exception("No policies found for cluster '" + payload.getCluster().getId() + "'");
                             }
                         } catch (Exception e) {
-                            // @TODO: should save that it failed and why it failed (the exception message)
+                            // TODO: should save that it failed and why it failed (the exception message)
                             e.printStackTrace();
                         }
                     }
