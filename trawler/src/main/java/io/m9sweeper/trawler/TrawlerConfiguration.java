@@ -94,11 +94,10 @@ public class TrawlerConfiguration {
         // Load the docker URL of the cluster
         dockerImageUrl = dotenv.get("DOCKER_IMAGE_URL", "");
 
-        // if full docker image url is not provided, will provide default hostname and tagname
+        // if full docker image url is not provided, will provide default hostname and tag name
         Pattern p = Pattern.compile("^([a-zA-Z0-9]+\\.[a-zA-Z0-9\\.]+)?\\/?([a-zA-Z0-9\\/]+)?\\:?([a-zA-Z0-9\\.]+)?$");
         Matcher m = p.matcher(dockerImageUrl);
         if (m.matches()){
-
             String hostname = m.group(1) != null ? m.group(1) : "docker.io";
             String imagename = m.group(2);
             String tagname = m.group(3) != null ? m.group(3) : "latest";
