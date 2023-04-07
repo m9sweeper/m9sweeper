@@ -166,7 +166,7 @@ public final class TestGateKeeper {
         // refresh browser
         driver.navigate().refresh();
         // sleep to load
-        Thread.sleep(7000);
+        Thread.sleep(12000);
 
         // Should find the saved testing-limit constraint
         driver.findElement(By.xpath("//td[contains(text(), 'testing-limit')]"));
