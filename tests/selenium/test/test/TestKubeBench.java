@@ -109,7 +109,7 @@ public final class TestKubeBench {
         for (int i=0; i<10 && !anyData; i++){
             try {
                 // verify there's data in the report
-                String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div[2]/div/mat-table/mat-row[1]/mat-cell[contains(text(),'" + Year.now().getValue() = "')]")).getText();
+                String lastReportDate = driver.findElement(By.xpath("//*[@id='bench-table-card']/mat-card-content/div[2]/div/mat-table/mat-row[1]/mat-cell[contains(text(),'" + Year.now().getValue() + "')]")).getText();
                 if (lastReportDate.length() > 0) {
                     System.out.println("*** KB returned results on: ***" + lastReportDate);
                 }
