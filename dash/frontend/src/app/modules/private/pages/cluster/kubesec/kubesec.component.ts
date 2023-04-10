@@ -56,6 +56,8 @@ export class KubesecComponent implements OnInit, OnDestroy {
   adviseDataSource: MatTableDataSource<any>;
   criticalDataSource: MatTableDataSource<any>;
   kubesecReportDownloadHref: string;
+  scoreColors = { red: '#ff0000', yellow: '#eeee00', orange: '#ffa500', green: '#00ff00'};
+
 
   constructor(
     private dialog: MatDialog,
@@ -172,17 +174,23 @@ export class KubesecComponent implements OnInit, OnDestroy {
     this.kubesecReportDownloadHref = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.kubesecReport[0]));
   }
 
-  decideScoreColor(score: string): string {
+  // Color for total score: passed or failed
+  passedOrFailedColor(score: string): string {
     const scoreNum = +score;
-    const scoreColors = { red: '#ff0000', yellow: '#eeee00', orange: '#ffa500', green: '#00ff00'};
     if (scoreNum <= 0) {
-      return scoreColors.red;
-    } else if (0 < scoreNum && scoreNum <= 3) {
-      return scoreColors.yellow;
-    } else if (3 < scoreNum && scoreNum <= 6) {
-      return scoreColors.orange;
-    } else {
-      return scoreColors.green;
+      return this.scoreColors.red; // critical issues
+    }else {
+      return this.scoreColors.green; // passed
+    }
+  }
+  // Color for passed/ advise/ critical sections
+  decideScoreColor(section: string): string {
+    if (section === 'critical' ) {
+      return this.scoreColors.red; // critical issues
+    } else if (section === 'advise') {
+      return this.scoreColors.yellow; // advice
+    } else if (section === 'passed') {
+      return this.scoreColors.green; // passed
     }
   }
 

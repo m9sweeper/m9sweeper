@@ -93,7 +93,7 @@
                 <div class="col-lg-9 col-xs-9 pod-name">
                   <h1> {{displayName}} </h1>
                 </div>
-                <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': decideScoreColor(score)}">
+                <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
                   <span> {{score}} </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@
                     </ng-container>
                     <ng-container matColumnDef="criticalPoints">
                       <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let criticalIssues" [ngStyle] = "{'background': decideScoreColor(criticalIssues?.points), 'justify-content': 'center'}"> {{criticalIssues?.points}} </mat-cell>
+                      <mat-cell *matCellDef="let criticalIssues" [ngStyle] = "{'background': decideScoreColor('critical'), 'justify-content': 'center'}"> {{criticalIssues?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="criticalReason">
                       <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
@@ -144,7 +144,7 @@
                     </ng-container>
                     <ng-container matColumnDef="advisePoints">
                       <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': decideScoreColor(advice?.points), 'justify-content': 'center'}"> {{advice?.points}} </mat-cell>
+                      <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': decideScoreColor('advise'), 'justify-content': 'center'}"> {{advice?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="adviseReason">
                       <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
@@ -167,7 +167,7 @@
                     </ng-container>
                     <ng-container matColumnDef="passedPoints">
                       <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let pass" [ngStyle] = "{'background': decideScoreColor(pass?.points), 'justify-content': 'center'}"> {{pass?.points}} </mat-cell>
+                      <mat-cell *matCellDef="let pass" [ngStyle] = "{'background': decideScoreColor('passed'), 'justify-content': 'center'}"> {{pass?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="passedReason">
                       <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
