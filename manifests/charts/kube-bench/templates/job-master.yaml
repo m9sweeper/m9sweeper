@@ -1,4 +1,4 @@
-{{- if eq .Values.provider "unmanaged" }}
+{{- if or (eq .Values.provider "unmanaged") (eq .Values.provider "master") }}
 ---
 {{- if eq .Values.cronjob.enabled false }}
 ---
@@ -34,7 +34,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: [ "/bin/sh" ]
-          args: [ "-c", "apk update && apk add curl && kube-bench run --targets master --json | curl -s -H \"Content-Type: application/json\" -X POST --data-binary @- {{ .Values.reportsurl }}" ]
+          args: [ "-c", "kube-bench run --targets master --json | wget -S -O - --header \"Content-Type: application/json\" --post-file /dev/stdin \"{{ .Values.reportsurl }}\"" ]
             {{- with .Values.customArguments }}
 {{ toYaml . | indent 12 }}
             {{- end }}

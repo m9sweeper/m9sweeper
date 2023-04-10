@@ -103,15 +103,19 @@ export class KubeBenchDao {
         # unmanaged = run on nodes
         # unmanaged = run on master
         # commonjob = run on both
+        # master = run just master benchmarks
+        # node = run just node benchmarks
         */
         return [
+            {name: 'Standard Kubernetes Environment - One Combined Job for Master and Node Benchamrks', value: 'commonjob'},
+            {name: 'Standard Kubernetes Environment - Just Master Benchmarks', value: 'master'},
+            {name: 'Standard Kubernetes Environment - Just Node Benchmarks', value: 'node'},
+            {name: 'Standard Kubernetes Environment - Separate Master and Node Jobs for Benchmarks', value: 'unmanaged'},
             {name: 'Azure Kubernetes Service', value: 'aks'},
             {name: 'Google kubernetes Engine', value: 'gke'},
             {name: 'Elastic kubernetes Service', value: 'eks'},
             {name: 'Elastic kubernetes Service with own kube-config provided', value: 'eksasf'},
             {name: 'Alibaba Cloud Container Service', value: 'ack'},
-            {name: 'Unmanaged Kubernetes Environment', value: 'unmanaged'},
-            {name: 'Common Job Kubernetes Environment', value: 'commonjob'},
         ];
     }
 
