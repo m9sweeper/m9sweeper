@@ -59,17 +59,23 @@ export class ClusterSyncCommand {
       const clusterSummaries: ClusterSummaryDto[] = await this._getClusterSummaries(clusters);
       this.log('cluster summaries retrieved', {clusterSummaries}, 'syncCluster');
       const instanceSummary = await ClusterSyncCommand._compileInstanceSummary(clusterSummaries);
-      await this.licensingPortalService
-        .sendInstanceSummaryToLicensingPortal(licenseValidityResult.licenseAndInstanceKeys, {
-          ...instanceSummary,
-          clusterSummaries
-        })
-        .then((response) => {
-          this.log(`Summaries sent to licensing portal. Was it successful? ${response.success}`, {response}, 'syncCluster');
-        })
-        .catch((e) => {
-          this.log('Error when sending summaries to licensing portal', {error: {stack: e.stack, message: e.message}}, 'syncCluster');
-        });
+      
+      // only upload summary stats to licensing portal IF they have a valid license and its enabled. 
+      // licensing is NOT required, therefore this should not be happening by default (some users 
+      // will run in an air-gapped environment and will NOT want us automatically uploading stats!)
+      if (licenseValidityResult?.licenseIsValid) {
+        await this.licensingPortalService
+          .sendInstanceSummaryToLicensingPortal(licenseValidityResult.licenseAndInstanceKeys, {
+            ...instanceSummary,
+            clusterSummaries
+          })
+          .then((response) => {
+            this.log(`Summaries sent to licensing portal. Was it successful? ${response.success}`, {response}, 'syncCluster');
+          })
+          .catch((e) => {
+            this.log('Error when sending summaries to licensing portal', {error: {stack: e.stack, message: e.message}}, 'syncCluster');
+          });
+      }
     } catch (e) {
       this.log('Error syncing cluster(s)', {error: {stack: e.stack, message: e.message}}, 'syncCluster');
       const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
@@ -134,12 +140,12 @@ export class ClusterSyncCommand {
         return {licenseAndInstanceKeys, licenseIsValid: true};
       }
 
-      // if the license data is missing or invalid
-      this.log('License Key / Instance Key combination is invalid. Please update in app_settings and try again to enable cluster scraping.', {}, '_checkLicense');
-      const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
+      // if the license data is missing or invalid - logging disabled since valid cicenses are not required anywhere!
+      this.log('License Key / Instance Key combination is invalid (but not required).', {}, '_checkLicense');
+      /*const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
         'License Validation', 'Create', 'Error',
         `License Key / Instance Key combination is invalid. Please update in app_settings and try again to enable cluster scraping.`, 'License validity is ' + licenseValidityInfo);
-      await this._saveClusterEventForAllClusters(clusters, clusterEventObject);
+      await this._saveClusterEventForAllClusters(clusters, clusterEventObject);*/
     } catch (e) {
       this.log('Error when starting cluster sync. ', {error: {stack: e.stack, message: e.message}}, '_checkLicense');
       const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
