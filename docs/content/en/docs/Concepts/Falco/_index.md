@@ -35,19 +35,20 @@ To accomplish this, [FalcoSideKick](https://github.com/falcosecurity/falcosideki
     helm repo add falcosecurity https://falcosecurity.github.io/charts
     helm repo update
     helm install falco falcosecurity/falco \
-     --create-namespace \
-     --namespace falco \
-     --set falco.driver.enabled=true \
-     --set-string falco.driver.kind=ebpf \
-     --set falco.tty=true \
-     --set falco.json_output=true \
-     --set falco.json_include_output_property=true \
-     --set falco.http_output.enabled=true \
-     --set-string falco.http_output.url=http://falcosidekick:2801/ \
-     --set falcosidekick.enabled=true \
-     --set-string falcosidekick.config.webhook.address= 'https://M9SWEEPER/api/falco/CLUSTERID/create/?key=FALCO_API_KEY' \
-     --set falcosidekick.config.webhook.checkcert=true \
-     --set-string falcosidekick.config.webhook.minimumpriority='error'
+      --wait \
+      --create-namespace \
+      --namespace falco \
+      --set falco.driver.enabled=true \
+      --set-string falco.driver.kind=ebpf \
+      --set falco.tty=true \
+      --set falco.json_output=true \
+      --set falco.json_include_output_property=true \
+      --set falco.http_output.enabled=true \
+      --set-string falco.http_output.url=http://falcosidekick:2801/ \
+      --set falcosidekick.enabled=true \
+      --set-string falcosidekick.config.webhook.address= 'https://M9SWEEPER/api/falco/CLUSTERID/create/?key=FALCO_API_KEY' \
+      --set falcosidekick.config.webhook.checkcert=true \
+      --set-string falcosidekick.config.webhook.minimumpriority='error'
 
 ### Notes: 
 - Make sure to change the URL value to point to your M9sweeper instance as well as enter the CLUSTER_ID of whatever cluster it is supposed to save to.
