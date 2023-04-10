@@ -44,10 +44,10 @@ dash:
     repository: dash
     tag: 0.0.0
 
-  kubesec:
-    registry: m9sweeper
-    repository: kubesec
-    tag: 0.0.0
+  #kubesec:
+    #registry: m9sweeper
+    #repository: kubesec
+    #tag: 0.0.0
 
   # values that will be used to initialize the Dash database during installation
   init:
