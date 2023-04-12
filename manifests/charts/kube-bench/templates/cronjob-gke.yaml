@@ -59,7 +59,7 @@ spec:
               image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               command: [ "/bin/sh" ]
-              args: [ "-c", "apk update && apk add curl && kube-bench run --targets node --benchmark gke-1.0 --json | curl -s -H \"Content-Type: application/json\" -X POST --data-binary @- {{ .Values.reportsurl }}" ]
+              args: [ "-c", "kube-bench run --targets node --benchmark gke-1.0 --json | wget -S -O - --header \"Content-Type: application/json\" --post-file /dev/stdin \"{{ .Values.reportsurl }}\"" ]
                 {{- with .Values.customArguments }}
 {{ toYaml . | indent 16 }}
                 {{- end }}

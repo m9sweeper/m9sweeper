@@ -24,7 +24,8 @@
         <div>
           <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
-helm install falco falcosecurity/falco \
+helm upgrade --install falco falcosecurity/falco \
+  --wait --version 2.5.5 \
   --namespace falco --create-namespace \
   --set falco.driver.enabled=true \
   --set-string falco.driver.kind=ebpf \
