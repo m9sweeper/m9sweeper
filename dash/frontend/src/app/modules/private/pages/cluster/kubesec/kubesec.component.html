@@ -110,9 +110,14 @@
               <div class="tables">
                 <div class="mat-elevation-z8 critical-table" *ngIf="critical.length > 0">
                   <mat-toolbar>
-                    <div>
-                      <span class="subnav-title">Critical Issues</span>
-                    </div>
+
+                      <div style="float: left; width: 95%">
+                        <span class="subnav-title">Critical Issues</span>
+                      </div>
+                      <div style="float: right; width: 5%; text-align: center" [ngStyle] = "{'background': decideScoreColor('critical')}">
+                        <span> {{criticalSubtotal}} </span>
+                      </div>
+
                   </mat-toolbar>
                   <mat-table [dataSource]="criticalDataSource">
                     <ng-container matColumnDef="criticalId">
@@ -133,9 +138,15 @@
                 </div>
                 <div class="mat-elevation-z8 advise-table" *ngIf="advise.length > 0">
                   <mat-toolbar>
-                    <div>
-                      <span class="subnav-title"> Advice </span>
-                    </div>
+
+                      <div style="float: left; width: 95%">
+                        <span class="subnav-title"> Advice </span>
+                      </div>
+                      <div style="float: right; width: 5%; text-align: center" [ngStyle] = "{'background': decideScoreColor('advise'), 'justify-content': 'center'}">
+                        <span>{{adviseSubtotal}}</span>
+                      </div>
+
+
                   </mat-toolbar>
                   <mat-table [dataSource]="adviseDataSource">
                     <ng-container matColumnDef="adviseId">
@@ -156,9 +167,14 @@
                 </div>
                 <div class="mat-elevation-z8 passed-table" *ngIf="passed.length > 0">
                   <mat-toolbar>
-                    <div>
-                      <span class="subnav-title">Passed</span>
-                    </div>
+
+                        <div style="float: left; width: 95%">
+                          <span>Passed</span>
+                        </div>
+                        <div style="float: right; width: 5%; text-align: center"  [ngStyle] = "{'background': decideScoreColor('passed')}">
+                          <span>{{passedSubtotal}}</span>
+                        </div>
+
                   </mat-toolbar>
                   <mat-table [dataSource]="passedDataSource">
                     <ng-container matColumnDef="passedId">
