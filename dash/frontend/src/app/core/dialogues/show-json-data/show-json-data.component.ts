@@ -5,7 +5,7 @@ import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
-import {ShowJsonDataMoreComponent} from '../show-json-data-more/show-json-data-more.component';
+
 
 @Component({
   selector: 'app-show-json-data',

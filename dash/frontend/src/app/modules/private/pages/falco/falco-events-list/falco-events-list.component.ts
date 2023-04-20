@@ -129,7 +129,7 @@ export class FalcoEventsListComponent implements OnInit {
   displayEventDetails(event: IFalcoLog) {
     this.dialog.open(ShowJsonDataComponent, {
       width: 'auto',
-      height: 'auto',
+      height: '100%',
       autoFocus: false,
       data: {content: event, header: 'Event Log Details'}
     });
