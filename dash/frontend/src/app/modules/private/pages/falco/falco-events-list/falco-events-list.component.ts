@@ -138,11 +138,24 @@ export class FalcoEventsListComponent implements OnInit {
 
   downloadReport() {
     this.loaderService.start('csv-download');
-
-    this.falcoService.downloadFalcoExport(this.clusterId)
+    // should only download filtered logs
+    this.falcoService.downloadFalcoExport( this.clusterId, {
+                                          limit: this.limit,
+                                          page: this.page,
+                                          selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+                                          selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+                                          startDate: this.startDate,
+                                          endDate: this.endDate,
+                                          namespace: this.filterForm.get('namespaceInput').value,
+                                          pod: this.filterForm.get('podInput').value,
+                                          image: this.filterForm.get('imageInput').value,
+                                          signature: this.signature}
+      )
         .pipe(take(1))
         .subscribe((response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
+          console.log ('csv', response.data.csv);
+          console.log('filename', response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
           alert(`Error downloading report: ${error?.error?.message}`);

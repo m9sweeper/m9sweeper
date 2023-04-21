@@ -78,13 +78,27 @@ export class FalcoService {
         return newResultSet;
     }
 
-    async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {
-        const queryResponse = await this.falcoDao.getFalcoLogsForExport(clusterId);
+    async getFalcoCsv( clusterId: number,
+                       limit = 20,
+                       page = 0,
+                       priorities?: string [],
+                       orderBy?: string,
+                       startDate?: string,
+                       endDate?: string,
+                       namespace?: string,
+                       pod?: string,
+                       image?: string,
+                       signature?: string,
+                       ): Promise<FalcoCsvDto> {
+
+        // retrieve filtered falco logs and use the query results to build the csv
+        const queryResp = await this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
         const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
-
-        for (let i = 0; i < queryResponse.logCount; i++) {
-            const falcoCol = queryResponse.fullList[i];
+        // logcount index should be one less
+        // only save logs to csv per selection of view items per page
+        for (let i = 0; i < queryResp.logCount -1 ; i++) {
+            const falcoCol = queryResp.list[i];
             result.push(this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
