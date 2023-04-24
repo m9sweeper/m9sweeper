@@ -18,6 +18,7 @@ $ms-default-warn: mat-palette($mat-pink, 600);
 
 $ms-default-theme: mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
 
+/*
 //Dark theme
 $ms-black-primary: mat-palette($mat-grey, 700, 300, 900);
 $ms-black-accent: mat-palette($mat-blue-grey, 400);
@@ -25,6 +26,7 @@ $ms-black-warn: mat-palette($mat-red, 500);
 
 $ms-black-theme: mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
 
+ */
 
 //Light theme
 $ms-light-primary: mat-palette($mat-grey, 200, 500, 300);
@@ -116,6 +118,7 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include custom-components-theme($ms-light-theme);
 }
 
+/*
 .dark-theme {
   @include angular-material-theme($ms-black-theme);
   @include custom-components-theme($ms-black-theme);
@@ -129,6 +132,8 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include custom-kubernetes-pods-dark-theme($ms-black-theme);
   @include custom-kubernetes-pods-details-dark-theme($ms-black-theme);
 }
+
+ */
 
 .remove-dialog-padding .mat-dialog-container {
   padding: 0;
