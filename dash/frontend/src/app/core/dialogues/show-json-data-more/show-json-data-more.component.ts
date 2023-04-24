@@ -32,7 +32,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
   eventId: number;
 
   namespace: string;
-  date: string;
+  date: Date;
   pod: string;
   image: string;
   message: string;
@@ -94,7 +94,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         this.namespace = response.data.namespace;
-        this.date = response.data.calendarDate;
+        this.date = new Date(+(response.data.timestamp));
         this.pod = response.data.container;
         this.image = response.data.image;
         this.message = response.data.message;
