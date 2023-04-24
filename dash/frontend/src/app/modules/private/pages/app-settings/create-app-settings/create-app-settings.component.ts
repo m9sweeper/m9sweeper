@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
@@ -14,10 +14,10 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
   styleUrls: ['./create-app-settings.component.scss']
 })
 export class CreateAppSettingsComponent implements OnInit {
-  createAppSettingsForm: FormGroup;
+  createAppSettingsForm: UntypedFormGroup;
 
   constructor(private dialogRef: MatDialogRef<CreateAppSettingsComponent>,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private appSettingsService: AppSettingsService,
               private fileManagementService: FileManagementService,
               @Inject(MAT_DIALOG_DATA) public data: any

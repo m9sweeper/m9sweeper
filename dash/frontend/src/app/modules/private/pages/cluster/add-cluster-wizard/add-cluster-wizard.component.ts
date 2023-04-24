@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Observable, throwError} from 'rxjs';
 import {parse as YmlParse} from 'yaml';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
@@ -23,7 +23,7 @@ import {MatRadioChange} from '@angular/material/radio';
   styleUrls: ['./add-cluster-wizard.component.scss']
 })
 export class AddClusterWizardComponent implements OnInit {
-  createClusterForm: FormGroup;
+  createClusterForm: UntypedFormGroup;
   serviceAccountForm = this.formBuilder.group({
     automaticInstall: [false, Validators.required],
     config: ['']
@@ -41,7 +41,7 @@ export class AddClusterWizardComponent implements OnInit {
   @ViewChild('defaultWebhookTextArea') defaultWebhookTextArea: ElementRef;
 
   constructor( private dialogRef: MatDialogRef<AddClusterWizardComponent>,
-               private formBuilder: FormBuilder,
+               private formBuilder: UntypedFormBuilder,
                private clusterService: ClusterService,
                private clusterGroupService: ClusterGroupService,
                private jwtAuthService: JwtAuthService,
@@ -311,7 +311,7 @@ webhooks:
     }
   }
 
-  validateConfigOption(group: FormGroup): {manualNoConfig: boolean} {
+  validateConfigOption(group: UntypedFormGroup): {manualNoConfig: boolean} {
     if (group.get('automaticInstall').value === false) {
       return group.get('config').value ? null : {manualNoConfig: true};
     }

@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-constraint-criteria.component';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from '@full-fledged/alerts';
 import {IConstraintCriteria, IGateKeeperConstraint} from '../../../../../core/entities/IGateKeeperConstraint';
@@ -16,7 +16,7 @@ import {TemplateConstraintManifestComponent} from '../template-constraint-manife
 export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   templateName: string;
-  addTemplateConstraintForm: FormGroup;
+  addTemplateConstraintForm: UntypedFormGroup;
   // templateConstraintCriteria: IConstraintCriteria[] = [{kinds: ['Pod'], apiGroups: []}];
   templateConstraintCriteria: IConstraintCriteria[] = [];
   k8sNamespaces: string[];
@@ -34,7 +34,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   @ViewChild('propertyFieldsJsonData') propertyFieldsJsonData: ElementRef;
 
   constructor(private dialog: MatDialog,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private readonly gatekeeperService: GateKeeperService,
               private alertService: AlertService,
               @Inject(MAT_DIALOG_DATA) public data,

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AlertService } from '@full-fledged/alerts';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { ClusterGroupService } from '../../../../../core/services/cluster-group.service';
@@ -17,8 +17,8 @@ export class ClusterGroupCreateComponent implements OnInit {
   userId = null;
   errorMsg = null;
   successMsg = null;
-  clusterGroupCreateForm: FormGroup;
-  constructor(private formBuilder: FormBuilder,
+  clusterGroupCreateForm: UntypedFormGroup;
+  constructor(private formBuilder: UntypedFormBuilder,
               public dialogRef: MatDialogRef<ClusterGroupCreateComponent>,
               private jwtAuthService: JwtAuthService,
               private alertService: AlertService,

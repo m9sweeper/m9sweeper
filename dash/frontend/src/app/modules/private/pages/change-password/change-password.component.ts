@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {AlertService} from '@full-fledged/alerts';
@@ -15,10 +15,10 @@ export class ChangePasswordComponent implements OnInit{
 
   width: number;
   height: number;
-  changePasswordForm: FormGroup;
+  changePasswordForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private alertService: AlertService,
     private router: Router,

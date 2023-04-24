@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
 import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
@@ -21,7 +21,7 @@ import {CustomValidatorService} from '../../../../../core/services/custom-valida
 export class WorstImagesComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   clusterId: number;
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   clusterNamespaces: Array<string>;
   barChartAttributes = {
     view: [],
@@ -47,7 +47,7 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private namespaceService: NamespaceService,
     private imageService: ImageService,
     private alertService: AlertService,
