@@ -38,9 +38,9 @@ export class FalcoEventsListComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   orderByOptions: string [] = ['Priority Desc', 'Priority Asc', 'Date Desc', 'Date Asc'];
 
-  logCount: number;
-  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
-  page: number;
+  logCount: number; // accumulated log total per forward/backward click
+  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20; // page size
+  page: number; // number of pages
   startDate: string;
   endDate: string;
   signature: string;
@@ -76,7 +76,7 @@ export class FalcoEventsListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(param => {
         this.clusterId = param.id;
-        this.getEvents();
+        this.getEvents(); // load logs
       });
     this.getUserAuthority();
 
@@ -86,7 +86,11 @@ export class FalcoEventsListComponent implements OnInit {
     this.limit = pageEvent.pageSize;
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
-    this.getEvents();
+
+    console.log('limit now', this.limit);
+    console.log('page now', this.page);
+
+    this.getEvents(); // load logs when page event changes
   }
 
   getEvents() {
@@ -154,8 +158,6 @@ export class FalcoEventsListComponent implements OnInit {
         .pipe(take(1))
         .subscribe((response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
-          console.log ('csv', response.data.csv);
-          console.log('filename', response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
           alert(`Error downloading report: ${error?.error?.message}`);

@@ -27,8 +27,7 @@ export class FalcoDao {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{ logCount: number, list: FalcoDto[]}> {
+    ): Promise<{ logCount: number, list: FalcoDto[], csvLogList: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
         let query = knex.select()
@@ -102,26 +101,32 @@ export class FalcoDao {
             query.where('anomaly_signature', signature);
         }
 
+        // Filtered list for csv - limit to 1000 logs
+        const filteredCsvLoglist = await query.limit(1000).then(data => {
+            return plainToInstance(FalcoDto, data);
+        });
+
         if (limit){
-            query = query.limit(limit).offset(page * limit)
+            query = query.limit(limit).offset(page * limit) // limit: page size
         }
 
-        // Find filtered list with pagination
-        const list = await query.then(data => {
+        // Filtered list per page for pagination
+        const filteredPerPageLogList = await query.then(data => {
             return plainToInstance(FalcoDto, data);
         });
 
         // "fake" the calculation of the logCount since count queries in
         // postgresql are slow with WHERE clauses on large tables
         // https://wiki.postgresql.org/wiki/Count_estimate
-        let logCount = limit * page + list?.length;
-        if (list?.length === limit) {
+        let logCount = limit * page + filteredPerPageLogList?.length; // accumulated log total per forward/backward click
+        if (filteredPerPageLogList?.length === limit) {
             logCount += 1; // this implies that there probably is another page of results
         }
 
         return {
-            list: list,
-            logCount: +logCount
+            list: filteredPerPageLogList,
+            logCount: +logCount,
+            csvLogList: filteredCsvLoglist
         }
     }
 
@@ -170,32 +175,6 @@ export class FalcoDao {
 
         // handle no query result
         return signatureCountByDate || null;
-    }
-
-    async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
-
-        const knex = await this.databaseService.getConnection();
-
-        let query = knex.select()
-            .from('project_falco_logs')
-            .where('cluster_id', clusterId);
-
-        // Find log count and full list for csv export
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
-
-        const fullList = await query.then(data => {
-            return plainToInstance(FalcoDto, data);
-        });
-
-
-        return {
-            fullList: fullList,
-            logCount: +logCount
-        }
     }
 
     async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {

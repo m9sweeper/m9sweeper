@@ -59,15 +59,13 @@ export class FalcoController {
         @Query('pod') pod?: string,
         @Query('image') image?: string,
         @Query('signature') signature?: string,
-        @Query('eventId') eventId?: number
-    ): Promise<{ logCount: number, list: FalcoDto[]}>
+    ): Promise<{ logCount: number, list: FalcoDto[],  csvLogList: FalcoDto[]}>
     {
         // default values - seems to be filling with NaN instead of null which causes the defaults in Dao to not work right
         if (!limit) limit = null;
         if (!page) page = null;
-        if (!eventId) eventId = null;
 
-        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     @Get('/count')

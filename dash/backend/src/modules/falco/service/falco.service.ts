@@ -35,9 +35,8 @@ export class FalcoService {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{  logCount: number, list: FalcoDto[] }> {
-       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+    ): Promise<{  logCount: number, list: FalcoDto[], csvLogList: FalcoDto[] }> {
+       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     async getFalcoLogByEventId(
@@ -95,10 +94,12 @@ export class FalcoService {
         const queryResp = await this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
         const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
-        // logcount index should be one less
-        // only save logs to csv per selection of view items per page
-        for (let i = 0; i < queryResp.logCount -1 ; i++) {
-            const falcoCol = queryResp.list[i];
+
+        // limit to 1000 or less logs
+        let numOfLogs = 0;
+        queryResp.csvLogList.length <= 1000 ? numOfLogs = queryResp.csvLogList.length : numOfLogs = 1000;
+        for (let i = 0; i <= numOfLogs -1 ; i++) {
+            const falcoCol = queryResp.csvLogList[i];
             result.push(this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
