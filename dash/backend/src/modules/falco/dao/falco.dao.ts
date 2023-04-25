@@ -30,9 +30,12 @@ export class FalcoDao {
     ): Promise<{ logCount: number, list: FalcoDto[], csvLogList: FalcoDto[]}> {
         const knex = await this.databaseService.getConnection();
 
+        // set limit to the less of 1000 or whatever is provided
+        limit = Math.min(limit, 1000);
+
         let query = knex.select()
             .from('project_falco_logs')
-            .where('cluster_id', clusterId).limit(1000);
+            .where('cluster_id', clusterId);
 
         if (priorities) {
             query = query.whereIn('level', priorities);
@@ -102,13 +105,12 @@ export class FalcoDao {
         }
 
         // Filtered list for csv - limit to 1000 logs
-        const filteredCsvLoglist = await query.then(data => {
+        const filteredCsvLoglist = await query.limit(1000).then(data => {
             return plainToInstance(FalcoDto, data);
         });
 
-        if (limit){
-            query = query.limit(limit).offset(page * limit) // limit: page size
-        }
+        query = query.limit(limit).offset(page * limit) // limit: page size
+
 
         // Filtered list per page for pagination
         const filteredPerPageLogList = await query.then(data => {
