@@ -32,7 +32,7 @@ export class FalcoDao {
 
         let query = knex.select()
             .from('project_falco_logs')
-            .where('cluster_id', clusterId);
+            .where('cluster_id', clusterId).limit(1000);
 
         if (priorities) {
             query = query.whereIn('level', priorities);
@@ -102,7 +102,7 @@ export class FalcoDao {
         }
 
         // Filtered list for csv - limit to 1000 logs
-        const filteredCsvLoglist = await query.limit(1000).then(data => {
+        const filteredCsvLoglist = await query.then(data => {
             return plainToInstance(FalcoDto, data);
         });
 

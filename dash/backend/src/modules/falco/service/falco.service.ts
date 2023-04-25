@@ -96,8 +96,7 @@ export class FalcoService {
             'Image', 'Priority', 'Message'])];
 
         // limit to 1000 or less logs
-        let numOfLogs = 0;
-        queryResp.csvLogList.length <= 1000 ? numOfLogs = queryResp.csvLogList.length : numOfLogs = 1000;
+        const numOfLogs = queryResp.csvLogList.length <= 1000 ? queryResp.csvLogList.length : 1000;
         for (let i = 0; i <= numOfLogs -1 ; i++) {
             const falcoCol = queryResp.csvLogList[i];
             result.push(this.csvService.buildLine([

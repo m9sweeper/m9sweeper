@@ -87,9 +87,6 @@ export class FalcoEventsListComponent implements OnInit {
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
 
-    console.log('limit now', this.limit);
-    console.log('page now', this.page);
-
     this.getEvents(); // load logs when page event changes
   }
 
