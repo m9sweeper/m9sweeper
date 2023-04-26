@@ -59,7 +59,7 @@ export class FalcoController {
         @Query('pod') pod?: string,
         @Query('image') image?: string,
         @Query('signature') signature?: string,
-    ): Promise<{ logCount: number, list: FalcoDto[],  csvLogList: FalcoDto[]}>
+    ): Promise<{ logCount: number, list: FalcoDto[], }>
     {
         // default values - seems to be filling with NaN instead of null which causes the defaults in Dao to not work right
         if (!limit) limit = null;

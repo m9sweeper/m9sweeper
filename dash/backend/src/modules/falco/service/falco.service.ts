@@ -35,7 +35,7 @@ export class FalcoService {
         pod?: string,
         image?: string,
         signature?: string,
-    ): Promise<{  logCount: number, list: FalcoDto[], csvLogList: FalcoDto[] }> {
+    ): Promise<{  logCount: number, list: FalcoDto[], }> {
        return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
@@ -91,7 +91,7 @@ export class FalcoService {
                        ): Promise<FalcoCsvDto> {
 
         // retrieve filtered falco logs and use the query results to build the csv
-        const queryResp = await this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
+        const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
         const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
