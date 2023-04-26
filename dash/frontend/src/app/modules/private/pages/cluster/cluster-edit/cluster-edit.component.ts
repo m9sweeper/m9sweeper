@@ -1,6 +1,6 @@
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormGroup, Validators, FormControl, FormBuilder} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
@@ -24,7 +24,7 @@ import {environment} from '../../../../../../environments/environment';
 export class ClusterEditComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
-  createClusterForm: UntypedFormGroup;
+  createClusterForm: FormGroup;
   selectable = true;
   removable = true;
   tags: any[];
@@ -33,13 +33,13 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
-  tagFormCtrl = new UntypedFormControl();
+  tagFormCtrl = new FormControl();
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
 
   config: IKubeConfig;
 
   constructor(private dialogRef: MatDialogRef<ClusterEditComponent>,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private alertService: AlertService,
               private clusterService: ClusterService,
               private tagService: TagService,

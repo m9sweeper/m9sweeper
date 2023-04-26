@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {IKubeBenchReport} from '../../../../../../core/entities/IKubeBenchReport';
-import {UntypedFormBuilder} from '@angular/forms';
+import {FormBuilder,} from '@angular/forms';
 import {KubeBenchService} from '../../../../../../core/services/kube-bench.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -33,7 +33,7 @@ export class KubeBenchDialogComponent implements OnInit{
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { clusterId: number },
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private kubeBenchService: KubeBenchService,
     private loaderService: NgxUiLoaderService,
     private commonService: CommonService,

@@ -1,14 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService } from '@full-fledged/alerts';
 import { ImageService } from '../../../../../core/services/image.service';
 import { DockerRegistriesService } from '../../../../../core/services/docker-registries.service';
 import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistries';
 import { CustomValidators } from '../../../form-validator/custom-validators';
-import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { Router } from '@angular/router';
-import { MatSelectChange } from '@angular/material/select';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -18,7 +16,7 @@ import { take } from 'rxjs/operators';
 })
 
 export class CreateImageComponent implements OnInit {
-  imageForm: UntypedFormGroup;
+  imageForm: FormGroup;
   subMenuTitle = 'Create Image';
   urlPattern = /^(https:\/\/?|http:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
   clusterId: number;
@@ -26,7 +24,7 @@ export class CreateImageComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<CreateImageComponent>,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private imageService: ImageService,
     private dockerRegistriesService: DockerRegistriesService,
     private alertService: AlertService,

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup,  Validators} from '@angular/forms';
 import {IAuthority, IUser, IUserUpdateRequestPayload} from '../../../../../core/entities/IUser';
 import {UserService} from '../../../../../core/services/user.service';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {AlertService} from '@full-fledged/alerts';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -16,14 +15,14 @@ import {IFile} from '../../../../../core/entities/IFile';
   styleUrls: ['./update-user-profile.component.scss']
 })
 export class UpdateUserProfileComponent implements OnInit {
-  updateUserForm: UntypedFormGroup;
+  updateUserForm: FormGroup;
   userProfileData: IUser;
   authorities: IAuthority[];
   currentUserId = null;
   profileImageFileId = '';
 
   constructor(private dialogRef: MatDialogRef<UpdateUserProfileComponent>,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private userService: UserService,
               private alertService: AlertService,
               private jwtAuthService: JwtAuthService,

@@ -1,12 +1,10 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
 import {FileManagementService} from '../../../../../core/services/file-management.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IFile} from '../../../../../core/entities/IFile';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-create-app-settings',
@@ -14,10 +12,10 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
   styleUrls: ['./create-app-settings.component.scss']
 })
 export class CreateAppSettingsComponent implements OnInit {
-  createAppSettingsForm: UntypedFormGroup;
+  createAppSettingsForm: FormGroup;
 
   constructor(private dialogRef: MatDialogRef<CreateAppSettingsComponent>,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private appSettingsService: AppSettingsService,
               private fileManagementService: FileManagementService,
               @Inject(MAT_DIALOG_DATA) public data: any

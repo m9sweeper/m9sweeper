@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 
@@ -11,12 +11,12 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
 })
 export class AdvancedSearchDialogComponent implements OnInit {
 
-  searchForm: UntypedFormGroup;
+  searchForm: FormGroup;
   isChecked = false;
 
   constructor(private dialogRef: MatDialogRef<AdvancedSearchDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: {imageName: string, cve: string, onlyRunning: boolean},
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private alertService: AlertService,
               protected dialog: MatDialog,
               ) { }

@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup,} from '@angular/forms';
 
 import {EnumService} from '../../../../../core/services/enum.service';
 import {format, startOfToday, sub} from 'date-fns';
@@ -34,7 +34,7 @@ export class FalcoEventsListComponent implements OnInit {
   clusterId: number;
   dialogRef: MatDialogRef<ShowJsonDataComponent>;
 
-  filterForm: UntypedFormGroup;
+  filterForm: FormGroup;
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   orderByOptions: string [] = ['Priority Desc', 'Priority Asc', 'Date Desc', 'Date Asc'];
 
@@ -52,7 +52,7 @@ export class FalcoEventsListComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private enumService: EnumService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private customValidatorService: CustomValidatorService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,

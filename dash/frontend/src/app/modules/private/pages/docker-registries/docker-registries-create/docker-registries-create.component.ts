@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup,Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DockerRegistriesService} from '../../../../../core/services/docker-registries.service';
 import {AlertService} from '@full-fledged/alerts';
@@ -17,7 +17,7 @@ import {ENTER, SPACE} from '@angular/cdk/keycodes';
   styleUrls: ['./docker-registries-create.component.scss']
 })
 export class DockerRegistriesCreateComponent implements OnInit {
-  createDockerRegistryForm: UntypedFormGroup;
+  createDockerRegistryForm: FormGroup;
   activateHiddenFields = false;
   passwordHide = true;
   currentUser = null;
@@ -29,7 +29,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
 
   readonly aliasSeparatorKeys = [SPACE, ENTER];
 
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<DockerRegistriesCreateComponent>,
               private dockerRegistriesService: DockerRegistriesService,
               private alertService: AlertService,
