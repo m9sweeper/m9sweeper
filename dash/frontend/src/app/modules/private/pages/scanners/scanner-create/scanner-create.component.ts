@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup,  Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup,  Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ScannerService } from '../../../../../core/services/scanner.service';
 import { AlertService } from '@full-fledged/alerts';
@@ -11,12 +11,12 @@ import {IScanner, VulnerabilitySettings} from '../../../../../core/entities/ISca
   styleUrls: ['./scanner-create.component.scss']
 })
 export class ScannerCreateComponent implements OnInit {
-  createScannerForm: FormGroup;
+  createScannerForm: UntypedFormGroup;
   scannerTypes: any;
   trivyVulnerabilitySettings: VulnerabilitySettings;
   displayTrivyVulnerabilitySettings = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               private dialogRef: MatDialogRef<ScannerCreateComponent>,
               private scannerService: ScannerService,
               private alertService: AlertService,

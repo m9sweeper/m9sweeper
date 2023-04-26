@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AlertService } from '@full-fledged/alerts';
 import { ImageService } from '../../../../../core/services/image.service';
@@ -16,7 +16,7 @@ import { take } from 'rxjs/operators';
 })
 
 export class CreateImageComponent implements OnInit {
-  imageForm: FormGroup;
+  imageForm: UntypedFormGroup;
   subMenuTitle = 'Create Image';
   urlPattern = /^(https:\/\/?|http:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
   clusterId: number;
@@ -24,7 +24,7 @@ export class CreateImageComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<CreateImageComponent>,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private imageService: ImageService,
     private dockerRegistriesService: DockerRegistriesService,
     private alertService: AlertService,

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
-import {FormBuilder, FormGroup,  Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup,  Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
@@ -24,7 +24,7 @@ import {MatOptionSelectionChange} from '@angular/material/core';
   styleUrls: ['./policy-create.component.scss']
 })
 export class PolicyCreateComponent implements OnInit {
-  policyForm: FormGroup;
+  policyForm: UntypedFormGroup;
   subMenuTitle: string;
   scannerSubmenuTitle = 'Policy Requirements';
   checkIfEdit: boolean;
@@ -46,7 +46,7 @@ export class PolicyCreateComponent implements OnInit {
   relevantForSpecificClusters = true;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private policyService: PolicyService,
     private scannerService: ScannerService,
     private clusterService: ClusterService,

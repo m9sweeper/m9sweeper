@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../../core/services/user.service';
@@ -14,7 +14,7 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-  userForm: FormGroup;
+  userForm: UntypedFormGroup;
   subMenuTitle = 'Create Local User';
   isEdit = false;
   userId = null;
@@ -28,7 +28,7 @@ export class CreateUserComponent implements OnInit {
   authType: string;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private alertService: AlertService,
     private router: Router,

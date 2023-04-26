@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, } from '@angular/router';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {  FormGroup, FormBuilder, FormArray} from '@angular/forms';
+import {  UntypedFormGroup, UntypedFormBuilder, UntypedFormArray} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
@@ -18,7 +18,7 @@ export class FalcoSettingsComponent implements OnInit {
 
   clusterId: number;
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
-  settingForm: FormGroup;
+  settingForm: UntypedFormGroup;
 
   savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
@@ -35,7 +35,7 @@ export class FalcoSettingsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private falcoService: FalcoService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
 
   ) { }
@@ -50,7 +50,7 @@ export class FalcoSettingsComponent implements OnInit {
       selectedWeekDay: [],
       whoToNotify: [],
       emailList: [[]],
-      savedSeverityLevelArray: new FormArray([]),
+      savedSeverityLevelArray: new UntypedFormArray([]),
     });
 
     this.route.parent.parent.params

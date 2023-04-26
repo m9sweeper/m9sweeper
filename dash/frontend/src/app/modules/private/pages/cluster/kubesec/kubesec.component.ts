@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
 } from '@angular/forms';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {Subject} from 'rxjs';
@@ -40,8 +40,8 @@ export class KubesecComponent implements OnInit, OnDestroy {
   isCompleted = true;
   displayedColumns: string[] = ['podNames', 'score'];
 
-  namespaceForm: FormGroup;
-  podForm: FormGroup;
+  namespaceForm: UntypedFormGroup;
+  podForm: UntypedFormGroup;
   @ViewChild('podAll') set setThing(e: MatOption) {
     this.thing = e;
   }
@@ -68,7 +68,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private alertService: AlertService,
     private podService: PodService,
     private namespaceService: NamespaceService,
@@ -80,10 +80,10 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.namespaceForm = this.formBuilder.group({
-      namespaceFormControl: new FormControl('')
+      namespaceFormControl: new UntypedFormControl('')
     });
     this.podForm = this.formBuilder.group({
-      podFormControl: new FormControl('')
+      podFormControl: new UntypedFormControl('')
     });
 
     this.namespaceForm.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(data => this.getPodsFromSelectedNamespace());

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup,  Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup,  Validators} from '@angular/forms';
 import {IAuthority, IUser, IUserUpdateRequestPayload} from '../../../../../core/entities/IUser';
 import {UserService} from '../../../../../core/services/user.service';
 import {AlertService} from '@full-fledged/alerts';
@@ -15,14 +15,14 @@ import {IFile} from '../../../../../core/entities/IFile';
   styleUrls: ['./update-user-profile.component.scss']
 })
 export class UpdateUserProfileComponent implements OnInit {
-  updateUserForm: FormGroup;
+  updateUserForm: UntypedFormGroup;
   userProfileData: IUser;
   authorities: IAuthority[];
   currentUserId = null;
   profileImageFileId = '';
 
   constructor(private dialogRef: MatDialogRef<UpdateUserProfileComponent>,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private userService: UserService,
               private alertService: AlertService,
               private jwtAuthService: JwtAuthService,

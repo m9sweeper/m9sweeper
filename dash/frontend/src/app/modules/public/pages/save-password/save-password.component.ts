@@ -1,6 +1,6 @@
 // This component is used for account-activation and password-reset
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../core/services/user.service';
@@ -14,12 +14,12 @@ import { CustomValidators } from '../../../private/form-validator/custom-validat
 
 export class SavePasswordComponent implements OnInit {
 
-  changePasswordForm: FormGroup;
+  changePasswordForm: UntypedFormGroup;
   token: string;
   isAccountActivation: boolean;
   title = 'Reset Password';
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private alertService: AlertService,
     private router: Router,

@@ -3,7 +3,7 @@ import {ReportsService} from '../../../../../core/services/reports.service';
 import {ActivatedRoute} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
@@ -26,14 +26,14 @@ export class RunningVulnerabilitiesComponent implements OnInit {
   displayedColumns: string[] = ['image', 'namespaces', 'scanResults', 'lastScanned', 'totalCritical', 'totalMajor',
     'totalMedium', 'totalLow', 'totalNegligible', 'totalFixableCritical', 'totalFixableMajor', 'totalFixableMedium',
     'totalFixableLow', 'totalFixableNegligible'];
-  filterForm: FormGroup;
+  filterForm: UntypedFormGroup;
   clusterNamespaces: Array<string>;
   previousRequest: {namespaces, isCompliant};
 
   constructor(
     private reportsService: ReportsService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private namespaceService: NamespaceService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,

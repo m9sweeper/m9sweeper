@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormBuilder} from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormBuilder} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { ApiKeyService } from '../../../../../core/services/api-key.service';
@@ -14,7 +14,7 @@ import {IAPIKeyUser, IUser} from '../../../../../core/entities/IUser';
   styleUrls: ['./api-key-form.component.scss']
 })
 export class ApiKeyFormComponent implements OnInit {
-  apiKeyForm: FormGroup;
+  apiKeyForm: UntypedFormGroup;
   subMenuTitle = 'Create API Key';
   isEdit = false;
   apiKeyId = null;
@@ -23,7 +23,7 @@ export class ApiKeyFormComponent implements OnInit {
   userList: IAPIKeyUser[];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private apiKeyService: ApiKeyService,
     private userService: UserService,
     private alertService: AlertService,
