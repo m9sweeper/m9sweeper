@@ -15,22 +15,22 @@
       </p> -->
     </div>
     <mat-form-field class="tag-chip-list" id="cluster-tags" style="display:none!important">
-      <mat-chip-list #chipList aria-label="List of Tags">
-        <mat-chip *ngFor="let tag of displayedTags; index as i" [selectable]="selectable"
-                  [removable]="removable" (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
+      <mat-chip-grid #chipGrid aria-label="List of Tags">
+        <mat-chip-row *ngFor="let tag of displayedTags; index as i" [editable]="selectable"
+                   (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
           {{tag.name}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
+        </mat-chip-row>
         <input
                placeholder="Add/Remove Tags"
                #tagInput
-               [matChipInputFor]="chipList"
+               [matChipInputFor]="chipGrid"
                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                [matAutocomplete]="auto"
                [formControl]="tagFormCtrl"
                (matChipInputTokenEnd)="addTag($event)"
         >
-      </mat-chip-list>
+      </mat-chip-grid>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addAutocompleteSuggestionToTags($event)">
         <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
           {{tag.name}}

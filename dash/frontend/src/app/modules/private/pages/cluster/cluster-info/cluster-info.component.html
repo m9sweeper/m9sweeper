@@ -31,10 +31,10 @@
       <p>Context: {{cluster.context}}</p>
       <p>Running m9sweeper version {{m9ver}} ({{commitSHA}} from {{buildDate}})</p>
       <!-- <p>Grace Period Days: {{cluster.gracePeriodDays}}</p> -->
-      <mat-chip-list aria-label="Cluster Tags" style="display:none!important">
+      <mat-chip-grid aria-label="Cluster Tags" style="display:none!important">
         <p>Tags: </p><mat-chip *ngFor="let tag of cluster['tags']; index as i " [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{tag.name}}</mat-chip>
-      </mat-chip-list>
-      
+      </mat-chip-grid>
+
       <h3 style="margin-top:20px;">Webhook Enforcement: </h3>
       <p style="line-height:0.2"><i>Block noncompliant applications from deploying</i></p>
       <mat-slide-toggle #matSlideToggle

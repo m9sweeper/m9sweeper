@@ -31,11 +31,11 @@
         <div class="right-column">
           <div *ngIf="!exception?.relevantForAllClusters; else noClusters">
             <h3><b>Clusters</b></h3>
-            <mat-chip-list>
+            <mat-chip-grid>
               <mat-chip *ngFor="let cluster of exception?.clusters" (click)="viewCluster(cluster?.id)">
                 {{cluster.name}}
               </mat-chip>
-            </mat-chip-list>
+            </mat-chip-grid>
           </div>
           <ng-template #noClusters>
             <p><b>Clusters:</b> All</p>
@@ -43,11 +43,11 @@
 
           <div *ngIf="!exception?.relevantForAllPolicies; else noPolicies">
             <h3><b>Policies</b></h3>
-            <mat-chip-list>
+            <mat-chip-grid>
               <mat-chip *ngFor="let policy of exception.policies" (click)="viewPolicy(policy?.id)">
                 {{policy.name}}
               </mat-chip>
-            </mat-chip-list>
+            </mat-chip-grid>
           </div>
           <ng-template #noPolicies>
             <p><b>Policies:</b> All</p>
@@ -55,11 +55,11 @@
 
           <div *ngIf="!exception?.relevantForAllKubernetesNamespaces; else noNamespaces">
             <h3><b>Namespaces</b></h3>
-            <mat-chip-list>
+            <mat-chip-grid>
               <mat-chip *ngFor="let namespace of exception.namespaces">
                 {{namespace.name}}
               </mat-chip>
-            </mat-chip-list>
+            </mat-chip-grid>
           </div>
           <ng-template #noNamespaces>
             <p><b>Namespaces:</b> All</p>
