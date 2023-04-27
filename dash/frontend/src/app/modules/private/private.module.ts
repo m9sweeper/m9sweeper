@@ -44,7 +44,6 @@ import { ScannerListComponent } from './pages/scanners/scanner-list/scanner-list
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 import { CreateAppSettingsComponent } from './pages/app-settings/create-app-settings/create-app-settings.component';
 import { SubNavigationComponent } from '../shared/subnavigation/sub-navigation.component';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { ExternalAuthConfigurationListComponent } from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
 import { ExternalAuthConfigurationCreateComponent } from './pages/external-auth-configuration/external-auth-configuration-create/external-auth-configuration-create.component';
@@ -245,7 +244,6 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatTabsModule,
-    NgxMatFileInputModule,
     SharedModule,
     MatNativeDateModule,
     FontAwesomeModule,
