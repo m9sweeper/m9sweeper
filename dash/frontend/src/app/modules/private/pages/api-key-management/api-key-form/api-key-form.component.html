@@ -24,13 +24,13 @@
         <mat-card-content>
           <form class="api-form" [formGroup]="apiKeyForm">
             <p >
-              <mat-form-field appearance="standard">
+              <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="Name" type="text" formControlName="name">
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="standard">
+              <mat-form-field appearance="outline">
                 <mat-label>Choose User</mat-label>
                 <mat-select formControlName="userId" [disabled]="isEdit">
                   <mat-option *ngFor="let user of userList" [value]="user.id">{{user.fullName}}</mat-option>

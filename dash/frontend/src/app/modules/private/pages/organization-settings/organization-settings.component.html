@@ -4,47 +4,47 @@
       <mat-list role="list">
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'settings'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Organization">
-          <mat-icon mat-list-icon>settings</mat-icon>
+          <mat-icon mat-list-item-icon>settings</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Organization</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'users']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Users">
-          <mat-icon mat-list-icon>folder_shared</mat-icon>
+          <mat-icon mat-list-item-icon>folder_shared</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Users</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'licenses']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="License">
-          <mat-icon mat-list-icon>lock_open</mat-icon>
+          <mat-icon mat-list-item-icon>lock_open</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Licenses</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'policies'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Policies">
-          <mat-icon mat-list-icon>assignment_turned_in</mat-icon>
+          <mat-icon mat-list-item-icon>assignment_turned_in</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Policies</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'exceptions'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Exceptions">
-          <mat-icon mat-list-icon>assignment_late</mat-icon>
+          <mat-icon mat-list-item-icon>assignment_late</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Exceptions</span>
         </a>
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'single-sign-on'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Sign On Methods">
-          <mat-icon mat-list-icon>vpn_key</mat-icon>
+          <mat-icon mat-list-item-icon>vpn_key</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Sign on Methods</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'docker-registries']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Docker Registries">
-          <mat-icon mat-list-icon>shopping_basket</mat-icon>
+          <mat-icon mat-list-item-icon>shopping_basket</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Docker Registries</span>
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="API Key Management">
-          <mat-icon mat-list-icon>code</mat-icon>
+          <mat-icon mat-list-item-icon>code</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">API Key Management</span>
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'audit-logs'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Audit Logs">
-          <mat-icon mat-list-icon>fingerprint</mat-icon> <!-- alternative icon might be `pets` -->
+          <mat-icon mat-list-item-icon>fingerprint</mat-icon> <!-- alternative icon might be `pets` -->
           <span matLine *ngIf="isExpanded || isSmallDevice">Audit Logs</span>
         </a>
       </mat-list>

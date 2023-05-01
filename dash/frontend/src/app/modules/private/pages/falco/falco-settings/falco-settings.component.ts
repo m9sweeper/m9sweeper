@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, } from '@angular/router';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {  UntypedFormGroup, UntypedFormBuilder, UntypedFormArray} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-falco-settings',
@@ -18,7 +18,7 @@ export class FalcoSettingsComponent implements OnInit {
 
   clusterId: number;
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
-  settingForm: UntypedFormGroup;
+  settingForm: FormGroup;
 
   savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
@@ -35,7 +35,7 @@ export class FalcoSettingsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private falcoService: FalcoService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private alertService: AlertService,
 
   ) { }
@@ -50,7 +50,7 @@ export class FalcoSettingsComponent implements OnInit {
       selectedWeekDay: [],
       whoToNotify: [],
       emailList: [[]],
-      savedSeverityLevelArray: new UntypedFormArray([]),
+      savedSeverityLevelArray: new FormArray([]),
     });
 
     this.route.parent.parent.params

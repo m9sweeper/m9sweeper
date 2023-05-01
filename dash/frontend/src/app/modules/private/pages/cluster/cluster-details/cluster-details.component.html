@@ -7,28 +7,28 @@
            title="Summary" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <mat-icon mat-list-icon>graphic_eq</mat-icon>
+          <mat-icon mat-list-item-icon>graphic_eq</mat-icon>
           <span matLine *ngIf="isExpanded  || isSmallDevice">Summary</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]"
            title="Cluster Info" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <mat-icon mat-list-icon>info</mat-icon>
+          <mat-icon mat-list-item-icon>info</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Cluster Info</span>
         </a>
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'images']"
            routerLinkActive="active" title="Images"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
-          <mat-icon mat-list-icon>insert_photo</mat-icon>
+          <mat-icon mat-list-item-icon>insert_photo</mat-icon>
           <span matLine *ngIf="isExpanded  || isSmallDevice">Images</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubernetes-namespaces']"
            title="Workloads" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <mat-icon mat-list-icon>network_check</mat-icon>
+          <mat-icon mat-list-item-icon>network_check</mat-icon>
           <span matLine *ngIf="isExpanded  || isSmallDevice">Workloads</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'gatekeeper']"
@@ -36,22 +36,31 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="gatekeeper-list-item">
-          <img mat-icon mat-list-icon src="../../../../../assets/images/opa-icon-black.png" class="opa-img"/>
+          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="20" height="20"/>
           <span matLine *ngIf="isExpanded  || isSmallDevice">GateKeeper</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubesec']"
            title="KubeSec" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img mat-icon mat-list-icon src="../../../../../assets/images/kubesec-logo.png" class="top-margin-16"/>
+          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">KubeSec</span>
         </a>
+
+
+        <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}" title="API Key Management">
+          <mat-icon mat-list-item-icon>code</mat-icon>
+          <span matLine *ngIf="isExpanded || isSmallDevice">API Key Management</span>
+        </a>
+
+
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubehunter']"
            title="Kube Hunter" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img mat-icon mat-list-icon src="../../../../../assets/images/kube-hunter-logo.png" class="kube-hunter-img"/>
+          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="25" height="25"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Hunter</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubebench']"
@@ -59,21 +68,21 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img mat-icon mat-list-icon src="../../../../../assets/images/kube-bench-logo.png" class="kube-hunter-img"/>
+          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="20" height="20"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Bench</span>
         </a>
         <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active" title="Falco"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
-          <img mat-list-icon src="../../../../../../assets/images/falco-icon-black.png" class="falco-img"/>
+          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="20" height="20"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Falco</span>
         </a>
         <a  mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'reports']"
            routerLinkActive="active" title="Reports"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
-          <mat-icon mat-list-icon>feed</mat-icon>
+          <mat-icon mat-list-item-icon>feed</mat-icon>
           <span matLine *ngIf="isExpanded  || isSmallDevice">Reports</span>
         </a>
       </mat-list>
@@ -83,7 +92,7 @@
       <mat-list role="list" [ngClass]="{'expanded': isExpanded, 'closed': !isExpanded}">
         <div class="expanded-item" *ngIf="isExpanded">
           <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" class="expand-hover" title="Organization Settings" (click)="menubarCollapse()">
-            <mat-icon mat-list-icon>settings</mat-icon>
+            <mat-icon mat-list-item-icon>settings</mat-icon>
             <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
           </a>
           <button mat-icon-button (click)="expand()" class="expand-hover" title="Collapse" style="width: 56px; height: 56px; line-height: normal;">
@@ -91,7 +100,7 @@
           </button>
         </div>
         <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" title="Organization Settings" (click)="menubarCollapse()" *ngIf="!isExpanded">
-          <mat-icon mat-list-icon>settings</mat-icon>
+          <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
         <div *ngIf="!isExpanded" mat-list-item class="expand-hover">
           <button mat-icon-button (click)="expand()" title="Expand" style="width: 65px; height: 56px; line-height: normal;">

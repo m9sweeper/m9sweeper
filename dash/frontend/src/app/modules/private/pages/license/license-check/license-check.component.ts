@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {AlertService} from "@full-fledged/alerts";
@@ -11,9 +11,9 @@ import {AlertService} from "@full-fledged/alerts";
 })
 export class LicenseCheckComponent implements OnInit {
 
-  checkLicenseValidityForm: UntypedFormGroup;
+  checkLicenseValidityForm: FormGroup;
 
-  constructor(private formBuilder: UntypedFormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<LicenseCheckComponent>,
               private clusterService: ClusterService,
               private alertService: AlertService) {

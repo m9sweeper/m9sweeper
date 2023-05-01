@@ -4,7 +4,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {IAuditLog} from '../../../../../core/entities/IAuditLog';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
 
@@ -18,13 +18,13 @@ export class AuditLogComponent implements OnInit {
   displayedColumns: string[] = ['id', 'entity_type', 'entity_id', 'event_type', 'event_time', 'user', 'data'];
   dataSource: MatTableDataSource<IAuditLog>;
   dialogRef: MatDialogRef<ShowJsonDataComponent>;
-  filterAuditLogForm: UntypedFormGroup;
+  filterAuditLogForm: FormGroup;
   entityTypes: { entityType: string }[];
   totalAuditLogs = 0;
   showAuditLogTable = false;
 
   constructor(private auditLogService: AuditLogService,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private loaderService: NgxUiLoaderService,
               private csvService: CsvService) {

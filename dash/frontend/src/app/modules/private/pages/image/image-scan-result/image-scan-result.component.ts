@@ -10,7 +10,7 @@ import {FormatDate} from '../../../../shared/format-date/format-date';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {UntypedFormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {combineLatest, merge, Observable, of, Subject} from 'rxjs';
 import {Title} from '@angular/platform-browser';
 import {MatSelectChange} from '@angular/material/select';
@@ -68,7 +68,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   displayComplianceAndIssueTable = true;
   imageScanDates: Array<{created_at: number}>;
   currentlySelectedDate: number;
-  scanDateDefault: UntypedFormControl;
+  scanDateDefault: FormControl;
   formatDate = FormatDate;
   imageNamespaces: string[];
   @ViewChild('complianceSort') sort: MatSort;
@@ -159,7 +159,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
             if (reloadScanDateSelection) {
               this.currentlySelectedDate = this.imageScanDates[0].created_at;
             }
-            this.scanDateDefault = new UntypedFormControl(this.currentlySelectedDate);
+            this.scanDateDefault = new FormControl(this.currentlySelectedDate);
             return this.imageService.getImageScanDataByImageId(this.imageId, this.currentlySelectedDate, this.limit, this.page, this.sort);
           } else {
             // We didn't have any scans for this image, so don't make the other API calls

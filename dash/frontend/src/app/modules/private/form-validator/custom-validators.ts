@@ -1,4 +1,4 @@
-import {AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 export class CustomValidators {
 
@@ -7,7 +7,7 @@ export class CustomValidators {
   }
 
   static checkPasswordAndConfirmPassword(controlName: string, matchingControlName: string) {
-    return (formGroup: UntypedFormGroup) => {
+    return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
 
@@ -51,7 +51,7 @@ export class CustomValidators {
   }
 
   static checkEndDateIsGreaterThanStartDate(): ValidatorFn {
-    return (form: UntypedFormGroup): ValidationErrors | null => {
+    return (form: FormGroup): ValidationErrors | null => {
       const start = new Date(form.get('startDate').value);
       const end = new Date(form.get('endDate').value);
       const endDateFieldValue = form.get('endDate').value;

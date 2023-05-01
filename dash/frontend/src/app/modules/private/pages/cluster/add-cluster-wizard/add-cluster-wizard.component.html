@@ -6,7 +6,7 @@
 
     <form [formGroup]="createClusterForm">
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="outline">
           <mat-label>Cluster Name</mat-label>
           <label>
             <input required matInput placeholder="Cluster Name" type="text" formControlName="name">
@@ -37,7 +37,7 @@
           <button type="button" mat-raised-button color="accent" (click)="configFileInput.click()">
             Select Kubeconfig
           </button>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label>Context</mat-label>
             <mat-select placeholder="Context"
                         formControlName="context"
@@ -52,7 +52,7 @@
           Cluster Details
         </h2>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label>Host Name</mat-label>
             <label>
               <input matInput placeholder="Host Name" required type="text" formControlName="ipAddress" [readonly]="!!this.createClusterForm.get('kubeConfig').value">
@@ -60,7 +60,7 @@
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="outline">
             <mat-label>Port</mat-label>
             <label>
               <input matInput placeholder="Port" type="number" formControlName="port" [readonly]="!!this.createClusterForm.get('kubeConfig').value">

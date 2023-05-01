@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {UntypedFormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
 import {FileManagementService} from '../../../../../core/services/file-management.service';
@@ -12,10 +12,10 @@ import {IFile} from '../../../../../core/entities/IFile';
   styleUrls: ['./create-app-settings.component.scss']
 })
 export class CreateAppSettingsComponent implements OnInit {
-  createAppSettingsForm: UntypedFormGroup;
+  createAppSettingsForm: FormGroup;
 
   constructor(private dialogRef: MatDialogRef<CreateAppSettingsComponent>,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private appSettingsService: AppSettingsService,
               private fileManagementService: FileManagementService,
               @Inject(MAT_DIALOG_DATA) public data: any

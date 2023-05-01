@@ -23,7 +23,7 @@
               <form (ngSubmit)="rebuildWithFilters()">
                 <div class="row report-header">
                   <div class="col-xs-12 col-sm-6 col-md-3">
-                    <mat-form-field appearance="fill" [formGroup]="filterForm">
+                    <mat-form-field appearance="outline" [formGroup]="filterForm">
                       <mat-label>Start Date</mat-label>
                       <input matInput [matDatepicker]="startPicker" formControlName="startDate">
                       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>

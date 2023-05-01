@@ -4,7 +4,7 @@
     <div class="create-cluster-group">
       <mat-list role="list">
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item title="Add Cluster Group" (click)="openAddGroupDialog()">
-          <mat-icon mat-list-icon>add</mat-icon>
+          <mat-icon mat-list-item-icon>add</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Add Cluster Group</span>
         </a>
         <mat-divider></mat-divider>
@@ -28,11 +28,11 @@
       <mat-list role="list" [ngClass]="{'expanded': isExpanded, 'closed': !isExpanded}">
         <div class="expanded-item" *ngIf="isExpanded">
           <a mat-list-item title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" (click)="menubarCollapse()">
-            <mat-icon title="Organization Settings" mat-list-icon>settings</mat-icon>
+            <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
             <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
           </a>
           <a mat-list-item title="Organization Settings" *ngIf="!isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']" (click)="menubarCollapse()">
-            <mat-icon title="Organization Settings" mat-list-icon>settings</mat-icon>
+            <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
             <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
           </a>
           <button mat-icon-button (click)="expand()" title="Collapse" class="expand-btn" style="width: 56px; height: 56px; line-height: normal;">
@@ -40,10 +40,10 @@
           </button>
         </div>
         <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']"  class="expand-hover" title="Organization Settings" (click)="menubarCollapse()" *ngIf="!isExpanded && isAdmin">
-          <mat-icon mat-list-icon>settings</mat-icon>
+          <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
         <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']"  title="Organization Settings" (click)="menubarCollapse()" *ngIf="!isExpanded && !isAdmin">
-          <mat-icon mat-list-icon>settings</mat-icon>
+          <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
         <div *ngIf="!isExpanded" class="expand-hover">
           <button mat-icon-button (click)="expand()" title="Expand" style="width: 65px; height: 56px; line-height: normal;">

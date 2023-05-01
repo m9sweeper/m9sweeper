@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
-import {UntypedFormBuilder, UntypedFormGroup,  Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@full-fledged/alerts';
 import {IAuthConfig, ILDAPConfigStrategy, IOAUTHConfigStrategy} from '../../../../../core/entities/IAuth';
 import {AuthenticationType} from '../../../../../core/enum/AuthenticationType';
@@ -16,14 +16,14 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   staticAuthTypeList: any[] = Object.keys(this.authenticationType).map(a => {
     return {label: a, value: this.authenticationType[a]};
   });
-  authConfigForm: UntypedFormGroup;
+  authConfigForm: FormGroup;
   oauthAuthActivated = false;
   ldapAuthActivated = false;
   ldapPasswordHide = true;
 
   constructor(private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
               private externalAuthConfigurationService: ExternalAuthConfigurationService,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private alertService: AlertService,
               @Inject(MAT_DIALOG_DATA) public data: {
                 isEdit: boolean;
