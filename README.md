@@ -217,6 +217,14 @@ The initial project was created by team members at Intelletive Consulting at tim
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
+<!-- Feature Requests -->
+
+## Feature Requests
+
+If you have feature requests, please submit them as github issues and prefix the request with "Feature Request:". If you find the feature has already been requested, then please upvote that feature so we know it is a feature that others are looking for. 
+
+This helps us to prioritize further feature development based upon the needs of our users. 
+
 <!-- License -->
 
 ## :warning: License
