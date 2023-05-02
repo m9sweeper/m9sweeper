@@ -189,15 +189,15 @@
         </div>
         <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
         <ng-template #moreThanSixTags>
-          <mat-chip-grid aria-label="tag list">
+          <mat-chip-listbox aria-label="tag list">
             <mat-chip *ngFor="let tag of cluster['tags'].slice(0, 6); index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip>
             <a [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]">{{limitTagList(cluster['tags'])}}</a>
-          </mat-chip-grid>
+          </mat-chip-listbox>
         </ng-template>
         <ng-template #lessThanSixTags>
-          <mat-chip-grid aria-label="tag list">
+          <mat-chip-listbox aria-label="tag list">
             <mat-chip *ngFor="let tag of cluster['tags'] || []; index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip>
-          </mat-chip-grid>
+          </mat-chip-listbox>
         </ng-template>
       </mat-card>
     </div>

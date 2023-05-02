@@ -1,20 +1,22 @@
-@import '@angular/material/theming';
+//@import '@angular/material/theming';
+@use '@angular/material' as mat;
 
 @mixin dashboard-component-light-theme($theme) {
+
   app-dashboard {
     .dashboard-container {
       .cluster-dashboard {
-        background-color: mat-color($mat-grey, 300);
+        background-color: mat.get-color-from-palette(mat.$gray-palette, 300); // pink now
       }
       .cluster-group-menu {
         mat-list {
-          background-color: map-get($mat-grey, A100);
+          background-color:  mat.get-color-from-palette(mat.$gray-palette, A100);// pink now
         }
       }
     }
   }
 }
-
+/*
 @mixin dashboard-component-dark-theme($theme) {
   app-dashboard {
     .dashboard-container {
@@ -83,3 +85,5 @@
     }
   }
 }
+
+ */

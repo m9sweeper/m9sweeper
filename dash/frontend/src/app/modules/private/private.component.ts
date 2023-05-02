@@ -81,7 +81,7 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.setShowSearchBar();
       });
-    
+
     /*if (this.isAdmin) {
       this.clusterService.checkLicenseValidity().subscribe(response => {
           if (response.data.success) {
@@ -158,7 +158,7 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   defaultLink() {
     this.clusterGroupService.getCurrentGroupId().subscribe(groupId => {
       if (!isNaN(groupId)) {
-        this.defaultRouteLink = ['/private', 'dashboard', 'group', String(groupId)];
+        setTimeout(() => this.defaultRouteLink = ['/private', 'dashboard', 'group', String(groupId)] );
         this.currentGroupId = groupId;
       }
     });
