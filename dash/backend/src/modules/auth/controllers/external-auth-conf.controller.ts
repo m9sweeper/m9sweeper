@@ -46,7 +46,7 @@ export class ExternalAuthConfController {
             authConfigurationDTO.authConfig.redirectUri = '/auth/non-redirectable-login/ldap';
         }
         const authConfigId = await this.externalAuthConfigService.createExternalAuth(authConfigurationDTO);
-        return await this.externalAuthConfigService.loadById(+authConfigId);
+        return this.externalAuthConfigService.loadById(+authConfigId);
     }
 
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN)

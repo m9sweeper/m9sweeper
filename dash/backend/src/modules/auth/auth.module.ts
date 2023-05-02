@@ -20,6 +20,7 @@ import { LoginCounterService } from './services/PrometheusService';
 import {ExternalAuthConfController} from './controllers/external-auth-conf.controller';
 import { ConfigService } from '@nestjs/config';
 import {AuthService} from './services/auth.service'
+import {AzureOauth2Service} from "./services/oauth2/azure-oauth2.service";
 
 @Global()
 @Module({
@@ -51,6 +52,7 @@ import {AuthService} from './services/auth.service'
   providers: [
     LoggedInUserFactory,
     GoogleOauth2Service,
+    AzureOauth2Service,
     ExternalAuthConfigService,
     OAuth2Factory,
     JwtUtilityService,
