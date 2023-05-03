@@ -36,6 +36,7 @@ div.exception-list-container {
 table {
   width: 100%;
 }
+/* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
 mat-paginator {
   display: flex;
   justify-content: center;

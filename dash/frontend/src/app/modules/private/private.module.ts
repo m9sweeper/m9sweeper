@@ -127,7 +127,6 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
-import {MatLegacyChipsModule} from '@angular/material/legacy-chips';
 
 
 @NgModule({

@@ -13,7 +13,7 @@ mat-horizontal-stepper {
       mat-form-field {
         width: 100%;
 
-        &.mat-form-field {
+        &.mat-mdc-form-field {
           margin-top: 16px;
         }
       }
@@ -21,7 +21,7 @@ mat-horizontal-stepper {
         height: 150px;
       }
     }
-    .mat-card-actions {
+    .mat-mdc-card-actions {
       margin-left: 0;
       margin-top: 20px !important;
     }
@@ -47,7 +47,7 @@ mat-horizontal-stepper {
   margin-left: 20px;
 }
 
-.mat-radio-button ~ .mat-radio-button {
+.mat-mdc-radio-button ~ .mat-radio-button {
   margin-left: 16px;
 }
 // Something was conflicting with the built in hidden rule. Adding this to increase specificity

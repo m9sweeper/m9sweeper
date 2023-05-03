@@ -23,7 +23,7 @@
   min-width: 500px;
 }
 
-.mat-table {
+.mat-mdc-table {
   margin-bottom: 40px;
   min-width: 500px;
 }
@@ -42,7 +42,7 @@
   max-width: 30%;
 }
 
-.mat-row:not(.expanded-detail-row):hover {
+.mat-mdc-row:not(.expanded-detail-row):hover {
   background: whitesmoke;
   cursor: pointer;
 }
@@ -51,11 +51,11 @@
   cursor: default;
 }
 
-.mat-row:not(.expanded-detail-row):active {
+.mat-mdc-row:not(.expanded-detail-row):active {
   background: #efefef;
 }
 
-.mat-row td {
+.mat-mdc-row td {
   border-bottom-width: 0;
   min-height: 0;
 }

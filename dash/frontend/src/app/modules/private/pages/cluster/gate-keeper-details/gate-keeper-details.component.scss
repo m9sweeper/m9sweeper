@@ -16,8 +16,8 @@ div {
         div.gate-keeper-details-sub-title {
           font-weight: 500;
           font-size: 20px;
-        }       
-
+        }
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
         mat-card-actions {
           margin-left: 3px;
         }
@@ -37,14 +37,15 @@ div {
       &.gate-keeper-details-dashboard-header-card-item {
         div {
           margin: 10px 0px;
-
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
           mat-card {
             height: 100px;
-
+            /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
             mat-card-title {
               font-weight: bold;
             }
-
+            /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
             mat-card-content {
               padding-top: 20px;
 
@@ -111,6 +112,7 @@ div {
 
       &.constraint-section {
         div {
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
           mat-card {
             #constraint-header {
               font-weight: bold;

@@ -22,7 +22,7 @@
   cursor: pointer;
 }
 
-.mat-card{
+.mat-mdc-card{
   padding: 0;
   margin: 10px 10px 0 0;
 }
@@ -61,7 +61,7 @@
   padding-bottom: 10px;
 }
 
-.mat-card-title {
+.mat-mdc-card-title {
   padding-top: 10px;
 }
 
@@ -128,7 +128,7 @@
   width: calc(var(--cluster-container-width) - 10px);
   margin: 0 0 0 10px;
   height: 175px;
-  .mat-card:not([class*=mat-elevation-z]) {
+  .mat-mdc-card:not([class*=mat-elevation-z]) {
     box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
   }
 }

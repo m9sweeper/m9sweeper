@@ -79,7 +79,6 @@ export class GateKeeperComponent implements OnInit {
     });
 
     openAddConstraint.afterClosed().subscribe(response => {
-      console.log(response);
       if (response && !response.cancel) {
         this.loadGateKeeperConstraintTemplates();
         this.checkGatekeeperStatus();

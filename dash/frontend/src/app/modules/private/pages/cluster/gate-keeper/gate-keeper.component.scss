@@ -37,12 +37,13 @@ div {
     }
 
     .top-header-row {
+      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
       mat-card {
         height: 140px
       }
     }
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       margin-left: -16px;
       margin-right: -16px;
     }
@@ -58,7 +59,7 @@ div {
   }
 }
 
-th.mat-header-cell, td.mat-cell {
+th.mat-mdc-header-cell, td.mat-mdc-cell {
   padding-right: 10px;
 }
 

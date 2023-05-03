@@ -17,7 +17,7 @@
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [initialDate]="date"></app-datepicker-component>
       </div>
     </div>
-    <mat-card>
+    <mat-card appearance="outlined">
       <div class="namespaces-table">
         <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">

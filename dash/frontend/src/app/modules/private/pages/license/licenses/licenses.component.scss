@@ -17,7 +17,7 @@ div {
             div.license-details-sub-title {
               font-size: 26px;
             }
-
+            /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
             mat-card-actions {
               margin-left: 3px;
             }
@@ -33,7 +33,9 @@ div {
             }
           }
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+        /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
         mat-card {
           margin-bottom: 10px;
 
@@ -41,21 +43,22 @@ div {
             font-size: 26px;
             font-weight: normal;
           }
-
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
           mat-card-content {
             word-wrap: break-word !important;
 
             p {
               font-size: 14px;
             }
-
+            /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
             &.mat-card-content-in-small-device {
               p {
                 font-size: 13px;
               }
             }
           }
-
+          /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
           mat-card-header {
             margin-left: -17px;
           }

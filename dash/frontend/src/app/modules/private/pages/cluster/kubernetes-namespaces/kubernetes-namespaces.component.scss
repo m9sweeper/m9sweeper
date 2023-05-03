@@ -43,6 +43,7 @@ div.kubernetes-object-container {
     background-color: rgba(0, 0, 0, .08);
     cursor: pointer;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
   mat-paginator {
     display: flex;
     justify-content: center;
@@ -64,6 +65,7 @@ div.kubernetes-object-container {
         .namespaces-table {
           overflow: auto !important;
           background: #F9F9F9;
+          /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           mat-table {
              min-width: 100% !important;
           }

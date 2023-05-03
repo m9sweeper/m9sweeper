@@ -56,17 +56,18 @@
   cursor: pointer;
 }
 
-  .mat-form-field {
+  .mat-mdc-form-field {
     //margin-right: 10px;
     width: 100%;
   }
 
+  /*TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
   mat-paginator {
     display: flex;
     justify-content: center;
   }
 
-  .mat-card-title{
+  .mat-mdc-card-title{
     //padding-left: 30px;
     //padding-right: 20px;
     width: 100%;
@@ -77,7 +78,7 @@
 .falco-table {
   // flex: 1;
   overflow-y: auto !important;
-
+  /*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   mat-table {
     min-width: 800px;
 

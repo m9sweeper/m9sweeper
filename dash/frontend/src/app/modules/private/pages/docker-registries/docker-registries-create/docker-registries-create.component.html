@@ -17,17 +17,17 @@
         <div>
           <mat-form-field appearance="outline">
             <mat-label>Aliases</mat-label>
-            <mat-chip-list #aliasList
+            <mat-chip-grid #aliasList
                            [hidden]="createDockerRegistryForm.get('aliases').value.size === 0"
                            formControlName="aliases">
-              <mat-chip *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
+              <mat-chip-row *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
               (removed)="removeAlias(alias)">
                 {{alias}}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-row>
+            </mat-chip-grid>
             <input placeholder="Add new alias"
                    class="mat-chip-input"
                    formControlName="aliasInput"

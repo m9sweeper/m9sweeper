@@ -30,6 +30,7 @@ div.image-container {
         padding-bottom: 10px;
       }
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
     mat-paginator {
       display: flex;
       justify-content: center;
@@ -58,7 +59,7 @@ div.image-container {
   // flex: 1;
   overflow: auto;
   background: #F9F9F9;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   mat-table {
     min-width: 800px;
 
@@ -113,7 +114,7 @@ div.image-container {
           margin-top: 10px !important;
           overflow: unset !important;
           height: auto !important;
-
+          /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
           mat-table {
             height: auto !important;
             min-width: 100% !important;

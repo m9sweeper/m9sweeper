@@ -11,7 +11,7 @@
   padding: 15px;
 }
 
-.mat-card-title{
+.mat-mdc-card-title{
   width: 100%;
   white-space: nowrap;
   display: flex;
@@ -26,11 +26,13 @@
   text-align: left;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
 mat-paginator {
   display: flex;
   justify-content: center;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
 mat-table {
   overflow: auto !important;
   min-width: 800px;

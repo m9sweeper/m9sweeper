@@ -13,8 +13,9 @@ h3 {
   display: inline;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 
 #action-btn {
@@ -32,6 +33,7 @@ mat-card-title {
   display:flex;
   flex-direction:column;
   max-height: 100%;
+  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin-bottom: 20px;
     width: 310px !important;
@@ -56,8 +58,9 @@ mat-card-title {
     right:-52px;
   }
 
-  ::ng-deep .icon-outside .mat-dialog-container {
-    overflow: unset
+  ::ng-deep .icon-outside .mat-mdc-dialog-container {
+    //overflow: unset
+    background-color: pink;
   }
   .scrollable-right-content {
     //position: fixed;

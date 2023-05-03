@@ -3,7 +3,7 @@
        [ngClass]="isSmallDevice ? 'cluster-group-menu-small-device' : 'cluster-group-menu-big-device'">
     <div class="create-cluster-group">
       <mat-list role="list">
-        <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item title="Add Cluster Group" (click)="openAddGroupDialog()">
+        <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" matListItemLine title="Add Cluster Group" (click)="openAddGroupDialog()">
           <mat-icon mat-list-item-icon>add</mat-icon>
           <span matLine *ngIf="isExpanded || isSmallDevice">Add Cluster Group</span>
         </a>
@@ -14,7 +14,7 @@
       <mat-list role="list" class="cluster-group-name-list"
                 [ngClass]="{'cluster-group-list-isExpanded' : isExpanded || isSmallDevice , 'cluster-group-list-isNotExpand' : !isExpanded  || !isSmallDevice }"
                 *ngFor="let group of userClusterGroups; index as i">
-        <a mat-list-item role="listitem" class="cluster-group-name" title="{{group?.name}}" (click)="menubarCollapse()"
+        <a matListItemLine role="listitem" class="cluster-group-name" title="{{group?.name}}" (click)="menubarCollapse()"
            [routerLink]="['/private', 'dashboard', 'group', group?.id]"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">

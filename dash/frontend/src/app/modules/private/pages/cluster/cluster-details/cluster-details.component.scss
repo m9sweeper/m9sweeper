@@ -40,7 +40,7 @@ div {
             background: #555;
           }
 
-          .mat-list-base {
+          .mat-mdc-list-base {
             margin-right: 3px;
           }
 
@@ -92,6 +92,8 @@ div {
       width: var(--navigation-menu-width);
       display: flex;
       align-items: center;
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
       mat-list {
         display: flex;
         width: 100%;
@@ -101,7 +103,7 @@ div {
         &.closed {
           flex-direction: column;
         }
-        &.mat-list-base {
+        &.mat-mdc-list-base {
           padding-top: 0 !important;
         }
         a {
@@ -109,7 +111,7 @@ div {
           //font-size: 1vw;
         }
 
-        > .mat-list-item {
+        > .mat-mdc-list-item {
           &:hover {
             background-color: #F2F2F2;
           }
@@ -144,8 +146,11 @@ div {
     }
   }
   .kube-hunter-list-item {
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
     ::ng-deep .mat-list-item-content {
       padding: 7px;
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
       ::ng-deep .mat-list-text {
         padding: 7px;
       }
@@ -153,7 +158,10 @@ div {
   }
 
   .gatekeeper-list-item {
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
+    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
     ::ng-deep .mat-list-item-content {
+      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
       ::ng-deep .mat-list-text {
         padding-left: 15px;
       }
