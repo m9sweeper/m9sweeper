@@ -1,17 +1,20 @@
-@import '@angular/material/theming';
+// @import '@angular/material/theming';
+@use 'sass:map';
+@use '@angular/material' as mat;
 
 @mixin app-root-theme($theme) {
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+  $color-config: mat.get-color-config($theme);
+  $primary: map.get($color-config, primary);
+  $accent: map.get($color-config, accent);
+  $foreground: map.get($color-config, foreground);
+  $background: map.get($color-config, background);
 
   app-root {
     .app-container {
-      background-color: mat-color($background, background);
+      background-color: mat.get-color-from-palette($background);
       > div {
         &.theme-changer-container {
-          background: mat-color($accent, accent);
+          background: mat.get-color-from-palette($accent);
         }
       }
     }

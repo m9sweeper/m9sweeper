@@ -1,5 +1,7 @@
 
 div {
+  height: 100%;
+  filter: none;
   &.app-container {
     height: 100%;
     display: flex;
@@ -37,11 +39,11 @@ div.kubernetes-object-container {
       padding-right: 3px;
     }
 
-    * > .mat-header-row {
+    * > .mat-mdc-header-row {
       display: none;
     }
 
-    * > .mat-row {
+    * > .mat-mdc-row {
       flex-direction: column;
       align-items: start;
       padding: 8px 24px;
@@ -49,7 +51,7 @@ div.kubernetes-object-container {
     * > mat-cell:first-of-type {
       padding-left: 0;
     }
-    * > .mat-table .mat-paginator {
+    * > .mat-mdc-table .mat-mdc-paginator {
       width: 250px;
     }
   }
@@ -146,10 +148,10 @@ div.kubernetes-object-sub-navigation {
 }
 
 /* Mat Table Styling Corrections */
-.mat-table {
+.mat-mdc-table {
   width: 100%;
 
-  & .mat-header-cell {
+  & .mat-mdc-header-cell {
     width: calc(100% / 4);
     text-align: center;
   }
