@@ -9,13 +9,13 @@
         <mat-card-content>
           <form class="exception-form" [formGroup]="exceptionForm">
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
               <mat-label>Title</mat-label>
               <input matInput placeholder="Exception Title" type="text" formControlName="title" required>
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Type</mat-label>
                 <mat-select formControlName="type" (selectionChange)="displayExceptionFields($event)" required>
                   <mat-option value="policy">Policy</mat-option>
@@ -25,7 +25,7 @@
               </mat-form-field>
             </p>
             <p *ngIf="exceptionForm.value.type == 'override'">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Alternate Severity</mat-label>
                 <mat-select formControlName="altSeverity">
                  <mat-option *ngFor="let severityLevel of severityLevels" [value]="severityLevel"> {{severityLevel}}</mat-option>
@@ -33,7 +33,7 @@
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label #issueIdentifierLabel>Issue</mat-label>
                 <input
                   matInput
@@ -51,13 +51,13 @@
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Reason</mat-label>
                 <textarea matInput placeholder="Reason" type="text" formControlName="reason"></textarea>
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Start Date</mat-label>
                 <input matInput placeholder="Start Date" [matDatepicker]="startDatePicker" formControlName="startDate" [readonly]="editMode"  required>
                 <mat-datepicker-toggle matPrefix [for]="startDatePicker" [disabled]="editMode"></mat-datepicker-toggle>
@@ -66,7 +66,7 @@
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>End Date</mat-label>
                 <input matInput placeholder="End Date" [matDatepicker]="endDatePicker" formControlName="endDate">
                 <mat-datepicker-toggle matPrefix [for]="endDatePicker"></mat-datepicker-toggle>
@@ -75,7 +75,7 @@
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Exception Status</mat-label>
                 <mat-select formControlName="status" required>
                   <mat-option  value="review">In Review</mat-option>
@@ -85,7 +85,7 @@
               </mat-form-field>
             </p>
             <p *ngIf="scannersLoaded && exceptionForm.value.type !== 'gatekeeper'">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Scanner</mat-label>
                 <mat-select formControlName="scannerId" [value]="origException?.scanner?.id.toString()">
                   <mat-option value="">Any Scanner</mat-option>
@@ -94,7 +94,7 @@
               </mat-form-field>
             </p>
             <p *ngIf="policiesLoaded && exceptionForm.value.type !== 'gatekeeper'">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Policies (Select none if exception applies to all)</mat-label>
                 <mat-select formControlName="policies" multiple>
                   <mat-option *ngFor="let policy of policies" value="{{policy.id}}">{{policy.name}}</mat-option>
@@ -102,7 +102,7 @@
               </mat-form-field>
             </p>
             <p *ngIf="clustersLoaded">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Clusters (Select none if exception applies to all)</mat-label>
                 <mat-select formControlName="clusters"
                             (selectionChange)="onClusterChange($event)"
@@ -117,7 +117,7 @@
               </mat-form-field>
             </p>
             <p *ngIf="namespacesLoaded && exceptionForm.value.type !== 'override'">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Namespaces (Select none if exception applies to all)</mat-label>
                 <mat-select formControlName="namespaces" multiple>
                   <mat-select-trigger>
@@ -128,7 +128,7 @@
               </mat-form-field>
             </p>
             <p>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="fill">
                 <mat-label>Image URL Pattern</mat-label>
                 <input matInput placeholder="%" type="text" formControlName="imageMatch">
               </mat-form-field>

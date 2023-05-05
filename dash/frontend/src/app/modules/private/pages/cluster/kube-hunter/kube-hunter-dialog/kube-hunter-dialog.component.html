@@ -2,7 +2,7 @@
   <mat-step>
     <ng-template matStepLabel>Create Job</ng-template>
     <div class="row intro-container">
-      <h2>Choose whether to run Kube Hunter periodically or manually</h2>
+      <h3>Choose whether to run Kube Hunter periodically or manually</h3>
       <mat-radio-group aria-labelledby="cronjob-options-group-label" class="cronjob-options-radio-group" [(ngModel)]="cronjobOpt">
         <mat-radio-button class="cronjob-radio-button" [value]="true">
           Run on a schedule
@@ -36,7 +36,7 @@
       </div>
       <div *ngIf="cronjobOpt === true">
         <div class="row cronjob-run">
-          <h2>Choose whether to run Kube Hunter daily, weekly, or monthly</h2>
+          <h3>Choose whether to run Kube Hunter daily, weekly, or monthly</h3>
           <mat-form-field appearance="fill" class="margin-right">
             <mat-label>Choose</mat-label>
             <mat-select [(ngModel)]="cronjobTime">
@@ -76,9 +76,9 @@ helm upgrade --install kube-hunter m9sweeper/kube-hunter \
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Getting Results</ng-template>
-    <h2> After running the CLI command, kube-hunter will start its testing. If you have a smaller cluster, kube-hunter will
+    <h3> After running the CLI command, kube-hunter will start its testing. If you have a smaller cluster, kube-hunter will
       take a shorter length of time to complete, but if you have a larger cluster, the report will not be ready for quite
-      some time. Feel free to check back whenever you remember.</h2>
+      some time. Feel free to check back whenever you remember.</h3>
     <div class="row" *ngIf="report">
       <div class="col-xs-12 text-center">
         <button mat-raised-button (click)="viewReport(report.id)">View Report</button>

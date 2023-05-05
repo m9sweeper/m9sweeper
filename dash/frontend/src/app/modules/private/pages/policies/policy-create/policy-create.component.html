@@ -14,7 +14,7 @@
             <div>
               <div class="row">
                 <div class="col-lg-12 col-xs-12">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-label>Name*</mat-label>
                     <input matInput placeholder="Policy Name" type="text" formControlName="name" required>
                   </mat-form-field>
@@ -22,7 +22,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-12 col-xs-12">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-label>Description</mat-label>
                     <textarea matInput placeholder="Description" type="textarea" formControlName="description" required></textarea>
                   </mat-form-field>
@@ -39,7 +39,7 @@
               </div>
               <div class="row" *ngIf="policyForm.controls.tempExceptionEnabled.value">
                 <div class="col-lg-12 col-xs-12">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-label>Temporary Exception Grace Period (Days)</mat-label>
                     <input matInput placeholder="None" type="text" formControlName="new_scan_grace_period">
                   </mat-form-field>
@@ -56,7 +56,7 @@
               </div>
               <div class="row" *ngIf="policyForm.controls.rescanEnabled.value">
                 <div class="col-lg-12 col-xs-12">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-label>Image Rescan Period (Days)</mat-label>
                     <input matInput placeholder="None" type="text" formControlName="rescan_grace_period">
                   </mat-form-field>
@@ -78,7 +78,7 @@
               </div>
               <div class="row">
                 <div class="col-lg-12 col-xs-12">
-                  <mat-form-field appearance="outline">
+                  <mat-form-field appearance="fill">
                     <mat-label>Clusters</mat-label>
                     <mat-select formControlName="clusters" multiple required (selectionChange)="handleRelevantForAllClusters($event)">
                       <mat-option value="all" [disabled]="relevantForAllClusters === false">For All Clusters</mat-option>

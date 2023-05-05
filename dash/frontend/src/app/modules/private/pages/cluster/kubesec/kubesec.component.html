@@ -6,7 +6,7 @@
         <mat-step [editable]="isCompleted">
           <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
           <div class="pod-selection-container">
-            <h2>Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</h2>
+            <h3>Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</h3>
             <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group" [(ngModel)]="podSelectionOpt">
               <mat-radio-button class="file-radio-button" [value]="1"
                                 (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
@@ -91,7 +91,7 @@
             <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
               <div class="pod-score row">
                 <div class="col-lg-9 col-xs-9 pod-name">
-                  <h1> {{displayName}} </h1>
+                  <h3> {{displayName}} </h3>
                 </div>
                 <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
                   <span> {{score}} </span>

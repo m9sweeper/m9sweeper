@@ -6,15 +6,15 @@
   $color-config: mat.get-color-config($theme);
   $primary: map.get($color-config, primary);
   $accent: map.get($color-config, accent);
-  $foreground: map.get($color-config, foreground);
-  $background: map.get($color-config, background);
+  //$foreground: map.get($color-config, foreground);
+  //$background: map.get($color-config, background);
 
   app-root {
     .app-container {
-      background-color: mat.get-color-from-palette($background);
+      background-color:  mat.get-color-from-palette(mat.$gray-palette, 300);
       > div {
         &.theme-changer-container {
-          background: mat.get-color-from-palette($accent);
+          background:  mat.get-color-from-palette(mat.$gray-palette, A100);
         }
       }
     }

@@ -2,7 +2,7 @@
   <form [formGroup]="imageForm" class="image-form" (ngSubmit)="onSubmit()">
     <div>
       <p>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Image URL</mat-label>
           <input matInput placeholder="Url" type="url" (keyup)="parseURL($event)" formControlName="fullUrl">
         </mat-form-field>

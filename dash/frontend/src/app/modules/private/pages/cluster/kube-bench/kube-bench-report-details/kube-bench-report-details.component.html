@@ -1,12 +1,12 @@
 <div class="kube-bench-report">
   <div class="bench-report-header">
-      <h1 class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <h3 class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
        Kube Bench Test Results
-      </h1>
+      </h3>
     <ng-container *ngIf="report && report.Totals">
-      <h1 id="overallResults" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <h3 id="overallResults" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         {{report.Totals.total_pass}}/{{report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn}} Tests Passed
-      </h1>
+      </h3>
     </ng-container>
   </div>
   <div class="bench-report-header">

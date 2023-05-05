@@ -8,9 +8,9 @@
             <mat-card-title>Status:</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <h1 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h1>
-            <h1 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h1>
-            <h1 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h1>
+            <h3 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h3>
+            <h3 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h3>
+            <h3 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h3>
           </mat-card-content>
         </mat-card>
       </div>

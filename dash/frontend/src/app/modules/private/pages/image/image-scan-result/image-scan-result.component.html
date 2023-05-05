@@ -67,7 +67,7 @@
       </div>
     </div>
     <div class="scanner-error mat-elevation-z8" *ngIf="lastScanReport?.encounterError">
-      <h2 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h2>
+      <h3 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h3>
       <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
     </div>
     <div class="image-scan-result-list" *ngIf="displayComplianceAndIssueTable">

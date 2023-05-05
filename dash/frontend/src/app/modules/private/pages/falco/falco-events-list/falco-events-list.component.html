@@ -14,7 +14,7 @@
         <mat-card-header>
           <div class="row card-list-header">
             <div class="col-xs-9 table-card-header">
-              <h2>Log Filters</h2>
+              <h3>Log Filters</h3>
             </div>
           </div>
         </mat-card-header>
@@ -23,7 +23,7 @@
               <form (ngSubmit)="rebuildWithFilters()">
                 <div class="row report-header">
                   <div class="col-xs-12 col-sm-6 col-md-3">
-                    <mat-form-field appearance="outline" [formGroup]="filterForm">
+                    <mat-form-field appearance="fill" [formGroup]="filterForm">
                       <mat-label>Start Date</mat-label>
                       <input matInput [matDatepicker]="startPicker" formControlName="startDate">
                       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
@@ -103,7 +103,7 @@
         <mat-card-header>
           <div class="row card-list-header">
             <div class="col-sm-6 falco-log-list no-padding" >
-              <h2>Recent Events</h2>
+              <h3>Recent Events</h3>
             </div>
             <div class="col-sm-6  text-align-right">
               <button (click)="downloadReport()"
