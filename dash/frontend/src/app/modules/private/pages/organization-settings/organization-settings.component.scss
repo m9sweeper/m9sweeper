@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :root {
   --organization-container-height: 981px;
   --organization-container-width: 1366px;
@@ -6,6 +8,7 @@
 
 div {
   &.organization-settings-container {
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
     height: calc(var(--organization-container-height) - 52px);
     display: flex;
 
