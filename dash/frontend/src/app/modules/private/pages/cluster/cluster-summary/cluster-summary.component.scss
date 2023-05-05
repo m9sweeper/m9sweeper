@@ -111,13 +111,14 @@
 
 .cluster-events-card {
   position: absolute;
-  width: calc(100% - 20px);
+  width: calc(100% - 43px);
   left: 1px;
   bottom: 0;
+  padding: 15px 0 0 15px;
 }
 
 .cluster-events {
-  padding-top: 175px;
+  padding-top: 160px;
   max-height: 50%;
   position: sticky;
   position: -webkit-sticky; /* Safari */
@@ -126,10 +127,11 @@
     padding-top: 0;
   }
   width: calc(var(--cluster-container-width) - 10px);
+
   margin: 0 0 0 10px;
   height: 175px;
   .mat-mdc-card:not([class*=mat-elevation-z]) {
+
     box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
   }
 }
-
