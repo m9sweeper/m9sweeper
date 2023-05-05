@@ -18,20 +18,23 @@ div {
         height: var(--dashboard-container-height);
         background-color: #FFFFFF;
         display: flex;
-        border-right: #b0aeaf 1px solid;
+        // border-right: #b0aeaf 1px solid;
         flex-direction: column;
         div.create-cluster-group {
+          margin:15px;
           cursor: pointer;
+          height: 35px;
           /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          mat-list {
-            padding-top: 0;
+
+
             a{
               font-size: 14px;
+              height:60px;
               &:hover {
                 background-color: #e3dede;
               }
             }
-          }
+
         }
         div.cluster-item {
           overflow: hidden auto;
@@ -48,8 +51,7 @@ div {
             background: #555;
           }
           /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          mat-list {
-            padding-top: 0;
+
             &.cluster-group-list-isExpand:last-child {
               margin-bottom: 60px;
             }
@@ -57,6 +59,7 @@ div {
               margin-bottom: 100px;
             }
             a {
+              height:60px;
               background-color: #FFFFFF;
               color: black;
               display: block;
@@ -69,31 +72,38 @@ div {
                 background-color: #F2F2F2;
               }
               &.active{
+                height: 45px;
+                vertical-align: baseline;
+                padding:10px;
                 background-color: #C7E0F4;
                 color: black;
-                border-left: #0078d4 3px solid;
                 &:hover{
                   background-color: #b3d3f1;
                   color: black;
                 }
               }
               span.cluster-group-name-full {
-                padding-left: 10px;
+                //padding-left: 10px;
+                //vertical-align: text-bottom;
+
               }
               span.cluster-group-name-short {
-                border-radius: 3px;
-                width: 24px;
-                height: 24px;
-                padding: 4px;
+                // border-radius: 3px;
+                width: 15px;
+                height: 15px;
+                padding:15px;
                 text-align: center;
                 color: white;
                 text-transform: uppercase;
-                font-size: 12px;
+                font-size: 10px;
+                vertical-align: text-bottom;
+                margin: 4px;
               }
             }
-          }
+
         }
         div.organization-settings {
+
           bottom: 0;
           position: fixed;
           width: calc(var(--dashboard-navbar-menu-width) - 1px);
@@ -110,19 +120,13 @@ div {
             &.closed {
               flex-direction: column;
             }
-            &.mat-mdc-list-base {
-              padding-top: 0 !important;
-            }
+
             a {
               text-decoration: none;
               font-size: 1vw;
             }
 
-            > .mat-mdc-list-item {
-              &:hover {
-                background-color: #F2F2F2;
-              }
-            }
+
 
             .expanded-item {
               display: flex;
@@ -139,6 +143,7 @@ div {
   }
   .organization-settings-text {
     font-size: 14px;
+    vertical-align: top;
   }
   > div {
     &.cluster-dashboard-small-device {

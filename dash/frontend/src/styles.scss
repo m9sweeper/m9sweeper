@@ -73,12 +73,15 @@ $ms-default-theme: mat.define-light-theme((
   @include custom-organization-settings-light-theme($ms-default-theme);
 }
 
-.remove-dialog-padding .mat-dialog-container {
-  padding: 0;
+ .mat-mdc-dialog-container {
+  padding: 20px;
+  margin-left: 20px;
 }
 
 .organization-settings-text {
-  font-size: 14px !important;
+  font-size: 16px !important;
+  vertical-align: top;
+  text-align: center;
 }
 
 @media print {
@@ -154,4 +157,12 @@ $ms-default-theme: mat.define-light-theme((
   padding: 2px;
   border-collapse: collapse;
   vertical-align: baseline;
+}
+.mat-icon{
+  vertical-align: middle;
+  padding-left: 10px;
+  // margin:10px;
+}
+.mat-mdc-icon-button{
+  margin: 5px;
 }
