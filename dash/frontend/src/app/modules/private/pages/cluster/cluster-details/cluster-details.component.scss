@@ -15,7 +15,7 @@ div {
         z-index: 99999;
       }
       &.cluster-menu {
-        width: var(--navigation-menu-width);
+        width: calc(var(--navigation-menu-width) + 10px );
         height: calc(var(--cluster-details-height) - 50px);
         display: flex;
         flex-direction: column;

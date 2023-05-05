@@ -1,7 +1,7 @@
 :root{
   --dashboard-container-height: 981px;
   --dashboard-container-width: 1000px;
-  --dashboard-navbar-menu-width: 250px;
+  --dashboard-navbar-menu-width: 300px;
 }
 
 div {
@@ -14,7 +14,7 @@ div {
         z-index: 99999;
       }
       &.cluster-group-menu {
-        width: var(--dashboard-navbar-menu-width);
+        width: calc(var(--dashboard-navbar-menu-width) + 10px);
         height: var(--dashboard-container-height);
         background-color: #FFFFFF;
         display: flex;

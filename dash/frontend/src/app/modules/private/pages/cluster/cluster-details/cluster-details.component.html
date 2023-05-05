@@ -8,42 +8,42 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <mat-icon mat-list-item-icon>graphic_eq</mat-icon>
-          <span matLine *ngIf="isExpanded  || isSmallDevice">Summary</span>
+          <span matLine *ngIf="isExpanded  || isSmallDevice" style="padding-left: 10px;">Summary</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]"
            title="Cluster Info" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <mat-icon mat-list-item-icon>info</mat-icon>
-          <span matLine *ngIf="isExpanded || isSmallDevice">Cluster Info</span>
+          <span matLine *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">Cluster Info</span>
         </a>
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'images']"
            routerLinkActive="active" title="Images"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
           <mat-icon mat-list-item-icon>insert_photo</mat-icon>
-          <span matLine *ngIf="isExpanded  || isSmallDevice">Images</span>
+          <span matLine *ngIf="isExpanded  || isSmallDevice"  style="padding-left: 10px;">Images</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubernetes-namespaces']"
            title="Workloads" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <mat-icon mat-list-item-icon>network_check</mat-icon>
-          <span matLine *ngIf="isExpanded  || isSmallDevice">Workloads</span>
+          <span matLine *ngIf="isExpanded  || isSmallDevice" style="padding-left: 10px;">Workloads</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'gatekeeper']"
            title="GateKeeper" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="gatekeeper-list-item">
-          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="padding:10px"/>
+          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="padding:10px; vertical-align: middle;"/>
           <span matLine *ngIf="isExpanded  || isSmallDevice">GateKeeper</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubesec']"
            title="KubeSec" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="padding:12px"/>
+          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="padding:12px; vertical-align: middle;"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">KubeSec</span>
         </a>
 
@@ -51,7 +51,7 @@
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="API Key Management">
           <mat-icon mat-list-item-icon>code</mat-icon>
-          <span matLine *ngIf="isExpanded || isSmallDevice">API Key Management</span>
+          <span matLine *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">API Key Management</span>
         </a>
 
 
@@ -60,7 +60,7 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="30" height="30"  style="padding:5px"/>
+          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="30" height="30"  style="padding:8px; vertical-align: middle;"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Hunter</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubebench']"
@@ -68,14 +68,14 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="30" height="30"  style="padding:8px"/>
+          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="30" height="30"  style="padding:8px; vertical-align: middle;"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Bench</span>
         </a>
         <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active" title="Falco"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
-          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="22" height="22"  style="padding:12px"/>
+          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="22" height="22"  style="padding:12px; vertical-align: middle;"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Falco</span>
         </a>
         <a  mat-list-item
@@ -83,7 +83,7 @@
            routerLinkActive="active" title="Reports"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
           <mat-icon mat-list-item-icon>feed</mat-icon>
-          <span matLine *ngIf="isExpanded  || isSmallDevice">Reports</span>
+          <span matLine *ngIf="isExpanded  || isSmallDevice"  style="padding-left: 10px;">Reports</span>
         </a>
       </mat-list>
     </div>

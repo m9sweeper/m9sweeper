@@ -5,7 +5,7 @@
       <mat-list role="list">
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" matListItemLine title="Add Cluster Group" (click)="openAddGroupDialog()">
           <mat-icon mat-list-item-icon>add</mat-icon>
-          <span matLine *ngIf="isExpanded || isSmallDevice">Add Cluster Group</span>
+          <span matLine *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">Add Cluster Group</span>
         </a>
         <mat-divider></mat-divider>
       </mat-list>
@@ -20,7 +20,7 @@
            [routerLinkActiveOptions]="{exact: true}">
           <span [ngStyle]="{'background': calculateMenuColor(i)}"
                 class="cluster-group-name-short">{{shortGroupName(group.name)}}</span>
-          <span class="cluster-group-name-full" *ngIf="isExpanded || isSmallDevice">{{group.name}}</span>
+          <span class="cluster-group-name-full" *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">{{group.name}}</span>
         </a>
       </mat-list>
     </div>
@@ -29,7 +29,7 @@
         <div class="expanded-item" *ngIf="isExpanded">
           <a mat-list-item title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" (click)="menubarCollapse()">
             <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
-            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
+            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">Organization Settings</span>
           </a>
           <a mat-list-item title="Organization Settings" *ngIf="!isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']" (click)="menubarCollapse()">
             <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
