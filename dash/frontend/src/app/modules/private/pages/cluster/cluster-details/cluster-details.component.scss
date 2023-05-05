@@ -7,7 +7,7 @@
 div {
   &.cluster-details-container{
     width: var(--cluster-details-width);
-    height: calc(var(--cluster-details-height) - 50px);
+    height: var(--cluster-details-height);
     display: flex;
     > div {
       &.cluster-group-menu-small-device {
@@ -44,7 +44,7 @@ div {
             margin-right: 3px;
           }
 
-          .mat-list {
+
             a {
               display: block;
               text-decoration: none;
@@ -69,7 +69,7 @@ div {
               width: 25px;
               height: 25px;
             }
-          }
+
         }
       }
     }
