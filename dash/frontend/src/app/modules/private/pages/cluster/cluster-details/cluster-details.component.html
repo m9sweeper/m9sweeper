@@ -36,14 +36,14 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="gatekeeper-list-item">
-          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="20" height="20"/>
+          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="padding:10px"/>
           <span matLine *ngIf="isExpanded  || isSmallDevice">GateKeeper</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubesec']"
            title="KubeSec" (click)="menubarCollapse()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20"/>
+          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="padding:12px"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">KubeSec</span>
         </a>
 
@@ -60,7 +60,7 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="25" height="25"/>
+          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="30" height="30"  style="padding:5px"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Hunter</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubebench']"
@@ -68,14 +68,14 @@
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            class="kube-hunter-list-item">
-          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="20" height="20"/>
+          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="30" height="30"  style="padding:8px"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Kube Bench</span>
         </a>
         <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active" title="Falco"
            [routerLinkActiveOptions]="{exact: true}" (click)="menubarCollapse()">
-          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="20" height="20"/>
+          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="22" height="22"  style="padding:12px"/>
           <span matLine *ngIf="isExpanded || isSmallDevice">Falco</span>
         </a>
         <a  mat-list-item
