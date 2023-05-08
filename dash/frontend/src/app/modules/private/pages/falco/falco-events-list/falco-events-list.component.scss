@@ -77,7 +77,7 @@
   }
 .align-top-buttons{
   text-align: right;
-  padding-right: 5px;
+  padding-right: 10px;
 }
 
 .falco-table {
@@ -86,6 +86,7 @@
   /*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   mat-table {
     min-width: 800px;
+    padding: 20px;
 
     mat-row {
       min-height: 24px !important

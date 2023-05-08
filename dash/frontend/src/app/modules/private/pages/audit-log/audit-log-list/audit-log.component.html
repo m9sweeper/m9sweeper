@@ -8,7 +8,7 @@
         <mat-card-header>
           <div class="row filter-header">
             <div class="col-xs-12 filter-header-title">
-              <h3>Audit Logs</h3>
+              <h4>Audit Logs</h4>
             </div>
           </div>
         </mat-card-header>
@@ -59,7 +59,7 @@
         <mat-card-header>
           <div class="row audit-logs-header">
             <div class="col-xs-9 audit-logs-count">
-              <h3>Audit logs count: {{totalAuditLogs}}</h3>
+              <h4>Audit logs count: {{totalAuditLogs}}</h4>
             </div>
             <div class="col-xs-3 download-button">
               <button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"

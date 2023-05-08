@@ -174,4 +174,12 @@ $ms-default-theme: mat.define-light-theme((
 .mat-mdc-dialog-container .mdc-dialog__surface {
   padding:10px;
 }
+.mat-mdc-card-header{
+  display: flex;
+  padding: 16px 16px 0;
+  margin-left: 25px;
+}
+.mat-mdc-form-field{
+  font-size:18px;
+}
 
