@@ -8,8 +8,9 @@
   <mat-sidenav #sidenav class="sidenav" mode="side" opened="true" style="height: 600px">
     <div *ngFor="let dir of topDirs" >
       <mat-list-item (click)="displaySubMenu(dir)" class="parent">
-        <span class="full-width">{{dir}}</span>
         <mat-icon mat-list-item-icon>home</mat-icon>
+        <span class="full-width">{{dir}}</span>
+
         <mat-icon class="menu-button" [ngClass]="{'rotated' : submenuStatus[dir]}">expand_more</mat-icon>
       </mat-list-item>
       <div class="submenu" style="height:280px" [ngClass]="{'expanded' : submenuStatus[dir]}" [style]="{'display': submenuStatus[dir] ? '' : 'none'}">

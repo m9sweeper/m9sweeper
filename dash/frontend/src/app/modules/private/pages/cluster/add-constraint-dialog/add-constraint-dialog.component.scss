@@ -31,7 +31,7 @@ remove-dialog-padding .mat-dialog-container {
 
   .checkbox-style {
     padding-right: 0;
-    margin-right: -17px;
+    margin-right: 0px;
   }
 
   .right-content {
@@ -108,4 +108,7 @@ remove-dialog-padding .mat-dialog-container {
 
 .constraints-header {
   padding-left: 20px;
+}
+.mat-mdc-card-title, .mat-mdc-subtitle{
+  margin-top: 10px;
 }
