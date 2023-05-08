@@ -1,11 +1,11 @@
 <div class="falco-container">
   <div class="falco-events-list">
     <div class="row mat-card-title">
-      <div class="col-sm-6 falco-log-list" >
+      <div class="col-sm-9 falco-log-list" >
         <div class="row page">Project Falco </div>
       </div>
-      <div class="col-sm-6 text-align-right no-padding">
-        <button class="margin-right-10 margin-top-10" mat-raised-button color="primary" (click)="openDialog()">Install</button> &nbsp;&nbsp;
+      <div class="col-sm-3 align-top-buttons">
+        <button class="margin-right-10 margin-top-10" mat-raised-button color="primary" (click)="openDialog()">Install</button>&nbsp;
         <button class="margin-right-10 margin-top-10" mat-raised-button color="primary" *ngIf="isAllowed" (click)="onClickSettings()">Settings</button>
       </div>
     </div>
@@ -102,10 +102,10 @@
       <mat-card appearance="outlined" >
         <mat-card-header>
           <div class="row card-list-header">
-            <div class="col-sm-6 falco-log-list no-padding" >
+            <div class="col-sm-9 falco-log-list no-padding" >
               <h3>Recent Events</h3>
             </div>
-            <div class="col-sm-6  text-align-right">
+            <div class="col-sm-3  text-align-right">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"

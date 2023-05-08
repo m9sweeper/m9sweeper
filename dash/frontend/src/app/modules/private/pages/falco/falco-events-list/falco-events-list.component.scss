@@ -49,6 +49,7 @@
   width: 100%;
   white-space: nowrap;
   display: flex;
+  padding-left: 20px;
   }
 
 .event-row:hover {
@@ -74,6 +75,10 @@
     white-space: nowrap;
     display: flex;
   }
+.align-top-buttons{
+  text-align: right;
+  padding-right: 5px;
+}
 
 .falco-table {
   // flex: 1;
