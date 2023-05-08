@@ -20,7 +20,7 @@
             <mat-card-title>Recommendation:</mat-card-title>
           </mat-card-header>
           <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-skinny">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-skinny">
               <mat-card-content>
                 <p class="recommendation-text" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationText">
                   We recommend you install Gatekeeper so that you can use M9sweeper to manager policies in your Kubernetes cluster.
@@ -35,7 +35,7 @@
                 </ng-template>
               </mat-card-content>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 end-text-align col-skinny">
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 end-text-align col-skinny">
               <mat-card-content class="setup-wizard-btn">
                 <button class="install-gatekeeper-btn" mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
                   Install

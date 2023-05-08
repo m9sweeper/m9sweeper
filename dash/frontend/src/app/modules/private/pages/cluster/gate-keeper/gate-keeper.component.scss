@@ -46,6 +46,7 @@ div {
     .mat-mdc-card-title {
       margin-left: -16px;
       margin-right: -16px;
+      padding-left: 15px;
     }
 
     .col-skinny {
@@ -65,4 +66,8 @@ th.mat-mdc-header-cell, td.mat-mdc-cell {
 
 .end-text-align {
   text-align: end;
+}
+
+.mat-mdc-card-content:first-child{
+  padding-top:0px;
 }

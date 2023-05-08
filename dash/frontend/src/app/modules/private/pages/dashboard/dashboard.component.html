@@ -29,7 +29,7 @@
         <div class="expanded-item" *ngIf="isExpanded">
           <a mat-list-item title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" (click)="menubarCollapse()">
             <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
-            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice" style="padding-left: 10px;">Organization Settings</span>
+            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice" >Organization Settings</span>
           </a>
           <a mat-list-item title="Organization Settings" *ngIf="!isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']" (click)="menubarCollapse()">
             <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
