@@ -3,6 +3,7 @@ mat-form-field {
   width: 130px;
   .mat-datepicker-input {
     width: 100%;
+    min-width: 150px;
   }
   mat-icon {
     position: relative;
