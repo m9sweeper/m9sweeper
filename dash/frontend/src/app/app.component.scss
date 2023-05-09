@@ -10,16 +10,7 @@ div {
       &.router-outlet-container {
         flex:1;
       }
-      &.theme-changer-container {
-        position: fixed;
-        overflow: hidden;
-        z-index: 2400;
-        bottom: 5px;
-        right: 5px;
-        padding: 5px;
-        background-color: #d6d3c3;
-        border-radius: 5px;
-      }
+
     }
   }
 }
@@ -169,3 +160,5 @@ div.kubernetes-object-sub-navigation {
     }
   }
 }
+
+//@TODO add button, header, page container, common styles

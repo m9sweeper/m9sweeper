@@ -13,9 +13,9 @@
     .app-container {
       background-color:  mat.get-color-from-palette(mat.$gray-palette, 300);
       > div {
-        &.theme-changer-container {
-          background:  mat.get-color-from-palette(mat.$gray-palette, A100);
-        }
+        //&.theme-changer-container {
+        //  background:  mat.get-color-from-palette(mat.$gray-palette, A100);
+        //}
       }
     }
   }
