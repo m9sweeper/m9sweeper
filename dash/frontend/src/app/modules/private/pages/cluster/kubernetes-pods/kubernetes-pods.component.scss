@@ -18,6 +18,8 @@ div.kubernetes-pods-container {
 
       & .mat-elevation-z8 {
         // flex: 1;
+        height: auto;
+        min-height: 200px;
         overflow: auto;
         background: #F9F9F9;
         > mat-table {

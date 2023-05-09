@@ -16,6 +16,7 @@ div.kubernetes-pod-details-container {
         // flex: 1;
         overflow: auto;
         background: #F9F9F9;
+        height:auto;
         min-height: 100px;
         > mat-table {
           min-width: 800px;
