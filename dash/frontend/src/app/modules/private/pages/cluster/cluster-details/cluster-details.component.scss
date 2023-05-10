@@ -1,6 +1,6 @@
 :root{
-  --cluster-details-height: 1000px;
-  --cluster-details-width: 981px;
+  --cluster-details-height: 981px;
+  --cluster-details-width: 1000px;
   --navigation-menu-width: 300px;
   --cluster-container-width: 981px;
 }
@@ -15,8 +15,8 @@ div {
         z-index: 99999;
       }
       &.cluster-menu {
-        width: calc(var(--navigation-menu-width) + 10px );
-        height: calc(var(--cluster-details-height) - 50px);
+        width: calc(var(--navigation-menu-width));
+        height: calc(var(--cluster-details-height));
         display: flex;
         flex-direction: column;
         // border-right: #b0aeaf 1px solid;
@@ -27,7 +27,7 @@ div {
           //&::-webkit-scrollbar {
           //  width: 2.5px;
           //}
-
+          height: var(--cluster-details-height) - 100px;
           &::-webkit-scrollbar-track {
             background: #f1f1f1;
           }
@@ -91,6 +91,7 @@ div {
       bottom: 0;
       //position: fixed;
       width: var(--navigation-menu-width);
+      // height: calc(var(--cluster-details-height));
       display: flex;
       align-items: center;
       /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/

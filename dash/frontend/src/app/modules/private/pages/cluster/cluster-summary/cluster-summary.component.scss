@@ -88,7 +88,7 @@
 }
 
 .search-results {
-  height: 130px;
+  height: 180px;
   overflow-x: hidden;
   overflow-y: scroll;
   flex: none;
@@ -110,7 +110,7 @@
 }
 
 .cluster-events-card {
-  position: absolute;
+  // position: absolute;
   width: 100%;
   left: 1px;
   bottom: 0;
@@ -118,7 +118,7 @@
 }
 
 .cluster-events {
-  padding-top: 160px;
+  padding-top: 30px;
   max-height: 50%;
   position: sticky;
   position: -webkit-sticky; /* Safari */
@@ -129,9 +129,9 @@
   width: calc(var(--cluster-container-width) - 10px);
 
   margin: 0 0 0 10px;
-  height: 175px;
+  height: 200px;
   .mat-mdc-card:not([class*=mat-elevation-z]) {
 
-    box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
+    // box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
   }
 }

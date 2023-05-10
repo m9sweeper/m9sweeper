@@ -90,13 +90,15 @@ div.kubernetes-object-sub-navigation {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  height:auto;
+  // min-height: 200px;
   .calendar-date-picker {
     margin-top: 20px
   }
 }
 .kubernetes-object-header {
   flex-direction: column;
+  height: 100px;
   div.content-breadcrumbs {
     display: inline-block;
     height: 35px;
@@ -135,6 +137,8 @@ div.kubernetes-object-sub-navigation {
   > .content-name {
     font-size: 26px;
     margin-top: 15px;
+    height: auto;
+    min-height:100px;
   }
 }
 

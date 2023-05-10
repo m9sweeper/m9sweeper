@@ -2,7 +2,7 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-html, body { height: 100%; }
+html, body { height: 80%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import '@angular/material/theming';
@@ -81,6 +81,7 @@ $ms-default-theme: mat.define-light-theme((
   margin-left: 20px;
 }
 
+// organization menu text
 .organization-settings-text {
   font-size: 16px !important;
   vertical-align: top;

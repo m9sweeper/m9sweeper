@@ -106,12 +106,11 @@ div {
 
           bottom: 0;
           position: fixed;
-          width: calc(var(--dashboard-navbar-menu-width) + 10px);
+          //width: calc(var(--dashboard-navbar-menu-width) + 10px);
           display: flex;
           align-items: center;
           /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
           /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          mat-list {
             display: flex;
             width: 100%;
             &.expanded {
@@ -136,7 +135,7 @@ div {
                 background-color: #F2F2F2;
               }
             }
-          }
+
         }
       }
     }

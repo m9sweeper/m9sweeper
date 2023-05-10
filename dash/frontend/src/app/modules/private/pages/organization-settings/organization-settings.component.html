@@ -51,11 +51,11 @@
     </div>
 
     <div class="bottom-menu" [ngClass]="{'flex-direction-row' : isExpanded || isSmallDevice, 'flex-direction-column' : !isExpanded}">
-      <mat-list role="list">
+      <div role="list">
         <button mat-icon-button (click)="expand()" style="width: 56px; height: 56px;" title="{{isExpanded ? 'Collapse' : 'Expand'}}">
           <fa-icon [icon]="isExpanded ? faIcons.arrowDoubleLeft : faIcons.arrowDoubleRight" size="2x"></fa-icon>
         </button>
-      </mat-list>
+      </div>
     </div>
   </div>
   <div class="cluster-dashboard"
