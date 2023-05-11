@@ -2,7 +2,7 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-html, body { height: 80%; }
+html, body { height: 100%;} // login page requires 100%
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import '@angular/material/theming';

@@ -7,19 +7,20 @@
 }
 
 div {
-  &.organization-settings-container {
+  &.organization-settings-container { // container with both left nav and the content
     background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
-    height: calc(var(--organization-container-height) - 52px);
+    // height: calc(var(--organization-container-height) - 52px);
     display: flex;
+    flex-direction: row;
 
     > div {
-      &.left-nav {
+      &.left-nav { // left nav
         width: calc(var(--navigation-menu-width) + 10px);
         height: calc(var(--organization-container-height));
         display: flex;
         flex-direction: column;
         //border-right: #b0aeaf 1px solid;
-        div.nav-menu {
+        div.nav-menu { // left nav 1)
 
 
           &::-webkit-scrollbar {
@@ -65,7 +66,7 @@ div {
           }
         }
 
-        .bottom-menu {
+        .bottom-menu { // left nav 2)
           bottom: 0;
           cursor: pointer;
           width: inherit;
@@ -130,17 +131,18 @@ div {
 
     }
 
-    > div {
+    > div { // main content
       &.cluster-dashboard {
         width: var(--organization-container-width);
         flex-direction: column;
-        height: calc(var(--organization-container-height));
+        // height: calc(var(--organization-container-height));
       }
 
       &.dashboard-style-in-small-device {
         position: fixed;
         opacity: 0.5;
         width: var(--organization-container-width);
+       // height: calc(var(--organization-container-height));
         display: flex;
       }
     }

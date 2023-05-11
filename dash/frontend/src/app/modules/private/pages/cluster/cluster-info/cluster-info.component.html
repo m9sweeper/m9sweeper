@@ -6,14 +6,16 @@
     </div>
     <div class="cluster-info-button-item">
       <mat-card-actions>
-        <button id="update-config-button" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterWizard()">
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterWizard()">
           <mat-icon>build</mat-icon>
           Update Kubeconfig
         </button>
+        &nbsp;
         <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterDialog(cluster)">
           <mat-icon>create</mat-icon>
           Edit
         </button>
+        &nbsp;
         <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="warn" (click)="alertDeleteCluster(cluster.id, cluster.groupId)">
           <mat-icon>delete_outline</mat-icon>
           Delete

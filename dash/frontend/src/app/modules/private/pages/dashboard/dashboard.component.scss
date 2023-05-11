@@ -5,7 +5,7 @@
 }
 
 div {
-  &.dashboard-container {
+  &.dashboard-container { // container with both left nav and the content
     display: flex;
     flex-direction: row;
     > div {
@@ -13,14 +13,14 @@ div {
         width: var(--dashboard-navbar-menu-width);
         z-index: 99999;
       }
-      &.cluster-group-menu {
+      &.cluster-group-menu { // left nav
         width: calc(var(--dashboard-navbar-menu-width) + 10px);
         height: var(--dashboard-container-height);
         background-color: #FFFFFF;
         display: flex;
         // border-right: #b0aeaf 1px solid;
         flex-direction: column;
-        div.create-cluster-group {
+        div.create-cluster-group { // left nav 1)
           margin:15px;
           cursor: pointer;
           height: 35px;
@@ -36,7 +36,7 @@ div {
             }
 
         }
-        div.cluster-item {
+        div.cluster-item { // left nav 2)
           overflow: hidden auto;
           &::-webkit-scrollbar {
             width: 2.5px;
@@ -102,7 +102,7 @@ div {
             }
 
         }
-        div.organization-settings {
+        div.organization-settings { // left nav 3)
 
           bottom: 0;
           position: fixed;
@@ -141,12 +141,12 @@ div {
     }
   }
 
-  > div {
+  > div { // main content
     &.cluster-dashboard-small-device {
       position: fixed;
       opacity: 0.5;
       width: var(--dashboard-container-width);
-      height: var(--dashboard-container-height);
+      // height: var(--dashboard-container-height);
       display: flex;
     }
     &.cluster-dashboard {
