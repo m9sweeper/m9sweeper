@@ -25,7 +25,7 @@
       </mat-list>
     </div>
     <div class="organization-settings">
-      <mat-list role="list" [ngClass]="{'expanded': isExpanded, 'closed': !isExpanded}">
+      <div role="list" [ngClass]="{'expanded': isExpanded, 'closed': !isExpanded}">
         <div class="expanded-item" *ngIf="isExpanded">
           <a mat-list-item title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" (click)="menubarCollapse()">
             <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
@@ -50,7 +50,7 @@
             <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
           </button>
         </div>
-      </mat-list>
+      </div>
     </div>
   </div>
   <div class="cluster-dashboard"

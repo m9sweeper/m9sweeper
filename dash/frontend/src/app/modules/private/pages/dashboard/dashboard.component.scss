@@ -14,7 +14,7 @@ div {
         z-index: 99999;
       }
       &.cluster-group-menu { // left nav
-        width: calc(var(--dashboard-navbar-menu-width) + 10px);
+        width: calc(var(--dashboard-navbar-menu-width));
         height: var(--dashboard-container-height);
         background-color: #FFFFFF;
         display: flex;
