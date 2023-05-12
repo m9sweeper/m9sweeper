@@ -1,13 +1,13 @@
-:root{
+:root {
   --cluster-details-height: 981px;
   --cluster-details-width: 1000px;
   --navigation-menu-width: 300px;
   --cluster-container-width: 981px;
 }
 div {
-  &.cluster-details-container{ // container with both left nav and the content
+  &.cluster-details-container { // container with both left nav and the content
     width: var(--cluster-details-width);
-    height: var(--cluster-details-height);
+    // height: var(--cluster-details-height);
     display: flex;
     > div {
       &.cluster-group-menu-small-device {
@@ -16,7 +16,7 @@ div {
       }
       &.cluster-menu { // left nav
         width: calc(var(--navigation-menu-width));
-        height: calc(var(--cluster-details-height));
+        // height: calc(var(--cluster-details-height));
         display: flex;
         flex-direction: column;
         // border-right: #b0aeaf 1px solid;
@@ -185,4 +185,5 @@ div {
   height: 40px;
   width: 40px;
 }
+
 
