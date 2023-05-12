@@ -184,3 +184,36 @@ $ms-default-theme: mat.define-light-theme((
   font-size:18px;
 }
 
+
+app-private {
+  display: flex;
+  flex-direction: column;
+  height: 100%
+}
+
+.main-content {
+  flex: 1;
+  height: auto;
+  margin-top: 0px !important
+}
+/*
+app-organization-settings {
+  height: 100%;
+  display: block;
+  flex: 1;
+  width: 100%
+}
+
+.organization-settings-container {
+  height: 100%;
+  display: block;
+  flex: 1;
+  width: 100%
+}*/
+
+.container {
+  height: 100%;
+  display: block;
+  flex: 1;
+  width: 100%
+}

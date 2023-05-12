@@ -16,7 +16,8 @@ div {
     > div {
       &.left-nav { // left nav
         width: calc(var(--navigation-menu-width) + 10px);
-        height: calc(var(--organization-container-height));
+        /*height: calc(var(--organization-container-height));*/
+        height: 100%;
         display: flex;
         flex-direction: column;
         //border-right: #b0aeaf 1px solid;
