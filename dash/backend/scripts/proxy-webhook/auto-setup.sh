@@ -1,3 +1,6 @@
+# Ensure the script returns a failure code if a error is encountered for use in CICD pipelines.
+set -e
+
 #####################
 # Set flags and help options
 #####################
