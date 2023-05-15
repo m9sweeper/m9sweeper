@@ -58,8 +58,14 @@ cp initialize_proxy.yaml init.yaml
 cp openssl.cnf ssl.cnf
 
 # Change the namespace in the initialize file and openssl configuration
-sed -I '' -e 's/m9sweeper-system/'$namespace'/g' init.yaml
-sed -I '' -e 's/m9sweeper-system/'$namespace'/g' ssl.cnf
+platform=$(uname)
+if [[ "$platform" != 'Linux' ]]; then
+    sed -i "s/m9sweeper-system/$namespace/g" init.yaml
+    sed -i "s/m9sweeper-system/$namespace/g" ssl.cnf
+else
+    sed -i '' -e "s/m9sweeper-system/$namespace/g" init.yaml
+    sed -i '' -e "s/m9sweeper-system/$namespace/g" ssl.cnf
+fi
 
 # Create a service account, role, rolebinding, and deployment to create the nginx reverse proxy. These will be deleted at the end.
 kubectl -n $namespace create -f init.yaml;
@@ -67,7 +73,7 @@ kubectl -n $namespace create -f init.yaml;
 # Wait 30 seconds for pod to be running - sometimes the first run pulling the image takes a bit.
 
 echo "Waiting for init pod to be created..."
-sleep 30; 
+sleep 30;
 
 # Delete the existing validating webhook configuration.
 kubectl -n $namespace delete validatingwebhookconfiguration m9sweeper-webhook
