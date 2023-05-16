@@ -131,7 +131,7 @@ export class FalcoDao {
         const knex = await this.databaseService.getConnection();
 
        const result= knex.select(
-            ['p.id as id', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
+            ['p.id as id', 'p.creation_timestamp as timestamp', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
                 'p.image as image', 'p.message as message', 'p.anomaly_signature as anomalySignature', 'p.raw as raw'])
             .from('project_falco_logs AS p')
             .where('p.id', eventId)
