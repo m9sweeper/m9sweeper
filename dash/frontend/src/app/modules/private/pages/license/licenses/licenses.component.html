@@ -1,23 +1,26 @@
-<div class="license-details-container">
-  <div class="license-details">
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title class="license-details-sub-title">License Details</mat-card-title>
-      </mat-card-header>
-      <mat-card-content [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}">
-        <p>License Key: {{licenseKey}}</p>
-        <p>Instance Key: {{instanceKey}}</p>
-        <p>Max CPU Cores: {{ maxNode }}</p>
-        <p>Max CPU Count: {{ maxCpu }}</p>
-        <p>Max RAM (bytes): {{ maxRam }}</p>
-        <p>Features: {{ displayFeatures() }}</p>
-        <p>Expiration Date: {{ expirationDate | date: 'medium' }}</p>
-        <p>Validity: {{isLicenseValid ? 'Valid' : 'Not Valid'}}</p>
-        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openCheckLicenseDialog()">
-          <mat-icon>check</mat-icon>
-          Enter License Key
-        </button>
-      </mat-card-content>
-    </mat-card>
+<div class="license-details-container container">
+  <div class="container-content">
+    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click) = "openCheckLicenseDialog()" ></app-sub-navigation>
+    <div class="page-card">
+      <mat-card appearance="outlined" >
+        <mat-card-header >
+          <div class="page-card-header">
+            <div class="col-xs-12 page-card-title">
+              <h4>License Details</h4>
+            </div>
+          </div>
+        </mat-card-header>
+          <mat-card-content  [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}">
+            <p class="page-card-content" >License Key: {{licenseKey}}</p>
+            <p class="page-card-content">Instance Key: {{instanceKey}}</p>
+            <p class="page-card-content">Max CPU Cores: {{ maxNode }}</p>
+            <p class="page-card-content">Max CPU Count: {{ maxCpu }}</p>
+            <p class="page-card-content">Max RAM (bytes): {{ maxRam }}</p>
+            <p class="page-card-content">Features: {{ displayFeatures() }}</p>
+            <p class="page-card-content">Expiration Date: {{ expirationDate | date: 'medium' }}</p>
+            <p class="page-card-content">Validity: {{isLicenseValid ? 'Valid' : 'Not Valid'}}</p>
+          </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

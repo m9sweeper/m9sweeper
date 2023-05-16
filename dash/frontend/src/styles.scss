@@ -175,11 +175,7 @@ $ms-default-theme: mat.define-light-theme((
 .mat-mdc-dialog-container .mdc-dialog__surface {
   padding:10px;
 }
-.mat-mdc-card-header{
-  display: flex;
-  padding: 16px 16px 0;
-  margin-left: 25px;
-}
+
 .mat-mdc-form-field{
   font-size:18px;
 }
@@ -211,9 +207,48 @@ app-organization-settings {
   width: 100%
 }*/
 
+// Org setting pages uses app-sub-navigation for titles and buttons
+// The following are for lining up other page elements
+.mat-mdc-card-header{
+  display: flex;
+  padding: 0;
+  margin-left: 0px;
+}
 .container {
   height: 100%;
   display: block;
   flex: 1;
   width: 100%
+}
+.container-content{
+  margin: 20px;
+}
+
+.page-card{
+  margin: 0px;
+  overflow-x: auto;
+}
+.page-card-header{
+  display:flex;
+  padding:0px;
+  margin-left: 0px;
+}
+.page-card-title{
+  font-size: 20px;
+  font-weight: normal;
+}
+.page-card-content {
+  display: flex;
+  padding-left: 15px;
+}
+
+.page-card-right-align-button{
+  display: flex;
+  justify-content: right;
+  padding:0px;
+
+}
+.page-card-left-align-button {
+  justify-content: left;
+  padding-left: 15px;
 }

@@ -1,13 +1,11 @@
-<div class="audit-logs-container">
-  <div class="audit-logs-list page">
-    <div class="col-lg-4 col-xs-12 page-title">
-      <span>Audit Logs</span>
-    </div>
-    <div class="filter-card">
+<div class="container">
+  <div class="container-content">
+    <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
+    <div class="page-card">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row filter-header">
-            <div class="col-xs-12 filter-header-title">
+          <div class="page-card-header">
+            <div class="col-xs-12 page-card-title">
               <h4>Audit Logs</h4>
             </div>
           </div>
@@ -35,14 +33,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-2 filter-button">
+                <div class="col-md-2 page-card-left-align-button">
                   <button [disabled]="!filterAuditLogForm.valid"
                           mat-raised-button
                           color="primary"
                           type="submit" (click)="filterAuditLogs()">Filter
                   </button>
                 </div>
-                <div class="col-md-10 filter-button">
+                <div class="col-md-10 page-card-left-align-button">
                   <button mat-raised-button
                           color="primary"
                           type="submit" (click)="resetAuditLogs()">Reset
@@ -54,15 +52,18 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="audit-logs-card" *ngIf="showAuditLogTable">
+    &nbsp;
+    <div class="page-card" *ngIf="showAuditLogTable">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row audit-logs-header">
-            <div class="col-xs-9 audit-logs-count">
-              <h4>Audit logs count: {{totalAuditLogs}}</h4>
+          <div class="row audit-logs-header page-card-header">
+            <div class="col-xs-9">
+              <div class="page-card-title">
+                <h4 >Audit logs count: {{totalAuditLogs}}</h4>
+              </div>
             </div>
-            <div class="col-xs-3 download-button">
-              <button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
+            <div class="col-xs-3 page-card-right-align-button" >
+              <button class=button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
                       mat-raised-button
                       color="primary"
                       type="button">Download
@@ -70,8 +71,8 @@
             </div>
           </div>
         </mat-card-header>
-        <mat-card-content>
-          <div class="mat-elevation-z8">
+        <mat-card-content class="page-card">
+          <div class="mat-elevation-z8 ">
             <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
               <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Id.</th>
