@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.Year;
 
 // *** Regular maintenance is required for all locators (locators can be changed with updated code) ***
 
@@ -99,7 +100,7 @@ public final class TestKubeHunter {
         for (int i=0; i<6 && !anyData; i++){
             try {
                 // verify there's data in the report
-                String lastReportDate = driver.findElement(By.xpath("//*[@id='hunter-table-card']/mat-card-content/div[2]/div/table/tbody/tr[1]/td[contains(text(),'2022')]")).getText();
+                String lastReportDate = driver.findElement(By.xpath("//*[@id='hunter-table-card']/mat-card-content/div[2]/div/table/tbody/tr[1]/td[contains(text(),'" + Year.now().getValue() + "')]")).getText();
                 if (lastReportDate.length() > 0) {
                     System.out.println("*** KH returned results on: ***" + lastReportDate);
                 }
