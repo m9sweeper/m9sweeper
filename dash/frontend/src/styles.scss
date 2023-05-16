@@ -44,6 +44,7 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 @import './app/modules/shared/subnavigation/sub-navigation.component.theme';
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
+@import './app/modules/private/pages/falco/falco-events-list/falco-events-list.component.theme';
 @import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
 
 @mixin custom-components-theme($theme) {
@@ -102,6 +103,10 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include kubernetes-pods-details-dark-theme($theme);
 }
 
+@mixin custom-falco-events-list-dark-theme($theme) {
+  @include falco-events-list-dark-theme($theme);
+}
+
 .default-theme {
   @include angular-material-theme($ms-default-theme);
   @include custom-components-theme($ms-default-theme);
@@ -128,6 +133,7 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include custom-cluster-summary-dark-theme($ms-black-theme);
   @include custom-kubernetes-pods-dark-theme($ms-black-theme);
   @include custom-kubernetes-pods-details-dark-theme($ms-black-theme);
+  @include custom-falco-events-list-dark-theme($ms-black-theme);
 }
 
 .remove-dialog-padding .mat-dialog-container {

@@ -2,8 +2,28 @@ import { Expose, Type} from 'class-transformer';
 import {IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, ValidateNested} from 'class-validator';
 import { AuthenticationType } from '../enum/AuthenticationType';
 import {ApiProperty} from '@nestjs/swagger';
+import {ProviderType} from "../enum/ProviderType";
 
 export abstract class AuthStrategyConfigDTO {
+}
+
+export class AzureOAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
+
+    @IsNotEmpty()
+    @IsString()
+    clientId:         string;
+
+    @IsNotEmpty()
+    @IsUrl()
+    authorizationUri: string;
+
+    @IsOptional()
+    @IsString()
+    redirectUri:      string;
+
+    @IsNotEmpty()
+    @IsString({each: true})
+    scopes:           string[];
 }
 
 export class OAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
@@ -103,14 +123,24 @@ export class AuthConfigurationDTO {
     @IsNotEmpty()
     @Expose({name: 'provider_type', toPlainOnly: true})
     @ApiProperty({name: 'provierType'})
-    providerType:     string;
+    providerType:     ProviderType;
 
     @IsNotEmpty()
     @ValidateNested()
-    @Type((ops) => ops.object['authType'] === AuthenticationType.OAUTH2 ? OAuth2AuthStrategyConfigDTO : (ops.object['authType'] === AuthenticationType.LDAP ? LDAPAuthStrategyConfigDTO : undefined))
+    @Type((ops) => {
+        if (ops.object['authType'] === AuthenticationType.OAUTH2) {
+            if (ops.object['providerType'] === ProviderType.GOOGLE) {
+                return OAuth2AuthStrategyConfigDTO;
+            } else if (ops.object['providerType'] === ProviderType.AZURE) {
+                return AzureOAuth2AuthStrategyConfigDTO;
+            }
+        } else if (ops.object['authType'] === AuthenticationType.LDAP) {
+            return LDAPAuthStrategyConfigDTO;
+        }
+    })
     @Expose({name: 'auth_strategy_config', toPlainOnly: true})
     @ApiProperty({name: 'authConfig'})
-    authConfig:       OAuth2AuthStrategyConfigDTO | LDAPAuthStrategyConfigDTO;
+    authConfig:       AzureOAuth2AuthStrategyConfigDTO | OAuth2AuthStrategyConfigDTO | LDAPAuthStrategyConfigDTO;
 
     @IsNotEmpty()
     @IsBoolean()
