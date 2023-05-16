@@ -56,6 +56,12 @@
   cursor: pointer;
 }
 
+.event-row:first-of-type {
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  border-top: 1px solid #E0E0E0;
+}
+
   .mat-form-field {
     //margin-right: 10px;
     width: 100%;
@@ -153,3 +159,6 @@
   }
 }
 
+.custom-mat-header {
+  margin-bottom: -15px;
+}

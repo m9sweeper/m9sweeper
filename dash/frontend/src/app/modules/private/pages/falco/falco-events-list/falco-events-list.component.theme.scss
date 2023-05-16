@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+
+@mixin falco-events-list-dark-theme($theme) {
+  app-falco-events-list {
+    .event-row:first-of-type {
+      background-color: #424242;
+      cursor: pointer;
+      border-top: 1px solid #575555;
+    }
+  }
+}
