@@ -34,7 +34,7 @@ export class FalcoService {
   ) {}
 
   getFalcoLogs(clusterId: number, options?: FalcoLogOptions
-  ): Observable<IServerResponse<{logCount: number, list: IFalcoLog[], csvLogList: IFalcoLog[]}>> {
+  ): Observable<IServerResponse<{logCount: number, list: IFalcoLog[]}>> {
     const params = this.buildParams(clusterId, options);
     return this.httpClient.get('/api/falco', {params});
   }

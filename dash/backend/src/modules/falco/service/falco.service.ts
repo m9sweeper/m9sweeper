@@ -92,14 +92,14 @@ export class FalcoService {
 
         // retrieve filtered falco logs and use the query results to build the csv
         const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
-        const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
+        let result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
         // limit to 1000 or less logs
         const numOfLogs = queryResp.csvLogList.length <= 1000 ? queryResp.csvLogList.length : 1000;
         for (let i = 0; i <= numOfLogs -1 ; i++) {
             const falcoCol = queryResp.csvLogList[i];
-            result.push(this.csvService.buildLine([
+            result = queryResp.csvLogList.map(falcoCol => this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
                 String(falcoCol.container),
