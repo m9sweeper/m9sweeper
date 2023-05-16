@@ -59,7 +59,7 @@ cp openssl.cnf ssl.cnf
 
 # Change the namespace in the initialize file and openssl configuration
 platform=$(uname)
-if [[ "$platform" != 'Linux' ]]; then
+if [[ "$platform" == 'Linux' ]]; then
     sed -i "s/m9sweeper-system/$namespace/g" init.yaml
     sed -i "s/m9sweeper-system/$namespace/g" ssl.cnf
 else
