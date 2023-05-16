@@ -53,9 +53,9 @@ public final class TestGateKeeper {
         Thread.sleep(2000);
 
         // Run helm command to install GateKeeper - falling back to kubectl because helm was failing in pipelines for some reason
-        String helmText = "kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v" + SeleniumTestRunner.gateKeeperVersion + "/deploy/gatekeeper.yaml";
-        //String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts && " +
-        //        "helm install gatekeeper/gatekeeper --wait --timeout 10m --debug --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version "+ SeleniumTestRunner.gateKeeperVersion;
+        //String helmText = "kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/v" + SeleniumTestRunner.gateKeeperVersion + "/deploy/gatekeeper.yaml";
+        String helmText = "helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts && helm repo update && " +
+                "helm install gatekeeper/gatekeeper --wait --timeout 10m --debug --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version "+ SeleniumTestRunner.gateKeeperVersion;
 
         System.out.println("****** Helm Text: *******");
         System.out.println(helmText);
