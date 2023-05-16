@@ -43,8 +43,8 @@ export interface IAuthConfig {
 
 export interface IOAUTHConfigStrategy {
   clientId: string;
-  clientSecret: string;
-  accessTokenUri: string;
+  clientSecret?: string;
+  accessTokenUri?: string;
   authorizationUri: string;
   redirectUri: string;
   scopes: string[];

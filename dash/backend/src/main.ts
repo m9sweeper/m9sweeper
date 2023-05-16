@@ -8,7 +8,7 @@ import { MineLoggerService } from './modules/shared/services/mine-logger.service
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import {ValidationPipe} from '@nestjs/common';
 import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
-import {json, text} from 'express';
+import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
 import {PrometheusService} from "./modules/shared/services/prometheus.service";
 
@@ -176,6 +176,8 @@ async function bootstrap() {
       bodyParser(req, res, next);
     }
   });
+
+  app.use(urlencoded({ extended: true }));
 
   const getRoute = path => {
     let getPath =  path ? path.replace(/\?.*/g, '') : '';

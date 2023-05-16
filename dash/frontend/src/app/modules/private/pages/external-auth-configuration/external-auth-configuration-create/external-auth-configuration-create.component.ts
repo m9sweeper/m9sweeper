@@ -76,6 +76,12 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
     }
   }
 
+  onOAuthProviderTypeChange($event) {
+    if (this.oauthAuthActivated && !this.ldapAuthActivated) {
+
+    }
+  }
+
   onSubmit() {
     const authConfig = {
       authType: this.authConfigForm.value.authType,
@@ -89,12 +95,15 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
 
     switch (authConfig.authType) {
       case AuthenticationType.OAUTH2 :
-        authConfig.authConfig = ({
+        authConfig.authConfig = authConfig.providerType === 'AZURE' ? ({
+          clientId: this.authConfigForm.value.oauthClientId,
+          authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
+          scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
+        } as IOAUTHConfigStrategy) : ({
           clientId: this.authConfigForm.value.oauthClientId,
           clientSecret: this.authConfigForm.value.oauthClientSecret,
           accessTokenUri: this.authConfigForm.value.oauthAccessTokenUri,
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
-          // redirectUri: '/auth/redirectable-login/oauth2-callback',
           scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
         } as IOAUTHConfigStrategy);
         break;
@@ -155,10 +164,12 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         this.oauthAuthActivated = true;
         this.ldapAuthActivated = false;
         this.authConfigForm.controls.oauthClientId.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).clientId);
-        this.authConfigForm.controls.oauthClientSecret.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).clientSecret);
-        this.authConfigForm.controls.oauthAccessTokenUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).accessTokenUri);
+
+        if (this.data.authConfigData.providerType === 'GOOGLE') {
+          this.authConfigForm.controls.oauthClientSecret.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).clientSecret);
+          this.authConfigForm.controls.oauthAccessTokenUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).accessTokenUri);
+        }
         this.authConfigForm.controls.oauthAuthorizationUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).authorizationUri);
-        // this.authConfigForm.controls.oauthRedirectUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).redirectUri);
         this.authConfigForm.controls.oauthScopes.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).scopes.join(','));
         break;
 
@@ -185,7 +196,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   }
 
   private scopesToArray(scopes) {
-    return scopes.split(',').map(scope => scope.trim());
+    return scopes?.split(',')?.map(scope => scope.trim());
   }
 }
 

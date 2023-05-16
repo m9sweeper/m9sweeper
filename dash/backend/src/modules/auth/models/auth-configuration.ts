@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { AuthenticationType } from '../enum/AuthenticationType';
+import {ProviderType} from "../enum/ProviderType";
 
 export class AuthStrategyConfig {
 
@@ -38,7 +39,7 @@ export class AuthConfiguration {
   id:               number;
   authName:         string;
   authType:         AuthenticationType;
-  providerType:     string;
+  providerType:     ProviderType;
   @Type(() => AuthStrategyConfig, {
     discriminator: {
       property: "authType",
