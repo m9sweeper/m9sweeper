@@ -96,14 +96,14 @@ export class FalcoService {
             'Image', 'Priority', 'Message'])];
 
         // limit to 1000 or less logs from dao
-            result = queryResp.csvLogList.map(falcoCol => this.csvService.buildLine([
+            queryResp.csvLogList.map(falcoCol => result.push(this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
                 String(falcoCol.container),
                 String(falcoCol.image),
                 String(falcoCol.level),
                 String(falcoCol.message),
-            ]));
+            ])));
 
 
         return {
