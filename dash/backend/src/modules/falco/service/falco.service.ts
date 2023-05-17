@@ -95,10 +95,7 @@ export class FalcoService {
         let result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
-        // limit to 1000 or less logs
-        const numOfLogs = queryResp.csvLogList.length <= 1000 ? queryResp.csvLogList.length : 1000;
-        for (let i = 0; i <= numOfLogs -1 ; i++) {
-            const falcoCol = queryResp.csvLogList[i];
+        // limit to 1000 or less logs from dao
             result = queryResp.csvLogList.map(falcoCol => this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
@@ -107,7 +104,7 @@ export class FalcoService {
                 String(falcoCol.level),
                 String(falcoCol.message),
             ]));
-        }
+
 
         return {
             filename: `Falco-Logs${format(new Date(), 'yyyy-MM-dd-hh-mm-ss')}.csv`,
