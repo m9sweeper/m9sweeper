@@ -38,9 +38,9 @@ export class FalcoEventsListComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   orderByOptions: string [] = ['Priority Desc', 'Priority Asc', 'Date Desc', 'Date Asc'];
 
-  logCount: number;
-  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
-  page: number;
+  logCount: number; // accumulated log total per forward/backward click
+  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20; // page size
+  page: number; // number of pages
   startDate: string;
   endDate: string;
   signature: string;
@@ -76,7 +76,7 @@ export class FalcoEventsListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(param => {
         this.clusterId = param.id;
-        this.getEvents();
+        this.getEvents(); // load logs
       });
     this.getUserAuthority();
 
@@ -86,7 +86,8 @@ export class FalcoEventsListComponent implements OnInit {
     this.limit = pageEvent.pageSize;
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
-    this.getEvents();
+
+    this.getEvents(); // load logs when page event changes
   }
 
   getEvents() {
@@ -138,8 +139,19 @@ export class FalcoEventsListComponent implements OnInit {
 
   downloadReport() {
     this.loaderService.start('csv-download');
-
-    this.falcoService.downloadFalcoExport(this.clusterId)
+    // should only download filtered logs
+    this.falcoService.downloadFalcoExport( this.clusterId, {
+                                          limit: this.limit,
+                                          page: this.page,
+                                          selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+                                          selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+                                          startDate: this.startDate,
+                                          endDate: this.endDate,
+                                          namespace: this.filterForm.get('namespaceInput').value,
+                                          pod: this.filterForm.get('podInput').value,
+                                          image: this.filterForm.get('imageInput').value,
+                                          signature: this.signature}
+      )
         .pipe(take(1))
         .subscribe((response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);

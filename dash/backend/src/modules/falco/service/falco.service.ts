@@ -35,9 +35,8 @@ export class FalcoService {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{  logCount: number, list: FalcoDto[] }> {
-       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+    ): Promise<{  logCount: number, list: FalcoDto[], }> {
+       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     async getFalcoLogByEventId(
@@ -78,22 +77,34 @@ export class FalcoService {
         return newResultSet;
     }
 
-    async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {
-        const queryResponse = await this.falcoDao.getFalcoLogsForExport(clusterId);
-        const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
+    async getFalcoCsv( clusterId: number,
+                       limit = 20,
+                       page = 0,
+                       priorities?: string [],
+                       orderBy?: string,
+                       startDate?: string,
+                       endDate?: string,
+                       namespace?: string,
+                       pod?: string,
+                       image?: string,
+                       signature?: string,
+                       ): Promise<FalcoCsvDto> {
+
+        // retrieve filtered falco logs and use the query results to build the csv
+        const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
+        let result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
-        for (let i = 0; i < queryResponse.logCount; i++) {
-            const falcoCol = queryResponse.fullList[i];
-            result.push(this.csvService.buildLine([
+        // limit to 1000 or less logs from dao
+            queryResp.csvLogList.forEach(falcoCol => result.push(this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
                 String(falcoCol.container),
                 String(falcoCol.image),
                 String(falcoCol.level),
                 String(falcoCol.message),
-            ]));
-        }
+            ])));
+
 
         return {
             filename: `Falco-Logs${format(new Date(), 'yyyy-MM-dd-hh-mm-ss')}.csv`,

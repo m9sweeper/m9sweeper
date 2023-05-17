@@ -28,7 +28,7 @@ import {AuthService} from "../../auth/services/auth.service";
 import {AuthorityId} from "../../user/enum/authority-id";
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
-import {format, set, sub} from "date-fns";
+import { FalcoCsvDto } from '../dto/falco-csv-dto';
 
 
 @ApiTags('Project Falco')
@@ -59,15 +59,13 @@ export class FalcoController {
         @Query('pod') pod?: string,
         @Query('image') image?: string,
         @Query('signature') signature?: string,
-        @Query('eventId') eventId?: number
-    ): Promise<{ logCount: number, list: FalcoDto[]}>
+    ): Promise<{ logCount: number, list: FalcoDto[], }>
     {
         // default values - seems to be filling with NaN instead of null which causes the defaults in Dao to not work right
         if (!limit) limit = null;
         if (!page) page = null;
-        if (!eventId) eventId = null;
 
-        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+        return this.falcoService.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     @Get('/count')
@@ -107,9 +105,19 @@ export class FalcoController {
         @Query('priority') priorities?: string [],
         @Query('orderBy') orderBy?: string,
         @Query('startDate') startDate?: string,
-        @Query('endDate') endDate?: string
-    ) {
-        return this.falcoService.getFalcoCsv(clusterId);
+        @Query('endDate') endDate?: string,
+        @Query('namespace') namespace?: string,
+        @Query('pod') pod?: string,
+        @Query('image') image?: string,
+        @Query('signature') signature?: string,
+    ): Promise< FalcoCsvDto >
+     {
+        //  use frontend result and pass them as parameters
+         // default values - seems to be filling with NaN instead of null which causes the defaults in Dao to not work right
+         if (!limit) limit = null;
+         if (!page) page = null;
+
+        return this.falcoService.getFalcoCsv(clusterId,  limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     @Get('/:eventId')
