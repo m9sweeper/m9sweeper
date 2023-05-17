@@ -96,6 +96,8 @@ public final class TestKubeHunter {
 
         // Give 5 attempts to try finding data until it works
         boolean anyData = false;
+        int failCounter = 0;
+
         // retry for up to 1 minute
         for (int i=0; i<6 && !anyData; i++){
             try {
@@ -109,7 +111,14 @@ public final class TestKubeHunter {
                 e.printStackTrace();
                 System.out.println("*** No report results! ***");
                 // sleep for 10 seconds
-                Thread.sleep(10000);
+                //Thread.sleep(10000);
+                // Count the attempts
+                failCounter++;
+                // If fails the last try, then break the test
+                if (failCounter == 5){
+                    System.out.println("*** Reach the last attempt! ***");
+                    System.exit(1);
+                }
             }
             // refresh browser
             driver.navigate().refresh();
