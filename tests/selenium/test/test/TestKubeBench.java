@@ -57,7 +57,7 @@ public final class TestKubeBench {
         // click on choosing environment dropdown
         driver.findElement(By.xpath("//app-kube-bench-dialog/mat-horizontal-stepper/div/div/div/mat-form-field/div/div/div/mat-select[@role='combobox']")).click();
         // click on "Plain Job"
-        driver.findElement(By.xpath("//mat-option/span[normalize-space(text())='Common Job Kubernetes Environment']")).click();
+        driver.findElement(By.xpath("//mat-option/span[normalize-space(text())='Standard Kubernetes Environment - Just Node Benchmarks']")).click();
         // click next
         driver.findElement(By.xpath("//button/span[contains(text(),'Next')]")).click();
         // sleep to load
