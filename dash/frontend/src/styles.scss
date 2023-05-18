@@ -265,3 +265,12 @@ app-organization-settings {
   justify-content: left;
   padding-left: 15px;
 }
+
+.mat-mdc-paginator{
+  .mat-mdc-paginator-outer-container {
+    min-width: 890px;
+    .mat-mdc-paginator-container {
+      justify-content: center;
+    }
+  }
+}

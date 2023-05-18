@@ -1,8 +1,8 @@
-<div class="api-key-list-container">
-    <div class="api-list">
+<div class="container">
+    <div class="container-content">
       <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
                           [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-      <div class="mat-elevation-z8 api-table">
+      <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource"  matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Name</th>
@@ -39,12 +39,12 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator
-        [length]="totalCount"
-        [pageSize]="limit"
-        [pageSizeOptions]="[10, 20, 50, 100]"
-        (page)="pageEvent($event)"
-        showFirstLastButtons></mat-paginator>
+          <mat-paginator
+            [length]="totalCount"
+            [pageSize]="limit"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="pageEvent($event)"
+            showFirstLastButtons></mat-paginator>
       </div>
     </div>
 </div>
