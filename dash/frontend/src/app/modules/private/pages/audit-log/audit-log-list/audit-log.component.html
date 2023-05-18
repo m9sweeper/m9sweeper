@@ -1,4 +1,4 @@
-<div class="audit-logs-container ">
+<div class="container ">
   <div class="container-content">
     <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
     <div class="page-card">
@@ -11,9 +11,9 @@
           </div>
         </mat-card-header>
         <mat-card-content>
-          <div class="filter-content">
+          <div class="page-card-content">
             <form>
-              <div class="row audit-logs-header">
+              <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6">
                   <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
                     <mat-label>Entity Type</mat-label>
@@ -56,13 +56,13 @@
     <div class="page-card" *ngIf="showAuditLogTable">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row audit-logs-header page-card-header">
+          <div class="row audit-log-table-header-area page-card-header">
             <div class="col-xs-9">
               <div class="page-card-title">
-                <h4 >Audit logs count: {{totalAuditLogs}}</h4>
+                <h4>Audit logs count: {{totalAuditLogs}}</h4>
               </div>
             </div>
-            <div class="col-xs-3 page-card-right-align-button" >
+            <div class="col-xs-3 page-card-right-align-button">
               <button class=button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
                       mat-raised-button
                       color="primary"
@@ -73,7 +73,8 @@
         </mat-card-header>
         <mat-card-content class="page-card">
           <div class="mat-elevation-z8 ">
-            <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
+                   matSortDirection="asc">
               <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Id.</th>
                 <td mat-cell *matCellDef="let auditLog"> {{auditLog?.id}} </td>

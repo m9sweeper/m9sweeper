@@ -230,7 +230,8 @@ app-organization-settings {
   height: 100%;
   display: block;
   flex: 1;
-  width: 100%
+  width: 100%;
+  overflow: auto;
 }
 .container-content{
   margin: 20px;
