@@ -50,9 +50,9 @@ export class FalcoService {
     return this.httpClient.get('/api/falco/count', {params});
   }
 
-  downloadFalcoExport(clusterId: number):
+  downloadFalcoExport(clusterId: number, options?: FalcoLogOptions ):
     Observable<IServerResponse<IFalcoCsv>> {
-    const params = this.buildParams(clusterId);
+    const params = this.buildParams(clusterId, options);
     return this.httpClient.get('/api/falco/download', {params});
   }
 

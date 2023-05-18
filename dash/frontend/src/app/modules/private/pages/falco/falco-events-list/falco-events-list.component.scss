@@ -57,7 +57,9 @@
   cursor: pointer;
 }
 
+
   .mat-mdc-form-field {
+
     //margin-right: 10px;
     width: 100%;
   }
@@ -160,3 +162,6 @@
   }
 }
 
+.custom-mat-header {
+  margin-bottom: -15px;
+}

@@ -27,9 +27,11 @@ export class FalcoDao {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{ logCount: number, list: FalcoDto[]}> {
+    ): Promise<{ logCount: number, list: FalcoDto[],}> {
         const knex = await this.databaseService.getConnection();
+
+        // set limit to the less of 1000 or whatever is provided
+        limit = Math.min(limit, 1000);
 
         let query = knex.select()
             .from('project_falco_logs')
@@ -102,26 +104,113 @@ export class FalcoDao {
             query.where('anomaly_signature', signature);
         }
 
-        if (limit){
-            query = query.limit(limit).offset(page * limit)
-        }
+        query = query.limit(limit).offset(page * limit) // limit: page size
 
-        // Find filtered list with pagination
-        const list = await query.then(data => {
+        // Filtered list per page for pagination
+        const filteredPerPageLogList = await query.then(data => {
             return plainToInstance(FalcoDto, data);
         });
 
         // "fake" the calculation of the logCount since count queries in
         // postgresql are slow with WHERE clauses on large tables
         // https://wiki.postgresql.org/wiki/Count_estimate
-        let logCount = limit * page + list?.length;
-        if (list?.length === limit) {
+        let logCount = limit * page + filteredPerPageLogList?.length; // accumulated log total per forward/backward click
+        if (filteredPerPageLogList?.length === limit) {
             logCount += 1; // this implies that there probably is another page of results
         }
 
         return {
-            list: list,
-            logCount: +logCount
+            list: filteredPerPageLogList,
+            logCount: +logCount,
+        }
+    }
+
+    async getFalcoCsvLogs(
+        clusterId: number,
+        priorities?: string [],
+        orderBy?: string,
+        startDate?: string,
+        endDate?: string,
+        namespace?: string,
+        pod?: string,
+        image?: string,
+    ): Promise<{ csvLogList: FalcoDto[] }> {
+        const knex = await this.databaseService.getConnection();
+
+        let query = knex.select()
+            .from('project_falco_logs')
+            .where('cluster_id', clusterId);
+
+        if (priorities) {
+            query = query.whereIn('level', priorities);
+        }
+        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
+            switch (orderBy) {
+                case 'Priority Desc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Emergency\' then 1' +
+                        ' WHEN level = \'Alert\' then 2' +
+                        ' WHEN level = \'Critical\' then 3' +
+                        ' WHEN level = \'Error\' then 4' +
+                        ' WHEN level = \'Warning\' then 5' +
+                        ' WHEN level = \'Notice\' then 6' +
+                        ' WHEN level = \'Informational\' then 7' +
+                        ' WHEN level = \'Debug\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Priority Asc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Debug\' then 1' +
+                        ' WHEN level = \'Informational\' then 2' +
+                        ' WHEN level = \'Notice\' then 3' +
+                        ' WHEN level = \'Warning\' then 4' +
+                        ' WHEN level = \'Error\' then 5' +
+                        ' WHEN level = \'Critical\' then 6' +
+                        ' WHEN level = \'Alert\' then 7' +
+                        ' WHEN level = \'Emergency\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Date Desc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
+                    break;
+                case 'Date Asc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
+                    break;
+                default:
+                    query = query.orderBy([{column: 'id', order: 'desc'}]);
+            }
+        }
+
+        if (startDate) {
+            query = query.andWhere('calendar_date', '>=', startDate);
+        }
+        if (endDate) {
+            query = query.andWhere('calendar_date', '<=', endDate);
+        }
+
+        if (namespace) {
+            query = query.whereRaw(`namespace LIKE ?`, [`%${namespace.trim()}%`]);
+        }
+
+        if (pod) {
+            query = query.whereRaw(`container LIKE ?`, [`%${pod.trim()}%`]);
+        }
+
+        if (image) {
+            query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        // Filtered list for csv - limit to 1000 logs
+        const filteredCsvLoglist = await query.limit(1000).then(data => {
+            return plainToInstance(FalcoDto, data);
+        });
+
+        return {
+            csvLogList: filteredCsvLoglist,
         }
     }
 
@@ -131,7 +220,7 @@ export class FalcoDao {
         const knex = await this.databaseService.getConnection();
 
        const result= knex.select(
-            ['p.id as id', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
+            ['p.id as id', 'p.creation_timestamp as timestamp', 'p.calendar_date as calendarDate', 'p.namespace as namespace', 'p.container as container',
                 'p.image as image', 'p.message as message', 'p.anomaly_signature as anomalySignature', 'p.raw as raw'])
             .from('project_falco_logs AS p')
             .where('p.id', eventId)
@@ -170,32 +259,6 @@ export class FalcoDao {
 
         // handle no query result
         return signatureCountByDate || null;
-    }
-
-    async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
-
-        const knex = await this.databaseService.getConnection();
-
-        let query = knex.select()
-            .from('project_falco_logs')
-            .where('cluster_id', clusterId);
-
-        // Find log count and full list for csv export
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
-
-        const fullList = await query.then(data => {
-            return plainToInstance(FalcoDto, data);
-        });
-
-
-        return {
-            fullList: fullList,
-            logCount: +logCount
-        }
     }
 
     async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {

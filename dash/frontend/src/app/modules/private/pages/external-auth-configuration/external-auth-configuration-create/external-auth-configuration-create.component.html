@@ -18,10 +18,11 @@
       </mat-form-field>
     </p>
     <p *ngIf="oauthAuthActivated">
-      <mat-form-field>
+      <mat-form-field (selectionchange)="onOAuthProviderTypeChange($event)">
         <mat-label>Provider Type</mat-label>
         <mat-select formControlName="providerType">
           <mat-option value="GOOGLE">GOOGLE</mat-option>
+          <mat-option value="AZURE">Azure</mat-option>
         </mat-select>
       </mat-form-field>
     </p>
@@ -38,30 +39,28 @@
             <input formControlName="oauthClientId" matInput>
           </mat-form-field>
           </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Client Secret</mat-label>
-              <input formControlName="oauthClientSecret" matInput>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Access Token Uri</mat-label>
-              <input formControlName="oauthAccessTokenUri" matInput>
-            </mat-form-field>
-          </p>
+
+          <ng-container *ngIf="authConfigForm.get('providerType').value === 'GOOGLE'">
+            <p>
+              <mat-form-field>
+                <mat-label>Client Secret</mat-label>
+                <input formControlName="oauthClientSecret" matInput>
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <mat-label>Access Token Uri</mat-label>
+                <input formControlName="oauthAccessTokenUri" matInput>
+              </mat-form-field>
+            </p>
+          </ng-container>
+
           <p>
             <mat-form-field>
               <mat-label>Authorization Uri</mat-label>
               <input formControlName="oauthAuthorizationUri" matInput>
             </mat-form-field>
           </p>
-<!--          <p>-->
-<!--            <mat-form-field>-->
-<!--              <mat-label>Redirect Uri</mat-label>-->
-<!--              <input formControlName="oauthRedirectUri" matInput>-->
-<!--            </mat-form-field>-->
-<!--          </p>-->
           <p>
             <mat-form-field>
               <mat-label>Access Scopes (comma separated)</mat-label>

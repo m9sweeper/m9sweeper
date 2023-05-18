@@ -1,3 +1,6 @@
+# Ensure the script returns a failure code if a error is encountered for use in CICD pipelines.
+set -e
+
 #####################
 # Set flags and help options
 #####################
@@ -55,16 +58,21 @@ cp initialize_proxy.yaml init.yaml
 cp openssl.cnf ssl.cnf
 
 # Change the namespace in the initialize file and openssl configuration
-sed -I '' -e 's/m9sweeper-system/'$namespace'/g' init.yaml
-sed -I '' -e 's/m9sweeper-system/'$namespace'/g' ssl.cnf
+platform=$(uname)
+if [[ "$platform" == 'Linux' ]]; then
+    sed -i "s/m9sweeper-system/$namespace/g" init.yaml
+    sed -i "s/m9sweeper-system/$namespace/g" ssl.cnf
+else
+    sed -i '' -e "s/m9sweeper-system/$namespace/g" init.yaml
+    sed -i '' -e "s/m9sweeper-system/$namespace/g" ssl.cnf
+fi
 
 # Create a service account, role, rolebinding, and deployment to create the nginx reverse proxy. These will be deleted at the end.
 kubectl -n $namespace create -f init.yaml;
 
-# Wait 30 seconds for pod to be running - sometimes the first run pulling the image takes a bit.
-
-echo "Waiting for init pod to be created..."
-sleep 30; 
+# Wait 120 seconds for the pod to be ready since it could take longer on slower clusters or internet connections to pull the image.
+echo "Waiting for init pod to be ready..."
+kubectl wait -n $namespace --for condition=Ready pod/m9sweeper-proxy --timeout=120s
 
 # Delete the existing validating webhook configuration.
 kubectl -n $namespace delete validatingwebhookconfiguration m9sweeper-webhook
@@ -82,5 +90,5 @@ kubectl -n $namespace delete -f init.yaml;
 rm init.yaml;
 rm ssl.cnf;
 
-clear
+# Show that the reverse proxy has been setup
 echo "Reverse Proxy is now setup and running."

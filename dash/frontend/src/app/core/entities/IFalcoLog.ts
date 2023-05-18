@@ -1,7 +1,7 @@
 export interface IFalcoLog {
   id: number;
   clusterId: number;
-  timestamp: string;
+  timestamp: number;
   calendarDate: string;
   anomalySignature: string;
   anomalySignatureGlobal: string;

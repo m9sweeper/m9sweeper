@@ -40,7 +40,13 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/cluster/cluster-list/cluster-list.component.theme';
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
+
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
+
+@import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
+@import './app/modules/private/pages/falco/falco-events-list/falco-events-list.component.theme';
+@import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
+
 
 @mixin custom-components-theme($theme) {
   @include app-root-theme($theme);
@@ -66,6 +72,10 @@ $ms-default-theme: mat.define-light-theme((
   @include audit-log-component-light-theme($theme)
 }
 
+@mixin custom-falco-events-list-dark-theme($theme) {
+  @include falco-events-list-dark-theme($theme);
+}
+
 .default-theme {
   @include angular-material-theme($ms-default-theme);
   @include custom-components-theme($ms-default-theme);
@@ -76,9 +86,11 @@ $ms-default-theme: mat.define-light-theme((
   @include custom-audit-log-light-theme($ms-default-theme);
 }
 
+
  .mat-mdc-dialog-container {
   padding: 20px;
   margin-left: 20px;
+
 }
 
 // organization menu text

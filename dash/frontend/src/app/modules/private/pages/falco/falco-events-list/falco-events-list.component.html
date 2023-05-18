@@ -154,7 +154,7 @@
                   <mat-cell *matCellDef="let log">{{log.level}}</mat-cell>
               </ng-container>
 
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-header-row *matHeaderRowDef="displayedColumns" class="custom-mat-header"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"
                        (click)="displayEventDetails(row)" class="event-row">
               </mat-row>
