@@ -235,6 +235,7 @@ app-organization-settings {
 }
 .container-content{
   margin: 20px;
+  // width:fit-content;
 }
 
 .page-card{
@@ -265,10 +266,12 @@ app-organization-settings {
   justify-content: left;
   padding-left: 15px;
 }
-
+.page-table-container{
+  width: fit-content;
+  overflow: auto;
+}
 .mat-mdc-paginator{
   .mat-mdc-paginator-outer-container {
-    min-width: 890px;
     .mat-mdc-paginator-container {
       justify-content: center;
     }

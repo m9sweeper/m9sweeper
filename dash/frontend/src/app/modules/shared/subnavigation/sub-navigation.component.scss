@@ -3,6 +3,7 @@ div {
   height: 60px;
   justify-content: space-between;
   flex-direction: row;
+  // width: 100%;
   > div {
     &.item-sub-navigation {
       display: flex;
