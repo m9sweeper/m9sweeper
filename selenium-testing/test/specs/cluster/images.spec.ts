@@ -1,0 +1,129 @@
+import { login } from '../../functions/login.js';
+import { buildUrl } from '../../functions/build-url.js';
+import { sleep } from '../../functions/sleep.js';
+
+/**
+ * Ensure that the Images page under the cluster section is functional
+ */
+describe('Images Page::', () => {
+    // Login to m9sweeper and navigate to the images page
+    it('1 Login and navigate to page', async () => {
+        // Login to m9sweeper
+        await login();
+        expect(browser).toHaveUrl(buildUrl('private/dashboard/group/1'));
+
+        // Open the default cluster
+        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        expect(browser).toHaveUrl(buildUrl('private/clusters/1/summary'));
+
+        // Move to the images page
+        await $("//mat-list/a[@title='Images']").customClick("images-page");
+        expect(browser).toHaveUrl(buildUrl('private/clusters/1/images'));
+    });
+
+
+    // Verify we are able to use the button to scan displayted images
+    it('2 Scan Displayed Images', async () => {
+        // Locate the Scan Displayed Images button and click on it
+        await $("//button/span[contains(normalize-space(), 'Scan Displayed Images')]").customClick("scan-displayed-images");
+
+        // Locate the overlay container with the images available to scan
+        expect(await $("//app-confirm-scan-all-dialog")).toBeDisplayed();
+
+        // Locate and click the scan button to start the image scan
+        await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(normalize-space(), 'Scan')]").customClick("scan");
+
+        // Wait for the alert confirming that the image scan has been queued
+        await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan queued')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Image Scan queued alert was not displayed, this suggests that the image scan was not queued successfully."});
+    });
+
+
+    // Verify that we can search for an image and it will find it
+    it('3 Verify Search Works', async () => {
+        // Locate the search bar
+        const searchBar = await $("//span[contains(normalize-space(), 'Search image')]/parent::div//input[@type='search']");
+        expect(await searchBar).toBePresent();
+
+        // Click on the search bar so we can enter text
+        await searchBar.customClick("search-bar");
+
+        // Clear the value in the search bar and enter our search query
+        await searchBar.clearValue();
+        await searchBar.setValue("sweeper/dash");
+
+        // Sleep for 2 seconds to allow the search to happen
+        await sleep(2000);
+
+        // Verify that a element with the query term exists
+        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent();
+    });
+
+
+    // Verify that an image page loads and that we can trigger a rescan of the image
+    it('4 Image page and rescan can be triggered', async () => {
+        // Click on the image we searched for above
+        await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]").customClick("open-image-page");
+
+        // Wait 2 seconds for the page to load
+        sleep(2000);
+
+        // Verify we are on the right page
+        expect(await $("//span[contains(normalize-space(), 'sweeper/dash')]")).toBePresent();
+
+        // Locate and click the Rescan Image button to trigger a rescan
+        await $("//span[contains(normalize-space(),'Rescan Image')]").customClick("rescan-image");
+
+        // Wait for the alert confirming that the image scan has been queued
+        await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan Queued')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Image Scan queued alert was not displayed, this suggests that the image scan was not queued successfully."});
+    });
+
+    it('5 Manually add image', async () => {
+        // Return to the base images page
+        await browser.back();
+        expect(browser).toHaveUrl(buildUrl('private/clusters/1/images'));
+
+        // Locate the + button to add a image and click on it
+        await $("//button//mat-icon[contains(@class, 'plus-button') and contains(normalize-space(), 'add')]").customClick("add-image-button");
+
+        // Locate the overlay for entering the image
+        expect(await $("//app-create-image")).toBePresent();
+
+        // Locate the Image URL text field and enter the dummy image
+        const imageUrlField = await $("//div[contains(@class, 'cdk-overlay-container')]//app-create-image//input");
+        expect(await imageUrlField).toBeExisting();
+        await imageUrlField.click();
+        await imageUrlField.clearValue();
+        await imageUrlField.setValue("docker.io/dummy-image:latest");
+
+        // Locate the submit button and click it
+        await $("//div[contains(@class, 'cdk-overlay-container')]//button[@type='submit']").customClick("submit");
+
+        // Wait for the alert stating the image has been added
+        await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image created successfully')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Image created successfully alert did not appear, this suggests the image was not added successfully."});
+
+        // Locate the search bar
+        const searchBar = await $("//span[contains(normalize-space(), 'Search image')]/parent::div//input[@type='search']");
+        expect(await searchBar).toBeExisting();
+
+        // Click on the search bar so we can enter text
+        await searchBar.customClick("search-bar");
+
+        // Clear the value in the search bar and enter our search query
+        await searchBar.clearValue();
+        await searchBar.setValue("docker.io/dummy-image:latest");
+
+        // Sleep for 2 seconds to allow the search to happen
+        await sleep(2000);
+
+        // Verify that a element with the query term exists
+        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'docker.io/dummy-image:latest')]")).toBePresent();
+    });
+
+
+    // it('5 Verify Advanced Search Works', () => {
+
+    // });
+});
