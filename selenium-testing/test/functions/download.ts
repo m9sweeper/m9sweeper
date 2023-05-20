@@ -44,7 +44,7 @@ export interface downloadTestOptions {
  */
 export async function download(filename: string, element: WebdriverIO.Element, options?: downloadTestOptions ): Promise<boolean> {
     try {
-        let filePath = path.join(downloadDir, filename);
+        let filePath = path.join(__downloadDir, filename);
 
         // If the file already exists, delete it
         // Otherwise it will download something like 'file (1).csv'.
@@ -59,8 +59,8 @@ export async function download(filename: string, element: WebdriverIO.Element, o
         const createdFilename = await waitForFileToExist(options?.filenameRegex || filename, options?.timeout || 10000, dlStart);
 
         if (createdFilename && !!options?.renameTo) {
-            fs.renameSync(path.join(downloadDir, createdFilename), path.join(downloadDir, options.renameTo));
-            filePath = path.join(downloadDir, options.renameTo);
+            fs.renameSync(path.join(__downloadDir, createdFilename), path.join(__downloadDir, options.renameTo));
+            filePath = path.join(__downloadDir, options.renameTo);
         }
 
         if (options?.callback) {
@@ -81,7 +81,7 @@ async function waitForFileToExist(filename: RegExp | string, timeout: number, do
         let watcher;
         try {
             // Start watching for file changes in the download directory
-            const watcher = fs.watch(downloadDir, (eventType, eventFilename) => {
+            const watcher = fs.watch(__downloadDir, (eventType, eventFilename) => {
                 // If a file in the download directory is renamed to our desired filename, it exists.
                 // We wait for a rename event because downloads work by creating a temporary file and then renaming it
                 // once the download is completed.
@@ -102,7 +102,7 @@ async function waitForFileToExist(filename: RegExp | string, timeout: number, do
             // Check if the file exists in case it finished downloading before we started watching the directory
             if (typeof filename === 'string') {
                 // If we are looking for a specific file, check that path
-                const filePath = path.join(downloadDir, filename);
+                const filePath = path.join(__downloadDir, filename);
                 fs.stat(filePath, (err) => {
                     // If there was no error, that means the file already exists
                     if (!err) {
@@ -114,10 +114,10 @@ async function waitForFileToExist(filename: RegExp | string, timeout: number, do
                 });
             } else {
                 // If we were given a regex for files, iterate over the files in the directory to find if any match
-                fs.readdir(downloadDir, (err, files: string[]) => {
+                fs.readdir(__downloadDir, (err, files: string[]) => {
                     files.forEach((fname) => {
                         if (filename.test(files[0])) {
-                            const stat = fs.statSync(path.join(downloadDir, fname));
+                            const stat = fs.statSync(path.join(__downloadDir, fname));
                             // If the file matches the regex & was created after we started downloading,
                             // it should be the downloaded file
                             if (stat.birthtimeMs >= downloadStart) {
