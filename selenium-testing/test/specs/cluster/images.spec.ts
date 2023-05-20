@@ -10,28 +10,40 @@ describe('Images Page::', () => {
     it('1 Login and navigate to page', async () => {
         // Login to m9sweeper
         await login();
-        expect(browser).toHaveUrl(buildUrl('private/dashboard/group/1'));
+        expect(browser).toHaveUrl(
+            buildUrl('private/dashboard/group/1'),
+            {message: "m9sweeper should have logged in and loaded the default dashboard"}
+        );
 
         // Open the default cluster
         await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
-        expect(browser).toHaveUrl(buildUrl('private/clusters/1/summary'));
+        expect(browser).toHaveUrl(
+            buildUrl('private/clusters/1/summary'),
+            {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
+        );
 
-        // Move to the images page
+        // Move to the Images page
         await $("//mat-list/a[@title='Images']").customClick("images-page");
-        expect(browser).toHaveUrl(buildUrl('private/clusters/1/images'));
+        expect(browser).toHaveUrl(
+            buildUrl('private/clusters/1/images'),
+            {message: "m9sweeper should be displaying the Images page"}
+        );
     });
 
 
-    // Verify we are able to use the button to scan displayted images
+    // Verify we are able to use the button to scan displayed images
     it('2 Scan Displayed Images', async () => {
         // Locate the Scan Displayed Images button and click on it
         await $("//button/span[contains(normalize-space(), 'Scan Displayed Images')]").customClick("scan-displayed-images");
-
-        // Locate the overlay container with the images available to scan
-        expect(await $("//app-confirm-scan-all-dialog")).toBeDisplayed();
+        expect(await $("//app-confirm-scan-all-dialog")).toBePresent(
+            {message: "The confirmation window for scanning the images should be visable"}
+        );
 
         // Locate and click the scan button to start the image scan
         await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(normalize-space(), 'Scan')]").customClick("scan");
+        expect(await $("//app-confirm-scan-all-dialog")).not.toBePresent(
+            {message: "The confirmation window for scanning the images should no longer be visable"}
+        );
 
         // Wait for the alert confirming that the image scan has been queued
         await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan queued')]")
@@ -43,7 +55,9 @@ describe('Images Page::', () => {
     it('3 Verify Search Works', async () => {
         // Locate the search bar
         const searchBar = await $("//span[contains(normalize-space(), 'Search image')]/parent::div//input[@type='search']");
-        expect(await searchBar).toBePresent();
+        expect(await searchBar).toBePresent(
+            {message: "Image search bar should be present"}
+        );
 
         // Click on the search bar so we can enter text
         await searchBar.customClick("search-bar");
@@ -56,7 +70,9 @@ describe('Images Page::', () => {
         await sleep(2000);
 
         // Verify that a element with the query term exists
-        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent();
+        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
+            {message: "The image we searched for should show up in the search results"}
+        );
     });
 
 
@@ -69,10 +85,14 @@ describe('Images Page::', () => {
         sleep(2000);
 
         // Verify we are on the right page
-        expect(await $("//span[contains(normalize-space(), 'sweeper/dash')]")).toBePresent();
+        expect(await $("//span[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
+            {message: "We should be on the page for the m9sweeper dash image"}
+        );
 
-        // Locate and click the Rescan Image button to trigger a rescan
-        await $("//span[contains(normalize-space(),'Rescan Image')]").customClick("rescan-image");
+        // Locate the button used to scan/rescan images. It maye be labled as Rescan Image or Scan Image depending on if the image has been scanned or not yet.
+        // We also want to wait until it is clickable, it may take a while if a scan is currently in progress.
+        await $("//span[contains(normalize-space(),'can Image')]").waitForClickable();
+        await $("//span[contains(normalize-space(),'can Image')]").customClick("rescan-image");
 
         // Wait for the alert confirming that the image scan has been queued
         await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan Queued')]")
@@ -82,23 +102,31 @@ describe('Images Page::', () => {
     it('5 Manually add image', async () => {
         // Return to the base images page
         await browser.back();
-        expect(browser).toHaveUrl(buildUrl('private/clusters/1/images'));
+        expect(browser).toHaveUrl(
+            buildUrl('private/clusters/1/images'),
+            {message: "m9sweeper should be displaying the Images page"}
+        );
 
         // Locate the + button to add a image and click on it
         await $("//button//mat-icon[contains(@class, 'plus-button') and contains(normalize-space(), 'add')]").customClick("add-image-button");
-
-        // Locate the overlay for entering the image
-        expect(await $("//app-create-image")).toBePresent();
+        expect(await $("//app-create-image")).toBePresent(
+            {message: "The popup for adding a image should be displayed"}
+        );
 
         // Locate the Image URL text field and enter the dummy image
         const imageUrlField = await $("//div[contains(@class, 'cdk-overlay-container')]//app-create-image//input");
-        expect(await imageUrlField).toBeExisting();
+        expect(await imageUrlField).toBePresent(
+            {message: "The input field for entering the image URL should be present"}
+        );
         await imageUrlField.click();
         await imageUrlField.clearValue();
         await imageUrlField.setValue("docker.io/dummy-image:latest");
 
         // Locate the submit button and click it
         await $("//div[contains(@class, 'cdk-overlay-container')]//button[@type='submit']").customClick("submit");
+        expect(await $("//app-create-image")).not.toBePresent(
+            {message: "The popup for adding a image should no longer be displayed"}
+        );
 
         // Wait for the alert stating the image has been added
         await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image created successfully')]")
@@ -106,7 +134,9 @@ describe('Images Page::', () => {
 
         // Locate the search bar
         const searchBar = await $("//span[contains(normalize-space(), 'Search image')]/parent::div//input[@type='search']");
-        expect(await searchBar).toBeExisting();
+        expect(await searchBar).toBeExisting(
+            {message: "Image search bar should be present"}
+        );
 
         // Click on the search bar so we can enter text
         await searchBar.customClick("search-bar");
@@ -119,7 +149,9 @@ describe('Images Page::', () => {
         await sleep(2000);
 
         // Verify that a element with the query term exists
-        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'docker.io/dummy-image:latest')]")).toBePresent();
+        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'docker.io/dummy-image:latest')]")).toBePresent(
+            {message: "The image we searched for should show up in the search results"}
+        );
     });
 
 
