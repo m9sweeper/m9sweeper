@@ -67,11 +67,11 @@ export const config: Options.Testrunner = {
             // './test/specs/cluster/cluster-info.spec.ts',
             './test/specs/cluster/images.spec.ts',
             // './test/specs/cluster/workloads.spec.ts',
-            './test/specs/cluster/gatekeeper.spec.ts',
             './test/specs/cluster/kube-sec.spec.ts',
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
+            './test/specs/cluster/gatekeeper.spec.ts'
         ],
 
         // Smoke tests suite
@@ -86,11 +86,11 @@ export const config: Options.Testrunner = {
             // './test/specs/cluster/cluster-info.spec.ts',
             './test/specs/cluster/images.spec.ts',
             // './test/specs/cluster/workloads.spec.ts',
-            './test/specs/cluster/gatekeeper.spec.ts',
             './test/specs/cluster/kube-sec.spec.ts',
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
+            './test/specs/cluster/gatekeeper.spec.ts',
         ],
 
         // Orginization tests
