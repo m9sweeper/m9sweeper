@@ -8,7 +8,7 @@ import config from '../../config.js';
  * Ensure that the gatekeeper page is functional and that gatekeeper installs properly
  */
 describe('Gatekeeper Page::', () => {
-    // Login to m9sweeper and navigate to the images page
+    // Login to m9sweeper and navigate to the gatekeeper page
     it('1 Login and navigate to page', async () => {
         // Login to m9sweeper
         await login();
@@ -56,16 +56,30 @@ describe('Gatekeeper Page::', () => {
         await sleep(5000);
 
         // Install the gatekeeper helm repo
-        await exec("helm", "repo", "add", "gatekeeper", "https://open-policy-agent.github.io/gatekeeper/charts");
+        let exitCode = await exec("helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts");
+        expect(exitCode).toEqual(0);
 
         // Run the helm repo update command
-        await exec("helm", "repo", "update")
+        exitCode = await exec("helm repo update");
+        expect(exitCode).toEqual(0);
+
+        // Build the default helm install command for gatekeeper
+        let installCommand = "helm upgrade --install gatekeeper gatekeeper/gatekeeper --namespace gatekeeper-system --create-namespace " +
+            `--version ${config.GATEKEEPER_VERSION} --wait --timeout 10m`;
+
+        // Ad the custom docker registry URL if one is supplied via environment variables
+        if ((config.DOCKER_REGISTRY?.trim()?.length || 0) > 0) {
+            installCommand = installCommand + ` --set-string image.repository='${config.DOCKER_REGISTRY}/openpolicyagent/gatekeeper' ` +
+                `--set-string image.crdRepository='${config.DOCKER_REGISTRY}/openpolicyagent/gatekeeper-crds' ` +
+                `--set-string postUpgrade.labelNamespace.image.repository='${config.DOCKER_REGISTRY}/openpolicyagent/gatekeeper-crds' ` +
+                `--set-string postInstall.labelNamespace.image.repository='${config.DOCKER_REGISTRY}/openpolicyagent/gatekeeper-crds' ` +
+                `--set-string postInstall.probeWebhook.image.repository='${config.DOCKER_REGISTRY}/curlimages/curl' ` +
+                `--set-string preUninstall.deleteWebhookConfigurations.image.repository='${config.DOCKER_REGISTRY}/openpolicyagent/gatekeeper-crds'`;
+        }
 
         // Run the helm install command to install gatekeeper
-        await exec("helm", "upgrade", "--install", "gatekeeper", "gatekeeper/gatekeeper",
-            "--wait", "--timeout", "10m",
-            "--namespace", "gatekeeper-system", "--create-namespace",
-            "--version", config.GATEKEEPER_VERSION);
+        exitCode = await exec(`${installCommand} --debug`);
+        expect(exitCode).toEqual(0);
 
         // Wait 30 seconds to give time for gatekeeper to be registered in m9sweeper
         console.log("Sleeping for 30 seconds to allow m9seeper to detect gatekeeper");

@@ -1,9 +1,13 @@
+// Load dotenv so we can utilize .env files
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+// Import remaining imports
 import { Options } from '@wdio/types';
 import { sleep } from './test/functions/sleep.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-
 
 global.__dirname = path.dirname(fileURLToPath(import.meta.url));
 global.__downloadDir = path.join(__dirname, 'downloads');
