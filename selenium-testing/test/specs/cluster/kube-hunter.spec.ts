@@ -32,6 +32,9 @@ describe('KubeHunter Page::', () => {
             buildUrl('private/clusters/1/kubehunter'),
             {message: "m9sweeper should be displaying the KubeHunter page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -90,12 +93,14 @@ describe('KubeHunter Page::', () => {
         expect(await $(`//table//tr[contains(normalize-space(), '${(new Date()).getFullYear()}')]`)).toBePresent(
             {message: "A Kube Hunter result should be present"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
     // TODO
     // Verify we can view the report page itself
-    it('3 Verify report page', async () => {
-        pending("This test has not yet been written")
-    });
+    // it('3 Verify report page', async () => {
+    // });
 });

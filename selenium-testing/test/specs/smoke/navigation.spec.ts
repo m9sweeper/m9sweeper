@@ -12,6 +12,9 @@ describe('Check Navigation::', () => {
             buildUrl('private/dashboard/group/1'),
             {message: "m9sweeper should be displaying the default dashboard page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -93,6 +96,9 @@ describe('Check Navigation::', () => {
             buildUrl('private/clusters/1/reports'),
             {message: "m9sweeper should be displaying the reports page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -167,5 +173,8 @@ describe('Check Navigation::', () => {
             buildUrl('private/audit-logs'),
             {message: "m9sweeper should be displaying the audit logs page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 });

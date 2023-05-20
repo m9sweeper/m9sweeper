@@ -30,6 +30,9 @@ describe('Gatekeeper Page::', () => {
             buildUrl('private/clusters/1/gatekeeper'),
             {message: "m9sweeper should be displaying the GateKeeper page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -96,8 +99,8 @@ describe('Gatekeeper Page::', () => {
             {message: "m9sweeper should be showing GateKeeper as installed, but in the Not Setup status"}
         );
 
-        // Take a screenshot for records
-        await browser.customScreenshot("post-installation");
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -147,6 +150,9 @@ describe('Gatekeeper Page::', () => {
         expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "m9sweeper should be reporting gatekeeper as Setup"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -231,5 +237,8 @@ describe('Gatekeeper Page::', () => {
         expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "The k8scontainerlimits constraint should be showing as setup."}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 });

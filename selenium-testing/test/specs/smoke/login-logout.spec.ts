@@ -15,6 +15,9 @@ describe('Login and Logout::', () => {
             buildUrl('private/dashboard/group/1'),
             {message: "m9sweeper should be displaying the default dashboard"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -25,6 +28,9 @@ describe('Login and Logout::', () => {
             buildUrl('public/login'),
             {message: "m9sweeper should be showing the login page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -35,5 +41,8 @@ describe('Login and Logout::', () => {
             buildUrl('public/login'),
             {message: "m9sweeper should be showing the login page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 });

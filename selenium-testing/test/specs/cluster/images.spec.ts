@@ -28,6 +28,9 @@ describe('Images Page::', () => {
             buildUrl('private/clusters/1/images'),
             {message: "m9sweeper should be displaying the Images page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -48,6 +51,9 @@ describe('Images Page::', () => {
         // Wait for the alert confirming that the image scan has been queued
         await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan queued')]")
             .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Image Scan queued alert was not displayed, this suggests that the image scan was not queued successfully."});
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -73,6 +79,9 @@ describe('Images Page::', () => {
         expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
             {message: "The image we searched for should show up in the search results"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -97,6 +106,9 @@ describe('Images Page::', () => {
         // Wait for the alert confirming that the image scan has been queued
         await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Image Scan Queued')]")
             .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Image Scan queued alert was not displayed, this suggests that the image scan was not queued successfully."});
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
     it('5 Manually add image', async () => {
@@ -152,6 +164,9 @@ describe('Images Page::', () => {
         expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'docker.io/dummy-image:latest')]")).toBePresent(
             {message: "The image we searched for should show up in the search results"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
