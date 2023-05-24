@@ -197,20 +197,6 @@ app-private {
   height: auto;
   margin-top: 0px !important
 }
-/*
-app-organization-settings {
-  height: 100%;
-  display: block;
-  flex: 1;
-  width: 100%
-}
-
-.organization-settings-container {
-  height: 100%;
-  display: block;
-  flex: 1;
-  width: 100%
-}*/
 
 // Org setting pages uses app-sub-navigation for titles and buttons
 // The following are for lining up other page elements
@@ -231,7 +217,6 @@ app-organization-settings {
   margin: 20px;
   // width:fit-content;
 }
-
 .page-card{
   margin: 0px;
   overflow-x: auto;
@@ -240,25 +225,24 @@ app-organization-settings {
   display:flex;
   padding:0px;
   margin-left: 0px;
+  width: 100%;
 }
 .page-card-title{
   font-size: 20px;
-  font-weight: normal;
+  font-weight: bold;
 }
-.page-card-content {
-  display: flex;
-  padding-left: 15px;
+.page-card-content{
+  margin-bottom: 30px;
 }
-
-.page-card-right-align-button{
+.page-card-line-content {
   display: flex;
-  justify-content: right;
+}
+.page-card-title-button-group-right-align{
+  text-align: right;
   padding:0px;
-
 }
 .page-card-left-align-button {
-  justify-content: left;
-  padding-left: 15px;
+  margin-left: 0px;
 }
 .page-table-container-with-paginator{
   width: fit-content; // align paginator with table width
@@ -272,55 +256,26 @@ app-organization-settings {
   }
 }
 
-// WIP- dashboard, cluster details, organization settings container with left
-.container-with-left-nav{
-  //width: 1000px;
-  display: flex;
-  height: 100%;
-  flex: 1;
-  width: 100%;
-  overflow: auto;
-}
-.container-left-nav-menu{
-  //width: 300px;
-  display: flex;
-  flex-direction: column;
-}
-.left-nav-menu{
-  //width: 100%;
-  flex: 2; // expand this menu to the bottom
-  flex-direction: column;
-}
-.organization-settings-menu{
-  bottom: 0;
-  width: 300px;
-  display: flex;
-  align-items: center;
-  &.expanded {
-    flex-direction: row;
-  }
-  &.closed {
-    flex-direction: column;
-  }
-  &.mat-mdc-list-base {
-    padding-top: 0 !important;
-  }
-  a {
-    text-decoration: none;
-    //font-size: 1vw;
-  }
 
-  > .mat-mdc-list-item {
-    &:hover {
-      background-color: #F2F2F2;
-    }
-  }
-  .expanded-item {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    &:hover {
-      background-color: #F2F2F2;
-    }
-  }
+// cluster details pages - page, card, title, button
+.page-title-div{
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title{
+  font-size: 26px;
+  vertical-align: bottom;
+  line-height: 1;
+}
+.page-title-button-group-spacing{
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.page-button-spacing{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }

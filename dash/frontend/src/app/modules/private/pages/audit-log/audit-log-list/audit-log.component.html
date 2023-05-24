@@ -5,13 +5,14 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <div class="page-card-header">
-            <div class="col-xs-12 page-card-title">
-              <h4>Audit Logs</h4>
+            <div class="page-card-title">
+              Audit Logs
             </div>
           </div>
         </mat-card-header>
+        <div class="page-card-content">
         <mat-card-content>
-          <div class="page-card-content">
+          <div class="page-card-line-content">
             <form>
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6">
@@ -32,37 +33,35 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-2 page-card-left-align-button">
+              <div class=" page-button-spacing page-card-left-align-button">
                   <button [disabled]="!filterAuditLogForm.valid"
                           mat-raised-button
                           color="primary"
                           type="submit" (click)="filterAuditLogs()">Filter
                   </button>
-                </div>
-                <div class="col-md-10 page-card-left-align-button">
+                  &nbsp;
                   <button mat-raised-button
                           color="primary"
                           type="submit" (click)="resetAuditLogs()">Reset
                   </button>
-                </div>
               </div>
             </form>
           </div>
         </mat-card-content>
+        </div>
       </mat-card>
     </div>
     &nbsp;
     <div class="page-card" *ngIf="showAuditLogTable">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row audit-log-table-header-area page-card-header">
-            <div class="col-xs-9">
+          <div class=" page-card-header">
+            <div class="col-xs-9 no-padding">
               <div class="page-card-title">
-                <h4>Audit logs count: {{totalAuditLogs}}</h4>
+                Audit logs count: {{totalAuditLogs}}
               </div>
             </div>
-            <div class="col-xs-3 page-card-right-align-button">
+            <div class="col-xs-3 page-card-title-button-group-right-align">
               <button class=button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
                       mat-raised-button
                       color="primary"

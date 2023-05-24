@@ -8,24 +8,26 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <div class="page-card-header">
-            <div class="col-xs-12 page-card-title">
-              <h4>Organization Details</h4>
+            <div class=" page-card-title">
+              Organization Details
             </div>
           </div>
         </mat-card-header>
+        <div class="page-card-content">
         <mat-card-content>
           <div class="logo-name">
-            <p class="page-card-content" *ngIf="organizationName">Organization Name: {{organizationName}}</p>
+            <p class="page-card-line-content" *ngIf="organizationName">Organization Name: {{organizationName}}</p>
             <ng-container *ngIf="displayLogo">
-              <p class="page-card-content">
+              <p class="page-card-line-content">
                 Organization Logo:
               </p>
-              <p class="page-card-content">
+              <p class="page-card-line-content">
                 <img class="organization-logo" [src]="organizationLogo"/>
               </p>
             </ng-container>
           </div>
         </mat-card-content>
+        </div>
       </mat-card>
     </div>
   </div>

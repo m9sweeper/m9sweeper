@@ -21,6 +21,7 @@ div {
     &.item-create {
       > div {
         display: flex;
+        width: fit-content;
         flex-direction: column;
         padding-bottom: 20px;
 

@@ -5,21 +5,23 @@
       <mat-card appearance="outlined" >
         <mat-card-header >
           <div class="page-card-header">
-            <div class="col-xs-12 page-card-title">
-              <h4>License Details</h4>
+            <div class=" page-card-title">
+              License Details
             </div>
           </div>
         </mat-card-header>
+        <div class="page-card-content">
           <mat-card-content  [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}">
-            <p class="page-card-content" >License Key: {{licenseKey}}</p>
-            <p class="page-card-content">Instance Key: {{instanceKey}}</p>
-            <p class="page-card-content">Max CPU Cores: {{ maxNode }}</p>
-            <p class="page-card-content">Max CPU Count: {{ maxCpu }}</p>
-            <p class="page-card-content">Max RAM (bytes): {{ maxRam }}</p>
-            <p class="page-card-content">Features: {{ displayFeatures() }}</p>
-            <p class="page-card-content">Expiration Date: {{ expirationDate | date: 'medium' }}</p>
-            <p class="page-card-content">Validity: {{isLicenseValid ? 'Valid' : 'Not Valid'}}</p>
+            <p class="page-card-line-content" >License Key: {{licenseKey}}</p>
+            <p class="page-card-line-content">Instance Key: {{instanceKey}}</p>
+            <p class="page-card-line-content">Max CPU Cores: {{ maxNode }}</p>
+            <p class="page-card-line-content">Max CPU Count: {{ maxCpu }}</p>
+            <p class="page-card-line-content">Max RAM (bytes): {{ maxRam }}</p>
+            <p class="page-card-line-content">Features: {{ displayFeatures() }}</p>
+            <p class="page-card-line-content">Expiration Date: {{ expirationDate | date: 'medium' }}</p>
+            <p class="page-card-line-content">Validity: {{isLicenseValid ? 'Valid' : 'Not Valid'}}</p>
           </mat-card-content>
+        </div>
       </mat-card>
     </div>
   </div>
