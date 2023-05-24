@@ -186,8 +186,9 @@ export class FalcoEventsListComponent implements OnInit {
 
   openDialog() {
     const dialog = this.dialog.open(FalcoDialogComponent, {
-      maxWidth: '800px',
-      maxHeight: '80vh',
+      // maxWidth: '1000px',
+      // maxHeight: '80vh',
+      width: '100%',
       closeOnNavigation: true,
       disableClose: false,
       data: {

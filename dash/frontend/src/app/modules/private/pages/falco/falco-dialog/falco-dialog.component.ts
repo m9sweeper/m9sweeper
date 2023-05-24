@@ -21,7 +21,7 @@ export class FalcoDialogComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
   apiKey: string;
   level = 'Error';
-  priorityLevels: string [] = ['','Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
+  priorityLevels: string [] = ['', 'Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { clusterId: number },
