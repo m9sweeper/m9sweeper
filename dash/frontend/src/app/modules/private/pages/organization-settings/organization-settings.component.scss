@@ -1,5 +1,3 @@
-@use '@angular/material' as mat;
-
 :root {
   --organization-container-height: 981px;
   --organization-container-width: 1000px;
@@ -8,14 +6,13 @@
 
 div {
   &.organization-settings-container { // container with both left nav and the content
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
     // height: calc(var(--organization-container-height) - 52px);
     display: flex;
     flex-direction: row;
 
     > div {
       &.left-nav { // left nav
-        width: calc(var(--navigation-menu-width) + 10px);
+        width: calc(var(--navigation-menu-width));
         /*height: calc(var(--organization-container-height));*/
         height: 100%;
         display: flex;

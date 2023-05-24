@@ -15,7 +15,7 @@ div {
       }
       &.cluster-group-menu { // left nav
         width: calc(var(--dashboard-navbar-menu-width));
-        height: var(--dashboard-container-height);
+        //height: var(--dashboard-container-height);
         background-color: #FFFFFF;
         display: flex;
         // border-right: #b0aeaf 1px solid;
@@ -24,8 +24,6 @@ div {
           margin:15px;
           cursor: pointer;
           height: 35px;
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-
 
             a{
               font-size: 14px;
@@ -37,9 +35,10 @@ div {
 
         }
         div.cluster-item { // left nav 2)
-          overflow: hidden auto;
+          flex: 4;
+          // overflow: hidden auto;
           &::-webkit-scrollbar {
-            width: 2.5px;
+           // width: 2.5px;
           }
           &::-webkit-scrollbar-track {
             background: #f1f1f1;
@@ -50,7 +49,6 @@ div {
           &::-webkit-scrollbar-thumb:hover {
             background: #555;
           }
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
 
             &.cluster-group-list-isExpand:last-child {
               margin-bottom: 60px;
@@ -105,14 +103,12 @@ div {
         div.organization-settings { // left nav 3)
 
           bottom: 0;
-          position: fixed;
+          position: inherit;
           //width: calc(var(--dashboard-navbar-menu-width) + 10px);
           display: flex;
           align-items: center;
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-          /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
-            display: flex;
-            width: 100%;
+          //justify-content: flex-end;
+          //width: 100%;
             &.expanded {
               flex-direction: row;
             }
@@ -145,12 +141,12 @@ div {
     &.cluster-dashboard-small-device {
       position: fixed;
       opacity: 0.5;
-      width: var(--dashboard-container-width);
+      width: 100%;
       // height: var(--dashboard-container-height);
       display: flex;
     }
     &.cluster-dashboard {
-      width: var(--dashboard-container-width);
+      width: 100%;
       flex-direction: column;
     }
   }

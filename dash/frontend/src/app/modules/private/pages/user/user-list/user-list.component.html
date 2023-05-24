@@ -1,8 +1,8 @@
-<div class="container">
-  <div class="container-content">
+<div class="page-container">
+  <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <div class="mat-elevation-z8 page-table-container">
+    <div class="mat-elevation-z8 page-table-container-with-paginator">
       <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> No.</th>

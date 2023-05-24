@@ -23,11 +23,11 @@ div {
 
         div.nav-menu { // left nav 1)
           //overflow: hidden auto;
-          flex: 5;
+          flex: 6;
           //&::-webkit-scrollbar {
           //  width: 2.5px;
           //}
-          height: var(--cluster-details-height) - 100px;
+          //height: var(--cluster-details-height) - 100px;
           &::-webkit-scrollbar-track {
             background: #f1f1f1;
           }
@@ -94,9 +94,6 @@ div {
       // height: calc(var(--cluster-details-height));
       display: flex;
       align-items: center;
-      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-
         &.expanded {
           flex-direction: row;
         }
@@ -146,23 +143,17 @@ div {
     }
   }
   .kube-hunter-list-item {
-    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-    ::ng-deep .mat-list-item-content {
+    .mat-list-item-content {
       padding: 7px;
-      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-      ::ng-deep .mat-list-text {
+     .mat-list-text {
         padding: 7px;
       }
     }
   }
 
   .gatekeeper-list-item {
-    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-    /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-    ::ng-deep .mat-list-item-content {
-      /*TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version.*/
-      ::ng-deep .mat-list-text {
+    .mat-list-item-content {
+      .mat-list-text {
         padding-left: 15px;
       }
     }
