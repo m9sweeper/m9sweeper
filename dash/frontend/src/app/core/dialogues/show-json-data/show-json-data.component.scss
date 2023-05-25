@@ -1,34 +1,14 @@
-.falco-log-more-container{
-  height: 100%;
-  overflow-y: auto;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 15px;
-}
-
-.mat-mdc-card-title{
-  width: 100%;
-  white-space: nowrap;
-  display: flex;
-  padding: 15px;
-}
 .falco-card{
   min-width: 400px;
 }
-.details-table{
+.left-align-text-with-margin{
   text-align: left;
+  margin:10px;
 }
 th, td{
   vertical-align: baseline;
 }
-
-/*TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
-mat-paginator {
-  display: flex;
-  justify-content: center;
-}
-
-  /*TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+.related-event-table {
   mat-table {
     overflow: auto !important;
     height: 100%;
@@ -103,6 +83,7 @@ mat-paginator {
       white-space: nowrap;
     }
   }
+}
 .date-link{
   color: #069;
   text-decoration: underline;

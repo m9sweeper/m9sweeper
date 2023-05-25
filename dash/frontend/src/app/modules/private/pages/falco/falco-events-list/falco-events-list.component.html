@@ -80,9 +80,7 @@
                     <input matInput autocomplete="off" type="text" formControlName="imageInput">
                   </mat-form-field>
                 </div>
-
               </div>
-
               <div>
                 <div class="page-card-left-align-button">
                   <button [disabled]="!filtersValid"
@@ -159,15 +157,12 @@
                 <mat-header-cell *matHeaderCellDef>Priority</mat-header-cell>
                 <mat-cell *matCellDef="let log">{{log.level}}</mat-cell>
               </ng-container>
-
-              <mat-header-row *matHeaderRowDef="displayedColumns" class="custom-mat-header"></mat-header-row>
+              <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"
-                       (click)="displayEventDetails(row)" class="event-row">
+                       (click)="displayEventDetails(row)" >
               </mat-row>
             </mat-table>
           </div>
-
-          <div class="paginator">
             <mat-paginator
               [length]="logCount"
               [pageSize]="limit"
@@ -175,7 +170,6 @@
               (page)="pageEvent($event)"
               showFirstLastButtons>
             </mat-paginator>
-          </div>
         </mat-card-content>
       </mat-card>
     </div>

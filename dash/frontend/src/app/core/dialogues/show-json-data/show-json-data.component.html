@@ -1,10 +1,10 @@
-<div class ="falco-log-more-container">
-<div>
-  <div class="row mat-card-title"> {{header}}</div>
-
+<div class ="modal-container-margin">
+<div class="modal-content-left-align">
+  <div class="page-title"> {{header}}</div>
+  <br>
   <div class="falco-card">
     <mat-card appearance="outlined">
-      <table class="details-table">
+      <table class="left-align-text-with-margin">
         <tr>
           <th>Namespace</th> <td>{{namespace}}</td>
         </tr>
@@ -22,64 +22,60 @@
         </tr>
       </table>
     </mat-card>
-
     <br>
-<div class="falco-card">
+  <div class="falco-card">
     <mat-card appearance="outlined">
-      <div class="row">
-        <div class="col-sm-6">
-          <h3>Related Events</h3>
-        </div >
-        <div class="col-sm-6 text-align-right">Signature: &nbsp;&nbsp;{{signature}}</div>
-      </div>
-
-      <div>
-        <mat-table [dataSource]="dataSource">
-          <ng-container matColumnDef="calendarDate">
-            <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-            <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="namespace">
-            <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-            <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="pod">
-            <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-            <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="image">
-            <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-            <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="message">
-            <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-            <mat-cell *matCellDef="let log">
-              {{log.message}}
-            </mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
-        </mat-table>
-
-        <div class="paginator">
-          <mat-paginator
-            [length]="logCount"
-            [pageSize]="limit"
-            [pageSizeOptions]="[ 20, 50, 100]"
-            (page)="pageEvent($event)"
-            showFirstLastButtons>
-          </mat-paginator>
+      <div class="left-align-text-with-margin">
+        <div class="page-title-button-group-spacing" >
+          <div class="page-card-title">
+           Related Events
+          </div >
+          <div >Signature: &nbsp;&nbsp;{{signature}}</div>
         </div>
-
+        <div>
+          <div class="related-event-table">
+          <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="calendarDate">
+              <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+              <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="namespace">
+              <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
+              <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="pod">
+              <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
+              <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="image">
+              <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+              <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="message">
+              <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+              <mat-cell *matCellDef="let log">
+                {{log.message}}
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
+          </mat-table>
+          </div>
+            <mat-paginator
+              [length]="logCount"
+              [pageSize]="limit"
+              [pageSizeOptions]="[ 20, 50, 100]"
+              (page)="pageEvent($event)"
+              showFirstLastButtons>
+            </mat-paginator>
+        </div>
       </div>
-
-
-
       <br>
-
     </mat-card>
-    <div mat-dialog-actions style="justify-content: left;">
+    <br>
+    <div class="modal-content-left-align">
       <button mat-raised-button color="primary"  (click)="onClickMore()">More</button>
+      &nbsp;
       <button mat-raised-button color="primary"  (click)="onClose()">Close</button>
     </div>
   </div>
