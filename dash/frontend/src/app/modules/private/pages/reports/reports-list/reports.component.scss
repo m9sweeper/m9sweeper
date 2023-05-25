@@ -3,16 +3,6 @@
   font-size: 26px;
 }
 
-div.reports-container {
-  //height: 100%;
-  //overflow-y: auto;
-  margin: 15px 15px 10px 15px;
-  display: flex;
-  flex-direction: column;
-  //max-height: 100%;
-  //max-width: 100%
-}
-
 .mat-mdc-card {
   height: 80%;
 }
@@ -28,14 +18,4 @@ div.reports-container {
   justify-content: center;
   align-self: center;
   padding-bottom: 24px;
-}
-/*
-.mat-icon {
-  font-size: 70px;
-}
- */
-
-.reports-card {
-  margin-top: 5px;
-  margin-bottom: 30px;
 }

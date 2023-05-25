@@ -1,42 +1,6 @@
-.padding-left{
-  padding-left: 3%;
-}
-
-.row{
-  padding-left: 30px;
-  padding-right: 20px;
-}
-
-.cluster-summary-container {
-  --cluster-summary-height: 300px;
-  --cluster-summary-widget-container-height: calc((var(--cluster-summary-height) - 10px) / 2);
-  height: calc(var(--cluster-details-height) - 52px);
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.image-click:hover{
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
-}
-
 .mat-mdc-card{
   padding: 0;
   margin: 10px 10px 0 0;
-}
-
-.cluster-summary-card {
-  height: 100%;
-}
-
-.cluster-card {
-  width: 100%;
-}
-
-.pointer{
-  cursor: pointer;
 }
 
 .label {
@@ -52,22 +16,13 @@
   padding-bottom: 10px;
 }
 
-.header-font{
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.edit-cluster-group-icon{
-  padding-bottom: 10px;
-}
-
 .mat-mdc-card-title {
   padding-top: 10px;
 }
 
 .cluster-element {
-  display:flex;
-  margin-top:15px;
+  display: flex;
+  margin-top: 15px;
 }
 
 .namespaces-table {
@@ -111,7 +66,7 @@
 
 .cluster-events-card {
   // position: absolute;
-  width: 100%;
+  width: 98.4%;
   left: 1px;
   bottom: 0;
   padding: 15px 0 0 15px;
@@ -134,4 +89,8 @@
 
     // box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
   }
+}
+
+.hide-scrollbar {
+  overflow: hidden !important;
 }

@@ -1,112 +1,116 @@
-<div class="reports-container">
-  <div class="row page">
-    <span>Reports</span>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="row page">
+      <span>Reports</span>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateVulnerabilityExport()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>list_alt</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Vulnerability Export</h3>
+                <p>Export details about every CVE that is running or was running in the cluster</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateImageVisualization()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>analytics</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Vulnerability Visualization</h3>
+                <p>Display a visualization of vulnerabilities on the cluster</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateRunningVulnerabilities()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>warning</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Running Vulnerabilities</h3>
+                <p>A description of every running image and the total vulnerabilities it has</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateHistoricalVulnerabilities()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>history</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Vulnerability History</h3>
+                <p>A break down of your overall security posture by day over the past month. </p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateWorstImages()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>stacked_bar_chart</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Worst CVE by Image</h3>
+                <p>Display a visualization of all images running on the cluster organized by the worst vulnerability present on each</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateDifferenceOverTime()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>query_stats</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Vulnerability Difference Over Time</h3>
+                <p>Display a chart of how many vulnerabilities in the cluster have been removed or added by day</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+        <mat-card appearance="outlined" class="cluster-card" (click)="navigateDifferenceByDate()">
+          <mat-card-content>
+            <div class="row">
+              <div class="col-xs-3 report-icon">
+                <mat-icon>addchart</mat-icon>
+              </div>
+              <div class="col-xs-9">
+                <h3>Vulnerability Difference By Date</h3>
+                <p>Display a list of vulnerabilities fixed and vulnerabilities added between two dates</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateVulnerabilityExport()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>list_alt</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Vulnerability Export</h3>
-              <p>Export details about every CVE that is running or was running in the cluster</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateImageVisualization()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>analytics</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Vulnerability Visualization</h3>
-              <p>Display a visualization of vulnerabilities on the cluster</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateRunningVulnerabilities()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>warning</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Running Vulnerabilities</h3>
-              <p>A description of every running image and the total vulnerabilities it has</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateHistoricalVulnerabilities()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>history</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Vulnerability History</h3>
-              <p>A break down of your overall security posture by day over the past month. </p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateWorstImages()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>stacked_bar_chart</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Worst CVE by Image</h3>
-              <p>Display a visualization of all images running on the cluster organized by the worst vulnerability present on each</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateDifferenceOverTime()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>query_stats</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Vulnerability Difference Over Time</h3>
-              <p>Display a chart of how many vulnerabilities in the cluster have been removed or added by day</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div class="reports-item col-xs-12 col-sm-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="reports-card" (click)="navigateDifferenceByDate()">
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-3 report-icon">
-              <mat-icon>addchart</mat-icon>
-            </div>
-            <div class="col-xs-9">
-              <h3>Vulnerability Difference By Date</h3>
-              <p>Display a list of vulnerabilities fixed and vulnerabilities added between two dates</p>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
+
+
 </div>
