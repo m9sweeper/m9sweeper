@@ -1,28 +1,28 @@
-<div class="cluster-summary-container">
-  <div class="cluster-summary">
-    <div class="counter-container">
-      <div class="row">
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-card hide-scrollbar">
+      <div class="row cluster-page-row">
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-card">
             <mat-card-content>
               <div class="label">Total Images Running</div>
               <div class="total">{{ countOfTotalImagesRunning }}</div>
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-card">
             <mat-card-content>
               <div class="label center-xs">Total Vulnerabilities Detected in Running Images</div>
               <div class="total center-xs">{{totalVulnerabilities}}</div>
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-card">
             <mat-card-content>
               <div class="label">Policy Violations</div>
               <div class="total">{{countOfPolicyViolations}}</div>
@@ -31,11 +31,10 @@
         </div>
       </div>
     </div>
-    <div class="graph-container">
-      <div class="row">
-        <div class="widget margin-top-10 no-padding full-height"
+      <div class="row cluster-page-row">
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+          <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
             <mat-card-content>
               <div>
@@ -78,7 +77,7 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding full-height"
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
           <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-title class="center-xs">Scan History</mat-card-title>
@@ -122,7 +121,7 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding full-height"
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
           <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
@@ -156,15 +155,14 @@
           </mat-card>
         </div>
       </div>
-    </div>
-    <div class="row">
+    <div class="row cluster-page-row">
       <div class="namespaces-table col-xs-12 no-padding">
         <mat-card appearance="outlined">
           <div class="namespace-image-table">
             <mat-table [dataSource]="dataSource" matSort  matSortActive="namespace" matSortDisableClear matSortDirection="asc">
               <ng-container  matColumnDef="namespace">
-                <mat-header-cell class="padding-left" *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
-                <mat-cell class="padding-left" *matCellDef="let totalSeverity">{{totalSeverity.namespace}}</mat-cell>
+                <mat-header-cell class="padding-left-3" *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
+                <mat-cell class="padding-left-3" *matCellDef="let totalSeverity">{{totalSeverity.namespace}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="criticalIssues">
                 <mat-header-cell class="justify-content-center" *matHeaderCellDef > Critical Issues</mat-header-cell>
@@ -188,7 +186,7 @@
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
-              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="image-click"></mat-row>>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="table-row"></mat-row>>
             </mat-table>
           </div>
         </mat-card>

@@ -115,6 +115,10 @@ $ms-default-theme: mat.define-light-theme((
   padding-top: 10px;
 }
 
+.padding-left-3 {
+  padding-left: 3%;
+}
+
 .negative-margin-bottom-20{
   margin-bottom: -20px;
 }
@@ -286,3 +290,24 @@ app-private {
 .modal-content-left-align{
   margin: 0px;
 }
+
+.cluster-card {
+  height: 100%;
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+.table-row:hover {
+  background-color: rgba(0, 0, 0, .05);
+  cursor: pointer;
+}
+
+.cluster-page-row {
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+

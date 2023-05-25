@@ -51,7 +51,7 @@
           </ng-container>
           <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="click-event"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="table-row"></mat-row>
         </mat-table>
       </div>
       <div class="paginator">
