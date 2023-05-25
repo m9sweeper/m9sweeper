@@ -1,10 +1,6 @@
 .falco-card{
   min-width: 400px;
 }
-.left-align-text-with-margin{
-  text-align: left;
-  margin:10px;
-}
 th, td{
   vertical-align: baseline;
 }
@@ -83,10 +79,5 @@ th, td{
       white-space: nowrap;
     }
   }
-}
-.date-link{
-  color: #069;
-  text-decoration: underline;
-  cursor: pointer;
 }
 

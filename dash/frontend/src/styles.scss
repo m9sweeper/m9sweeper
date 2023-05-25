@@ -245,7 +245,7 @@ app-private {
   text-align: right;
   padding:0px;
 }
-.page-card-left-align-button {
+.page-card-left-align {
   margin-left: 0px;
 }
 .page-table-container-with-paginator{
@@ -287,8 +287,9 @@ app-private {
 .modal-container-margin{
   padding: 30px;
 }
-.modal-content-left-align{
+.modal-content-left-align-no-margin{
   margin: 0px;
+  text-align: left;
 }
 
 .cluster-card {
@@ -310,4 +311,8 @@ app-private {
 .pointer {
   cursor: pointer;
 }
-
+.date-link{
+  color: pink;
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -7,7 +7,7 @@
     </div>
     <div class="page-card">
       <div> <!--class="col-xl-6"-->
-        <mat-card appearance="outlined" style="height:700px; min-width: 400px; display: grid;!important;">
+        <mat-card appearance="outlined" style="height:500px; min-width: 400px; display: grid;!important;">
           <mat-card-header>
             <div class="page-card-title"> Notification Settings </div>
           </mat-card-header>
@@ -16,25 +16,25 @@
               <div>
                 <form [formGroup]="settingForm">
                     <div class="section-sublevel-1">
-                      <div class="row">
-                        <div>
+                      <div class="row page-card-left-align">
+                        <div >
                           <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)" formControlName="sendNotificationAnomaly"> </mat-checkbox>
                         </div>&nbsp;&nbsp;
                         <div>
-                          <h3>Notify about Anomalies</h3>
+                          Notify about Anomalies
                         </div>
                       </div>
 
                       <div class="section-sublevel-2">
-                        <div class ="row">
-                          <h3>Notify no more than once every</h3>
+                        <div class ="row page-card-left-align">
+                          Notify no more than once every
                           &nbsp;&nbsp;
                             <input [readonly]="isNotifyAnomalyDisabled" type="number" style="width:3em" formControlName="anomalyFrequency">
                           &nbsp;&nbsp;
-                          <h3>day(s)</h3>
+                          day(s)
                         </div>
                         <div>
-                          <h3>Severity Levels to Include</h3>
+                          Severity Levels to Include
 
                           <mat-form-field appearance="fill" [formGroup]="settingForm">
                             <mat-select [disabled]="isNotifyAnomalyDisabled" formControlName="selectedPriorityLevels" multiple>
@@ -72,23 +72,22 @@
                     -->
                     <br>
                     <div class="section-sublevel-1">
-                      <div class="row">
-                        <h3>Who to Notify</h3>
+                      <div class="row page-card-left-align">
+                        Who to Notify
+                        <div class="section-sublevel-2">
+                          <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
+                            <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admin</mat-radio-button> <br>
+                            <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button>
+                            <br>
+                              <textarea [style.display]="isSpecificEmailHidden? 'none' :'block'" formControlName="emailList"></textarea>
+                          </mat-radio-group>
+                        </div>
                       </div>
-                      <div class="section-sublevel-2">
-                        <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
-                          <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admin</mat-radio-button> <br>
-                          <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button>
-                          <br>
-                            <textarea [style.display]="isSpecificEmailHidden? 'none' :'block'" formControlName="emailList"></textarea>
-                        </mat-radio-group>
+                      <br>
+                      <div class="page-card-left-align">
+                        <button mat-raised-button color="primary" type="submit" (click)="onClickSave()">Save Changes</button>
                       </div>
                     </div>
-                    <br>
-                    <div class="page-card-left-align-button">
-                      <button mat-raised-button color="primary" type="submit" (click)="onClickSave()">Save Changes</button>
-                    </div>
-
                 </form>
               </div>
             </div>
