@@ -43,7 +43,7 @@
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                <div class="setup-wizard-btn">
+                <div >
                   <button  mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
                     Install
                   </button>
@@ -77,7 +77,7 @@
     <br>
     <div class="page-card">
       <mat-card appearance="outlined">
-        <mat-card-header id="constraint-templates-header">
+        <mat-card-header >
           <div class=" col-sm-3 no-padding">
             <div class="page-card-title">
               Constraint Templates
