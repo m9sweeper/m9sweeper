@@ -1,56 +1,61 @@
-<div class="mat-dialog-container" style="overflow-y: hidden;">
-  <mat-toolbar color="primary">
-    <h3 class="header-left">Library</h3>
-    <h3 class="header-right">Add Constraint Template(s)</h3>
-  </mat-toolbar>
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
 
-<mat-sidenav-container class="example-container" autosize>
-  <mat-sidenav #sidenav class="sidenav" mode="side" opened="true" style="height: 600px">
-    <div *ngFor="let dir of topDirs" >
-      <mat-list-item (click)="displaySubMenu(dir)" class="parent">
-        <mat-icon mat-list-item-icon>home</mat-icon>
-        <span class="full-width">{{dir}}</span>
+    <div class="mat-dialog-container" style="overflow-y: hidden;">
+      <mat-toolbar color="primary">
+        <h3 class="header-left">Library</h3>
+        <h3 class="header-right">Add Constraint Template(s)</h3>
+      </mat-toolbar>
 
-        <mat-icon class="menu-button" [ngClass]="{'rotated' : submenuStatus[dir]}">expand_more</mat-icon>
-      </mat-list-item>
-      <div class="submenu" style="height:280px" [ngClass]="{'expanded' : submenuStatus[dir]}" [style]="{'display': submenuStatus[dir] ? '' : 'none'}">
-        <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
-          <a  href="javascript:void(0)">
-            <mat-checkbox #checkboxes id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
-          </a>
-        </div>
-      </div>
-    </div>
-  </mat-sidenav>
+    <mat-sidenav-container class="example-container" autosize>
+      <mat-sidenav #sidenav class="sidenav" mode="side" opened="true" style="height: 600px">
+        <div *ngFor="let dir of topDirs" >
+          <mat-list-item (click)="displaySubMenu(dir)" >
+            <mat-icon mat-list-item-icon>home</mat-icon>
+            <span class="full-width">{{dir}}</span>
 
-  <mat-sidenav-content style="height:600px">
-    <div class="mat-row check-item-list">
-      <div class="sidenav-content"  [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}" *ngIf="currentlySelectedTemplates.length">
-        <div class="row" *ngFor="let template of currentlySelectedTemplates">
-          <div class="col-md-1 checkbox-style">
-          <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
-          </div>
-          <div  class="col-md-11 right-content">
-            <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
-            <div id="category-text"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
-            <strong>Description: </strong>
-            <p>{{template.selectedTemplate.metadata.annotations.description}}</p>
-            <div id="btn">
-              <button mat-raised-button color="primary" (click)="openK8sManifest(template)">Review or Edit Kubernetes Manifest</button>
+            <mat-icon class="menu-button" [ngClass]="{'rotated' : submenuStatus[dir]}">expand_more</mat-icon>
+          </mat-list-item>
+          <div class="submenu" style="height:280px" [ngClass]="{'expanded' : submenuStatus[dir]}" [style]="{'display': submenuStatus[dir] ? '' : 'none'}">
+            <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
+              <a  href="javascript:void(0)">
+                <mat-checkbox #checkboxes id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
+              </a>
             </div>
           </div>
         </div>
-      </div>
-  </div>
-    <div class="mat-row action-btn">
-      <div *ngIf="currentlySelectedTemplates.length" style="margin-top: 10px; margin-right: 10px;">
-        <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployMultipleGateKeeperTemplates()">Save Changes</button>
-        &nbsp;
-        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-      </div>
+      </mat-sidenav>
+
+      <mat-sidenav-content style="height:600px">
+        <div class="mat-row check-item-list">
+          <div class="sidenav-content"  [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}" *ngIf="currentlySelectedTemplates.length">
+            <div class="row" *ngFor="let template of currentlySelectedTemplates">
+              <div class="col-md-1 checkbox-style">
+              <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
+              </div>
+              <div  class="col-md-11 right-content">
+                <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
+                <div id="category-text"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
+                <strong>Description: </strong>
+                <p>{{template.selectedTemplate.metadata.annotations.description}}</p>
+                <div id="btn">
+                  <button mat-raised-button color="primary" (click)="openK8sManifest(template)">Review or Edit Kubernetes Manifest</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mat-row action-btn">
+          <div *ngIf="currentlySelectedTemplates.length" style="margin-top: 10px; margin-right: 10px;">
+            <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployMultipleGateKeeperTemplates()">Save Changes</button>
+            &nbsp;
+            <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+          </div>
+        </div>
+      </mat-sidenav-content>
+
+    </mat-sidenav-container>
+
     </div>
-  </mat-sidenav-content>
-
-</mat-sidenav-container>
-
+  </div>
 </div>

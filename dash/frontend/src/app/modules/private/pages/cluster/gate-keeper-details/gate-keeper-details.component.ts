@@ -106,7 +106,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   openAddConstraintTemplate() {
     const openAddConstraintTemplate = this.dialog.open(AddTemplateConstraintComponent, {
       width: '850px',
-      height: '570px',
+      height: '700px',
       closeOnNavigation: true,
       disableClose: false,
       data: { clusterId: this.clusterId, templateName: this.templateName, templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,

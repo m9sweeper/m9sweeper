@@ -311,8 +311,13 @@ app-private {
 .pointer {
   cursor: pointer;
 }
-.date-link{
-  color: pink;
-  text-decoration: underline;
-  cursor: pointer;
+
+.text-style-red {
+  color: red;
+}
+.text-style-orange {
+  color: orange;
+}
+.text-style-green {
+  color: green;
 }
