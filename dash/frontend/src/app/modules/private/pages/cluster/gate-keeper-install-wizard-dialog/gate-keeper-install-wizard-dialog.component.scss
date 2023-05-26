@@ -1,29 +1,4 @@
 .padding-top-15 {
   padding-top:15px;
-  padding-left:15px;
-}
-
-.copy-to-button {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0px;
-}
-
-.code-snippet {
-  width: 100%;
-  max-height: 400px;
-  resize: none;
-  margin: 0 0 16px  0;
-  // Styles below replicate StackOverflow
-  background-color: #f6f6f6;
-  padding: 12px;
-  border: none;
-  color: #2f3337;
-  font-size: 13px;
-  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
-}
-
-.row-reverse{
-  flex-direction: row-reverse;
 }
 

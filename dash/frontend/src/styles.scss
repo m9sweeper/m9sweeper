@@ -291,6 +291,9 @@ app-private {
   margin: 0px;
   text-align: left;
 }
+.modal-content-no-right-margin{
+  margin-right: 0px;
+}
 
 .cluster-card {
   height: 100%;
@@ -323,4 +326,17 @@ app-private {
 }
 .full-width {
   width: 100%;
+}
+.code-snippet {
+  width: -webkit-fill-available;
+  max-height: 400px;
+  resize: none;
+  margin: 0 0 16px  0;
+  // Styles below replicate StackOverflow
+  background-color: #f6f6f6;
+  padding: 12px;
+  border: none;
+  color: #2f3337;
+  font-size: 13px;
+  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
 }

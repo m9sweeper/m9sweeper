@@ -1,12 +1,12 @@
 <div class="modal-container-margin">
   <div class="modal-content-left-align-no-margin">
-    <a mat-list-item href="https://open-policy-agent.github.io/gatekeeper/website/docs/install/#installation">
+    <a href="https://open-policy-agent.github.io/gatekeeper/website/docs/install/#installation">
       <mat-icon mat-list-item-icon>info</mat-icon>
     </a>
 
-    <div class="row button-row ng-star-inserted">
-      <div class="col-xs-9 padding-top-15">Run GateKeeper (3.9.2) using the following CLI command:</div>
-      <div class="col-xs-3 copy-to-button">
+    <div class="page-title-button-group-spacing">
+      <div class="padding-top-15">Run GateKeeper (3.9.2) using the following CLI command:</div>
+      <div >
         <app-copy-to-clipboard-button
           successMessage="Command copied to clipboard!"
           errorMessage="Command could not be copied"
@@ -16,14 +16,14 @@
     </div>
 
     <div>
-      <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
+      <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet modal-content-left-align-no-margin modal-content-no-right-margin" readonly>helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
     helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace --version 3.9.2
       </textarea>
     </div>
 
     <div>Note: Gatekeeper version v3.10 and newer is required for Kubernetes 1.24 and newer.</div>
-
-    <div class="row row-reverse">
+    <br>
+    <div class="page-card-title-button-group-right-align">
       <button mat-raised-button matDialogClose color="primary">Done</button>
     </div>
   </div>
