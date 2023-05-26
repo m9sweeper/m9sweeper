@@ -4,10 +4,6 @@
   width: 100%;
 }
 
-.full-width {
-  width: 100%;
-}
-
 .close-button{
   float: right;
   top:-16px;
@@ -22,7 +18,7 @@
   transform: rotate(180deg);
 }
 
- .icon-outside .close-button{
+.icon-outside .close-button{
   float: right;
   top:-52px;
   right:-52px;

@@ -83,8 +83,8 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   AddConstraintCriteriaDialog() {
     const openConstraintCriteriaDialog = this.dialog.open(AddConstraintCriteriaComponent, {
-      width: '550px',
-      height: '300px',
+      width: '600px',
+      height: '400px',
       closeOnNavigation: true,
       disableClose: false,
       data: {clusterId: this.data.clusterId}

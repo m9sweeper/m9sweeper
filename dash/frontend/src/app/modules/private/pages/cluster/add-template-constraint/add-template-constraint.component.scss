@@ -4,18 +4,9 @@
   width: 100%;
 }
 
-.form-field-full-width {
-  width: 100%;
-}
-
 h3 {
   font-weight: bold;
   display: inline;
-}
-
-/*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-mat-card-title {
-  margin-bottom: 0px;
 }
 
 #action-btn {
@@ -33,40 +24,29 @@ mat-card-title {
   display:flex;
   flex-direction:column;
   max-height: 100%;
-  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
-  mat-card {
-    margin-bottom: 20px;
-    width: 310px !important;
-  }
-  .close-button{
-    float: right;
-    top: -16px;
-    right: -31px;
-  }
-
-  .close-icon {
-    transition: 1s ease-in-out;
-  }
-
-  .close-icon:hover {
-    transform: rotate(180deg);
-  }
-
-  ::ng-deep .icon-outside .close-button {
-    float: right;
-    top:-52px;
-    right:-52px;
-  }
-
-  ::ng-deep .icon-outside .mat-mdc-dialog-container {
-    //overflow: unset
-    background-color: pink;
-  }
-  .scrollable-right-content {
-    //position: fixed;
-    //overflow-y: auto;
-    //max-height: 40%;
-    width: 100%;
-  }
-
 }
+
+.close-button{
+  //float: left ;
+  top: -16px;
+  right: -31px;
+}
+
+.close-icon {
+  transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+}
+
+.icon-outside .close-button {
+  //float: right;
+  top:-52px;
+  right:-52px;
+}
+
+.icon-outside .mat-mdc-dialog-container {
+  background-color: pink;
+}
+
