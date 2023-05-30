@@ -1,130 +1,141 @@
-<div id="kube-bench-container">
-  <div class="row page">KubeBench</div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10">
-      <mat-card appearance="outlined" class="card-height">
-        <mat-card-header>
-          <mat-card-title>CIS Benchmark Status:</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-12">
-              <h3 [class.error]="statusInvalid">{{benchmarkStatus}}</h3>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+<div id="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing">
+        <div class="page-title">KubeBench</div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10">
-      <mat-card appearance="outlined" class="card-height">
-        <mat-card-header class="justify-content-left">
-          <mat-card-title>Results of Last Run:</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <table style="width: 100%">
-            <tr>
-              <th>Passed</th>
-              <th>Failed</th>
-              <th>Warnings</th>
-            </tr>
-            <tr>
-              <td>{{lastRun ? lastRun.Totals.total_pass : ''}}</td>
-              <td>{{lastRun ? lastRun.Totals.total_fail : ''}}</td>
-              <td>{{lastRun ? lastRun.Totals.total_warn : ''}}</td>
-            </tr>
-          </table>
-        </mat-card-content>
-      </mat-card>
+    <div class="page-card">
+      <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <div class="page-card-title">CIS Benchmark Status:</div>
+            </mat-card-header>
+            <mat-card-content>
+                  <h3 [class.error]="statusInvalid">{{benchmarkStatus}}</h3>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
+          <mat-card appearance="outlined">
+            <mat-card-header >
+              <div class="page-card-title">Results of Last Run:</div>
+            </mat-card-header>
+            <mat-card-content>
+              <table >
+                <tr>
+                  <th>Passed</th>
+                  <th>Failed</th>
+                  <th>Warnings</th>
+                </tr>
+                <tr>
+                  <td class="last-run-data">{{lastRun ? lastRun.Totals.total_pass : ''}}</td>
+                  <td class="last-run-data">{{lastRun ? lastRun.Totals.total_fail : ''}}</td>
+                  <td class="last-run-data">{{lastRun ? lastRun.Totals.total_warn : ''}}</td>
+                </tr>
+              </table>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-top-10" style="margin: 0; padding-left:0; padding-right:0; height:150px; display: grid;!important; overflow: auto">
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <div class="page-card-title">Our Advice:</div>
+            </mat-card-header>
+            <mat-card-content>
+            <div class="page-card-header">
+              <div class="col-sm-8 no-padding">
+                <p>
+                  {{ourAdvice}}
+                </p>
+              </div>
+              <div class="col-sm-4 page-card-title-button-group-right-align">
+                <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+              </div>
+            </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-top-10">
-      <mat-card appearance="outlined" class="card-height">
-        <mat-card-header>
-          <mat-card-title>Our Advice:</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-8">
-              {{ourAdvice}}
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 text-align-end">
-              <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-  <div class="row margin-top-bottom-15">
-    <div class="col-xs-12">
-      <mat-card appearance="outlined" class="card-height" id="bench-table-card">
-        <mat-card-header id="bench-audit-header">
-          <mat-card-title>Past Audits</mat-card-title>
-          <div id="bench-audit-header-button">
-            <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="row">
-            <div class="col-xs-12 description">
-              Click on an audit to learn more about run results and issue resolution <br>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12">
-              <mat-table [dataSource]="datasource">
-                <ng-container matColumnDef="date">
-                  <mat-header-cell *matHeaderCellDef>Date Audit Ran</mat-header-cell>
-                  <mat-cell *matCellDef="let index">
-                    {{unixToDate(index.createdAt)}}
-                  </mat-cell>
-                </ng-container>
 
-                <ng-container matColumnDef="total pass">
-                  <mat-header-cell *matHeaderCellDef>Total pass</mat-header-cell>
-                  <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_pass}}
-                  </mat-cell>
-                </ng-container>
+    <br>
 
-                <ng-container matColumnDef="total fail">
-                  <mat-header-cell *matHeaderCellDef>Total Fail</mat-header-cell>
-                  <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_fail}}
-                  </mat-cell>
-                </ng-container>
+      <div class="page-card">
+          <mat-card appearance="outlined">
+            <mat-card-header >
+              <div class="col-sm-3 no-padding">
+                <div class="page-card-title">
+                  Past Audits
+                </div>
+              </div>
+              <div class="col-sm-9 page-card-title-button-group-right-align">
+                <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <div >
+                <div >
+                  Click on an audit to learn more about run results and issue resolution <br>
+                </div>
+              </div>
 
-                <ng-container matColumnDef="total warnings">
-                  <mat-header-cell *matHeaderCellDef>Total Warnings</mat-header-cell>
-                  <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_warn}}
-                  </mat-cell>
-                </ng-container>
+                  <mat-table [dataSource]="datasource">
+                    <ng-container matColumnDef="date">
+                      <mat-header-cell *matHeaderCellDef>Date Audit Ran</mat-header-cell>
+                      <mat-cell *matCellDef="let index">
+                        {{unixToDate(index.createdAt)}}
+                      </mat-cell>
+                    </ng-container>
 
-                <ng-container matColumnDef="delete">
-                  <mat-header-cell [hidden]="!isSuperAdmin" *matHeaderCellDef></mat-header-cell>
-                  <mat-cell [hidden]="!isSuperAdmin" *matCellDef="let index" (click)="$event.stopPropagation()">
-                    <div id="deleteButton">
-                      <button mat-raised-button style="background-color: maroon; color: white" (click)="deleteReport(index.id)">Delete Report</button>
-                    </div>
-                  </mat-cell>
-                </ng-container>
+                    <ng-container matColumnDef="total pass">
+                      <mat-header-cell *matHeaderCellDef>Total pass</mat-header-cell>
+                      <mat-cell *matCellDef="let index">
+                        {{index.resultsSummary.total_pass}}
+                      </mat-cell>
+                    </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row class="bench-audit-row" *matRowDef="let row; columns: displayedColumns" (click)="toReportDetails(row.id)"></mat-row>
-              </mat-table>
-            </div>
-          </div>
-          <div class="paginator">
-            <mat-paginator [length]="reportCount"
-                           [pageSize]="limit"
-                           [pageSizeOptions]="[20, 50, 100]"
-                           (page)="pageEvent($event)"
-                           showFirstLastButtons>
-            </mat-paginator>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+                    <ng-container matColumnDef="total fail">
+                      <mat-header-cell *matHeaderCellDef>Total Fail</mat-header-cell>
+                      <mat-cell *matCellDef="let index">
+                        {{index.resultsSummary.total_fail}}
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="total warnings">
+                      <mat-header-cell *matHeaderCellDef>Total Warnings</mat-header-cell>
+                      <mat-cell *matCellDef="let index">
+                        {{index.resultsSummary.total_warn}}
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="delete">
+                      <mat-header-cell [hidden]="!isSuperAdmin" *matHeaderCellDef></mat-header-cell>
+                      <mat-cell [hidden]="!isSuperAdmin" *matCellDef="let index" (click)="$event.stopPropagation()">
+                        <div id="deleteButton">
+                          <button mat-raised-button style="background-color: maroon; color: white" (click)="deleteReport(index.id)">Delete Report</button>
+                        </div>
+                      </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="bench-audit-row" *matRowDef="let row; columns: displayedColumns" (click)="toReportDetails(row.id)"></mat-row>
+                  </mat-table>
+
+              <div >
+                <mat-paginator [length]="reportCount"
+                               [pageSize]="limit"
+                               [pageSizeOptions]="[20, 50, 100]"
+                               (page)="pageEvent($event)"
+                               showFirstLastButtons>
+                </mat-paginator>
+              </div>
+            </mat-card-content>
+          </mat-card>
+      </div>
+
   </div>
 </div>
 

@@ -1,15 +1,10 @@
-#kube-bench-container {
+td, th {
+  width: 33.3%;
+}
+table {
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
 }
-
-.page {
-  padding: 20px 15px 10px 15px;
-  font-size: 26px;
-}
-
-td {
+.last-run-data {
   text-align: center;
 }
 
@@ -18,62 +13,9 @@ td {
   display: flex;
 }
 
-.card-height{
-  min-height: 100px;
-}
-
-.margin-top-bottom-15{
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.margin-top-10{
-  margin-top: 10px;
-}
-
-.text-align-end{
-  text-align: end;
-}
-
-.justify-content-left{
-  justify-content: left;
-}
-
 .error {
   color: red;
 }
 
-.bench-audit-row:hover {
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
-}
 
-.description {
-  padding-bottom: 1em;
-}
 
-#bench-table-card {
-  padding-top: 20px;
-  min-width: 500px
-}
-
-#bench-audit-header {
-  display: flex;
-}
-
-#bench-audit-header-button {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-}
-
-#deleteButton {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-}
-/* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version. */
-mat-paginator {
-  display: flex;
-  justify-content: center;
-}
