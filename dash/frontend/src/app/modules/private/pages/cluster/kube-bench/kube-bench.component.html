@@ -12,7 +12,8 @@
               <div class="page-card-title">CIS Benchmark Status:</div>
             </mat-card-header>
             <mat-card-content>
-                  <h3 [class.error]="statusInvalid">{{benchmarkStatus}}</h3>
+                  <h3 class="okay" *ngIf="!statusInvalid">{{benchmarkStatus}}</h3>
+                  <h3 class="error" *ngIf="statusInvalid">{{benchmarkStatus}}</h3>
             </mat-card-content>
           </mat-card>
         </div>
