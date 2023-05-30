@@ -53,13 +53,14 @@ We have multiple test suites configured for m9sweeper in order to more efficient
 
 These tests allow you to configure several options that the test runner exposes to the test suites. All of these settings can be set in an .env file. If one is not provided, then the test will be run using the defaults that are set in the config.ts file as outlined above in this document. Below is a table of the possible variables and their descritions as well as their defaults:
 
-| **<u>Variable</u>** |                    **<u>Description</u>**                    |   **<u>Default Value</u>**    |
-| :-----------------: | :----------------------------------------------------------: | :---------------------------: |
-|      USERNAME       | This is the username that the tests will use when logging into the m9sweeper dashboard. | `super.admin@intellative.com` |
-|      PASSWORD       | This is the password that the tests will use when logging into the m9sweeper dashboard. |           `123456`            |
-|      BASE_URL       | This is the full url (including port and protocol) that the m9sweeper dashboard is available on. |    `http://127.0.0.1:3000`    |
-| GATEKEEPER_VERSION  |        This is the version of gatekeeper to install.         |           `3.10.0`            |
-|   DOCKER_REGISTRY   | Used if you need to use a proxy registry such as Nexus to avoid rate limits for pulling from DockerHub. This should be a registry that allows anynomous pulls. |                               |
+| **<u>Variable</u>**  |                    **<u>Description</u>**                    |   **<u>Default Value</u>**    |
+| :------------------: | :----------------------------------------------------------: | :---------------------------: |
+|       USERNAME       | This is the username that the tests will use when logging into the m9sweeper dashboard. | `super.admin@intellative.com` |
+|       PASSWORD       | This is the password that the tests will use when logging into the m9sweeper dashboard. |           `123456`            |
+|       BASE_URL       | This is the full url (including port and protocol) that the m9sweeper dashboard is available on. |    `http://127.0.0.1:3000`    |
+|  GATEKEEPER_VERSION  |        This is the version of gatekeeper to install.         |           `3.10.0`            |
+|   DOCKER_REGISTRY    | Used if you need to use a proxy registry such as Nexus to avoid rate limits for pulling from DockerHub. This should be a registry that allows anynomous pulls. |                               |
+| SKIP_GATEKEEPER_TEST | This will skip the gatekeeper tests if set to `true`. If not defined or set to `false` the tests will be run as normal. This is mainly used in the pipeline for testing older versions of k8s (<=1.17.x) where gatekeeper installs are potentially broken and not supported by m9sweeper. |            `false`            |
 
 ### Preparing to Run:
 

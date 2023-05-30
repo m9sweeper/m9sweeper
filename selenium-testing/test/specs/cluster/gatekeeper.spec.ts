@@ -8,6 +8,12 @@ import config from '../../config.js';
  * Ensure that the gatekeeper page is functional and that gatekeeper installs properly
  */
 describe('Gatekeeper Page::', () => {
+
+    // Skip running these tests if the SKTIP_GATEKEEPER_TESTS setting was set to true
+    if (config.SKIP_GATEKEEPER_TESTS) {
+        pending("Skipping Gatekeeper tests due to configured SKIP_GATEKEEPER_TESTS");
+    }
+
     // Login to m9sweeper and navigate to the gatekeeper page
     it('1 Login and navigate to page', async () => {
         // Login to m9sweeper
