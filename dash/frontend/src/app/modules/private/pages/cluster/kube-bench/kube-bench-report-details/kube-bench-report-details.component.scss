@@ -1,33 +1,3 @@
-.kube-bench-report {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  padding-top: 10px;
-}
-
-.bench-report-header {
-  display: flex;
-  padding-top: 5px;
-}
-
-#overallResults {
-  text-align: right;
-}
-
-#instructions {
-  padding-left: 15px;
-}
-
-#tables-container {
-  margin: 15px;
-  min-width: 500px;
-}
-
-.mat-mdc-table {
-  margin-bottom: 40px;
-  min-width: 500px;
-}
-
 .test-main {
   max-width: 8%;
 }

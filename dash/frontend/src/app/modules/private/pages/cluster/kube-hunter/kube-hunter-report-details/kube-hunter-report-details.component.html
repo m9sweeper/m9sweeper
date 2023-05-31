@@ -1,10 +1,14 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-card-title" *ngIf="report && cluster">
-      <h3> Kube Hunter Report: Cluster Vulnerabilities </h3>
-      <h3> Cluster: {{cluster.name}}</h3>
-      <h3> Date run: {{dateRan}} </h3>
-    </div>
+
+      <div *ngIf="report && cluster">
+        <div class="page-title-button-group-spacing">
+          <div class="page-title"> Kube Hunter Report: Cluster Vulnerabilities </div>
+        </div>
+        <h3> Cluster: {{cluster.name}}</h3>
+        <h3> Date run: {{dateRan}} </h3>
+      </div>
+
     <div class="page-card">
       <mat-card appearance="outlined">
 
