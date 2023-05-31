@@ -19,7 +19,6 @@ import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import {NgxMatFileInputModule} from '@angular-material-components/file-input';
 import { UserProfileImageDirective } from './modules/shared/directives/user-profile-image.directive';
 import {SiteLogoDirective} from './modules/shared/directives/site-logo.directive';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -75,7 +74,6 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     MatSlideToggleModule,
     MatIconModule,
     MatDialogModule,
-    NgxMatFileInputModule,
     FontAwesomeModule,
     InfiniteScrollModule
   ],
