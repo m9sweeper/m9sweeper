@@ -1,42 +1,55 @@
-<div class="kube-hunter-report">
-  <div class="header" *ngIf="report && cluster">
-    <h3> Kube Hunter Report: Cluster Vulnerabilities </h3>
-    <h3> Cluster: {{cluster.name}}</h3>
-    <h3> Date run: {{dateRan}} </h3>
-  </div>
-  <div class="row report-table-root" *ngIf="dataSource.length === location.length">
-    <div *ngFor="let data of dataSource; let i = index">
-      <div class="report-details-table mat-elevation-z8">
-        <mat-toolbar>
-          <div>
-            <span class="table-title">Location: {{location[i]}}</span>
-          </div>
-        </mat-toolbar>
-        <mat-table [dataSource]="data">
-          <ng-container matColumnDef="severity">
-            <mat-header-cell class="column-severity" *matHeaderCellDef> Severity </mat-header-cell>
-            <mat-cell class="column-severity" *matCellDef="let vuln"> {{vuln.severity}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="category">
-            <mat-header-cell class="column-category" *matHeaderCellDef> Category </mat-header-cell>
-            <mat-cell class="column-category" *matCellDef="let vuln"> {{vuln.category}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="vulnerability">
-            <mat-header-cell class="column-vulnerability" *matHeaderCellDef> Vulnerability </mat-header-cell>
-            <mat-cell class="column-vulnerability" *matCellDef="let vuln"> {{vuln.vulnerability}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="description">
-            <mat-header-cell class="column-description" *matHeaderCellDef> Description </mat-header-cell>
-            <mat-cell class="column-description" *matCellDef="let vuln"> {{vuln.description}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="additionalInfo">
-            <mat-header-cell class="column-additionalInfo" *matHeaderCellDef> Additional Information </mat-header-cell>
-            <mat-cell class="column-additionalInfo" *matCellDef="let vuln"> <a href="{{vuln.avd_reference}}"> {{vuln.avd_reference}} </a></mat-cell>
-          </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-      </div>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-card-title" *ngIf="report && cluster">
+      <h3> Kube Hunter Report: Cluster Vulnerabilities </h3>
+      <h3> Cluster: {{cluster.name}}</h3>
+      <h3> Date run: {{dateRan}} </h3>
     </div>
-  </div>
+    <div class="page-card">
+      <mat-card appearance="outlined">
+
+
+      <div  *ngIf="dataSource.length === location.length">
+        <div *ngFor="let data of dataSource; let i = index">
+          <div >
+            <mat-card-header>
+              <div>
+                <span class="table-title">Location: {{location[i]}}</span>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+            <mat-table [dataSource]="data">
+              <ng-container matColumnDef="severity">
+                <mat-header-cell class="column-severity" *matHeaderCellDef> Severity </mat-header-cell>
+                <mat-cell class="column-severity" *matCellDef="let vuln"> {{vuln.severity}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="category">
+                <mat-header-cell class="column-category" *matHeaderCellDef> Category </mat-header-cell>
+                <mat-cell class="column-category" *matCellDef="let vuln"> {{vuln.category}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="vulnerability">
+                <mat-header-cell class="column-vulnerability" *matHeaderCellDef> Vulnerability </mat-header-cell>
+                <mat-cell class="column-vulnerability" *matCellDef="let vuln"> {{vuln.vulnerability}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <mat-header-cell class="column-description" *matHeaderCellDef> Description </mat-header-cell>
+                <mat-cell class="column-description" *matCellDef="let vuln"> {{vuln.description}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="additionalInfo">
+                <mat-header-cell class="column-additionalInfo" *matHeaderCellDef> Additional Information </mat-header-cell>
+                <mat-cell class="column-additionalInfo" *matCellDef="let vuln"> <a href="{{vuln.avd_reference}}"> {{vuln.avd_reference}} </a></mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            </mat-card-content>
+          </div>
+        </div>
+      </div>
+
+      </mat-card>
+    </div>
+
+</div>
+
 </div>
