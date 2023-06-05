@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import {ForbiddenException, Injectable, Scope} from '@nestjs/common';
 import { HttpService } from "@nestjs/axios";
 import { AxiosRequestConfig } from 'axios';
 import * as qs from 'qs';
@@ -6,6 +6,7 @@ import { Oauth2AuthProvider } from './oauth2-auth-provider';
 import { ConfigService } from '@nestjs/config';
 import { OAuth2AuthStrategyConfig } from '../../models/auth-configuration';
 import { SourceSystem, UserAuthority, UserProfileDto } from '../../../user/dto/user-profile-dto';
+import {AuthorityId} from '../../../user/enum/authority-id';
 
 @Injectable({scope: Scope.REQUEST})
 export class GoogleOauth2Service extends Oauth2AuthProvider {
@@ -43,9 +44,15 @@ export class GoogleOauth2Service extends Oauth2AuthProvider {
 
     userProfile.authorities = [];
 
+    // Check access rights for profile
     const userAuthority = new UserAuthority();
-    userAuthority.id = 3;
-    userProfile.authorities.push(userAuthority);
+    const emailDomain = userProfile.email.split('@').pop().toLowerCase().trim();
+    if (oAuth2Config.allowedDomains.includes(emailDomain)) {
+      userAuthority.id = AuthorityId.SUPER_ADMIN;
+      userProfile.authorities.push(userAuthority);
+    } else {
+      throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
+    }
 
     return userProfile;
   }

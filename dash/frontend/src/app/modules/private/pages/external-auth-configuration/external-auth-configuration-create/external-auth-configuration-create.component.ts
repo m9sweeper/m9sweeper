@@ -41,6 +41,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
       oauthAuthorizationUri: [''],
       // oauthRedirectUri: [{disabled: true, value: ''}],
       oauthScopes: [''],
+      oauthAllowedDomains: [''],
       ldapUrl: [''],
       ldapUserSearchBase: [''],
       ldapUserNameAttribute: [''],
@@ -98,13 +99,15 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         authConfig.authConfig = authConfig.providerType === 'AZURE' ? ({
           clientId: this.authConfigForm.value.oauthClientId,
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
-          scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
+          scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
+          allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
         } as IOAUTHConfigStrategy) : ({
           clientId: this.authConfigForm.value.oauthClientId,
           clientSecret: this.authConfigForm.value.oauthClientSecret,
           accessTokenUri: this.authConfigForm.value.oauthAccessTokenUri,
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
-          scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
+          scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
+          allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
         } as IOAUTHConfigStrategy);
         break;
       case AuthenticationType.LDAP :
@@ -171,6 +174,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         }
         this.authConfigForm.controls.oauthAuthorizationUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).authorizationUri);
         this.authConfigForm.controls.oauthScopes.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).scopes.join(','));
+        this.authConfigForm.controls.oauthAllowedDomains.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).allowedDomains.join(','));
         break;
 
       case AuthenticationType.LDAP:
@@ -195,9 +199,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
     }
   }
 
-  private scopesToArray(scopes) {
-    return scopes?.split(',')?.map(scope => scope.trim());
+  private stringToArray(commaSeparatedList) {
+    return commaSeparatedList?.split(',')?.map(item => item.trim().toLowerCase());
   }
 }
-
-
