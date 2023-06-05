@@ -48,7 +48,7 @@ export class GoogleOauth2Service extends Oauth2AuthProvider {
     const userAuthority = new UserAuthority();
     const emailDomain = userProfile.email.split('@').pop().toLowerCase().trim();
     if (oAuth2Config.allowedDomains.includes(emailDomain)) {
-      userAuthority.id = AuthorityId.SUPER_ADMIN;
+      userAuthority.id = AuthorityId.READ_ONLY;
       userProfile.authorities.push(userAuthority);
     } else {
       throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
