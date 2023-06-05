@@ -78,8 +78,17 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   }
 
   onOAuthProviderTypeChange($event) {
-    if (this.oauthAuthActivated && !this.ldapAuthActivated) {
-
+    if (this.oauthAuthActivated && !this.data.isEdit) {
+      this.authConfigForm.controls.oauthScopes.setValue('profile,openid,email');
+      switch ($event.value) {
+        case 'GOOGLE':
+          this.authConfigForm.controls.oauthAccessTokenUri.setValue('https://oauth2.googleapis.com/token');
+          this.authConfigForm.controls.oauthAuthorizationUri.setValue('https://accounts.google.com/o/oauth2/v2/auth');
+          break;
+        case 'AZURE':
+          this.authConfigForm.controls.oauthAuthorizationUri.setValue('https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize');
+          break;
+      }
     }
   }
 
