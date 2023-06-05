@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import {ForbiddenException, Injectable, Scope} from '@nestjs/common';
 import { HttpService } from "@nestjs/axios";
 import { AxiosRequestConfig } from 'axios';
 import * as qs from 'qs';
@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { OAuth2AuthStrategyConfig } from '../../models/auth-configuration';
 import { SourceSystem, UserAuthority, UserProfileDto } from '../../../user/dto/user-profile-dto';
 import {lastValueFrom} from 'rxjs';
+import {AuthorityId} from '../../../user/enum/authority-id';
 
 @Injectable({scope: Scope.REQUEST})
 export class AzureOauth2Service extends Oauth2AuthProvider {
@@ -17,6 +18,7 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
   }
 
   async getOAuthUserData(accessToken: string): Promise<UserProfileDto> {
+    const oAuth2Config = <OAuth2AuthStrategyConfig> this._authConfiguration.authConfig;
     const oAuthUserProfile = await this.getOauthProfile('https://graph.microsoft.com/v1.0/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -35,9 +37,15 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
 
     userProfile.authorities = [];
 
+    // Check access rights for profile
     const userAuthority = new UserAuthority();
-    userAuthority.id = 3;
-    userProfile.authorities.push(userAuthority);
+    const emailDomain = userProfile.email.split('@').pop().toLowerCase().trim();
+    if (oAuth2Config.allowedDomains.includes(emailDomain)) {
+      userAuthority.id = AuthorityId.READ_ONLY;
+      userProfile.authorities.push(userAuthority);
+    } else {
+      throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
+    }
 
     return userProfile;
   }
