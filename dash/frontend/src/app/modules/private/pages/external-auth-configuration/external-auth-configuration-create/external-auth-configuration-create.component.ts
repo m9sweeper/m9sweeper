@@ -70,11 +70,14 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
     if (authType === AuthenticationType.OAUTH2) {
       this.oauthAuthActivated = true;
       this.ldapAuthActivated = false;
-
+      this.authConfigForm.controls.oauthAllowedDomains.setValidators([Validators.required]);
     } else if (authType === AuthenticationType.LDAP) {
       this.oauthAuthActivated = false;
       this.ldapAuthActivated = true;
+      this.authConfigForm.controls.oauthAllowedDomains.removeValidators([Validators.required]);
     }
+    // Recheck the validity of fields which had validators changed
+    this.authConfigForm.controls.oauthAllowedDomains.updateValueAndValidity();
   }
 
   onOAuthProviderTypeChange($event) {

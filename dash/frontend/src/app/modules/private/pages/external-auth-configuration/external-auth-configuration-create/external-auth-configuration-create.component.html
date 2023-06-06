@@ -21,8 +21,8 @@
       <mat-form-field>
         <mat-label>Provider Type</mat-label>
         <mat-select formControlName="providerType" (selectionChange)="onOAuthProviderTypeChange($event)">
-          <mat-option [value]="'GOOGLE'">Google</mat-option>
-          <mat-option [value]="'AZURE'">Azure</mat-option>
+          <mat-option value="GOOGLE">Google</mat-option>
+          <mat-option value="AZURE">Azure</mat-option>
         </mat-select>
       </mat-form-field>
     </p>
