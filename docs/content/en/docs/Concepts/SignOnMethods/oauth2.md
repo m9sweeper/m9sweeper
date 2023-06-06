@@ -6,7 +6,7 @@ description: >
   How to configure user login using OAuth2
 ---
 
-M9sweeper currently supports two implementations of Oauth2, through Google and Microsoft Azure. To add one of these
+M9sweeper supports using OAuth2 to authenticate, and has been tested with Google and Microsoft Azure AD. To add one of these
 login methods, go to "Organization Settings" > "Sign on Methods" and select "Add External Auth Configuration." Then
 select the OAUTH2 Auth Type. After, select your desired implementation from the Provider Type dropdown, with
 implementation details found below.
@@ -28,12 +28,12 @@ add them to their respective fields in the configuration form.
 ### Access Token Uri and Authorization Uri
 
 These fields refer to the endpoints which the app will reach out to during the authorization process. They are
-automatically filled with the default values used by Google, and you shouldn't need to modify them yourself
+automatically filled with the default values used by Google, and you should not need to modify them yourself.
 
 ### Access Scopes
 
 A comma separated list of the fields the app will request access to when querying data from a user. This is automatically
-filled with the information M9sweeper needs to access, and you shouldn't need to modify it yourself.
+filled with the information M9sweeper needs to access, and you should not need to modify it yourself.
 
 ### Allowed User Domains
 
@@ -60,12 +60,12 @@ Client ID field of the configuration form.
 ### Authorization Uri
 
 The endpoint that M9sweeper will use to authenticate with Microsoft's OAuth system. This field is automatically filled
-with the default endpoint, and you shouldn't need to modify it yourself.
+with the default endpoint, and you should not need to modify it yourself.
 
 ### Access Scopes
 
 A comma separated list of fields that M9sweeper's OAuth will request access to. This field is automatically filled and
-shouldn't need further modification.
+should not need further modification.
 
 ### Allowed User Domains
 
