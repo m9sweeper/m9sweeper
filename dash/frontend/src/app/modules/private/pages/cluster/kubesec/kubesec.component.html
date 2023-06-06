@@ -75,7 +75,7 @@
                 <ng-container matColumnDef="podNames">
                   <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
                   <mat-cell *matCellDef="let report; let i = index">
-                    <a (click)="clickEvent(i)">
+                    <a>
                       {{report.object.substring(4)}}
                     </a>
                   </mat-cell>
