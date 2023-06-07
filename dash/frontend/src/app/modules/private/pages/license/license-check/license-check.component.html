@@ -1,4 +1,5 @@
-<div>
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
   <form [formGroup]="checkLicenseValidityForm"  (ngSubmit)="onSubmit()">
     <div>
       <p>
@@ -13,10 +14,12 @@
           <input matInput placeholder="Enter your instance key" type="text" formControlName="instanceKey">
         </mat-form-field>
       </p>
-      <div mat-dialog-actions>
+      <div >
         <button [disabled]="!checkLicenseValidityForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+        &nbsp;
         <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
       </div>
     </div>
   </form>
+</div>
 </div>

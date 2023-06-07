@@ -4,7 +4,7 @@
                         [buttonTitle]="subNavigationButtonTitle"
                         (click)="openDockerRegistryDialog(false)"></app-sub-navigation>
     <app-sub-navigation [allowedRoles]="['READ_ONLY']" [title]="subNavigationTitle"></app-sub-navigation>
-    <div class="mat-elevation-z8 page-table-container-with-paginator">
+    <div class="mat-elevation-z8 page-card">
       <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear
              matSortDirection="asc">
         <ng-container matColumnDef="name">

@@ -1,16 +1,14 @@
-<div class="policy-create-container">
-  <div class="create-policy-form">
-    <div class="mat-toolbar">
-      <mat-toolbar>
-        <div>
-          <span class="subnav-title">{{subMenuTitle}}</span>
-        </div>
-      </mat-toolbar>
-    </div>
-    <div class="create-policy-form-card">
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-card">
+
+    <div >
       <mat-card appearance="outlined">
         <mat-card-content>
-          <form [formGroup]="policyForm" class="policy-form">
+          <div class="page-title-button-group-spacing">
+            <span class="page-title">{{subMenuTitle}}</span>
+          </div>
+          <form [formGroup]="policyForm" >
             <div>
               <div class="row">
                 <div class="col-lg-12 col-xs-12">
@@ -70,7 +68,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-12 col-xs-12 required-checkbox">
+                <div class="col-lg-12 col-xs-12 ">
                   <mat-checkbox formControlName="enforcement" [ngModel]="checkboxDefault">Required: All required, active
                     scanners must pass to consider an image valid
                   </mat-checkbox>
@@ -93,22 +91,18 @@
           </form>
           <!--<app-scanner-list></app-scanner-list>-->
           <!-- Scanner List Table -->
-          <div class="scanner-list">
-            <div class="row scanner-list-heading-row">
-              <mat-toolbar>
-                <div class="col-lg-10 col-xs-12">
-                  <span class="subnav-title">{{scannerSubmenuTitle}}</span>
-                </div>
-                <div class="col-lg-2 col-xs-12">
-                  <span>
-                  <button mat-raised-button color="primary" class="create-scanner-button" type="button"
-                          (click)="openAddScannerDialog()"><mat-icon mat-list-item-icon>add</mat-icon>Create Scanner</button>
-                </span>
-                </div>
-              </mat-toolbar>
+          <div class="page-card-header">
+            <div class="col-sm-8 no-padding">
+              <span class="page-card-title">{{scannerSubmenuTitle}}</span>
             </div>
-            <div class="row table-row">
-              <div class="mat-elevation-z8">
+            <div class="col-sm-4 page-card-title-button-group-right-align">
+              <button mat-raised-button color="primary"  type="button"
+                      (click)="openAddScannerDialog()"><mat-icon mat-list-item-icon>add</mat-icon>Create Scanner</button>
+            </div>
+          </div>
+          <br>
+            <div class="row page-card-header">
+              <div class="mat-elevation-z8" style="width: 100%;">
                 <table mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="enabled">
                     <th mat-header-cell *matHeaderCellDef>Active</th>
@@ -156,17 +150,19 @@
                 </table>
               </div>
             </div>
-          </div>
+
           <!-- Scanner List Table End -->
           <p></p>
           <div mat-dialog-actions>
-            <button class="button-space" [disabled]="!policyForm.valid" mat-raised-button color="primary" type="submit"
+            <button  [disabled]="!policyForm.valid" mat-raised-button color="primary" type="submit"
                     (click)="onSubmit()">Submit
             </button>
+            &nbsp;
             <button mat-raised-button color="warn" type="button" (click)="cancelPolicyForm()">Cancel</button>
           </div>
         </mat-card-content>
       </mat-card>
+    </div>
     </div>
   </div>
 </div>

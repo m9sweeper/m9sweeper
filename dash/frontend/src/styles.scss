@@ -305,6 +305,7 @@ app-private {
 }
 
 .table-row:hover {
+  width: 100%;
   background-color: rgba(0, 0, 0, .05);
   cursor: pointer;
 }
@@ -342,4 +343,8 @@ app-private {
   color: #2f3337;
   font-size: 13px;
   font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+mat-form-field {
+  width: 100%;
 }

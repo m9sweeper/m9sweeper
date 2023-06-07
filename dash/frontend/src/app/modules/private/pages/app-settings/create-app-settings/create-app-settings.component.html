@@ -1,4 +1,5 @@
-<div class="create-cluster-form">
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
   <form [formGroup]="createAppSettingsForm" class="cluster-form" (ngSubmit)="onSubmit()">
     <div>
       <p>
@@ -11,14 +12,15 @@
         <input
           formControlName="file"
           type="file"
-          class="form-control"
           (change)="onLogoChange($event)">
       </p>
     </div>
 
-    <div mat-dialog-actions>
+    <div>
       <button [disabled]="!createAppSettingsForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+      &nbsp;
       <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
     </div>
   </form>
+</div>
 </div>

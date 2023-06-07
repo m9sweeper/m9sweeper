@@ -1,8 +1,10 @@
-<h3 mat-dialog-title class="subnav-title">
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
+<div class="page-card-title" >
   {{data.isEdit ? 'Update' : 'Add'}} Sign on method
-</h3>
-<div mat-dialog-content [ngClass]="oauthAuthActivated || ldapAuthActivated ? 'extend-create-external-auth-configuration-form': 'create-external-auth-configuration-form'">
-  <form [formGroup]="authConfigForm" class="external-configuration-form" (ngSubmit)="onSubmit()" id="external-auth-conf-form">
+</div>
+<div  [ngClass]="oauthAuthActivated || ldapAuthActivated ? 'extend-create-external-auth-configuration-form': 'create-external-auth-configuration-form'">
+  <form [formGroup]="authConfigForm"  (ngSubmit)="onSubmit()" id="external-auth-conf-form">
       <p>
         <mat-form-field>
           <mat-label>Auth Type</mat-label>
@@ -186,3 +188,5 @@
   <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
 </div>
 
+</div>
+</div>
