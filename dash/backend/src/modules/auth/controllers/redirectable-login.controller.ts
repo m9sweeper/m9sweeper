@@ -66,13 +66,8 @@ export class RedirectableLoginController {
       const authProviderConfig = await this.externalAuthConfigService.loadById(providerState);
       if (authProviderConfig) {
         const oAuth2Service = this.oAuth2Factory.getInstance(authProviderConfig);
-        const externalUserData: UserProfileDto = await oAuth2Service.getOAuthUserData(accessCode);
+        const user: UserProfileDto = await oAuth2Service.getOAuthUserData(accessCode);
 
-        const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(externalUserData.email);
-        if(users && Array.isArray(users) && !users[0].isActive) {
-          throw new Error('This user is not active.');
-        }
-        const user: UserProfileDto = users ? users.pop() : await this.userProfileService.createUser(externalUserData);
         // Delete the user's password for security. We should never return a password to the frontend.
         delete user.password;
 

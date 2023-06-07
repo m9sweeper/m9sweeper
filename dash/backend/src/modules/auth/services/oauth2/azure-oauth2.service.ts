@@ -8,12 +8,15 @@ import { OAuth2AuthStrategyConfig } from '../../models/auth-configuration';
 import { SourceSystem, UserAuthority, UserProfileDto } from '../../../user/dto/user-profile-dto';
 import {lastValueFrom} from 'rxjs';
 import {AuthorityId} from '../../../user/enum/authority-id';
+import {UserProfileService} from '../../../user/services/user-profile.service';
 
 @Injectable({scope: Scope.REQUEST})
 export class AzureOauth2Service extends Oauth2AuthProvider {
 
   constructor(private readonly httpClient: HttpService,
-              protected readonly configService: ConfigService){
+              protected readonly configService: ConfigService,
+              private readonly userProfileService: UserProfileService,
+              ){
     super();
   }
 
@@ -24,30 +27,43 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
         Authorization: `Bearer ${accessToken}`
       }
     });
-    const userProfile = new UserProfileDto();
-    userProfile.firstName = oAuthUserProfile.data?.givenName;
-    userProfile.lastName = oAuthUserProfile.data?.surname;
-    userProfile.email = oAuthUserProfile.data?.userPrincipalName;
-    userProfile.phone = '';
-    const userSourceSystem = new SourceSystem();
-    userSourceSystem.id = this._authConfiguration.id.toString();
-    userSourceSystem.uid = oAuthUserProfile.data?.id;
-    userSourceSystem.type = this._authConfiguration.authType;
-    userProfile.sourceSystem = userSourceSystem;
-
-    userProfile.authorities = [];
-
-    // Check access rights for profile
-    const userAuthority = new UserAuthority();
-    const emailDomain = userProfile.email.split('@').pop().toLowerCase().trim();
-    if (oAuth2Config.allowedDomains.includes(emailDomain)) {
-      userAuthority.id = AuthorityId.READ_ONLY;
-      userProfile.authorities.push(userAuthority);
-    } else {
+    const userEmail = oAuthUserProfile.data?.userPrincipalName;
+    const emailDomain = userEmail.split('@').pop().toLowerCase().trim();
+    if (!oAuth2Config.allowedDomains.includes(emailDomain)) {
+      // Check that the email domain of the OAuth user is within the allowed list before anything else
       throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
-    }
+    } else {
+      // If user is in an allowed domain, check to see if they already exist, and if so return the existing user
+      const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(userEmail);
+      if (users && Array.isArray(users) && users.length > 0) {
+        if (!users[0].isActive) {
+          throw new Error('This user is not active.');
+        } else {
+          return users[0];
+        }
+      } else {
+        // If the OAuth user is valid and does not yet exist, create a new user to return
+        const userProfile = new UserProfileDto();
+        userProfile.firstName = oAuthUserProfile.data?.givenName;
+        userProfile.lastName = oAuthUserProfile.data?.surname;
+        userProfile.email = oAuthUserProfile.data?.userPrincipalName;
+        userProfile.phone = '';
+        const userSourceSystem = new SourceSystem();
+        userSourceSystem.id = this._authConfiguration.id.toString();
+        userSourceSystem.uid = oAuthUserProfile.data?.id;
+        userSourceSystem.type = this._authConfiguration.authType;
+        userProfile.sourceSystem = userSourceSystem;
 
-    return userProfile;
+        userProfile.authorities = [];
+
+        // Set the default authority for new OAuth users to read only
+        const userAuthority = new UserAuthority();
+        userAuthority.id = AuthorityId.READ_ONLY;
+        userProfile.authorities.push(userAuthority);
+
+        return await this.userProfileService.createUser(userProfile);
+      }
+    }
   }
 
   async getOauthAccessToken(url: string, data): Promise<any> {
