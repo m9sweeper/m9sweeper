@@ -15,6 +15,7 @@ import {AllowedAuthorityLevels} from '../../../decorators/allowed-authority-leve
 import {Authority} from '../../user/enum/Authority';
 import {AuthGuard} from '../../../guards/auth.guard';
 import {AuthorityGuard} from '../../../guards/authority.guard';
+import {ReportsCsvDto} from '../../reports/dto/reports-csv-dto';
 
 
 @ApiTags('ImageScanResultsIssues')
@@ -44,5 +45,25 @@ export class ImageScanResultsIssueController {
         ): Promise<{totalCount: number, list:ImageScanResultsIssueDto[]}> {
         return await this.imageScanResultsIssueService.getImageScanResultsIssuesByImageResultsId(imageScanResultsIssuesId,
             all, page, limit, sort, {scanDate, policyId});
+    }
+
+    @Get('/scan/issues/:imageResultsId/download')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.SUPER_ADMIN, Authority.ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 200,
+        schema: IMAGE_SCAN_RESULTS_ISSUE_RESPONSE_SCHEMA
+    })
+    async downloadImageScanResultsIssues(
+      @Param('imageResultsId') imageScanResultsIssuesId: number,
+      @Query('scanDate') scanDate: number,
+      @Query('all') all: number,
+      @Query('sort') sort: {field: string; direction: string; },
+      @Query('policyId') policyId?: number
+    ): Promise<ReportsCsvDto> {
+        const csv = await this.imageScanResultsIssueService.buildImageScanResultsIssuesByImageResultsIdCsv(imageScanResultsIssuesId, all, scanDate, policyId, sort);
+
+
+
     }
 }
