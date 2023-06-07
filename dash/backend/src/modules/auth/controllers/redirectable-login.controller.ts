@@ -3,7 +3,6 @@ import * as qs from 'qs';
 import { ExternalAuthConfigService } from '../services/external-auth-config.service';
 import { OAuth2Factory } from '../factories/OAuth2Factory';
 import { UserProfileDto } from '../../user/dto/user-profile-dto';
-import { UserProfileService } from '../../user/services/user-profile.service';
 import { JwtUtilityService } from '../services/jwt-utility.service';
 import {ApiExcludeEndpoint} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -13,7 +12,6 @@ export class RedirectableLoginController {
 
   constructor(private readonly oAuth2Factory: OAuth2Factory,
               private readonly externalAuthConfigService: ExternalAuthConfigService,
-              private readonly userProfileService: UserProfileService,
               private readonly jwtUtility: JwtUtilityService,
               private readonly configService: ConfigService) {}
 
