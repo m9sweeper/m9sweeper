@@ -1,4 +1,5 @@
 import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {IScanner} from '../../../core/entities/IScanner';
 
 export class CustomValidators {
 
@@ -45,6 +46,20 @@ export class CustomValidators {
       const formattedInputDate = `${inputDate.getMonth() + 1}-${inputDate.getDate()}-${inputDate.getFullYear()}`;
       if (formattedToday > formattedInputDate) {
         return {inputDateIsToday: true};
+      }
+      return null;
+    };
+  }
+
+  static validateActivePolicyScanners(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const policyActive = control.get('enabled');
+      const scanners = control.get('scanners');
+      // if a policy is marked as active, ensure it has at least one active scanner
+      if (policyActive.value && !scanners.value.reduce((hasActiveScanner: boolean, scanner: IScanner) => {
+        return scanner.enabled || hasActiveScanner;
+      }, false)) {
+        return {activePolicyHasActiveScanner: true};
       }
       return null;
     };
