@@ -166,9 +166,9 @@ public class ScanRunner {
                                 .data(o.getExtraData())
                 ).collect(Collectors.toList()))).collect(Collectors.toList());
 
-        saveScanResults(imageTrawlerResultDtos);
-
-        if (!scanConfig.getImage().getHash().equals(newImageHash) && scanConfig.getImage().getHash() != null) {
+        // If the image hash is different than the one stored in the DB, and it is not a temporary ID, give the scan an error result
+        // Otherwise save the scan results normally
+        if (!scanConfig.getImage().getHash().equals(newImageHash) && (scanConfig.getImage().getHash() != null && !scanConfig.getImage().getHash().startsWith("TMP_"))) {
             String errorSummary = "Image ID does not match most recent image pulled from Trawler";
             if (scanConfig.getImage().getTag().contains("latest")) {
                 errorSummary = errorSummary.concat(". Note, using the latest tag for images is not recommended and can cause undesirable behavior");
@@ -185,6 +185,8 @@ public class ScanRunner {
             List<ImageTrawlerResultDto> outdatedImageIdArray = new ArrayList<ImageTrawlerResultDto>();
             outdatedImageIdArray.add(outdatedImageIdResult);
             saveScanResults(outdatedImageIdArray);
+        } else {
+            saveScanResults(imageTrawlerResultDtos);
         }
     }
 

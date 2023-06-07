@@ -17,6 +17,7 @@
   "dependencies": {
     "@ajsf/core": "~0.7.0",
     "@ajsf/material": "~0.7.0",
+
     "@angular/animations": "^15.2.8",
     "@angular/cdk": "^15.2.8",
     "@angular/common": "^15.2.8",
@@ -26,6 +27,8 @@
     "@angular/platform-browser": "^15.2.8",
     "@angular/platform-browser-dynamic": "^15.2.8",
     "@angular/router": "^15.2.8",
+
+
     "@ctrl/ngx-codemirror": "^4.1.1",
     "@fortawesome/angular-fontawesome": "^0.10.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
