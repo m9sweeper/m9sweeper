@@ -11,6 +11,25 @@ spec:
   template:
     spec:
       serviceAccount: m9sweeper
+      initContainers:
+        - name: wait-for-postgresql
+          image: postgres:11.10
+          imagePullPolicy: IfNotPresent
+          command:
+            - 'sh'
+            - '-c'
+            - 'until pg_isready; do echo "Waiting for database...""; sleep 2; done;'
+          env:
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dash.fullname" . }}-secrets
+                  key: DATABASE_CONNECTION_HOST
+            - name: PGPORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dash.fullname" . }}-secrets
+                  key: DATABASE_CONNECTION_PORT
       containers:
       - name: {{ .Chart.Name }}-init
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
