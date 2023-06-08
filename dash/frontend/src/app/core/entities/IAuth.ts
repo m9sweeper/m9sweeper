@@ -48,6 +48,7 @@ export interface IOAUTHConfigStrategy {
   authorizationUri: string;
   redirectUri: string;
   scopes: string[];
+  allowedDomains: string[];
 }
 
 export interface ILDAPConfigStrategy {
