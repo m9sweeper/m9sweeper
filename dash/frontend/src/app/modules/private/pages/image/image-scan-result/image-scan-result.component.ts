@@ -316,6 +316,18 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
       {state: {cve, onlyRunning: this.dataSource.runningInCluster, imageName: this.dataSource.name}});
   }
 
+  downloadCsv() {
+    this.imageScanResultIssueService.getImageScanResultsIssuesCsv(this.scanResultsIssuesId,
+      this.currentlySelectedDate,
+      false,
+      this.issueSort,
+      this.policyIdFilter)
+      .pipe(take(1))
+      .subscribe({
+        next: csvDto => console.log(csvDto)
+      });
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

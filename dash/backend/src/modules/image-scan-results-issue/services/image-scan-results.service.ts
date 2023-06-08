@@ -36,11 +36,11 @@ export class ImageScanResultsIssueService {
         }
     }
 
-    async buildImageScanResultsIssuesByImageResultsIdCsv(id: number,
-                                                         all: number,
-                                                         scanDate: number,
-                                                         policyId: number,
-                                                         sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
+    async buildImageScanResultsIssuesCsv(id: number,
+                                         all: number,
+                                         scanDate: number,
+                                         policyId: number,
+                                         sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
     ):
       Promise<ReportsCsvDto> {
         const headers = ['Package', 'Compliant', 'Severity', 'Title', 'Type', 'AVD Link', 'Scanner', 'Installed', 'Fixed Version'];
@@ -51,7 +51,7 @@ export class ImageScanResultsIssueService {
         let page = 0;
         let more = true;
         while (more) {
-            const issueBatch = await this.getImageScanResultsIssuesByImageResultsId(id, all, page, limit, sort, options);
+            const issueBatch = await this.getImageScanResultsIssuesByImageResultsId(id, all, page, limit, sort, { scanDate, policyId });
             for (const issue of issueBatch.list) {
                 lines.push(this.csvService.buildLine([
                   issue.packageName || 'N/A',

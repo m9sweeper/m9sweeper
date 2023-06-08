@@ -61,7 +61,7 @@ export class ImageScanResultsIssueController {
       @Query('sort') sort: {field: string; direction: string; },
       @Query('policyId') policyId?: number
     ): Promise<ReportsCsvDto> {
-        const csv = await this.imageScanResultsIssueService.buildImageScanResultsIssuesByImageResultsIdCsv(imageScanResultsIssuesId, all, scanDate, policyId, sort);
+        return await this.imageScanResultsIssueService.buildImageScanResultsIssuesCsv(imageScanResultsIssuesId, all, scanDate, policyId, sort);
 
 
 

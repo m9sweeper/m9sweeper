@@ -133,6 +133,9 @@
         <div>
           <span class="subnav-title">Issues</span>
         </div>
+        <div class="ml-a">
+          <button mat-button mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
+        </div>
       </mat-toolbar>
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="imageScanResultIssueData" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
