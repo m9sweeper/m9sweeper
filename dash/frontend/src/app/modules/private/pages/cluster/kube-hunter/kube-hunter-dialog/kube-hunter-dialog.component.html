@@ -88,6 +88,7 @@
 
   <mat-step>
     <ng-template matStepLabel>Getting Results</ng-template>
+    <div class="modal-content-left-align-no-margin">
     <h3> After running the CLI command, kube-hunter will start its testing. If you have a smaller cluster, kube-hunter will
       take a shorter length of time to complete, but if you have a larger cluster, the report will not be ready for quite
       some time. Feel free to check back whenever you remember.</h3>
@@ -95,6 +96,7 @@
       <div class="col-xs-12 text-center">
         <button mat-raised-button (click)="viewReport(report.id)">View Report</button>
       </div>
+    </div>
     </div>
   </mat-step>
 
