@@ -56,9 +56,7 @@ export class CustomValidators {
       const policyActive = control.get('enabled');
       const scanners = control.get('scanners');
       // if a policy is marked as active, ensure it has at least one active scanner
-      if (policyActive.value && !scanners.value.reduce((hasActiveScanner: boolean, scanner: IScanner) => {
-        return scanner.enabled || hasActiveScanner;
-      }, false)) {
+      if (policyActive.value && !scanners.value.some((scanner: IScanner) => scanner.enabled)) {
         return {activePolicyHasActiveScanner: true};
       }
       return null;

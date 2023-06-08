@@ -96,13 +96,7 @@ export class PolicyService {
 
     validateActivePolicyScanners(policy: PolicyDto, scanners: ScannerDto[]): boolean {
         // Checks if an active policy has at least one active scanner
-        if (policy.enabled) {
-            return scanners.reduce((hasActiveScanner: boolean, scanner) => {
-                return scanner?.enabled || hasActiveScanner;
-            }, false);
-        } else {
-            return true;
-        }
+        return !policy.enabled || scanners.some((scanner) => scanner.enabled);
     }
 }
 
