@@ -55,6 +55,8 @@
             <button [disabled]="!userForm.valid" mat-raised-button type="button" (click)="onSubmit()" >
               {{ isEdit ? 'Save' : 'Create'}}
             </button>
+            &nbsp;
+            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
           </mat-card-content>
         </mat-card>
       </div>

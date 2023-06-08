@@ -29,6 +29,9 @@
             <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" (click)="onSubmit()" class="create-api-button">
               {{ isEdit ? 'Update' : 'Create'}}
             </button>
+            &nbsp;
+            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+
           </mat-card-content>
         </mat-card>
       </div>
