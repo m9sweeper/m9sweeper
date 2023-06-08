@@ -16,6 +16,8 @@ import {MatSelectChange} from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {CsvService} from '../../../../../core/services/csv.service';
 
 
 @Component({
@@ -89,6 +91,8 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     private imageService: ImageService,
     private imageScanResultIssueService: ImageScanResultIssueService,
     public dialog: MatDialog,
+    protected loader: NgxUiLoaderService,
+    protected csvService: CsvService,
     private router: Router) {
     this.imageId = +this.route.snapshot.paramMap.get('imageId');
   }
@@ -313,14 +317,24 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   downloadCsv() {
-    this.imageScanResultIssueService.getImageScanResultsIssuesCsv(this.scanResultsIssuesId,
+    this.loader.startLoader('scan-issue-csv-download');
+    this.imageScanResultIssueService.getImageScanResultsIssuesCsv(
+      this.imageId,
+      this.scanResultsIssuesId,
       this.currentlySelectedDate,
       false,
       this.issueSort,
       this.policyIdFilter)
       .pipe(take(1))
       .subscribe({
-        next: csvDto => console.log(csvDto)
+        next: csvDto => {
+          this.csvService.downloadCsvFile(csvDto.data?.csv, csvDto.data?.filename);
+        },
+        error: () => {
+          this.alertService.danger('Error downloading report');
+          this.loader.stopLoader('scan-issue-csv-download');
+        },
+        complete: () => this.loader.stopLoader('scan-issue-csv-download')
       });
   }
 

@@ -16,6 +16,7 @@ import {Authority} from '../../user/enum/Authority';
 import {AuthGuard} from '../../../guards/auth.guard';
 import {AuthorityGuard} from '../../../guards/authority.guard';
 import {ReportsCsvDto} from '../../reports/dto/reports-csv-dto';
+import {ImageService} from '../../image/services/image.service';
 
 
 @ApiTags('ImageScanResultsIssues')
@@ -25,6 +26,7 @@ import {ReportsCsvDto} from '../../reports/dto/reports-csv-dto';
 export class ImageScanResultsIssueController {
     constructor(@Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
                 private readonly imageScanResultsIssueService: ImageScanResultsIssueService,
+                protected readonly imageService: ImageService
     ){}
 
     @Get('/scan/issues/:imageResultsId')
@@ -56,14 +58,14 @@ export class ImageScanResultsIssueController {
     })
     async downloadImageScanResultsIssues(
       @Param('imageResultsId') imageScanResultsIssuesId: number,
+      @Query('imageId') imageId: number,
       @Query('scanDate') scanDate: number,
       @Query('all') all: number,
       @Query('sort') sort: {field: string; direction: string; },
       @Query('policyId') policyId?: number
     ): Promise<ReportsCsvDto> {
-        return await this.imageScanResultsIssueService.buildImageScanResultsIssuesCsv(imageScanResultsIssuesId, all, scanDate, policyId, sort);
-
-
-
+        const image = await this.imageService.getImageById(imageId);
+        const imageName = `${image?.name}:${image?.tag}`;
+        return await this.imageScanResultsIssueService.buildImageScanResultsIssuesCsv(imageName, imageScanResultsIssuesId, all, scanDate, policyId, sort);
     }
 }

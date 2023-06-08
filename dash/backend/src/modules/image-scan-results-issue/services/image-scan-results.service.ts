@@ -3,12 +3,15 @@ import { ImageScanResultsIssueDto } from '../dto/image-scan-results-issue-dto';
 import { ImageScanResultsIssueDao } from '../dao/image-scan-results-issue.dao';
 import {CsvService} from '../../shared/services/csv.service';
 import {ReportsCsvDto} from '../../reports/dto/reports-csv-dto';
+import {format} from 'date-fns';
+import {UtilitiesService} from '../../shared/services/utilities.service';
 
 @Injectable()
 export class ImageScanResultsIssueService {
     constructor(
       private readonly imageScanResultsIssueDao: ImageScanResultsIssueDao,
-      protected readonly csvService: CsvService
+      protected readonly csvService: CsvService,
+      protected readonly utilityService: UtilitiesService
                  ){}
     async getImageScanResultsIssuesByImageResultsId(id: number,
                                                     all: number,
@@ -36,7 +39,8 @@ export class ImageScanResultsIssueService {
         }
     }
 
-    async buildImageScanResultsIssuesCsv(id: number,
+    async buildImageScanResultsIssuesCsv(imageName: string,
+                                         id: number,
                                          all: number,
                                          scanDate: number,
                                          policyId: number,
@@ -70,15 +74,18 @@ export class ImageScanResultsIssueService {
             more = issueBatch.totalCount > seen;
         }
 
-        // @TODO: add generated and scan data lines
+        // Add scan date and file gerneation stamps at end.
+        // 'P ppp' format is: mm/dd/yyyy h:mm:ss GMT-X
+        const prettyScanDate = format(scanDate, 'P ppp');
+        const prettyDate = format(Date.now(), 'P ppp');
+        lines.push('', `Scanned ${prettyScanDate}`, `Generated: ${prettyDate}`);
 
         const csv =  lines.join('\n');
 
-        // @TODO: generate filename
-        const filename = 'test_name.csv';
+        const filenameDateSuffix = format(scanDate, 'yyyy-MM-dd');
+        const filename = this.utilityService.cleanFileName(`${imageName}_${filenameDateSuffix}.csv`);
 
         return { filename, csv };
-
     }
 
     async getAllImageScanResults(imageId: number, page: number, limit: number): Promise<ImageScanResultsIssueDto[]> {

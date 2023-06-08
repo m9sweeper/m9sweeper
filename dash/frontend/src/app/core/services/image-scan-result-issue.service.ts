@@ -36,10 +36,11 @@ export class ImageScanResultIssueService {
     return this.httpClient.get(url, { params });
   }
 
-  getImageScanResultsIssuesCsv(imageScanResultsId: number, scanDate: number, all: boolean,
+  getImageScanResultsIssuesCsv(imageId: number, imageScanResultsId: number, scanDate: number, all: boolean,
                                sort: MatSort, policyId: number): Observable<IServerResponse<ReportsCsvDto>> {
     const url = `/api/images/scan/issues/${imageScanResultsId}/download`;
     const params = new HttpParams()
+      .set('imageId', String(imageId))
       .set('scanDate', String(scanDate))
       .set('sort[field]', sort.active)
       .set('sort[direction]', sort.direction)
