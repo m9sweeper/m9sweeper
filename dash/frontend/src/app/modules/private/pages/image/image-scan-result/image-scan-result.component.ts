@@ -6,7 +6,6 @@ import {ImageScanResultIssueService} from '../../../../../core/services/image-sc
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IImage, IImageScanData} from '../../../../../core/entities/IImage';
 import {IImageScanResultIssue} from '../../../../../core/entities/IImageScanResultIssue';
-import {FormatDate} from '../../../../shared/format-date/format-date';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
@@ -62,14 +61,11 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   /** Initialized when filtering vulnerabilities by a specific policy ID, otherwise passed
    * as undefined to get all vulnerabilities */
   policyIdFilter: number;
-  imageScanResultsId: number;
-  formatData = FormatDate.formatLastScannedDate;
   scanButtonText: string;
   displayComplianceAndIssueTable = true;
   imageScanDates: Array<{created_at: number}>;
   currentlySelectedDate: number;
   scanDateDefault: FormControl;
-  formatDate = FormatDate;
   imageNamespaces: string[];
   @ViewChild('complianceSort') sort: MatSort;
   @ViewChild('issueSort') issueSort: MatSort;
