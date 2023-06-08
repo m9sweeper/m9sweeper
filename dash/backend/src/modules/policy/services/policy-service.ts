@@ -2,7 +2,8 @@ import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {PoliciesByClusterIdDto, PoliciesIdByCluster, PolicyDto} from '../dto/policy-dto';
 import { PolicyDao } from '../dao/policy-dao';
 import { UserProfileDto } from 'src/modules/user/dto/user-profile-dto';
-import {AuditLogService} from "../../audit-log/services/audit-log.service";
+import { AuditLogService } from '../../audit-log/services/audit-log.service';
+import { ScannerDto } from '../../scanner/dto/scanner-dto';
 
 @Injectable()
 export class PolicyService {
@@ -93,5 +94,9 @@ export class PolicyService {
         return await this.auditLogService.calculateMetaData(previous, updated, 'Policy');
     }
 
+    validateActivePolicyScanners(policy: PolicyDto, scanners: ScannerDto[]): boolean {
+        // Checks if an active policy has at least one active scanner
+        return !policy.enabled || scanners.some((scanner) => scanner.enabled);
+    }
 }
 
