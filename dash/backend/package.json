@@ -36,7 +36,8 @@
     "cli:users:init": "nestjs-command users:init",
     "cli:populate:kubernetes-history": "nestjs-command populate:kubernetes-history",
     "cli:cluster:seed": "nestjs-command cluster:seed",
-    "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all"
+    "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all",
+    "cli:database:status": "nestjs-command database:status"
   },
   "dependencies": {
     "@kubernetes/client-node": "^0.12.0",

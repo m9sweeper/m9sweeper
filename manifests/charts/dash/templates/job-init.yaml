@@ -13,7 +13,7 @@ spec:
       serviceAccount: m9sweeper
       initContainers:
         - name: wait-for-postgresql
-          image: postgres:11.10
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: IfNotPresent
           command:
             - 'sh'
