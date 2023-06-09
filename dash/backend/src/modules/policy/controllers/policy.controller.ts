@@ -70,6 +70,11 @@ export class PolicyController {
     })
     @UseInterceptors(AuditLogInterceptor)
     async createPolicy(@Body() policyData: PolicyScannerDto): Promise<PolicyDto> {
+        if (!this.policyService.validateActivePolicyScanners(policyData.policy, policyData.scanners)) {
+            throw new HttpException({status: HttpStatus.UNPROCESSABLE_ENTITY,
+                message: 'Active policies require at least one active scanner'},
+                HttpStatus.UNPROCESSABLE_ENTITY)
+        }
         const createdPolicy: PolicyDto = await this.policyService.createPolicy(policyData.policy);
         createdPolicy.metadata = await this.policyService.calculatePolicyMetadata(null, createdPolicy);
         if (createdPolicy) {
@@ -102,6 +107,11 @@ export class PolicyController {
     })
     @UseInterceptors(AuditLogInterceptor)
     async updatePolicy(@Body() policyData: PolicyScannerDto, @Param('policyId') policyId: number): Promise<PolicyDto> {
+        if (!this.policyService.validateActivePolicyScanners(policyData.policy, policyData.scanners)) {
+            throw new HttpException({status: HttpStatus.UNPROCESSABLE_ENTITY,
+                message: 'Active policies require at least one active scanner'},
+                HttpStatus.UNPROCESSABLE_ENTITY)
+        }
         const currentPolicy = await this.getPolicyById(policyId);
 
         if (policyData.policy.rescanEnabled == false) {

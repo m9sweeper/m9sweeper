@@ -16,7 +16,6 @@ import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
-import {MatOptionSelectionChange} from '@angular/material/core';
 
 @Component({
   selector: 'app-policy-create',
@@ -30,7 +29,6 @@ export class PolicyCreateComponent implements OnInit {
   checkIfEdit: boolean;
   checkboxDefault = true;
   policyId: number;
-  allScanners = [];
   dataSource: MatTableDataSource<IScanner>;
   displayedColumns: string[] = ['enabled', 'required', 'name', 'description', 'type', 'actions'];
   scannerData: ScannerData[] = new Array();
@@ -67,10 +65,11 @@ export class PolicyCreateComponent implements OnInit {
       rescan_grace_period: ['', Validators.pattern(/^\d+$/)],
       tempExceptionEnabled: ['', Validators.required],
       rescanEnabled: ['', Validators.required],
-      enabled: ['', Validators.required],
+      enabled: [true, Validators.required],
       enforcement: ['', [Validators.required]],
-      clusters: ['', [Validators.required]]
-    });
+      clusters: ['', [Validators.required]],
+      scanners: [[]],
+    }, {validators: [CustomValidators.validateActivePolicyScanners()]});
 
     if (this.checkIfEdit) {
       console.log('policy name: ', this.policyService);
@@ -147,7 +146,8 @@ export class PolicyCreateComponent implements OnInit {
     this.dataSource = null;
     this.scannerService.getAllScannersByPolicyId(this.policyId).subscribe((result: IServerResponse<IScanner[]>) => {
       if (result.data) {
-        this.allScanners = result.data;
+        this.policyForm.controls.scanners.setValue(result.data);
+        this.policyForm.controls.scanners.updateValueAndValidity();
         this.dataSource = new MatTableDataSource(result.data);
         this.dataSource.sort = this.sort;
       }
@@ -159,10 +159,8 @@ export class PolicyCreateComponent implements OnInit {
     const clusters = policy.clusters.includes('all') ? [] : policy.clusters;
     policy.relevantForAllClusters = policy.clusters.includes('all') ? true : false;
     delete policy.clusters;
-    // const createPolicyData = {
-    //   ...this.policyForm.value,
-    //   ...{scannerIds: this.checkIfEdit ? this.currentScannerData : this.scannerData}
-    // };
+    const scanners = policy.scanners;
+    delete policy.scanners;
 
     policy.name = policy.name.trim();
     // Sending empty strings will fail
@@ -172,7 +170,7 @@ export class PolicyCreateComponent implements OnInit {
 
     const policyCreateData = {
       policy,
-      scanners: this.allScanners,
+      scanners,
       clusters
     };
 
@@ -208,8 +206,9 @@ export class PolicyCreateComponent implements OnInit {
         if (this.policyId) {
           this.getAllScannersByPolicyId();
         } else {
-          this.allScanners.push(result.value);
-          this.dataSource = new MatTableDataSource(this.allScanners);
+          this.policyForm.controls.scanners.value.push(result.value);
+          this.policyForm.controls.scanners.updateValueAndValidity();
+          this.dataSource = new MatTableDataSource(this.policyForm.controls.scanners.value);
         }
       }
     });
@@ -239,8 +238,9 @@ export class PolicyCreateComponent implements OnInit {
         if (this.checkIfEdit) {
           this.getAllScannersByPolicyId();
         } else {
-          this.allScanners[index] = result.value;
-          this.dataSource = new MatTableDataSource(this.allScanners);
+          this.policyForm.controls.scanners.value[index] = result.value;
+          this.policyForm.controls.scanners.updateValueAndValidity();
+          this.dataSource = new MatTableDataSource<IScanner>(this.policyForm.controls.scanners.value);
           this.dataSource.sort = this.sort;
         }
       }
@@ -259,8 +259,9 @@ export class PolicyCreateComponent implements OnInit {
         if (this.checkIfEdit){
           this.deleteScannerById(id);
         } else {
-          this.allScanners.splice(index, 1);
-          this.dataSource = new MatTableDataSource(this.allScanners);
+          this.policyForm.controls.scanners.value.splice(index, 1);
+          this.policyForm.controls.scanners.updateValueAndValidity();
+          this.dataSource = new MatTableDataSource<IScanner>(this.policyForm.controls.scanners.value);
           this.dataSource.sort = this.sort;
         }
       }
@@ -297,7 +298,6 @@ export class PolicyCreateComponent implements OnInit {
         this.relevantForSpecificClusters = true;
       }
     }
-    // console.log($event.source.value);
   }
 
   private updateTempExceptionEnabled(newGracePeriod: number)  {
@@ -317,5 +317,4 @@ export class PolicyCreateComponent implements OnInit {
       this.policyForm.controls.rescanEnabled.setValue(false);
     }
   }
-
 }

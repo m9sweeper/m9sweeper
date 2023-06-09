@@ -3,7 +3,6 @@ import * as qs from 'qs';
 import { ExternalAuthConfigService } from '../services/external-auth-config.service';
 import { OAuth2Factory } from '../factories/OAuth2Factory';
 import { UserProfileDto } from '../../user/dto/user-profile-dto';
-import { UserProfileService } from '../../user/services/user-profile.service';
 import { JwtUtilityService } from '../services/jwt-utility.service';
 import {ApiExcludeEndpoint} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -13,7 +12,6 @@ export class RedirectableLoginController {
 
   constructor(private readonly oAuth2Factory: OAuth2Factory,
               private readonly externalAuthConfigService: ExternalAuthConfigService,
-              private readonly userProfileService: UserProfileService,
               private readonly jwtUtility: JwtUtilityService,
               private readonly configService: ConfigService) {}
 
@@ -66,13 +64,8 @@ export class RedirectableLoginController {
       const authProviderConfig = await this.externalAuthConfigService.loadById(providerState);
       if (authProviderConfig) {
         const oAuth2Service = this.oAuth2Factory.getInstance(authProviderConfig);
-        const externalUserData: UserProfileDto = await oAuth2Service.getOAuthUserData(accessCode);
+        const user: UserProfileDto = await oAuth2Service.getOAuthUserData(accessCode);
 
-        const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(externalUserData.email);
-        if(users && Array.isArray(users) && !users[0].isActive) {
-          throw new Error('This user is not active.');
-        }
-        const user: UserProfileDto = users ? users.pop() : await this.userProfileService.createUser(externalUserData);
         // Delete the user's password for security. We should never return a password to the frontend.
         delete user.password;
 

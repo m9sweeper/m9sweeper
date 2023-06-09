@@ -13,6 +13,7 @@ export class OAuth2AuthStrategyConfig extends AuthStrategyConfig{
   authorizationUri: string;
   redirectUri:      string;
   scopes:           string[];
+  allowedDomains:   string[];
 }
 
 export class LDAPAuthStrategyConfig extends AuthStrategyConfig{

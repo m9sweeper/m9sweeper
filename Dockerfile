@@ -33,7 +33,6 @@ RUN rm -f node_modules/@nestjs-modules/mailer && rm -f node_modules/knexnest && 
 WORKDIR /usr/src/app/frontend
 COPY ./dash/frontend/package.json /usr/src/app/frontend
 COPY ./dash/frontend/package-lock.json /usr/src/app/frontend
-WORKDIR /usr/src/app/frontend/vendor
 COPY ./dash/frontend/vendor /usr/src/app/frontend/vendor
 RUN npm ci
 

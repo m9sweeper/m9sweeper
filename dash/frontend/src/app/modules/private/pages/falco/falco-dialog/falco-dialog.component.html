@@ -33,7 +33,7 @@ helm upgrade --install falco falcosecurity/falco \
   --set falco.tty=true \
   --set falco.json_output=true \
   --set falco.http_output.enabled=true \
-  --set-string falco.http_output.url='http://falcosidekick:2801/' \
+  --set-string falco.http_output.url='http://falco-falcosidekick:2801/' \
   --set falcosidekick.enabled=true \
   --set-string falcosidekick.config.webhook.address='{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}' \
   --set falcosidekick.config.webhook.checkcert=true \

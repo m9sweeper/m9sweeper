@@ -1,5 +1,15 @@
 import { Expose, Type} from 'class-transformer';
-import {IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, ValidateNested} from 'class-validator';
+import {
+    IsBoolean,
+    IsEnum,
+    IsLowercase,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    IsUrl,
+    ValidateNested
+} from 'class-validator';
 import { AuthenticationType } from '../enum/AuthenticationType';
 import {ApiProperty} from '@nestjs/swagger';
 import {ProviderType} from "../enum/ProviderType";
@@ -23,7 +33,13 @@ export class AzureOAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
 
     @IsNotEmpty()
     @IsString({each: true})
+    @IsLowercase({each: true})
     scopes:           string[];
+
+    @IsNotEmpty()
+    @IsString({each: true})
+    @IsLowercase({each: true})
+    allowedDomains: string[];
 }
 
 export class OAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
@@ -50,7 +66,13 @@ export class OAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
 
     @IsNotEmpty()
     @IsString({each: true})
+    @IsLowercase({each: true})
     scopes:           string[];
+
+    @IsNotEmpty()
+    @IsString({each: true})
+    @IsLowercase({each: true})
+    allowedDomains: string[];
 }
 
 export class LDAPAuthStrategyConfigDTO extends AuthStrategyConfigDTO {
