@@ -348,3 +348,12 @@ app-private {
 mat-form-field {
   width: 100%;
 }
+
+.padding-top-bot-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.next-button {
+  display: flex;
+  justify-content: flex-end;
+}
