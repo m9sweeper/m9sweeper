@@ -1,5 +1,5 @@
- <div class="create-cluster-form">
-  <form [formGroup]="createClusterForm" class="cluster-form" (ngSubmit)="onSubmit()">
+ <div class="modal-container-margin">
+  <form [formGroup]="createClusterForm" (ngSubmit)="onSubmit()">
     <div>
       <p>
         <mat-form-field appearance="fill">
@@ -14,7 +14,7 @@
         </mat-form-field>
       </p> -->
     </div>
-    <mat-form-field class="tag-chip-list" id="cluster-tags" style="display:none!important">
+    <mat-form-field  id="cluster-tags" style="display:none!important">
       <mat-chip-grid #chipGrid aria-label="List of Tags">
         <mat-chip-row *ngFor="let tag of displayedTags; index as i" [editable]="selectable"
                    (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
@@ -37,8 +37,9 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <div mat-dialog-actions>
+    <div class="modal-content-left-align-no-margin">
       <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+      &nbsp;
       <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
     </div>
   </form>
