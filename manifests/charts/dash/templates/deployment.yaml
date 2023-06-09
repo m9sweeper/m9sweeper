@@ -33,18 +33,13 @@ spec:
           command:
             - 'sh'
             - '-c'
-            - 'until pg_isready; do echo "Waiting for database...""; sleep 2; done;'
+            - 'until npm run cli:database:status; do echo "Will try again in 2 seconds..."; sleep 2; done;'
+          envFrom:
+            - secretRef:
+                name: {{ include "dash.fullname" . }}-secrets
           env:
-            - name: PGHOST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dash.fullname" . }}-secrets
-                  key: DATABASE_CONNECTION_HOST
-            - name: PGPORT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "dash.fullname" . }}-secrets
-                  key: DATABASE_CONNECTION_PORT
+            - name: CLI_PATH
+              value: ./cli.js
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
