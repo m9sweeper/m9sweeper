@@ -80,6 +80,9 @@ export class DockerRegistriesService {
     return await this.auditLogService.calculateMetaData(previous, updated, 'DockerRegistry');
   }
 
+  /** Will remove the sensitive properties (username, password, authDetails)
+   *  from a DockerRegistriesDto and return the clean version.
+   * */
   removeSensitiveInfo(registry: DockerRegistriesDto): DockerRegistriesDto {
     if (!!registry) {
       delete registry.username;
