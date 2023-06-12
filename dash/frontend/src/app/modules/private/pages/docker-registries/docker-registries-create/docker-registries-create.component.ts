@@ -84,20 +84,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
     ];
     if (this.data.isEdit) {
       this.loginRequired = this.data.dockerRegistry.loginRequired;
-      switch (this.data.dockerRegistry.authType) {
-        case (DockerRegistryAuthTypes.BASIC):
-          this.showBasicAuthFields = true;
-          break;
-        case (DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY):
-          this.showGcrAuthFields = true;
-          break;
-        case (DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY):
-          this.showAcrAuthFields = true;
-          break;
-        case (DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY):
-          this.showAzureAuthFields = true;
-          break;
-      }
+      this.handleHiddenFields({value: this.data.dockerRegistry.authType});
     }
   }
 
@@ -217,6 +204,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
         this.deactivateGcrAuth();
         break;
     }
+    this.createDockerRegistryForm.updateValueAndValidity();
   }
 
   deactivateBasicAuth() {
