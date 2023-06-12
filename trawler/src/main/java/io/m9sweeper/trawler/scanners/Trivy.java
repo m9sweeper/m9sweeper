@@ -117,6 +117,18 @@ public class Trivy implements Scanner {
 
             // Export the location of this file so that Trivy can utilize it
             trivyScanCommandBuilder.append("export GOOGLE_APPLICATION_CREDENTIALS='").append(gcrAuthFile.getAbsolutePath()).append("'; ");
+        } else if (registry.getAuthType().equals("AZCR")) {
+            // Azure Container Registry images are accessed with a service principal set up beforehand. Trawler only needs to
+            // export the Client ID, Secret, and Tenant ID of the service principal to allow Trivy to connect to it
+            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
+
+            String clientId = authDetails.get("azureClientId").toString();
+            String clientSecret = authDetails.get("azureClientSecret").toString();
+            String tenantId = authDetails.get("azureTenantId").toString();
+
+            trivyScanCommandBuilder.append("export AZURE_CLIENT_ID='").append(escapeXsi(clientId)).append("'; ");
+            trivyScanCommandBuilder.append("export AZURE_CLIENT_SECRET='").append(escapeXsi(clientSecret)).append("'; ");
+            trivyScanCommandBuilder.append("export AZURE_TENANT_ID='").append(escapeXsi(tenantId)).append("'; ");
         } else if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append("export TRIVY_USERNAME='").append(escapeXsi(registry.getUsername())).append("'; ");
             trivyScanCommandBuilder.append("export TRIVY_PASSWORD='").append(escapeXsi(registry.getPassword())).append("'; ");
@@ -139,6 +151,9 @@ public class Trivy implements Scanner {
 
         if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append(" unset TRIVY_USERNAME; unset TRIVY_PASSWORD;");
+        }
+        if (registry.getAuthType().equals("AZCR")) {
+            trivyScanCommandBuilder.append(" unset AZURE_CLIENT_ID; unset AZURE_CLIENT_SECRET; unset AZURE_TENANT_ID;");
         }
 
         if (TrawlerConfiguration.getInstance().getDebug()) {

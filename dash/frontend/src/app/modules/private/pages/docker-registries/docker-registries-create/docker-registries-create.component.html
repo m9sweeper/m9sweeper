@@ -91,6 +91,27 @@
             </mat-form-field>
           </p>
         </div>
+        <div *ngIf="showAzureAuthFields">
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Client ID</mat-label>
+              <input matInput placeholder="Client ID" type="text" formControlName="azureClientId">
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Client Secret</mat-label>
+              <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="azureClientSecret">
+              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Tenant ID</mat-label>
+              <input matInput placeholder="Tenant ID" type="text" formControlName="azureTenantId">
+            </mat-form-field>
+          </p>
+        </div>
         <p>
           <mat-form-field appearance="standard">
             <mat-label>Registry Authentication Type</mat-label>

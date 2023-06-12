@@ -11,6 +11,8 @@ export class DockerRegistryAuthTypePipe implements PipeTransform {
         return 'Google Container Registry';
       case (DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY):
         return 'Amazon Container Registry';
+      case (DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY):
+        return 'Azure Container Registry';
       default:
         return authType;
     }
