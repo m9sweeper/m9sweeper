@@ -30,11 +30,9 @@ export class DockerRegistriesService {
   }
 
   async getDockerRegistryById(id: number, removeSensitiveInfo = true): Promise<DockerRegistriesDto> {
-    const registry = await this.dockerRegistriesDao.getDockerRegistryById(id);
+    let registry = await this.dockerRegistriesDao.getDockerRegistryById(id);
     if (removeSensitiveInfo) {
-      delete registry.username;
-      delete registry.password;
-      delete registry.authDetails;
+      registry = this.removeSensitiveInfo(registry);
     }
     return registry;
   }
@@ -67,9 +65,7 @@ export class DockerRegistriesService {
 
     if (removeSensitiveInfo) {
       listData.map(registry => {
-        delete registry.username;
-        delete registry.password;
-        delete registry.authDetails;
+        this.removeSensitiveInfo(registry);
       });
     }
     return {totalCount: +totalCount, list: listData};
@@ -84,4 +80,16 @@ export class DockerRegistriesService {
     return await this.auditLogService.calculateMetaData(previous, updated, 'DockerRegistry');
   }
 
+  /** Will remove the sensitive properties (username, password, authDetails)
+   *  from a DockerRegistriesDto and return the clean version.
+   * */
+  removeSensitiveInfo(registry: DockerRegistriesDto): DockerRegistriesDto {
+    if (!!registry) {
+      delete registry.username;
+      delete registry.password;
+      delete registry.authDetails;
+    }
+
+    return registry;
+  }
 }
