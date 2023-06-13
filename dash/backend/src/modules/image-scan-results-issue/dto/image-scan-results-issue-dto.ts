@@ -91,6 +91,11 @@ export class ImageScanResultsIssueDto {
     @Expose({name: 'compliance_reason', toPlainOnly: true})
     complianceReason: string;
 
+    @IsString()
+    @IsOptional()
+    @Expose({name: 'vulnerability_desc_url', toPlainOnly: true})
+    vulnerabilityDescUrl
+
     scannerName: string;
 
     extraData: any;
