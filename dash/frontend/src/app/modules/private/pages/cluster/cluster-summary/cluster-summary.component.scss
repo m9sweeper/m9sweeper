@@ -7,12 +7,14 @@
   padding-top: 10px;
   font-weight: bold;
   text-align: center;
+  font-size: 14px;
+  margin-top: -16px;
 }
 
 .total {
   font-size: xx-large;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 10px;
 }
 
@@ -23,6 +25,10 @@
 .cluster-element {
   display: flex;
   margin-top: 15px;
+}
+
+.cluster-summary-card {
+  height: 80%;
 }
 
 .namespaces-table {
@@ -75,6 +81,8 @@
 .cluster-events {
   padding-top: 30px;
   max-height: 50%;
+  padding-right: 0 !important;
+  padding-left: 3px !important;
   position: sticky;
   position: -webkit-sticky; /* Safari */
   bottom: 0;
@@ -93,4 +101,17 @@
 
 .hide-scrollbar {
   overflow: hidden !important;
+}
+
+.hide-x-scrollbar {
+  overflow-x: hidden !important;
+}
+
+.container-margin {
+  margin: 0 !important;
+}
+
+.graph-row {
+  margin-top: -22px;
+  margin-bottom: -10px;
 }
