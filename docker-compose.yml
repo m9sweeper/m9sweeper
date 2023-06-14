@@ -1,0 +1,90 @@
+version: "3.9"
+
+volumes:
+  m9sweeperDbData:
+    driver: local
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-alpine
+    ports:
+      - '56729:5672'
+
+  postgres:
+    image: postgres:15.3-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: "m9sweeper"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '54329:5432'
+    volumes:
+      - m9sweeperDbData:/var/lib/postgresql/data
+
+  dash-init:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      SERVER_BASE_URL: "http://localhost:3000"
+      DATABASE_CONNECTION_HOST: "postgres"
+      DATABASE_CONNECTION_DATABASE: "m9sweeper"
+      DATABASE_CONNECTION_USERNAME: "postgres"
+      DATABASE_CONNECTION_PASSWORD: "postgres"
+      DATABASE_MIGRATION_ENABLED: 1
+
+
+  dash:
+    build: .
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+    environment:
+      SERVER_BASE_URL: "http://localhost:3000"
+      DATABASE_CONNECTION_HOST: "postgres"
+      DATABASE_CONNECTION_DATABASE: "m9sweeper"
+      DATABASE_CONNECTION_USERNAME: "postgres"
+      DATABASE_CONNECTION_PASSWORD: "postgres"
+      DATABASE_MIGRATION_ENABLED: 1
+      # Email
+      EMAIL_CONFIG_USE: "SMTP"
+      EMAIL_DEFAULT_SENDER_EMAIL: ""
+      EMAIL_SMTP_AUTH_USER: ""
+      EMAIL_SMTP_AUTH_PASSWORD: ""
+      EMAIL_SMTP_SECURE_CONNECTION: 1
+      EMAIL_SMTP_PORT: ""
+
+      # Rabbit mq
+      MSG_QUEUE_NAME_IMAGE_SCANNER: "trawler_queue"
+      RABBITMQ_HOSTNAME: "http://rabbitmq"
+      RABBITMQ_PORT: 56729
+      RABBITMQ_USERNAME: "guest"
+      RABBITMQ_PASSWORD: "guest"
+
+  trawler:
+    build: trawler
+    environment:
+      # TrawlerConfig
+      TRAWLER_PARALLEL_SCANNERS: 1
+      TRAWLER_RUN_MODE: rabbitmq
+      DEBUG: 0 # 0 for off, 1 for on
+      # Rabbit MQ Connection
+      RABBITMQ_HOSTNAME: "rabbitmq"
+      RABBITMQ_USERNAME: "guest"
+      RABBITMQ_PASSWORD: "guest"
+      # Dash Connection
+      M9SWEEPER_URL: "http://dash:3000"
+      M9SWEEPER_API_KEY: "123456"
+    depends_on:
+      - rabbitmq
+      - dash
+
+
+
+
+
