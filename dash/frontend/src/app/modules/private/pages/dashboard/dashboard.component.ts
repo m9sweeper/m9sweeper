@@ -41,6 +41,8 @@ export class DashboardComponent implements OnInit {
   isSmallDevice = false;
   isSmallSize: boolean;
   isAdmin: boolean;
+  leftNavWidth: number;
+
   constructor(
     private clusterService: ClusterService,
     private sharedSubscriptionService: SharedSubscriptionService,
@@ -141,7 +143,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openAddGroupDialog() {
-    this.menubarCollapse();
+    // this.menubarCollapse();
     const confirmDialog = this.dialog.open(ClusterGroupCreateComponent, {
       width: '520px',
       closeOnNavigation: true,
@@ -177,15 +179,22 @@ export class DashboardComponent implements OnInit {
     }
   }
   expand(){
-    if (this.isSmallSize) {
-      this.isSmallDevice = !this.isSmallDevice;
-      this.expandMenuBarForSmallDevice(this.width);
-    } else {
-      this.isExpanded = !this.isExpanded;
-      localStorage.setItem('expand', `${this.isExpanded}`);
-      this.screenSizeExpand(this.width);
+    // get the current left nav menu width
+    const leftNav = document.querySelector('.cluster-group-menu');
+    this.leftNavWidth = leftNav.clientWidth;
+    console.log ('leftNavWidth', this.leftNavWidth);
+
+    const x = document.getElementById('left-nav');
+    if (this.leftNavWidth === 300){
+       // document.getElementById('left-nav').style.width = '65px';
+       x.className += ' responsive';
+       // console.log ('x.classNAme' , x.className);
+    }else{
+      // document.getElementById('left-nav').style.width = '300px';
+      x.className = 'cluster-group-menu';
+      // console.log ('x.classNAme' , x.className);
     }
-    this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
+    // this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
   }
 
   expandMenuBarForSmallDevice(width: number){

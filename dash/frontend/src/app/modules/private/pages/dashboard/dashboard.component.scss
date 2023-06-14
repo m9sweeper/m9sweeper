@@ -1,153 +1,176 @@
-:root{
-  --dashboard-container-height: 981px;
-  --dashboard-container-width: 1000px;
-  --dashboard-navbar-menu-width: 300px;
-}
-
-div {
-  &.dashboard-container { // container with both left nav and the content
+// LARGE SCREEN: width >800px
+  div.cluster-group-menu {
+    height: auto;
+    //background-color: pink;
+    width: 300px;
+    background-color: #FFFFFF;
     display: flex;
-    flex-direction: row;
-    > div {
-      &.cluster-group-menu-small-device {
-        width: var(--dashboard-navbar-menu-width);
-        z-index: 99999;
-      }
-      &.cluster-group-menu { // left nav
-        width: calc(var(--dashboard-navbar-menu-width));
-        //height: var(--dashboard-container-height);
-        background-color: #FFFFFF;
-        display: flex;
-        // border-right: #b0aeaf 1px solid;
-        flex-direction: column;
-        div.create-cluster-group { // left nav 1)
-          margin:15px;
-          cursor: pointer;
-          height: 35px;
-
-            a{
-              font-size: 14px;
-              height:60px;
-              &:hover {
-                background-color: #e3dede;
-              }
-            }
-
-        }
-        div.cluster-item { // left nav 2)
-          flex: 4;
-          // overflow: hidden auto;
-          &::-webkit-scrollbar {
-           // width: 2.5px;
-          }
-          &::-webkit-scrollbar-track {
-            background: #f1f1f1;
-          }
-          &::-webkit-scrollbar-thumb {
-            background: #888;
-          }
-          &::-webkit-scrollbar-thumb:hover {
-            background: #555;
-          }
-
-            &.cluster-group-list-isExpand:last-child {
-              margin-bottom: 60px;
-            }
-            &.cluster-group-list-isNotExpand:last-child{
-              margin-bottom: 100px;
-            }
-            a {
-              height:60px;
-              background-color: #FFFFFF;
-              color: black;
-              display: block;
-              text-decoration: none;
-              &.cluster-group-name {
-                text-decoration: none;
-                font-size: 14px;
-              }
-              &:hover{
-                background-color: #F2F2F2;
-              }
-              &.active{
-                height: 45px;
-                vertical-align: baseline;
-                padding:10px;
-                background-color: #C7E0F4;
-                color: black;
-                &:hover{
-                  background-color: #b3d3f1;
-                  color: black;
-                }
-              }
-              span.cluster-group-name-full {
-                //padding-left: 10px;
-                //vertical-align: text-bottom;
-
-              }
-              span.cluster-group-name-short {
-                // border-radius: 3px;
-                width: 15px;
-                height: 15px;
-                padding:15px;
-                text-align: center;
-                color: white;
-                text-transform: uppercase;
-                font-size: 10px;
-                vertical-align: text-bottom;
-                margin: 4px;
-              }
-            }
-
-        }
-        div.organization-settings { // left nav 3)
-
-          bottom: 0;
-          position: inherit;
-          //width: calc(var(--dashboard-navbar-menu-width) + 10px);
-          display: flex;
-          align-items: center;
-          //justify-content: flex-end;
-          //width: 100%;
-            &.expanded {
-              flex-direction: row;
-            }
-            &.closed {
-              flex-direction: column;
-            }
-
-            a {
-              text-decoration: none;
-              font-size: 1vw;
-            }
-
-
-
-            .expanded-item {
-              display: flex;
-              flex-direction: row;
-              width: 100%;
-              &:hover {
-                background-color: #F2F2F2;
-              }
-            }
-
-        }
+    flex-direction: column;
+  }
+  div.create-cluster-group { // left nav 1)
+    cursor: pointer;
+    height: 60px;
+    a{
+      font-size: 14px;
+      height:60px;
+      &:hover {
+        background-color: #e3dede;
       }
     }
   }
+  .mat-icon{ // for mat-icon in dashboard
+    padding-left: 10px;
+    margin-right: 25px;
+    margin-left: 5px;
+    height: 40px;
+  }
+  .material-icons{
+    line-height:2.5;
+  }
+  span.plus-button{
 
-  > div { // main content
-    &.cluster-dashboard-small-device {
-      position: fixed;
-      opacity: 0.5;
-      width: 100%;
-      // height: var(--dashboard-container-height);
-      display: flex;
+  }
+  span.add-cluster-group{
+    height: 35px;
+  }
+  div.cluster-item { // left nav 2)
+    height: 35px;
+    flex: 4;
+    a{
+      font-size: 14px;
+      height:60px;
+      &:hover {
+        background-color: #e3dede;
+      }
     }
-    &.cluster-dashboard {
-      width: 100%;
+  }
+  span.cluster-group-name-full {
+    padding-left: 10px;
+    vertical-align: text-bottom;
+  }
+  span.cluster-group-name-short {
+    width: 15px;
+    height: 60px;
+    padding:15px;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    font-size: 10px;
+    vertical-align: text-bottom;
+    margin: 4px;
+  }
+
+  div.cluster-group-name {
+    text-decoration: none;
+    font-size: 14px;
+  }
+  div.organization-settings { // left nav 3)
+    flex-direction: row;
+  }
+  div.expanded-item {
+    display: flex;
+    flex-direction: row;
+    background-color: green;
+
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+  div.collapse-item {
+    flex-direction: column;
+    display: none;
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+  div.cluster-dashboard {
+    width: calc(100% - 300px);
+    flex-direction: column;
+  }
+
+
+
+// SMALL SCREEN: width <800px
+@media screen and (max-width: 800px) {
+  div.cluster-group-menu {
+    background-color: yellow;
+    width: 65px;
+  }
+  span.add-cluster-group{
+    display:none;
+  }
+
+  div.cluster-item { // left nav 2)
+    flex: 1;
+  }
+  span.cluster-group-name-full {
+    display:none;
+  }
+  div.organization-settings { // left nav 3)
+    flex-direction: column;
+  }
+
+  div.expanded-item{
+    //display: flex;
+    flex-direction: column;
+    display:none;
+    //width: 100%;
+
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+  div.collapse-item{
+    display: flex;
+    flex-direction: column;
+    //width: 100%;
+    background-color: lightskyblue;
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+
+  div.cluster-dashboard {
+    width: calc(100% - 65px);
+    flex-direction: column;
+  }
+}
+
+
+// RESPONSIVE - work for large screen to collapse or expand
+  div.cluster-group-menu.responsive {
+    background-color: orange;
+    width: 65px;
+    span.add-cluster-group{
+      display:none;
+    }
+    div.organization-settings { // left nav 3)
+      flex-direction: column;
+      background-color: orangered;
+    }
+
+    div.expanded-item {
+      flex-direction: column;
+      display: none;
+      background-color: red;
+      &:hover {
+        background-color: #F2F2F2;
+      }
+    }
+    div.collapse-item {
+      display: flex;
+      flex-direction: column;
+      //width: 100%;
+      background-color: palegreen;
+
+      &:hover {
+        background-color: #F2F2F2;
+      }
+    }
+    div.cluster-dashboard {
+      width: calc(100% - 65px);
       flex-direction: column;
     }
   }
-}
+
+
