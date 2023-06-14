@@ -31,7 +31,7 @@ export class ChartSizeService {
     const screenWidth = this.getScreenWidth(dashboard);
     let chartWidth: number;
     if (screenWidth >= breakpointLarge) {
-      chartWidth = Math.floor(screenWidth / 3) - 15;
+      chartWidth = Math.floor(screenWidth / 3) - 40;
     } else if (screenWidth >= breakpointMedium) {
       chartWidth = Math.floor(screenWidth / 2) - 20;
     } else {
