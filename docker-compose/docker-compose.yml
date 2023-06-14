@@ -1,0 +1,110 @@
+version: "3.9"
+
+volumes:
+  m9sweeperDbData:
+    driver: local
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-alpine
+    ports:
+      - '56729:5672'
+
+  postgres:
+    image: postgres:15.3-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: "${DATABASE_NAME}"
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+    ports:
+      - '54329:5432'
+    volumes:
+      - m9sweeperDbData:/var/lib/postgresql/data
+
+  dash-users-init:
+    build: ..
+    image: m9sweeper-dash
+    entrypoint: "npm run cli:users:init"
+    depends_on:
+      postgres:
+        condition: service_started
+      dash:
+        condition: service_healthy
+    environment:
+      SERVER_BASE_URL: "http://localhost:3000"
+      DATABASE_CONNECTION_HOST: "postgres"
+      DATABASE_CONNECTION_DATABASE: "${DATABASE_NAME}"
+      DATABASE_CONNECTION_USERNAME: "${DATABASE_USER}"
+      DATABASE_CONNECTION_PASSWORD: "${DATABASE_PASSWORD}"
+      DATABASE_MIGRATION_ENABLED: 1
+      TRAWLER_API_KEY: "${TRAWLER_API_KEY}"
+      FALCO_API_KEY: "${FALCO_API_KEY}"
+      KUBE_HUNTER_API_KEY: "${KUBE_HUNTER_API_KEY}"
+      KUBE_BENCH_API_KEY: "${KUBE_BENCH_API_KEY}"
+      SUPER_ADMIN_EMAIL: "${SUPER_ADMIN_EMAIL}"
+      SUPER_ADMIN_PASSWORD: "${SUPER_ADMIN_PASSWORD}"
+      CLI_PATH: "./cli.js"
+
+  dash:
+    build: ..
+    image: m9sweeper-dash
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
+      interval: 30s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
+    environment:
+      SERVER_BASE_URL: "http://localhost:3000"
+      DATABASE_CONNECTION_HOST: "postgres"
+      DATABASE_CONNECTION_DATABASE: "${DATABASE_NAME}"
+      DATABASE_CONNECTION_USERNAME: "${DATABASE_USER}"
+      DATABASE_CONNECTION_PASSWORD: "${DATABASE_PASSWORD}"
+      DATABASE_MIGRATION_ENABLED: 1
+      # Email
+      EMAIL_CONFIG_USE: "SMTP"
+      EMAIL_SMTP_SECURE_CONNECTION: 1
+      EMAIL_SMTP_HOST: "${EMAIL_SMTP_HOST}"
+      EMAIL_SMTP_PORT: "${EMAIL_SMTP_PORT}"
+      EMAIL_DEFAULT_SENDER_EMAIL: "${EMAIL_DEFAULT_SENDER_EMAIL}"
+      EMAIL_SMTP_AUTH_USER: "${EMAIL_SMTP_AUTH_USER}"
+      EMAIL_SMTP_AUTH_PASSWORD: "${EMAIL_SMTP_AUTH_PASSWORD}"
+
+      # Rabbit mq
+      MSG_QUEUE_NAME_IMAGE_SCANNER: "trawler_queue"
+      RABBITMQ_HOSTNAME: "http://rabbitmq"
+      RABBITMQ_PORT: 56729
+      RABBITMQ_USERNAME: "guest"
+      RABBITMQ_PASSWORD: "guest"
+
+      SECURITY_JWT_SECRET: "${SECURITY_JWT_SECRET}"
+
+  trawler:
+    build: ../trawler
+    image: m9sweeper-trawler
+    environment:
+      # TrawlerConfig
+      TRAWLER_PARALLEL_SCANNERS: 1
+      TRAWLER_RUN_MODE: rabbitmq
+      DEBUG: "${TRAWLER_DEBUG}"
+      # Rabbit MQ Connection
+      RABBITMQ_HOSTNAME: "rabbitmq"
+      RABBITMQ_USERNAME: "guest"
+      RABBITMQ_PASSWORD: "guest"
+      # Dash Connection
+      M9SWEEPER_URL: "http://dash:3000"
+      M9SWEEPER_API_KEY: "${TRAWLER_API_KEY}"
+    depends_on:
+      - rabbitmq
+      - dash
+
+
+
+
+
