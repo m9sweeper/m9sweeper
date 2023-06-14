@@ -304,10 +304,14 @@ app-private {
   margin-bottom: 30px;
 }
 
-.table-row:hover {
-  width: 100%;
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
+.table-row {
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+    cursor: pointer;
+  }
+  &.mark {
+    background: rgba(0, 0, 0, .05);
+  }
 }
 
 .cluster-page-row {
