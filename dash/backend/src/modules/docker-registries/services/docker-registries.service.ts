@@ -64,9 +64,7 @@ export class DockerRegistriesService {
     const totalCount = await this.dockerRegistriesDao.countTotalRegistries();
 
     if (removeSensitiveInfo) {
-      listData.map(registry => {
-        this.removeSensitiveInfo(registry);
-      });
+      listData.map(registry => this.removeSensitiveInfo(registry));
     }
     return {totalCount: +totalCount, list: listData};
   }
