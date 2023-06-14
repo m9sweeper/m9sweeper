@@ -285,7 +285,8 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupId = +this.router.url.split('/').reverse()[0];
     const openAddCluster = this.dialog.open(AddClusterWizardComponent, {
       width: '900px',
-      height: this.isChartInSmallDevice ? '300px' : 'auto',
+      height: '75%',
+      minHeight: '300px',
       closeOnNavigation: true,
       disableClose: true,
       data: { groupId: this.groupId }
