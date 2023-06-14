@@ -99,41 +99,6 @@ div.kubernetes-object-sub-navigation {
 .kubernetes-object-header {
   flex-direction: column;
   height: 100px;
-  div.content-breadcrumbs {
-    display: inline-block;
-    height: 35px;
-    p {
-      font-size: 26px;
-      margin-top: 15px;
-    }
-    > ol {
-      display: flex;
-      flex-direction: row;
-      list-style-type: none;
-      padding-inline-start: 0;
-      font-size: 12px;
-      text-transform: lowercase;
-      li:not(:first-child):before {
-        content: ">";
-        padding-right: 5px;
-        padding-left: 5px;
-      }
-
-      > li.breadcrumb-item {
-        > span:hover{
-          text-decoration: underline;
-          cursor: pointer;
-        }
-        &:first-child {
-          padding-left: -5px;
-        }
-        a {
-          font-size: 12px;
-          color: black;
-        }
-      }
-    }
-  }
   > .content-name {
     font-size: 26px;
     margin-top: 15px;

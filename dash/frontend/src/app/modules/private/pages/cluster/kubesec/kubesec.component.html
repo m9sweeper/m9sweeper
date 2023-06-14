@@ -1,12 +1,12 @@
-<div class="kubesec-container">
-  <div class="kubesec-content">
-    <div class="title">KubeSec</div>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-title title">KubeSec</div>
     <mat-card appearance="outlined">
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
           <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
           <div class="pod-selection-container">
-            <h3>Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</h3>
+            <p class="heading">Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</p>
             <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group" [(ngModel)]="podSelectionOpt">
               <mat-radio-button class="file-radio-button" [value]="1"
                                 (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
@@ -21,10 +21,10 @@
               <button type="button" class="file-upload-button" mat-raised-button color="accent" (click)="podFileInput.click()">
                 Select Pod File
               </button>
-              <h3 *ngIf="podFile">You've uploaded {{podFile.name}}</h3>
+              <p class="heading" *ngIf="podFile">You've uploaded {{podFile.name}}</p>
             </div>
             <div class="select-pod-content row" *ngIf="podSelectionOpt === 2">
-              <mat-form-field appearance="fill" class="margin-right" *ngIf="currentNamespaces">
+              <mat-form-field appearance="fill" class="margin-right-10" *ngIf="currentNamespaces">
                 <mat-label>Select namespaces</mat-label>
                 <form [formGroup]="namespaceForm">
                   <mat-select formControlName="namespaceFormControl" multiple>
@@ -75,7 +75,7 @@
                 <ng-container matColumnDef="podNames">
                   <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
                   <mat-cell *matCellDef="let report; let i = index">
-                    <a>
+                    <a (click)="clickEvent(i)">
                       {{report.object.substring(4)}}
                     </a>
                   </mat-cell>
@@ -91,21 +91,21 @@
             <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
               <div class="pod-score row">
                 <div class="col-lg-9 col-xs-9 pod-name">
-                  <h3> {{displayName}} </h3>
+                  <p class="pod-score-heading"> {{displayName}} </p>
                 </div>
-                <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
+                <div class="col-lg-3 col-xs-3 kubesec-score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
                   <span> {{score}} </span>
                 </div>
               </div>
               <div class="message-download row">
-                <h3> {{message}}. </h3>
-                <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)">
+                <p> {{message}}. </p>
+                <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)" class="download-report">
                   Download Report
                 </a>
               </div>
               <div>
-                <h3>Passed rules are given a positive score. Rules with critical issue are given a negative score.</h3>
-                <h3>After fixing a critical issue or improving with an advice, the previous suggestion will move to the passed section and the score will be improved. </h3>
+                <p>Passed rules are given a positive score. Rules with critical issue are given a negative score.</p>
+                <p>After fixing a critical issue or improving with an advice, the previous suggestion will move to the passed section and the score will be improved. </p>
               </div>
               <div class="tables">
                 <div class="mat-elevation-z8 critical-table" *ngIf="critical.length > 0">
@@ -125,7 +125,7 @@
                       <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="criticalPoints">
-                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
                       <mat-cell *matCellDef="let criticalIssues" [ngStyle] = "{'background': decideScoreColor('critical'), 'justify-content': 'center'}"> {{criticalIssues?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="criticalReason">
@@ -139,9 +139,9 @@
                 <div class="mat-elevation-z8 advise-table" *ngIf="advise.length > 0">
                   <mat-toolbar>
 
-                      <div style="float: left; width: 95%">
-                        <span class="subnav-title"> Advice </span>
-                      </div>
+                    <div style="float: left; width: 95%">
+                      <span class="subnav-title"> Advice </span>
+                    </div>
 
                   </mat-toolbar>
                   <mat-table [dataSource]="adviseDataSource">
@@ -150,7 +150,7 @@
                       <mat-cell *matCellDef="let advice"> {{advice?.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="advisePoints">
-                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
                       <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': decideScoreColor('advise'), 'justify-content': 'center'}"> {{advice?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="adviseReason">
@@ -178,7 +178,7 @@
                       <mat-cell *matCellDef="let pass"> {{pass?.id}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="passedPoints">
-                      <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
                       <mat-cell *matCellDef="let pass" [ngStyle] = "{'background': decideScoreColor('passed'), 'justify-content': 'center'}"> {{pass?.points}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="passedReason">

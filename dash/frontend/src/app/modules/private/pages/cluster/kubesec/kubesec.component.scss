@@ -1,21 +1,12 @@
-div.kubesec-container {
+.title {
+  padding-bottom: 20px;
+}
+
+mat-horizontal-stepper {
   height: 100%;
+  max-height: 80%;
   overflow: auto;
-  & .kubesec-content {
-    height: fit-content;
-    max-height: 80%;
-    margin: 20px 15px 20px 15px;
-    .title {
-      font-size: 26px;
-      padding-bottom: 20px;
-    }
-    mat-horizontal-stepper {
-      height: 100%;
-      max-height: 80%;
-      overflow: auto;
-      margin-bottom: 20px;
-    }
-  }
+  margin-bottom: 20px;
 }
 
 div.pod-selection-container {
@@ -45,18 +36,21 @@ div.kubesec-popup {
   & .kubesec-popup-contents {
     & .pod-score {
       width: 100%;
-      margin: 0px;
+      margin: 0;
       .pod-name {
-        padding: 0px;
+        padding: 0;
       }
       .score {
-        margin-right: 0px;
-        padding: 0px;
+        margin-right: 0;
+        padding: 0;
       }
     }
     .message-download {
       width: 100%;
-      margin: 0px;
+      margin: 0;
+      .download-report {
+        margin: 15px;
+      }
       h3 {
         margin-right: 10px;
       }
@@ -90,21 +84,6 @@ div.kubesec-popup {
   }
 }
 
-.score{
-  height: 44px;
-  width: 50px;
-  background-color: cadetblue;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  text-transform: uppercase;
-  color: white;
-  > span {
-    font-size: xx-large;
-  }
-}
-
 .critical-table {
   margin-bottom: 5px;
 }
@@ -117,12 +96,18 @@ a {
   text-decoration: underline;
 }
 
-.margin-right {
-  margin-right: 10px;
-}
 .margin-top {
   margin-top: 10px;
 }
 a {
   color: blue;
+}
+
+.heading {
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.pod-score-heading {
+  font-size: 23px;
 }

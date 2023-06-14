@@ -1,10 +1,10 @@
-<div class="page-container">
-  <div class="page-container-content">
+<div class="page-container hide-x-scrollbar">
+  <div class="page-container-content container-margin">
     <div class="page-card hide-scrollbar">
       <div class="row cluster-page-row">
         <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label">Total Images Running</div>
               <div class="total">{{ countOfTotalImagesRunning }}</div>
@@ -13,7 +13,7 @@
         </div>
         <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label center-xs">Total Vulnerabilities Detected in Running Images</div>
               <div class="total center-xs">{{totalVulnerabilities}}</div>
@@ -22,7 +22,7 @@
         </div>
         <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label">Policy Violations</div>
               <div class="total">{{countOfPolicyViolations}}</div>
@@ -31,7 +31,7 @@
         </div>
       </div>
     </div>
-      <div class="row cluster-page-row">
+    <div class="row cluster-page-row graph-row">
         <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
           <mat-card appearance="outlined">
@@ -79,7 +79,7 @@
         </div>
         <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+        <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Scan History</mat-card-title>
             <mat-card-content>
               <div>
@@ -123,7 +123,7 @@
         </div>
         <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card appearance="outlined" class="cluster-summary-card">
+        <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
             <mat-card-content>
               <div>
