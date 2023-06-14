@@ -1,4 +1,10 @@
-export type DockerRegistryAuthDetails = ACRAuthDetails | GCRAuthDetails;
+export type DockerRegistryAuthDetails = ACRAuthDetails | GCRAuthDetails | AzureCRAuthDetails;
+
+export class AzureCRAuthDetails {
+    azureClientId: string;
+    azureClientSecret: string;
+    azureTenantId: string;
+}
 
 export class ACRAuthDetails {
     acrAccessKey: string;

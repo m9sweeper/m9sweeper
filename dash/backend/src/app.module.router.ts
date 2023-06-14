@@ -1,4 +1,4 @@
-import { Routes } from 'nest-router';
+import { Routes } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module';
 import {SettingsModule} from './modules/settings/settings.module';
 import {SharedModule} from './modules/shared/shared.module';

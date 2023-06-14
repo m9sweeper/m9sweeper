@@ -2,7 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware/middleware-consumer.interface';
 import { Module } from '@nestjs/common/decorators/modules/module.decorator';
 import { NestModule } from '@nestjs/common/interfaces/modules/nest-module.interface';
-import { RouterModule } from 'nest-router/router.module';
+import { RouterModule } from '@nestjs/core';
 import { WinstonModule} from 'nest-winston/dist/winston.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { format, transports } from 'winston';
@@ -97,7 +97,7 @@ const myFormatter = info => {
       ignoreEnvFile: true,
       isGlobal: true,
     }),
-    RouterModule.forRoutes(routes),
+    RouterModule.register(routes),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'public'),
     }),

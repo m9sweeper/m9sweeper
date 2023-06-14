@@ -92,6 +92,36 @@
             </mat-form-field>
           </p>
         </div>
+        <div *ngIf="showAzureAuthFields">
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Client ID</mat-label>
+              <input matInput placeholder="Client ID" type="text" formControlName="azureClientId">
+              <mat-hint *ngIf="createDockerRegistryForm.get('azureClientId').errors &&
+               (createDockerRegistryForm.get('azureClientId').touched || createDockerRegistryForm.get('azureClientId').dirty)"
+              >"appId" of a service principal with AcrPull permissions</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Client Secret</mat-label>
+              <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="azureClientSecret">
+              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-hint *ngIf="createDockerRegistryForm.get('azureClientSecret').errors &&
+              (createDockerRegistryForm.get('azureClientSecret').touched || createDockerRegistryForm.get('azureClientSecret').dirty)"
+              >"password" of a service principal with AcrPull permissions</mat-hint>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="standard">
+              <mat-label>Azure Tenant ID</mat-label>
+              <input matInput placeholder="Tenant ID" type="text" formControlName="azureTenantId">
+              <mat-hint *ngIf="createDockerRegistryForm.get('azureTenantId').errors &&
+               (createDockerRegistryForm.get('azureTenantId').touched || createDockerRegistryForm.get('azureTenantId').dirty)"
+              >"tenant" of service principal with AcrPull permissions</mat-hint>
+            </mat-form-field>
+          </p>
+        </div>
         <p>
           <mat-form-field appearance="fill">
             <mat-label>Registry Authentication Type</mat-label>
