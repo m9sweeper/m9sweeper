@@ -60,7 +60,7 @@
             <p >{{dataSource.lowIssues}}</p>
           </div>
           <div class="elements">
-            <p>Negligible</p>
+            <p>Negligi888ble</p>
             <p >{{dataSource.negligibleIssues}}</p>
           </div>
         </div>
@@ -114,7 +114,7 @@
             <td mat-cell *matCellDef="let result" > {{result.lowIssues}} </td>
           </ng-container>
           <ng-container matColumnDef="negligible_issues">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Negl</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Nsssegl</th>
             <td mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -214,10 +214,10 @@
             <th style="width: 6%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
             <td style="width: 6%;" mat-cell *matCellDef="let issue">
               <a mat-button (click)="showMoreIssueDetails(issue)">+more</a>
-              <a color="primary" mat-raised-button *ngIf="issue.isFixable"
+              <button color="primary" class="request-exception-button" mat-raised-button *ngIf="issue.isFixable"
                  [routerLink]="['/private', 'exceptions','create']"
                  [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"
-              > Request Exception</a>
+              > Request Exception</button>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="issuesDisplayedColumns"></tr>

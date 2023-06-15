@@ -112,6 +112,7 @@
   }
 
   div.mat-elevation-z8 {
+    overflow-x: auto;
     @media all and (max-width: 685px) {
       overflow-x: scroll;
     }
@@ -150,6 +151,7 @@
   }
 
   div.mat-elevation-z8 {
+    overflow-x: auto;
     @media all and (max-width: 685px) {
       overflow-x: scroll;
     }
@@ -185,4 +187,15 @@ mat-paginator {
 
 .type-margin {
   margin-top: 24px;
+}
+
+.request-exception-button {
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  text-align: center;
+  margin: 0;
+  min-width: 64px;
+  line-height: 36px;
 }
