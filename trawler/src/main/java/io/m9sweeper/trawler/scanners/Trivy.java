@@ -67,16 +67,16 @@ public class Trivy implements Scanner {
 
         // If registry is Amazon Container Registry, set aws access key and secret key to get token
         DockerRegistry registry = config.getImage().getRegistry();
-        if (registry.getAuthType().equals("ACR")) {
+        if ("ACR".equals(registry.getAuthType())) {
 
             String aws_account_id = TrawlerConfiguration.getInstance().dockerImageUrl().split("\\.")[0];
 
             try {
                 Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
 
-                String region = authDetails.get("acrDefaultRegion").toString();
-                String accessKey = authDetails.get("acrAccessKey").toString();
-                String secretKey = authDetails.get("acrSecretKey").toString();
+                String region = authDetails.getOrDefault("acrDefaultRegion", "").toString();
+                String accessKey = authDetails.getOrDefault("acrAccessKey", "").toString();
+                String secretKey = authDetails.getOrDefault("acrSecretKey", "").toString();
 
                 AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
                 AmazonECR amazonECR = AmazonECRClientBuilder.standard()
@@ -98,7 +98,7 @@ public class Trivy implements Scanner {
                 e.printStackTrace();
             }
 
-        } else if (registry.getAuthType().equals("GCR")) {
+        } else if ("GCR".equals(registry.getAuthType())) {
             // Create a temporary auth file for Trivy to use for authentication with GCR
             File gcrAuthFile = File.createTempFile("gcrAuthFile-", ".json");
 
@@ -107,7 +107,7 @@ public class Trivy implements Scanner {
 
             // Write the auth JSON to the temp JSON file
             try (FileWriter writer = new FileWriter(gcrAuthFile)) {
-                writer.write(authDetails.get("gcrAuthJson").toString());
+                writer.write(authDetails.getOrDefault("gcrAuthJson", "").toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -117,6 +117,18 @@ public class Trivy implements Scanner {
 
             // Export the location of this file so that Trivy can utilize it
             trivyScanCommandBuilder.append("export GOOGLE_APPLICATION_CREDENTIALS='").append(gcrAuthFile.getAbsolutePath()).append("'; ");
+        } else if ("AZCR".equals(registry.getAuthType())) {
+            // Azure Container Registry images are accessed with a service principal set up beforehand. Trawler only needs to
+            // export the Client ID, Secret, and Tenant ID of the service principal to allow Trivy to connect to it
+            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
+
+            String clientId = authDetails.getOrDefault("azureClientId", "").toString();
+            String clientSecret = authDetails.getOrDefault("azureClientSecret", "").toString();
+            String tenantId = authDetails.getOrDefault("azureTenantId", "").toString();
+
+            trivyScanCommandBuilder.append("export AZURE_CLIENT_ID='").append(escapeXsi(clientId)).append("'; ");
+            trivyScanCommandBuilder.append("export AZURE_CLIENT_SECRET='").append(escapeXsi(clientSecret)).append("'; ");
+            trivyScanCommandBuilder.append("export AZURE_TENANT_ID='").append(escapeXsi(tenantId)).append("'; ");
         } else if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append("export TRIVY_USERNAME='").append(escapeXsi(registry.getUsername())).append("'; ");
             trivyScanCommandBuilder.append("export TRIVY_PASSWORD='").append(escapeXsi(registry.getPassword())).append("'; ");
@@ -139,6 +151,9 @@ public class Trivy implements Scanner {
 
         if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append(" unset TRIVY_USERNAME; unset TRIVY_PASSWORD;");
+        }
+        if ("AZCR".equals(registry.getAuthType())) {
+            trivyScanCommandBuilder.append(" unset AZURE_CLIENT_ID; unset AZURE_CLIENT_SECRET; unset AZURE_TENANT_ID;");
         }
 
         if (TrawlerConfiguration.getInstance().getDebug()) {
