@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from 'nestjs-command';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ClusterDao } from '../../cluster/dao/cluster.dao';
 import { KubernetesHistoryService } from '../services/kubernetes-history.service';
@@ -23,7 +22,6 @@ export class KubernetesHistoryCommand {
                 private readonly historyNamespaceComplianceService: NamespaceComplianceService) {
     }
 
-    @Command({ command: 'populate:kubernetes-history', describe: 'Save kubernetes contents history' })
     async get() {
         let dayStr = yesterdaysDateAsStr();
 

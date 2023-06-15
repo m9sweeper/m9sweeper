@@ -9,7 +9,6 @@ import {LicensingPortalService} from '../../../integrations/licensing-portal/lic
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
 import {NamespaceComplianceService} from '../../namespace/services/namespace_compliance.service';
-import {Command, Positional} from 'nestjs-command';
 import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {ClusterSummaryDto} from '../../../integrations/licensing-portal/licensing-portal.dto';
 import {ClusterEventCreateDto} from '../../cluster-event/dto/cluster-event-create-dto';
@@ -36,15 +35,7 @@ export class ClusterSyncCommand {
     if (this.debugMode) this.loggerService.log({label, ...data}, `ClusterSyncCommand.${method}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  @Command({ command: 'cluster:sync <clusterID>', describe: 'Sync one or all clusters\' data' })
-  async syncCluster(
-    @Positional({
-      name: 'clusterID',
-      // describe: 'Database ID of a cluster',
-      // type: 'string',
-    }) clusterID: string
-  ) {
+  async syncCluster(clusterID: string): Promise<void> {
     this.log('Job started - Syncing cluster', {clusterID}, 'syncCluster');
     let clusterIDs: number[] | 'all' = 'all';
     if (clusterID !== 'all') clusterIDs = [parseInt(clusterID.toString(), 10)];

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from 'nestjs-command';
 import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {ExceptionType} from "../../exceptions/enum/ExceptionType";
 
@@ -14,7 +13,6 @@ export class SyncExceptionStatusCommand {
         private readonly exceptionsService: ExceptionsService,
     ) {}
 
-    @Command({ command: 'sync:exception-status', describe: 'Syncing exception status...' })
     async syncExceptionStatus(): Promise<void> {
         let exceptions = await this.exceptionsService.getAllExceptions();
         exceptions = exceptions.filter(e => e.end_date && new Date(e.end_date) < new Date());

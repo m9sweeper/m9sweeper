@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {Command} from 'nestjs-command';
 import { DatabaseService } from '../../shared/services/database.service';
 import {UserDao} from "../../user/dao/user.dao";
 import * as bcrypt from 'bcryptjs';
@@ -8,12 +7,11 @@ import {DockerRegistriesDao} from "../../docker-registries/dao/docker-registries
 import {DockerRegistriesDto} from "../../docker-registries/dto/docker-registries-dto";
 import {plainToInstance} from "class-transformer";
 import {KubernetesApiService} from "../services/kubernetes-api.service";
-import {KubeConfig} from "@kubernetes/client-node/dist/config";
-import * as k8s from "@kubernetes/client-node";
 import { ExceptionsService } from '../../exceptions/services/exceptions.service';
 import { ExceptionCreateDto } from '../../exceptions/dto/exceptioncreateDto';
 import { IcliRegistry, IHelmInputRegistry } from "../dto/IHelmInputRegistry";
 import {generateRandomString} from "./generate-random-string";
+import {AuthorityId} from '../../user/enum/authority-id';
 
 
 /**
@@ -31,7 +29,6 @@ export class HelmSetupCommand {
                 private readonly exceptionService: ExceptionsService) {
     }
 
-    @Command({ command: 'users:init', describe: 'Seeds the a super admin account & trawler account\'s API key' })
     async runSeed(): Promise<any[] | void> {
         const promises: Promise<any>[] = [];
         if (process.env.SUPER_ADMIN_EMAIL && process.env.SUPER_ADMIN_PASSWORD) {
@@ -77,6 +74,7 @@ export class HelmSetupCommand {
         const randomKHApiKey = process.env.KUBE_HUNTER_API_KEY || generateRandomString(33);
         const randomKBApiKey = process.env.KUBE_BENCH_API_KEY || generateRandomString(33);
         const randomFalcoApiKey = process.env.FALCO_API_KEY || generateRandomString(33);
+        const cronApiKey = process.env.CRON_API_KEY || generateRandomString(33);
 
         const kubebenchUserExists = !!(await this.userDao.loadUser({email: 'Kubebench'}));
         if (!kubebenchUserExists) {
@@ -158,12 +156,37 @@ export class HelmSetupCommand {
             console.log('Falco user exists.... skipping');
         }
 
+      const cronUserExists = !!(await this.userDao.loadUser({email: 'Cron'}));
+      if (!cronUserExists) {
+        const encryptedCronApiKey = await bcrypt.hash(cronApiKey, await bcrypt.genSalt(10))
+        promises.push(
+          this.userDao.create({
+            email: 'Cron',
+            first_name: 'Cron',
+            last_name: 'Cron',
+            source_system_id: '0',
+            source_system_type: 'LOCAL_AUTH',
+            source_system_user_id: '0',
+            password: encryptedCronApiKey,
+            authorities: [{ id: AuthorityId.CRON }],
+          })
+            .then(cronUser => this.apiKeyDao.createApiKey({
+              user_id: cronUser[0],
+              name: 'Cron API key',
+              api: cronApiKey,
+              is_active: true,
+            }))
+            .catch());
+      } else {
+        // @TODO: clean up this message when making cli commands silent
+        console.log('Cron user exists.... skipping');
+      }
+
         return Promise.all(promises);
     }
 
     // @TODO: clean up log messages to make this silent
     // Populates the docker registries tables with initial registries passed in through env variable
-    @Command({command: "registries:init", describe: "Takes JSON of docker registries to populate the database with"})
     async populateRegistries(): Promise<any[] | void> {
         const b64Registries = process.env.INITIAL_REGISTRIES_JSON;
         // Expects a JSON containing the fields registries that is a list of registries (name, hostname, login_required, username, password)
@@ -240,7 +263,6 @@ export class HelmSetupCommand {
         }
     }
 */
-    @Command({command: "exceptions:init", describe: "Accepts comma delimited list of namespaces to whitelist"})
     async loadDefaultNamespaceExceptions(): Promise<void> {
         if ((await this.exceptionService.getAllExceptions()).length === 0) {
             // create a default namespace exception

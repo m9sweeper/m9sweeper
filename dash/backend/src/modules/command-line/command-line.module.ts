@@ -10,12 +10,16 @@ import {GatekeeperExceptionCommand} from "./commands/gatekeeper-exception.comman
 import {SyncExceptionStatusCommand} from "./commands/exception.command";
 import {ExceptionBlockService} from "./services/exception-block.service";
 import { ImageRescanningService } from './services/image-rescanning.service';
+import {JobsCliController} from './controllers/jobs-cli.controller';
+import {JobsHttpController} from './controllers/jobs-http.controller';
 
 @Global()
 @Module({
     providers: [
         ClusterCommand,
         ClusterSyncCommand,
+        JobsCliController,
+        JobsHttpController,
         HelmSetupCommand,
         KubernetesClusterService,
         KubernetesHistoryCommand,
@@ -28,6 +32,9 @@ import { ImageRescanningService } from './services/image-rescanning.service';
     imports: [
         CommandModule,
     ],
-    exports: []
+    exports: [],
+    controllers: [
+      JobsHttpController
+    ],
 })
 export class CommandLineModule {}

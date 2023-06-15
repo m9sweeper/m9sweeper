@@ -1,9 +1,7 @@
 import {Injectable} from '@nestjs/common';
-import {Command, Positional} from 'nestjs-command';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 import {KubernetesClusterService} from '../services/kubernetes-cluster.service';
 import {ClusterDao} from '../../cluster/dao/cluster.dao';
-import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {KubernetesApiService} from '../services/kubernetes-api.service';
 import {CoreV1Api} from '@kubernetes/client-node/dist/gen/api/coreV1Api';
 import {KubeConfig} from '@kubernetes/client-node/dist/config';
@@ -15,9 +13,7 @@ import {AppSettingsService} from '../../settings/services/app-settings.service';
 import {AppSettingsType, LicenseSettingsType} from '../../settings/enums/settings-enums';
 import {LicensingPortalService} from '../../../integrations/licensing-portal/licensing-portal.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
-import {ClusterSummaryDto, InstanceSummaryDto} from '../../../integrations/licensing-portal/licensing-portal.dto';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
-import { NamespaceComplianceService } from '../../namespace/services/namespace_compliance.service';
 import { AppSettingsDto } from "../../settings/dto/app-settings-dto";
 
 
@@ -37,12 +33,11 @@ export class ClusterCommand {
       private readonly licensingPortalService: LicensingPortalService,
       private readonly appSettingsService:AppSettingsService,
       private readonly clusterEventService: ClusterEventService,
-      private readonly clusterGroupService: ClusterGroupService,
-      private readonly namespaceComplianceService: NamespaceComplianceService
+      private readonly clusterGroupService: ClusterGroupService
     ) {}
 
     // @TODO: Remove all log messages so this will be silent
-    @Command({ command: 'cluster:seed', describe: 'Seeds the DB with the current cluster' })
+
     async seedCluster(): Promise<void> {
         const clusterName = process.env.FIRST_CLUSTER_NAME;
         const clusterGroupName = process.env.FIRST_CLUSTER_GROUP_NAME;

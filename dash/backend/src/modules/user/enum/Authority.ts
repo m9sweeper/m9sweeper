@@ -6,4 +6,5 @@ export enum Authority {
     KUBEBENCH = 'KUBEBENCH',
     TRAWLER ='TRAWLER',
     FALCO = 'FALCO',
+    CRON = 'CRON'
 }
