@@ -17,5 +17,39 @@
 }
 
 .search-image {
-  margin-top: -8px;
+  margin-top: -18px;
 }
+
+@media all and (max-width: 765px) {
+  .flex-display {
+    display: flex;
+    flex-direction: column;
+    button {
+      display: inline-block;
+      white-space: nowrap;
+      text-decoration: none;
+      vertical-align: baseline;
+      text-align: center;
+      margin: 0;
+      min-width: 64px;
+      line-height: 36px;
+    }
+    .scan-images-button {
+      margin-top: -32px;
+    }
+    .scan-displayed-images-button {
+      margin-top: -12px;
+    }
+  }
+  mat-card {
+    margin-top: 100px;
+  }
+}
+
+::ng-deep
+.default-theme
+.mdc-text-field--filled:not(.mdc-text-field--disabled)
+{
+  background-color: transparent !important;
+}
+

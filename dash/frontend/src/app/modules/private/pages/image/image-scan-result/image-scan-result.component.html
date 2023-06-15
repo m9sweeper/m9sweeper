@@ -60,7 +60,7 @@
             <p >{{dataSource.lowIssues}}</p>
           </div>
           <div class="elements">
-            <p>Negligi888ble</p>
+            <p>Negligible</p>
             <p >{{dataSource.negligibleIssues}}</p>
           </div>
         </div>
@@ -74,7 +74,7 @@
       <mat-toolbar>
         <span class="subnav-title" matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         <div class="advanced-search" *ngIf="imageScanDates">
-          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" >
+          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="datepicker">
             <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
           </mat-select>
         </div>
@@ -114,7 +114,7 @@
             <td mat-cell *matCellDef="let result" > {{result.lowIssues}} </td>
           </ng-container>
           <ng-container matColumnDef="negligible_issues">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Nsssegl</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Negl</th>
             <td mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
