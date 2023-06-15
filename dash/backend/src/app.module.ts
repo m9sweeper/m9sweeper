@@ -43,6 +43,8 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { M9sweeperCronJobService } from "./cron-jobs/m9sweeper_cron_jobs.service";
 
 
 const myFormatter = info => {
@@ -139,7 +141,9 @@ const myFormatter = info => {
         enabled: true
       },
     }),
+    ScheduleModule.forRoot(),
   ],
+  providers: [M9sweeperCronJobService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
