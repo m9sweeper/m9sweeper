@@ -51,4 +51,11 @@ export class UtilitiesService {
         return raw?.indexOf('sha256:') > -1 ? raw.split('sha256:')[1] : '';
     }
 
+    /** Replaces all characters invalid for a filename with the desired replacement character
+     * Default replacement is an underscore
+     */
+    cleanFileName(raw: string, replacement = '_'): string {
+        return raw.replace(/[/\\?%*:|"<>]/g, replacement);
+    }
+
 }

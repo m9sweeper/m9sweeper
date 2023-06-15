@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClusterService } from '../../../../core/services/cluster.service';
@@ -128,7 +128,8 @@ export class DashboardComponent implements OnInit {
   openDefaultCreateClusterDialog() {
     const openAddCluster = this.dialog.open(AddClusterWizardComponent, {
       width: '900px',
-      height: 'auto',
+      height: '75%',
+      minHeight: '300px',
       closeOnNavigation: true,
       disableClose: true,
       data: { groupId:  null}
