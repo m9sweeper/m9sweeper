@@ -1,9 +1,9 @@
-// LARGE SCREEN: width >800px
+// LARGE SCREEN: width >800px // pink & green
   div.cluster-group-menu {
     height: auto;
-    //background-color: pink;
+    background-color: pink;
     width: 300px;
-    background-color: #FFFFFF;
+    // background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
   }
@@ -90,7 +90,7 @@
 
 
 
-// SMALL SCREEN: width <800px
+// SMALL SCREEN: width <800px // yellow & blue
 @media screen and (max-width: 800px) {
   div.cluster-group-menu {
     background-color: yellow;
@@ -123,7 +123,6 @@
   div.collapse-item{
     display: flex;
     flex-direction: column;
-    //width: 100%;
     background-color: lightskyblue;
     &:hover {
       background-color: #F2F2F2;
@@ -137,7 +136,7 @@
 }
 
 
-// RESPONSIVE - work for large screen to collapse or expand
+// RESPONSIVE - work for large screen to collapse or expand // orange & light green
   div.cluster-group-menu.responsive {
     background-color: orange;
     width: 65px;
@@ -146,13 +145,11 @@
     }
     div.organization-settings { // left nav 3)
       flex-direction: column;
-      background-color: orangered;
     }
 
     div.expanded-item {
       flex-direction: column;
       display: none;
-      background-color: red;
       &:hover {
         background-color: #F2F2F2;
       }
@@ -160,17 +157,17 @@
     div.collapse-item {
       display: flex;
       flex-direction: column;
-      //width: 100%;
       background-color: palegreen;
 
       &:hover {
         background-color: #F2F2F2;
       }
     }
-    div.cluster-dashboard {
-      width: calc(100% - 65px);
-      flex-direction: column;
-    }
   }
+  div.cluster-dashboard.responsive {
+    width: calc(100% - 65px);
+    flex-direction: column;
+  }
+
 
 

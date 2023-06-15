@@ -185,14 +185,17 @@ export class DashboardComponent implements OnInit {
     this.leftNavWidth = leftNav.clientWidth;
     console.log ('leftNavWidth', this.leftNavWidth);
 
-    const x = document.getElementById('left-nav');
+    const leftNavTag = document.getElementById('left-nav');
+    const clusterDashTag = document.getElementById('cluster-dashboard');
     if (this.leftNavWidth === 300){
        // document.getElementById('left-nav').style.width = '65px';
-       x.className += ' responsive';
+       leftNavTag.className += ' responsive';
+       clusterDashTag.className += ' responsive';
        // console.log ('x.classNAme' , x.className);
     }else{
       // document.getElementById('left-nav').style.width = '300px';
-      x.className = 'cluster-group-menu';
+      leftNavTag.className = 'cluster-group-menu';
+      clusterDashTag.className = 'cluster-dashboard';
       // console.log ('x.classNAme' , x.className);
     }
     // this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
