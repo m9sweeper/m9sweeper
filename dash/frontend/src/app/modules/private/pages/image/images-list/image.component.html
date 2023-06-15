@@ -3,7 +3,7 @@
     <div class="page-title-button-group-spacing">
       <div class="page-title-div">
         <span class="page-title">Images
-          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="openImageCreateDialog()">
+          <button mat-icon-button (click)="openImageCreateDialog()">
             <mat-icon class="plus-button">add</mat-icon>
           </button>
         </span>
@@ -17,10 +17,8 @@
           Advanced
         </button> &nbsp;
         <button
-          class="scan-images-button"
-          [style.display]="(userIsAdmin)? 'block': 'none'"
-          [disabled]="!(dataSource && dataSource.data)"
-          (click)="openConfirmScanDialog()"
+          class="scan-displayed-images-button"
+
           mat-raised-button
           color="primary">
           Scan Displayed Images

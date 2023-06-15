@@ -33,9 +33,9 @@ export class ChartSizeService {
     if (screenWidth >= breakpointLarge) {
       chartWidth = Math.floor(screenWidth / 3) - 40;
     } else if (screenWidth >= breakpointMedium) {
-      chartWidth = Math.floor(screenWidth / 2) - 20;
+      chartWidth = Math.floor(screenWidth / 2) - 40;
     } else {
-      chartWidth = screenWidth - 40;
+      chartWidth = screenWidth - 60;
     }
     // Keep the chart at a consistent aspect ratio through window size changes
     const chartHeight = Math.floor((chartWidth * 8) / 16);
