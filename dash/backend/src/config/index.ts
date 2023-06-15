@@ -10,6 +10,7 @@ import security from './security';
 import server from './server';
 import gatekeeper from './gatekeeper';
 import kubebench from './kubebench';
+import kubesec from './kubesec';
 import releaseNamespace from "./releaseNamespace";
 
 export default () => ({
@@ -28,5 +29,6 @@ export default () => ({
   server,
   gatekeeper,
   kubebench,
+  kubesec,
   releaseNamespace
 });

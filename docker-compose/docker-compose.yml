@@ -84,6 +84,7 @@ services:
       RABBITMQ_PASSWORD: "guest"
 
       SECURITY_JWT_SECRET: "${SECURITY_JWT_SECRET}"
+      KUBESEC_URL: "http://kubesec:${KUBESEC_PORT}"
 
   trawler:
     build: ../trawler
@@ -104,7 +105,9 @@ services:
       - rabbitmq
       - dash
 
-
-
-
-
+  kubesec:
+    image: kubesec/kubesec:v2.13.0
+    platform: linux/amd64
+    command: ["http", "${KUBESEC_PORT}"]
+    ports:
+      - '${KUBESEC_PORT}:${KUBESEC_PORT}'
