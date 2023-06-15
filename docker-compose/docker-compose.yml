@@ -19,6 +19,12 @@ services:
   postgres:
     image: postgres:15.3-alpine
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER" ]
+      interval: 15s
+      timeout: 30s
+      retries: 3
+      start_period: 3s
     environment:
       POSTGRES_DB: "${DATABASE_NAME}"
       POSTGRES_USER: "${DATABASE_USER}"
@@ -34,7 +40,7 @@ services:
     entrypoint: "npm run cli:users:init"
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
       dash:
         condition: service_healthy
     environment:
@@ -56,8 +62,10 @@ services:
     build: ..
     image: m9sweeper-dash
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     ports:
       - '3000:3000'
     healthcheck:
@@ -111,7 +119,7 @@ services:
       rabbitmq:
         condition: service_healthy
       dash:
-        condition: service_started
+        condition: service_healthy
 
   kubesec:
     image: kubesec/kubesec:v2.13.0
