@@ -74,7 +74,7 @@
       <mat-toolbar>
         <span class="subnav-title" matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         <div class="advanced-search" *ngIf="imageScanDates">
-          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" >
+          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="datepicker">
             <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
           </mat-select>
         </div>
@@ -217,10 +217,10 @@
             <th style="width: 6%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
             <td style="width: 6%;" mat-cell *matCellDef="let issue">
               <a mat-button (click)="showMoreIssueDetails(issue)">+more</a>
-              <a color="primary" mat-raised-button *ngIf="issue.isFixable"
+              <button color="primary" class="request-exception-button" mat-raised-button *ngIf="issue.isFixable"
                  [routerLink]="['/private', 'exceptions','create']"
                  [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"
-              > Request Exception</a>
+              > Request Exception</button>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="issuesDisplayedColumns"></tr>
