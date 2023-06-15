@@ -33,7 +33,7 @@ import {ApiregistrationApi} from "@kubernetes/client-node/dist/gen/api/apiregist
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
-import {PrometheusService} from "../../shared/services/prometheus.service";
+import {PrometheusService} from "../../metrics/services/prometheus.service";
 import {AuditLogService} from "../../audit-log/services/audit-log.service";
 
 @Injectable()

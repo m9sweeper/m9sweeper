@@ -1,10 +1,11 @@
 import {Injectable} from "@nestjs/common";
-import {PrometheusService} from "../modules/shared/services/prometheus.service";
-import {ImageService} from "../modules/image/services/image.service";
+import {PrometheusService} from "../../metrics/services/prometheus.service";
+import {ImageService} from "../../image/services/image.service";
 import {Cron} from "@nestjs/schedule";
-import {ExceptionsService} from "../modules/exceptions/services/exceptions.service";
+import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {formatDistance} from "date-fns";
-import { MineLoggerService } from '../modules/shared/services/mine-logger.service';
+import { MineLoggerService } from "../../shared/services/mine-logger.service";
+
 
 @Injectable()
 export class M9sweeperCronJobService {
@@ -18,7 +19,7 @@ export class M9sweeperCronJobService {
     /**
      * Recompile M9sweeper Metrics every 5 minutes for Prometheus metrics
      */
-    @Cron('0 */5 * * * *')
+    @Cron('0 * * * * *')
     async updateExceptionAndImageMetrics() {
         const activeExceptions = await this.exceptionsService.getAllActiveExceptions();
         const activeExceptionsCount = activeExceptions ? activeExceptions.length : 0;
@@ -31,16 +32,19 @@ export class M9sweeperCronJobService {
         this.loggerService.log({label: `Total number of active exceptions expiring tomorrow: ${exceptionsExpireTomorrowCount}`});
 
         const totalCompliantImages = await this.imageService.getAllImagesByCompliance('Compliant');
-        this.prometheusService.numOfCompliantImages.set(+totalCompliantImages.shift().count);
-        this.loggerService.log({label: `Total number of compliant images: ${+totalCompliantImages.shift().count}`});
+        const totalCompliantImagesCount = +totalCompliantImages.shift().count;
+        this.prometheusService.numOfCompliantImages.set(totalCompliantImagesCount);
+        this.loggerService.log({label: `Total number of compliant images: ${totalCompliantImagesCount}`});
 
         const totalNonCompliantImages = await this.imageService.getAllImagesByCompliance('Non-compliant');
-        this.prometheusService.numOfNonCompliantImages.set(+totalNonCompliantImages.shift().count);
-        this.loggerService.log({label: `Total number of non-compliant images: ${+totalNonCompliantImages.shift().count}`});
+        const totalNonCompliantImagesCount = +totalNonCompliantImages.shift().count;
+        this.prometheusService.numOfNonCompliantImages.set(totalNonCompliantImagesCount);
+        this.loggerService.log({label: `Total number of non-compliant images: ${totalNonCompliantImagesCount}`});
 
         const totalUnScannedImages = await this.imageService.getAllImagesByCompliance(null);
-        this.prometheusService.numOfUnScannedImages.set(+totalUnScannedImages.shift().count);
-        this.loggerService.log({label: `Total number of unscanned images: ${+totalUnScannedImages.shift().count}`});
+        const totalUnScannedImagesCount = +totalUnScannedImages.shift().count;
+        this.prometheusService.numOfUnScannedImages.set(totalUnScannedImagesCount);
+        this.loggerService.log({label: `Total number of unscanned images: ${totalUnScannedImagesCount}`});
 
         for (const exception of activeExceptions) {
             this.prometheusService.activeException

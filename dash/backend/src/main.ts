@@ -10,7 +10,7 @@ import {ValidationPipe} from '@nestjs/common';
 import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
 import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
-import {PrometheusService} from "./modules/shared/services/prometheus.service";
+import {PrometheusService} from "./modules/metrics/services/prometheus.service";
 
 
 async function registerSwagger(app) {
@@ -180,7 +180,7 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true }));
 
   const getRoute = path => {
-    let getPath =  path ? path.replace(/\?.*/g, '') : '';
+    const getPath =  path ? path.replace(/\?.*/g, '') : '';
     return getPath.replace(/\d+/g, '?');
   };
 

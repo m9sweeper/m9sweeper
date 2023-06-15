@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { InfoService } from "./services/info.service";
 import { InfoController } from "./controllers/info.controller";
 import {SharedModule} from '../shared/shared.module';
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Global()
 @Module({
@@ -12,7 +13,8 @@ import {SharedModule} from '../shared/shared.module';
     InfoService
   ],
   imports: [
-      SharedModule
+    SharedModule,
+    MetricsModule
   ],
   controllers: [InfoController]
 })

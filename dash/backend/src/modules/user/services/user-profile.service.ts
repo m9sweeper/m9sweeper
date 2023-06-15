@@ -6,7 +6,7 @@ import {UserCreateDto} from '../dto/user-create-dto';
 import {ResetPasswordService} from '../../auth/services/reset-password.service';
 import * as bcrypt from 'bcryptjs';
 import { Authority } from "../enum/Authority";
-import {PrometheusService} from "../../shared/services/prometheus.service";
+import {PrometheusService} from "../../metrics/services/prometheus.service";
 
 
 @Injectable()

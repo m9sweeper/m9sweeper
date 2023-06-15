@@ -14,10 +14,6 @@ import {MessagingService} from './services/messaging-service';
 import {UtilitiesService} from './services/utilities.service';
 import {CommonController} from './controllers/common.controller';
 import {CsvService} from './services/csv.service';
-import {prometheusCounters} from './utilities/prometheus_counters';
-import {prometheusGauges} from "./utilities/prometheus_gauges";
-import {PrometheusService} from './services/prometheus.service';
-import {prometheusSummaries} from "./utilities/prometheus_summaries";
 
 @Global()
 @Module({
@@ -61,7 +57,6 @@ import {prometheusSummaries} from "./utilities/prometheus_summaries";
         MessagingService,
         UtilitiesService,
         CsvService,
-        PrometheusService,
     ],
     controllers: [
         FileManagementController,
@@ -78,10 +73,6 @@ import {prometheusSummaries} from "./utilities/prometheus_summaries";
         MessagingService,
         UtilitiesService,
         CsvService,
-        PrometheusService,
-        ...prometheusCounters,
-        ...prometheusGauges,
-        ...prometheusSummaries,
     ]
 })
 export class SharedModule {
