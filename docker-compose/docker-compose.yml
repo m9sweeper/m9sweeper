@@ -9,6 +9,12 @@ services:
     image: rabbitmq:3.12-alpine
     ports:
       - '56729:5672'
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      start_period: 15s
+      interval: 10s
+      timeout: 10s
+      retries: 3
 
   postgres:
     image: postgres:15.3-alpine
@@ -61,7 +67,7 @@ services:
       start_period: 20s
       timeout: 10s
     environment:
-      SERVER_BASE_URL: "http://localhost:3000"
+      SERVER_BASE_URL: "${SERVER_BASE_URL}"
       DATABASE_CONNECTION_HOST: "postgres"
       DATABASE_CONNECTION_DATABASE: "${DATABASE_NAME}"
       DATABASE_CONNECTION_USERNAME: "${DATABASE_USER}"
@@ -102,8 +108,10 @@ services:
       M9SWEEPER_URL: "http://dash:3000"
       M9SWEEPER_API_KEY: "${TRAWLER_API_KEY}"
     depends_on:
-      - rabbitmq
-      - dash
+      rabbitmq:
+        condition: service_healthy
+      dash:
+        condition: service_started
 
   kubesec:
     image: kubesec/kubesec:v2.13.0
