@@ -134,11 +134,11 @@ const myFormatter = info => {
     AuditLogModule,
     FalcoModule,
     PrometheusModule.register({
-          path: '/api/v1/metrics',
-          defaultMetrics: {
-            enabled: true
-          },
-        }),
+      path: '/api/v1/metrics',
+      defaultMetrics: {
+        enabled: true
+      },
+    }),
   ],
 })
 export class AppModule implements NestModule {

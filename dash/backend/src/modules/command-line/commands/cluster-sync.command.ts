@@ -59,9 +59,9 @@ export class ClusterSyncCommand {
       const clusterSummaries: ClusterSummaryDto[] = await this._getClusterSummaries(clusters);
       this.log('cluster summaries retrieved', {clusterSummaries}, 'syncCluster');
       const instanceSummary = await ClusterSyncCommand._compileInstanceSummary(clusterSummaries);
-      
-      // only upload summary stats to licensing portal IF they have a valid license and its enabled. 
-      // licensing is NOT required, therefore this should not be happening by default (some users 
+
+      // only upload summary stats to licensing portal IF they have a valid license and its enabled.
+      // licensing is NOT required, therefore this should not be happening by default (some users
       // will run in an air-gapped environment and will NOT want us automatically uploading stats!)
       if (licenseValidityResult?.licenseIsValid) {
         await this.licensingPortalService
@@ -140,7 +140,7 @@ export class ClusterSyncCommand {
         return {licenseAndInstanceKeys, licenseIsValid: true};
       }
 
-      // if the license data is missing or invalid - logging disabled since valid cicenses are not required anywhere!
+      // if the license data is missing or invalid - logging disabled since valid licenses are not required anywhere!
       this.log('License Key / Instance Key combination is invalid (but not required).', {}, '_checkLicense');
       /*const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
         'License Validation', 'Create', 'Error',
