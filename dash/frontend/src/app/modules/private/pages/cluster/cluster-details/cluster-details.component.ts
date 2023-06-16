@@ -1,8 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { ClusterService } from '../../../../../core/services/cluster.service';
 import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import {SharedSubscriptionService} from '../../../../../core/services/shared.subscription.service';
+import {ClusterGroupService} from '../../../../../core/services/cluster-group.service';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 @Component({
   selector: 'app-cluster-details',
@@ -24,6 +26,8 @@ export class ClusterDetailsComponent implements OnInit {
   isExpanded: boolean;
   isSmallSize: boolean;
   isSmallDevice = false;
+  leftNavWidth: number;
+
   constructor(
     private clusterService: ClusterService,
     private sharedSubscriptionService: SharedSubscriptionService,
@@ -36,17 +40,17 @@ export class ClusterDetailsComponent implements OnInit {
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.screenSizeExpand(this.width);
-    document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
+    // document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
     this.getClusterById(this.route.snapshot.params.id);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize', ['$event']) // listen for screen size change
   calculateScreenSize($event?: any) {
     this.scrHeight = document.documentElement.clientHeight;
     this.scrWidth = document.documentElement.clientWidth;
     this.isSmallDevice = false;
-    document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--dashboard-details-width', `${this.width}px`);
+    // document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
+    // document.documentElement.style.setProperty('--dashboard-details-width', `${this.width}px`);
     this.screenSizeExpand(this.scrWidth);
   }
 
@@ -75,6 +79,21 @@ export class ClusterDetailsComponent implements OnInit {
     }
   }
   expand() {
+    // get the current left nav menu width
+    const leftNav = document.querySelector('.cluster-group-menu');
+    this.leftNavWidth = leftNav.clientWidth;
+
+    const leftNavTag = document.getElementById('left-nav');
+    const clusterDashTag = document.getElementById('cluster-dashboard');
+
+    if (this.leftNavWidth === 300){
+      leftNavTag.className += ' responsive';
+      clusterDashTag.className += ' responsive';
+    }else{
+      leftNavTag.className = 'cluster-group-menu';
+      clusterDashTag.className = 'cluster-dashboard';
+    }
+    /*
     if (this.isSmallSize) {
       this.isSmallDevice = !this.isSmallDevice;
       this.expandMenuBarForSmallDevice(this.width);
@@ -85,6 +104,8 @@ export class ClusterDetailsComponent implements OnInit {
       this.screenSizeExpand(this.width);
     }
     this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
+    */
+
   }
 
   expandMenuBarForSmallDevice(width: number) {
@@ -100,8 +121,8 @@ export class ClusterDetailsComponent implements OnInit {
       menuWidth = 65;
       containerWidthForSmallDevice = width - menuWidth;
     }
-    document.documentElement.style.setProperty('--navigation-menu-width', `${menuWidth}px`);
-    document.documentElement.style.setProperty('--cluster-container-width', `${containerWidthForSmallDevice}px`);
+    // document.documentElement.style.setProperty('--navigation-menu-width', `${menuWidth}px`);
+    // document.documentElement.style.setProperty('--cluster-container-width', `${containerWidthForSmallDevice}px`);
   }
   screenSizeExpand(width: number) {
     let menuWidth: number;
@@ -123,8 +144,8 @@ export class ClusterDetailsComponent implements OnInit {
         containerWidth = width - menuWidth;
       }
     }
-    document.documentElement.style.setProperty('--navigation-menu-width', `${menuWidth}px`);
-    document.documentElement.style.setProperty('--cluster-container-width', `${containerWidth}px`);
+    // document.documentElement.style.setProperty('--navigation-menu-width', `${menuWidth}px`);
+    // document.documentElement.style.setProperty('--cluster-container-width', `${containerWidth}px`);
   }
   getClusterById(clusterId: number) {
     this.clusterService.getClusterById(clusterId).subscribe(response => {
