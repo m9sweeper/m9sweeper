@@ -37,15 +37,15 @@
            title="GateKeeper" (click) = "widenClusterDetailsContentPage()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="padding:10px; vertical-align: middle;"/>
-          <span matLine style="padding-left:25px;vertical-align: sub;" >GateKeeper</span>
+          <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="margin-top:10px; margin-left:12px; vertical-align: bottom;"/>
+          <span matLine style="padding-left:30px;vertical-align: bottom;" >GateKeeper</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubesec']"
            title="KubeSec" (click) = "widenClusterDetailsContentPage()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="padding:12px; vertical-align: middle;"/>
-          <span matLine style="padding-left: 25px;" >KubeSec</span>
+          <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="margin-top:10px; margin-left:12px; vertical-align: bottom;"/>
+          <span matLine style="padding-left: 35px; vertical-align: bottom;" >KubeSec</span>
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
@@ -57,23 +57,35 @@
            title="Kube Hunter" (click) = "widenClusterDetailsContentPage()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="30" height="30"  style="padding:8px; vertical-align: middle;"/>
-          <span matLine style="padding-left: 25px;" >Kube Hunter</span>
+          <div class="row">
+            <div style=" margin-left:20px; margin-top:28px;">
+              <img ngSrc="../../../../../assets/images/kube-hunter-logo.png" width="30" height="30"/>
+            </div>
+            <span matLine style="margin-left:33px; margin-top:33px;" >Kube Hunter</span>
+          </div>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubebench']"
            title="Kube Bench" (click) = "widenClusterDetailsContentPage()"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
-          <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="30" height="30"  style="padding:8px; vertical-align: middle;"/>
-          <span matLine style="padding-left:25px;">Kube Bench</span>
+          <div class="row">
+            <div style=" margin-left:20px; margin-top:28px;">
+              <img ngSrc="../../../../../assets/images/kube-bench-logo.png" width="30" height="30" />
+            </div>
+            <span matLine style="margin-left:33px; margin-top:33px;">Kube Bench</span>
+          </div>
         </a>
         <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active"
            title="Falco" (click) = "widenClusterDetailsContentPage()"
            [routerLinkActiveOptions]="{exact: true}" >
-          <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="22" height="22"  style="padding:12px; vertical-align: middle;"/>
-          <span matLine style="padding-left: 25px;">Falco</span>
+          <div class="row">
+            <div style=" margin-left:20px; margin-top:28px;">
+              <img ngSrc="../../../../../../assets/images/falco-icon-black.png" width="22" height="22"  />
+            </div>
+            <span matLine style="margin-left:40px; margin-top:33px;">Falco</span>
+          </div>
         </a>
         <a  mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'reports']"
@@ -101,8 +113,8 @@
           <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" title="Organization Settings" >
             <mat-icon mat-list-item-icon>settings</mat-icon>
           </a>
-          <div  mat-list-item class="expand-hover">
-            <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:0; padding:0;" >
+          <div  mat-list-item class="arrowRight">
+            <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:10px; padding:0;" >
               <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
             </button>
           </div>
