@@ -487,6 +487,10 @@ mat-form-field {
   font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
 }
 
+.title-margin {
+  margin-left: 31px;
+}
+
 .vulnerability-filter-card {
   margin-bottom: 15px;
   margin-top: 10px;
@@ -496,4 +500,28 @@ mat-form-field {
   display: flex;
   width: 100%;
   padding-left: 15px;
+}
+
+.vulnerability-filter-button {
+  justify-content: left;
+  padding-left: 15px;
+}
+
+.vulnerability-download-button {
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+  align-content: center;
+}
+
+.vulnerability-count {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  padding-left: 0;
+}
+
+.vulnerability-card {
+  min-width: 800px;
+  padding-bottom: 20px;
 }

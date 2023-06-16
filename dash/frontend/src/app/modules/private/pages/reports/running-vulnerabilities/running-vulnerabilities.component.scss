@@ -1,31 +1,3 @@
-.page {
-  padding: 20px 15px 10px 15px;
-  font-size: 26px;
-}
-
-.filter-card {
-  margin-bottom: 15px;
-  margin-top: 10px;
-}
-
-.page-title {
-  margin-bottom: 15px;
-  padding-left: 0;
-  justify-content: left;
-}
-
-.vulnerability-container {
-  height: 100%;
-  overflow: auto;
-}
-
-.vulnerability-list {
-  margin: 15px 15px 10px 15px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%
-}
-
 .mat-column-image {
   word-break: break-all;
   margin-right: 10px
@@ -74,50 +46,6 @@
   margin-right: 10px;
 }
 
-.filter-button {
-  justify-content: left;
-  padding-left: 15px;
-}
-
-.download-button {
-  display: flex;
-  justify-content: right;
-  padding-right: 15px;
-  align-content: center;
-}
-
-.report-header {
-  width: 100%
-}
-
-.namespace-input {
-  width: 100%;
-}
-
 .mat-mdc-card {
   max-width: 2000px;
-}
-
-.vulnerability-card {
-  min-width: 800px;
-  padding-bottom: 20px;
-}
-
-.vulnerability-count {
-  display: flex;
-  justify-content: left;
-  align-content: center;
-  padding-left: 0;
-}
-
-.filter-header-title {
-  display: flex;
-  justify-content: left;
-  align-content: center;
-  padding-left: 0;
-}
-
-.filter-content {
-  display: flex;
-  padding-left: 15px;
 }
