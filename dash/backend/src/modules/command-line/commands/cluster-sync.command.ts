@@ -94,7 +94,7 @@ export class ClusterSyncCommand {
   }
 
   private async _saveClusterEventForAllClusters(clusters: ClusterDto[], clusterEventObject: ClusterEventCreateDto) {
-    const clusterIds = clusters.map(cluster => cluster.id);
+    const clusterIds = clusters?.map(cluster => cluster.id) || [];
     return await Promise.all(clusterIds.map(clusterId => this.clusterEventService.createClusterEvent(clusterEventObject, clusterId)));
   }
 

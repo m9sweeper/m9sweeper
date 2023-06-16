@@ -1,5 +1,5 @@
 import {ApiTags} from '@nestjs/swagger';
-import {Controller, Get, Param, Query, UnauthorizedException, UseGuards, UseInterceptors} from '@nestjs/common';
+import {Controller, Get, Param, Query, UnauthorizedException, UseInterceptors} from '@nestjs/common';
 import {ResponseTransformerInterceptor} from '../../../interceptors/response-transformer.interceptor';
 import {ClusterCommand} from '../commands/cluster.command';
 import {ClusterSyncCommand} from '../commands/cluster-sync.command';
@@ -7,10 +7,6 @@ import {SyncExceptionStatusCommand} from '../commands/exception.command';
 import {GatekeeperExceptionCommand} from '../commands/gatekeeper-exception.command';
 import {HelmSetupCommand} from '../commands/helm-setup.command';
 import {KubernetesHistoryCommand} from '../commands/kubernetes-history.command';
-import {AllowedAuthorityLevels} from '../../../decorators/allowed-authority-levels.decorator';
-import {Authority} from '../../user/enum/Authority';
-import {AuthGuard} from '../../../guards/auth.guard';
-import {AuthorityGuard} from '../../../guards/authority.guard';
 import {UserDao} from '../../user/dao/user.dao';
 import {AuthService} from '../../auth/services/auth.service';
 import {AuthorityId} from '../../user/enum/authority-id';
@@ -32,8 +28,6 @@ export class JobsHttpController {
   }
 
   @Get('/sync-cluster/:clusterId')
-  @AllowedAuthorityLevels(Authority.CRON)
-  @UseGuards(AuthGuard, AuthorityGuard)
   async syncCluster(
     @Param('clusterId') clusterId: string,
     @Query('apiKey') apiKey: string
@@ -47,7 +41,7 @@ export class JobsHttpController {
 
 
   protected async checkCronAuth(apiKey: string): Promise<boolean> {
-    const user = await this.userDao.loadUserByApiKey(apiKey);
+    const user = (await this.userDao.loadUserByApiKey(apiKey))?.[0];
     return !!user && this.authService.checkAuthority(user.authorities, [AuthorityId.CRON]);
   }
 }
