@@ -1,0 +1,4 @@
+SHELL=/bin/sh
+
+# m h  dom mon dow user command
+@every 30s guest wget --spider http://dash:3000/api/cron/sync-cluster/all?apiKey=${CRON_API_KEY}

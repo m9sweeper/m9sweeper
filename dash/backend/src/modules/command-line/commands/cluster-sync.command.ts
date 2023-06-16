@@ -42,6 +42,11 @@ export class ClusterSyncCommand {
     const clusters: ClusterDto[] = await this._getClustersToSync(clusterIDs);
     const licenseValidityResult = await this._checkLicense(clusters);
 
+    if (!clusters?.length) {
+      this.log('No clusters matching the given ID found, skipping syncing', { clusterID }, 'syncCluster');
+      return;
+    }
+
     // if there is no valid license (or an error occurred), exit
     // if (!licenseValidityResult.licenseIsValid) global.app.close();
 
@@ -161,7 +166,7 @@ export class ClusterSyncCommand {
           await this.clusterDao.updateClusterLastScanned(cluster?.id);
         }
       } catch (e) {
-        this.log('Error syncing cluster', {name: cluster?.name, id: cluster?.id, error: {stack: e.stack, message: e.message}}, '_checkLicense');
+        this.log('Error syncing cluster', {name: cluster?.name, id: cluster?.id, error: {stack: e.stack, message: e.message}}, '_getClusterSummaries');
       }
     }
     return clusterSummaries;

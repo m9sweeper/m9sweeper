@@ -1,0 +1,4 @@
+FROM webdevops/go-crond
+COPY ./crontab /etc/cron.d/crontab
+
+ENTRYPOINT ["go-crond", "--include=/etc/cron.d"]

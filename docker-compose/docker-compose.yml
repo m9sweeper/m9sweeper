@@ -128,3 +128,12 @@ services:
     command: ["http", "${KUBESEC_PORT}"]
     ports:
       - '${KUBESEC_PORT}:${KUBESEC_PORT}'
+
+  go-crond:
+    image: m9sweeper-go-crond
+    build:
+      dockerfile: ./Dockerfile-go-crond
+      context: .
+    environment:
+      CRON_API_KEY: "${CRON_API_KEY}"
+
