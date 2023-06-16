@@ -27,6 +27,7 @@ export class ClusterDetailsComponent implements OnInit {
   isSmallSize: boolean;
   isSmallDevice = false;
   leftNavWidth: number;
+  clusterDashWidth: number;
 
   constructor(
     private clusterService: ClusterService,
@@ -36,14 +37,17 @@ export class ClusterDetailsComponent implements OnInit {
   {}
 
   ngOnInit(): void {
+    /*
     this.isExpanded = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
     this.width = document.documentElement.clientWidth;
     this.height = document.documentElement.clientHeight;
     this.screenSizeExpand(this.width);
-    // document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
+    document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
+    */
+    this.widenClusterDetailsContentPage();
     this.getClusterById(this.route.snapshot.params.id);
   }
-
+  /*
   @HostListener('window:resize', ['$event']) // listen for screen size change
   calculateScreenSize($event?: any) {
     this.scrHeight = document.documentElement.clientHeight;
@@ -51,7 +55,7 @@ export class ClusterDetailsComponent implements OnInit {
     this.isSmallDevice = false;
     // document.documentElement.style.setProperty('--cluster-details-height', `${this.height}px`);
     // document.documentElement.style.setProperty('--dashboard-details-width', `${this.width}px`);
-    this.screenSizeExpand(this.scrWidth);
+    // this.screenSizeExpand(this.scrWidth);
   }
 
   set scrHeight(val: number) {
@@ -78,14 +82,32 @@ export class ClusterDetailsComponent implements OnInit {
       this.expand();
     }
   }
+  */
+
+  widenClusterDetailsContentPage(){
+    // individual pages on cluster-details dashboard display with page content width
+    // make pages to fill the dashboard width
+
+    // get the current cluster-details dashboard width
+    const clusterDash = document.querySelector('.cluster-details-dashboard');
+    this.clusterDashWidth = clusterDash.clientWidth;
+    // find the cluster-details dashboard's associated class
+    const clusterDashTag = document.getElementById('cluster-dashboard');
+    // use default width from css
+    clusterDashTag.className = 'cluster-dashboard';
+  }
+
   expand() {
+    // collapse or expand left nav
+
     // get the current left nav menu width
     const leftNav = document.querySelector('.cluster-group-menu');
     this.leftNavWidth = leftNav.clientWidth;
-
+    // find the cluster-details dashboard's associated class
     const leftNavTag = document.getElementById('left-nav');
     const clusterDashTag = document.getElementById('cluster-dashboard');
 
+    // check whether to expand or collapse left nav
     if (this.leftNavWidth === 300){
       leftNavTag.className += ' responsive';
       clusterDashTag.className += ' responsive';
@@ -107,7 +129,7 @@ export class ClusterDetailsComponent implements OnInit {
     */
 
   }
-
+  /*
   expandMenuBarForSmallDevice(width: number) {
     let menuWidth: number;
     let containerWidthForSmallDevice: number;
@@ -147,6 +169,7 @@ export class ClusterDetailsComponent implements OnInit {
     // document.documentElement.style.setProperty('--navigation-menu-width', `${menuWidth}px`);
     // document.documentElement.style.setProperty('--cluster-container-width', `${containerWidth}px`);
   }
+   */
   getClusterById(clusterId: number) {
     this.clusterService.getClusterById(clusterId).subscribe(response => {
       this.isClusterLoaded = true;
