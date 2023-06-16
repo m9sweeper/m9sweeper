@@ -486,3 +486,14 @@ mat-form-field {
 .title-font {
   font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
 }
+
+.vulnerability-filter-card {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.vulnerability-filter-content {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+}
