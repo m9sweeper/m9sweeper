@@ -183,20 +183,15 @@ export class DashboardComponent implements OnInit {
     // get the current left nav menu width
     const leftNav = document.querySelector('.cluster-group-menu');
     this.leftNavWidth = leftNav.clientWidth;
-    console.log ('leftNavWidth', this.leftNavWidth);
 
     const leftNavTag = document.getElementById('left-nav');
     const clusterDashTag = document.getElementById('cluster-dashboard');
     if (this.leftNavWidth === 300){
-       // document.getElementById('left-nav').style.width = '65px';
        leftNavTag.className += ' responsive';
        clusterDashTag.className += ' responsive';
-       // console.log ('x.classNAme' , x.className);
     }else{
-      // document.getElementById('left-nav').style.width = '300px';
       leftNavTag.className = 'cluster-group-menu';
       clusterDashTag.className = 'cluster-dashboard';
-      // console.log ('x.classNAme' , x.className);
     }
     // this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
   }
