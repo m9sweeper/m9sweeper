@@ -39,6 +39,33 @@ export class JobsHttpController {
     return await this.clusterSyncCommand.syncCluster(clusterId);
   }
 
+  @Get('/populate-kubernetes-history')
+  async populateKubernetseHistory(@Query('apiKey') apiKey: string) {
+    if (!(await this.checkCronAuth(apiKey))) {
+      throw new UnauthorizedException('Access Denied!');
+    }
+
+    return await this.kubernetesHistoryCommand.get();
+  }
+
+  @Get('/sync-exception-status')
+  async syncExceptionStatus(@Query('apiKey') apiKey: string) {
+    if (!(await this.checkCronAuth(apiKey))) {
+      throw new UnauthorizedException('Access Denied!');
+    }
+
+    return await this.exceptionCommand.syncExceptionStatus();
+  }
+
+  @Get('/sync-gatekeeper-exceptions')
+  async syncGatekeeperExceptions(@Query('apiKey') apiKey: string) {
+    if (!(await this.checkCronAuth(apiKey))) {
+      throw new UnauthorizedException('Access Denied!');
+    }
+
+    return await this.gatekeeperExceptionCommand.syncGatekeeperExceptionBlocks();
+  }
+
 
   protected async checkCronAuth(apiKey: string): Promise<boolean> {
     const user = (await this.userDao.loadUserByApiKey(apiKey))?.[0];
