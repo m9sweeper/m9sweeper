@@ -74,7 +74,7 @@
       <mat-toolbar>
         <span class="subnav-title" matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         <div class="advanced-search" *ngIf="imageScanDates">
-          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="datepicker">
+          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="title-font ">
             <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
           </mat-select>
         </div>
