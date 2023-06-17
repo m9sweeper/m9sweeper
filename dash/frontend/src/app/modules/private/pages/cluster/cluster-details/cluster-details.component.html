@@ -11,7 +11,7 @@
           <span matLine  style="padding-left: 8px;">Summary</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]"
-           title="Cluster Info" (click) = "widenClusterDetailsContentPage()"
+           title="Cluster Info"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
            >
@@ -21,27 +21,27 @@
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'images']"
            routerLinkActive="active"
-           title="Images" (click) = "widenClusterDetailsContentPage()"
+           title="Images"
            [routerLinkActiveOptions]="{exact: true}" >
           <mat-icon mat-list-item-icon>insert_photo</mat-icon>
           <span matLine   style="padding-left: 8px;">Images</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubernetes-namespaces']"
-           title="Workloads" (click) = "widenClusterDetailsContentPage()"
+           title="Workloads"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <mat-icon mat-list-item-icon>network_check</mat-icon>
           <span matLine  style="padding-left: 8px;">Workloads</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'gatekeeper']"
-           title="GateKeeper" (click) = "widenClusterDetailsContentPage()"
+           title="GateKeeper"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <img ngSrc="../../../../../assets/images/opa-icon-black.png" width="25" height="25" style="margin-top:10px; margin-left:12px; vertical-align: bottom;"/>
           <span matLine style="padding-left:30px;vertical-align: bottom;" >GateKeeper</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubesec']"
-           title="KubeSec" (click) = "widenClusterDetailsContentPage()"
+           title="KubeSec"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <img ngSrc="../../../../../assets/images/kubesec-logo.png"width="20" height="20" style="margin-top:10px; margin-left:12px; vertical-align: bottom;"/>
@@ -49,12 +49,12 @@
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
-           title="API Key Management" (click) = "widenClusterDetailsContentPage()">
+           title="API Key Management">
           <mat-icon mat-list-item-icon>code</mat-icon>
           <span matLine  style="padding-left: 8px;">API Key Management</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubehunter']"
-           title="Kube Hunter" (click) = "widenClusterDetailsContentPage()"
+           title="Kube Hunter"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <div class="row">
@@ -65,7 +65,7 @@
           </div>
         </a>
         <a mat-list-item [routerLink]="['/private', 'clusters', cluster?.id, 'kubebench']"
-           title="Kube Bench" (click) = "widenClusterDetailsContentPage()"
+           title="Kube Bench"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <div class="row">
@@ -78,7 +78,7 @@
         <a mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'falco']"
            routerLinkActive="active"
-           title="Falco" (click) = "widenClusterDetailsContentPage()"
+           title="Falco"
            [routerLinkActiveOptions]="{exact: true}" >
           <div class="row">
             <div style=" margin-left:20px; margin-top:28px;">
@@ -90,7 +90,7 @@
         <a  mat-list-item
            [routerLink]="['/private', 'clusters', cluster?.id, 'reports']"
            routerLinkActive="active"
-            title="Reports" (click) = "widenClusterDetailsContentPage()"
+            title="Reports"
            [routerLinkActiveOptions]="{exact: true}" >
           <mat-icon mat-list-item-icon>feed</mat-icon>
           <span matLine style="padding-left: 8px;">Reports</span>
@@ -105,7 +105,7 @@
             <mat-icon mat-list-item-icon>settings</mat-icon>
             <span matLine class="organization-settings-text" >Organization Settings</span>
           </a>
-          <button mat-icon-button (click)="expand()" class="expand-hover" title="Collapse"  style="width: 56px; height: 56px; line-height: normal; horiz-align: center">
+          <button mat-icon-button (click)="expand()"  title="Collapse"  style="width: 56px; height: 56px; line-height: normal; horiz-align: center">
             <fa-icon [icon]="faIcons.arrowDoubleLeft" size="2x"></fa-icon>
           </button>
         </div>
@@ -113,7 +113,7 @@
           <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" title="Organization Settings" >
             <mat-icon mat-list-item-icon>settings</mat-icon>
           </a>
-          <div  mat-list-item class="arrowRight">
+          <div  mat-list-item >
             <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:10px; padding:0;" >
               <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
             </button>
@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <div id="cluster-dashboard" class="cluster-details-dashboard">
+  <div id="cluster-dashboard" class="cluster-dashboard">
     <router-outlet></router-outlet>
   </div>
 
