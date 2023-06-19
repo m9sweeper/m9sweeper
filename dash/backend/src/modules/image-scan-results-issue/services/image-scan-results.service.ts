@@ -11,19 +11,20 @@ export class ImageScanResultsIssueService {
     constructor(
       private readonly imageScanResultsIssueDao: ImageScanResultsIssueDao,
       protected readonly csvService: CsvService,
-      protected readonly utilityService: UtilitiesService
-                 ){}
-    async getImageScanResultsIssuesByImageResultsId(id: number,
-                                                    all: number,
-                                                    page  = 0,
-                                                    limit  = 10,
-                                                    sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
-                                                    options?: {
-                                                        scanDate?: number,
-                                                        policyId?: number
-                                                    }
-                                                    ):
-        Promise<{totalCount: number, list:ImageScanResultsIssueDto[]}> {
+      protected readonly utilityService: UtilitiesService,
+    ){}
+
+    async getImageScanResultsIssuesByImageResultsId(
+      id: number,
+      all: number,
+      page  = 0,
+      limit  = 10,
+      sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
+      options?: {
+        scanDate?: number,
+        policyId?: number
+      }
+    ): Promise<{totalCount: number, list:ImageScanResultsIssueDto[]}> {
         let list: ImageScanResultsIssueDto[] ;
         let totalCount: number;
         if(all === 1 && options?.scanDate){
@@ -39,14 +40,14 @@ export class ImageScanResultsIssueService {
         }
     }
 
-    async buildImageScanResultsIssuesCsv(imageName: string,
-                                         id: number,
-                                         all: number,
-                                         scanDate: number,
-                                         policyId: number,
-                                         sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
-    ):
-      Promise<ReportsCsvDto> {
+    async buildImageScanResultsIssuesCsv(
+      imageName: string,
+      id: number,
+      all: number,
+      scanDate: number,
+      policyId: number,
+      sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'},
+    ): Promise<ReportsCsvDto> {
         const headers = ['Package', 'Compliant', 'Severity', 'Title', 'Type', 'AVD Link', 'Scanner', 'Installed', 'Fixed Version'];
         const lines = [this.csvService.buildLine(headers)];
 
