@@ -102,6 +102,7 @@
 
   div.cluster-item { // left nav 2)
     flex: 1;
+    height: fit-content;
   }
   span.cluster-group-name-full {
     display:none;
