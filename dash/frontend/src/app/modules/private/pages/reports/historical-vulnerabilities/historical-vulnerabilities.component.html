@@ -1,21 +1,21 @@
-<div class="vulnerability-container">
-  <div class="vulnerability-list page">
+<div class="page-container">
+  <div class="page-container-content">
     <div class="col-lg-4 col-xs-12 page-title">
       <span>Vulnerabilities History</span>
     </div>
-    <div class="filter-card">
+    <div class="vulnerability-filter-card">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row filter-header">
-            <div class="col-xs-12 filter-header-title">
-              <h4>Report Settings</h4>
+          <div class="row">
+            <div class="col-xs-12 page-card-title fix-margin">
+              <p class="title-font">Report Settings</p>
             </div>
           </div>
         </mat-card-header>
         <mat-card-content>
-          <div class="filter-content">
+          <div class="vulnerability-filter-content">
             <form (ngSubmit)="rebuildWithFilters()" [formGroup]="filterForm">
-              <div class="row report-header">
+              <div class="row full-width">
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                   <mat-form-field appearance="fill" [formGroup]="filterForm">
                     <mat-label>Entries to preview</mat-label>
@@ -29,7 +29,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <mat-form-field class="namespace-input" appearance="fill" [formGroup]="filterForm">
+                  <mat-form-field class="full-width" appearance="fill" [formGroup]="filterForm">
                     <mat-label>Namespaces</mat-label>
                     <mat-select formControlName="namespaces"
                                 multiple>
@@ -47,7 +47,7 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row filter-button">
+              <div class="row vulnerability-filter-button">
                 <button [disabled]="!filtersValid"
                         mat-raised-button
                         color="primary"
@@ -63,11 +63,11 @@
     <div class="vulnerability-card">
       <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row report-header">
+          <div class="row full-width">
             <div class="col-xs-9 vulnerability-count">
-              <h4>Displaying {{limit}} out of {{vulnerabilityCount}} vulnerabilities</h4>
+              <p class="title-font title-margin">Displaying {{limit}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
-            <div class="col-xs-3 download-button">
+            <div class="col-xs-3 vulnerability-download-button">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"
@@ -77,7 +77,7 @@
           </div>
         </mat-card-header>
         <mat-card-content>
-          <div class="vulnerability-table">
+          <div class="page-table">
             <mat-table [dataSource]="dataSource">
               <ng-container matColumnDef="savedDate" class="column-word-break">
                 <mat-header-cell *matHeaderCellDef>Date Scanned</mat-header-cell>

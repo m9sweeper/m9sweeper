@@ -188,11 +188,6 @@ $ms-default-theme: mat.define-light-theme((
   padding:10px;
 }
 
-.mat-mdc-form-field{
-  font-size:18px;
-}
-
-
 app-private {
   display: flex;
   flex-direction: column;
@@ -482,3 +477,107 @@ mat-form-field {
   display: flex;
   flex-display: row;
 }
+
+// CSS for Report pages [Start]
+
+.title-font {
+  font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
+}
+
+.title-margin {
+  margin-left: 31px;
+}
+
+.vulnerability-filter-card {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.vulnerability-filter-content {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+}
+
+.vulnerability-filter-button {
+  justify-content: left;
+  padding-left: 15px;
+}
+
+.vulnerability-download-button {
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+  align-content: center;
+}
+
+.vulnerability-count {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  padding-left: 0;
+}
+
+.vulnerability-card {
+  min-width: 800px;
+  padding-bottom: 20px;
+}
+
+.mat-column-imageId {
+  margin-right: 10px;
+  word-break: break-all;
+  max-width: 7%;
+}
+
+.mat-column-image {
+  word-break: break-all;
+  margin-right: 10px
+}
+
+.mat-column-type {
+  word-break: break-all;
+  margin-right: 10px;
+}
+
+.mat-column-package {
+  word-break: break-all;
+  margin-right: 10px;
+}
+
+.mat-column-isFixable {
+  max-width: 7%;
+  margin-right: 10px;
+}
+
+.mat-column-severity {
+  max-width: 7%;
+}
+
+.mat-column-scannerName {
+  margin-right: 10px;
+}
+
+.mat-column-runningInCluster {
+  max-width: 7%;
+  margin-right: 10px;
+}
+
+.mat-column-namespaces {
+  margin-right: 10px;
+  word-break: break-all;
+}
+
+.mat-mdc-form-field {
+  margin-right: 10px;
+}
+
+.fix-margin {
+  margin-left: 18px;
+}
+
+.graph-card {
+  min-width: 625px;
+  padding-bottom: 20px;
+}
+
+// CSS for Report pages [END]
