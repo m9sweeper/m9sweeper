@@ -178,12 +178,12 @@ export class ImageDao {
         });
     }
 
-    async countImage(searchClause: any): Promise<any> {
+    async countImage(searchClause: any): Promise<string> {  // this was always returning a string. now it's typed appropriately.
         const knex = await this.databaseService.getConnection();
         const result = await knex('images as i')
           .count('i.id', {as: 'count'}).where(searchClause)
           .returning('count');
-        return (result && result[0] && result[0].count) ? result[0].count : 0;
+        return (result && result[0] && result[0].count) ? result[0].count : '0';
     }
 
     async loadImage(imageSearchClause?: any): Promise<ListOfImagesDto[]> {

@@ -7,19 +7,20 @@ import {
 import { Response } from "express";
 import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import * as client from "prom-client";
-import { PrometheusService } from "../services/prometheus.service";
+import { PrometheusV1Service } from "../services/prometheus-v1.service";
+import { PrometheusEnvironmentMetricsService } from "../services/prometheus-environment-metrics.service";
 
 @ApiTags('Metrics')
 @Controller()
 export class MetricsController {
   constructor(
-    private prometheusService: PrometheusService
+    private prometheusEnvService: PrometheusEnvironmentMetricsService
   ) {}
 
   @Get('/environment')
-  index(@Res() response: Response) {
+  async index(@Res() response: Response) {
     response.header("Content-Type", client.register.contentType);
-    response.send(this.prometheusService.environmentMetrics());
+    response.send(await this.prometheusEnvService.environmentMetrics());
   }
 
 }

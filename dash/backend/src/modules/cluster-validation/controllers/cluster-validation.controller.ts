@@ -12,7 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { ConfigService } from '@nestjs/config';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ClusterEventService } from '../../cluster-event/services/cluster-event.service';
-import {PrometheusService} from '../../metrics/services/prometheus.service';
+import {PrometheusV1Service} from '../../metrics/services/prometheus-v1.service';
 
 @Controller()
 export class ClusterValidationController {
@@ -21,7 +21,7 @@ export class ClusterValidationController {
     private readonly configService: ConfigService,
     private readonly logger: MineLoggerService,
     private readonly clusterEventService: ClusterEventService,
-    private readonly prometheusService: PrometheusService
+    private readonly prometheusService: PrometheusV1Service
   ) {}
 
   @Post()

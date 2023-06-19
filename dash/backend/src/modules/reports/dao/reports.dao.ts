@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../shared/services/database.service';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { ReportsVulnerabilityExportDto } from '../dto/reports-vulnerability-export-dto';
 import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity';
 import { ReportsVulnerabilityExportPreviewDto } from '../dto/reports-vulnerability-export-preview-dto';
@@ -13,6 +13,8 @@ import {ReportsHistoricalVulnerabilitiesDto} from '../dto/reports-historical-vul
 import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
 import {format} from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
+import knex, { Knex } from "knex";
+import { ReportsRunningVulnerabilitiesSummaryDto } from "../dto/reports-running-vulnerabilities-summary-dto";
 
 
 @Injectable()
@@ -175,8 +177,36 @@ export class ReportsDao {
         return {count, results: queryResults};
     }
 
-    async getRunningVulnerabilities(clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string})
-        : Promise<ReportsRunningVulnerabilitiesPreviewDto> {
+    async getRunningVulnerabilities(
+      clusterId?: number,
+      options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+    ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
+      const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
+
+      const count = await knex
+        .count('*', {as: 'entries'})
+        .from(query.as('results'))
+        .returning('entries')
+        .then(resp => parseInt(resp[0].entries.toString(), 10));
+
+      if (options?.limit) {
+        query.limit(options.limit);
+      }
+
+      const queryResults: ReportsRunningVulnerabilitiesDto[] = await query.then((response) => {
+        // plainToInstance returns a single even when it's an array --> proper typing requires longer form
+        const mappedObjects: ReportsRunningVulnerabilitiesDto[] = [];
+        for (const responseInstance of response) {
+          mappedObjects.push(plainToInstance(ReportsRunningVulnerabilitiesDto, responseInstance));
+        }
+        return mappedObjects;
+      });
+
+      return {count, results: queryResults};
+    }
+
+    async getRunningVulnerabilitiesQuery(clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string})
+        : Promise<{ query: Knex.QueryBuilder, knex: Knex<any, any[]>}> {
         const knex = await this.databaseService.getConnection();
 
         let subQuery = knex.select([
@@ -244,21 +274,25 @@ export class ReportsDao {
             ])
             .orderBy('image_details.last_scanned', 'desc');
 
-        const count = await knex
-            .count('*', {as: 'entries'})
-            .from(query.as('results'))
-            .returning('entries')
-            .then(resp => parseInt(resp[0].entries.toString(), 10));
+        return { query, knex };
+    }
 
-        if (options?.limit) {
-            query.limit(options.limit);
-        }
-
-        const queryResults = await query.then((response) => {
-            return plainToClass(ReportsRunningVulnerabilitiesDto, response);
-        });
-
-        return {count, results: queryResults};
+    async getRunningVulnerabilitiesSummary(clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string})
+      : Promise<ReportsRunningVulnerabilitiesSummaryDto> {
+      const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
+      const outerquery = knex.select([
+        knex.raw('SUM(summary_info.total_critical) AS total_critical'),
+        knex.raw('SUM(summary_info.total_fixable_critical) AS total_fixable_critical'),
+        knex.raw('SUM(summary_info.total_major) AS total_major'),
+        knex.raw('SUM(summary_info.total_fixable_major) AS total_fixable_major'),
+        knex.raw('SUM(summary_info.total_medium) AS total_medium'),
+        knex.raw('SUM(summary_info.total_fixable_medium) AS total_fixable_medium'),
+        knex.raw('SUM(summary_info.total_low) AS total_low'),
+        knex.raw('SUM(summary_info.total_fixable_low) AS total_fixable_low'),
+        knex.raw('SUM(summary_info.total_negligible) AS total_negligible'),
+        knex.raw('SUM(summary_info.total_fixable_negligible) AS total_fixable_negligible')
+      ]).from(query.as('summary_info'));
+      return outerquery.first().then(result => plainToInstance(ReportsRunningVulnerabilitiesSummaryDto, result));
     }
 
     async getHistoricalRunningVulnerabilities(clusterId: number, date: string, options: {limit?: number, namespaces?: string[], isCompliant?: string})

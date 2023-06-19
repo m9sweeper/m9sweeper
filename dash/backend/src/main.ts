@@ -10,7 +10,7 @@ import {ValidationPipe} from '@nestjs/common';
 import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
 import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
-import {PrometheusService} from "./modules/metrics/services/prometheus.service";
+import {PrometheusV1Service} from "./modules/metrics/services/prometheus-v1.service";
 
 
 async function registerSwagger(app) {
@@ -163,7 +163,7 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter(app.get(MineLoggerService)));
-  const prometheusService = app.get(PrometheusService);
+  const prometheusService = app.get(PrometheusV1Service);
 
   const requestLimit = process.env.REQUEST_LIMIT || '30mb';
 
