@@ -19,7 +19,8 @@ div.cluster-group-menu {
 }
 
 div.cluster-item { // left nav 2)
-  height: 35px;
+  //height: 35px;
+  height: fit-content;
   flex: 4;
   a{
     font-size: 14px;
