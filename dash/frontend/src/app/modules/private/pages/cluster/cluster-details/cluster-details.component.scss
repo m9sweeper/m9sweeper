@@ -81,6 +81,7 @@ div.cluster-dashboard {
   div.cluster-group-menu {
     background-color: yellow;
     width: 65px;
+    overflow-y: scroll;
   }
   span.add-cluster-group{
     display:none;
@@ -127,6 +128,7 @@ div.cluster-dashboard {
 div.cluster-group-menu.responsive {
   background-color: orange;
   width: 65px;
+  overflow-y: scroll;
   span.add-cluster-group{
     display:none;
   }
