@@ -38,7 +38,7 @@ export class ClusterCommand {
 
     // @TODO: Remove all log messages so this will be silent
 
-    async seedCluster(): Promise<void> {
+    async seedCluster(): Promise<boolean> {
         const clusterName = process.env.FIRST_CLUSTER_NAME;
         const clusterGroupName = process.env.FIRST_CLUSTER_GROUP_NAME;
         const superAdminEmail = process.env.SUPER_ADMIN_EMAIL;
@@ -48,7 +48,7 @@ export class ClusterCommand {
         // validate required fields are present
         if (!(superAdminEmail && clusterGroupName && clusterName)) {
             this.loggerService.log({label: 'Skipping seeding cluster - missing SUPER_ADMIN_EMAIL, FIRST_CLUSTER_GROUP_NAME, or FIRST_CLUSTER_NAME.'});
-            return;
+            return false;
         }
 
         // save license & instance key if neither already exist in the DB
@@ -72,14 +72,14 @@ export class ClusterCommand {
             }
         } catch (e) {
             console.log('Error saving license & instance key', e);
-            return;
+            return false;
         }
 
         // Do not attempt to create the cluster or cluster group if the cluster group already exists
         const existingGroups = await this.clusterGroupService.countClusterGroups();
         if (existingGroups > 0) {
             console.log(`Cluster groups already exist. Skipping Cluster & Cluster group creation`);
-            return;
+            return true;
         }
 
         // Try to get the user's ID
@@ -89,11 +89,11 @@ export class ClusterCommand {
             userId = !!user ? user[0].id : null;
             if (!userId) {
                 this.loggerService.log({label: 'Specified admin user does not exist - unable to initialize cluster'});
-                return;
+                return false;
             }
         } catch (e) {
             console.log('Failed to retrieve user', e);
-            return;
+            return false;
         }
 
         // @TODO: If any cluster/cluster groups exist in the DB, skip the rest of the function. This should ONLY be run on the initial install and not 
@@ -179,9 +179,11 @@ export class ClusterCommand {
                 await this.clusterDao.seedInitialCluster(cluster, clusterGroupName, policy, scanner, userId);
             } catch (e) {
                 console.log("Error saving to DB", e);
+                return false;
             }
         } else {
             this.loggerService.log({label: 'Skipping saving default cluster - could not connect. '});
         }
+        return true;
     }
 }

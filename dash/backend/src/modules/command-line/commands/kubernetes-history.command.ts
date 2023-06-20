@@ -22,7 +22,7 @@ export class KubernetesHistoryCommand {
                 private readonly historyNamespaceComplianceService: NamespaceComplianceService) {
     }
 
-    async get() {
+    async get(): Promise<boolean> {
         let dayStr = yesterdaysDateAsStr();
 
         await this.kubernetesHistoryService.saveK8sClustersHistory(dayStr);
@@ -37,5 +37,6 @@ export class KubernetesHistoryCommand {
         await this.imageRescanningService.rescanIfNeeded();
 
         await this.historyNamespaceComplianceService.calculateHistoricalNameSpaceCompliance(dayStr);
+        return true;
     }
 }

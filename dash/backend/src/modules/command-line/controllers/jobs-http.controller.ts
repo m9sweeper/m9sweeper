@@ -31,7 +31,7 @@ export class JobsHttpController {
   async syncCluster(
     @Param('clusterId') clusterId: string,
     @Query('apiKey') apiKey: string
-  ): Promise<void> {
+  ): Promise<boolean> {
     if (!(await this.checkCronAuth(apiKey))) {
       throw new UnauthorizedException('Access Denied!');
     }

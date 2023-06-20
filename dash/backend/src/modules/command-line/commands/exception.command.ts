@@ -13,9 +13,10 @@ export class SyncExceptionStatusCommand {
         private readonly exceptionsService: ExceptionsService,
     ) {}
 
-    async syncExceptionStatus(): Promise<void> {
+    async syncExceptionStatus(): Promise<boolean> {
         let exceptions = await this.exceptionsService.getAllExceptions();
         exceptions = exceptions.filter(e => e.end_date && new Date(e.end_date) < new Date());
         await Promise.all(exceptions.map(e => this.exceptionsService.updateExceptionStatus(e.id, ExceptionType.INACTIVE)));
+        return true;
     }
 }

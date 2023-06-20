@@ -35,7 +35,7 @@ export class ClusterSyncCommand {
     if (this.debugMode) this.loggerService.log({label, ...data}, `ClusterSyncCommand.${method}`);
   }
 
-  async syncCluster(clusterID: string): Promise<void> {
+  async syncCluster(clusterID: string): Promise<boolean> {
     this.log('Job started - Syncing cluster', {clusterID}, 'syncCluster');
     let clusterIDs: number[] | 'all' = 'all';
     if (clusterID !== 'all') clusterIDs = [parseInt(clusterID.toString(), 10)];
@@ -44,7 +44,7 @@ export class ClusterSyncCommand {
 
     if (!clusters?.length) {
       this.log('No clusters matching the given ID found, skipping syncing', { clusterID }, 'syncCluster');
-      return;
+      return true;
     }
 
     // if there is no valid license (or an error occurred), exit
@@ -95,7 +95,7 @@ export class ClusterSyncCommand {
       });
 
     this.log('Job finished - Syncing cluster',  {}, 'syncCluster');
-    return;
+    return true;
   }
 
   private async _saveClusterEventForAllClusters(clusters: ClusterDto[], clusterEventObject: ClusterEventCreateDto) {

@@ -29,7 +29,7 @@ export class HelmSetupCommand {
                 private readonly exceptionService: ExceptionsService) {
     }
 
-    async runSeed(): Promise<any[] | void> {
+    async runSeed(): Promise<boolean> {
         const promises: Promise<any>[] = [];
         if (process.env.SUPER_ADMIN_EMAIL && process.env.SUPER_ADMIN_PASSWORD) {
             promises.push(this.databaseService.getConnection().then(knex => {
@@ -182,23 +182,26 @@ export class HelmSetupCommand {
         console.log('Cron user exists.... skipping');
       }
 
-        return Promise.all(promises);
+      await Promise.all(promises);
+      return true;
     }
 
     // @TODO: clean up log messages to make this silent
     // Populates the docker registries tables with initial registries passed in through env variable
-    async populateRegistries(): Promise<any[] | void> {
+    async populateRegistries(): Promise<boolean> {
         const b64Registries = process.env.INITIAL_REGISTRIES_JSON;
         // Expects a JSON containing the fields registries that is a list of registries (name, hostname, login_required, username, password)
         let registries: IcliRegistry[];
         try {
             registries = (JSON.parse(Buffer.from(b64Registries, "base64").toString("ascii")) as IHelmInputRegistry)?.registries;
         } catch (e) {
-            return console.log('Could not parse JSON', e);
+            console.log('Could not parse JSON', e);
+            return false;
         }
 
         if (!registries?.length) {
-            return console.log('Data not present or could not be read');
+            console.log('Data not present or could not be read');
+            return false;
         }
 
         const existingRegistries = await this.registryDao.getDockerRegistries(null);
@@ -225,7 +228,7 @@ export class HelmSetupCommand {
         }
 
         await Promise.all(promises);
-        return;
+        return true;
     }
 
     // @TODO: clean up log messages to make this silent
@@ -263,7 +266,7 @@ export class HelmSetupCommand {
         }
     }
 */
-    async loadDefaultNamespaceExceptions(): Promise<void> {
+    async loadDefaultNamespaceExceptions(): Promise<boolean> {
         if ((await this.exceptionService.getAllExceptions()).length === 0) {
             // create a default namespace exception
             const exception = new ExceptionCreateDto();
@@ -293,6 +296,7 @@ export class HelmSetupCommand {
         } else {
             console.log("Not creating default namespace exception - exceptions already exist");
         }
+        return true;
     }
 
 }

@@ -21,14 +21,18 @@ export class GatekeeperExceptionCommand {
     ) {
     }
 
-    async syncGatekeeperExceptionBlocks(): Promise<void> {
+    async syncGatekeeperExceptionBlocks(): Promise<boolean> {
         /*
         this.licensingPortalService.checkLicenseValidityFromDash()
             .then((checkLicenseValidity) => {
                 if (checkLicenseValidity.isLicenseSetup && checkLicenseValidity.validity) {
          */
-                    this.exceptionBlockService.syncGatekeeperExceptionBlocks()
-                        .catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+                    return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
+                        .then(() => true)
+                        .catch(e => {
+                            console.log('Error syncing GateKeeper exception blocks: ' + e);
+                            return false;
+                        });
          /*
                 } else {
                     if (checkLicenseValidity.isLicenseSetup) {

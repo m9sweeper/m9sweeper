@@ -1,5 +1,4 @@
 import { Global, Module } from '@nestjs/common';
-import { CommandModule } from 'nestjs-command';
 import { ClusterCommand } from './commands/cluster.command';
 import { ClusterSyncCommand } from './commands/cluster-sync.command';
 import { KubernetesClusterService } from './services/kubernetes-cluster.service';
@@ -12,6 +11,7 @@ import {ExceptionBlockService} from "./services/exception-block.service";
 import { ImageRescanningService } from './services/image-rescanning.service';
 import {JobsCliController} from './controllers/jobs-cli.controller';
 import {JobsHttpController} from './controllers/jobs-http.controller';
+import {CliCommandBuilderService} from './services/cli-command-builder.service';
 
 @Global()
 @Module({
@@ -28,10 +28,9 @@ import {JobsHttpController} from './controllers/jobs-http.controller';
         GatekeeperExceptionCommand,
         SyncExceptionStatusCommand,
         ImageRescanningService,
+        CliCommandBuilderService
     ],
-    imports: [
-        CommandModule,
-    ],
+    imports: [],
     exports: [],
     controllers: [
       JobsHttpController
