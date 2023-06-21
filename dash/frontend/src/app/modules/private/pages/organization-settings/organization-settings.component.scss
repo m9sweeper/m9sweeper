@@ -81,7 +81,7 @@ div.cluster-dashboard {
     background-color: yellow;
     width: 65px;
     overflow-y: scroll;
-    min-height: 667px;
+    overflow-x: hidden;
   }
   span.add-cluster-group{
     display:none;
@@ -129,9 +129,13 @@ div.cluster-group-menu.responsive {
   background-color: orange;
   width: 65px;
   overflow-y: scroll;
-  min-height: 667px;
+  overflow-x: hidden;
   span.add-cluster-group{
     display:none;
+  }
+  div.cluster-item { // left nav 2)
+    flex: 1;
+    height: fit-content;
   }
   div.organization-settings { // left nav 3)
     flex-direction: column;

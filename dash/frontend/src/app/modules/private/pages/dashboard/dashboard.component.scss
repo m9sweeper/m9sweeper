@@ -21,7 +21,7 @@
   .mat-icon{ // for mat-icon in dashboard
     padding-left: 10px;
     margin-right: 25px;
-    margin-left: 5px;
+    // margin-left: 5px;
     height: 40px;
   }
   .material-icons{
@@ -97,6 +97,7 @@
     background-color: yellow;
     width: 65px;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
   span.add-cluster-group{
     display:none;
@@ -144,9 +145,15 @@
     background-color: orange;
     width: 65px;
     overflow-y: scroll;
+    overflow-x: hidden;
     span.add-cluster-group{
       display:none;
     }
+    div.cluster-item { // left nav 2)
+      flex: 1;
+      height: fit-content;
+    }
+
     div.organization-settings { // left nav 3)
       flex-direction: column;
     }

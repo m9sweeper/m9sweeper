@@ -101,7 +101,7 @@
     <div class="organization-settings">
       <div role="list">
         <div  id='expand' class="expanded-item" >
-          <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" class="expand-hover" title="Organization Settings" >
+          <a  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" class="expand-hover" title="Organization Settings" >
             <mat-icon mat-list-item-icon>settings</mat-icon>
             <span matLine class="organization-settings-text" >Organization Settings</span>
           </a>
@@ -109,15 +109,15 @@
             <fa-icon [icon]="faIcons.arrowDoubleLeft" size="2x"></fa-icon>
           </button>
         </div>
-        <div  id='collapse'class="collapse-item" >
-          <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" title="Organization Settings" >
+        <div  id='collapse' class="collapse-item" >
+          <a style="margin-left:5px" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" title="Organization Settings" >
             <mat-icon mat-list-item-icon>settings</mat-icon>
           </a>
-          <div  mat-list-item >
-            <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:10px; padding:0;" >
+
+            <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:0; padding:0;" >
               <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
             </button>
-          </div>
+
         </div>
       </div>
     </div>

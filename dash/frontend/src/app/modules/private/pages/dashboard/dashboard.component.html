@@ -44,18 +44,18 @@
         </div>
 
         <div id='collapse' class="collapse-item" >
-        <a  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']"  class="expand-hover" title="Organization Settings"  *ngIf=" isAdmin">
+        <a style="margin-left:5px"  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']"  class="expand-hover" title="Organization Settings"  *ngIf=" isAdmin">
           <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
-        <a  [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']"  title="Organization Settings"  *ngIf=" !isAdmin">
+        <a style="margin-left:5px"  [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']"  title="Organization Settings"  *ngIf=" !isAdmin">
           <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
 
-        <div>
+
           <button mat-icon-button (click)="expand()" title="Expand" style="width: 56px; height: 56px; line-height: normal; margin-left:0; padding:0;">
             <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
           </button>
-        </div>
+
         </div>
 
 
