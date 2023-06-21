@@ -39,7 +39,7 @@
     "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all"
   },
   "dependencies": {
-    "@kubernetes/client-node": "^0.12.0",
+    "@kubernetes/client-node": "^0.18.1",
     "@nestjs-modules/mailer": "file:vendor/nestjs-mailer",
     "@nestjs/axios": "2.0.0",
     "@nestjs/common": "^9.3.9",
