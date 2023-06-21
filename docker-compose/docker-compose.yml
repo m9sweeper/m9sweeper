@@ -34,10 +34,10 @@ services:
     volumes:
       - m9sweeperDbData:/var/lib/postgresql/data
 
-  dash-users-init:
+  dash-init:
     build: ..
     image: m9sweeper-dash
-    entrypoint: "npm run cli:users:init"
+    entrypoint: "npm run cli:init:all"
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,6 +58,7 @@ services:
       SUPER_ADMIN_EMAIL: "${SUPER_ADMIN_EMAIL}"
       SUPER_ADMIN_PASSWORD: "${SUPER_ADMIN_PASSWORD}"
       CLI_PATH: "./cli.js"
+      INITIAL_REGISTRIES_JSON: "${INITIAL_REGISTRIES_JSON}"
 
   dash:
     build: ..

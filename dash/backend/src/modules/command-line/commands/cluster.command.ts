@@ -48,7 +48,7 @@ export class ClusterCommand {
         // validate required fields are present
         if (!(superAdminEmail && clusterGroupName && clusterName)) {
             this.loggerService.log({label: 'Skipping seeding cluster - missing SUPER_ADMIN_EMAIL, FIRST_CLUSTER_GROUP_NAME, or FIRST_CLUSTER_NAME.'});
-            return false;
+            return true;
         }
 
         // save license & instance key if neither already exist in the DB
