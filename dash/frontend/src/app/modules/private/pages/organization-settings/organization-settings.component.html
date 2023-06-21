@@ -1,5 +1,6 @@
-<div class="main-container">
+<div id="main-div" class="main-container">
   <div id="left-nav" class="cluster-group-menu">
+
     <div class="cluster-item">
       <mat-list role="list">
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'settings'] " routerLinkActive="active"
@@ -53,12 +54,12 @@
     <div class="organization-settings" >
       <div role="list">
         <div class="expanded-item">
-          <button mat-icon-button (click)="expand()" title="Expand"  style="width: 56px; height: 56px; line-height: normal; margin-left:10px; padding:0;" >
+          <button mat-icon-button (click)="expand()" title="Collapse"  style="width: 56px; height: 56px; line-height: normal; margin-left:10px; padding:0;" >
             <fa-icon [icon]="faIcons.arrowDoubleLeft" size="2x"></fa-icon>
           </button>
         </div>
         <div class="collapse-item">
-        <button mat-icon-button (click)="expand()" style="width: 56px; height: 56px;line-height: normal; margin-left:10px; padding:0;">
+        <button mat-icon-button (click)="expand()" title="Expand" style="width: 56px; height: 56px;line-height: normal; margin-left:10px; padding:0;">
           <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
 
         </button>

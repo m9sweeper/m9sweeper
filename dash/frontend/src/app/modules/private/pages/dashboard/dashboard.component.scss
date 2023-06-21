@@ -1,9 +1,9 @@
-// LARGE SCREEN: width >800px // pink & green
+// LARGE SCREEN: width >800px
   div.cluster-group-menu {
     height: auto;
-    background-color: pink;
+    //background-color: pink;
     width: 300px;
-    // background-color: #FFFFFF;
+    background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
   }
@@ -71,7 +71,7 @@
   div.expanded-item {
     display: flex;
     flex-direction: row;
-    background-color: green;
+    // background-color: green;
 
     &:hover {
       background-color: #F2F2F2;
@@ -87,10 +87,11 @@
   div.cluster-dashboard {
     width: calc(100% - 300px);
     flex-direction: column;
+    background-color: #e0e0e0;
   }
 
 
-
+/*
 // SMALL SCREEN: width <800px // yellow & blue
 @media screen and (max-width: 800px) {
   div.cluster-group-menu {
@@ -139,10 +140,12 @@
   }
 }
 
+ */
 
-// RESPONSIVE - work for large screen to collapse or expand // orange & light green
+
+// RESPONSIVE - work for large screen to collapse or expand
   div.cluster-group-menu.responsive {
-    background-color: orange;
+    // background-color: orange;
     width: 65px;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -168,7 +171,7 @@
     div.collapse-item {
       display: flex;
       flex-direction: column;
-      background-color: palegreen;
+      //background-color: palegreen;
 
       &:hover {
         background-color: #F2F2F2;

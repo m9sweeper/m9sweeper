@@ -22,6 +22,7 @@ export class ClusterDetailsComponent implements OnInit {
 
   leftNavWidth: number;
   clusterDashWidth: number;
+  mainDivWidth: number;
 
   constructor(
     private clusterService: ClusterService,
@@ -35,16 +36,29 @@ export class ClusterDetailsComponent implements OnInit {
     this.getClusterById(this.route.snapshot.params.id);
   }
 
+  @HostListener('window:resize', ['$event'])
+  collapseIfSmallScreen() {
+    const mainDiv = document.querySelector('.main-container');
+    this.mainDivWidth = mainDiv.clientWidth;
+
+    const leftNavTag = document.getElementById('left-nav');
+    const clusterDashTag = document.getElementById('cluster-dashboard');
+
+    if (this.mainDivWidth < 800 ){
+      leftNavTag.className += ' responsive';
+      clusterDashTag.className += ' responsive';
+    }
+  }
+
   expand() {
     // collapse or expand left nav
 
     // get the current left nav menu width
     const leftNav = document.querySelector('.cluster-group-menu');
     this.leftNavWidth = leftNav.clientWidth;
-    // find the cluster-details dashboard's associated class
+    // find associated class by id
     const leftNavTag = document.getElementById('left-nav');
     const clusterDashTag = document.getElementById('cluster-dashboard');
-
     // check whether to expand or collapse left nav
     if (this.leftNavWidth === 300){
       leftNavTag.className += ' responsive';
