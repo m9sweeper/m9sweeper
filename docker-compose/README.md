@@ -7,6 +7,19 @@ You will need to install Docker & Docker Compose. Dockers Docs has instructions 
 
 It is recommended to install Docker Desktop as a simple way to install both Docker and Docker Compose in addition to having a UI that will make certain tasks easier.
 
+### Running With Apple Silicon chip 
+The docker images for rabbitmq and kubesec do not support being run on Apple Silicon. If you try to run them, they will either fail to boot up, or crash fairly quickly after booting up.
+To resolve this:
+1. Open Docker Desktop
+2. Click the cog in the top right to access the settings.
+3. Under 'Features in Development', enable the 'Use Rosetta for x86/amd64 emulation on Apple Silicon'
+   - You will need to install Rosetta if you haven't already. You should be prompted to install it the first time your OS determines it to be needed
+   - If you had previoulsy disabled it, The setting 'General' > 'Use Virtualization Network' must also be enabled.
+4. Use the 'Apply & restart' button to apply these settings. You should be good to go
+
+Note: on rare occasions, one of those containers will still fail to boot up when running this way.
+Restarting the container should fix this.
+
 ## Setting up
 1. In the docker-compose directory, make a copy of .env.sample, and rename it to .env.sample
 2. Update the values in your .env
@@ -19,7 +32,6 @@ It is recommended to install Docker Desktop as a simple way to install both Dock
 2. Run `docker-compose build` to build all of the services. This will build these services
     - dash
     - trawler
-    - go-crond (Used exclusively in docker compose to simulate Kubernetes Cronjobs)
 3. Run `docker-compose up` to start all of the services
    - Note: Any changes you make in the code will not be reflected until you run `docker-compose build` again
 4. Docker Compose will pull images for the other services, and then boot all of the services up.
@@ -39,6 +51,7 @@ This is used for the Dash API to push messages to in order to inform Trawler of 
 
 ### Dash
 The dash project from this repo. It contains both the UI and API, that are the heart of the application.
+When running in Docker Compose, dash will also run the jobs that would be run as kubernetes cron jobs when deployed via helm. (See Cron section for more details)
 
 ### Trawler
 This will be built from the trawler project in this repo.
@@ -53,5 +66,12 @@ and will exit quickly in future runs of the docker compose project
 A security analysis tool.
 Dash will call on Kubesec to generate reports when a user requests those reports from the dash UI.
 
-### go-crond
-This is a crontab that will run the jobs that would be run as Kubernetes cronjobs when deployed with helm.
+## Cron Jobs
+When running in Docker Compose, there is no equivalent to Kubernetes cron jobs.
+Instead, the jobs that would typically be run as Cron jobs, are ran using the @nestjs/scheduler package.
+
+Using the default settings in the sample env file, they will be run using the same settings as if deployed with helm and its default configuration.
+
+Under the cron config section in your .env file, you can set NODE_CRON_ENABLED to 0 to entirely disable them.
+If you wish to change the frequenect of them, you can change the appropriate [JOB]_SCHEDULE environment variable to your desired frequency.
+This can be useful when you would like to test a change to one of the jobs, but don't want to wait for 30 minutes for it to actually run.
