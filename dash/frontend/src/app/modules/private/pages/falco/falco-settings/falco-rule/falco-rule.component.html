@@ -1,0 +1,33 @@
+<mat-card style="height:800px; min-width: 400px;">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Rules</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngFor="let rule of rules; index as idx">
+      <div class="rule-container">
+        <strong>{{rule.action | titlecase}}</strong> when the following are true:
+        <div class="pl-10">
+            <p *ngIf="rule.namespace">
+              Namespace is: <strong>{{ rule.namespace }}</strong>
+            </p>
+            <p *ngIf="!!rule.image">
+              Namespace is: <strong>{{ rule.image }}</strong>
+            </p>
+            <p *ngIf="!!rule.type">
+              Type is: <strong>{{ rule.type }}</strong>
+            </p>
+          <div class="row">
+            <button mat-raised-button color="primary">Edit</button>
+            <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(idx)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="openAddEditModal()">Add Rule</button>
+    </div>
+  </mat-card-content>
+</mat-card>

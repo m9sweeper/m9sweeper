@@ -97,47 +97,7 @@
       </mat-card>
     </div>
     <div class="col-sm-6">
-      <mat-card style="height:800px; min-width: 400px;">
-        <mat-card-header>
-          <mat-card-title>
-            <h1>Rules</h1>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="section-rules">
-            <div class="section-sublevel-1">
-              <h3>Ignore when following are true: </h3>
-              <div class="section-sublevel-2">
-                 <h3>Namespace is kube-system</h3>
-                <h3>Type is privilege escalation</h3>
-              </div>
-              <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-              </div>
-            </div>
-          </div>
-          <br><br>
-          <div class="section-rules">
-            <div class="section-sublevel-1">
-              <h3>Ignore when following are true: </h3>
-              <div class="section-sublevel-2">
-                <h3>Namespace is m9sweeper-system</h3>
-                <h3>Type is privilege escalation</h3>
-                <h3>Image is rabbitmq/ rabbitmq</h3>
-              </div>
-              <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div>
-            <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()" >Edit</button>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <app-falco-rule></app-falco-rule>
     </div>
   </div>
 
