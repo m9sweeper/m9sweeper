@@ -36,7 +36,8 @@ export class FalcoRuleComponent implements OnInit {
   openAddEditModal(existingRuleIndex?: number) {
     const ref = this.dialog.open(FalcoRuleAddEditDialogComponent, {
       data: {
-        namespaces: this.namespaces
+        namespaces: this.namespaces,
+        rule: !isNaN(existingRuleIndex) ? this.rules[existingRuleIndex] : undefined
       }
     });
     ref.afterClosed()
@@ -44,7 +45,7 @@ export class FalcoRuleComponent implements OnInit {
       .subscribe({
         next: (data: { rule: IFalcoRule }) => {
           if (data?.rule) {
-            if (existingRuleIndex) {
+            if (!isNaN(existingRuleIndex)) {
               this.rules[existingRuleIndex] = data.rule;
             } else {
               this.rules.push(data.rule);

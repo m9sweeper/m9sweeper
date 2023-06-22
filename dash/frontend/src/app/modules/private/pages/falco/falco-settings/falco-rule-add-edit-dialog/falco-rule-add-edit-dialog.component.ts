@@ -30,17 +30,18 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     protected fb: FormBuilder,
     protected customValidators: CustomValidatorService,
     protected dialogRef: MatDialogRef<FalcoRuleAddEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) protected data: { namespaces: string[], existing: IFalcoRule },
+    @Inject(MAT_DIALOG_DATA) protected data: { namespaces: string[], rule: IFalcoRule },
   ) { }
 
   ngOnInit(): void {
     this.namespaces = this.data?.namespaces || [];
+    this.editMode = !! this.data?.rule;
     this.ruleForm = this.fb.group({
-      id: [''],
-      action: [FalcoRuleAction.Ignore, [Validators.required]],
-      namespace: [''],
-      type: [''],
-      image: [''],
+      id: [this.data?.rule?.id || ''],
+      action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
+      namespace: [this.data?.rule?.namespace || ''],
+      type: [this.data?.rule?.type || ''],
+      image: [this.data?.rule?.image || ''],
     }, {
       validators: [this.customValidators.atLeastOne(['namespace', 'type', 'image'])]
       }

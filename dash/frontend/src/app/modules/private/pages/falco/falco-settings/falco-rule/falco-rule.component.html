@@ -19,7 +19,7 @@
               Type is: <strong>{{ rule.type }}</strong>
             </p>
           <div class="row">
-            <button mat-raised-button color="primary">Edit</button>
+            <button mat-raised-button color="primary" (click)="openAddEditModal(idx)">Edit</button>
             <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(idx)">Delete</button>
           </div>
         </div>
