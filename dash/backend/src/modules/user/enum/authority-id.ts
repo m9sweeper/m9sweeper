@@ -6,5 +6,4 @@ export enum AuthorityId {
     KUBEBENCH = 5,
     TRAWLER =6,
     FALCO = 7,
-    CRON = 8,
 }

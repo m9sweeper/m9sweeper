@@ -11,7 +11,6 @@ import { ExceptionsService } from '../../exceptions/services/exceptions.service'
 import { ExceptionCreateDto } from '../../exceptions/dto/exceptioncreateDto';
 import { IcliRegistry, IHelmInputRegistry } from "../dto/IHelmInputRegistry";
 import {generateRandomString} from "./generate-random-string";
-import {AuthorityId} from '../../user/enum/authority-id';
 
 
 /**
@@ -74,7 +73,6 @@ export class HelmSetupCommand {
         const randomKHApiKey = process.env.KUBE_HUNTER_API_KEY || generateRandomString(33);
         const randomKBApiKey = process.env.KUBE_BENCH_API_KEY || generateRandomString(33);
         const randomFalcoApiKey = process.env.FALCO_API_KEY || generateRandomString(33);
-        const cronApiKey = process.env.CRON_API_KEY || generateRandomString(33);
 
         const kubebenchUserExists = !!(await this.userDao.loadUser({email: 'Kubebench'}));
         if (!kubebenchUserExists) {
@@ -155,32 +153,6 @@ export class HelmSetupCommand {
             // @TODO: clean up this message when making cli commands silent
             console.log('Falco user exists.... skipping');
         }
-
-      const cronUserExists = !!(await this.userDao.loadUser({email: 'Cron'}));
-      if (!cronUserExists) {
-        const encryptedCronApiKey = await bcrypt.hash(cronApiKey, await bcrypt.genSalt(10))
-        promises.push(
-          this.userDao.create({
-            email: 'Cron',
-            first_name: 'Cron',
-            last_name: 'Cron',
-            source_system_id: '0',
-            source_system_type: 'LOCAL_AUTH',
-            source_system_user_id: '0',
-            password: encryptedCronApiKey,
-            authorities: [{ id: AuthorityId.CRON }],
-          })
-            .then(cronUser => this.apiKeyDao.createApiKey({
-              user_id: cronUser[0],
-              name: 'Cron API key',
-              api: cronApiKey,
-              is_active: true,
-            }))
-            .catch());
-      } else {
-        // @TODO: clean up this message when making cli commands silent
-        console.log('Cron user exists.... skipping');
-      }
 
       await Promise.all(promises);
       return true;

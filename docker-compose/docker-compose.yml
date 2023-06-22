@@ -54,7 +54,6 @@ services:
       FALCO_API_KEY: "${FALCO_API_KEY}"
       KUBE_HUNTER_API_KEY: "${KUBE_HUNTER_API_KEY}"
       KUBE_BENCH_API_KEY: "${KUBE_BENCH_API_KEY}"
-      CRON_API_KEY: "${CRON_API_KEY}"
       SUPER_ADMIN_EMAIL: "${SUPER_ADMIN_EMAIL}"
       SUPER_ADMIN_PASSWORD: "${SUPER_ADMIN_PASSWORD}"
       CLI_PATH: "./cli.js"
@@ -99,6 +98,14 @@ services:
       RABBITMQ_USERNAME: "guest"
       RABBITMQ_PASSWORD: "guest"
 
+      # Cron
+      NODE_CRON_ENABLED: "${NODE_CRON_ENABLED}"
+      CLUSTER_SCRAPE_SCHEDULE: "${CLUSTER_SCRAPE_SCHEDULE}"
+      GATEKEEPER_EXCEPTION_SYNC_SCHEDULE: "${GATEKEEPER_EXCEPTION_SYNC_SCHEDULE}"
+      KUBERNETES_HISTORY_SCHEDULE: "${KUBERNETES_HISTORY_SCHEDULE}"
+      UPDATE_EXCEPTION_STATUS_SCHEDULE: "${UPDATE_EXCEPTION_STATUS_SCHEDULE}"
+
+      # Misc
       SECURITY_JWT_SECRET: "${SECURITY_JWT_SECRET}"
       KUBESEC_URL: "http://kubesec:${KUBESEC_PORT}"
 
@@ -129,12 +136,3 @@ services:
     command: ["http", "${KUBESEC_PORT}"]
     ports:
       - '${KUBESEC_PORT}:${KUBESEC_PORT}'
-
-  go-crond:
-    image: m9sweeper-go-crond
-    build:
-      dockerfile: ./Dockerfile-go-crond
-      context: .
-    environment:
-      CRON_API_KEY: "${CRON_API_KEY}"
-

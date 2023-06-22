@@ -1,7 +1,0 @@
-SHELL=/bin/sh
-
-# m h  dom mon dow user command
-@every 1m guest wget --spider http://dash:3000/api/cron/sync-cluster/all?apiKey=${CRON_API_KEY}
-@every 1m guest wget --spider http://dash:3000/api/cron/populate-kubernetes-history?apiKey=${CRON_API_KEY}
-@every 1m guest wget --spider http://dash:3000/api/cron/sync-exception-status?apiKey=${CRON_API_KEY}
-@every 1m guest wget --spider http://dash:3000/api/cron/sync-gatekeeper-exceptions/all?apiKey=${CRON_API_KEY}

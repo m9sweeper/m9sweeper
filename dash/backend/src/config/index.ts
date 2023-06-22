@@ -11,7 +11,8 @@ import server from './server';
 import gatekeeper from './gatekeeper';
 import kubebench from './kubebench';
 import kubesec from './kubesec';
-import releaseNamespace from "./releaseNamespace";
+import releaseNamespace from './releaseNamespace';
+import nodeCron from './node-cron';
 
 export default () => ({
   test: {
@@ -30,5 +31,6 @@ export default () => ({
   gatekeeper,
   kubebench,
   kubesec,
-  releaseNamespace
+  releaseNamespace,
+  nodeCron
 });
