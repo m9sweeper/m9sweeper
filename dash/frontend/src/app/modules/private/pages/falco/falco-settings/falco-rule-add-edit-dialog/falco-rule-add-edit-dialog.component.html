@@ -4,16 +4,17 @@
     <div class="row">
       <mat-form-field>
         <mat-label>Action</mat-label>
-        <mat-select>
+        <mat-select formControlName="action">
           <mat-option *ngFor="let opt of actionOptions" [value]="opt.value">{{opt.displayName}}</mat-option>
         </mat-select>
-        <input matInput formControlName="action">
       </mat-form-field>
     </div>
     <div class="row">
       <mat-form-field>
         <mat-label>Namespace</mat-label>
-        <input matInput formControlName="namespace">
+        <mat-select formControlName="namespace">
+          <mat-option *ngFor="let ns of namespaces" [value]="ns">{{ns}}</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <div class="row">

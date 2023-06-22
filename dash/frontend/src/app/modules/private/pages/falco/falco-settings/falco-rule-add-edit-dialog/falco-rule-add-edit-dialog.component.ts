@@ -13,6 +13,7 @@ import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
 export class FalcoRuleAddEditDialogComponent implements OnInit {
 
   ruleForm: FormGroup;
+  namespaces: string[] = [];
   actionOptions = [
     {
       displayName: 'Ignore',
@@ -33,6 +34,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.namespaces = this.data?.namespaces || [];
     this.ruleForm = this.fb.group({
       id: [''],
       action: [FalcoRuleAction.Ignore, [Validators.required]],
