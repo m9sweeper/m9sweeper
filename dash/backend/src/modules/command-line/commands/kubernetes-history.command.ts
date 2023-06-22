@@ -25,7 +25,7 @@ export class KubernetesHistoryCommand {
 
     @Command({ command: 'populate:kubernetes-history', describe: 'Save kubernetes contents history' })
     async get() {
-        let dayStr = yesterdaysDateAsStr();
+        const dayStr = yesterdaysDateAsStr();
 
         await this.kubernetesHistoryService.saveK8sClustersHistory(dayStr);
         await this.kubernetesHistoryService.saveK8sNamespacesHistory(dayStr);
