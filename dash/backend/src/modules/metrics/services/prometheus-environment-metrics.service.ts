@@ -10,8 +10,8 @@ import { PodService } from "../../pod/services/pod.service";
 
 @Injectable()
 export class PrometheusEnvironmentMetricsService {
-  envMetricsCacheLength = 0 * 1000;  // 30s = 30,000ms
-  envMetricsUpdatedTimestamp = Date.now();
+  envMetricsCacheLength = 30 * 1000;  // 30s = 30,000ms
+  envMetricsUpdatedTimestamp = 0;
 
   constructor(
     @InjectMetric('num_images_running') public numImagesRunning: Gauge<string>,
@@ -70,14 +70,6 @@ export class PrometheusEnvironmentMetricsService {
     return envMetrics.join('\n\n');
   }
 
-  /*
-  1. get clusters
-  2. for each cluster, get the images running
-  --- or ---
-  1. get images running, grouped by cluster
-  (not possible with object-oriented-ness bc ClusterDto doesn't have Images included)
-
-   */
   private async updateEnvMetrics(): Promise<void> {
     try {
       const allClusters = await this.clusterService.getAllClusters();
@@ -94,54 +86,65 @@ export class PrometheusEnvironmentMetricsService {
   }
 
   private async updateNumImagesRunning(cluster: ClusterDto): Promise<void> {
-    const imagesRunningInCluster = await this.imageService.getAllRunningImagesByClusterId(cluster.id);
-    const totalAsNumber = parseFloat(imagesRunningInCluster.total);
-    this.numImagesRunning.labels(cluster.name).set(totalAsNumber);
-    return;
+    try {
+      const imagesRunningInCluster = await this.imageService.getAllRunningImagesByClusterId(cluster.id);
+      const totalAsNumber = parseFloat(imagesRunningInCluster.total);
+      this.numImagesRunning.labels(cluster.name).set(totalAsNumber);
+      return;
+    } catch (e) {
+      return;
+    }
   }
 
   private async updateNumVulnerabilitiesDetected(cluster: ClusterDto): Promise<void> {
-    const runningVulnerabilities = await this.reportsService.getRunningVulnerabilitiesNoRequirements(cluster.id);
-    this.numImagesWithVulnerabilities.labels(cluster.name).set(runningVulnerabilities.count);
-    return;
+    try {
+      const runningVulnerabilities = await this.reportsService.getRunningVulnerabilitiesNoRequirements(cluster.id);
+      this.numImagesWithVulnerabilities.labels(cluster.name).set(runningVulnerabilities.count);
+      return;
+    } catch (e) {
+      return;
+    }
   }
 
   private async updatePodCompliancePercentage(cluster): Promise<void> {
-    const podComplianceSummaries = await this.podService.getCurrentPodsComplianceSummary(cluster.id);
-    let overallCompliantPods = 0;
-    let overallNoncompliantPods = 0;
-    let totalPods = 0;
-    for (const summary of podComplianceSummaries) {
-      this.numPodsCompliant.labels(summary.namespace, cluster.name).set(summary.numCompliantPods);
-      this.numPodsNonCompliant.labels(summary.namespace, cluster.name).set(summary.numNoncompliantPods);
-      this.currentPodCompliancePercentage.labels(summary.namespace, cluster.name).set(summary.numCompliantPods/summary.numPods * 100);
-      overallCompliantPods += summary.numCompliantPods;
-      overallNoncompliantPods += summary.numNoncompliantPods;
-      totalPods += summary.numPods;
+    try {
+      const podComplianceSummaries = await this.podService.getCurrentPodsComplianceSummary(cluster.id);
+      for (const summary of podComplianceSummaries) {
+        try {
+          this.numPodsCompliant.labels(summary.namespace, cluster.name).set(summary.numCompliantPods);
+          this.numPodsNonCompliant.labels(summary.namespace, cluster.name).set(summary.numNoncompliantPods);
+          this.currentPodCompliancePercentage.labels(summary.namespace, cluster.name).set(summary.numCompliantPods / summary.numPods * 100);
+        } catch (e) {
+          return;
+        }
+      }
+    } catch (e) {
+      return;
     }
-    this.numPodsCompliant.labels('all', cluster.name).set(overallCompliantPods);
-    this.numPodsNonCompliant.labels('all', cluster.name).set(overallNoncompliantPods);
-    this.currentPodCompliancePercentage.labels('all', cluster.name).set(overallCompliantPods/totalPods * 100);
   }
 
   private async updateCVEReports(cluster: ClusterDto): Promise<void> {
-    const summary = await this.reportsService.getRunningVulnerabilitiesSummary(cluster.id);
-    this.totalCVEs.labels(cluster.name).set(summary.totalCritical + summary.totalMajor + summary.totalMedium + summary.totalLow + summary.totalNegligible);
+    try {
+      const summary = await this.reportsService.getRunningVulnerabilitiesSummary(cluster.id);
+      this.totalCVEs.labels(cluster.name).set(summary.totalCritical + summary.totalMajor + summary.totalMedium + summary.totalLow + summary.totalNegligible);
 
-    this.numCriticalCVEs.labels(cluster.name).set(summary.totalCritical);
-    this.numFixableCriticalCVEs.labels(cluster.name).set(summary.totalFixableCritical);
+      this.numCriticalCVEs.labels(cluster.name).set(summary.totalCritical);
+      this.numFixableCriticalCVEs.labels(cluster.name).set(summary.totalFixableCritical);
 
-    this.numMajorCVEs.labels(cluster.name).set(summary.totalMajor);
-    this.numFixableMajorCVEs.labels(cluster.name).set(summary.totalFixableMajor);
+      this.numMajorCVEs.labels(cluster.name).set(summary.totalMajor);
+      this.numFixableMajorCVEs.labels(cluster.name).set(summary.totalFixableMajor);
 
-    this.numMediumCVEs.labels(cluster.name).set(summary.totalMedium);
-    this.numFixableMediumCVEs.labels(cluster.name).set(summary.totalFixableMedium);
+      this.numMediumCVEs.labels(cluster.name).set(summary.totalMedium);
+      this.numFixableMediumCVEs.labels(cluster.name).set(summary.totalFixableMedium);
 
-    this.numLowCVEs.labels(cluster.name).set(summary.totalLow);
-    this.numFixableLowCVEs.labels(cluster.name).set(summary.totalFixableLow);
+      this.numLowCVEs.labels(cluster.name).set(summary.totalLow);
+      this.numFixableLowCVEs.labels(cluster.name).set(summary.totalFixableLow);
 
-    this.numNegligibleCVEs.labels(cluster.name).set(summary.totalNegligible);
-    this.numFixableNegligibleCVEs.labels(cluster.name).set(summary.totalFixableNegligible);
-    return;
+      this.numNegligibleCVEs.labels(cluster.name).set(summary.totalNegligible);
+      this.numFixableNegligibleCVEs.labels(cluster.name).set(summary.totalFixableNegligible);
+      return;
+    } catch (e) {
+      return;
+    }
   }
 }
