@@ -20,10 +20,8 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
   isSpecificEmailHidden = true;
-  foundSavedSeverityLevel = false;
 
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
