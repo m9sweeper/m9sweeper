@@ -17,7 +17,7 @@ RUN node --version && npm --version
 RUN npm install -g npm@9.5.0
 RUN npm ci
 
-COPY /dash/backend/ /usr/src/app/backend/
+COPY /dash/backend /usr/src/app/backend/
 RUN npm run prebuild
 
 RUN cp src/config/licensing-portal-config/misc.prod.ts src/config/misc.ts

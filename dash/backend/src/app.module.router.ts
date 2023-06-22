@@ -28,7 +28,6 @@ import {KubeBenchModule} from "./modules/kube-bench/kube-bench.module";
 import { ReportsModule } from './modules/reports/reports.module';
 import {AuditLogModule} from "./modules/audit-log/audit-log.module";
 import {FalcoModule} from './modules/falco/falco.module';
-import {CommandLineModule} from './modules/command-line/command-line.module';
 
 
 export const routes: Routes = [
@@ -155,10 +154,6 @@ export const routes: Routes = [
       {
         path: '/falco',
         module: FalcoModule
-      },
-      {
-        path: '/cron',
-        module: CommandLineModule
       }
     ]
   }

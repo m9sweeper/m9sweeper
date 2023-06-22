@@ -17,7 +17,7 @@ export class JobsCliController {
     const args = trimmed.slice(1);
 
     const command = this.cliCommandBuilderService.findCommand(cliCommand);
-    let success = true;
+    let success = false;
     if (command) {
       success = await command.execute(args);
     } else {
