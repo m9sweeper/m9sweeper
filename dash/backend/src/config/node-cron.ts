@@ -1,4 +1,5 @@
 import * as process from 'process';
+import {NodeCronConfig} from './types/node-cron-config';
 
 export default {
   // default to disabled
@@ -9,4 +10,4 @@ export default {
   // Default: daily at 12:01 am
   kubernetesHistorySchedule: process.env.KUBERNETES_HISTORY_SCHEDULE || '1 0 * * *',
   updateExceptionStatusSchedule: process.env.UPDATE_EXCEPTION_STATUS_SCHEDULE || '1 0 * * *'
-}
+} as NodeCronConfig

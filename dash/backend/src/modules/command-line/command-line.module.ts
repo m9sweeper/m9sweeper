@@ -10,7 +10,7 @@ import {SyncExceptionStatusCommand} from "./commands/exception.command";
 import {ExceptionBlockService} from "./services/exception-block.service";
 import { ImageRescanningService } from './services/image-rescanning.service';
 import {JobsCliController} from './controllers/jobs-cli.controller';
-import {JobsCronController} from './controllers/jobs-cron.controller';
+import {CronJobsController} from './controllers/cron-jobs.controller';
 import {CliCommandBuilderService} from './services/cli-command-builder.service';
 import {ScheduleModule} from '@nestjs/schedule';
 
@@ -20,7 +20,7 @@ import {ScheduleModule} from '@nestjs/schedule';
         ClusterCommand,
         ClusterSyncCommand,
         JobsCliController,
-        JobsCronController,
+        CronJobsController,
         HelmSetupCommand,
         KubernetesClusterService,
         KubernetesHistoryCommand,

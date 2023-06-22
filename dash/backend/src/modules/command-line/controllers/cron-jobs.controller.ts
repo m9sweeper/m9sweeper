@@ -9,7 +9,7 @@ import {MineLoggerService} from '../../shared/services/mine-logger.service';
 import {ConfigService} from '@nestjs/config';
 
 @Injectable()
-export class JobsCronController {
+export class CronJobsController {
   constructor(
     protected readonly clusterSyncCommand: ClusterSyncCommand,
     protected readonly exceptionCommand: SyncExceptionStatusCommand,
