@@ -24,6 +24,9 @@ Restarting the container should fix this.
 1. In the docker-compose directory, make a copy of .env.sample, and rename it to .env.sample
 2. Update the values in your .env
    - at a minimum, fill in SUPER_ADMIN_EMAIL and SUPER_ADMIN_PASSWORD, these will create the initial log in you use to sign into the UI with
+   - You should also fill in values for the API Keys section. Any that you do not fill in during your first run will be randomly generated.
+     - If you let the keys get randomly generated, you will need to fill in the TRAWLER_API_KEY with the generated value before you can successfully scan images.
+     - Find the Generated keys by signing in as a super admin user, going to 'organization settings' > 'API Key Management'
    - If you wish to have email function, you will need to enter the details for your SMTP provider in the SMTP_EMAIL_XXX variables
    - You can update any other variables you'd like, refer to the documentation for the appropriate service for more details on them.
 
