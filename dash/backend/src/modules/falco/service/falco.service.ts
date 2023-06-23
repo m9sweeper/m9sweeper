@@ -1,4 +1,4 @@
-import {Injectable, LoggerService} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoDao} from '../dao/falco.dao';
 import {createHash} from 'crypto';
@@ -14,6 +14,7 @@ import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
+import {logger} from 'handlebars';
 
 @Injectable()
 export class FalcoService {
@@ -22,7 +23,7 @@ export class FalcoService {
         private readonly csvService: CsvService,
         private readonly email: EmailService,
         private readonly configService: ConfigService,
-        private readonly loggerService: MineLoggerService,
+        private readonly loggerService: MineLoggerService
     ) {}
 
     async getFalcoLogs(
@@ -143,6 +144,8 @@ export class FalcoService {
         if (!skipAnomalyEmail) {
             // look up falco settings in order to decide if we need to send email(s) to administrators
             await this.sendFalcoEmailAlert(clusterId, createdLog);
+        } else {
+            this.loggerService.log('Falco Event silenced', { id: createdLog.id });
         }
 
         return createdLog;
@@ -283,8 +286,8 @@ export class FalcoService {
                   || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
                 const ruleNameMatches = !rule.falcoRule
                   || rule.falcoRule.trim() === falcoEvent?.rule?.trim();
-                const imageNameMatches = !rule.falcoRule
-                  || rule.namespace === falcoEvent?.outputFields?.containerImageRepository;
+                const imageNameMatches = !rule.image
+                  || rule.image === falcoEvent?.outputFields?.containerImageRepository;
 
                 // If all 3 sections of the rule were either matches of blank, then this rule applies, return its action.
                 if (namespaceMatches && ruleNameMatches && imageNameMatches) {

@@ -33,6 +33,7 @@ import {FalcoSettingDto} from '../dto/falco-setting.dto';
 import {FalcoCsvDto} from '../dto/falco-csv-dto';
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 @ApiTags('Project Falco')
@@ -44,6 +45,7 @@ export class FalcoController {
         private readonly apiKeyDao: ApiKeyDao,
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
+        protected readonly logger: MineLoggerService
         // private readonly falcoEmailCommand: FalcoEmailCommand,
 
     ) {}
@@ -173,6 +175,7 @@ export class FalcoController {
         const action = await this.falcoService.checkRules(clusterId, falcoLog);
         // An ignore rule applied,
         if (action === FalcoRuleAction.Ignore) {
+            this.logger.log('Ignoring Falco Event');
             return;
         }
 
