@@ -1,10 +1,6 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {UserAuthority, UserProfileDto} from '../../user/dto/user-profile-dto';
-import kubebench from "../../../config/kubebench";
-import {KubeBenchController} from "../../kube-bench/controllers/kube-bench.controller";
 import {AuthorityId} from "../../user/enum/authority-id";
-import {audit} from "rxjs";
-
 @Injectable()
 export class AuthService {
     constructor(
@@ -20,14 +16,14 @@ export class AuthService {
     }
 
 
-    public checkAuthority(currentUserAuth: UserAuthority [], validAuthority: AuthorityId []):boolean{
+    public checkAuthority(currentUserAuth: UserAuthority [], validAuthority: AuthorityId []): boolean {
         var allowAuth = false;
-        currentUserAuth.forEach(userAuth => {
+        currentUserAuth?.forEach(userAuth => {
             //console.log("userAuth: ", userAuth);
             //console.log("validAuthority.indexOf(userAuth.id)", validAuthority.indexOf(userAuth.id));
             if(validAuthority.indexOf(userAuth.id)!==-1){
                 allowAuth = true;
-            };
+            }
         })
         return allowAuth;
      }
