@@ -7,6 +7,7 @@ import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
 
 
 @Injectable()
@@ -364,5 +365,22 @@ export class FalcoDao {
         } else {
             return null;
         }
+    }
+
+    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+        return knex.into('falco_rules')
+          .insert(raw, '*')
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
+    }
+
+    async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+        return knex.into('falco_rules')
+          .update(raw, '*')
+          .where('id', '=', ruleId)
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
     }
 }

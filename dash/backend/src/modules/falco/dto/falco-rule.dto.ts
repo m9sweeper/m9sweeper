@@ -19,6 +19,11 @@ export class FalcoRuleDto {
   @IsNumber()
   createdAt: number;
 
+  @Expose({name: 'deleted_at', toPlainOnly: true})
+  @IsOptional()
+  @IsNumber()
+  deletedAt: number;
+
   @Expose({name: 'action', toPlainOnly: true})
   @ApiProperty()
   @IsOptional()

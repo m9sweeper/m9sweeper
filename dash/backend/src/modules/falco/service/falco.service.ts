@@ -12,6 +12,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
 
 @Injectable()
 export class FalcoService {
@@ -251,6 +252,19 @@ export class FalcoService {
                 this.loggerService.log("Failed to send email!");
             }
         }
+    }
+
+    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
+        return this.falcoDao.createFalcoRule(rule);
+    }
+
+    async updateFalcoRule(rule: FalcoRuleDto, ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.updateFalcoRule(rule, ruleId);
+    }
+
+    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<FalcoRuleDto> {
+        const edits = Object.assign(new FalcoRuleDto(), { deletedAt: Date.now() });
+        return this.falcoDao.updateFalcoRule(edits, ruleId);
     }
 
 }

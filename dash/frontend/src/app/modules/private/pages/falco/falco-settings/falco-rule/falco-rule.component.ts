@@ -5,6 +5,7 @@ import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
 import {take} from 'rxjs/operators';
 import {KubesecService} from '../../../../../../core/services/kubesec.service';
 import {FalcoService} from '../../../../../../core/services/falco.service';
+import {AlertService} from '@full-fledged/alerts';
 
 @Component({
   selector: 'app-falco-rule',
@@ -20,7 +21,8 @@ export class FalcoRuleComponent implements OnInit {
   constructor(
     protected dialog: MatDialog,
     protected kubesecService: KubesecService,
-    protected falcoService: FalcoService
+    protected falcoService: FalcoService,
+    protected alert: AlertService
   ) { }
 
 
@@ -58,10 +60,16 @@ export class FalcoRuleComponent implements OnInit {
       });
   }
 
-  removeRule(idx: number) {
-    // Splice will remove the element and move other elements up.
-    // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
-    this.rules.splice(idx, 1);
+  removeRule(idx: number, ruleId: number) {
+    this.falcoService.deleteRule(this.clusterId, ruleId)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.alert.success('Rule deleted');
+          // Splice will remove the element and move other elements up.
+          // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
+          this.rules.splice(idx, 1);
+        }
+      });
   }
-
 }

@@ -54,7 +54,7 @@ export class FalcoSettingsComponent implements OnInit {
     this.route.parent.parent.params
       .pipe(take(1))
       .subscribe(param => {
-        this.clusterId = param.id;
+        this.clusterId = +param.id;
       });
 
     this.displaySetting();

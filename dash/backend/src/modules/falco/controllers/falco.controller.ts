@@ -1,6 +1,6 @@
 import {
     Body,
-    Controller,
+    Controller, Delete,
     Get,
     Header,
     HttpException,
@@ -198,7 +198,11 @@ export class FalcoController {
       @Param('clusterId') clusterId: number,
       @Body() rule: FalcoRuleDto
     ) {
-        return true;
+        if (rule?.clusterId !== clusterId) {
+            throw new HttpException({ message: 'Cluster id in path does not match cluster ID in body.' }, HttpStatus.BAD_REQUEST);
+        }
+        delete rule.id;
+        return await this.falcoService.createFalcoRule(rule);
     }
 
     @Put(':clusterId/rule/:ruleId')
@@ -210,7 +214,15 @@ export class FalcoController {
         if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
             throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
-        return true;
+        return this.falcoService.updateFalcoRule(rule, ruleId);
+    }
+
+    @Delete(':clusterId/rule/:ruleId')
+    async deleteFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Param('ruleId') ruleId: number
+    ) {
+        return this.falcoService.deleteFalcoRule(clusterId, ruleId);
     }
 
 }

@@ -49,7 +49,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
 
     this.ruleForm = this.fb.group({
       id: [this.data?.rule?.id || ''],
-        clusterId: [this.data?.rule?.clusterId || ''],
+        clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
       namespace: [this.data?.rule?.namespace || ''],
       falcoRule: [this.data?.rule?.falcoRule || ''],
@@ -68,9 +68,9 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     request
       .pipe(take(1))
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.alert.success(`Rule successfully ${this.editMode ? 'updated' : 'created'}!`);
-          this.dialogRef.close({ rule });
+          this.dialogRef.close({ rule: res?.data });
         }
       });
 
