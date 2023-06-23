@@ -6,5 +6,7 @@ export enum CliCommands {
   SyncGateKeeperExceptions = 'sync:gatekeeper-exceptions',
   RegistryInit = 'registries:init',
   ExceptionInit = 'exceptions:init',
-  PopulateKubernetesHistory = 'populate:kubernetes-history'
+  PopulateKubernetesHistory = 'populate:kubernetes-history',
+  DatabaseCheck = 'database:check',
+  DatabaseWait = 'database:wait',
 }

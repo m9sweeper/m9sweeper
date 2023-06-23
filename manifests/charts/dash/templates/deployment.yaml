@@ -33,7 +33,7 @@ spec:
           command:
             - 'sh'
             - '-c'
-            - 'until npm run cli:database:status; do echo "Will try again in 2 seconds..."; sleep 2; done;'
+            - 'npm run cli:database:wait'
           envFrom:
             - secretRef:
                 name: {{ include "dash.fullname" . }}-secrets
