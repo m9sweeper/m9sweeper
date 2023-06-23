@@ -8,6 +8,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {option} from 'yargs';
 
 
 @Injectable()
@@ -376,11 +377,13 @@ export class FalcoDao {
     }
 
 
-    async listActiveFalcoRulesForCluster(clusterId: number): Promise<FalcoRuleDto[]> {
+    async listActiveFalcoRulesForCluster(clusterId: number, options?: { sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
         const knex = await this.databaseService.getConnection();
         return knex.from('falco_rules')
           .select('*')
           .where('cluster_id', '=', clusterId)
+          .andWhere('deleted_at', 'IS', null)
+          .orderBy(options?.sortField || 'created_at', options?.sortDir || 'asc')
           .then(rows => plainToInstance(FalcoRuleDto, rows))
     }
     async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
