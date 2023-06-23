@@ -13,6 +13,8 @@
       <mat-form-field>
         <mat-label>Namespace</mat-label>
         <mat-select formControlName="namespace">
+          <!--Empty option to allow deselecting a namespace-->
+          <mat-option [value]="''"></mat-option>
           <mat-option *ngFor="let ns of namespaces" [value]="ns">{{ns}}</mat-option>
         </mat-select>
       </mat-form-field>

@@ -1,12 +1,14 @@
 import {
     Body,
-    Controller, Delete,
+    Controller,
+    Delete,
     Get,
     Header,
     HttpException,
     HttpStatus,
     Param,
-    Post, Put,
+    Post,
+    Put,
     Query,
     UnauthorizedException,
     UseGuards,
@@ -18,18 +20,19 @@ import {AuthGuard} from '../../../guards/auth.guard';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoService} from '../service/falco.service';
 import {ResponseTransformerInterceptor} from '../../../interceptors/response-transformer.interceptor';
-import {ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FalcoWebhookInputDto} from '../dto/falco-webhook-input.dto';
 import {Authority} from '../../user/enum/Authority';
-import {ApiKeyDao} from "../../api-key/dao/api-key.dao";
-import {ApiKeyDto} from "../../api-key/dto/api-key-dto";
-import {UserDao} from "../../user/dao/user.dao";
-import {AuthService} from "../../auth/services/auth.service";
-import {AuthorityId} from "../../user/enum/authority-id";
-import {FalcoCountDto} from "../dto/falco-count.dto";
-import {FalcoSettingDto} from "../dto/falco-setting.dto";
-import { FalcoCsvDto } from '../dto/falco-csv-dto';
+import {ApiKeyDao} from '../../api-key/dao/api-key.dao';
+import {ApiKeyDto} from '../../api-key/dto/api-key-dto';
+import {UserDao} from '../../user/dao/user.dao';
+import {AuthService} from '../../auth/services/auth.service';
+import {AuthorityId} from '../../user/enum/authority-id';
+import {FalcoCountDto} from '../dto/falco-count.dto';
+import {FalcoSettingDto} from '../dto/falco-setting.dto';
+import {FalcoCsvDto} from '../dto/falco-csv-dto';
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleAction} from '../enums/falco-rule-action';
 
 
 @ApiTags('Project Falco')
@@ -155,7 +158,7 @@ export class FalcoController {
         @Query('key') key: string
     ): Promise<FalcoDto> {
         // look up user by api key
-        const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
+        const currentUserAuthObj = await this.userDao.loadUserByApiKey(key || '');
         if (!currentUserAuthObj) {
             throw new UnauthorizedException('Access Denied!');
         }
@@ -167,21 +170,14 @@ export class FalcoController {
             throw new UnauthorizedException('Access Denied!');
         }
 
-        // @TODO: Will implement falco filters/rules settings at a later time
-        // check if falco settings rules should be applied
-        /*
-            const rules = getFalcoSettingsRules(clusterId);
-            for (rules : rule) {
-                if (rule.isRelevant(event)) {
-                    if (rule.affect === 'ignore') {
-                        return; // don't save this event - it is being filtered out
-                    }
-                }
-            }
-        */
+        const action = await this.falcoService.checkRules(clusterId, falcoLog);
+        // An ignore rule applied,
+        if (action === FalcoRuleAction.Ignore) {
+            return;
+        }
 
-        // Saved new falco log
-        return await this.falcoService.createFalcoLog(clusterId, falcoLog);
+        // Save new falco log
+        return await this.falcoService.createFalcoLog(clusterId, falcoLog, action === FalcoRuleAction.Silence);
     }
 
     @Post(':clusterid/settings')

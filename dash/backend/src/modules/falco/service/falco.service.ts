@@ -13,6 +13,7 @@ import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleAction} from '../enums/falco-rule-action';
 
 @Injectable()
 export class FalcoService {
@@ -113,7 +114,7 @@ export class FalcoService {
         }
     }
 
-    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto): Promise<FalcoDto> {
+    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto, skipAnomalyEmail = false): Promise<FalcoDto> {
         const falcoLog = new FalcoDto;
         falcoLog.clusterId = clusterId;
         falcoLog.rule = falcoWebhookLog.rule;
@@ -139,9 +140,10 @@ export class FalcoService {
             .update(globalSignature)
             .digest('hex');
         const createdLog = await this.falcoDao.createFalcoLog(falcoLog);
-
-        // look up falco settings in order to decide if we need to send email(s) to administrators
-        await this.sendFalcoEmailAlert(clusterId, createdLog);
+        if (!skipAnomalyEmail) {
+            // look up falco settings in order to decide if we need to send email(s) to administrators
+            await this.sendFalcoEmailAlert(clusterId, createdLog);
+        }
 
         return createdLog;
     }
@@ -269,6 +271,29 @@ export class FalcoService {
     async deleteFalcoRule(clusterId: number, ruleId: number): Promise<FalcoRuleDto> {
         const edits = Object.assign(new FalcoRuleDto(), { deletedAt: Date.now() });
         return this.falcoDao.updateFalcoRule(edits, ruleId);
+    }
+
+    async checkRules(clusterId: number, falcoEvent: FalcoWebhookInputDto): Promise<FalcoRuleAction | null> {
+        const rules = await this.listActiveFalcoRulesForCluster(clusterId);
+        if (rules?.length) {
+            for (const rule of rules) {
+                // For each fo the three fields: if it is blank, consider it a match
+                // Otherwise compare to the value from the falco event
+                const namespaceMatches = !rule.namespace
+                  || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
+                const ruleNameMatches = !rule.falcoRule
+                  || rule.falcoRule.trim() === falcoEvent?.rule?.trim();
+                const imageNameMatches = !rule.falcoRule
+                  || rule.namespace === falcoEvent?.outputFields?.containerImageRepository;
+
+                // If all 3 sections of the rule were either matches of blank, then this rule applies, return its action.
+                if (namespaceMatches && ruleNameMatches && imageNameMatches) {
+                    return rule.action;
+                }
+            }
+        }
+
+        return null;
     }
 
 }
