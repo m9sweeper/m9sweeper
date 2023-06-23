@@ -375,6 +375,14 @@ export class FalcoDao {
           .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
     }
 
+
+    async listActiveFalcoRulesForCluster(clusterId: number): Promise<FalcoRuleDto[]> {
+        const knex = await this.databaseService.getConnection();
+        return knex.from('falco_rules')
+          .select('*')
+          .where('cluster_id', '=', clusterId)
+          .then(rows => plainToInstance(FalcoRuleDto, rows))
+    }
     async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
         const raw = instanceToPlain(rule);
         const knex = await this.databaseService.getConnection();

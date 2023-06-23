@@ -258,6 +258,10 @@ export class FalcoService {
         return this.falcoDao.createFalcoRule(rule);
     }
 
+    async listActiveFalcoRulesForCluster(clusterId: number): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRulesForCluster(clusterId);
+    }
+
     async updateFalcoRule(rule: FalcoRuleDto, ruleId: number): Promise<FalcoRuleDto> {
         return this.falcoDao.updateFalcoRule(rule, ruleId);
     }

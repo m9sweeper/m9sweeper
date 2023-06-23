@@ -162,7 +162,7 @@ export class FalcoController {
 
         // get all authorities from the current user
         const currentUserAuth = currentUserAuthObj[0].authorities;
-        let isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
+        const isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
         if (!isFalcoUser) {
             throw new UnauthorizedException('Access Denied!');
         }
@@ -193,11 +193,11 @@ export class FalcoController {
         return result;
     }
 
-    @Post(':clusterId/rule')
+    @Post(':clusterId/rules')
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
       @Body() rule: FalcoRuleDto
-    ) {
+    ): Promise<FalcoRuleDto> {
         if (rule?.clusterId !== clusterId) {
             throw new HttpException({ message: 'Cluster id in path does not match cluster ID in body.' }, HttpStatus.BAD_REQUEST);
         }
@@ -205,24 +205,32 @@ export class FalcoController {
         return await this.falcoService.createFalcoRule(rule);
     }
 
-    @Put(':clusterId/rule/:ruleId')
+    @Get(':clusterId/rules')
+    async listActiveFalcoRulesForCluster(@Param('clusterId') clusterId: number): Promise<FalcoRuleDto[]> {
+        return this.falcoService.listActiveFalcoRulesForCluster(clusterId);
+
+    }
+
+    @Put(':clusterId/rules/:ruleId')
     async updateFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number,
       @Body() rule: FalcoRuleDto
-    ) {
+    ): Promise<FalcoRuleDto> {
         if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
             throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
         return this.falcoService.updateFalcoRule(rule, ruleId);
     }
 
-    @Delete(':clusterId/rule/:ruleId')
+    @Delete(':clusterId/rules/:ruleId')
     async deleteFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number
-    ) {
+    ): Promise<FalcoRuleDto>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
     }
+
+
 
 }

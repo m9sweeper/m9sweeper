@@ -32,8 +32,13 @@ export class FalcoRuleComponent implements OnInit {
       .subscribe({
         next: (namespaces) => {
           this.namespaces = namespaces?.items?.map(itm => itm.metadata.name) || [];
-          console.log(this.namespaces);
         }
+      });
+
+    this.falcoService.listRules(this.clusterId)
+      .pipe(take(1))
+      .subscribe({
+        next: (resp) => this.rules = resp.data
       });
   }
 
