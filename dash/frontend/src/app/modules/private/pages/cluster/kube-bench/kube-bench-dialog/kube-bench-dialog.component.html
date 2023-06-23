@@ -1,9 +1,9 @@
 <mat-horizontal-stepper #stepper>
   <mat-step>
     <ng-template matStepLabel>Select Environment</ng-template>
-    <div class="row row-pad-left">
-      <span class="padding-top-17">Select Your Kubernetes Environment</span>
-      <mat-form-field class="margin-left-10">
+    <div class="modal-content-left-align-no-margin">
+      <span class="padding-top-15">Select Your Kubernetes Environment</span>
+      <mat-form-field >
         <mat-label>Environments</mat-label>
           <mat-select [(value)]="selectedProvider" (selectionChange)="proceedToNext($event)">
             <mat-option *ngFor="let env of environments" [value]="env.value">
@@ -12,26 +12,29 @@
           </mat-select>
       </mat-form-field>
     </div>
-    <div class="row row-reverse">
+    <div >
       <button mat-raised-button matStepperNext color="primary" [disabled]="nextButtonDisabled">Next</button>
     </div>
   </mat-step>
+
   <mat-step>
     <ng-template matStepLabel>Create Job</ng-template>
-    <div>
-      <h2>Choose whether to run Kube Bench periodically or manually</h2>
-      <mat-radio-group aria-labelledby="cronjob-options-group-label" class="cronjob-options-radio-group" [(ngModel)]="cronjobOpt">
-        <mat-radio-button class="cronjob-radio-button" [value]="true">
+
+    <div class="modal-content-left-align-no-margin">
+      <h3>Choose whether to run Kube Bench periodically or manually</h3>
+      <mat-radio-group aria-labelledby="cronjob-options-group-label" [(ngModel)]="cronjobOpt">
+        <mat-radio-button  [value]="true">
           Run on a schedule
         </mat-radio-button>
-        <mat-radio-button class="manual-radio-button" [value]="false">
+        <mat-radio-button  [value]="false">
           Run one time
         </mat-radio-button>
       </mat-radio-group>
     </div>
+  <div class="modal-content-left-align-no-margin">
     <div *ngIf="cronjobOpt === true">
       <div>
-        <mat-form-field appearance="fill" class="margin-right">
+        <mat-form-field appearance="fill" >
           <mat-label>Choose</mat-label>
           <mat-select [(ngModel)]="cronjobTime">
             <mat-option [value]="'daily'">Daily</mat-option>
@@ -43,43 +46,42 @@
         <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means Kube Bench will run at 12 am every Sunday</span>
         <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means Kube Bench will run at 12 am every first day of the month</span>
       </div>
+      <br>
       <div *ngIf="cronjobTime">
-        <div class="row pad-left-20 button-row">
-          <div class="flex-child">
-            <span class="padding-top-17">Run Kube Bench using the following CLI command:</span>
-          </div>
-          <div class="flex-child">
+        <div class="page-title-button-group-spacing" >
+            <div>Run Kube Bench using the following CLI command:</div>
+            <div>
             <app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
               errorMessage="Command could not be copied"
               [text]="run.value">
             </app-copy-to-clipboard-button>
-          </div>
-        </div>
-        <div>
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
-    helm repo update && \
-    helm upgrade --install kube-bench m9sweeper/kube-bench \
-        -n m9sweeper-system --create-namespace \
-        --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}' \
-        --set-string provider={{selectedProvider}} \
-        --set cronjob.enabled=true \
-        --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}"
-          </textarea>
-        </div>
-        <div class="row row-reverse">
-          <button mat-raised-button matDialogClose color="primary">Done</button>
+            </div>
         </div>
       </div>
+      <div>
+          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
+            helm repo update && \
+            helm upgrade --install kube-bench m9sweeper/kube-bench \
+            -n m9sweeper-system --create-namespace \
+            --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}' \
+            --set-string provider={{selectedProvider}} \
+            --set cronjob.enabled=true \
+            --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}"
+          </textarea>
+      </div>
+      </div>
+
     </div>
 
+
+
+  <div class="modal-content-left-align-no-margin">
     <div *ngIf="cronjobOpt === false">
       <ng-template matStepLabel>Create Job</ng-template>
-      <div class="row pad-left-20 button-row">
-        <div class="flex-child">
-          <span class="padding-top-17">Run Kube Bench using the following CLI command:</span>
-        </div>
-        <div class="flex-child">
+      <div class="page-title-button-group-spacing">
+        <div>Run Kube Bench using the following CLI command:</div>
+        <div >
           <app-copy-to-clipboard-button
             successMessage="Command copied to clipboard!"
             errorMessage="Command could not be copied"
@@ -87,20 +89,22 @@
           </app-copy-to-clipboard-button>
         </div>
       </div>
-      <div class="row">
-        <textarea #cliCommand class="code-snippet margin-left-20" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
-helm repo update && \
-helm upgrade --install kube-bench m9sweeper/kube-bench \
-    -n m9sweeper-system --create-namespace \
-    --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}'\
-    --set-string provider={{selectedProvider}} \
-    --set cronjob.enabled=false
+      <div >
+        <textarea #cliCommand class="code-snippet" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
+          helm repo update && \
+          helm upgrade --install kube-bench m9sweeper/kube-bench \
+          -n m9sweeper-system --create-namespace \
+          --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}'\
+          --set-string provider={{selectedProvider}} \
+          --set cronjob.enabled=false
         </textarea>
       </div>
-      <div class="row row-reverse">
+    </div>
+    </div>
+
+      <div class="next-button">
         <button mat-raised-button [matDialogClose]="true" color="primary">Done</button>
       </div>
-    </div>
 
   </mat-step>
 </mat-horizontal-stepper>

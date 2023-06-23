@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import {CommonModule, DatePipe, NgOptimizedImage} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -258,6 +258,7 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     JsonSchemaFormModule,
     MatExpansionModule,
     MatButtonToggleModule,
+    NgOptimizedImage
   ],
   providers: [
     DatePipe

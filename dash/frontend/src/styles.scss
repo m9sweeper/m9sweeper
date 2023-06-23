@@ -1,38 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@include mat.core();
 
-html, body { height: 100%; }
+html, body { height: 100%;} // login page requires 100%
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import '~@angular/material/theming';
+@import '@angular/material/theming';
 @import './app/modules/private/private.component.theme';
-@import '~flexboxgrid/css/flexboxgrid.min.css';
-@import '~codemirror/lib/codemirror';
-@import '~codemirror/theme/material';
-
-@include mat-core();
+@import 'flexboxgrid/css/flexboxgrid.min.css';
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/theme/material';
 
 //Default theme
-$ms-default-primary: mat-palette($mat-indigo, 800, 300, 900);
-$ms-default-accent: mat-palette($mat-light-blue);
-$ms-default-warn: mat-palette($mat-pink, 600);
-
-$ms-default-theme: mat-light-theme($ms-default-primary, $ms-default-accent, $ms-default-warn);
-
-//Dark theme
-$ms-black-primary: mat-palette($mat-grey, 700, 300, 900);
-$ms-black-accent: mat-palette($mat-blue-grey, 400);
-$ms-black-warn: mat-palette($mat-red, 500);
-
-$ms-black-theme: mat-dark-theme($ms-black-primary, $ms-black-accent, $ms-black-warn);
-
-
-//Light theme
-$ms-light-primary: mat-palette($mat-grey, 200, 500, 300);
-$ms-light-accent: mat-palette($mat-brown, 200);
-$ms-light-warn: mat-palette($mat-deep-orange, 200);
-
-$ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-warn);
-// $ms-toolbar-light-theme: mat-light-theme-for-toolbar($ms-light-primary, $ms-light-accent, $ms-light-warn);
+$ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
+$ms-default-accent: mat.define-palette(mat.$light-blue-palette);
+$ms-default-warn: mat.define-palette(mat.$pink-palette, 600);
+/*
+$ms-default-level: mat.define-typography-level(
+  $font-family: "Roboto, 'Helvetica Neue', sans-serif",
+  $font-weight: 400,
+  $font-size: 1rem,
+  $line-height: 1,
+  $letter-spacing: normal,
+);
+ */
+$ms-default-theme: mat.define-light-theme((
+  color: (
+    primary: $ms-default-primary,
+    accent: $ms-default-accent,
+    warn: $ms-default-warn
+  )
+));
 
 
 //<app-root></app-root> theme
@@ -41,11 +39,10 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 @import './app/modules/private/pages/cluster/cluster-details/cluster-details.component.theme';
 @import './app/modules/private/pages/cluster/cluster-list/cluster-list.component.theme';
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
-@import './app/modules/shared/subnavigation/sub-navigation.component.theme';
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
-@import './app/modules/private/pages/cluster/kubernetes-pods/kubernetes-pods.component.theme';
-@import './app/modules/private/pages/falco/falco-events-list/falco-events-list.component.theme';
-@import './app/modules/private/pages/cluster/kubernetes-pod-details/kubernetes-pods-details.component.theme';
+@import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
+
+
 
 @mixin custom-components-theme($theme) {
   @include app-root-theme($theme);
@@ -55,57 +52,22 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include dashboard-component-light-theme($theme);
 }
 
-@mixin custom-dashboard-component-dark-theme($theme) {
-  @include dashboard-component-dark-theme($theme);
-}
-
 @mixin custom-cluster-details-component-theme($theme){
   @include cluster-details-component-light-theme($theme);
-}
-
-@mixin custom-cluster-details-component-dark-theme($theme) {
-  @include cluster-details-component-dark-theme($theme);
 }
 
 @mixin custom-toolbar-light-theme($theme) {
   @include toolbar-light-theme($theme);
 }
 
-@mixin custom-toolbar-dark-theme($theme) {
-  @include toolbar-dark-theme($theme);
-}
-
-@mixin custom-cluster-list-chart-font-color-dark-theme($theme) {
-  @include cluster-list-component-chart-font-dark-theme($theme);
-}
-
-@mixin custom-organization-settings-dark-theme($theme) {
-  @include organization-settings-component-dark-theme($theme);
-}
-
 @mixin custom-organization-settings-light-theme($theme) {
   @include organization-settings-component-light-theme($theme)
 }
 
-@mixin custom-sub-navigation-dark-theme($theme) {
-  @include sub-navigation-dark-theme($theme);
+@mixin custom-audit-log-light-theme($theme) {
+  @include audit-log-component-light-theme($theme)
 }
 
-@mixin custom-cluster-summary-dark-theme($theme) {
-  @include cluster-summary-chart-dark-theme($theme);
-}
-
-@mixin custom-kubernetes-pods-dark-theme($theme) {
-  @include kubernetes-pods-dark-theme($theme);
-}
-
-@mixin custom-kubernetes-pods-details-dark-theme($theme) {
-  @include kubernetes-pods-details-dark-theme($theme);
-}
-
-@mixin custom-falco-events-list-dark-theme($theme) {
-  @include falco-events-list-dark-theme($theme);
-}
 
 .default-theme {
   @include angular-material-theme($ms-default-theme);
@@ -114,40 +76,29 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   @include custom-cluster-details-component-theme($ms-default-theme);
   @include custom-toolbar-light-theme($ms-default-theme);
   @include custom-organization-settings-light-theme($ms-default-theme);
+  @include custom-audit-log-light-theme($ms-default-theme);
 }
 
-.light-theme {
-  @include angular-material-theme($ms-light-theme);
-  @include custom-components-theme($ms-light-theme);
+
+ .mat-mdc-dialog-container {
+  padding: 20px;
+  margin-left: 20px;
+
 }
 
-.dark-theme {
-  @include angular-material-theme($ms-black-theme);
-  @include custom-components-theme($ms-black-theme);
-  @include custom-toolbar-dark-theme($ms-black-theme);
-  @include custom-dashboard-component-dark-theme($ms-black-theme);
-  @include custom-cluster-list-chart-font-color-dark-theme($ms-black-theme);
-  @include custom-cluster-details-component-dark-theme($ms-black-theme);
-  @include custom-organization-settings-dark-theme($ms-black-theme);
-  @include custom-sub-navigation-dark-theme($ms-black-theme);
-  @include custom-cluster-summary-dark-theme($ms-black-theme);
-  @include custom-kubernetes-pods-dark-theme($ms-black-theme);
-  @include custom-kubernetes-pods-details-dark-theme($ms-black-theme);
-  @include custom-falco-events-list-dark-theme($ms-black-theme);
-}
-
-.remove-dialog-padding .mat-dialog-container {
-  padding: 0;
-}
-
+// organization menu text
 .organization-settings-text {
-  font-size: 14px !important;
+  font-size: 16px !important;
+  vertical-align: center;
+  text-align: center;
+  margin: 8px;
+
 }
 
 @media print {
   html, body {
     height: auto;
-    color-adjust: exact !important;
+    print-color-adjust: exact !important;
     -webkit-print-color-adjust:exact !important
   }
 }
@@ -162,6 +113,13 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
 
 .padding-top-10{
   padding-top: 10px;
+}
+.padding-top-15 {
+  padding-top:15px;
+  padding-left: 0px;
+}
+.padding-left-3 {
+  padding-left: 3%;
 }
 
 .negative-margin-bottom-20{
@@ -218,3 +176,538 @@ $ms-light-theme: mat-light-theme($ms-light-primary, $ms-light-accent, $ms-light-
   border-collapse: collapse;
   vertical-align: baseline;
 }
+.mat-icon{
+  vertical-align: bottom;
+  padding-left: 10px;
+  // margin:10px;
+}
+.mat-mdc-icon-button{
+  margin: 5px;
+}
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  padding:10px;
+}
+
+app-private {
+  display: flex;
+  flex-direction: column;
+  height: 100%
+}
+
+.main-content {
+  flex: 1;
+  height: auto;
+  margin-top: 0px !important
+}
+
+// Org setting pages uses app-sub-navigation for titles and buttons
+// The following are for lining up other page elements
+.mat-mdc-card-header{
+  display: flex;
+  padding: 0;
+  margin-left: 0px;
+}
+.page-container {
+  height: 100%;
+  display: block;
+  flex: 1;
+  width: 100%;
+  overflow: auto;
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 300); // for containers without theme applied
+}
+.page-container-content{
+  margin: 20px;
+  // width:fit-content;
+}
+.page-card{
+  margin: 0px;
+  overflow-x: auto;
+}
+.page-card-header{
+  display:flex;
+  padding:0px;
+  margin-left: 0px;
+  width: 100%;
+}
+.page-card-title{
+  font-size: 20px;
+  font-weight: bold;
+}
+.page-card-content{
+  margin-bottom: 30px;
+}
+.page-card-line-content {
+  display: flex;
+}
+.page-card-title-button-group-right-align{
+  text-align: right;
+  padding:0px;
+}
+.page-card-left-align {
+  margin-left: 0px;
+}
+.page-table-container-with-paginator{
+  width: fit-content; // align paginator with table width
+  overflow: auto;
+}
+.mat-mdc-paginator{
+  .mat-mdc-paginator-outer-container {
+    .mat-mdc-paginator-container {
+      justify-content: center;
+    }
+  }
+}
+
+
+// cluster details pages - page, card, title, button
+.page-title-div{
+  display: flex;
+  flex-direction: column;
+}
+
+.page-title{
+  font-size: 26px;
+  vertical-align: bottom;
+  line-height: 1;
+}
+.page-title-button-group-spacing{
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.page-button-spacing{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+// dialog line up
+.modal-container-margin{
+  padding: 30px;
+}
+.modal-content-left-align-no-margin{
+  margin: 0px;
+  text-align: left;
+}
+.modal-content-no-right-margin{
+  margin-right: 0px;
+}
+
+.cluster-card {
+  height: 100%;
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+.table-row {
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+    cursor: pointer;
+  }
+  &.mark {
+    background: rgba(0, 0, 0, .05);
+  }
+}
+
+.cluster-page-row {
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-style-red {
+  color: red;
+}
+.text-style-orange {
+  color: orange;
+}
+.text-style-green {
+  color: green;
+}
+.full-width {
+  width: 100%;
+}
+.code-snippet {
+  width: -webkit-fill-available;
+  max-height: 400px;
+  resize: none;
+  margin: 0 0 16px  0;
+  // Styles below replicate StackOverflow
+  background-color: #f6f6f6;
+  padding: 12px;
+  border: none;
+  color: #2f3337;
+  font-size: 13px;
+  font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.padding-top-bot-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.next-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+// Styles for the pages contains table
+
+.page-table {
+  // flex: 1;
+  overflow: auto;
+  background: #F9F9F9;
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  mat-table {
+    min-width: 800px;
+
+    mat-cell, mat-header-cell, mat-footer-cell {
+      overflow: visible;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      padding-right: 5px;
+    }
+
+    & .mat-column-date {
+      width: 150px;
+      max-width: 150px;
+    }
+
+    & .mat-column-runningCluster {
+      width: 120px;
+      max-width: 120px;
+      text-align: center;
+    }
+
+    & .mat-column-scanResult {
+      width: 100px;
+      max-width: 100px;
+      text-align: center;
+    }
+
+    & .mat-column-Crt, & .mat-column-Maj, & .mat-column-Med, & .mat-column-Min, & .mat-column-Neg {
+      width: 50px;
+      max-width: 50px;
+      text-align: center;
+    }
+  }
+}
+
+.content-breadcrumbs {
+  display: inline-block;
+  height: 35px;
+  p {
+    font-size: 26px;
+    margin-top: 15px;
+  }
+  > ol {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    padding-inline-start: 0;
+    font-size: 12px;
+    text-transform: lowercase;
+    li:not(:first-child):before {
+      content: ">";
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+    > li.breadcrumb-item {
+      > span:hover{
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      &:first-child {
+        padding-left: -5px;
+      }
+      a {
+        font-size: 12px;
+        color: black;
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.kubesec-score {
+  height: 44px;
+  width: 50px;
+  background-color: cadetblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: white;
+  > span {
+    font-size: xx-large;
+  }
+}
+
+.subnav-title {
+  font-size: 26px;
+  font-weight: normal;
+
+  @media all and (max-width: 850px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 35px;
+  }
+  @media all and (max-width: 377px) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-bottom: 35px;
+  }
+}
+
+.main-container{
+  height:100%;
+  display: flex;
+  flex-display: row;
+}
+
+// CSS for Report pages [Start]
+
+.title-font {
+  font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
+}
+
+.title-margin {
+  margin-left: 31px;
+}
+
+.vulnerability-filter-card {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.vulnerability-filter-content {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+}
+
+.vulnerability-filter-button {
+  justify-content: left;
+  padding-left: 15px;
+}
+
+.vulnerability-download-button {
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+  align-content: center;
+}
+
+.vulnerability-count {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  padding-left: 0;
+}
+
+.vulnerability-card {
+  min-width: 800px;
+  padding-bottom: 20px;
+}
+
+.mat-column-imageId {
+  margin-right: 10px;
+  word-break: break-all;
+  max-width: 7%;
+}
+
+.mat-column-image {
+  word-break: break-all;
+  margin-right: 10px
+}
+
+.mat-column-type {
+  word-break: break-all;
+  margin-right: 10px;
+}
+
+.mat-column-package {
+  word-break: break-all;
+  margin-right: 10px;
+}
+
+.mat-column-isFixable {
+  max-width: 7%;
+  margin-right: 10px;
+}
+
+.mat-column-severity {
+  max-width: 7%;
+}
+
+.mat-column-scannerName {
+  margin-right: 10px;
+}
+
+.mat-column-runningInCluster {
+  max-width: 7%;
+  margin-right: 10px;
+}
+
+.mat-column-namespaces {
+  margin-right: 10px;
+  word-break: break-all;
+}
+
+.mat-mdc-form-field {
+  margin-right: 10px;
+}
+
+.fix-margin {
+  margin-left: 18px;
+}
+
+.graph-card {
+  min-width: 625px;
+  padding-bottom: 20px;
+}
+
+// CSS for Report pages [END]
+
+// CSS for left nav [begin]
+// LARGE SCREEN: width >800px
+div.cluster-group-menu {
+  height: auto;
+  //background-color: pink;
+  width: 300px;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
+div.create-cluster-group { // left nav 1)
+  cursor: pointer;
+  height: 60px;
+  a{
+    font-size: 14px;
+    height:60px;
+    &:hover {
+      background-color: #e3dede;
+    }
+  }
+}
+.material-icons{
+  line-height:2.5;
+}
+span.plus-button{
+
+}
+span.add-cluster-group{
+  height: 35px;
+}
+div.cluster-item { // left nav 2)
+  //height: 35px;
+  height: fit-content;
+  flex: 4;
+  a{
+    font-size: 14px;
+    height:60px;
+    &:hover {
+      background-color: #e3dede;
+    }
+  }
+}
+span.cluster-group-name-full {
+  padding-left: 10px;
+  vertical-align: text-bottom;
+}
+span.cluster-group-name-short {
+  width: 15px;
+  height: 60px;
+  padding:15px;
+  text-align: center;
+  color: white;
+  text-transform: uppercase;
+  font-size: 10px;
+  vertical-align: text-bottom;
+  margin: 4px;
+}
+
+div.cluster-group-name {
+  text-decoration: none;
+  font-size: 14px;
+}
+div.organization-settings { // left nav 3)
+  flex-direction: row;
+}
+div.expanded-item {
+  display: flex;
+  flex-direction: row;
+  // background-color: green;
+
+  &:hover {
+    background-color: #F2F2F2;
+  }
+}
+div.collapse-item {
+  flex-direction: column;
+  display: none;
+  &:hover {
+    background-color: #F2F2F2;
+  }
+}
+div.cluster-dashboard {
+  width: calc(100% - 300px);
+  flex-direction: column;
+  background-color: #e0e0e0;
+}
+
+// RESPONSIVE - work for large screen to collapse or expand
+div.cluster-group-menu.responsive {
+  // background-color: orange;
+  width: 65px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  span.add-cluster-group{
+    display:none;
+  }
+  div.cluster-item { // left nav 2)
+    flex: 1;
+    height: fit-content;
+  }
+
+  div.organization-settings { // left nav 3)
+    flex-direction: column;
+  }
+
+  div.expanded-item {
+    flex-direction: column;
+    display: none;
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+  div.collapse-item {
+    display: flex;
+    flex-direction: column;
+    //background-color: palegreen;
+
+    &:hover {
+      background-color: #F2F2F2;
+    }
+  }
+}
+div.cluster-dashboard.responsive {
+  width: calc(100% - 65px);
+  flex-direction: column;
+}
+
+// CSS for left nav [end]
+

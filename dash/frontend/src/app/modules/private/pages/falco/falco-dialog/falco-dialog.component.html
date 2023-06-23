@@ -1,27 +1,28 @@
-
-        <mat-form-field appearance="fill">
-          <mat-label>Minimum Priority</mat-label>
-          <mat-select [(value)]="level">
-            <mat-option *ngFor="let level of priorityLevels"
-                        [value]="level">
-            {{level}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <a mat-list-item href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
-          <mat-icon mat-list-icon>info</mat-icon>
-        </a>
-        <div class="row button-row ng-star-inserted">
-          <div class="col-xs-6 padding-top-15">Run Falco using the following CLI command:</div>
-          <div class="col-xs-6 copy-to-button">
-            <app-copy-to-clipboard-button
-              successMessage="Command copied to clipboard!"
-              errorMessage="Command could not be copied"
-              [text]="run.value">
-            </app-copy-to-clipboard-button>
-          </div>
-        </div>
-        <div>
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
+    <mat-form-field appearance="fill">
+      <mat-label>Minimum Priority</mat-label>
+      <mat-select [(value)]="level">
+        <mat-option *ngFor="let level of priorityLevels"
+                    [value]="level">
+          {{level}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div mat-list-item href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
+      <mat-icon mat-list-item-icon>info</mat-icon>
+    </div>
+    <div class="page-title-button-group-spacing">
+      <div class="padding-top-15">Run Falco using the following CLI command:</div>
+      <div>
+        <app-copy-to-clipboard-button
+          successMessage="Command copied to clipboard!"
+          errorMessage="Command could not be copied"
+          [text]="run.value">
+        </app-copy-to-clipboard-button>
+      </div>
+    </div>
+    <div>
           <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
 helm upgrade --install falco falcosecurity/falco \
@@ -38,8 +39,9 @@ helm upgrade --install falco falcosecurity/falco \
   --set falcosidekick.config.webhook.checkcert=true \
   --set-string falcosidekick.config.webhook.minimumpriority='{{level.toLowerCase()}}'
           </textarea>
-        </div>
-        <div class="row row-reverse">
-          <button mat-raised-button matDialogClose color="primary">Done</button>
-        </div>
-
+    </div>
+    <div class="modal-content-left-align-no-margin">
+      <button mat-raised-button matDialogClose color="primary">Done</button>
+    </div>
+  </div>
+</div>

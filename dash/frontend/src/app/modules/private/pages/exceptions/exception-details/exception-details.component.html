@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <mat-card *ngIf="exception || false" class="cluster-details-mat-card">
+    <mat-card appearance="outlined" *ngIf="exception || false" class="cluster-details-mat-card">
       <mat-card-content>
         <div class="left-column">
           <p><b>Status:</b> {{exception?.status}}</p>
@@ -31,11 +31,11 @@
         <div class="right-column">
           <div *ngIf="!exception?.relevantForAllClusters; else noClusters">
             <h3><b>Clusters</b></h3>
-            <mat-chip-list>
-              <mat-chip *ngFor="let cluster of exception?.clusters" (click)="viewCluster(cluster?.id)">
+            <mat-chip-grid>
+              <mat-chip-option *ngFor="let cluster of exception?.clusters" (click)="viewCluster(cluster?.id)">
                 {{cluster.name}}
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-option>
+            </mat-chip-grid>
           </div>
           <ng-template #noClusters>
             <p><b>Clusters:</b> All</p>
@@ -43,11 +43,11 @@
 
           <div *ngIf="!exception?.relevantForAllPolicies; else noPolicies">
             <h3><b>Policies</b></h3>
-            <mat-chip-list>
-              <mat-chip *ngFor="let policy of exception.policies" (click)="viewPolicy(policy?.id)">
+            <mat-chip-grid>
+              <mat-chip-option *ngFor="let policy of exception.policies" (click)="viewPolicy(policy?.id)">
                 {{policy.name}}
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-option>
+            </mat-chip-grid>
           </div>
           <ng-template #noPolicies>
             <p><b>Policies:</b> All</p>
@@ -55,11 +55,11 @@
 
           <div *ngIf="!exception?.relevantForAllKubernetesNamespaces; else noNamespaces">
             <h3><b>Namespaces</b></h3>
-            <mat-chip-list>
-              <mat-chip *ngFor="let namespace of exception.namespaces">
+            <mat-chip-grid>
+              <mat-chip-option *ngFor="let namespace of exception.namespaces">
                 {{namespace.name}}
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-option>
+            </mat-chip-grid>
           </div>
           <ng-template #noNamespaces>
             <p><b>Namespaces:</b> All</p>
@@ -68,7 +68,7 @@
       </mat-card-content>
     </mat-card>
     <div>
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-content>
           <form [formGroup]="commentForm" >
             <p>
@@ -88,7 +88,7 @@
       </mat-card>
     </div>
     <div>
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-content>
           <mat-list class="display-comments">
             <mat-list-item *ngFor="let comment of (comments$ | async)">

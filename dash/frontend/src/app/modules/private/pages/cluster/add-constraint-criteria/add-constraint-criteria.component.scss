@@ -4,10 +4,6 @@
   width: 100%;
 }
 
-.form-field-full-width {
-  width: 100%;
-}
-
 .close-button{
   float: right;
   top:-16px;
@@ -22,12 +18,12 @@
   transform: rotate(180deg);
 }
 
-::ng-deep .icon-outside .close-button{
+.icon-outside .close-button{
   float: right;
   top:-52px;
   right:-52px;
 }
 
-::ng-deep .icon-outside .mat-dialog-container {
+.icon-outside .mat-mdc-dialog-container {
   overflow: unset
 }

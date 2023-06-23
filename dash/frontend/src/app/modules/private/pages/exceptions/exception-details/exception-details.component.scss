@@ -31,7 +31,7 @@ div.exception-details-container {
     }
 
     .cluster-details-mat-card {
-      > .mat-card-content {
+      > .mat-mdc-card-content {
         display: flex;
         justify-content: space-around;
         flex-direction: row;
@@ -92,14 +92,14 @@ div.exception-details-container {
     }
   }
 
-  .mat-card-actions {
+  .mat-mdc-card-actions {
     margin-left: 0;
   }
-
+  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-header {
     margin-left: -17px;
   }
-
+  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin-bottom: 10px;
   }

@@ -1,10 +1,10 @@
-<div class="image-scan-result-container">
-  <div class="image-scan-content">
+<div class="page-container">
+  <div class="page-container-content">
     <div class="image-scan-list" *ngIf="dataSource">
       <mat-toolbar>
         <mat-toolbar-row>
           <div class="col-lg-9 col-xs-12">
-            <span class="subnav-title" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
+            <span class="page-title" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
           </div>
           <div class="col-lg-2 col-lg-offset-1 col-xs-12">
             <div class="mr-15px">
@@ -25,11 +25,11 @@
       <div class="mat-elevation-z8 image-details">
         <div class="left-elements">
           <div class="elements">
-            <h4>Scan Result</h4>
+            <p>Scan Result</p>
             <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>
           </div>
           <div class="elements">
-            <h4>Last Scanned</h4>
+            <p>Last Scanned</p>
             <div *ngIf="dataSource.lastScanned; else elseBlock">
               <p>{{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}</p>
             </div>
@@ -38,43 +38,43 @@
             </ng-template>
           </div>
           <div class="elements">
-            <h4>Running</h4>
+            <p>Running</p>
             <p >{{dataSource.runningInCluster}}</p>
           </div>
         </div>
         <div class="right-elements" >
           <div class="elements">
-            <h4>Critical</h4>
+            <p>Critical</p>
             <p>{{dataSource.criticalIssues}}</p>
           </div>
           <div class="elements">
-            <h4>Major</h4>
+            <p>Major</p>
             <p >{{dataSource.majorIssues}}</p>
           </div>
           <div class="elements">
-            <h4>Medium</h4>
+            <p>Medium</p>
             <p >{{dataSource.mediumIssues}}</p>
           </div>
           <div class="elements">
-            <h4>Low</h4>
+            <p>Low</p>
             <p >{{dataSource.lowIssues}}</p>
           </div>
           <div class="elements">
-            <h4>Negligible</h4>
+            <p>Negligible</p>
             <p >{{dataSource.negligibleIssues}}</p>
           </div>
         </div>
       </div>
     </div>
     <div class="scanner-error mat-elevation-z8" *ngIf="lastScanReport?.encounterError">
-      <h2 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h2>
+      <h3 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h3>
       <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
     </div>
     <div class="image-scan-result-list" *ngIf="displayComplianceAndIssueTable">
       <mat-toolbar>
         <span class="subnav-title" matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         <div class="advanced-search" *ngIf="imageScanDates">
-          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" >
+          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="title-font ">
             <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
           </mat-select>
         </div>
@@ -118,7 +118,7 @@
             <td mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getIssuesByPolicy(row)" class="scan-report-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getIssuesByPolicy(row)" class="table-row"></tr>
         </table>
       </div>
       <mat-paginator
@@ -156,15 +156,23 @@
           <ng-container matColumnDef="type">
             <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header="type" disableClear> Type </th>
             <td style="width: 15%;" mat-cell *matCellDef="let issue">
-              <ng-container *ngIf="issue.vulnerabilityDescUrl">
-                <a [href]="issue.vulnerabilityDescUrl" target="_blank"> {{issue.type}} </a>
-              </ng-container>
-              <ng-container *ngIf="!issue.vulnerabilityDescUrl">
-                {{issue.type}}
-              </ng-container>
-              <button mat-icon-button (click)="searchCVE(issue.type)">
-                <mat-icon>search</mat-icon>
-              </button>
+              <div class="row">
+                <div class="col type-margin">
+                  <ng-container *ngIf="issue.vulnerabilityDescUrl">
+                    <a [href]="issue.vulnerabilityDescUrl" target="_blank"> {{issue.type}} </a>
+                  </ng-container>
+                  <ng-container *ngIf="!issue.vulnerabilityDescUrl">
+                    {{issue.type}}
+                  </ng-container>
+                </div>
+                <div class="col">
+                  <button mat-icon-button (click)="searchCVE(issue.type)">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+
             </td>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
@@ -209,10 +217,10 @@
             <th style="width: 6%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
             <td style="width: 6%;" mat-cell *matCellDef="let issue">
               <a mat-button (click)="showMoreIssueDetails(issue)">+more</a>
-              <a color="primary" mat-raised-button *ngIf="issue.isFixable"
+              <button color="primary" class="request-exception-button" mat-raised-button *ngIf="issue.isFixable"
                  [routerLink]="['/private', 'exceptions','create']"
                  [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"
-              > Request Exception</a>
+              > Request Exception</button>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="issuesDisplayedColumns"></tr>

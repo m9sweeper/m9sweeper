@@ -1,5 +1,6 @@
-@import '~@angular/material/theming';
-
+// @import '@angular/material/theming';
+@use '@angular/material' as mat;
+/*
 @mixin organization-settings-component-dark-theme($theme) {
   app-organization-settings {
     .organization-settings-container {
@@ -32,11 +33,13 @@
   }
 }
 
+
+ */
 @mixin organization-settings-component-light-theme($theme) {
   app-organization-settings {
     .organization-settings-container {
       .left-nav {
-        background-color: map-get($mat-gray, A100);
+        background-color: mat.get-color-from-palette(mat.$gray-palette, A100);
       }
     }
   }

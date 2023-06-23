@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, } from '@angular/forms';
 
 import {EnumService} from '../../../../../core/services/enum.service';
 import {format, startOfToday, sub} from 'date-fns';
@@ -186,8 +186,9 @@ export class FalcoEventsListComponent implements OnInit {
 
   openDialog() {
     const dialog = this.dialog.open(FalcoDialogComponent, {
-      maxWidth: '800px',
+      maxWidth: '1000px',
       maxHeight: '80vh',
+      // width: '100%',
       closeOnNavigation: true,
       disableClose: false,
       data: {

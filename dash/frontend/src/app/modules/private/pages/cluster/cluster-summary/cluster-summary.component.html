@@ -1,28 +1,28 @@
-<div class="cluster-summary-container">
-  <div class="cluster-summary">
-    <div class="counter-container">
-      <div class="row">
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+<div class="page-container hide-x-scrollbar">
+  <div class="page-container-content container-margin">
+    <div class="page-card hide-scrollbar">
+      <div class="row cluster-page-row">
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label">Total Images Running</div>
               <div class="total">{{ countOfTotalImagesRunning }}</div>
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label center-xs">Total Vulnerabilities Detected in Running Images</div>
               <div class="total center-xs">{{totalVulnerabilities}}</div>
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding no-margin full-height"
+        <div class="margin-top-10 no-padding no-margin full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+          <mat-card appearance="outlined" class="cluster-summary-card">
             <mat-card-content>
               <div class="label">Policy Violations</div>
               <div class="total">{{countOfPolicyViolations}}</div>
@@ -31,14 +31,13 @@
         </div>
       </div>
     </div>
-    <div class="graph-container">
-      <div class="row">
-        <div class="widget margin-top-10 no-padding full-height"
+    <div class="row cluster-page-row graph-row">
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+          <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
             <mat-card-content>
-              <div class="graph dark-theme">
+              <div>
                 <ngx-charts-line-chart
                 [view]="complianceSummaryLineChartAttributes.view"
                 [scheme]="complianceSummaryLineChartAttributes.colorScheme"
@@ -78,12 +77,12 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding full-height"
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+        <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Scan History</mat-card-title>
             <mat-card-content>
-              <div class="graph dark-theme">
+              <div>
                 <ngx-charts-line-chart
                   [view]="lineChartAttributes.view"
                   [scheme]="lineChartAttributes.colorScheme"
@@ -122,12 +121,12 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="widget margin-top-10 no-padding full-height"
+        <div class="margin-top-10 no-padding full-height"
              [ngClass]="this.currentCardSize">
-          <mat-card class="cluster-summary-card">
+        <mat-card appearance="outlined">
             <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
             <mat-card-content>
-              <div class="graph dark-theme">
+              <div>
                 <ngx-charts-bar-vertical-stacked
                   [view]="barChartAttributes.view"
                   [scheme]="barChartAttributes.colorScheme"
@@ -156,15 +155,14 @@
           </mat-card>
         </div>
       </div>
-    </div>
-    <div class="row">
+    <div class="row cluster-page-row">
       <div class="namespaces-table col-xs-12 no-padding">
-        <mat-card>
+        <mat-card appearance="outlined">
           <div class="namespace-image-table">
             <mat-table [dataSource]="dataSource" matSort  matSortActive="namespace" matSortDisableClear matSortDirection="asc">
               <ng-container  matColumnDef="namespace">
-                <mat-header-cell class="padding-left" *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
-                <mat-cell class="padding-left" *matCellDef="let totalSeverity">{{totalSeverity.namespace}}</mat-cell>
+                <mat-header-cell class="padding-left-3" *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
+                <mat-cell class="padding-left-3" *matCellDef="let totalSeverity">{{totalSeverity.namespace}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="criticalIssues">
                 <mat-header-cell class="justify-content-center" *matHeaderCellDef > Critical Issues</mat-header-cell>
@@ -188,14 +186,14 @@
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
-              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="image-click"></mat-row>>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="table-row"></mat-row>>
             </mat-table>
           </div>
         </mat-card>
       </div>
     </div>
     <div class="cluster-events no-padding col-xs-12">
-      <mat-card class="cluster-events-card">
+      <mat-card appearance="outlined" class="cluster-events-card">
         <h3>Logs</h3>
         <div
           class="search-results"

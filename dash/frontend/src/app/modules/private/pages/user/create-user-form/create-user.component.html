@@ -1,73 +1,64 @@
-<div class="create-user-container">
-  <div class="mat-toolbar">
-    <mat-toolbar>
-      <div>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_horiz</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu" xPosition="after" yPosition="below">
-          <span>
-            <a mat-menu-item [routerLink]="['/private', 'users']">
-              <mat-icon>keyboard_backspace</mat-icon> Back
-            </a>
-          </span>
-        </mat-menu>
-        <span class="subnav-title">{{subMenuTitle}}</span>
-        <button [disabled]="!userForm.valid" mat-raised-button type="button" (click)="onSubmit()" class="create-user-button">
-          {{ isEdit ? 'Save' : 'Create'}}
-        </button>
-      </div>
-    </mat-toolbar>
-  </div>
-  <div class="create-user-form-card">
-    <mat-card>
-      <mat-card-content>
-        <form class="user-form" [formGroup]="userForm">
-          <p >
-            <mat-form-field appearance="standard">
-              <mat-label>First Name</mat-label>
-              <input matInput placeholder="Enter your first name" type="text" formControlName="firstName" [readonly]="activateReadOly">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Last Name</mat-label>
-              <input matInput placeholder="Enter your last name" type="text" formControlName="lastName" [readonly]="activateReadOly">
-            </mat-form-field>
-          </p>
-          <p *ngIf="!isEdit">
-            <mat-form-field appearance="standard">
-              <mat-label>Email</mat-label>
-              <input matInput placeholder="Enter your email" type="text" formControlName="email">
-            </mat-form-field>
-          </p>
-          <p *ngIf="authType !== 'OAUTH2'">
-            <mat-form-field appearance="standard" [allowedRoles]="['SUPER_ADMIN']">
-              <mat-label>Password</mat-label>
-              <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-              <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </mat-form-field>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-card">
 
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Phone</mat-label>
-              <input matInput placeholder="Enter phone number" type="text" formControlName="phone" [readonly]="activateReadOly">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Authority</mat-label>
-              <mat-select formControlName="authorities" multiple>
-                <mat-option *ngFor="let authority of authorities" [value]="authority.id">{{authority.type}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-checkbox formControlName="isActive" class="checkbox-margin">Active</mat-checkbox>
-          </p>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+        <mat-card appearance="outlined">
+          <mat-card-content>
+            <div class="page-title-button-group-spacing">
+              <span class="page-title" style="vertical-align: middle">{{subMenuTitle}}</span>
+            </div>
+            <form [formGroup]="userForm">
+              <p >
+                <mat-form-field appearance="fill">
+                  <mat-label>First Name</mat-label>
+                  <input matInput placeholder="Enter your first name" type="text" formControlName="firstName" [readonly]="activateReadOly">
+                </mat-form-field>
+              </p>
+              <p>
+                <mat-form-field appearance="fill">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput placeholder="Enter your last name" type="text" formControlName="lastName" [readonly]="activateReadOly">
+                </mat-form-field>
+              </p>
+              <p *ngIf="!isEdit">
+                <mat-form-field appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input matInput placeholder="Enter your email" type="text" formControlName="email">
+                </mat-form-field>
+              </p>
+              <p *ngIf="authType !== 'OAUTH2'">
+                <mat-form-field appearance="fill" [allowedRoles]="['SUPER_ADMIN']">
+                  <mat-label>Password</mat-label>
+                  <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+                  <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+
+              </p>
+              <p>
+                <mat-form-field appearance="fill">
+                  <mat-label>Phone</mat-label>
+                  <input matInput placeholder="Enter phone number" type="text" formControlName="phone" [readonly]="activateReadOly">
+                </mat-form-field>
+              </p>
+              <p>
+                <mat-form-field appearance="fill">
+                  <mat-label>Authority</mat-label>
+                  <mat-select formControlName="authorities" multiple>
+                    <mat-option *ngFor="let authority of authorities" [value]="authority.id">{{authority.type}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </p>
+              <p>
+                <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
+              </p>
+            </form>
+            <button [disabled]="!userForm.valid" mat-raised-button type="button" (click)="onSubmit()" >
+              {{ isEdit ? 'Save' : 'Create'}}
+            </button>
+            &nbsp;
+            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+</div>
 </div>

@@ -1,23 +1,32 @@
-<mat-card>
-  <mat-card-title>
-    Edit {{this.data ? this.data.subDir + ' Template' : 'Constraint Template'}}
-  </mat-card-title>
-  <mat-card-content>
-    <ngx-codemirror #codemirror
-                    [options]="codeMirrorOptions"
-                    [(ngModel)]="rawTemplate"
-                    (ngModelChange)="setEditorContent($event)">
+<div class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
 
-    </ngx-codemirror>
+    <mat-card appearance="outlined">
+      <div class="page-card-title">
+        Edit {{this.data ? this.data.subDir + ' Template' : 'Constraint Template'}}
+      </div>
+      <br>
+      <mat-card-content>
+        <ngx-codemirror #codemirror
+                        [options]="codeMirrorOptions"
+                        [(ngModel)]="rawTemplate"
+                        (ngModelChange)="setEditorContent($event)">
 
-  </mat-card-content>
-  <div class="buttons">
-    <div mat-dialog-actions class="action-btn-left">
-      <button [disabled]="true" mat-raised-button color="primary" type="submit" style="display: none;">REgo IDE</button>
-    </div>
-    <div mat-dialog-actions class="action-btn-right">
-      <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
-      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-    </div>
+        </ngx-codemirror>
+
+      </mat-card-content>
+      <br>
+      <div class="page-card-title-button-group-right-align">
+        <div  >
+          <button [disabled]="true" mat-raised-button color="primary" type="submit" style="display: none;">REgo IDE</button>
+        </div>
+        <div>
+          <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
+          &nbsp;
+          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+        </div>
+      </div>
+    </mat-card>
+
   </div>
-</mat-card>
+</div>

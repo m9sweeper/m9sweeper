@@ -1,21 +1,20 @@
-<div class="audit-logs-container">
-  <div class="audit-logs-list page">
-    <div class="col-lg-4 col-xs-12 page-title">
-      <span>Audit Logs</span>
-    </div>
-    <div class="filter-card">
-      <mat-card>
+<div class="page-container ">
+  <div class="page-container-content">
+    <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
+    <div class="page-card">
+      <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row filter-header">
-            <div class="col-xs-12 filter-header-title">
-              <h2>Audit Logs</h2>
+          <div class="page-card-header">
+            <div class="page-card-title">
+              Audit Logs
             </div>
           </div>
         </mat-card-header>
+        <div class="page-card-content">
         <mat-card-content>
-          <div class="filter-content">
+          <div class="page-card-line-content">
             <form>
-              <div class="row audit-logs-header">
+              <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6">
                   <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
                     <mat-label>Entity Type</mat-label>
@@ -34,35 +33,36 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-2 filter-button">
+
                   <button [disabled]="!filterAuditLogForm.valid"
                           mat-raised-button
                           color="primary"
                           type="submit" (click)="filterAuditLogs()">Filter
                   </button>
-                </div>
-                <div class="col-md-10 filter-button">
+                  &nbsp;
                   <button mat-raised-button
                           color="primary"
                           type="submit" (click)="resetAuditLogs()">Reset
                   </button>
-                </div>
-              </div>
+
             </form>
           </div>
         </mat-card-content>
+        </div>
       </mat-card>
     </div>
-    <div class="audit-logs-card" *ngIf="showAuditLogTable">
-      <mat-card>
+    &nbsp;
+    <div class="page-card" *ngIf="showAuditLogTable">
+      <mat-card appearance="outlined">
         <mat-card-header>
-          <div class="row audit-logs-header">
-            <div class="col-xs-9 audit-logs-count">
-              <h2>Audit logs count: {{totalAuditLogs}}</h2>
+          <div class=" page-card-header">
+            <div class="col-xs-9 no-padding">
+              <div class="page-card-title">
+                Audit logs count: {{totalAuditLogs}}
+              </div>
             </div>
-            <div class="col-xs-3 download-button">
-              <button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
+            <div class="col-xs-3 page-card-title-button-group-right-align">
+              <button class=button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
                       mat-raised-button
                       color="primary"
                       type="button">Download
@@ -70,9 +70,10 @@
             </div>
           </div>
         </mat-card-header>
-        <mat-card-content>
-          <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
+        <mat-card-content class="page-card">
+          <div class="mat-elevation-z8 ">
+            <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
+                   matSortDirection="asc">
               <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Id.</th>
                 <td mat-cell *matCellDef="let auditLog"> {{auditLog?.id}} </td>

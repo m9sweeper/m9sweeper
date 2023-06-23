@@ -1,56 +1,65 @@
-<div class="cluster-info-container">
- <div class="cluster-details">
-  <div [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'cluster-info-sub-navigation'">
-    <div class="cluster-info-sub-title">
-      Cluster Info
+<div class="page-container">
+ <div class="page-container-content">
+  <div class="page-title-button-group-spacing" [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'cluster-info-sub-navigation'">
+    <div class="page-title-div">
+      <div class="page-title">
+        Cluster Info
+      </div>
     </div>
     <div class="cluster-info-button-item">
-      <mat-card-actions>
-        <button id="update-config-button" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterWizard()">
+
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterWizard()">
           <mat-icon>build</mat-icon>
           Update Kubeconfig
         </button>
+        &nbsp;
         <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterDialog(cluster)">
           <mat-icon>create</mat-icon>
           Edit
         </button>
+        &nbsp;
         <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="warn" (click)="alertDeleteCluster(cluster.id, cluster.groupId)">
           <mat-icon>delete_outline</mat-icon>
           Delete
         </button>
-      </mat-card-actions>
+
     </div>
   </div>
-  <mat-card *ngIf="isClusterLoaded" class="cluster-details-mat-card">
-    <mat-card-header>
-      <mat-card-title>{{cluster.name}} Details</mat-card-title>
-    </mat-card-header>
-    <mat-card-content [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}" *ngIf="buildDate">
-      <p>Host Name: {{cluster.ipAddress}}</p>
-      <p>Port: {{cluster.port}}</p>
-      <p>Context: {{cluster.context}}</p>
-      <p>Running m9sweeper version {{m9ver}} ({{commitSHA}} from {{buildDate}})</p>
-      <!-- <p>Grace Period Days: {{cluster.gracePeriodDays}}</p> -->
-      <mat-chip-list aria-label="Cluster Tags" style="display:none!important">
-        <p>Tags: </p><mat-chip *ngFor="let tag of cluster['tags']; index as i " [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{tag.name}}</mat-chip>
-      </mat-chip-list>
-      
-      <h3 style="margin-top:20px;">Webhook Enforcement: </h3>
-      <p style="line-height:0.2"><i>Block noncompliant applications from deploying</i></p>
-      <mat-slide-toggle #matSlideToggle
-        [checked]="isEnforcementEnabled"
-        color="primary"
-        (change)="changeEnforcementValue($event)">
-      </mat-slide-toggle>
+   <div class="page-card">
+     <mat-card appearance="outlined" *ngIf="isClusterLoaded" >
+       <mat-card-header>
+         <div class="page-card-header">
+         <div class="page-card-title">{{cluster.name}} Details</div>
+         </div>
+       </mat-card-header>
+       <mat-card-content [ngClass]="{'mat-card-content-in-small-device': isMobileDevice}" *ngIf="buildDate">
+         <p>Host Name: {{cluster.ipAddress}}</p>
+         <p>Port: {{cluster.port}}</p>
+         <p>Context: {{cluster.context}}</p>
+         <p>Running m9sweeper version {{m9ver}} ({{commitSHA}} from {{buildDate}})</p>
+         <!-- <p>Grace Period Days: {{cluster.gracePeriodDays}}</p> -->
+         <mat-chip-listbox aria-label="Cluster Tags" style="display:none!important">
+           <p>Tags: </p><mat-chip-row *ngFor="let tag of cluster['tags']; index as i " [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{tag.name}}</mat-chip-row>
+         </mat-chip-listbox>
 
-      <h3 style="margin-top:20px;">Image Scanning Enforcement: </h3>
-      <p style="line-height:0.2"><i>Fail build pipelines if image is non-compliant</i></p>
-      <mat-slide-toggle #matSlideToggleForImageScanning
-          [checked]="isImageScanningEnforcementEnabled"
-          color="primary"
-          (change)="changeImageScanningEnforcementValue($event)">
-      </mat-slide-toggle>
-    </mat-card-content>
-  </mat-card>
+         <h3 style="margin-top:20px;">Webhook Enforcement: </h3>
+         <p style="line-height:0.2"><i>Block noncompliant applications from deploying</i></p>
+         <mat-slide-toggle #matSlideToggle
+                           [checked]="isEnforcementEnabled"
+                           color="primary"
+                           (change)="changeEnforcementValue($event)">
+         </mat-slide-toggle>
+
+         <h3 style="margin-top:20px;">Image Scanning Enforcement: </h3>
+         <p style="line-height:0.2"><i>Fail build pipelines if image is non-compliant</i></p>
+         <mat-slide-toggle #matSlideToggleForImageScanning
+                           [checked]="isImageScanningEnforcementEnabled"
+                           color="primary"
+                           (change)="changeImageScanningEnforcementValue($event)">
+         </mat-slide-toggle>
+       </mat-card-content>
+     </mat-card>
+   </div>
+
  </div>
 </div>

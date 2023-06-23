@@ -1,5 +1,7 @@
 
 div {
+  height: 100%;
+  filter: none;
   &.app-container {
     height: 100%;
     display: flex;
@@ -8,16 +10,7 @@ div {
       &.router-outlet-container {
         flex:1;
       }
-      &.theme-changer-container {
-        position: fixed;
-        overflow: hidden;
-        z-index: 2400;
-        bottom: 5px;
-        right: 5px;
-        padding: 5px;
-        background-color: #d6d3c3;
-        border-radius: 5px;
-      }
+
     }
   }
 }
@@ -37,11 +30,11 @@ div.kubernetes-object-container {
       padding-right: 3px;
     }
 
-    * > .mat-header-row {
+    * > .mat-mdc-header-row {
       display: none;
     }
 
-    * > .mat-row {
+    * > .mat-mdc-row {
       flex-direction: column;
       align-items: start;
       padding: 8px 24px;
@@ -49,7 +42,7 @@ div.kubernetes-object-container {
     * > mat-cell:first-of-type {
       padding-left: 0;
     }
-    * > .mat-table .mat-paginator {
+    * > .mat-mdc-table .mat-mdc-paginator {
       width: 250px;
     }
   }
@@ -97,59 +90,28 @@ div.kubernetes-object-sub-navigation {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  height:auto;
+  // min-height: 200px;
   .calendar-date-picker {
     margin-top: 20px
   }
 }
 .kubernetes-object-header {
   flex-direction: column;
-  div.content-breadcrumbs {
-    display: inline-block;
-    height: 35px;
-    p {
-      font-size: 26px;
-      margin-top: 15px;
-    }
-    > ol {
-      display: flex;
-      flex-direction: row;
-      list-style-type: none;
-      padding-inline-start: 0;
-      font-size: 12px;
-      text-transform: lowercase;
-      li:not(:first-child):before {
-        content: ">";
-        padding-right: 5px;
-        padding-left: 5px;
-      }
-
-      > li.breadcrumb-item {
-        > span:hover{
-          text-decoration: underline;
-          cursor: pointer;
-        }
-        &:first-child {
-          padding-left: -5px;
-        }
-        a {
-          font-size: 12px;
-          color: black;
-        }
-      }
-    }
-  }
+  height: 100px;
   > .content-name {
     font-size: 26px;
     margin-top: 15px;
+    height: auto;
+    min-height:100px;
   }
 }
 
 /* Mat Table Styling Corrections */
-.mat-table {
+.mat-mdc-table {
   width: 100%;
 
-  & .mat-header-cell {
+  & .mat-mdc-header-cell {
     width: calc(100% / 4);
     text-align: center;
   }
@@ -167,3 +129,5 @@ div.kubernetes-object-sub-navigation {
     }
   }
 }
+
+//@TODO add button, header, page container, common styles

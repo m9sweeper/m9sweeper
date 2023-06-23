@@ -1,12 +1,13 @@
 <mat-horizontal-stepper linear #stepper>
   <mat-step [editable]="isCompleted" [stepControl]="createClusterForm">
     <ng-template matStepLabel>Setup Cluster</ng-template>
-    <h1>Setup Cluster</h1>
+    <div class="modal-content-left-align-no-margin">
+    <h3>Setup Cluster</h3>
     <p>This wizard will walk you through setting up your cluster.</p>
 
     <form [formGroup]="createClusterForm">
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Cluster Name</mat-label>
           <label>
             <input required matInput placeholder="Cluster Name" type="text" formControlName="name">
@@ -37,7 +38,7 @@
           <button type="button" mat-raised-button color="accent" (click)="configFileInput.click()">
             Select Kubeconfig
           </button>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Context</mat-label>
             <mat-select placeholder="Context"
                         formControlName="context"
@@ -48,11 +49,11 @@
             </mat-select>
           </mat-form-field>
         </p>
-        <h2>
+        <h3>
           Cluster Details
-        </h2>
+        </h3>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Host Name</mat-label>
             <label>
               <input matInput placeholder="Host Name" required type="text" formControlName="ipAddress" [readonly]="!!this.createClusterForm.get('kubeConfig').value">
@@ -60,7 +61,7 @@
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Port</mat-label>
             <label>
               <input matInput placeholder="Port" type="number" formControlName="port" [readonly]="!!this.createClusterForm.get('kubeConfig').value">
@@ -69,19 +70,21 @@
         </p>
       </div>
 
-      <mat-card-actions>
+      <div>
         <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+        &nbsp;
         <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" style="float: right"
                 matStepperNext>Next Step
         </button>
-      </mat-card-actions>
+      </div>
     </form>
+    </div>
   </mat-step>
 
   <mat-step [editable]="isCompleted" [formGroup]="serviceAccountForm">
     <ng-template matStepLabel>Grant Access</ng-template>
-    <div>
-      <h1>Grant Access</h1>
+    <div class="modal-content-left-align-no-margin">
+      <h3>Grant Access</h3>
       <!--Users are required to go through the manual service account configuration if they have not provided an admin kubeconfig-->
       <ng-container *ngIf="!!this.createClusterForm.get('kubeConfig').value; else manualServiceAccountRequired">
         <p>
@@ -109,38 +112,36 @@
         </button>
       </ng-template>
     </div>
-    <mat-card-actions style="margin-top: 40px">
+    <br>
+    <div>
       <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+      &nbsp;
       <button mat-raised-button
               color="primary"
               style="float: right"
               [disabled]="serviceAccountForm.invalid"
               matStepperNext>Next Step</button>
-    </mat-card-actions>
+    </div>
   </mat-step>
 
   <mat-step [editable]="isCompleted">
     <ng-template matStepLabel>Install Enforcer</ng-template>
-    <div>
-      <h1>Install Enforcer</h1>
+    <div class="modal-content-left-align-no-margin">
+      <h3>Install Enforcer</h3>
       <ng-container *ngIf="!!this.createClusterForm.get('kubeConfig').value; else manualWebhookOnlyMessage">
+
         <mat-radio-group [(ngModel)]="installWebhook">
-          <div>
-          <span>
-            <mat-radio-button value="automatically" [checked]="true"></mat-radio-button>
-            <span>Automatically Upon Completion of Install Wizard</span>
-          </span>
-          </div>
-          <div style="margin-top: 30px">
-          <span>
-            <mat-radio-button value="manually"></mat-radio-button>
-            <span>
+          <div class="row"><div class="col-xs">
+            <mat-radio-button value="automatically" [checked]="true">Automatically Upon Completion of Install Wizard</mat-radio-button>
+          </div></div>
+          <div class="row mt-8px"><div class="col-xs">
+            <mat-radio-button  value="manually">
               Manually with kubernetes manifest
-            </span>
-          </span>
-          </div>
+            </mat-radio-button>
+          </div></div>
         </mat-radio-group>
       </ng-container>
+      <br>
       <ng-template #manualWebhookOnlyMessage>
         <p>
           You will need to install a webhook configuration so that M9sweeper can ensure that pods deployed
@@ -148,16 +149,17 @@
         </p>
       </ng-template>
     </div>
-    <mat-card-actions style="margin-top: 40px">
+    <div>
       <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+      &nbsp;
       <button mat-raised-button color="primary" [disabled]="submitting" style="float: right" (click)="onSubmit(stepper)">Next Step</button>
-    </mat-card-actions>
+    </div>
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <div>
-      <h1>Done!</h1>
+    <div class="modal-content-left-align-no-margin">
+      <h3>Done!</h3>
       <div class="row">
         <span class="col-md-9">
           Your cluster is set up and being scanned now!
@@ -172,7 +174,7 @@
       </div>
       <div>
         <form [style]="displayWebhookText()">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <label>
               <textarea #defaultWebhookTextArea class="manually-textarea" matInput></textarea>
             </label>

@@ -25,6 +25,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {DatePipe} from '@angular/common';
 import { TablifyPipe } from './core/pipe/tablify.pipe';
+import {MatButtonModule} from '@angular/material/button';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
@@ -62,21 +63,22 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     AppComponent,
     AlertDialogComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    OverlayModule,
-    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-    NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
-    AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
-    MatSlideToggleModule,
-    MatIconModule,
-    MatDialogModule,
-    FontAwesomeModule,
-    InfiniteScrollModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        OverlayModule,
+        NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+        NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
+        AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
+        MatSlideToggleModule,
+        MatIconModule,
+        MatDialogModule,
+        FontAwesomeModule,
+        InfiniteScrollModule,
+        MatButtonModule
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

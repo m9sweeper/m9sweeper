@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-constraint-criteria.component';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from '@full-fledged/alerts';
 import {IConstraintCriteria, IGateKeeperConstraint} from '../../../../../core/entities/IGateKeeperConstraint';
@@ -83,8 +83,8 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   AddConstraintCriteriaDialog() {
     const openConstraintCriteriaDialog = this.dialog.open(AddConstraintCriteriaComponent, {
-      width: '550px',
-      height: '300px',
+      width: '600px',
+      height: '400px',
       closeOnNavigation: true,
       disableClose: false,
       data: {clusterId: this.data.clusterId}

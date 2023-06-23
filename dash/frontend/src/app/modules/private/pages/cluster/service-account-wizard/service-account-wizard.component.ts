@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {AlertService} from '@full-fledged/alerts';
-import {FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder,  Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {take} from 'rxjs/operators';

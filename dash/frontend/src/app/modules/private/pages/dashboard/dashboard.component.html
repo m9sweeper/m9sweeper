@@ -1,62 +1,69 @@
-<div class="dashboard-container">
-  <div class="cluster-group-menu"
-       [ngClass]="isSmallDevice ? 'cluster-group-menu-small-device' : 'cluster-group-menu-big-device'">
+<div class="main-container">
+  <div id="left-nav" class="cluster-group-menu">
+
     <div class="create-cluster-group">
       <mat-list role="list">
-        <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item title="Add Cluster Group" (click)="openAddGroupDialog()">
-          <mat-icon mat-list-icon>add</mat-icon>
-          <span matLine *ngIf="isExpanded || isSmallDevice">Add Cluster Group</span>
+        <a  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"  title="Add Cluster Group" (click)="openAddGroupDialog()">
+          <span class="plus-button">
+            <mat-icon>add</mat-icon>
+          </span>
+          <span class="add-cluster-group" >Add Cluster Group</span>
         </a>
-        <mat-divider></mat-divider>
       </mat-list>
     </div>
+    <mat-divider></mat-divider>
+
     <div class="cluster-item">
-      <mat-list role="list" class="cluster-group-name-list"
-                [ngClass]="{'cluster-group-list-isExpanded' : isExpanded || isSmallDevice , 'cluster-group-list-isNotExpand' : !isExpanded  || !isSmallDevice }"
+      <mat-list role="list"
                 *ngFor="let group of userClusterGroups; index as i">
-        <a mat-list-item role="listitem" class="cluster-group-name" title="{{group?.name}}" (click)="menubarCollapse()"
+        <a matListItemLine role="listitem" title="{{group?.name}}"
            [routerLink]="['/private', 'dashboard', 'group', group?.id]"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}">
           <span [ngStyle]="{'background': calculateMenuColor(i)}"
                 class="cluster-group-name-short">{{shortGroupName(group.name)}}</span>
-          <span class="cluster-group-name-full" *ngIf="isExpanded || isSmallDevice">{{group.name}}</span>
+          <span class="cluster-group-name-full" style="padding-left: 10px;">{{group.name}}</span>
         </a>
       </mat-list>
     </div>
+
     <div class="organization-settings">
-      <mat-list role="list" [ngClass]="{'expanded': isExpanded, 'closed': !isExpanded}">
-        <div class="expanded-item" *ngIf="isExpanded">
-          <a mat-list-item title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']" (click)="menubarCollapse()">
-            <mat-icon title="Organization Settings" mat-list-icon>settings</mat-icon>
-            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
+      <div role="list" >
+        <div id='expand' class="expanded-item" >
+          <a  title="Organization Settings" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']">
+            <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
+            <span  class="organization-settings-text"  >Organization Settings</span>
           </a>
-          <a mat-list-item title="Organization Settings" *ngIf="!isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']" (click)="menubarCollapse()">
-            <mat-icon title="Organization Settings" mat-list-icon>settings</mat-icon>
-            <span matLine class="organization-settings-text" *ngIf="isExpanded || isSmallDevice">Organization Settings</span>
+          <a  title="Organization Settings" *ngIf="!isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']" >
+            <mat-icon title="Organization Settings" mat-list-item-icon>settings</mat-icon>
+            <span matLine class="organization-settings-text" >Organization Settings</span>
           </a>
-          <button mat-icon-button (click)="expand()" title="Collapse" class="expand-btn" style="width: 56px; height: 56px; line-height: normal;">
+          <button mat-icon-button (click)="expand()" title="Collapse" style="width: 56px; height: 56px; line-height: normal; horiz-align: center">
             <fa-icon [icon]="faIcons.arrowDoubleLeft" size="2x"></fa-icon>
           </button>
         </div>
-        <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']"  class="expand-hover" title="Organization Settings" (click)="menubarCollapse()" *ngIf="!isExpanded && isAdmin">
-          <mat-icon mat-list-icon>settings</mat-icon>
+
+        <div id='collapse' class="collapse-item" >
+        <a style="margin-left:5px"  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [routerLink]="['/private', 'users']"  class="expand-hover" title="Organization Settings"  *ngIf=" isAdmin">
+          <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
-        <a mat-list-item [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']"  title="Organization Settings" (click)="menubarCollapse()" *ngIf="!isExpanded && !isAdmin">
-          <mat-icon mat-list-icon>settings</mat-icon>
+        <a style="margin-left:5px"  [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']" [routerLink]="['/private', 'policies']"  title="Organization Settings"  *ngIf=" !isAdmin">
+          <mat-icon mat-list-item-icon>settings</mat-icon>
         </a>
-        <div *ngIf="!isExpanded" class="expand-hover">
-          <button mat-icon-button (click)="expand()" title="Expand" style="width: 65px; height: 56px; line-height: normal;">
+
+
+          <button mat-icon-button (click)="expand()" title="Expand" style="width: 56px; height: 56px; line-height: normal; margin-left:0; padding:0;">
             <fa-icon [icon]="faIcons.arrowDoubleRight" size="2x"></fa-icon>
           </button>
+
         </div>
-      </mat-list>
+
+
+      </div>
     </div>
   </div>
-  <div class="cluster-dashboard"
-       [ngClass]="isSmallDevice ? 'cluster-dashboard-small-device' : 'cluster-dashboard-big-device'">
-    <div class="cluster-router-outlet">
+
+  <div  id="cluster-dashboard" class="cluster-dashboard">
       <router-outlet></router-outlet>
-    </div>
   </div>
 </div>

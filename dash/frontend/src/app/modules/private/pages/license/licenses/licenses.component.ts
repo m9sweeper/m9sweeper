@@ -33,7 +33,8 @@ export class LicensesComponent implements OnInit {
               private appSettingsService: AppSettingsService) { }
 
   ngOnInit(): void {
-    this.subNavigationTitle = 'App License';
+    this.subNavigationTitle = 'Application License';
+    this.subNavigationButtonTitle = 'Enter License Key';
     this.loadLicenseSettings();
   }
 
