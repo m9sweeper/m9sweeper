@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "cli": "node ./dist/src/cli.js",
+    "cli": "node ${CLI_PATH:=./dist/src/cli.js}",
     "prebuild": "rimraf dist",
     "copy-misc-vars:local": "cp src/config/licensing-portal-config/misc.local.ts src/config/misc.ts",
     "copy-misc-vars:dev": "cp src/config/licensing-portal-config/misc.dev.ts src/config/misc.ts",
