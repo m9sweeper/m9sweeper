@@ -59,17 +59,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   // this.isExpanded = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
-   // this.sharedSubscriptionService.setCurrentExpandStatus(this.isExpanded);
-    this.width = document.documentElement.clientWidth;
-   // this.height = document.documentElement.clientHeight - 50;
-   // this.initialWidth = document.documentElement.clientWidth;
+    this.collapseIfSmallScreen();
+
+    this.width = document.documentElement.clientWidth; // for charts?
     this.screenSizeExpand(this.width); // for charts?
+
     this.getAllClusterByGroupId();
     this.groupId = +this.route.snapshot.params.groupId;
-    // this.route.params.subscribe(routeParams => {
-    //   this.getClusterByClusterGroupId(routeParams.groupId);
-    // });
+
     this.updatedClusterGroup = this.clusterGroupService.getCurrentGroup().subscribe(updatedClusterGroup => {
       const tempGroup = this.userClusterGroups.filter(group => group.id === updatedClusterGroup.groupId);
       const previousClusterGroupIndex = this.userClusterGroups.indexOf(tempGroup[0]);
@@ -90,36 +87,6 @@ export class DashboardComponent implements OnInit {
       clusterDashTag.className += ' responsive';
     }
   }
-/*
-  @HostListener('window:resize', ['$event'])
-  calculateScreenSize($event?: any) {
-    this.scrHeight = document.documentElement.clientHeight;
-    this.scrWidth = document.documentElement.clientWidth;
-    this.isSmallDevice = false;
-    this.screenSizeExpand(this.scrWidth);
-  }
-
-  set scrHeight(val: number) {
-    if (val !== this.height) {
-      this.height = val - 50;
-    }
-  }
-
-  get scrHeight(): number {
-    return this.height;
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = val;
-    }
-  }
-
-  get scrWidth(): number {
-    return this.width;
-  }
-
- */
 
   getClusterByClusterGroupId(groupId: number) {
     this.subscription = this.clusterService.getClustersByClusterGroupId(groupId).subscribe(response => {
@@ -190,14 +157,7 @@ export class DashboardComponent implements OnInit {
     }
     return this.azureColorSchema[rowIndex % 7];
   }
-/*
-  menubarCollapse(){
-    if (this.isSmallDevice){
-      this.expand();
-    }
-  }
 
- */
   expand(){
     // collapse or expand left nav
 
@@ -216,25 +176,7 @@ export class DashboardComponent implements OnInit {
       clusterDashTag.className = 'cluster-dashboard';
     }
   }
-/*
-  expandMenuBarForSmallDevice(width: number){
-    let menuWidth: number;
-    let containerWidth: number;
-    if (this.isSmallDevice){
-      this.isExpanded = true;
-      menuWidth = 300;
-      containerWidth =  width;
-    }
-    else {
-      this.isExpanded = false;
-      menuWidth = 65;
-      containerWidth = width - menuWidth;
-    }
-  //  document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-  //  document.documentElement.style.setProperty('--dashboard-container-width', `${containerWidth}px`);
-  //  document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
-  }
-*/
+
   screenSizeExpand(width: number){
     let menuWidth: number;
     let containerWidth: number;
@@ -254,7 +196,7 @@ export class DashboardComponent implements OnInit {
     }
     containerWidth = width - menuWidth;
    // document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--dashboard-container-width', `${containerWidth}px`);
+   // document.documentElement.style.setProperty('--dashboard-container-width', `${this.mainDivWidth}px`); // for charts?
    // document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
   }
 
