@@ -6,7 +6,6 @@ import {ImageScanResultIssueService} from '../../../../../core/services/image-sc
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IImage, IImageScanData} from '../../../../../core/entities/IImage';
 import {IImageScanResultIssue} from '../../../../../core/entities/IImageScanResultIssue';
-import {FormatDate} from '../../../../shared/format-date/format-date';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
@@ -17,6 +16,8 @@ import {MatSelectChange} from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {CsvService} from '../../../../../core/services/csv.service';
 
 
 @Component({
@@ -62,14 +63,11 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   /** Initialized when filtering vulnerabilities by a specific policy ID, otherwise passed
    * as undefined to get all vulnerabilities */
   policyIdFilter: number;
-  imageScanResultsId: number;
-  formatData = FormatDate.formatLastScannedDate;
   scanButtonText: string;
   displayComplianceAndIssueTable = true;
   imageScanDates: Array<{created_at: number}>;
   currentlySelectedDate: number;
   scanDateDefault: FormControl;
-  formatDate = FormatDate;
   imageNamespaces: string[];
   @ViewChild('complianceSort') sort: MatSort;
   @ViewChild('issueSort') issueSort: MatSort;
@@ -93,6 +91,8 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     private imageService: ImageService,
     private imageScanResultIssueService: ImageScanResultIssueService,
     public dialog: MatDialog,
+    protected loader: NgxUiLoaderService,
+    protected csvService: CsvService,
     private router: Router) {
     this.imageId = +this.route.snapshot.paramMap.get('imageId');
   }
@@ -314,6 +314,28 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   searchCVE(cve: string) {
     this.router.navigate(['/private/clusters', this.clusterId, 'images'],
       {state: {cve, onlyRunning: this.dataSource.runningInCluster, imageName: this.dataSource.name}});
+  }
+
+  downloadCsv() {
+    this.loader.startLoader('scan-issue-csv-download');
+    this.imageScanResultIssueService.getImageScanResultsIssuesCsv(
+      this.imageId,
+      this.scanResultsIssuesId,
+      this.currentlySelectedDate,
+      false,
+      this.issueSort,
+      this.policyIdFilter)
+      .pipe(take(1))
+      .subscribe({
+        next: csvDto => {
+          this.csvService.downloadCsvFile(csvDto.data?.csv, csvDto.data?.filename);
+        },
+        error: () => {
+          this.alertService.danger('Error downloading report');
+          this.loader.stopLoader('scan-issue-csv-download');
+        },
+        complete: () => this.loader.stopLoader('scan-issue-csv-download')
+      });
   }
 
   ngOnDestroy() {

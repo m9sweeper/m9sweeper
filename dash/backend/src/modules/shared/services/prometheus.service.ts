@@ -16,7 +16,7 @@ export class PrometheusService {
         @InjectMetric('dash_num_of_non_compliant_images') public numOfNonCompliantImages: Gauge<any>,
         @InjectMetric('dash_active_exceptions') public activeExceptions: Gauge<any>,
         @InjectMetric('dash_expiring_exceptions_tomorrow') public expiringExceptionsTomorrow: Gauge<any>,
-        @InjectMetric('dash_responses') public responses: Summary<any>,
         @InjectMetric('dash_active_exception') public activeException: Summary<any>,
+        @InjectMetric('dash_responses') public responses: Summary<any>,
     ) { }
 }

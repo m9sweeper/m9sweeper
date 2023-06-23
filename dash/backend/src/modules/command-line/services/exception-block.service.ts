@@ -7,7 +7,7 @@ import * as jsYaml from "js-yaml";
 import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
-import {DEFAULT_FULL_SCHEMA} from "js-yaml";
+import {DEFAULT_SCHEMA} from "js-yaml";
 
 
 @Injectable()
@@ -36,7 +36,7 @@ export class ExceptionBlockService {
                     for (const subDir of directoryObj[dir]) {
                         const templatePath = `${this.defaultTemplateDir}/../cluster-${cluster.id}-gatekeeper-templates/${dir}/${subDir}/template.yaml`;
                         try {
-                            const templateObj = jsYaml.load(fs.readFileSync(templatePath, 'utf-8'));
+                            const templateObj = jsYaml.load(fs.readFileSync(templatePath, 'utf-8')) as any;
                             const templateExceptionBlock = await this.templateSpecificExceptionBlock(templateObj, commonExceptionBlock, cluster.id);
                             const templateWithModifiedRego = await this.saveExceptionBlockToTemplateFile(templatePath, templateObj, templateExceptionBlock);
                             if (deployedTemplateList && deployedTemplateList.length) {
@@ -174,7 +174,7 @@ export class ExceptionBlockService {
 
         // console.log(modifiedRego);
         templateObj.spec.targets[0].rego = modifiedRego;
-        const objectToYaml = jsYaml.dump(templateObj, {schema: DEFAULT_FULL_SCHEMA});
+        const objectToYaml = jsYaml.dump(templateObj, {schema: DEFAULT_SCHEMA});
         fs.writeFileSync(templatePath, objectToYaml, 'utf-8');
         return templateObj;
     }
@@ -209,7 +209,7 @@ export class ExceptionBlockService {
 
     async readFolderNames(pathName: string): Promise<string[]> {
         try {
-            const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8'));
+            const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
             return readDirNamesFromFile.resources;
         } catch (e) {
             console.log(`Could not read file ${pathName}`);

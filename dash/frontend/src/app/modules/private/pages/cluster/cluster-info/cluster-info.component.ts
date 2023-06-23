@@ -175,7 +175,8 @@ export class ClusterInfoComponent implements OnInit {
   openClusterWizard() {
     const openAddCluster = this.dialog.open(AddClusterWizardComponent, {
       width: '900px',
-      height: 'auto',
+      height: '75%',
+      minHeight: '300px',
       closeOnNavigation: true,
       disableClose: true,
       data: { cluster: this.cluster, clusterId: this.cluster.id, isEdit: true }

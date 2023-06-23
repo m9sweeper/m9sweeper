@@ -51,16 +51,16 @@ export const config: Options.Testrunner = {
             './test/specs/smoke/login-logout.spec.ts',
             './test/specs/smoke/navigation.spec.ts',
 
-            // Run the tests for managing the orginization
-            // './test/specs/orginization/organization.spec.ts',
-            // './test/specs/orginization/users.spec.ts',
-            // './test/specs/orginization/licenses.spec.ts',
-            // './test/specs/orginization/policies.spec.ts',
-            // './test/specs/orginization/exceptions.spec.ts',
-            // './test/specs/orginization/sign-on-methods.spec.ts',
-            // './test/specs/orginization/docker-registries.spec.ts',
-            // './test/specs/orginization/api-key-management.spec.ts',
-            // './test/specs/orginization/audit-logs.spec.ts',
+            // Run the tests for managing the organization
+            // './test/specs/organization/organization.spec.ts',
+            // './test/specs/organization/users.spec.ts',
+            // './test/specs/organization/licenses.spec.ts',
+            // './test/specs/organization/policies.spec.ts',
+            // './test/specs/organization/exceptions.spec.ts',
+            // './test/specs/organization/sign-on-methods.spec.ts',
+            // './test/specs/organization/docker-registries.spec.ts',
+            // './test/specs/organization/api-key-management.spec.ts',
+            // './test/specs/organization/audit-logs.spec.ts',
 
             // Run the tests for managing a cluster
             // './test/specs/cluster/summary.spec.ts',
@@ -93,17 +93,17 @@ export const config: Options.Testrunner = {
             './test/specs/cluster/gatekeeper.spec.ts',
         ],
 
-        // Orginization tests
-        orginization: [
-            // './test/specs/orginization/organization.spec.ts',
-            // './test/specs/orginization/users.spec.ts',
-            // './test/specs/orginization/licenses.spec.ts',
-            // './test/specs/orginization/policies.spec.ts',
-            // './test/specs/orginization/exceptions.spec.ts',
-            // './test/specs/orginization/sign-on-methods.spec.ts',
-            // './test/specs/orginization/docker-registries.spec.ts',
-            // './test/specs/orginization/api-key-management.spec.ts',
-            // './test/specs/orginization/audit-logs.spec.ts',
+        // organization tests
+        organization: [
+            // './test/specs/organization/organization.spec.ts',
+            // './test/specs/organization/users.spec.ts',
+            // './test/specs/organization/licenses.spec.ts',
+            // './test/specs/organization/policies.spec.ts',
+            // './test/specs/organization/exceptions.spec.ts',
+            // './test/specs/organization/sign-on-methods.spec.ts',
+            // './test/specs/organization/docker-registries.spec.ts',
+            // './test/specs/organization/api-key-management.spec.ts',
+            // './test/specs/organization/audit-logs.spec.ts',
         ]
     },
 

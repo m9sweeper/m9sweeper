@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DeploymentDao } from '../dao/deployment.dao';
 import { DeploymentDto } from '../dto/deployment-dto';
 import { V1Deployment } from '@kubernetes/client-node/dist/gen/model/v1Deployment';
-import { ClusterEventService } from '../../cluster-event/services/cluster-event.service';
-import { yesterdaysDateAsStr } from '../../../util/date_util';
 
 @Injectable()
 export class DeploymentService {
@@ -49,7 +47,9 @@ export class DeploymentService {
 
     async saveK8sDeployments(deployment:V1Deployment, clusterId:number): Promise<any> {
         const deploymentDTO = new DeploymentDto();
-        deploymentDTO.clusterName = deployment.metadata.clusterName;
+        /** Not available in newer versions of kubernetes client node. Since this
+         * function was unused at upgrade time, time was spent finding other source for this info */
+        // deploymentDTO.clusterName = deployment.metadata.clusterName;
         deploymentDTO.compliant = false;
         deploymentDTO.creationTimestamp = deployment.metadata.creationTimestamp.valueOf();
         deploymentDTO.generation = deployment.metadata.generation;

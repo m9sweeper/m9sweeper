@@ -63,6 +63,12 @@ init:
         aliases:
           - index.docker.io
         login_required: false
+      - name: "GitHub Container Registry"
+        hostname: ghcr.io
+        login_required: false
+      - name: "Kubernetes Container Registry"
+        hostname: registry.k8s.io
+        login_required: false
 
 # install validating webhook by default
 validatingWebhook:
