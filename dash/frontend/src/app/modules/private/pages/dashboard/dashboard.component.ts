@@ -196,7 +196,7 @@ export class DashboardComponent implements OnInit {
     }
     containerWidth = width - menuWidth;
    // document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-   // document.documentElement.style.setProperty('--dashboard-container-width', `${this.mainDivWidth}px`); // for charts?
+    document.documentElement.style.setProperty('--dashboard-container-width', `${this.mainDivWidth}px`); // for charts?
    // document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
   }
 
