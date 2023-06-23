@@ -3,13 +3,10 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {IServerResponse} from '../entities/IServerResponse';
 import {IFalcoLog} from '../entities/IFalcoLog';
 import {Observable} from 'rxjs';
-import {VulnerabilitySeverity} from '../enum/VulnerabilitySeverity';
-import {IReportsCsv} from '../entities/IReportsCsv';
 import {IFalcoCsv} from '../entities/IFalcoCsv';
-import {IKubeBenchReport} from '../entities/IKubeBenchReport';
 import {IFalcoCount} from '../entities/IFalcoCount';
 import {IFalcoSettingPayload} from '../entities/IFalcoSettingPayload';
-import * as cluster from 'cluster';
+import {IFalcoRule} from '../entities/IFalcoRule';
 
 export interface FalcoLogOptions {
   limit?: number;
@@ -120,5 +117,13 @@ export class FalcoService {
 
   getFalcoApiKey(): Observable<IServerResponse<{api: string}[]>>{
     return this.httpClient.get<IServerResponse<{api: string}[]>>(`/api/falco/apiKey`);
+  }
+
+  createRule(clusterId: number, rule: IFalcoRule): Observable<IServerResponse<any>> {
+    return this.httpClient.post(`/api/falco/${clusterId}/rule`, rule);
+  }
+
+  updateRule(clusterId: number, rule: IFalcoRule): Observable<IServerResponse<any>> {
+    return this.httpClient.put(`/api/falco/${clusterId}/rule/${rule.id}`, rule);
   }
 }

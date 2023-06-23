@@ -19,8 +19,8 @@
     </div>
     <div class="row">
       <mat-form-field>
-        <mat-label>Type</mat-label>
-          <input matInput formControlName="type">
+        <mat-label>Falco Rule</mat-label>
+          <input matInput formControlName="falcoRule">
       </mat-form-field>
     </div>
     <div class="row">
@@ -37,7 +37,7 @@
     mat-raised-button
     color="primary"
     type="submit"
-    (click)="confirmRule()"
+    (click)="save()"
   >Confirm</button>
   <button mat-raised-button
           color="warn"

@@ -6,7 +6,7 @@ import {
     HttpException,
     HttpStatus,
     Param,
-    Post,
+    Post, Put,
     Query,
     UnauthorizedException,
     UseGuards,
@@ -29,6 +29,7 @@ import {AuthorityId} from "../../user/enum/authority-id";
 import {FalcoCountDto} from "../dto/falco-count.dto";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import { FalcoCsvDto } from '../dto/falco-csv-dto';
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
 
 
 @ApiTags('Project Falco')
@@ -190,6 +191,26 @@ export class FalcoController {
     ): Promise <any> {
         const result = this.falcoService.createFalcoSetting(clusterId, falcoSetting);
         return result;
+    }
+
+    @Post(':clusterId/rule')
+    async createFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Body() rule: FalcoRuleDto
+    ) {
+        return true;
+    }
+
+    @Put(':clusterId/rule/:ruleId')
+    async updateFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Param('ruleId') ruleId: number,
+      @Body() rule: FalcoRuleDto
+    ) {
+        if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
+            throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
+        }
+        return true;
     }
 
 }

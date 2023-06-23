@@ -4,6 +4,7 @@ import {FalcoRuleAddEditDialogComponent} from '../falco-rule-add-edit-dialog/fal
 import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
 import {take} from 'rxjs/operators';
 import {KubesecService} from '../../../../../../core/services/kubesec.service';
+import {FalcoService} from '../../../../../../core/services/falco.service';
 
 @Component({
   selector: 'app-falco-rule',
@@ -18,7 +19,8 @@ export class FalcoRuleComponent implements OnInit {
 
   constructor(
     protected dialog: MatDialog,
-    protected kubesecService: KubesecService
+    protected kubesecService: KubesecService,
+    protected falcoService: FalcoService
   ) { }
 
 
@@ -37,6 +39,7 @@ export class FalcoRuleComponent implements OnInit {
     const ref = this.dialog.open(FalcoRuleAddEditDialogComponent, {
       data: {
         namespaces: this.namespaces,
+        clusterId: this.clusterId,
         rule: !isNaN(existingRuleIndex) ? this.rules[existingRuleIndex] : undefined
       }
     });
@@ -60,4 +63,5 @@ export class FalcoRuleComponent implements OnInit {
     // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
     this.rules.splice(idx, 1);
   }
+
 }

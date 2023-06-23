@@ -15,8 +15,8 @@
             <p *ngIf="!!rule.image">
               Image is: <strong>{{ rule.image }}</strong>
             </p>
-            <p *ngIf="!!rule.type">
-              Type is: <strong>{{ rule.type }}</strong>
+            <p *ngIf="!!rule.falcoRule">
+              Falco rule is: <strong>{{ rule.falcoRule }}</strong>
             </p>
           <div class="row">
             <button mat-raised-button color="primary" (click)="openAddEditModal(idx)">Edit</button>
