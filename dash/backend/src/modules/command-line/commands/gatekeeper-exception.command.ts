@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from 'nestjs-command';
 import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
@@ -22,18 +21,18 @@ export class GatekeeperExceptionCommand {
     ) {
     }
 
-    @Command({
-        command: 'sync:gatekeeper-exceptions',
-        describe: 'Synchronizing gatekeeper exception blocks.'
-    })
-    async syncGatekeeperExceptionBlocks(): Promise<void> {
+    async syncGatekeeperExceptionBlocks(): Promise<boolean> {
         /*
         this.licensingPortalService.checkLicenseValidityFromDash()
             .then((checkLicenseValidity) => {
                 if (checkLicenseValidity.isLicenseSetup && checkLicenseValidity.validity) {
          */
-                    this.exceptionBlockService.syncGatekeeperExceptionBlocks()
-                        .catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+                    return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
+                        .then(() => true)
+                        .catch(e => {
+                            console.log('Error syncing GateKeeper exception blocks: ' + e);
+                            return false;
+                        });
          /*
                 } else {
                     if (checkLicenseValidity.isLicenseSetup) {

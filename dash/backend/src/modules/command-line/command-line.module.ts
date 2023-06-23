@@ -1,5 +1,4 @@
 import { Global, Module } from '@nestjs/common';
-import { CommandModule } from 'nestjs-command';
 import { ClusterCommand } from './commands/cluster.command';
 import { ClusterSyncCommand } from './commands/cluster-sync.command';
 import { KubernetesClusterService } from './services/kubernetes-cluster.service';
@@ -10,12 +9,18 @@ import {GatekeeperExceptionCommand} from "./commands/gatekeeper-exception.comman
 import {SyncExceptionStatusCommand} from "./commands/exception.command";
 import {ExceptionBlockService} from "./services/exception-block.service";
 import { ImageRescanningService } from './services/image-rescanning.service';
+import {JobsCliController} from './controllers/jobs-cli.controller';
+import {CronJobsController} from './controllers/cron-jobs.controller';
+import {CliCommandBuilderService} from './services/cli-command-builder.service';
+import {ScheduleModule} from '@nestjs/schedule';
 
 @Global()
 @Module({
     providers: [
         ClusterCommand,
         ClusterSyncCommand,
+        JobsCliController,
+        CronJobsController,
         HelmSetupCommand,
         KubernetesClusterService,
         KubernetesHistoryCommand,
@@ -24,9 +29,10 @@ import { ImageRescanningService } from './services/image-rescanning.service';
         GatekeeperExceptionCommand,
         SyncExceptionStatusCommand,
         ImageRescanningService,
+        CliCommandBuilderService
     ],
     imports: [
-        CommandModule,
+      ScheduleModule.forRoot()
     ],
     exports: []
 })
