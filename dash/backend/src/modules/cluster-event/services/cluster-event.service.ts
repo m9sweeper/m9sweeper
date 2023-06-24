@@ -5,7 +5,7 @@ import {instanceToPlain} from 'class-transformer';
 import {ClusterEventCreateDto} from '../dto/cluster-event-create-dto';
 import {KubeConfig} from '@kubernetes/client-node/dist/config';
 import {
-    V1Event,
+    CoreV1Event,
     V1EventSource,
     V1ObjectMeta,
     V1ObjectReference
@@ -65,7 +65,7 @@ export class ClusterEventService {
             const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
             const eventsApi = kubeConfig.makeApiClient(CoreV1Api);
 
-            const eventBody = new V1Event();
+            const eventBody = new CoreV1Event();
             eventBody.type = eventType;
             eventBody.reason = eventName;
             eventBody.message = message;

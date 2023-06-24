@@ -62,6 +62,7 @@ $ npm run start:prod
 SUPER_ADMIN_EMAIL=email@intelletive.com  
 SUPER_ADMIN_PASSWORD=password  
 TRAWLER_API_KEY=123456
+* `npm run build:local`
 * `npm run cli users:init`
 
 ## Seeing raw SQL Queries

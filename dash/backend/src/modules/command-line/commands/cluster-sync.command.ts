@@ -9,7 +9,6 @@ import {LicensingPortalService} from '../../../integrations/licensing-portal/lic
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
 import {NamespaceComplianceService} from '../../namespace/services/namespace_compliance.service';
-import {Command, Positional} from 'nestjs-command';
 import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {ClusterSummaryDto} from '../../../integrations/licensing-portal/licensing-portal.dto';
 import {ClusterEventCreateDto} from '../../cluster-event/dto/cluster-event-create-dto';
@@ -36,20 +35,17 @@ export class ClusterSyncCommand {
     if (this.debugMode) this.loggerService.log({label, ...data}, `ClusterSyncCommand.${method}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  @Command({ command: 'cluster:sync <clusterID>', describe: 'Sync one or all clusters\' data' })
-  async syncCluster(
-    @Positional({
-      name: 'clusterID',
-      // describe: 'Database ID of a cluster',
-      // type: 'string',
-    }) clusterID: string
-  ) {
+  async syncCluster(clusterID: string): Promise<boolean> {
     this.log('Job started - Syncing cluster', {clusterID}, 'syncCluster');
     let clusterIDs: number[] | 'all' = 'all';
     if (clusterID !== 'all') clusterIDs = [parseInt(clusterID.toString(), 10)];
     const clusters: ClusterDto[] = await this._getClustersToSync(clusterIDs);
     const licenseValidityResult = await this._checkLicense(clusters);
+
+    if (!clusters?.length) {
+      this.log('No clusters matching the given ID found, skipping syncing', { clusterID }, 'syncCluster');
+      return true;
+    }
 
     // if there is no valid license (or an error occurred), exit
     // if (!licenseValidityResult.licenseIsValid) global.app.close();
@@ -59,9 +55,9 @@ export class ClusterSyncCommand {
       const clusterSummaries: ClusterSummaryDto[] = await this._getClusterSummaries(clusters);
       this.log('cluster summaries retrieved', {clusterSummaries}, 'syncCluster');
       const instanceSummary = await ClusterSyncCommand._compileInstanceSummary(clusterSummaries);
-      
-      // only upload summary stats to licensing portal IF they have a valid license and its enabled. 
-      // licensing is NOT required, therefore this should not be happening by default (some users 
+
+      // only upload summary stats to licensing portal IF they have a valid license and its enabled.
+      // licensing is NOT required, therefore this should not be happening by default (some users
       // will run in an air-gapped environment and will NOT want us automatically uploading stats!)
       if (licenseValidityResult?.licenseIsValid) {
         await this.licensingPortalService
@@ -99,11 +95,11 @@ export class ClusterSyncCommand {
       });
 
     this.log('Job finished - Syncing cluster',  {}, 'syncCluster');
-    return;
+    return true;
   }
 
   private async _saveClusterEventForAllClusters(clusters: ClusterDto[], clusterEventObject: ClusterEventCreateDto) {
-    const clusterIds = clusters.map(cluster => cluster.id);
+    const clusterIds = clusters?.map(cluster => cluster.id) || [];
     return await Promise.all(clusterIds.map(clusterId => this.clusterEventService.createClusterEvent(clusterEventObject, clusterId)));
   }
 
@@ -140,7 +136,7 @@ export class ClusterSyncCommand {
         return {licenseAndInstanceKeys, licenseIsValid: true};
       }
 
-      // if the license data is missing or invalid - logging disabled since valid cicenses are not required anywhere!
+      // if the license data is missing or invalid - logging disabled since valid licenses are not required anywhere!
       this.log('License Key / Instance Key combination is invalid (but not required).', {}, '_checkLicense');
       /*const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
         'License Validation', 'Create', 'Error',
@@ -170,7 +166,7 @@ export class ClusterSyncCommand {
           await this.clusterDao.updateClusterLastScanned(cluster?.id);
         }
       } catch (e) {
-        this.log('Error syncing cluster', {name: cluster?.name, id: cluster?.id, error: {stack: e.stack, message: e.message}}, '_checkLicense');
+        this.log('Error syncing cluster', {name: cluster?.name, id: cluster?.id, error: {stack: e.stack, message: e.message}}, '_getClusterSummaries');
       }
     }
     return clusterSummaries;

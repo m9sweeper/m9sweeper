@@ -28,8 +28,6 @@ import {
   GatekeeperConstraintSpecMatchKind, GateKeeperConstraintViolation
 } from "../dto/gatekeeper-constraint-dto";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
-import {ApiregistrationV1beta1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1beta1Api";
-import {ApiregistrationApi} from "@kubernetes/client-node/dist/gen/api/apiregistrationApi";
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
@@ -315,7 +313,7 @@ export class ClusterService {
 
   async readFolderNames(pathName: string): Promise<string[]> {
     try {
-      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8'));
+      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
       return readDirNamesFromFile.resources;
     } catch (e) {
       console.log(`Could not read file ${pathName}`);
@@ -394,7 +392,7 @@ export class ClusterService {
     console.log('Template Name: ', templateName);
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
     try {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8'));
+      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       await customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
@@ -414,7 +412,7 @@ export class ClusterService {
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     const createTemplatePromises = []
     for (const templateName of templateNames) {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8'));
+      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
       const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
       createTemplatePromises.push(templateDeployPromise);
     }
