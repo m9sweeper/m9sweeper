@@ -189,6 +189,8 @@ export class FalcoController {
     }
 
     @Post(':clusterid/settings')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoSetting(
         @Param('clusterid') clusterId: number,
         @Body() falcoSetting: FalcoSettingDto
@@ -211,7 +213,8 @@ export class FalcoController {
         return await this.falcoService.createFalcoRule(rule);
     }
 
-    @Get(':clusterId/rules')
+    @Get(':clusterId/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async listActiveFalcoRulesForCluster(@Param('clusterId') clusterId: number): Promise<FalcoRuleDto[]> {
         return this.falcoService.listActiveFalcoRulesForCluster(clusterId);
 
@@ -240,7 +243,4 @@ export class FalcoController {
     ): Promise<FalcoRuleDto>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
     }
-
-
-
 }

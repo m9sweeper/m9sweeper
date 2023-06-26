@@ -14,10 +14,12 @@ import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
-import {logger} from 'handlebars';
+import {DataCache} from '../../../util/classes/data-cache';
 
 @Injectable()
 export class FalcoService {
+    protected ruleCache = new Map<number, DataCache<FalcoRuleDto[]>>();
+
     constructor(
         private readonly falcoDao: FalcoDao,
         private readonly csvService: CsvService,
@@ -263,8 +265,19 @@ export class FalcoService {
         return this.falcoDao.createFalcoRule(rule);
     }
 
-    async listActiveFalcoRulesForCluster(clusterId: number): Promise<FalcoRuleDto[]> {
-        return this.falcoDao.listActiveFalcoRulesForCluster(clusterId);
+    async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
+        // If we request the cache, and have unexpired cached data, return that.
+        if (useCached) {
+            const cachedData = this.ruleCache.get(clusterId)?.data;
+            if (cachedData) {
+                return cachedData;
+            }
+        }
+
+        // If we don't use the cache, or there was no unexpired cache, get the rules from the DB and cache them.
+        const rules = await this.falcoDao.listActiveFalcoRulesForCluster(clusterId);
+        this.ruleCache.set(clusterId, DataCache.cacheFor(rules, 60000)); // 60000ms = 1min
+        return rules;
     }
 
     async updateFalcoRule(rule: FalcoRuleDto, ruleId: number): Promise<FalcoRuleDto> {
@@ -277,7 +290,7 @@ export class FalcoService {
     }
 
     async checkRules(clusterId: number, falcoEvent: FalcoWebhookInputDto): Promise<FalcoRuleAction | null> {
-        const rules = await this.listActiveFalcoRulesForCluster(clusterId);
+        const rules = await this.listActiveFalcoRulesForCluster(clusterId, true);
         if (rules?.length) {
             for (const rule of rules) {
                 // For each fo the three fields: if it is blank, consider it a match
