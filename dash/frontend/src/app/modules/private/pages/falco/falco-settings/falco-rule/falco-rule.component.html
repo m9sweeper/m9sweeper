@@ -1,0 +1,32 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Rules</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="falco-rule-card-content">
+    <ng-container *ngFor="let rule of rules; index as idx">
+      <div class="rule-container">
+        <strong>{{rule.action | titlecase}}</strong> when the following are true:
+        <div class="pl-10">
+            <p *ngIf="rule.namespace">
+              Namespace is: <strong>{{ rule.namespace }}</strong>
+            </p>
+            <p *ngIf="!!rule.image">
+              Image is: <strong>{{ rule.image }}</strong>
+            </p>
+            <p *ngIf="!!rule.falcoRule">
+              Falco rule is: <strong>{{ rule.falcoRule }}</strong>
+            </p>
+          <div class="row">
+            <button mat-raised-button color="primary" (click)="openAddEditModal(idx)">Edit</button>
+            <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(idx, rule.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </mat-card-content>
+  <mat-card-footer class="p-30">
+      <button mat-raised-button color="primary" (click)="openAddEditModal()">Add Rule</button>
+  </mat-card-footer>
+</mat-card>

@@ -144,9 +144,11 @@ const routes: Routes = [
               {
                 path: 'settings',
                 component: FalcoSettingsComponent,
+                canActivate: [RoleGuard],
                 data: {
-                  title: 'Project Falco Settings'
-                }
+                  title: 'Project Falco Settings',
+                  allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+                },
               }
             ]
           },
