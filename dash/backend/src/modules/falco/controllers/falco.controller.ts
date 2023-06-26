@@ -175,7 +175,12 @@ export class FalcoController {
         const action = await this.falcoService.checkRules(clusterId, falcoLog);
         // An ignore rule applied,
         if (action === FalcoRuleAction.Ignore) {
-            this.logger.log('Ignoring Falco Event');
+            this.logger.log('Ignoring Falco Event', {
+                clusterId,
+                namespace: falcoLog?.outputFields?.k8sNamespaceName,
+                rule: falcoLog?.rule,
+                image: falcoLog?.outputFields?.containerImageRepository,
+            });
             return;
         }
 
@@ -193,6 +198,8 @@ export class FalcoController {
     }
 
     @Post(':clusterId/rules')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
       @Body() rule: FalcoRuleDto
@@ -211,6 +218,8 @@ export class FalcoController {
     }
 
     @Put(':clusterId/rules/:ruleId')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async updateFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number,
@@ -223,6 +232,8 @@ export class FalcoController {
     }
 
     @Delete(':clusterId/rules/:ruleId')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async deleteFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number
