@@ -13,7 +13,6 @@ export async function up(knex: Knex): Promise<any> {
         table.string('falco_rule');
         table.string('namespace');
         table.string('image');
-        knex.raw('create index idx_cluster_id on falco_rules(cluster_id)');
         knex.raw('create index idx_cluster_id_created_at on falco_rules(cluster_id, created_at desc)');
     });
 }
