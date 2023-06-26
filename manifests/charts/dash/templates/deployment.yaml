@@ -26,6 +26,20 @@ spec:
         {{- include "dash.selectorLabels" . | nindent 8 }}
     spec:
       serviceAccount: dash-sa
+      initContainers:
+        - name: wait-for-postgresql
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          command:
+            - 'sh'
+            - '-c'
+            - 'npm run cli:database:wait'
+          envFrom:
+            - secretRef:
+                name: {{ include "dash.fullname" . }}-secrets
+          env:
+            - name: CLI_PATH
+              value: ./cli.js
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"

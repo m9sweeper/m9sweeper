@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import {Command} from 'nestjs-command';
 import { DatabaseService } from '../../shared/services/database.service';
 import {UserDao} from "../../user/dao/user.dao";
 import * as bcrypt from 'bcryptjs';
@@ -8,8 +7,6 @@ import {DockerRegistriesDao} from "../../docker-registries/dao/docker-registries
 import {DockerRegistriesDto} from "../../docker-registries/dto/docker-registries-dto";
 import {plainToInstance} from "class-transformer";
 import {KubernetesApiService} from "../services/kubernetes-api.service";
-import {KubeConfig} from "@kubernetes/client-node/dist/config";
-import * as k8s from "@kubernetes/client-node";
 import { ExceptionsService } from '../../exceptions/services/exceptions.service';
 import { ExceptionCreateDto } from '../../exceptions/dto/exceptioncreateDto';
 import { IcliRegistry, IHelmInputRegistry } from "../dto/IHelmInputRegistry";
@@ -31,8 +28,7 @@ export class HelmSetupCommand {
                 private readonly exceptionService: ExceptionsService) {
     }
 
-    @Command({ command: 'users:init', describe: 'Seeds the a super admin account & trawler account\'s API key' })
-    async runSeed(): Promise<any[] | void> {
+    async runSeed(): Promise<boolean> {
         const promises: Promise<any>[] = [];
         if (process.env.SUPER_ADMIN_EMAIL && process.env.SUPER_ADMIN_PASSWORD) {
             promises.push(this.databaseService.getConnection().then(knex => {
@@ -158,24 +154,26 @@ export class HelmSetupCommand {
             console.log('Falco user exists.... skipping');
         }
 
-        return Promise.all(promises);
+      await Promise.all(promises);
+      return true;
     }
 
     // @TODO: clean up log messages to make this silent
     // Populates the docker registries tables with initial registries passed in through env variable
-    @Command({command: "registries:init", describe: "Takes JSON of docker registries to populate the database with"})
-    async populateRegistries(): Promise<any[] | void> {
+    async populateRegistries(): Promise<boolean> {
         const b64Registries = process.env.INITIAL_REGISTRIES_JSON;
         // Expects a JSON containing the fields registries that is a list of registries (name, hostname, login_required, username, password)
         let registries: IcliRegistry[];
         try {
             registries = (JSON.parse(Buffer.from(b64Registries, "base64").toString("ascii")) as IHelmInputRegistry)?.registries;
         } catch (e) {
-            return console.log('Could not parse JSON', e);
+            console.log('Could not parse JSON', e);
+            return false;
         }
 
         if (!registries?.length) {
-            return console.log('Data not present or could not be read');
+            console.log('Data not present or could not be read');
+            return false;
         }
 
         const existingRegistries = await this.registryDao.getDockerRegistries(null);
@@ -202,7 +200,7 @@ export class HelmSetupCommand {
         }
 
         await Promise.all(promises);
-        return;
+        return true;
     }
 
     // @TODO: clean up log messages to make this silent
@@ -240,8 +238,7 @@ export class HelmSetupCommand {
         }
     }
 */
-    @Command({command: "exceptions:init", describe: "Accepts comma delimited list of namespaces to whitelist"})
-    async loadDefaultNamespaceExceptions(): Promise<void> {
+    async loadDefaultNamespaceExceptions(): Promise<boolean> {
         if ((await this.exceptionService.getAllExceptions()).length === 0) {
             // create a default namespace exception
             const exception = new ExceptionCreateDto();
@@ -271,6 +268,7 @@ export class HelmSetupCommand {
         } else {
             console.log("Not creating default namespace exception - exceptions already exist");
         }
+        return true;
     }
 
 }

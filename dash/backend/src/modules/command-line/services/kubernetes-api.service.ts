@@ -296,7 +296,13 @@ export class KubernetesApiService {
     async applyK8sObject(obj: KubernetesObject, config: KubeConfig): Promise<KubernetesObject> {
         const objApi = config.makeApiClient(KubernetesObjectApi);
         try {
-            await objApi.read(obj);
+            const header = {
+                metadata: {
+                    name: obj?.metadata?.name,
+                    namespace: obj?.metadata?.name,
+                }
+            }
+            await objApi.read(header);
             return (await objApi.patch(obj)).body;
         } catch (e) { // objApi throws errors if it can't find the object
             if (e.statusCode === 401) {
@@ -472,7 +478,7 @@ export class KubernetesApiService {
         const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_MERGE_PATCH }};
 
         try {
-            const result = await rbacApi.patchClusterRole(clusterRole.metadata.name, clusterRole, undefined, undefined, undefined, undefined, options);
+            const result = await rbacApi.patchClusterRole(clusterRole.metadata.name, clusterRole, undefined, undefined, undefined, undefined, undefined, options);
             console.log('Cluster Role Patch Status: ', result.response.statusCode);
             return result.body;
         } catch (e) {
