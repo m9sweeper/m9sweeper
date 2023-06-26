@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "cli": "node ./dist/src/cli.js",
+    "cli": "node ${CLI_PATH:=./dist/src/cli.js}",
     "prebuild": "rimraf dist",
     "copy-misc-vars:local": "cp src/config/licensing-portal-config/misc.local.ts src/config/misc.ts",
     "copy-misc-vars:dev": "cp src/config/licensing-portal-config/misc.dev.ts src/config/misc.ts",
@@ -36,7 +36,9 @@
     "cli:users:init": "node ${CLI_PATH:=./dist/src/cli.js} users:init",
     "cli:populate:kubernetes-history": "node ${CLI_PATH:=./dist/src/cli.js} populate:kubernetes-history",
     "cli:cluster:seed": "node ${CLI_PATH:=./dist/src/cli.js} cluster:seed",
-    "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all"
+    "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all",
+    "cli:database:check": "node ${CLI_PATH:=./dist/src/cli.js} database:check",
+    "cli:database:wait": "node ${CLI_PATH:=./dist/src/cli.js} database:wait"
   },
   "dependencies": {
     "@kubernetes/client-node": "^0.18.1",
