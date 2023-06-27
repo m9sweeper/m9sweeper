@@ -28,18 +28,18 @@ import common from "../../../config/common";
 @UseInterceptors(ResponseTransformerInterceptor)
 export class NonRedirectableLoginController {
 
+
     private readonly CONTEXT = NonRedirectableLoginController.name;
 
-    constructor(private readonly externalAuthConfigService: ExternalAuthConfigService,
-                private readonly ldapFactory: LdapFactory,
-                private readonly userProfileService: UserProfileService,
-                private readonly jwtUtility: JwtUtilityService,
-                private readonly logger: MineLoggerService,
-                private readonly loginCounterService: LoginCounterService,
-                private readonly auditLogService: AuditLogService,
-    ){
-
-    }
+    constructor(
+        private readonly externalAuthConfigService: ExternalAuthConfigService,
+        private readonly ldapFactory: LdapFactory,
+        private readonly userProfileService: UserProfileService,
+        private readonly jwtUtility: JwtUtilityService,
+        private readonly logger: MineLoggerService,
+        private readonly loginCounterService: LoginCounterService,
+        private readonly auditLogService: AuditLogService,
+    ) {}
 
 
     @Post('ldap/:providerId')
@@ -112,7 +112,7 @@ export class NonRedirectableLoginController {
             auditLog.entityId = user.id;
             auditLog.userId = user.id;
             auditLog.organizationId = 0;
-            if (user.isActive){
+            if (user.isActive) {
                 if (user.sourceSystem.type === AuthenticationType.LOCAL &&
                     bcrypt.compareSync(loginDto.userPassword, user.password)
                     && (!user.deletedAt || (user.deletedAt && user.deletedAt === 0)))

@@ -23,13 +23,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostBinding('class') componentCssClass;
 
-  constructor(private themeService: ThemeService,
-              private overlayContainer: OverlayContainer,
-              private titleService: Title,
-              private jwtAuthService: JwtAuthService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
-  }
+  constructor(
+    private themeService: ThemeService,
+    private overlayContainer: OverlayContainer,
+    private titleService: Title,
+    private jwtAuthService: JwtAuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
@@ -43,13 +44,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.theme = currentTheme;
     });
 
-    timer(0, 10000)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        if (this.jwtAuthService.isTokenExpired()) {
-          this.router.navigate(['/login']);
-        }
-      });
+    // timer(0, 10000)
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe(() => {
+    //     if (this.jwtAuthService.isTokenExpired()) {
+    //       console.log('rerouting to the login page');
+    //       this.jwtAuthService.clearToken();
+    //       this.router.navigate(['/login']);
+    //     }
+    //   });
 
     console.log('overlayContainer.getContainerElement ===> ', Array.from(this.overlayContainer.getContainerElement().classList));
   }

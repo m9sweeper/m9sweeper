@@ -16,7 +16,6 @@ export class JwtAuthService {
   public CURRENT_USER: Observable<IUser>;
 
   constructor() {
-    console.log(this.parseToken(localStorage.getItem('__token__')));
     this.CURRENT_USER_SUBJECT = new BehaviorSubject<IUser>(this.parseToken(localStorage.getItem('__token__')));
     this.CURRENT_USER = this.CURRENT_USER_SUBJECT.asObservable();
   }
@@ -24,14 +23,27 @@ export class JwtAuthService {
   private parseToken(token: string): IUser {
     try {
       const decoded = jwt_decode(token) as IUser;
-      console.log('decoded: ', decoded);
+      console.log('parseToken decoded: ', decoded);
       return decoded;
     } catch (e) {
       return null;
     }
   }
 
+  getCurrentUserData(): IUser {
+    try {
+      const rawToken = localStorage.getItem('__token__');
+      const decoded = this.parseToken(rawToken);
+      console.log('getCurrentUserData decoded:', decoded);
+      return decoded;
+    } catch (e) {
+      console.log('getCurrentUserData error: ', e);
+      return null;
+    }
+  }
+
   saveToken(token: string) {
+    console.log('saving token');
     localStorage.setItem('__token__', token);
     const user: IUser = this.parseToken(token);
     this.CURRENT_USER_SUBJECT.next(user);
@@ -58,17 +70,6 @@ export class JwtAuthService {
   isLocalUser(): boolean {
     const currentUser = this.currentUser;
     return currentUser.sourceSystem.type === AuthenticationType.LOCAL;
-  }
-
-  getCurrentUserData(): IUser {
-    try {
-      const decoded = jwt_decode(localStorage.getItem('__token__'));
-      console.log('decoded: ', decoded);
-      return decoded;
-    } catch (e){
-      console.log('getCurrentUserData: ', e);
-      return null;
-    }
   }
 
   isTokenExpired(): boolean {
