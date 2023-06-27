@@ -12,7 +12,7 @@ export class ImageScanResultsIssueService {
       private readonly imageScanResultsIssueDao: ImageScanResultsIssueDao,
       protected readonly csvService: CsvService,
       protected readonly utilityService: UtilitiesService,
-    ){}
+    ) {}
 
     async getImageScanResultsIssuesByImageResultsId(
       id: number,
