@@ -298,9 +298,9 @@ export class FalcoService {
                 const namespaceMatches = !rule.namespace
                   || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
                 const ruleNameMatches = !rule.falcoRule
-                  || rule.falcoRule.trim() === falcoEvent?.rule?.trim();
+                  || new RegExp(rule.falcoRule.trim()).test(falcoEvent?.rule?.trim());
                 const imageNameMatches = !rule.image
-                  || rule.image === falcoEvent?.outputFields?.containerImageRepository;
+                  || new RegExp(rule.image).test(falcoEvent?.outputFields?.containerImageRepository);
 
                 // If all 3 sections of the rule were either matches of blank, then this rule applies, return its action.
                 if (namespaceMatches && ruleNameMatches && imageNameMatches) {

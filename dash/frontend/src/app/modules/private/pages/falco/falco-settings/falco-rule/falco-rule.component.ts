@@ -74,6 +74,9 @@ export class FalcoRuleComponent implements OnInit {
           // Splice will remove the element and move other elements up.
           // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
           this.rules.splice(idx, 1);
+        },
+        error: (err) => {
+          this.alert.danger(err?.error?.metadata || 'Something went wrong.');
         }
       });
   }
