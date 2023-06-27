@@ -1,5 +1,7 @@
-{{- if .Values.prometheusOperator.enabled }}
+{{- if and .Values.prometheusOperator.enabled .Values.grafana.enabled .Values.grafana.defaultDashboards.enabled }}
 {{- $files := .Files.Glob "grafana-dashboards/*.json" }}
+{{- $trimmedDashName := include "dash.fullname" . | trunc 55 }}
+{{- $appName := printf "%s-%s" $trimmedDashName "grafana" | trimSuffix "-" }}
 {{- if $files }}
 apiVersion: v1
 kind: ConfigMapList
@@ -9,12 +11,12 @@ items:
   - apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: {{ printf "%s-%s" grafana $dashboardName | trunc 63 | trimSuffix "-" }}
-{{/*      namespace: {{ template "prometheus-operator.namespace" $ }}*/}}
+      name: {{ printf "%s-%s" $appName $dashboardName | trunc 63 | trimSuffix "-" }}
+      {{/*namespace: {{ template "prometheus-operator.namespace" $ }}*/}}
       labels:
         {{- include "dash.labels" . | nindent 8 }}
-        app: {{ template "prometheus-operator.name" $ }}-grafana
-        {{- include "prometheus-operator.labels" $ | nindent 8 }}
+        {{- $.Values.grafana.customLabels | toYaml | nindent 8 }}
+        app: {{ printf "%s" $appName }}
     data:
       {{ $dashboardName }}.json: |
         {{- $.Files.Get $path | toJson | nindent 8 }}

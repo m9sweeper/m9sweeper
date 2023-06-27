@@ -44,6 +44,25 @@ service:
 prometheusOperator:
   enabled: true
 
+grafana:
+  enabled: true
+  customLabels:
+    grafana_dashboard: 1
+  defaultDashboards:
+    enabled: true
+  datasources:
+    enabled: true
+    customLabels:
+      grafana_datasource: "1"
+    includeGrafanaCustomLabels: true
+    customAnnotations: {}
+    list:
+      - name: Prometheus
+        type: prometheus
+        url: localhost
+        access: proxy
+        isDefault: true
+
 replicaCount: 1
 
 init:

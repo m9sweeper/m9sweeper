@@ -1,16 +1,22 @@
 {{ if .Values.prometheusOperator.enabled }}
+{{- $trimmedDashName := include "dash.fullname" . | trunc 55 }}
+{{- $appName := printf "%s-%s" $trimmedDashName "grafana" | trimSuffix "-" }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "dash.fullname" . }}
+  name: {{ printf "%s" $appName }}
   labels:
     {{- include "dash.labels" . | nindent 4 }}
+    {{- $.Values.grafana.customLabels | toYaml | nindent 4 }}
+    app: {{ printf "%s" $appName }}
 spec:
   endpoints:
   - path: /api/v1/metrics
     port: http
+  - path: /api/metrics/environment
+    port: http
   selector:
     matchLabels:
-    {{- include "dash.selectorLabels" . | nindent 6 }}
+      {{- include "dash.selectorLabels" . | nindent 6 }}
 {{ end }}
