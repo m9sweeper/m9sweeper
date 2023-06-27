@@ -7,6 +7,7 @@ import { GatekeeperExceptionCommand } from '../commands/gatekeeper-exception.com
 import { KubernetesHistoryCommand } from '../commands/kubernetes-history.command';
 import { ClusterCommand } from '../commands/cluster.command';
 import { SyncExceptionStatusCommand } from '../commands/exception.command';
+import { DatabaseStatusCommand } from "../commands/database-status.command";
 
 
 @Injectable()
@@ -20,10 +21,8 @@ export class CliCommandBuilderService {
       protected readonly kubernetesHistoryCommand: KubernetesHistoryCommand,
       protected readonly clusterCommand: ClusterCommand,
       protected readonly exceptionCommand: SyncExceptionStatusCommand,
-    ) {
-
-    }
-
+      protected readonly databaseStatusCommand: DatabaseStatusCommand
+    ) {}
 
     get commands(): CliCommand[] {
         if (this._commands) {
@@ -48,45 +47,55 @@ export class CliCommandBuilderService {
     protected initializeCommandArray(): void {
         this._commands = [
             new CliCommand(
-            CliCommands.UserInit,
-            'Seeds the a super admin account & creates API keys',
-            () => this.helmSetupCommand.runSeed()
+                CliCommands.UserInit,
+                'Seeds the a super admin account & creates API keys',
+                () => this.helmSetupCommand.runSeed()
             ),
             new CliCommand(
-              CliCommands.RegistryInit,
-              'Takes JSON of docker registries to populate the database with',
-              () => this.helmSetupCommand.populateRegistries(),
+                CliCommands.RegistryInit,
+                'Takes JSON of docker registries to populate the database with',
+                () => this.helmSetupCommand.populateRegistries(),
             ),
             new CliCommand(
-              CliCommands.ExceptionInit,
-              'Accepts comma delimited list of namespaces to whitelist',
-              () => this.helmSetupCommand.loadDefaultNamespaceExceptions(),
+                CliCommands.ExceptionInit,
+                'Accepts comma delimited list of namespaces to whitelist',
+                () => this.helmSetupCommand.loadDefaultNamespaceExceptions(),
             ),
             new CliCommand(
-              CliCommands.SyncGateKeeperExceptions,
-              'Synchronizes gatekeeper exception blocks.',
-              () => this.gatekeeperExceptionCommand.syncGatekeeperExceptionBlocks(),
+                CliCommands.SyncGateKeeperExceptions,
+                'Synchronizes gatekeeper exception blocks.',
+                () => this.gatekeeperExceptionCommand.syncGatekeeperExceptionBlocks(),
             ),
             new CliCommand(
-              CliCommands.ClusterSync,
-              'Sync one or all cluster\'s data',
-              clusterId => this.clusterSyncCommand.syncCluster(clusterId),
-              ['clusterID']
+                CliCommands.ClusterSync,
+                'Sync one or all cluster\'s data',
+                clusterId => this.clusterSyncCommand.syncCluster(clusterId),
+                ['clusterID']
             ),
             new CliCommand(
-              CliCommands.PopulateKubernetesHistory,
-              'Save kubernetes contents history',
-              () => this.kubernetesHistoryCommand.get(),
+                CliCommands.PopulateKubernetesHistory,
+                'Save kubernetes contents history',
+                () => this.kubernetesHistoryCommand.get(),
             ),
             new CliCommand(
-              CliCommands.ClusterSeed,
-              'Seeds the DB with the current cluster',
-              () => this.clusterCommand.seedCluster(),
+                CliCommands.ClusterSeed,
+                'Seeds the DB with the current cluster',
+                () => this.clusterCommand.seedCluster(),
             ),
             new CliCommand(
-              CliCommands.SyncExceptionStatus,
-              'Syncs exception status',
-              () => this.exceptionCommand.syncExceptionStatus(),
+                CliCommands.SyncExceptionStatus,
+                'Syncs exception status',
+                () => this.exceptionCommand.syncExceptionStatus(),
+            ),
+            new CliCommand(
+                CliCommands.DatabaseCheck,
+                'Runs a one-time check against the database to see if it is available and responding to queries',
+                () => this.databaseStatusCommand.runCheck(),
+            ),
+            new CliCommand(
+                CliCommands.DatabaseWait,
+                'Waits for the database to be available and responding to queries',
+                () => this.databaseStatusCommand.waitForDatabse(),
             ),
         ];
     }

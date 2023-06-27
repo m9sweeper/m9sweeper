@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>{{ editMode ? 'Edit' : 'Create'}} Falco Rule</h1>
+<mat-dialog-content *ngIf="!!ruleForm" class="m-20">
+  <form [formGroup]="ruleForm">
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Action</mat-label>
+        <mat-select formControlName="action">
+          <mat-option *ngFor="let opt of actionOptions" [value]="opt.value">{{opt.displayName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Namespace</mat-label>
+        <mat-select formControlName="namespace">
+          <!--Empty option to allow deselecting a namespace-->
+          <mat-option [value]="''"></mat-option>
+          <mat-option *ngFor="let ns of namespaces" [value]="ns">{{ns}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Falco Rule</mat-label>
+          <input matInput formControlName="falcoRule">
+      </mat-form-field>
+    </div>
+    <div class="row">
+    <mat-form-field>
+      <mat-label>Image</mat-label>
+        <input matInput formControlName="image">
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<div mat-dialog-actions>
+  <button
+    [disabled]="ruleForm?.invalid"
+    mat-raised-button
+    color="primary"
+    type="submit"
+    (click)="save()"
+  >Confirm</button>
+  <button mat-raised-button
+          color="warn"
+          type="button"
+          mat-dialog-close
+  >Cancel</button>
+</div>
