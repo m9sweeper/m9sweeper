@@ -15,7 +15,7 @@ items:
       {{/*namespace: {{ template "prometheus-operator.namespace" $ }}*/}}
       labels:
         {{- include "dash.labels" . | nindent 8 }}
-        {{- $.Values.grafana.customLabels | toYaml | nindent 8 }}
+        {{- $.Values.grafana.labels | toYaml | nindent 8 }}
         app: {{ printf "%s" $appName }}
     data:
       {{ $dashboardName }}.json: |

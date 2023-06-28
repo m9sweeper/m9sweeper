@@ -47,15 +47,15 @@ prometheusOperator:
 
 grafana:
   enabled: true
-  customLabels:
+  labels:
     grafana_dashboard: 1
   defaultDashboards:
     enabled: true
   datasources:
     enabled: true
-    customLabels:
+    labels:
       grafana_datasource: "1"
-    includeGrafanaCustomLabels: true
+    includeGrafanaDefaultLabels: true
     customAnnotations: {}
     defaultScrapeInterval: "15s"
     defaultPrometheusSource:

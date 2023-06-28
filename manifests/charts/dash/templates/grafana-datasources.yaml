@@ -16,10 +16,10 @@ metadata:
   {{- end }}
   labels:
     {{- include "dash.labels" $ | nindent 6 }}
-    {{- if .datasources.includeGrafanaCustomLabels }}
-    {{- .customLabels | toYaml | nindent 6 }}
+    {{- if .datasources.includeGrafanaDefaultLabels }}
+    {{- .labels | toYaml | nindent 6 }}
     {{- end }}
-    {{- .datasources.customLabels | toYaml | nindent 6 }}
+    {{- .datasources.labels | toYaml | nindent 6 }}
     app: {{ printf "%s" $appName }}
 data:
   datasource.yaml: |-

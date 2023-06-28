@@ -8,7 +8,7 @@ metadata:
   name: {{ printf "%s" $appName }}
   labels:
     {{- include "dash.labels" . | nindent 4 }}
-    {{- $.Values.grafana.customLabels | toYaml | nindent 4 }}
+    {{- $.Values.grafana.labels | toYaml | nindent 4 }}
     app: {{ printf "%s" $appName }}
 spec:
   endpoints:
