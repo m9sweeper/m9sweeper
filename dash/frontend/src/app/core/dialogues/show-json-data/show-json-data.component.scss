@@ -1,13 +1,14 @@
 .falco-card{
   min-width: 400px;
+  max-height: 1000px; // override mat-dialog container max height
 }
 th, td{
   vertical-align: baseline;
 }
 .related-event-table {
   mat-table {
-    overflow: auto !important;
-    height: 100%;
+    //overflow: auto !important;
+    height: 50%;
 
     mat-row {
       min-height: 20px !important
