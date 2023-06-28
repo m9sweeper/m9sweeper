@@ -102,7 +102,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
         this.extractProperty = this.extractProperties(this.raw);
         this.eventData = response.data;
       }, (err) => {
-        alert(err);
+        this.alertService.danger(err.error.message);
       });
   }
 
@@ -119,7 +119,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        alert(err);
+        this.alertService.danger(err.error.message);
       });
   }
 
