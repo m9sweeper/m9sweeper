@@ -199,16 +199,13 @@ export class FalcoController {
         return result;
     }
 
-    @Post(':clusterId/rules')
+    @Post('/rules')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
       @Body() rule: FalcoRuleDto
     ): Promise<FalcoRuleDto> {
-        if (rule?.clusterId !== clusterId) {
-            throw new HttpException({ message: 'Cluster id in path does not match cluster ID in body.' }, HttpStatus.BAD_REQUEST);
-        }
         delete rule.id;
         return await this.falcoService.createFalcoRule(rule);
     }
