@@ -43,6 +43,7 @@ service:
 
 prometheusOperator:
   enabled: true
+  port: 9090
 
 grafana:
   enabled: true
@@ -56,12 +57,20 @@ grafana:
       grafana_datasource: "1"
     includeGrafanaCustomLabels: true
     customAnnotations: {}
-    list:
-      - name: Prometheus
-        type: prometheus
-        url: localhost
-        access: proxy
-        isDefault: true
+    defaultScrapeInterval: "15s"
+    defaultPrometheusSource:
+      enabled: true
+      #urlOverride: http://my-url-here:port
+      httpMethod: POST
+      #scrapeIntervalOverride: "15s"
+    customSources: {}
+#      - name: Prometheus
+#        type: prometheus
+#        url: localhost
+#        access: proxy
+#        isDefault: true
+#        jsonData:
+#          httpMethod: POST
 
 replicaCount: 1
 

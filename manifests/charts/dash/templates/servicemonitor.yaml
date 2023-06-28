@@ -1,6 +1,6 @@
-{{ if .Values.prometheusOperator.enabled }}
-{{- $trimmedDashName := include "dash.fullname" . | trunc 55 }}
-{{- $appName := printf "%s-%s" $trimmedDashName "grafana" | trimSuffix "-" }}
+{{/*https://github.com/helm/charts/blob/master/stable/prometheus-operator/templates/grafana/servicemonitor.yaml*/}}
+{{- if .Values.prometheusOperator.enabled }}
+{{- $appName := include "dash.prom-name" . }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -19,4 +19,4 @@ spec:
   selector:
     matchLabels:
       {{- include "dash.selectorLabels" . | nindent 6 }}
-{{ end }}
+{{- end }}
