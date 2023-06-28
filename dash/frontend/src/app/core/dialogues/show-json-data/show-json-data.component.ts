@@ -1,10 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
+import {AlertService} from '@full-fledged/alerts';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class ShowJsonDataComponent implements OnInit {
               private router: Router,
               private falcoService: FalcoService,
               private dialog: MatDialog,
+              private alertService: AlertService,
   ) { }
 
   dataSource: MatTableDataSource<IFalcoLog>;
@@ -64,7 +66,7 @@ export class ShowJsonDataComponent implements OnInit {
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        alert(err);
+        this.alertService.danger(err.error.message);
       });
   }
 
