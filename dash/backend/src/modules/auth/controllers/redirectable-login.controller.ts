@@ -10,10 +10,12 @@ import { ConfigService } from '@nestjs/config';
 @Controller('redirectable-login')
 export class RedirectableLoginController {
 
-  constructor(private readonly oAuth2Factory: OAuth2Factory,
-              private readonly externalAuthConfigService: ExternalAuthConfigService,
-              private readonly jwtUtility: JwtUtilityService,
-              private readonly configService: ConfigService) {}
+  constructor(
+    private readonly oAuth2Factory: OAuth2Factory,
+    private readonly externalAuthConfigService: ExternalAuthConfigService,
+    private readonly jwtUtility: JwtUtilityService,
+    private readonly configService: ConfigService
+  ) {}
 
   @ApiExcludeEndpoint(true)
   @Get('oauth2/:providerId')
