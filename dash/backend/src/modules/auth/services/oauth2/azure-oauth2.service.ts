@@ -84,7 +84,7 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
     const authQuery = {
       client_id: oAuth2Config.clientId,
       response_type: 'id_token token',
-      redirect_uri: this.configService.get('server.baseUrl') + oAuth2Config.redirectUri,
+      redirect_uri: this.configService.get('server.frontendUrl') + oAuth2Config.redirectUri,
       response_mode: 'form_post',
       scope: oAuth2Config?.scopes.join(' '),
       state: JSON.stringify({id: this._authConfiguration.id}),

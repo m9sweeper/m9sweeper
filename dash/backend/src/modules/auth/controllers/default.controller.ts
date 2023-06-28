@@ -76,7 +76,7 @@ export class DefaultController {
             } else if (p.authType === AuthenticationType.LDAP) {
                 requestHandlerPath = (<LDAPAuthStrategyConfig>p.authConfig).redirectUri + '/' + p.id;
             } else if (p.authType === AuthenticationType.OAUTH2) {
-                requestHandlerPath = `${this.configService.get('server.baseUrl')}/auth/redirectable-login/oauth2/${p.id}`;
+                requestHandlerPath = `${this.configService.get('server.frontendUrl')}/auth/redirectable-login/oauth2/${p.id}`;
             }
             return {
                 id: p.id,
