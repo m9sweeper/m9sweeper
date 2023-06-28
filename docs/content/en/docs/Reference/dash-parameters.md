@@ -34,8 +34,7 @@ For details about configuring environment variables for the dash app, see the [a
 | SERVER_HOST | What network adapter to listen on (defaults to all - 0.0.0.0) | 0.0.0.0 |
 | SERVER_PORT | What port to listen on | 3000 |
 | SERVER_BASE_URL | Server Base URL for things like links in emails | http://localhost:3000/ |
-| SERVER_FRONTEND_URL | Server Frontend URL for things like links in emails | ${SERVER_BASE_URL} |
-
+| SERVER_FRONTEND_URL | Server Frontend URL for things like links in emails. Only needed if different that SERVER_BASE_URL | ${SERVER_BASE_URL} |
 
 #### Database Configuration
 
