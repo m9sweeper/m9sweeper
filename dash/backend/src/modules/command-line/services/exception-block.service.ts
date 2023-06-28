@@ -252,19 +252,16 @@ export class ExceptionBlockService {
         for (const namespace of exception.namespaces) {
             namespaceRego += ` pod.metadata.namespace == "${namespace.name}",\n `;
         }
-        if (imagePattern === '') {
-
-        } else {
+        if (imagePattern !== '') {
             for (const namespace of exception.namespaces) {
                 namespaceRegoWithImagePattern += ` {pod.metadata.namespace == "${namespace.name}",\n   regex.match("${imagePattern}", container.image)},\n `;
             }
         }
         const template = `# Exception ${exception.id} - ${exception.title} #\n ${namespaceRego === '' ? ` true\n` : namespaceRego}\n  `;
         exceptionBlock += template;
-        const templateWithImagePattern = `# Exception ${exception.id} - ${exception.title} #\n ${namespaceRegoWithImagePattern === '' ? ` {true, true}\n` : namespaceRegoWithImagePattern}\n  `;
+        const templateWithImagePattern = `# Exception ${exception.id} - ${exception.title} #\n ${namespaceRegoWithImagePattern === '' ? ` {true, true},\n` : namespaceRegoWithImagePattern}\n  `;
         exceptionBlockWithImagePattern += templateWithImagePattern;
 
         return { exceptionBlock, exceptionBlockWithImagePattern }
     }
-
 }
