@@ -18,7 +18,7 @@ export class M9sweeperCronJobService {
     /**
      * Recompile M9sweeper Metrics every 30s for Prometheus metrics
      */
-    @Cron('*/30 * * * * *')
+    // @Cron('*/30 * * * * *')
     async updateExceptionAndImageMetrics() {
         const activeExceptions = await this.exceptionsService.getAllActiveExceptions();
         const activeExceptionsCount = activeExceptions ? activeExceptions.length : 0;
