@@ -39,4 +39,16 @@ export class CustomValidatorService {
       return exists ? null : { atLeastOne: true };
     };
   }
+
+  regex(control: AbstractControl): { regex: boolean } {
+    if (!control.value) {
+      return null;
+    }
+    try {
+      const r = new RegExp(control.value);
+      return null;
+    } catch (e) {
+      return { regex: true };
+    }
+  }
 }

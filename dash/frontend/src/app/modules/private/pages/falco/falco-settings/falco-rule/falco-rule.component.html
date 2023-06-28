@@ -13,10 +13,10 @@
               Namespace is: <strong>{{ rule.namespace }}</strong>
             </p>
             <p *ngIf="!!rule.image">
-              Image is: <strong>{{ rule.image }}</strong>
+              Image matches: <strong>{{ rule.image }}</strong>
             </p>
             <p *ngIf="!!rule.falcoRule">
-              Falco rule is: <strong>{{ rule.falcoRule }}</strong>
+              Falco rule matches: <strong>{{ rule.falcoRule }}</strong>
             </p>
           <div class="row">
             <button mat-raised-button color="primary" (click)="openAddEditModal(idx)">Edit</button>

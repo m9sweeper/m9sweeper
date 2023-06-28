@@ -1,7 +1,8 @@
 import {Expose} from 'class-transformer';
 import {ApiProperty} from '@nestjs/swagger';
-import {IsNumber, IsOptional} from 'class-validator';
+import {IsNumber, IsOptional, Validate} from 'class-validator';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
+import {RegexConstraint} from '../../../util/validator-constraints/regex-constraint';
 
 export class FalcoRuleDto {
   @Expose({name: 'cluster_id', toPlainOnly: true})
@@ -37,10 +38,12 @@ export class FalcoRuleDto {
   @Expose({name: 'falco_rule', toPlainOnly: true})
   @IsOptional()
   @IsOptional()
+  @Validate(RegexConstraint)
   falcoRule: string;
 
   @Expose({name: 'image', toPlainOnly: true})
   @ApiProperty()
   @IsOptional()
+  @Validate(RegexConstraint)
   image: string;
 }

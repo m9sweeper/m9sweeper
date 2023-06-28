@@ -52,8 +52,8 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
         clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
       namespace: [this.data?.rule?.namespace || ''],
-      falcoRule: [this.data?.rule?.falcoRule || ''],
-      image: [this.data?.rule?.image || ''],
+      falcoRule: [this.data?.rule?.falcoRule || '', [this.customValidators.regex]],
+      image: [this.data?.rule?.image || '', [this.customValidators.regex]],
     }, {
       validators: [this.customValidators.atLeastOne(['namespace', 'falcoRule', 'image'])]
       });
@@ -71,6 +71,9 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
         next: (res) => {
           this.alert.success(`Rule successfully ${this.editMode ? 'updated' : 'created'}!`);
           this.dialogRef.close({ rule: res?.data });
+        },
+        error: err => {
+          this.alert.danger(err?.error?.message || 'Something went wrong');
         }
       });
 
