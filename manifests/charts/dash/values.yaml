@@ -44,7 +44,7 @@ service:
 prometheusOperator:
   enabled: true
   port: 9090
-  scrapeInterval: "15s""
+  scrapeInterval: "15s"
 
 grafana:
   enabled: true
