@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DatePipe, Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -16,17 +16,20 @@ import {IPolicy} from '../../../../../core/entities/IPolicy';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {INamespace} from '../../../../../core/entities/INamespace';
 import {IException} from '../../../../../core/entities/IException';
-import {forkJoin, Observable, of} from 'rxjs';
+import {forkJoin, Observable, of, Subject} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'exception-create',
   templateUrl: './exception-create.component.html',
   styleUrls: ['./exception-create.component.scss']
 })
-export class ExceptionCreateComponent implements OnInit, AfterViewInit {
+export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected unsubscribe$ = new Subject<void>();
+
   exceptionForm: FormGroup;
   subMenuTitle: string;
   editMode: boolean;
@@ -116,6 +119,20 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
       this.exceptionForm.controls.policies.disable();
       this.subMenuTitle = 'Create Exception';
     }
+
+    // Will be triggered iin edit mode because population of the data happens in ngAftetrViewInit
+    this.exceptionForm.controls.type.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (newVal: string) => {
+          if (newVal === 'override') {
+            this.exceptionForm.controls.altSeverity.setValidators([Validators.required]);
+          } else {
+            this.exceptionForm.controls.altSeverity.clearValidators();
+          }
+          this.exceptionForm.controls.altSeverity.updateValueAndValidity();
+        }
+      });
   }
 
   ngOnInit(): void {
@@ -397,5 +414,10 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit {
       // console.log(namespaces);
       return namespaces.join(', ');
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
