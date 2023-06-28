@@ -28,7 +28,7 @@ If release name contains chart name it will be used as a full name.
 Create Prometheus name
 */}}
 {{- define "dash.prom-name" -}}
-{{- $trimmedDashName := include "dash.fullname" . | trunc 52 }}
+{{- $trimmedDashName := include "dash.name" . | trunc 50 | trimSuffix "-" }}
 {{- printf "%s-%s" $trimmedDashName "prometheus" | trimSuffix "-" }}
 {{- end }}
 
@@ -36,7 +36,7 @@ Create Prometheus name
 Create Grafana name
 */}}
 {{- define "dash.grafana-name" -}}
-{{- $trimmedDashName := include "dash.fullname" . | trunc 55 }}
+{{- $trimmedDashName := include "dash.fullname" . | trunc 55 | trimSuffix "-" }}
 {{- printf "%s-%s" $trimmedDashName "grafana" | trimSuffix "-" }}
 {{- end }}
 
