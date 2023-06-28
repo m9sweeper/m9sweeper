@@ -27,8 +27,8 @@ export class AddReferenceComponent {
             this.jsf.setArrayItemTitle(parent, this.layoutNode, this.itemCount);
     }
 }
-AddReferenceComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: AddReferenceComponent, deps: [{ token: i1.JsonSchemaFormService }], target: i0.ɵɵFactoryTarget.Component });
-AddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.2.0", type: AddReferenceComponent, selector: "add-reference-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: `
+AddReferenceComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: AddReferenceComponent, deps: [{ token: i1.JsonSchemaFormService }], target: i0.ɵɵFactoryTarget.Component });
+AddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.2.9", type: AddReferenceComponent, selector: "add-reference-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: `
     <button *ngIf="showAddButton"
       [class]="options?.fieldHtmlClass || ''"
       [disabled]="options?.readonly"
@@ -36,7 +36,7 @@ AddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", 
       <span *ngIf="options?.icon" [class]="options?.icon"></span>
       <span *ngIf="options?.title" [innerHTML]="buttonText"></span>
     </button>`, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }], changeDetection: i0.ChangeDetectionStrategy.Default });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: AddReferenceComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: AddReferenceComponent, decorators: [{
             type: Component,
             args: [{
                     // tslint:disable-next-line:component-selector

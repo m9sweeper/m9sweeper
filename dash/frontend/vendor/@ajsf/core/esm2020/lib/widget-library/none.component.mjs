@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core';
 import * as i0 from "@angular/core";
 export class NoneComponent {
 }
-NoneComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: NoneComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-NoneComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.2.0", type: NoneComponent, selector: "none-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: ``, isInline: true });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: NoneComponent, decorators: [{
+NoneComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: NoneComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
+NoneComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.2.9", type: NoneComponent, selector: "none-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: ``, isInline: true });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: NoneComponent, decorators: [{
             type: Component,
             args: [{
                     // tslint:disable-next-line:component-selector

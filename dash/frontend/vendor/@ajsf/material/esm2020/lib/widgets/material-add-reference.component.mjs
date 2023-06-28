@@ -28,8 +28,8 @@ export class MaterialAddReferenceComponent {
             this.jsf.setArrayItemTitle(parent, this.layoutNode, this.itemCount);
     }
 }
-MaterialAddReferenceComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: MaterialAddReferenceComponent, deps: [{ token: i1.JsonSchemaFormService }], target: i0.ɵɵFactoryTarget.Component });
-MaterialAddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.2.0", type: MaterialAddReferenceComponent, selector: "material-add-reference-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: `
+MaterialAddReferenceComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: MaterialAddReferenceComponent, deps: [{ token: i1.JsonSchemaFormService }], target: i0.ɵɵFactoryTarget.Component });
+MaterialAddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.2.9", type: MaterialAddReferenceComponent, selector: "material-add-reference-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: `
     <section [class]="options?.htmlClass || ''" align="end">
       <button mat-raised-button *ngIf="showAddButton"
         [color]="options?.color || 'accent'"
@@ -39,7 +39,7 @@ MaterialAddReferenceComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "1
         <span *ngIf="options?.title" [innerHTML]="buttonText"></span>
       </button>
     </section>`, isInline: true, dependencies: [{ kind: "directive", type: i2.NgIf, selector: "[ngIf]", inputs: ["ngIf", "ngIfThen", "ngIfElse"] }, { kind: "component", type: i3.MatButton, selector: "button[mat-button], button[mat-raised-button], button[mat-icon-button],             button[mat-fab], button[mat-mini-fab], button[mat-stroked-button],             button[mat-flat-button]", inputs: ["disabled", "disableRipple", "color"], exportAs: ["matButton"] }], changeDetection: i0.ChangeDetectionStrategy.Default });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: MaterialAddReferenceComponent, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: MaterialAddReferenceComponent, decorators: [{
             type: Component,
             args: [{
                     // tslint:disable-next-line:component-selector
