@@ -45,6 +45,28 @@ prometheusOperator:
   enabled: true
   port: 9090
   scrapeInterval: "15s"
+  defaultRules:
+    ruleOne:
+      enabled: true
+    ruleTwo:
+      enabled: true
+  additionalRules: {}
+#    rulename:
+#      additionalLabels: {}
+#      groups:
+#        - name: test
+#          rules:
+#            - alert: test
+#              annotations:
+#                additionalAnnotations: {}
+#                description: Describe here
+#                runbook_url: url_here
+#                summary: Summarize here
+#              expr: ex
+#              for: 10m
+#              labels:
+#                severity: critical
+#                additionalLabels: {}
 
 grafana:
   enabled: true
