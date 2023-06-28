@@ -13,8 +13,10 @@ metadata:
 spec:
   endpoints:
   - path: /api/v1/metrics
+    interval: {{ .Values.prometheusOperator.scrapeInterval }}
     port: http
   - path: /api/metrics/environment
+    interval: {{ .Values.prometheusOperator.scrapeInterval }}
     port: http
   selector:
     matchLabels:
