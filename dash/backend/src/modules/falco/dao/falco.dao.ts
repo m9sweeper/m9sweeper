@@ -381,7 +381,10 @@ export class FalcoDao {
         const knex = await this.databaseService.getConnection();
         return knex.from('falco_rules')
           .select('*')
-          .where('cluster_id', '=', clusterId)
+          .where(builder => {
+              builder.where('cluster_id', '=', clusterId)
+                .orWhere('cluster_id', 'is', null)
+          })
           .andWhere('deleted_at', 'IS', null)
           .orderBy(options?.sortField || 'created_at', options?.sortDir || 'asc')
           .then(rows => plainToInstance(FalcoRuleDto, rows))

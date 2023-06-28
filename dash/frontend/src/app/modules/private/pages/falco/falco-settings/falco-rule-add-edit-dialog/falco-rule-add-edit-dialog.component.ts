@@ -49,7 +49,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
 
     this.ruleForm = this.fb.group({
       id: [this.data?.rule?.id || ''],
-        clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
+      clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
       namespace: [this.data?.rule?.namespace || ''],
       falcoRule: [this.data?.rule?.falcoRule || '', [this.customValidators.regex]],
@@ -63,7 +63,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     const rule = this.ruleForm.getRawValue();
     const request = this.editMode
     ? this.falcoService.updateRule(this.data?.clusterId, rule)
-      : this.falcoService.createRule(this.data?.clusterId, rule);
+      : this.falcoService.createRule(rule);
 
     request
       .pipe(take(1))
