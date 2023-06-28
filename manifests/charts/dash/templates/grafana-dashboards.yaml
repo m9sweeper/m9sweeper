@@ -1,4 +1,4 @@
-{{/*  https://github.com/helm/charts/blob/master/stable/prometheus-operator/templates/grafana/configmap-dashboards.yaml*/}}
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
 {{- if and .Values.prometheusOperator.enabled .Values.grafana.enabled .Values.grafana.defaultDashboards.enabled }}
 {{- $files := .Files.Glob "grafana-dashboards/*.json" }}
 {{- $appName := include "dash.grafana-name" }}

@@ -1,4 +1,4 @@
-{{/*https://github.com/helm/charts/blob/master/stable/prometheus-operator/templates/grafana/servicemonitor.yaml*/}}
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
 {{- if .Values.prometheusOperator.enabled }}
 {{- $appName := include "dash.prom-name" . }}
 ---

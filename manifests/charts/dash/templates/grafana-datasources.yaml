@@ -1,4 +1,4 @@
-{{/*  https://github.com/helm/charts/blob/master/stable/prometheus-operator/templates/grafana/configmaps-datasources.yaml*/}}
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
 {{- if and .Values.prometheusOperator.enabled .Values.grafana.enabled .Values.grafana.datasources.enabled }}
 {{- $trimmedDashName := include "dash.fullname" . | trunc 43 }}
 {{- $dashName := printf "%s-%s" $trimmedDashName "grafana-datasources" | trimSuffix "-" }}
