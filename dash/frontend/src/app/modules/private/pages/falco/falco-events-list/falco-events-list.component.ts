@@ -18,6 +18,7 @@ import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {AlertService} from '@full-fledged/alerts';
 
 
 
@@ -58,7 +59,7 @@ export class FalcoEventsListComponent implements OnInit {
     private csvService: CsvService,
     private router: Router,
     private jwtAuthService: JwtAuthService,
-
+    private alertService: AlertService,
   ) {}
 
   ngOnInit() {
@@ -116,7 +117,7 @@ export class FalcoEventsListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(response.data.list);
         this.logCount = response.data.logCount;
       }, (err) => {
-          alert(err);
+        this.alertService.danger(err.error.message);
       });
 
   }
@@ -157,7 +158,7 @@ export class FalcoEventsListComponent implements OnInit {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
-          alert(`Error downloading report: ${error?.error?.message}`);
+          this.alertService.danger(`Error downloading report: ${error.error.message}`);
         }, () => {
           this.loaderService.stop('csv-download');
         });
@@ -165,7 +166,7 @@ export class FalcoEventsListComponent implements OnInit {
 
   rebuildWithFilters(){
     if (!this.filtersValid) {
-      alert('Invalid filter settings; please recheck filter values');
+      this.alertService.danger('Invalid filter settings; please recheck filter values');
     }else {
         this.getEvents();
     }
