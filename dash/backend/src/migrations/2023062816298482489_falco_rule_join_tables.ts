@@ -4,8 +4,8 @@ export async function up(knex: Knex): Promise<any> {
     await knex.schema.alterTable('falco_rules', (table) => {
         table.dropColumn('cluster_id');
         table.dropColumn('namespace');
-        table.boolean('all_namespaces');
-        table.boolean('all_clusters');
+        table.boolean('all_namespaces').defaultTo(false);
+        table.boolean('all_clusters').defaultTo(false);
     }).createTable('falco_rules_namespace', (table) => {
         table.primary(['falco_rule_id','namespace']);
         table.integer('falco_rule_id').references('id')

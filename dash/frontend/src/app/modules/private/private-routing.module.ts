@@ -56,6 +56,7 @@ import {
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
+import {FalcoOrgSettingsPageComponent} from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
 
 const routes: Routes = [
   {
@@ -484,6 +485,21 @@ const routes: Routes = [
             }
           },
         ]
+      },
+      {
+        path: 'falco',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [{
+          path: '',
+          component: FalcoOrgSettingsPageComponent,
+          data: {
+            title: 'Falco Settings',
+          }
+        }]
       },
       {
         path: 'change-password',

@@ -42,16 +42,11 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     this.namespaces = this.data?.namespaces || [];
     this.editMode = !!this.data?.rule?.id;
 
-    if (!this.data?.clusterId) {
-      this.alert.danger('Failed to initialize rule dialog, refresh the page and try again');
-      this.dialogRef.close();
-    }
-
     this.ruleForm = this.fb.group({
       id: [this.data?.rule?.id || ''],
       clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
-      namespace: [this.data?.rule?.namespace || ''],
+      namespace: [this.data?.rule?.namespaces || ''],
       falcoRule: [this.data?.rule?.falcoRule || '', [this.customValidators.regex]],
       image: [this.data?.rule?.image || '', [this.customValidators.regex]],
     }, {

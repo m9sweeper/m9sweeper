@@ -69,7 +69,7 @@ export class FalcoService {
         for (let i = 0; i <= daysBack; i++) {
             resultSet.filter(result => newDate.toString() === result.date.toString()).forEach(result => value = result.count);
 
-            let newResult = new FalcoCountDto();
+            const newResult = new FalcoCountDto();
             newResult.date = newDate;
             newResult.count = value;
 
@@ -97,7 +97,7 @@ export class FalcoService {
 
         // retrieve filtered falco logs and use the query results to build the csv
         const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
-        let result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
+        const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
         // limit to 1000 or less logs from dao
@@ -265,6 +265,10 @@ export class FalcoService {
         return this.falcoDao.createFalcoRule(rule);
     }
 
+    async listActiveFalcoRules(): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRules();
+    }
+
     async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
         // If we request the cache, and have unexpired cached data, return that.
         if (useCached) {
@@ -275,7 +279,7 @@ export class FalcoService {
         }
 
         // If we don't use the cache, or there was no unexpired cache, get the rules from the DB and cache them.
-        const rules = await this.falcoDao.listActiveFalcoRulesForCluster(clusterId);
+        const rules = await this.falcoDao.listActiveFalcoRules({ clusterId });
         this.ruleCache.set(clusterId, DataCache.cacheFor(rules, 60000)); // 60000ms = 1min
         return rules;
     }

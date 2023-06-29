@@ -123,15 +123,15 @@ export class FalcoService {
     return this.httpClient.post(`/api/falco/rules`, rule);
   }
 
-  listRules(clusterId: number): Observable<IServerResponse<IFalcoRule[]>> {
-    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/${clusterId}/rules`);
+  listRules(): Observable<IServerResponse<IFalcoRule[]>> {
+    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/rules`);
   }
 
   updateRule(clusterId: number, rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {
     return this.httpClient.put(`/api/falco/${clusterId}/rules/${rule.id}`, rule);
   }
 
-  deleteRule(clusterId: number, ruleId: number): Observable<IServerResponse<IFalcoRule>> {
-    return this.httpClient.delete(`/api/falco/${clusterId}/rules/${ruleId}`);
+  deleteRule(ruleId: number): Observable<IServerResponse<IFalcoRule>> {
+    return this.httpClient.delete(`/api/falco/rules/${ruleId}`);
   }
 }
