@@ -10,13 +10,13 @@ Maybe you can mention me or this repo in the acknowledgements too
 
   <img src="assets/logo.png" alt="logo" width="200" height="auto" />
   <h1>m9sweeper</h1>
-  
+
   <p>
-    Kubernetes Security for Everyone! 
+    Kubernetes Security for Everyone!
   </p>
-  
+
   <p>
-  
+
 </p>
 
 <!-- Badges -->
@@ -36,12 +36,12 @@ Maybe you can mention me or this repo in the acknowledgements too
   <a href="https://github.com/m9sweeper/m9sweeper/issues/">
     <img src="https://img.shields.io/github/issues/m9sweeper/m9sweeper" alt="open issues" />
   </a>
-  
+
   <a href="https://github.com/m9sweeper/m9sweeper/blob/main/LICENSE">
     <img src="assets/license.svg" alt="license" />
   </a>
 </p>
-   
+
 <h4>
     <a href="https://youtu.be/5sIqnYSZWAc/">View Demo</a>
   <span> · </span>
@@ -82,7 +82,7 @@ m9sweeper is a free and easy kubernetes security platform. It integrates industr
 
 ### :camera: Features in Action
 
-<div align="center"> 
+<div align="center">
   <img src="assets/m9sweeper-features.gif" alt="m9sweeper-features-gif" />
 </div>
 
@@ -151,7 +151,7 @@ While our documentation has more details, installing m9sweeper can be as simple
 as running a few CLI commands to install it into your own kubernetes cluster
 with helm.
 
-    helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
+    helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
     helm repo update && \
     helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait \
       --create-namespace --namespace m9sweeper-system \
@@ -159,7 +159,7 @@ with helm.
       --set-string dash.init.superAdminPassword="password" \
       --set-string global.jwtSecret="changeme" \
       --set-string global.apiKey="YOUR-API-KEY"
-   
+
 <!-- Contributing -->
 
 ## :wave: Contributing
@@ -221,9 +221,9 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## Feature Requests
 
-If you have feature requests, please submit them as github issues and prefix the request with "Feature Request:". If you find the feature has already been requested, then please upvote that feature so we know it is a feature that others are looking for. 
+If you have feature requests, please submit them as github issues and prefix the request with "Feature Request:". If you find the feature has already been requested, then please upvote that feature so we know it is a feature that others are looking for.
 
-This helps us to prioritize further feature development based upon the needs of our users. 
+This helps us to prioritize further feature development based upon the needs of our users.
 
 <!-- License -->
 

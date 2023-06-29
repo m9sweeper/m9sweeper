@@ -2,7 +2,6 @@ import {Injectable} from "@nestjs/common";
 import {KubeConfig} from "@kubernetes/client-node/dist/config";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import { Cluster, Context, User } from '@kubernetes/client-node/dist/config_types';
-import * as k8s from "@kubernetes/client-node";
 import * as fs from 'fs';
 import {
     KubernetesObject,
@@ -12,7 +11,7 @@ import {
     V1ClusterRole,
     V1ObjectMeta, V1PodList,
     V1PolicyRule, V1RoleBinding, V1RoleRef, V1Secret, V1ServiceAccount, V1Subject
-} from "@kubernetes/client-node";
+} from '@kubernetes/client-node';
 import {V1Pod} from "@kubernetes/client-node/dist/gen/model/v1Pod";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
 import {ConfigService} from "@nestjs/config";
@@ -116,10 +115,6 @@ export class KubernetesApiService {
         } catch (error) {
             console.log(error);
         }
-    }
-
-    makeK8sAppsApiFromConfig(config: KubeConfig): k8s.AppsV1Api{
-        return config?.makeApiClient(k8s.AppsV1Api) || null;
     }
 
     makeRbacApiFromConfig(config: KubeConfig): RbacAuthorizationV1Api {
@@ -294,9 +289,11 @@ export class KubernetesApiService {
      * Simulates the behavior of kubectl apply. patches the object if it exists, creates it if it does not
      * */
     async applyK8sObject(obj: KubernetesObject, config: KubeConfig): Promise<KubernetesObject> {
-        const objApi = config.makeApiClient(KubernetesObjectApi);
+        const objApi = KubernetesObjectApi.makeApiClient(config);
         try {
-            await objApi.read(obj);
+            // Casting to any, the interface the function seems to only want a prtial metadata
+            // But doesn;t quite work right without all of the fields
+            await objApi.read(obj as any);
             return (await objApi.patch(obj)).body;
         } catch (e) { // objApi throws errors if it can't find the object
             if (e.statusCode === 401) {
@@ -365,6 +362,7 @@ export class KubernetesApiService {
             // Build the service account
             serviceAccount = new V1ServiceAccount();
             serviceAccount.kind = 'ServiceAccount';
+            serviceAccount.apiVersion = 'v1';
             serviceAccount.metadata = new V1ObjectMeta();
             serviceAccount.metadata.name = 'm9sweeper';
             serviceAccount.metadata.namespace = serviceAccountNamespace;
@@ -384,6 +382,7 @@ export class KubernetesApiService {
         console.log(`Creating a secret in ${serviceAccountNamespace}`);
         const secret : V1Secret = new V1Secret();
         secret.kind = "Secret";
+        secret.apiVersion = 'v1';
         secret.metadata = new V1ObjectMeta();
         secret.metadata.name = "m9sweeper";
         secret.type = "kubernetes.io/service-account-token"
@@ -472,7 +471,7 @@ export class KubernetesApiService {
         const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_MERGE_PATCH }};
 
         try {
-            const result = await rbacApi.patchClusterRole(clusterRole.metadata.name, clusterRole, undefined, undefined, undefined, undefined, options);
+            const result = await rbacApi.patchClusterRole(clusterRole.metadata.name, clusterRole, undefined, undefined, undefined, undefined, undefined, options);
             console.log('Cluster Role Patch Status: ', result.response.statusCode);
             return result.body;
         } catch (e) {

@@ -76,8 +76,8 @@ export class PolicyController {
                 HttpStatus.UNPROCESSABLE_ENTITY)
         }
         const createdPolicy: PolicyDto = await this.policyService.createPolicy(policyData.policy);
-        createdPolicy.metadata = await this.policyService.calculatePolicyMetadata(null, createdPolicy);
         if (createdPolicy) {
+            createdPolicy.metadata = await this.policyService.calculatePolicyMetadata(null, createdPolicy);
             if (policyData.scanners && policyData.scanners.length > 0) {
                 await Promise.all(policyData.scanners.map(scanner => {
                     scanner.policyId = createdPolicy.id;
@@ -94,7 +94,7 @@ export class PolicyController {
             }
             return createdPolicy;
         } else {
-            throw new HttpException({ status: HttpStatus.INTERNAL_SERVER_ERROR, message: 'Policy Name already exists', entityType: 'Policy'}, HttpStatus.INTERNAL_SERVER_ERROR)
+            throw new HttpException({ status: HttpStatus.CONFLICT, message: 'Policy Name already exists', entityType: 'Policy'}, HttpStatus.CONFLICT)
         }
     }
 

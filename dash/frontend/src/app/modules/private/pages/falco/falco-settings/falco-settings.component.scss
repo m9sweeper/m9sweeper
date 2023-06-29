@@ -1,4 +1,7 @@
-.page {
+.falco-settings-header {
+  width: 100%;
+  white-space: nowrap;
+  display: flex;
   padding: 20px 15px 10px 15px;
   font-size: 26px;
 }
@@ -11,16 +14,6 @@
   padding: 15px;
 }
 
-.mat-card-title{
-  width: 100%;
-  white-space: nowrap;
-  display: flex;
-}
-
-.event-table {
-  overflow-y: auto !important;
-}
-
 .details-content{
   margin-left: 25px;
 }
@@ -30,98 +23,22 @@
 .section-sublevel-2{
   margin-left: 35px;
 }
-.weekDay{
-  width: 100px
-}
-ul {
-  list-style-type: none;
-  margin-top: 4px;
-}
+
 .section-rules{
   padding: 15px;
   border: 5px solid;
   margin: 20px;
 }
-:host ::ng-deep .jsonTable table {
-  width: 100%;
-}
 
-textarea {
+textarea.email-list {
   width: 250px;
   height: 100px;
 }
 
-mat-table {
-  overflow: auto !important;
-  min-width: 800px;
+.w-100 {
+  width: 100%;
+}
 
-  mat-row {
-    min-height: 20px !important
-  }
-
-  mat-header {
-    min-height: 32px !important
-  }
-
-  mat-cell, mat-header-cell, mat-footer-cell {
-    overflow: visible;
-  }
-
-  .mat-column-calendarDate {
-    width: 100px;
-    min-width: 50px;
-    max-width: 100px;
-    margin-right: 5px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .mat-column-namespace {
-    width: 120px;
-    min-width: 100px;
-    max-width: 120px;;
-    margin-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .mat-column-pod {
-    width: 120px;
-    min-width: 100px;
-    max-width: 120px;;
-    //max-width: 7%;
-    margin-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .mat-column-image {
-    //max-width: 7%;
-    width: 150px;
-    min-width: 100px;
-    max-width: 150px;;
-    margin-right: 10px;
-    //white-space: nowrap;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .mat-column-priority {
-    width: 100px;
-    min-width: 50px;
-    max-width: 100px;
-    margin-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .mat-column-message {
-    //max-width: 60%;
-    //width: 200px;
-    min-width: 200px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    white-space: nowrap;
-  }
+.ml-25p {
+  margin-left: 25px;
 }

@@ -62,6 +62,7 @@ $ npm run start:prod
 SUPER_ADMIN_EMAIL=email@intelletive.com  
 SUPER_ADMIN_PASSWORD=password  
 TRAWLER_API_KEY=123456
+* `npm run build:local`
 * `npm run cli users:init`
 
 ## Seeing raw SQL Queries
@@ -90,6 +91,20 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Note on ngrok
+If you want to test ldap locally, you may need to set up an ngrok temporary URL.
+To start the server, run `ngrok http --host-header=rewrite 4200`
+
+Copy the first URL on the line marked "Forwarding."
+_(It should look something like `https://a-bunch-of-letters-and-numbers.ngrok-free.app`.)_
+
+Paste that value into your .env file as the value of `SERVER_BASE_URL`.
+
+Please note that this won't always work because certain providers require the referring
+URL to be registered with them separately. `http://mine-sweeper.ngrok.io` may work if
+you can set up the ngrok tunnel to use that URL.
+
 
 ## Note on Knexnest
 We have pulled in and updated knexnest as a vendor package.

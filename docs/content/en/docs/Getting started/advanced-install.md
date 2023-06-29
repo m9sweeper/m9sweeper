@@ -6,7 +6,7 @@ linkTitle: "Advanced Install"
 date: 2017-01-05
 weight: 3
 description: >
-  Full list of installation options using m9sweeper's helm chart. 
+  Full list of installation options using m9sweeper's helm chart.
 ---
 
 ## Install
@@ -15,22 +15,22 @@ description: >
 
 To claim a free license go to [m9sweeper licensing](licensing.m9sweeper.io). Claiming a license
 is optional, but if you setup a license our online portal will enable remote monitoring. We can notify you, for example,
-if you a new version is available or if your environment is no longer being monitored for some reason. 
+if you a new version is available or if your environment is no longer being monitored for some reason.
 
 ### Installation
 
 We recommend putting your configuration in a values.yaml file and then deploying our app using helm. This
 example uses "helm upgrade --install", which is an idempotent way of installing and/or upgrading the app. This
-is repeatable and the same command can be run regardless of whether you intend to upgrade or install the app. 
+is repeatable and the same command can be run regardless of whether you intend to upgrade or install the app.
 
-    helm repo add m9sweeper https://helm.m9sweeper.io/chartrepo/m9sweeper && \
+    helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
     helm repo update && \
     helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait --create-namespace --namespace m9sweeper-system \
       --values values.yaml --version latest
 
 When implementing for our customers we automate this in a CICD pipeline. Upgrades can be done simply by changing
-which chart version you are deploying. By default, it installs the latest version, but you can add 
---version to install a specific version of m9sweeper. 
+which chart version you are deploying. By default, it installs the latest version, but you can add
+--version to install a specific version of m9sweeper.
 
 **At a minimum, you MUST specify these 4 values:**
 
@@ -45,10 +45,10 @@ If you wish to have m9sweeper prevent applications from booting up that are not 
 policies, you will need the validating webhook. This installs automatically and should work without any configuration.
 
 However, **if you are running in Azure Kubernetes Service** OR have the kubernetes api firewalled in such a way that it
-cannot reach out to a remote url for the validating webhook, then you will need to 
-[setup an nginx reverse proxy](https://github.com/m9sweeper/m9sweeper/blob/main/dash/backend/scripts/proxy-webhook/README.md) 
+cannot reach out to a remote url for the validating webhook, then you will need to
+[setup an nginx reverse proxy](https://github.com/m9sweeper/m9sweeper/blob/main/dash/backend/scripts/proxy-webhook/README.md)
 using our reverse proxy self-installer. This script will generate a CA Certificate Bundle and Nginx configuration
-to enable the reverse proxy to work in Azure Kubernetes Service. 
+to enable the reverse proxy to work in Azure Kubernetes Service.
 
 ## Falco bulkhead Deployment
 
@@ -61,8 +61,8 @@ falco:
   replicas: 1
 ```
 
-When set to true, this will create a seperate deployment appended with "-falco", a service, and when applicable, a service monitor. 
-This also edits ingress, routing all API calls from Falco, into the bulkhead deployment. 
+When set to true, this will create a seperate deployment appended with "-falco", a service, and when applicable, a service monitor.
+This also edits ingress, routing all API calls from Falco, into the bulkhead deployment.
 
 
 ## Configuration Options

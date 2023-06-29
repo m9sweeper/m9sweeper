@@ -1,9 +1,7 @@
 import {Injectable} from '@nestjs/common';
-import {Command, Positional} from 'nestjs-command';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 import {KubernetesClusterService} from '../services/kubernetes-cluster.service';
 import {ClusterDao} from '../../cluster/dao/cluster.dao';
-import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {KubernetesApiService} from '../services/kubernetes-api.service';
 import {CoreV1Api} from '@kubernetes/client-node/dist/gen/api/coreV1Api';
 import {KubeConfig} from '@kubernetes/client-node/dist/config';
@@ -15,9 +13,7 @@ import {AppSettingsService} from '../../settings/services/app-settings.service';
 import {AppSettingsType, LicenseSettingsType} from '../../settings/enums/settings-enums';
 import {LicensingPortalService} from '../../../integrations/licensing-portal/licensing-portal.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
-import {ClusterSummaryDto, InstanceSummaryDto} from '../../../integrations/licensing-portal/licensing-portal.dto';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
-import { NamespaceComplianceService } from '../../namespace/services/namespace_compliance.service';
 import { AppSettingsDto } from "../../settings/dto/app-settings-dto";
 
 
@@ -37,13 +33,12 @@ export class ClusterCommand {
       private readonly licensingPortalService: LicensingPortalService,
       private readonly appSettingsService:AppSettingsService,
       private readonly clusterEventService: ClusterEventService,
-      private readonly clusterGroupService: ClusterGroupService,
-      private readonly namespaceComplianceService: NamespaceComplianceService
+      private readonly clusterGroupService: ClusterGroupService
     ) {}
 
     // @TODO: Remove all log messages so this will be silent
-    @Command({ command: 'cluster:seed', describe: 'Seeds the DB with the current cluster' })
-    async seedCluster(): Promise<void> {
+
+    async seedCluster(): Promise<boolean> {
         const clusterName = process.env.FIRST_CLUSTER_NAME;
         const clusterGroupName = process.env.FIRST_CLUSTER_GROUP_NAME;
         const superAdminEmail = process.env.SUPER_ADMIN_EMAIL;
@@ -53,7 +48,7 @@ export class ClusterCommand {
         // validate required fields are present
         if (!(superAdminEmail && clusterGroupName && clusterName)) {
             this.loggerService.log({label: 'Skipping seeding cluster - missing SUPER_ADMIN_EMAIL, FIRST_CLUSTER_GROUP_NAME, or FIRST_CLUSTER_NAME.'});
-            return;
+            return true;
         }
 
         // save license & instance key if neither already exist in the DB
@@ -77,14 +72,14 @@ export class ClusterCommand {
             }
         } catch (e) {
             console.log('Error saving license & instance key', e);
-            return;
+            return false;
         }
 
         // Do not attempt to create the cluster or cluster group if the cluster group already exists
         const existingGroups = await this.clusterGroupService.countClusterGroups();
         if (existingGroups > 0) {
             console.log(`Cluster groups already exist. Skipping Cluster & Cluster group creation`);
-            return;
+            return true;
         }
 
         // Try to get the user's ID
@@ -94,11 +89,11 @@ export class ClusterCommand {
             userId = !!user ? user[0].id : null;
             if (!userId) {
                 this.loggerService.log({label: 'Specified admin user does not exist - unable to initialize cluster'});
-                return;
+                return false;
             }
         } catch (e) {
             console.log('Failed to retrieve user', e);
-            return;
+            return false;
         }
 
         // @TODO: If any cluster/cluster groups exist in the DB, skip the rest of the function. This should ONLY be run on the initial install and not 
@@ -184,9 +179,11 @@ export class ClusterCommand {
                 await this.clusterDao.seedInitialCluster(cluster, clusterGroupName, policy, scanner, userId);
             } catch (e) {
                 console.log("Error saving to DB", e);
+                return false;
             }
         } else {
             this.loggerService.log({label: 'Skipping saving default cluster - could not connect. '});
         }
+        return true;
     }
 }

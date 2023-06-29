@@ -72,6 +72,33 @@ export const AUTH_VALIDATE_RESPONSE_SCHEMA =  {
         }
     }
 };
+export const AUTH_CHECK_LOGIN_STATUS_RESPONSE_SCHEMA =  {
+    "type": "object",
+    "required": [
+        "success",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "success": {
+            "type": "boolean"
+        },
+        "message": {
+            "type": "string"
+        },
+        "data": {
+            "type": "object",
+            "required": [
+              "logged_in",
+            ],
+            "properties": {
+                "loggedIn": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+};
 
 export const AUTHORITY_LIST_RESPONSE_SCHEMA = {
     "type": "object",

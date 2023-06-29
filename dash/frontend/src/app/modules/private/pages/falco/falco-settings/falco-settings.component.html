@@ -1,50 +1,51 @@
 <div class ="falco-log-settings-container">
 
   <div>
-    <div class=" row mat-card-title">
+    <div class=" row falco-settings-header">
       <div class="col-sm-6" >
-        <div class="row page"> Falco Settings</div>
+        <div class="row"> Falco Settings</div>
       </div>
-      <div class="col-sm-6 "></div>
+      <div class="col-sm-6"></div>
     </div>
   </div>
 
   <div class="row">
 
-    <div class="event-table col-sm-6">
-      <mat-card style="height:600px; min-width: 400px; display: grid;!important;">
-        <h1>Notification Settings</h1>
-        <div class ="details-content">
+    <div class="col-sm-6">
+      <mat-card style="height:600px; min-width: 400px;">
+        <mat-card-header style="margin-left: 0">
+          <mat-card-title>
+            <h1>Notification Settings</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ml-25p">
           <form [formGroup]="settingForm">
 
               <div class="section-sublevel-1">
                 <div class="row">
                   <div>
-                    <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)" formControlName="sendNotificationAnomaly"> </mat-checkbox>
-                  </div>&nbsp;&nbsp;
-                  <div>
-                    <h3>Notify about Anomalies</h3>
+                    <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)" formControlName="sendNotificationAnomaly">Notify about Anomalies </mat-checkbox>
                   </div>
                 </div>
 
                 <div class="section-sublevel-2">
                   <div class ="row">
-                    <h3>Notify no more than once every</h3>
-                    &nbsp;&nbsp;
-                      <input [readonly]="isNotifyAnomalyDisabled" type="number" style="width:3em" formControlName="anomalyFrequency">
-                    &nbsp;&nbsp;
-                    <h3>day(s)</h3>
+                    <h3>Notify no more than once every
+                      <mat-form-field style="width:3em">
+                        <input matInput [readonly]="isNotifyAnomalyDisabled" formControlName="anomalyFrequency">
+                      </mat-form-field>
+                     day(s)</h3>
                   </div>
-                  <div>
-                    <h3>Severity Levels to Include</h3>
+                  <div class="row">
 
-                    <mat-form-field appearance="fill" [formGroup]="settingForm">
-                      <mat-select [disabled]="isNotifyAnomalyDisabled" formControlName="selectedPriorityLevels" multiple>
-                        <mat-option *ngFor="let level of priorityLevels" [value]="level">
-                          {{level}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                      <mat-form-field [formGroup]="settingForm">
+                        <mat-label>Severity Levels to Include</mat-label>
+                        <mat-select [disabled]="isNotifyAnomalyDisabled" formControlName="selectedPriorityLevels" multiple>
+                          <mat-option *ngFor="let level of priorityLevels" [value]="level">
+                            {{level}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                   </div>
                 </div>
               </div>
@@ -63,7 +64,7 @@
                     <mat-radio-button [disabled]="isSummaryDisabled" value="daily">Daily</mat-radio-button> <br><br>
                     <mat-radio-button [disabled]="isSummaryDisabled" (change)="enableWeeklySubLevelcheckbox($event)" value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
 
-                    <mat-select [disabled]="isWeeklyDisabled" class="weekDay" formControlName="selectedWeekDay">
+                    <mat-select [disabled]="isWeeklyDisabled" class="w-100" formControlName="selectedWeekDay">
                       <mat-option *ngFor="let day of weekDays" [value]="day">
                         {{day}}
                       </mat-option>
@@ -79,10 +80,10 @@
                 </div>
                 <div class="section-sublevel-2">
                   <mat-radio-group aria-label="SelectPerson" formControlName="whoToNotify">
-                    <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admin</mat-radio-button> <br>
+                    <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admins</mat-radio-button> <br>
                     <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List</mat-radio-button>
                     <br>
-                      <textarea [style.display]="isSpecificEmailHidden? 'none' :'block'" formControlName="emailList"></textarea>
+                      <textarea class="email-list" [style.display]="isSpecificEmailHidden? 'none' :'block'" formControlName="emailList"></textarea>
                   </mat-radio-group>
                 </div>
               </div>
@@ -92,51 +93,14 @@
               </div>
 
           </form>
-        </div>
-
+        </mat-card-content>
       </mat-card>
     </div>
-    <!--
-    <div class="event-table col-sm-6">
-      <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
-        <h1>Rules</h1>
-        <div class ="details-content">
-          <div class="section-rules">
-            <div class="section-sublevel-1">
-              <h3>Ignore when following are true: </h3>
-              <div class="section-sublevel-2">
-                 <h3>Namespace is kube-system</h3>
-                <h3>Type is privilege escalation</h3>
-              </div>
-              <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-              </div>
-            </div>
-          </div>
-          <br><br>
-          <div class="section-rules">
-            <div class="section-sublevel-1">
-              <h3>Ignore when following are true: </h3>
-              <div class="section-sublevel-2">
-                <h3>Namespace is m9sweeper-system</h3>
-                <h3>Type is privilege escalation</h3>
-                <h3>Image is rabbitmq/ rabbitmq</h3>
-              </div>
-              <div>
-                <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-              </div>
-            </div>
-          </div>
-          <br>
-          <div>
-            <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()" >Edit</button>
-          </div>
-        </div>
-      </mat-card>
+    <div class="col-sm-6" *ngIf="clusterId">
+      <app-falco-rule
+      [clusterId]="clusterId"
+      ></app-falco-rule>
     </div>
--->
   </div>
 
 </div>
