@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-container-content">
-    <app-sub-navigation title="Falco Settings"></app-sub-navigation>
+    <app-sub-navigation title="Falco Settings" buttonTitle="Add Rule"></app-sub-navigation>
     <mat-card>
       <mat-card-header>
         <mat-card-title>
@@ -13,17 +13,9 @@
             <div class="rule-container">
               <strong>{{rule.action | titlecase}}</strong> when the following are true:
               <div class="pl-10">
-                <ng-container *ngIf="!rule.allNamespaces">
-                  <p>
-                    Event is from <strong>certain namespaces,</strong> including: {{ beautifyArray(rule.namespaces,{ key: 'namespace', elements: 3 }) }}
-                  </p>
-                </ng-container>
-
-                <ng-container *ngIf="!rule.allClusters">
-                  <p>
-                    Event is from <strong>certain clusters,</strong> including: {{ beautifyArray(rule.clusters,{ key: 'name', elements: 3 }) }}
-                  </p>
-                </ng-container>
+                <p *ngIf="rule.namespace">
+                  Namespace is: <strong>{{ rule.namespace }}</strong>
+                </p>
                 <p *ngIf="!!rule.image">
                   Image matches: <strong>{{ rule.image }}</strong>
                 </p>

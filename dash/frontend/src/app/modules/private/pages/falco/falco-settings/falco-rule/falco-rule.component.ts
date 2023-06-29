@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {KubesecService} from '../../../../../core/services/kubesec.service';
-import {FalcoService} from '../../../../../core/services/falco.service';
-import {AlertService} from '@full-fledged/alerts';
+import {FalcoRuleAddEditDialogComponent} from '../falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
+import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
 import {take} from 'rxjs/operators';
-import {
-  FalcoRuleAddEditDialogComponent
-} from '../falco-settings/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
-import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
+import {KubesecService} from '../../../../../../core/services/kubesec.service';
+import {FalcoService} from '../../../../../../core/services/falco.service';
+import {AlertService} from '@full-fledged/alerts';
 
 @Component({
-  selector: 'app-falco-org-settings-page',
-  templateUrl: './falco-org-settings-page.component.html',
-  styleUrls: ['./falco-org-settings-page.component.scss']
+  selector: 'app-falco-rule',
+  templateUrl: './falco-rule.component.html',
+  styleUrls: ['./falco-rule.component.scss']
 })
-export class FalcoOrgSettingsPageComponent implements OnInit {
-  rules = [];
+export class FalcoRuleComponent implements OnInit {
+  @Input() clusterId: number;
+
+  rules: IFalcoRule[] = [];
+  namespaces: string[] = [];
 
   constructor(
     protected dialog: MatDialog,
@@ -24,19 +25,29 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
     protected alert: AlertService
   ) { }
 
+
   ngOnInit(): void {
+    this.kubesecService.listNamespaces(this.clusterId)
+      .pipe(take(1))
+      .subscribe({
+        next: (namespaces) => {
+          this.namespaces = namespaces?.items?.map(itm => itm.metadata.name) || [];
+        }
+      });
+
     this.falcoService.listRules()
       .pipe(take(1))
       .subscribe({
-        next: (resp) => this.rules = resp.data || []
+        next: (resp) => this.rules = resp.data
       });
   }
 
-  openAddEditModal(rule?: IFalcoRule, existingRuleIndex?: number) {
-    console.log('opening modal');
+  openAddEditModal(existingRuleIndex?: number) {
     const ref = this.dialog.open(FalcoRuleAddEditDialogComponent, {
       data: {
-        rule
+        namespaces: this.namespaces,
+        clusterId: this.clusterId,
+        rule: !isNaN(existingRuleIndex) ? this.rules[existingRuleIndex] : undefined
       }
     });
     ref.afterClosed()
@@ -54,7 +65,7 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
       });
   }
 
-  removeRule(ruleId: number, idx: number) {
+  removeRule(idx: number, ruleId: number) {
     this.falcoService.deleteRule(ruleId)
       .pipe(take(1))
       .subscribe({
@@ -69,5 +80,4 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
         }
       });
   }
-
 }

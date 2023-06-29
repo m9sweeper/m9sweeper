@@ -7,7 +7,7 @@ import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
-import { FalcoRuleCreateDto, FalcoRuleDto } from '../dto/falco-rule.dto';
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
 import {Knex} from 'knex';
 
 
@@ -368,49 +368,14 @@ export class FalcoDao {
         }
     }
 
-    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<number> {
+    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
         const knex = await this.databaseService.getConnection();
-        return knex.transaction(async (trx) => {
-            rule.allNamespaces = !rule?.namespaces?.length;
-            rule.allClusters = !rule?.clusters?.length;
-            let rawNamespaces = [];
-            if (!rule.allNamespaces) {
-                rawNamespaces = rule.namespaces.map(ns => {
-                    return { namespace: ns }
-                })
-            }
-            let rawClusters = [];
-            if (!rule.allClusters) {
-                rawClusters = rule.clusters.map(id => {
-                    return { cluster_id: id }
-                })
-            }
-
-            delete rule.namespaces;
-            delete rule.clusters;
-            const raw = instanceToPlain(rule);
-            const id = (await trx.insert(raw, 'id').into('falco_rules'))[0]?.id;
-            if (!rule.allNamespaces) {
-                rawNamespaces.forEach(ns => ns.falco_rule_id = id);
-                await trx.insert(rawNamespaces).into('falco_rules_namespace')
-            }
-            if (!rule.allClusters) {
-                rawClusters.forEach(ns => ns.falco_rule_id = id);
-                await trx.insert(rawClusters).into('falco_rules_cluster')
-            }
-            return id;
-        });
+        return knex.into('falco_rules')
+          .insert(raw, '*')
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
     }
 
-    async getFalcoRuleById(id: number): Promise<FalcoRuleDto> {
-        console.log(id);
-        const knex = await this.databaseService.getConnection();
-        const query = this.baseFalcoRuleQuery(knex)
-          .where('rule.id', '=', id);
-
-        return knexnest(query)
-          .then(rows => plainToInstance(FalcoRuleDto, rows[0]))
-    }
 
     async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
         const knex = await this.databaseService.getConnection();
@@ -419,62 +384,20 @@ export class FalcoDao {
           .orderBy(options?.sortField || 'rule.created_at', options?.sortDir || 'asc')
         if (options?.clusterId) {
             query.andWhere(builder => {
-                    builder.where('rule.all_clusters', '=', true)
+                    builder.where('rule.all_clusters')
                       .orWhere('rule_cluster.cluster_id', '=', options.clusterId);
                 })
         }
         return knexnest(query)
           .then(rows => plainToInstance(FalcoRuleDto, rows))
     }
-
-    async deleteFalcoRule(ruleId: number): Promise<number> {
+    async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
         const knex = await this.databaseService.getConnection();
-        return knex.update({ deleted_at: Date.now() })
-          .into('falco_rules')
-          .where('id', '=', ruleId);
-    }
-    async updateFalcoRule(rule: Partial<FalcoRuleCreateDto>, ruleId: number): Promise<void> {
-        // const raw = instanceToPlain(rule);
-        const knex = await this.databaseService.getConnection();
-
-        return knex.transaction(async (trx) => {
-            rule.allNamespaces = !rule?.namespaces?.length;
-            rule.allClusters = !rule?.clusters?.length;
-            let rawNamespaces = [];
-            if (!rule.allNamespaces) {
-                rawNamespaces = rule.namespaces.map(ns => {
-                    return { namespace: ns, falco_rule_id: ruleId }
-                })
-            }
-            let rawClusters = [];
-            if (!rule.allClusters) {
-                rawClusters = rule.clusters.map(id => {
-                    return { cluster_id: id, falco_rule_id: ruleId }
-                })
-            }
-
-            // Update the rule
-            delete rule.namespaces;
-            delete rule.clusters;
-            delete rule.id;
-            const raw = instanceToPlain(rule);
-            await trx.update(raw).into('falco_rules').where('id', '=', ruleId);
-
-            // Clear the namespace and cluster tables of associated entries
-            await trx.delete().from('falco_rules_cluster')
-              .where('falco_rule_id', '=', ruleId);
-            await trx.delete().from('falco_rules_namespace')
-              .where('falco_rule_id', '=', ruleId);
-
-
-            // (Re)-create the entries in the join tables if needed
-            if (!rule.allNamespaces) {
-                await trx.insert(rawNamespaces).into('falco_rules_namespace')
-            }
-            if (!rule.allClusters) {
-                await trx.insert(rawClusters).into('falco_rules_cluster')
-            }
-        });
+        return knex.into('falco_rules')
+          .update(raw, '*')
+          .where('id', '=', ruleId)
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
     }
 
     /**

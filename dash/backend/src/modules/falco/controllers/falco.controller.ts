@@ -31,7 +31,7 @@ import {AuthorityId} from '../../user/enum/authority-id';
 import {FalcoCountDto} from '../dto/falco-count.dto';
 import {FalcoSettingDto} from '../dto/falco-setting.dto';
 import {FalcoCsvDto} from '../dto/falco-csv-dto';
-import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
@@ -191,7 +191,7 @@ export class FalcoController {
     @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
-      @Body() rule: FalcoRuleCreateDto
+      @Body() rule: FalcoRuleDto
     ): Promise<FalcoRuleDto> {
         delete rule.id;
         return await this.falcoService.createFalcoRule(rule);
@@ -201,18 +201,19 @@ export class FalcoController {
     @UseGuards(AuthGuard, AuthorityGuard)
     async listActiveFalcoRulesForCluster(): Promise<FalcoRuleDto[]> {
         return this.falcoService.listActiveFalcoRules();
+
     }
 
-    @Put('/rules/:ruleId')
+    @Put(':clusterId/rules/:ruleId')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async updateFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number,
-      @Body() rule: FalcoRuleCreateDto
+      @Body() rule: FalcoRuleDto
     ): Promise<FalcoRuleDto> {
         if (ruleId !== rule?.id) {
-            throw new HttpException({ message: 'rule id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
+            throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
         return this.falcoService.updateFalcoRule(rule, ruleId);
     }
@@ -223,7 +224,7 @@ export class FalcoController {
     async deleteFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number
-    ): Promise<number>  {
+    ): Promise<FalcoRuleDto>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
     }
 

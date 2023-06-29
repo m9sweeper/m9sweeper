@@ -274,6 +274,10 @@ export class FalcoService {
         return this.falcoDao.getFalcoRuleById(ruleId);
     }
 
+    async listActiveFalcoRules(): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRules();
+    }
+
     async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
         // If we request the cache, and have unexpired cached data, return that.
         if (useCached) {
