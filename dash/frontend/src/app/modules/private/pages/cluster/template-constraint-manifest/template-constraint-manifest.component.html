@@ -1,9 +1,9 @@
-<div class="modal-container-margin">
+<mat-dialog-content class="modal-container-margin">
   <div class="modal-content-left-align-no-margin">
     <mat-card appearance="outlined">
-      <div class="page-card-title">
-        Edit Manifest
-      </div>
+      <mat-card-header class="page-card-title">
+        <h4>Edit Manifest</h4>
+      </mat-card-header>
       <mat-card-content>
         <ngx-codemirror #codemirror
                         [options]="codeMirrorOptions"
@@ -14,13 +14,13 @@
 
       </mat-card-content>
       <br>
-      <div class="modal-content-left-align-no-margin">
+      <mat-card-actions class="modal-content-left-align-no-margin">
         <div >
           <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="saveManifest()">Save Changes</button>
           &nbsp;
           <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
         </div>
-      </div>
+      </mat-card-actions>
     </mat-card>
   </div>
-</div>
+</mat-dialog-content>

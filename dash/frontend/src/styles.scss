@@ -79,6 +79,9 @@ $ms-default-theme: mat.define-light-theme((
   @include custom-audit-log-light-theme($ms-default-theme);
 }
 
+.mat-mdc-dialog-container .mdc-dialog__content {
+  --mdc-dialog-supporting-text-color: rgba(0, 0, 0, 1);
+}
 
  .mat-mdc-dialog-container {
   padding: 20px;
@@ -148,6 +151,10 @@ $ms-default-theme: mat.define-light-theme((
   margin-bottom: 2px;
 }
 
+.negative-margin-bottom-8 {
+  margin-bottom: -8px;
+}
+
 .font-size-20{
   font-size: 20px;
 }
@@ -183,8 +190,8 @@ $ms-default-theme: mat.define-light-theme((
   vertical-align: baseline;
 }
 .mat-icon{
-  vertical-align: bottom;
-  padding-left: 10px;
+  //vertical-align: bottom;
+  //padding-left: 10px;
   // margin:10px;
 }
 .mat-mdc-icon-button{
@@ -714,4 +721,27 @@ div.cluster-dashboard.responsive {
 }
 
 // CSS for left nav [end]
+
+.padding-bottom-5px {
+  padding-bottom: 5px;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.action-button-row {
+  display: flex;
+  justify-content: end;
+  align-content: center;
+  margin-right: 5px;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+.padding-top-4 {
+  padding-top: 4px;
+}
 
