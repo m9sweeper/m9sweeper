@@ -65,7 +65,7 @@ export class ImageController {
         schema: ALL_IMAGES_RESPONSE_SCHEMA
     })
     async getAllImagesByClusterId(@Param('clusterId') clusterId: number):
-        Promise<{total: number, listOfImages: ListOfImagesDto[]}>{
+        Promise<{total: string, listOfImages: ListOfImagesDto[]}>{
         return await this.imageService.getAllImagesByClusterId(+clusterId);
     }
 
