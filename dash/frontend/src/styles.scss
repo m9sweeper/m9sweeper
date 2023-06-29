@@ -677,7 +677,7 @@ div.cluster-dashboard {
 div.cluster-group-menu.responsive {
   // background-color: orange;
   width: 65px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
   span.add-cluster-group{
     display:none;
