@@ -126,19 +126,6 @@ export class FalcoController {
         return this.falcoService.getFalcoCsv(clusterId,  limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
-    @Get('/:eventId')
-    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201
-    })
-    async getFalcoLogByEventId(
-        @Param('eventId') eventId: number
-    ): Promise< FalcoDto>
-    {
-        return this.falcoService.getFalcoLogByEventId(eventId);
-    }
-
     @Get('/:clusterid/findsetting')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -210,10 +197,10 @@ export class FalcoController {
         return await this.falcoService.createFalcoRule(rule);
     }
 
-    @Get(':clusterId/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
+    @Get('/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
     @UseGuards(AuthGuard, AuthorityGuard)
-    async listActiveFalcoRulesForCluster(@Param('clusterId') clusterId: number): Promise<FalcoRuleDto[]> {
-        return this.falcoService.listActiveFalcoRulesForCluster(clusterId);
+    async listActiveFalcoRulesForCluster(): Promise<FalcoRuleDto[]> {
+        return this.falcoService.listActiveFalcoRules();
 
     }
 
@@ -231,7 +218,7 @@ export class FalcoController {
         return this.falcoService.updateFalcoRule(rule, ruleId);
     }
 
-    @Delete(':clusterId/rules/:ruleId')
+    @Delete('/rules/:ruleId')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async deleteFalcoRule(
@@ -239,5 +226,18 @@ export class FalcoController {
       @Param('ruleId') ruleId: number
     ): Promise<FalcoRuleDto>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
+    }
+
+    @Get('/:eventId')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 201
+    })
+    async getFalcoLogByEventId(
+      @Param('eventId') eventId: number
+    ): Promise< FalcoDto>
+    {
+        return this.falcoService.getFalcoLogByEventId(eventId);
     }
 }
