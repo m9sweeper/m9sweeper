@@ -6,7 +6,7 @@ import {UserCreateDto} from '../dto/user-create-dto';
 import {ResetPasswordService} from '../../auth/services/reset-password.service';
 import * as bcrypt from 'bcryptjs';
 import { Authority } from "../enum/Authority";
-import {PrometheusService} from "../../shared/services/prometheus.service";
+import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class UserProfileService {
   constructor(@Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
               private readonly userDao: UserDao,
               private readonly resetPasswordService: ResetPasswordService,
-              private readonly prometheusService: PrometheusService){}
+              private readonly prometheusService: PrometheusV1Service){}
 
 
   async getAuthorities(): Promise<UserAuthority[]> {
