@@ -42,6 +42,23 @@ export class ImageService {
             return images;
         }
     }
+
+    async getAllRunningImagesByClusterId(clusterId: number):
+      Promise<{total: string, listOfImages: ListOfImagesDto[]}> {
+        const images = {
+            total: undefined,
+            listOfImages: undefined
+        }
+        const checkClusterById = await this.clusterService.getClusterById(clusterId);
+        const imageSearchClauses = {'i.deleted_at': null, 'i.cluster_id': clusterId, 'i.running_in_cluster': true};
+        if (checkClusterById) {
+            const listOfImages = await this.imageDao.loadImage(imageSearchClauses);
+            images.total = await this.imageDao.countImage(imageSearchClauses);
+            images.listOfImages = listOfImages;
+            return images;
+        }
+    }
+
     async checkIfImageAlreadyExists(imageDto: ImageDto, clusterId: number): Promise<boolean> {
       const imageAsString = imageDto.image = imageDto.url + '/' + imageDto.name + ':' + imageDto.tag;
       const listOfImages = await this.imageDao.loadImage({'i.image': imageAsString, 'i.cluster_id': clusterId, 'i.docker_image_id': imageDto.dockerImageId});

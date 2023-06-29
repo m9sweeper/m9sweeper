@@ -6,6 +6,7 @@ import { PodDto } from '../dto/pod-dto';
 import { PodComplianceDto } from '../dto/pod-history-compliance-dto';
 import {PodHistoryDto} from "../dto/pod-history-dto";
 import { PodComplianceSummaryGroupDto } from '../dto/pod_compliance_sumamry_group_dto';
+import { PodComplianceForNamespace } from '../dto/pod-compliance-for-namespace';
 
 @Injectable()
 export class PodDao {
@@ -572,4 +573,30 @@ export class PodDao {
 
         return sql.then();
     }
+
+  async getCurrentPodsComplianceSummary(clusterId: number): Promise<PodComplianceForNamespace[]> {
+    const knex = await this.databaseService.getConnection();
+
+    const complianceQuery = knex
+      .select([
+        'pods.cluster_id as cluster_id',
+        'pods.namespace as namespace',
+        knex.raw('COUNT(pods.id) AS num_pods'),
+        knex.raw('COUNT(CASE WHEN pods.compliant=True THEN 1 END) AS num_compliant_pods'),
+        knex.raw('COUNT(CASE WHEN pods.compliant=False THEN 1 END) AS num_noncompliant_pods')
+      ])
+      .from('kubernetes_pods as pods')
+      .where('pods.pod_status', "Running")
+      .andWhere('pods.cluster_id', clusterId)
+      .groupBy('pods.cluster_id', 'pods.namespace')
+      .orderBy('pods.cluster_id', 'pods.namespace');
+
+    return complianceQuery.then((result: any[]) => {
+      const summariesAsObjects: PodComplianceForNamespace[] = [];
+      for (const summary of result) {
+        summariesAsObjects.push(plainToInstance(PodComplianceForNamespace, summary));
+      }
+      return summariesAsObjects;
+    });
+  }
 }
