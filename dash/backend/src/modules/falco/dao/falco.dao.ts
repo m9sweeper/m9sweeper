@@ -8,7 +8,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
 import {FalcoRuleDto} from '../dto/falco-rule.dto';
-import {option} from 'yargs';
+import {Knex} from 'knex';
 
 
 @Injectable()
@@ -329,7 +329,7 @@ export class FalcoDao {
     }
 
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any> {
-        let falcoEmailObj = new FalcoEmailDto();
+        const falcoEmailObj = new FalcoEmailDto();
         const emailSentDate = format(set(new Date(emailSentTime), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0}),'yyyy-MM-dd');
 
         falcoEmailObj.creationTimestamp = emailSentTime;
@@ -379,14 +379,14 @@ export class FalcoDao {
 
     async listActiveFalcoRulesForCluster(clusterId: number, options?: { sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
         const knex = await this.databaseService.getConnection();
-        return knex.from('falco_rules')
-          .select('*')
-          .where(builder => {
-              builder.where('cluster_id', '=', clusterId)
-                .orWhere('cluster_id', 'is', null)
+        const query = this.baseFalcoRuleQuery(knex)
+          .where('rule.deleted_at', 'IS', null)
+          .andWhere(builder => {
+              builder.where('rule.all_clusters')
+                .orWhere('rule_cluster.cluster_id', '=', clusterId);
           })
-          .andWhere('deleted_at', 'IS', null)
-          .orderBy(options?.sortField || 'created_at', options?.sortDir || 'asc')
+          .orderBy(options?.sortField || 'rule.created_at', options?.sortDir || 'asc')
+        return knexnest(query)
           .then(rows => plainToInstance(FalcoRuleDto, rows))
     }
     async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
@@ -396,5 +396,40 @@ export class FalcoDao {
           .update(raw, '*')
           .where('id', '=', ruleId)
           .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
+    }
+
+    /**
+     * Will use the provided connection to create the basic query for retrieving falco rules.
+     * It will alias the tables
+     * Table | Alias
+     * falco_rules | rule
+     * falco_rules_namespace | rule_ns
+     * falco_rules_cluster | rule_cluster
+     * clusters | cluster
+     * */
+    protected baseFalcoRuleQuery(knex: Knex) {
+        return knex.from({ rule: 'falco_rules' })
+          .select({
+              '_id': 'rule.id',
+              '_deletedAt': 'rule.deleted_at',
+              '_createdAt': 'rule.created_at',
+              '_image': 'rule.image',
+              '_falcoRule': 'rule.falco_rule',
+              '_action': 'rule.action',
+              '_allNamespaces': 'rule.all_namespaces',
+              '_allClusters': 'rule.all_clusters',
+              '_namespaces__namespace': 'rule_ns.namespace',
+              '_clusters__clusterId': 'rule_cluster.cluster_id',
+              '_clusters__name': 'cluster.name'
+          })
+          .leftJoin({rule_ns: 'falco_rules_namespace'}, function() {
+              this.on('rule_ns.falco_rule_id', '=', 'rule.id')
+          })
+          .leftJoin({rule_cluster: 'falco_rules_cluster'}, function() {
+              this.on('rule_cluster.falco_rule_id', '=', 'rule.id')
+          })
+          .leftJoin({cluster: 'clusters'}, function() {
+              this.on('rule_cluster.cluster_id', '=', 'cluster.id')
+          });
     }
 }
