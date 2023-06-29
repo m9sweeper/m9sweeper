@@ -84,8 +84,9 @@ export class ReportsService {
       date?: string
     ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
         if (date && date !== format(new Date(), 'yyyy-MM-dd')) {
-            return this.reportsDao.getHistoricalRunningVulnerabilities(clusterId, date,
-              {limit, namespaces, isCompliant});
+            return this.reportsDao.getHistoricalRunningVulnerabilities(
+              clusterId, date, {limit, namespaces, isCompliant}
+            );
         } else {
             return this.reportsDao.getRunningVulnerabilities(clusterId, {namespaces, limit, isCompliant});
         }
@@ -131,7 +132,8 @@ export class ReportsService {
     }
 
     async getRunningVulnerabilitiesSummary(
-      clusterId: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+      clusterId: number,
+      options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string},
     ): Promise<ReportsRunningVulnerabilitiesSummaryDto> {
         return await this.reportsDao.getRunningVulnerabilitiesSummary(clusterId, options);
     }
