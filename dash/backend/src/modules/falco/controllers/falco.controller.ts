@@ -225,7 +225,7 @@ export class FalcoController {
       @Param('ruleId') ruleId: number,
       @Body() rule: FalcoRuleDto
     ): Promise<FalcoRuleDto> {
-        if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
+        if (ruleId !== rule?.id) {
             throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
         return this.falcoService.updateFalcoRule(rule, ruleId);

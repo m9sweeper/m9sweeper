@@ -295,8 +295,8 @@ export class FalcoService {
             for (const rule of rules) {
                 // For each fo the three fields: if it is blank, consider it a match
                 // Otherwise compare to the value from the falco event
-                const namespaceMatches = !rule.namespace
-                  || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
+                const namespaceMatches = true // !rule.namespace
+                //   || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
                 const ruleNameMatches = !rule.falcoRule
                   || new RegExp(rule.falcoRule.trim()).test(falcoEvent?.rule?.trim());
                 const imageNameMatches = !rule.image
