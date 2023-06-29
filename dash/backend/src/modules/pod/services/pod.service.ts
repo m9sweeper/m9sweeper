@@ -11,6 +11,7 @@ import {V1ContainerStatus} from "@kubernetes/client-node";
 import {V1Container} from "@kubernetes/client-node/dist/gen/model/v1Container";
 import {UtilitiesService} from "../../shared/services/utilities.service";
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
+import { PodComplianceForNamespace } from '../dto/pod-compliance-for-namespace';
 
 
 @Injectable()
@@ -142,6 +143,10 @@ export class PodService {
 
     async getPodByNamespace(namespace: string): Promise<any> {
         return this.podDao.getPodByNamespace(namespace);
+    }
+
+    async getCurrentPodsComplianceSummary(clusterId: number): Promise<PodComplianceForNamespace[]> {
+        return await this.podDao.getCurrentPodsComplianceSummary(clusterId);
     }
 
     async getPodsComplianceSummary(clusterId: number): Promise<PodComplianceSummaryDto[]> {

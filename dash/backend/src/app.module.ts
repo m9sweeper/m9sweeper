@@ -44,6 +44,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MetricsModule } from './modules/metrics/metrics.module';
 
 
 const myFormatter = info => {
@@ -104,6 +105,7 @@ const myFormatter = info => {
     }),
     HttpModule,
     SharedModule,
+    MetricsModule,
     AuthModule,
     UserModule,
     SettingsModule,
@@ -140,7 +142,6 @@ const myFormatter = info => {
         enabled: true
       },
     }),
-    ScheduleModule.forRoot(),
   ],
   providers: [],
 })
