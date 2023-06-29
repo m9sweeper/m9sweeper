@@ -91,7 +91,7 @@ $ms-default-theme: mat.define-light-theme((
   // falco dialog height
   mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat-mdc-dialog-container .mdc-dialog__surface {
     height: fit-content;
-    overflow-y: auto;
+   // overflow-y: auto;
   }
 
 

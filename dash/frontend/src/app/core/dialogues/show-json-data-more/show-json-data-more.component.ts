@@ -169,7 +169,9 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   onClickShare(){
       this.dialog.open(ShareEventComponent, {
-      width: '100%'
+      // width: '100%'
+      // minHeight: '600px',
+        height: 'fit-content'
     });
   }
 
