@@ -10,7 +10,7 @@ import {ValidationPipe} from '@nestjs/common';
 import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
 import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
-import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
+import { PrometheusV1Service } from './modules/metrics/services/prometheus-v1.service';
 
 
 async function registerSwagger(app) {

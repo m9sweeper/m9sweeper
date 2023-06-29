@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import {forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common'
 import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {ImageDto} from '../dto/image-dto';
@@ -28,7 +29,7 @@ export class ImageService {
     ) {
     }
 
-    async getAllImagesByClusterId(clusterId: number): Promise<{total: number, listOfImages: ListOfImagesDto[]}> {
+    async getAllImagesByClusterId(clusterId: number): Promise<{total: string, listOfImages: ListOfImagesDto[]}> {
         const images = {
             total: undefined,
             listOfImages: undefined
@@ -37,8 +38,8 @@ export class ImageService {
         if (checkClusterById) {
             const listOfImages = await this.imageDao.loadImage({'i.deleted_at': null, 'i.cluster_id': clusterId});
             const total = await this.imageDao.countImage({'i.deleted_at': null, 'i.cluster_id': clusterId});
-            images.total = listOfImages;
-            images.listOfImages = total;
+            images.total = total;
+            images.listOfImages = listOfImages;
             return images;
         }
     }
