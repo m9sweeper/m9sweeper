@@ -11,7 +11,6 @@ import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
 import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
 import {PrometheusService} from "./modules/shared/services/prometheus.service";
-import { M9sweeperCronJobService } from "./cron-jobs/m9sweeper_cron_jobs.service";
 
 
 async function registerSwagger(app) {
@@ -192,13 +191,6 @@ async function bootstrap() {
       prometheusService.responses.labels(req.method, getRoute(req.url), res.statusCode).observe(time);
     }
   }));
-
-  const m9sCronService = app.get(M9sweeperCronJobService);
-  try {
-    await m9sCronService.updateExceptionAndImageMetrics();
-  } catch (e) {
-    logger.error('There was an error setting the initial v1 exception and image metrics', e, 'bootstrap');
-  }
 
   const configurationService = app.get(ConfigService);
 
