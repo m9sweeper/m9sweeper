@@ -9,9 +9,9 @@ export class ChartSizeService {
   ) {}
 
   /** Get the size for fullscreen charts displayed on the reports pages based on
-   * the current window size */
-  getReportChartSize(): [number, number] {
-    const screenWidth = this.getScreenWidth();
+   * the current window size
+   */
+  getReportChartSize(screenWidth: number): [number, number] {
     let chartWidth: number;
     if (screenWidth < 600) {
       chartWidth = 600;
@@ -27,8 +27,7 @@ export class ChartSizeService {
 
   getDashboardChartSize(breakpointLarge = 1200,
                         breakpointMedium = 800,
-                        dashboard = false): [number, number] {
-    const screenWidth = this.getScreenWidth(dashboard);
+                        screenWidth: number): [number, number] {
     let chartWidth: number;
     if (screenWidth >= breakpointLarge) {
       chartWidth = Math.floor(screenWidth / 3) - 40;
@@ -40,19 +39,5 @@ export class ChartSizeService {
     // Keep the chart at a consistent aspect ratio through window size changes
     const chartHeight = Math.floor((chartWidth * 8) / 16);
     return [chartWidth, chartHeight];
-  }
-
-  getScreenWidth(dashboard: boolean = false): number {
-    // the cluster list page uses a different property to track the size of the internal window than the rest
-    // of  the application. Allow users to specify when they need the alternate value
-    if (dashboard) {
-      return +document.documentElement.style
-        .getPropertyValue('--dashboard-container-width')
-        .replace('px', '');
-    } else {
-      return +document.documentElement.style
-        .getPropertyValue('--cluster-container-width')
-        .replace('px', '');
-    }
   }
 }

@@ -107,6 +107,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   breakpointLarge = 1200;
   breakpointMedium = 800;
   resizeTimeout;
+  innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
@@ -167,9 +168,11 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   setChartHeightWidth(){
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
+      const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
+      this.innerScreenWidth = innerWindow.offsetWidth;
       this.updateFormatting();
       this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, false);
+        this.breakpointMedium, this.innerScreenWidth);
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
     }, 50);
@@ -379,12 +382,9 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   updateFormatting() {
-    const screenWidth = +document.documentElement.style
-      .getPropertyValue('--cluster-container-width')
-      .replace('px', '');
-    if (screenWidth >= this.breakpointLarge) {
+    if (this.innerScreenWidth >= this.breakpointLarge) {
       this.currentCardSize = 'col-xs-4';
-    } else if (screenWidth >= this.breakpointMedium) {
+    } else if (this.innerScreenWidth >= this.breakpointMedium) {
       this.currentCardSize = 'col-xs-6';
     } else {
       this.currentCardSize = 'col-xs-12';
