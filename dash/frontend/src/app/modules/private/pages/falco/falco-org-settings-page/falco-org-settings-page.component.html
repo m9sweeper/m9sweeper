@@ -1,0 +1,35 @@
+<div class="page-container">
+  <div class="page-container-content">
+    <app-sub-navigation title="Falco Settings" buttonTitle="Add Rule"></app-sub-navigation>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Falco Rules
+          <button mat-raised-button color="primary" (click)="openAddEditModal()">Add Rule</button>
+        </mat-card-title>
+      </mat-card-header>
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-4" *ngFor="let rule of rules; index as idx">
+            <div class="rule-container">
+              <strong>{{rule.action | titlecase}}</strong> when the following are true:
+              <div class="pl-10">
+                <p *ngIf="rule.namespace">
+                  Namespace is: <strong>{{ rule.namespace }}</strong>
+                </p>
+                <p *ngIf="!!rule.image">
+                  Image matches: <strong>{{ rule.image }}</strong>
+                </p>
+                <p *ngIf="!!rule.falcoRule">
+                  Falco rule matches: <strong>{{ rule.falcoRule }}</strong>
+                </p>
+                <div class="row">
+                  <button mat-raised-button color="primary" (click)="openAddEditModal(rule, idx)">Edit</button>
+                  <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(rule.id, idx)">Delete</button>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

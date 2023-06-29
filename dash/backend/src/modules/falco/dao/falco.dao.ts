@@ -377,15 +377,17 @@ export class FalcoDao {
     }
 
 
-    async listActiveFalcoRulesForCluster(clusterId: number, options?: { sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+    async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
         const knex = await this.databaseService.getConnection();
         const query = this.baseFalcoRuleQuery(knex)
           .where('rule.deleted_at', 'IS', null)
-          .andWhere(builder => {
-              builder.where('rule.all_clusters')
-                .orWhere('rule_cluster.cluster_id', '=', clusterId);
-          })
           .orderBy(options?.sortField || 'rule.created_at', options?.sortDir || 'asc')
+        if (options?.clusterId) {
+            query.andWhere(builder => {
+                    builder.where('rule.all_clusters')
+                      .orWhere('rule_cluster.cluster_id', '=', options.clusterId);
+                })
+        }
         return knexnest(query)
           .then(rows => plainToInstance(FalcoRuleDto, rows))
     }
