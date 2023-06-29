@@ -18,10 +18,10 @@ import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import {LOCAL_AUTH_RESPONSE_SCHEMA} from '../open-api-schema/non-redirectable-auth';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 import {AuthenticationType} from '../enum/AuthenticationType';
-import {LoginCounterService} from '../services/PrometheusService';
 import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {AuditLogDto} from '../../audit-log/dto/audit-log.dto';
 import common from "../../../config/common";
+import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 
 @ApiTags('Authentication')
 @Controller('non-redirectable-login')
@@ -37,7 +37,7 @@ export class NonRedirectableLoginController {
         private readonly userProfileService: UserProfileService,
         private readonly jwtUtility: JwtUtilityService,
         private readonly logger: MineLoggerService,
-        private readonly loginCounterService: LoginCounterService,
+        private readonly prometheusV1Service: PrometheusV1Service,
         private readonly auditLogService: AuditLogService,
     ) {}
 
@@ -101,7 +101,7 @@ export class NonRedirectableLoginController {
         schema: LOCAL_AUTH_RESPONSE_SCHEMA
     })
     async localAuthLoginAction(@Body() loginDto: LoginDto): Promise<any> {
-        this.loginCounterService.counter.inc(1);
+        this.prometheusV1Service.loginCounter.inc(1);
         const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(loginDto.userName);
         if (users && users.length > 0) {
             const user: UserProfileDto = users.pop();

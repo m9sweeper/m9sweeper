@@ -31,7 +31,7 @@ import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
-import {PrometheusService} from "../../shared/services/prometheus.service";
+import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 import {AuditLogService} from "../../audit-log/services/audit-log.service";
 
 @Injectable()
@@ -44,7 +44,7 @@ export class ClusterService {
       private readonly kubernetesClusterService: KubernetesClusterService,
       private readonly exceptionBlockService: ExceptionBlockService,
       private readonly configService: ConfigService,
-      private readonly prometheusService: PrometheusService,
+      private readonly prometheusService: PrometheusV1Service,
       private readonly auditLogService: AuditLogService,
   ) {}
 
