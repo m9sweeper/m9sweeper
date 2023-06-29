@@ -1,0 +1,24 @@
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
+{{- if and .Values.prometheusOperator.enabled .Values.grafana.enabled .Values.grafana.defaultDashboards.enabled }}
+{{- $files := .Files.Glob "grafana-dashboards/*.json" }}
+{{- $appName := include "dash.grafana-name" }}
+{{- if $files }}
+apiVersion: v1
+kind: ConfigMapList
+items:
+  {{- range $path, $fileContents := $files }}
+  {{- $dashboardName := regexReplaceAll "(^.*/)(.*)\\.json$" $path "${2}" }}
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ printf "%s-%s" $appName $dashboardName | trunc 63 | trimSuffix "-" }}
+      labels:
+        {{- include "dash.labels" . | nindent 8 }}
+        {{- $.Values.grafana.labels | toYaml | nindent 8 }}
+        app: {{ printf "%s" $appName }}
+    data:
+      {{ $dashboardName }}.json: |
+        {{- $.Files.Get $path | toJson | nindent 8 }}
+{{- end }}
+{{- end }}
+{{- end }}
