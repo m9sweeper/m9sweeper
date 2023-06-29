@@ -277,23 +277,24 @@ export class ReportsDao {
         return {count, results: queryResults};
     }
 
-  async getRunningVulnerabilitiesSummary(clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string})
-    : Promise<ReportsRunningVulnerabilitiesSummaryDto> {
-    const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
-    const outerquery = knex.select([
-      knex.raw('SUM(summary_info.total_critical) AS total_critical'),
-      knex.raw('SUM(summary_info.total_fixable_critical) AS total_fixable_critical'),
-      knex.raw('SUM(summary_info.total_major) AS total_major'),
-      knex.raw('SUM(summary_info.total_fixable_major) AS total_fixable_major'),
-      knex.raw('SUM(summary_info.total_medium) AS total_medium'),
-      knex.raw('SUM(summary_info.total_fixable_medium) AS total_fixable_medium'),
-      knex.raw('SUM(summary_info.total_low) AS total_low'),
-      knex.raw('SUM(summary_info.total_fixable_low) AS total_fixable_low'),
-      knex.raw('SUM(summary_info.total_negligible) AS total_negligible'),
-      knex.raw('SUM(summary_info.total_fixable_negligible) AS total_fixable_negligible')
-    ]).from(query.as('summary_info'));
-    return outerquery.first().then(result => plainToInstance(ReportsRunningVulnerabilitiesSummaryDto, result));
-  }
+    async getRunningVulnerabilitiesSummary(
+      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+    ): Promise<ReportsRunningVulnerabilitiesSummaryDto> {
+      const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
+      const outerquery = knex.select([
+        knex.raw('SUM(summary_info.total_critical) AS total_critical'),
+        knex.raw('SUM(summary_info.total_fixable_critical) AS total_fixable_critical'),
+        knex.raw('SUM(summary_info.total_major) AS total_major'),
+        knex.raw('SUM(summary_info.total_fixable_major) AS total_fixable_major'),
+        knex.raw('SUM(summary_info.total_medium) AS total_medium'),
+        knex.raw('SUM(summary_info.total_fixable_medium) AS total_fixable_medium'),
+        knex.raw('SUM(summary_info.total_low) AS total_low'),
+        knex.raw('SUM(summary_info.total_fixable_low) AS total_fixable_low'),
+        knex.raw('SUM(summary_info.total_negligible) AS total_negligible'),
+        knex.raw('SUM(summary_info.total_fixable_negligible) AS total_fixable_negligible')
+      ]).from(query.as('summary_info'));
+      return outerquery.first().then(result => plainToInstance(ReportsRunningVulnerabilitiesSummaryDto, result));
+    }
 
     async getHistoricalRunningVulnerabilities(clusterId: number, date: string, options: {limit?: number, namespaces?: string[], isCompliant?: string})
         : Promise<ReportsRunningVulnerabilitiesPreviewDto> {
