@@ -29,7 +29,7 @@ export class ClusterValidationController {
   // @UseGuards(AuthGuard, AuthorityGuard)
   @HttpCode(200)
   async validateRequest(@Req() request: Request, @Body() body: AdmissionReviewDto, @Param('clusterId') clusterId: number): Promise <AdmissionReviewReplyDto> {
-    console.log(`.....................................Validating webhook request for cluster ${clusterId} started at ${new Date().toUTCString()}.....................................`);
+    this.logger.log({label: 'Validating webhook request for cluster', data: { clusterId, startTime: new Date().toUTCString() }}, 'ClusterValidationController.validateRequest');
     const parsedRequest = plainToInstance(AdmissionReviewDto, request.body);
     let response: AdmissionReviewReplyDto;
     this.prometheusService.webhookApiCalled.inc();
@@ -62,7 +62,7 @@ export class ClusterValidationController {
         await this.clusterEventService.createClusterEvent(clusterEventObject, clusterId);
       }
     }
-    console.log(`.....................................Validating webhook request for cluster ${clusterId} ended at ${new Date().toUTCString()}.....................................`);
+    this.logger.log({label: 'Webhook request validation for cluster complete', data: { clusterId, endTime: new Date().toUTCString() }}, 'ClusterValidationController.validateRequest');
     return response;
   }
 }

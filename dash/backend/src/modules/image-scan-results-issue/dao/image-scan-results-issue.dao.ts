@@ -318,7 +318,6 @@ export class ImageScanResultsIssueDao {
             // .limit(limit)
             // .offset(page * limit)
             .orderByRaw(`${sort.field} ${sort.direction}`);
-        // console.log('QUERY: ', query.toSQL());
         return await knexnest(query)
             .then(data => plainToInstance(ImageScanResultsIssueDto, data));
     }

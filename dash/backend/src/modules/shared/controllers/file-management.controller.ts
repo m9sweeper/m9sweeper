@@ -6,6 +6,7 @@ import {ResponseTransformerInterceptor} from '../../../interceptors/response-tra
 import {MineFileDto} from '../dto/mine-file.dto';
 import {ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {UPLOAD_FILES_REQUEST_SCHEMA, UPLOAD_FILES_RESPONSE_SCHEMA} from '../open-api-schema/file-management-schema';
+import { MineLoggerService } from '../services/mine-logger.service';
 
 @ApiTags('File Management')
 @ApiBearerAuth('jwt-auth')
@@ -14,7 +15,10 @@ import {UPLOAD_FILES_REQUEST_SCHEMA, UPLOAD_FILES_RESPONSE_SCHEMA} from '../open
 @Controller('file-management')
 export class FileManagementController {
 
-    constructor(private readonly fileManagementService: FileManagementService){}
+    constructor(
+      private readonly fileManagementService: FileManagementService,
+      private logger: MineLoggerService,
+    ) {}
 
     @Post('upload')
     @UseInterceptors(AnyFilesInterceptor())
@@ -44,7 +48,7 @@ export class FileManagementController {
                 res.end()
             });
             file.stream.on('error', (error) => {
-                console.log('Error: ',error);
+                this.logger.error({label: 'Error viewing file'}, error, 'FileManagementController.viewFile');
                 res.end()
             });
             file.stream.pipe(res);

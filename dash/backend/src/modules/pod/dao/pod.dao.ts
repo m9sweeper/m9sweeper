@@ -6,10 +6,14 @@ import { PodDto } from '../dto/pod-dto';
 import { PodComplianceDto } from '../dto/pod-history-compliance-dto';
 import {PodHistoryDto} from "../dto/pod-history-dto";
 import { PodComplianceSummaryGroupDto } from '../dto/pod_compliance_sumamry_group_dto';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class PodDao {
-    constructor(private databaseService: DatabaseService) {}
+    constructor(
+      private databaseService: DatabaseService,
+      private logger: MineLoggerService,
+    ) {}
 
     async getAllPods(clusterId: number, namespace: string, sort, page?: number, limit?: number): Promise<PodDto[]>{
         const knex = await this.databaseService.getConnection();
@@ -322,7 +326,7 @@ export class PodDao {
             .returning('id')
             .then(results => !!results ? results[0]?.id : null)
             .catch(e => {
-                console.log(e);
+                this.logger.error({label: 'Error saving pod', data: { pod }}, e, 'PodDao.savePod');
                 Promise.reject(0);
             });
         if (id) {
@@ -407,10 +411,9 @@ export class PodDao {
       const idsToDelete = toDelete.map(obj => obj.id);
 
       if (!idsToDelete.length) {
-        // console.log(`No dead pods to delete in cluster ${clusterId}`);
         return;
       }
-      console.log(`Deleting ${idsToDelete.length} dead pods in cluster ${clusterId}. ids: ${idsToDelete}`);
+      this.logger.log({label: 'Deleting dead pods', data: { clusterId, runningPodNames, idsToDelete, numPodsToDelete: idsToDelete.length }}, 'PodDao.deleteDeadPods');
 
       // delete pods and their image associations
       await knex.from('pod_images')
@@ -433,7 +436,6 @@ export class PodDao {
           const historyIdsToDelete = (await knex('history_kubernetes_pods')
             .pluck('id')
             .where({'saved_date': day}));
-          console.log(JSON.stringify(historyIdsToDelete[0]));
           await knex('history_pod_images')
             .del().whereIn('history_pod_id', historyIdsToDelete)
             .transacting(trx);
@@ -442,10 +444,10 @@ export class PodDao {
             .transacting(trx);
         })
         .then(() => {
-          console.log("Successfully cleared pod history for date " + day);
+          this.logger.log({label: 'Successfully cleared pod history for date', data: { date: day }}, 'PodDao.clearPodHistory');
         })
         .catch(e => {
-          console.log("Error duing clearing pod history " + e);
+          this.logger.error({label: 'Error clearing pod history', data: { date: day }}, e, 'PodDao.clearPodHistory');
         });
 
     }

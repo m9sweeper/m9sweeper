@@ -342,7 +342,6 @@ export class ImageDao {
           .where('p.relevant_for_all_clusters', true)
           .andWhere('p.deleted_at', null)
           .andWhereRaw(`p.id NOT IN (select policy_id from policy_cluster where policy_cluster.cluster_id = ?)`,[clusterId]);
-        // console.log(query.toSQL());
         return knexnest(query).then(data => data[0]);
     }
 
@@ -492,7 +491,6 @@ export class ImageDao {
           .where({
               'kn.cluster_id': clusterId
           });
-        // console.log(query.toSQL());
         return query;
     }
 
@@ -888,7 +886,6 @@ export class ImageDao {
         if (filters.hasOwnProperty('endDate')) {
             query.whereRaw(`TO_TIMESTAMP(CAST(isr.created_at/1000 AS BIGINT))::DATE <= ?`, [filters['endDate']]);
         }
-        console.log(query.toSQL());
         return query;
     }
 
@@ -957,7 +954,6 @@ export class ImageDao {
         const query = knex('images')
           .where({'id': imageId})
           .update({'scan_queued': status}, ['id']);
-        // console.log(query.toSQL());
         return await query
           .then(result => result[0].id);
     }
@@ -1034,7 +1030,6 @@ export class ImageDao {
           ])
           .from('kubernetes_images as ki')
           .where('ki.image_hash', imageHash);
-        // console.log(query.toSQL());
         return query.then(data => {
             return data;
         });
@@ -1048,7 +1043,6 @@ export class ImageDao {
           ])
           .from('kubernetes_images as ki')
           .where('ki.image_hash', imageHash);
-        // console.log(query.toSQL());
         return query.then(data => {
             return data;
         });
@@ -1060,7 +1054,6 @@ export class ImageDao {
             .count('i.id as count')
             .from('images as i')
             .where('i.scan_results', complianceType);
-        // console.log(query.toSQL());
         return query.then(data => {
             return data;
         });

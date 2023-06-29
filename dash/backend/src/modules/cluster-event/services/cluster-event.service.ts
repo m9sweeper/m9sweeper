@@ -14,11 +14,15 @@ import {uuid} from 'uuidv4';
 import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {ClusterDao} from "../../cluster/dao/cluster.dao";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class ClusterEventService {
-    constructor(private readonly clusterEventDao: ClusterEventDao,
-                private readonly clusterDao: ClusterDao){}
+    constructor(
+      private readonly clusterEventDao: ClusterEventDao,
+      private readonly clusterDao: ClusterDao,
+      private logger: MineLoggerService,
+    ) {}
 
     async createClusterEvent(clusterEvent: ClusterEventCreateDto, clusterId: number): Promise<{id: number}[]> {
         const clusterEventObject: any = instanceToPlain(clusterEvent);
@@ -95,9 +99,9 @@ export class ClusterEventService {
             eventBody.source.host = kubeConfig.getCurrentContext();
 
             const response = await eventsApi.createNamespacedEvent(namespace, eventBody);
-            // console.log(response);
+            this.logger.log({label: 'Cluster event created', data: { response }}, 'ClusterEventService.createK8sClusterEvent');
         } catch (e) {
-            console.log('Error: ', e);
+            this.logger.error({label: 'Error creating cluster event'}, e, 'ClusterEventService.createK8sClusterEvent');
         }
     }
 

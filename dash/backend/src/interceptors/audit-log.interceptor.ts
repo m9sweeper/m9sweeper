@@ -4,12 +4,16 @@ import {catchError, map} from "rxjs/operators";
 import {UserProfileDto} from "../modules/user/dto/user-profile-dto";
 import {AuditLogService} from "../modules/audit-log/services/audit-log.service";
 import {AuditLogDto} from "../modules/audit-log/dto/audit-log.dto";
+import { MineLoggerService } from '../modules/shared/services/mine-logger.service';
 
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
-    constructor(@Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
-                private readonly auditLogService: AuditLogService) {
-    }
+    constructor(
+      @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+      private readonly auditLogService: AuditLogService,
+      private logger: MineLoggerService,
+    ) {}
+
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
         const req = context.switchToHttp().getRequest();
         const userId = this._loggedInUser.id;
@@ -23,9 +27,7 @@ export class AuditLogInterceptor implements NestInterceptor {
                 return response;
             }),
         catchError(err => {
-                console.log('error ............................');
-                console.log(err);
-                console.log('error ............................');
+                this.logger.error({label: 'Error in the audit log interceptor'}, err, 'AuditLogInterceptor.intercept');
                 const auditLog = new AuditLogDto();
                 auditLog.entityType = err.response.entityType ?? 'Unknown';
                 auditLog.entityId = err.response.entityId ?? 0;

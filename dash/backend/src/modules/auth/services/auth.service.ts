@@ -19,8 +19,6 @@ export class AuthService {
     public checkAuthority(currentUserAuth: UserAuthority [], validAuthority: AuthorityId []): boolean {
         var allowAuth = false;
         currentUserAuth?.forEach(userAuth => {
-            //console.log("userAuth: ", userAuth);
-            //console.log("validAuthority.indexOf(userAuth.id)", validAuthority.indexOf(userAuth.id));
             if(validAuthority.indexOf(userAuth.id)!==-1){
                 allowAuth = true;
             }

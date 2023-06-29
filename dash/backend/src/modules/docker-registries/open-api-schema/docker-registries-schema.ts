@@ -264,10 +264,8 @@ export class RegistryQueryParamsDto {
     @Expose()
     @Transform(({value}) => {
         value = value || [];
-        // console.log('filter: ', value, value.map(v => plainToInstance(BaseFilter, v)))
         return value.map(v => {
             // plainToInstance(BaseFilter, v)
-            console.log('filter: ', v, typeof v, JSON.parse(v));
             return plainToInstance(BaseFilter, JSON.parse(v));
         });
     }, { toClassOnly: true })
