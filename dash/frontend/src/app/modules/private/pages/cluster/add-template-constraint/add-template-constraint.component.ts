@@ -11,7 +11,7 @@ import {TemplateConstraintManifestComponent} from '../template-constraint-manife
 @Component({
   selector: 'app-add-template-constraint',
   templateUrl: './add-template-constraint.component.html',
-  styleUrls: ['./add-template-constraint.component.scss']
+  styleUrls: ['./add-template-constraint.component.scss', '../../../../../../styles.scss']
 })
 export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
