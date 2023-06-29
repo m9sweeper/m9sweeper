@@ -46,7 +46,8 @@ prometheusOperator:
   port: 9090
   scrapeInterval: "15s"
   defaultRules:
-    ruleOne:
+    enabled: true
+    newCVEs:
       enabled: true
     ruleTwo:
       enabled: true

@@ -1,0 +1,42 @@
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
+{{- if .Values.prometheusOperator.defaultRules.enabled }}
+{{- $prometheusAppName := include "dash.prom-name" . }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  {{- $lenRuleOne := len "newCVEs" }}
+  name: {{ printf "%s-newCVEs" ($prometheusAppName | trunc $lenRuleOne | trimSuffix "-") }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dash.labels" $ | nindent 4 }}
+    role: alert-rules
+    app: {{ printf "%s" $prometheusAppName }}
+spec:
+  groups:
+    {{- if .Values.prometheusOperator.defaultRules.newCVEs.enabled }}
+    - name: newCVEs
+      rules:
+        - alert: ManyNewCVEs
+          annotations:
+            description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
+            runbook_url: url_here
+            summary: The number of new CVEs breached 20
+          expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > 20
+          labels:
+            severity: warning
+    {{- end }}# closes if .Values.prometheusOperator.defaultRules.newCVEs.enabled
+    {{- if .Values.prometheusOperator.defaultRules.ruleTwo.enabled }}
+    - name: ruleTwo
+      rules:
+        - alert: ruleTwoName
+          annotations:
+            description: Description here
+            runbook_url: url_here
+            summary: Summary here
+          expr: (delta(num_major_cves[10m])) > 20
+          labels:
+            severity: warning
+    {{- end }}# closes if .Values.prometheusOperator.defaultRules.ruleTwo.enabled
+
+{{- end }}# closes if .Values.prometheusOperator.defaultRules.enabled

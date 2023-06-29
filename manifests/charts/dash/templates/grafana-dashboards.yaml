@@ -12,7 +12,6 @@ items:
     kind: ConfigMap
     metadata:
       name: {{ printf "%s-%s" $appName $dashboardName | trunc 63 | trimSuffix "-" }}
-      {{/*namespace: {{ template "prometheus-operator.namespace" $ }}*/}}
       labels:
         {{- include "dash.labels" . | nindent 8 }}
         {{- $.Values.grafana.labels | toYaml | nindent 8 }}
