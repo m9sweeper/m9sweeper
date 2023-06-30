@@ -4,7 +4,7 @@ import {IsNumber, IsOptional, Validate} from 'class-validator';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {RegexConstraint} from '../../../util/validator-constraints/regex-constraint';
 
-export class FalcoRuleDto {
+class FalcoRuleBaseDto {
   @Expose({name: 'id', toPlainOnly: true})
   @ApiProperty()
   @IsOptional()
@@ -46,16 +46,31 @@ export class FalcoRuleDto {
   @ApiProperty()
   @IsOptional()
   allNamespaces: boolean;
+}
 
+export class FalcoRuleDto extends FalcoRuleBaseDto {
   @ApiProperty()
   @IsOptional()
   /** Array of names of namespaces joined to this exception through the falco_rules_namespaces table */
-  namespaces: string[];
+  namespaces: FalcoRuleNamespaceDto[];
 
   @ApiProperty()
   @IsOptional()
   /** cluster ids & names retrieved using falco_rules_clusters table */
   clusters: FalcoRuleClusterDto[];
+}
+
+/** Used for submitting from the frontend for creating & updating the dto */
+export class FalcoRuleCreateDto extends FalcoRuleBaseDto {
+  @ApiProperty()
+  @IsOptional()
+  /** namespace names as strings */
+  namespaces: string[];
+
+  @ApiProperty()
+  @IsOptional()
+  /** cluster ids */
+  clusters: string[];
 }
 
 /** Represents information from faco_rules_cluster table */
@@ -74,7 +89,7 @@ export class FalcoRuleClusterDto {
 }
 
 export class FalcoRuleNamespaceDto {
-  @Expose({name: 'namespace_name', toPlainOnly: true})
+  @Expose({name: 'namespace', toPlainOnly: true})
   @ApiProperty()
   @IsOptional()
   name: string;

@@ -7,7 +7,7 @@ import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
-import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import { FalcoRuleCreateDto, FalcoRuleDto } from '../dto/falco-rule.dto';
 import {Knex} from 'knex';
 
 
@@ -368,14 +368,49 @@ export class FalcoDao {
         }
     }
 
-    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
-        const raw = instanceToPlain(rule);
+    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<number> {
         const knex = await this.databaseService.getConnection();
-        return knex.into('falco_rules')
-          .insert(raw, '*')
-          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
+        return knex.transaction(async (trx) => {
+            rule.allNamespaces = !rule?.namespaces?.length;
+            rule.allClusters = !rule?.clusters?.length;
+            let rawNamespaces = [];
+            if (!rule.allNamespaces) {
+                rawNamespaces = rule.namespaces.map(ns => {
+                    return { namespace: ns }
+                })
+            }
+            let rawClusters = [];
+            if (!rule.allClusters) {
+                rawClusters = rule.clusters.map(id => {
+                    return { cluster_id: id }
+                })
+            }
+
+            delete rule.namespaces;
+            delete rule.clusters;
+            const raw = instanceToPlain(rule);
+            const id = (await trx.insert(raw, 'id').into('falco_rules'))[0]?.id;
+            if (!rule.allNamespaces) {
+                rawNamespaces.forEach(ns => ns.falco_rule_id = id);
+                await trx.insert(rawNamespaces).into('falco_rules_namespace')
+            }
+            if (!rule.allClusters) {
+                rawClusters.forEach(ns => ns.falco_rule_id = id);
+                await trx.insert(rawClusters).into('falco_rules_cluster')
+            }
+            return id;
+        });
     }
 
+    async getFalcoRuleById(id: number): Promise<FalcoRuleDto> {
+        console.log(id);
+        const knex = await this.databaseService.getConnection();
+        const query = this.baseFalcoRuleQuery(knex)
+          .where('rule.id', '=', id);
+
+        return knexnest(query)
+          .then(rows => plainToInstance(FalcoRuleDto, rows[0]))
+    }
 
     async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
         const knex = await this.databaseService.getConnection();

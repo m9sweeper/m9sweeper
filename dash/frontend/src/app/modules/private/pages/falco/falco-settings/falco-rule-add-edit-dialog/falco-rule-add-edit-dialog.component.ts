@@ -6,7 +6,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
 import {FalcoService} from '../../../../../../core/services/falco.service';
 import {AlertService} from '@full-fledged/alerts';
-import {take} from 'rxjs/operators';
+import {switchMap, take} from 'rxjs/operators';
+import {ClusterService} from '../../../../../../core/services/cluster.service';
+import {NamespaceService} from '../../../../../../core/services/namespace.service';
+import {ICluster} from '../../../../../../core/entities/ICluster';
+import {forkJoin, of} from 'rxjs';
 
 @Component({
   selector: 'app-falco-rule-add-edit-dialog',
@@ -17,6 +21,8 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
 
   ruleForm: FormGroup;
   namespaces: string[] = [];
+  clusters: ICluster[];
+  namespaceClusterMap = new Map<number, string[]>();
   actionOptions = [
     {
       displayName: 'Ignore',
@@ -35,7 +41,9 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     protected dialogRef: MatDialogRef<FalcoRuleAddEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) protected data: { namespaces: string[], rule: IFalcoRule, clusterId: number },
     protected falcoService: FalcoService,
-    protected alert: AlertService
+    protected alert: AlertService,
+    protected clusterService: ClusterService,
+    protected namespaceService: NamespaceService
   ) { }
 
   ngOnInit(): void {
@@ -44,14 +52,74 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
 
     this.ruleForm = this.fb.group({
       id: [this.data?.rule?.id || ''],
-      clusterId: [this.data?.rule?.clusterId || this.data.clusterId],
+      clusters: [[]],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
-      namespace: [this.data?.rule?.namespaces || ''],
+      namespaces: [this.data?.rule?.namespaces || []],
       falcoRule: [this.data?.rule?.falcoRule || '', [this.customValidators.regex]],
       image: [this.data?.rule?.image || '', [this.customValidators.regex]],
     }, {
-      validators: [this.customValidators.atLeastOne(['namespace', 'falcoRule', 'image'])]
+      validators: [this.customValidators.atLeastOne([
+        { key: 'namespaces', condition: (ns: string[]) => !!ns?.length},
+        { key: 'clusters', condition: (clusters: string[]) => !!clusters?.length},
+        { key: 'falcoRule', condition: (rule: string) => !!rule},
+        { key: 'image', condition: (image: string) => !!image}
+        ]),
+      ]});
+
+    const clusterInit$ = this.clusterService.getAllClusters()
+      .pipe(
+        take(1),
+        switchMap(resp => this.clusters = resp.data)
+      );
+
+    const namespaceInit$ = this.namespaceService.getCurrentK8sNamespaces()
+      .pipe(
+        take(1),
+        switchMap(resp => {
+          resp.data.forEach((ns) => {
+            const namespacesInCluster = this.namespaceClusterMap.get(ns.clusterId);
+            if (namespacesInCluster) {
+              namespacesInCluster.push(ns.name);
+            } else {
+              this.namespaceClusterMap.set(ns.clusterId, [ns.name]);
+            }
+          });
+          console.log(this.namespaceClusterMap);
+          return of(this.namespaceClusterMap);
+        })
+      );
+
+    forkJoin([namespaceInit$, clusterInit$])
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.setVisibleNamespaces();
+        }
       });
+  }
+
+  setVisibleNamespaces() {
+    // Get the list of all applicable cluster ids
+    let keys;
+    if (this.ruleForm.controls.clusters.value?.length) {
+      // If we have any cluster(s) selected, get their keys
+      keys = this.ruleForm.controls.clusters.value.map(id => +id);
+    } else {
+      // No cluster selected, get every namespace
+      keys = this.namespaceClusterMap.keys();
+    }
+
+    // Put all namespaces associated with an appropriate cluster into the set
+    const set = new Set<string>();
+    for (const key of keys) {
+      const namespaces = this.namespaceClusterMap.get(key);
+      namespaces.forEach(ns => set.add(ns));
+    }
+    // Add any already selected namespaces to the list
+    if (this.ruleForm.controls.namespaces.value) {
+      this.ruleForm.controls.namespaces.value.forEach(ns => set.add(ns));
+    }
+    this.namespaces = Array.from(set).sort();
   }
 
   save() {
