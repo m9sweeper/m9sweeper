@@ -1,12 +1,14 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Header,
     HttpException,
     HttpStatus,
     Param,
     Post,
+    Put,
     Query,
     UnauthorizedException,
     UseGuards,
@@ -18,17 +20,20 @@ import {AuthGuard} from '../../../guards/auth.guard';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoService} from '../service/falco.service';
 import {ResponseTransformerInterceptor} from '../../../interceptors/response-transformer.interceptor';
-import {ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import {FalcoWebhookInputDto} from '../dto/falco-webhook-input.dto';
 import {Authority} from '../../user/enum/Authority';
-import {ApiKeyDao} from "../../api-key/dao/api-key.dao";
-import {ApiKeyDto} from "../../api-key/dto/api-key-dto";
-import {UserDao} from "../../user/dao/user.dao";
-import {AuthService} from "../../auth/services/auth.service";
-import {AuthorityId} from "../../user/enum/authority-id";
-import {FalcoCountDto} from "../dto/falco-count.dto";
-import {FalcoSettingDto} from "../dto/falco-setting.dto";
-import { FalcoCsvDto } from '../dto/falco-csv-dto';
+import {ApiKeyDao} from '../../api-key/dao/api-key.dao';
+import {ApiKeyDto} from '../../api-key/dto/api-key-dto';
+import {UserDao} from '../../user/dao/user.dao';
+import {AuthService} from '../../auth/services/auth.service';
+import {AuthorityId} from '../../user/enum/authority-id';
+import {FalcoCountDto} from '../dto/falco-count.dto';
+import {FalcoSettingDto} from '../dto/falco-setting.dto';
+import {FalcoCsvDto} from '../dto/falco-csv-dto';
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleAction} from '../enums/falco-rule-action';
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 @ApiTags('Project Falco')
@@ -40,6 +45,7 @@ export class FalcoController {
         private readonly apiKeyDao: ApiKeyDao,
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
+        protected readonly logger: MineLoggerService
         // private readonly falcoEmailCommand: FalcoEmailCommand,
 
     ) {}
@@ -154,36 +160,37 @@ export class FalcoController {
         @Query('key') key: string
     ): Promise<FalcoDto> {
         // look up user by api key
-        const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
+        const currentUserAuthObj = await this.userDao.loadUserByApiKey(key || '');
         if (!currentUserAuthObj) {
             throw new UnauthorizedException('Access Denied!');
         }
 
         // get all authorities from the current user
         const currentUserAuth = currentUserAuthObj[0].authorities;
-        let isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
+        const isFalcoUser = this.authService.checkAuthority(currentUserAuth, [AuthorityId.FALCO]);
         if (!isFalcoUser) {
             throw new UnauthorizedException('Access Denied!');
         }
 
-        // @TODO: Will implement falco filters/rules settings at a later time
-        // check if falco settings rules should be applied
-        /*
-            const rules = getFalcoSettingsRules(clusterId);
-            for (rules : rule) {
-                if (rule.isRelevant(event)) {
-                    if (rule.affect === 'ignore') {
-                        return; // don't save this event - it is being filtered out
-                    }
-                }
-            }
-        */
+        const action = await this.falcoService.checkRules(clusterId, falcoLog);
+        // An ignore rule applied,
+        if (action === FalcoRuleAction.Ignore) {
+            this.logger.log('Ignoring Falco Event', {
+                clusterId,
+                namespace: falcoLog?.outputFields?.k8sNamespaceName,
+                rule: falcoLog?.rule,
+                image: falcoLog?.outputFields?.containerImageRepository,
+            });
+            return;
+        }
 
-        // Saved new falco log
-        return await this.falcoService.createFalcoLog(clusterId, falcoLog);
+        // Save new falco log
+        return await this.falcoService.createFalcoLog(clusterId, falcoLog, action === FalcoRuleAction.Silence);
     }
 
     @Post(':clusterid/settings')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoSetting(
         @Param('clusterid') clusterId: number,
         @Body() falcoSetting: FalcoSettingDto
@@ -192,4 +199,48 @@ export class FalcoController {
         return result;
     }
 
+    @Post(':clusterId/rules')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async createFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Body() rule: FalcoRuleDto
+    ): Promise<FalcoRuleDto> {
+        if (rule?.clusterId !== clusterId) {
+            throw new HttpException({ message: 'Cluster id in path does not match cluster ID in body.' }, HttpStatus.BAD_REQUEST);
+        }
+        delete rule.id;
+        return await this.falcoService.createFalcoRule(rule);
+    }
+
+    @Get(':clusterId/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async listActiveFalcoRulesForCluster(@Param('clusterId') clusterId: number): Promise<FalcoRuleDto[]> {
+        return this.falcoService.listActiveFalcoRulesForCluster(clusterId);
+
+    }
+
+    @Put(':clusterId/rules/:ruleId')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async updateFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Param('ruleId') ruleId: number,
+      @Body() rule: FalcoRuleDto
+    ): Promise<FalcoRuleDto> {
+        if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
+            throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
+        }
+        return this.falcoService.updateFalcoRule(rule, ruleId);
+    }
+
+    @Delete(':clusterId/rules/:ruleId')
+    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async deleteFalcoRule(
+      @Param('clusterId') clusterId: number,
+      @Param('ruleId') ruleId: number
+    ): Promise<FalcoRuleDto>  {
+        return this.falcoService.deleteFalcoRule(clusterId, ruleId);
+    }
 }

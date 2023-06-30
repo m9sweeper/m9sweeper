@@ -15,10 +15,13 @@ import {AuthGuard} from '../../../guards/auth.guard';
 import {UserAuthority, UserProfileDto} from '../../user/dto/user-profile-dto';
 import {ResponseTransformerInterceptor} from '../../../interceptors/response-transformer.interceptor';
 import {ApiBearerAuth, ApiResponse, ApiTags} from '@nestjs/swagger';
-import {AVAILABLE_AUTH_PROVIDER_RESPONSE_SCHEMA,
-        AUTH_VALIDATE_RESPONSE_SCHEMA,
-        AUTHORITY_LIST_RESPONSE_SCHEMA,
-        CHANGE_PASSWORD_RESPONSE_SCHEMA} from '../open-api-schema/authentication-meta-schema';
+import {
+    AUTH_CHECK_LOGIN_STATUS_RESPONSE_SCHEMA,
+    AUTH_VALIDATE_RESPONSE_SCHEMA,
+    AUTHORITY_LIST_RESPONSE_SCHEMA,
+    AVAILABLE_AUTH_PROVIDER_RESPONSE_SCHEMA,
+    CHANGE_PASSWORD_RESPONSE_SCHEMA
+} from "../open-api-schema/authentication-meta-schema";
 import { ConfigService } from '@nestjs/config';
 import {ActivateUserAccountDto} from '../dto/activate-user-account-dto';
 import {ResetPasswordService} from '../services/reset-password.service';
@@ -53,6 +56,19 @@ export class DefaultController {
     })
     async authValidateAction(): Promise<null> {
         return null;
+    }
+
+    @Get('check-status')
+    @ApiTags('Authentication Meta')
+    @ApiBearerAuth('jwt-auth')
+    @ApiResponse({
+        status: 201,
+        schema: AUTH_CHECK_LOGIN_STATUS_RESPONSE_SCHEMA
+    })
+    async checkAuthValidity(): Promise<{loggedIn: boolean}> {
+        return {
+            loggedIn: !!this._loggedInUser,
+        };
     }
 
     @Get('available-providers')

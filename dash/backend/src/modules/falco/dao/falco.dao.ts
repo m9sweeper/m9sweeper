@@ -7,6 +7,8 @@ import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
+import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {option} from 'yargs';
 
 
 @Injectable()
@@ -364,5 +366,32 @@ export class FalcoDao {
         } else {
             return null;
         }
+    }
+
+    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+        return knex.into('falco_rules')
+          .insert(raw, '*')
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
+    }
+
+
+    async listActiveFalcoRulesForCluster(clusterId: number, options?: { sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+        const knex = await this.databaseService.getConnection();
+        return knex.from('falco_rules')
+          .select('*')
+          .where('cluster_id', '=', clusterId)
+          .andWhere('deleted_at', 'IS', null)
+          .orderBy(options?.sortField || 'created_at', options?.sortDir || 'asc')
+          .then(rows => plainToInstance(FalcoRuleDto, rows))
+    }
+    async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
+        const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+        return knex.into('falco_rules')
+          .update(raw, '*')
+          .where('id', '=', ruleId)
+          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
     }
 }

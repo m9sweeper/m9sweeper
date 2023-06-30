@@ -20,10 +20,8 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
   isSpecificEmailHidden = true;
-  foundSavedSeverityLevel = false;
 
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
@@ -56,7 +54,7 @@ export class FalcoSettingsComponent implements OnInit {
     this.route.parent.parent.params
       .pipe(take(1))
       .subscribe(param => {
-        this.clusterId = param.id;
+        this.clusterId = +param.id;
       });
 
     this.displaySetting();

@@ -2,8 +2,8 @@ apiVersion: v2
 name: rabbitmq
 description: A Helm chart for the RabbitMQ
 type: application
-version: 0.0.1
-appVersion: 0.0.1
+version: 0.0.0
+appVersion: 3.8.34
 maintainers:
   - email: info@m9sweeper.io
     name: m9sweeper Support Team

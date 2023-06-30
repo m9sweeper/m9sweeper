@@ -1,7 +1,7 @@
 image:
   repository: rabbitmq
   pullPolicy: Always
-  tag: "3.8-alpine"
+  tag: "3.8.34-alpine"
 
 service:
   type: ClusterIP

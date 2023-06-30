@@ -127,6 +127,8 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
+import { FalcoRuleComponent } from './pages/falco/falco-settings/falco-rule/falco-rule.component';
+import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-settings/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
 
 
 @NgModule({
@@ -215,6 +217,8 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,
+    FalcoRuleComponent,
+    FalcoRuleAddEditDialogComponent,
   ],
   imports: [
     CommonModule,
