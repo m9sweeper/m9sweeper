@@ -70,13 +70,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
   /** Adjust size and number per row of report cards based on the size of the container element instead of
    * the overall screen size. Allows card items to resize when the left navigation bar expands or contracts. */
   updateFormatting() {
-    const screenWidth = +document.documentElement.style
-      .getPropertyValue('--cluster-container-width')
-      .replace('px', '');
+    const innerWindow = document.getElementsByTagName('app-reports').item(0) as HTMLElement;
+    const innerScreenWidth = innerWindow.offsetWidth;
     let className = 'reports-item ';
-    if (screenWidth >= 1200) {
+    if (innerScreenWidth >= 1200) {
       className = className.concat('col-xs-4');
-    } else if (screenWidth >= 900) {
+    } else if (innerScreenWidth >= 900) {
       className = className.concat('col-xs-6');
     } else {
       className = className.concat('col-xs-12');

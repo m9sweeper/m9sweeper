@@ -163,7 +163,9 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
   }
 
   setChartSize() {
-    this.barChartAttributes.view = this.chartSizeService.getReportChartSize();
+    const innerWindow = document.getElementsByTagName('app-worst-images').item(0) as HTMLElement;
+    const innerScreenWidth = innerWindow.offsetWidth;
+    this.barChartAttributes.view = this.chartSizeService.getReportChartSize(innerScreenWidth);
   }
 
   ngOnDestroy() {

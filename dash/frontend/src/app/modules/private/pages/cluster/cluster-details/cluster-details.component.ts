@@ -67,7 +67,8 @@ export class ClusterDetailsComponent implements OnInit {
       leftNavTag.className = 'cluster-group-menu';
       clusterDashTag.className = 'cluster-dashboard';
     }
-
+    // Emit a window resize event to trigger UI handlers listening for resize events
+    window.dispatchEvent(new Event('resize'));
   }
   getClusterById(clusterId: number) {
     this.clusterService.getClusterById(clusterId).subscribe(response => {
