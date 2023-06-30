@@ -16,7 +16,7 @@
         (selectionChange)="setVisibleNamespaces()">
           <mat-option
             *ngFor="let cluster of clusters"
-            value="{{cluster.id}}"
+            [value]="cluster.id"
           >
             {{cluster.name}}
           </mat-option>

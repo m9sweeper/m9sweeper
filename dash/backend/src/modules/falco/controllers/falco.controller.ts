@@ -203,16 +203,16 @@ export class FalcoController {
         return this.falcoService.listActiveFalcoRules();
     }
 
-    @Put(':clusterId/rules/:ruleId')
+    @Put('/rules/:ruleId')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async updateFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number,
-      @Body() rule: FalcoRuleDto
+      @Body() rule: FalcoRuleCreateDto
     ): Promise<FalcoRuleDto> {
         if (ruleId !== rule?.id) {
-            throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
+            throw new HttpException({ message: 'rule id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
         return this.falcoService.updateFalcoRule(rule, ruleId);
     }
@@ -223,7 +223,7 @@ export class FalcoController {
     async deleteFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number
-    ): Promise<FalcoRuleDto>  {
+    ): Promise<number>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
     }
 
