@@ -201,7 +201,6 @@ export class FalcoController {
     @UseGuards(AuthGuard, AuthorityGuard)
     async listActiveFalcoRulesForCluster(): Promise<FalcoRuleDto[]> {
         return this.falcoService.listActiveFalcoRules();
-
     }
 
     @Put(':clusterId/rules/:ruleId')
