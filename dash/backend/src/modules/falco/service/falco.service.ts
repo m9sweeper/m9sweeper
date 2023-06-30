@@ -270,6 +270,10 @@ export class FalcoService {
         return this.falcoDao.listActiveFalcoRules();
     }
 
+    async getFalcoRuleById(ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.getFalcoRuleById(ruleId);
+    }
+
     async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
         // If we request the cache, and have unexpired cached data, return that.
         if (useCached) {
@@ -285,13 +289,13 @@ export class FalcoService {
         return rules;
     }
 
-    async updateFalcoRule(rule: FalcoRuleDto, ruleId: number): Promise<FalcoRuleDto> {
-        return this.falcoDao.updateFalcoRule(rule, ruleId);
+    async updateFalcoRule(rule: FalcoRuleCreateDto, ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.updateFalcoRule(rule, ruleId)
+          .then(() => this.getFalcoRuleById(ruleId));
     }
 
-    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<FalcoRuleDto> {
-        const edits = Object.assign(new FalcoRuleDto(), { deletedAt: Date.now() });
-        return this.falcoDao.updateFalcoRule(edits, ruleId);
+    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<number> {
+        return this.falcoDao.deleteFalcoRule(ruleId);
     }
 
     async checkRules(clusterId: number, falcoEvent: FalcoWebhookInputDto): Promise<FalcoRuleAction | null> {
