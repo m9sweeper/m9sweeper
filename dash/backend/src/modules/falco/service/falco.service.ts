@@ -12,7 +12,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
-import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {DataCache} from '../../../util/classes/data-cache';
 
@@ -261,8 +261,9 @@ export class FalcoService {
         }
     }
 
-    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
-        return this.falcoDao.createFalcoRule(rule);
+    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<FalcoRuleDto> {
+        return this.falcoDao.createFalcoRule(rule)
+          .then(id => this.falcoDao.getFalcoRuleById(id));
     }
 
     async listActiveFalcoRules(): Promise<FalcoRuleDto[]> {

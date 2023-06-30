@@ -31,7 +31,7 @@ import {AuthorityId} from '../../user/enum/authority-id';
 import {FalcoCountDto} from '../dto/falco-count.dto';
 import {FalcoSettingDto} from '../dto/falco-setting.dto';
 import {FalcoCsvDto} from '../dto/falco-csv-dto';
-import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
@@ -191,7 +191,7 @@ export class FalcoController {
     @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
-      @Body() rule: FalcoRuleDto
+      @Body() rule: FalcoRuleCreateDto
     ): Promise<FalcoRuleDto> {
         delete rule.id;
         return await this.falcoService.createFalcoRule(rule);
