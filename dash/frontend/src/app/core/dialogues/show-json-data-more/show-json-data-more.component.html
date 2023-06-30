@@ -10,7 +10,7 @@
     </div>
     <div class="page-card-left-align">
       <div class="row">
-        <div class="col-sm-6">
+        <div [ngClass]="this.currentCardSize">
           <mat-card appearance="outlined" style="height:400px; display: grid;!important; overflow: auto">
             <mat-card-header>
               <div class="page-card-header">
@@ -42,7 +42,7 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div class="col-sm-6">
+        <div [ngClass]="this.currentCardSize">
           <mat-card appearance="outlined" style="height:400px; display: grid;!important;overflow: auto">
             <mat-card-header>
               <div class="page-card-header">

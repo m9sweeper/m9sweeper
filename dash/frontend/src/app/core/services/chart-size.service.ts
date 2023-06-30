@@ -40,4 +40,16 @@ export class ChartSizeService {
     const chartHeight = Math.floor((chartWidth * 8) / 16);
     return [chartWidth, chartHeight];
   }
+
+  getIncidenceRateChartSize(breakpointMedium = 800,
+                            screenWidth: number): [number, number] {
+    let chartWidth: number;
+    if (screenWidth >= breakpointMedium) {
+      chartWidth = Math.floor(screenWidth / 2) - 100;
+    } else {
+      chartWidth = screenWidth - 110;
+    }
+    const chartHeight = Math.floor((chartWidth * 8) / 16);
+    return [chartWidth, chartHeight];
+  }
 }
