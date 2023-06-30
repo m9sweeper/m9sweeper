@@ -39,7 +39,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
     protected fb: FormBuilder,
     protected customValidators: CustomValidatorService,
     protected dialogRef: MatDialogRef<FalcoRuleAddEditDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) protected data: { namespaces: string[], rule: IFalcoRule, clusterId: number },
+    @Inject(MAT_DIALOG_DATA) protected data: { rule: IFalcoRule },
     protected falcoService: FalcoService,
     protected alert: AlertService,
     protected clusterService: ClusterService,
@@ -47,14 +47,19 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.namespaces = this.data?.namespaces || [];
     this.editMode = !!this.data?.rule?.id;
+
+    const selectedClusters = this.data?.rule?.clusters
+      ? this.data.rule.clusters.map(c => c.clusterId) : [];
+
+    const selectedNamespaces = this.data?.rule?.clusters
+      ? this.data.rule.namespaces.map(ns => ns.namespace) : [];
 
     this.ruleForm = this.fb.group({
       id: [this.data?.rule?.id || ''],
-      clusters: [[]],
+      clusters: [selectedClusters],
       action: [this.data?.rule?.action || FalcoRuleAction.Ignore, [Validators.required]],
-      namespaces: [this.data?.rule?.namespaces || []],
+      namespaces: [selectedNamespaces],
       falcoRule: [this.data?.rule?.falcoRule || '', [this.customValidators.regex]],
       image: [this.data?.rule?.image || '', [this.customValidators.regex]],
     }, {
@@ -125,7 +130,7 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
   save() {
     const rule = this.ruleForm.getRawValue();
     const request = this.editMode
-    ? this.falcoService.updateRule(this.data?.clusterId, rule)
+    ? this.falcoService.updateRule(rule)
       : this.falcoService.createRule(rule);
 
     request

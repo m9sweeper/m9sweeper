@@ -426,13 +426,55 @@ export class FalcoDao {
         return knexnest(query)
           .then(rows => plainToInstance(FalcoRuleDto, rows))
     }
-    async updateFalcoRule(rule: Partial<FalcoRuleDto>, ruleId: number): Promise<FalcoRuleDto> {
-        const raw = instanceToPlain(rule);
+
+    async deleteFalcoRule(ruleId: number): Promise<number> {
         const knex = await this.databaseService.getConnection();
-        return knex.into('falco_rules')
-          .update(raw, '*')
-          .where('id', '=', ruleId)
-          .then(resp => plainToInstance(FalcoRuleDto, resp[0]));
+        return knex.update({ deleted_at: Date.now() })
+          .into('falco_rules')
+          .where('id', '=', ruleId);
+    }
+    async updateFalcoRule(rule: Partial<FalcoRuleCreateDto>, ruleId: number): Promise<void> {
+        // const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+
+        return knex.transaction(async (trx) => {
+            rule.allNamespaces = !rule?.namespaces?.length;
+            rule.allClusters = !rule?.clusters?.length;
+            let rawNamespaces = [];
+            if (!rule.allNamespaces) {
+                rawNamespaces = rule.namespaces.map(ns => {
+                    return { namespace: ns, falco_rule_id: ruleId }
+                })
+            }
+            let rawClusters = [];
+            if (!rule.allClusters) {
+                rawClusters = rule.clusters.map(id => {
+                    return { cluster_id: id, falco_rule_id: ruleId }
+                })
+            }
+
+            // Update the rule
+            delete rule.namespaces;
+            delete rule.clusters;
+            delete rule.id;
+            const raw = instanceToPlain(rule);
+            await trx.update(raw).into('falco_rules').where('id', '=', ruleId);
+
+            // Clear the namespace and cluster tables of associated entries
+            await trx.delete().from('falco_rules_cluster')
+              .where('falco_rule_id', '=', ruleId);
+            await trx.delete().from('falco_rules_namespace')
+              .where('falco_rule_id', '=', ruleId);
+
+
+            // (Re)-create the entries in the join tables if needed
+            if (!rule.allNamespaces) {
+                await trx.insert(rawNamespaces).into('falco_rules_namespace')
+            }
+            if (!rule.allClusters) {
+                await trx.insert(rawClusters).into('falco_rules_cluster')
+            }
+        });
     }
 
     /**
