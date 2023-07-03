@@ -375,15 +375,11 @@ export class FalcoDao {
             rule.allClusters = !rule?.clusters?.length;
             let rawNamespaces = [];
             if (!rule.allNamespaces) {
-                rawNamespaces = rule.namespaces.map(ns => {
-                    return { namespace: ns }
-                })
+                rawNamespaces = rule.namespaces.map(ns => ({ namespace: ns }))
             }
             let rawClusters = [];
             if (!rule.allClusters) {
-                rawClusters = rule.clusters.map(id => {
-                    return { cluster_id: id }
-                })
+                rawClusters = rule.clusters.map(id => ({ cluster_id: id }))
             }
 
             delete rule.namespaces;
@@ -442,15 +438,11 @@ export class FalcoDao {
             rule.allClusters = !rule?.clusters?.length;
             let rawNamespaces = [];
             if (!rule.allNamespaces) {
-                rawNamespaces = rule.namespaces.map(ns => {
-                    return { namespace: ns, falco_rule_id: ruleId }
-                })
+                rawNamespaces = rule.namespaces.map(ns => ({ namespace: ns, falco_rule_id: ruleId }))
             }
             let rawClusters = [];
             if (!rule.allClusters) {
-                rawClusters = rule.clusters.map(id => {
-                    return { cluster_id: id, falco_rule_id: ruleId }
-                })
+                rawClusters = rule.clusters.map(id => ({ cluster_id: id, falco_rule_id: ruleId }))
             }
 
             // Update the rule
