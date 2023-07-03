@@ -1,31 +1,25 @@
-<div class="falco-log-share-container">
-<div class="falco-card">
-
-
-    <div class=" row">
-      <div class="col-sm-6">
-        <h1> Share Event</h1>
+<div class="modal-container-margin">
+<div style="width:100%">
+    <div class="page-title-button-group-spacing">
+      <div class="page-card-title">
+        Share Event
       </div>
-      <div class="col-sm-6 text-align-right no-padding">
+      <div>
         <button class="close" mat-raised-button color="primary"  (click)="onClickClose()">X</button>
       </div>
     </div>
-
     <div>
-      <h3> Send this link to share this event's details with someone else.</h3>
+      Send this link to share this event's details with someone else.
     </div>
-
-    <div class="row">
-      <div class="col-xs-11 ">
+    <div class="page-title-button-group-spacing">
+      <div>
         <input type="text" placeholder="{{currentUrl}}" size="100" class="url-box"/>
-
       </div>
-      <div class="col-xs-1 text-align-right no-padding">
+      <div>
         <button mat-raised-button color="primary"  (click)="onClickCopy()">
           <mat-icon>content_copy</mat-icon>
         </button>
       </div>
     </div>
-
-</div>
+  </div>
 </div>

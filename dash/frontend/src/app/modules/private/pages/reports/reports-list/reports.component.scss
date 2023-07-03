@@ -3,21 +3,11 @@
   font-size: 26px;
 }
 
-div.reports-container {
-  height: 100%;
-  overflow: auto;
-  margin: 15px 15px 10px 15px;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-  max-width: 100%
+.mat-mdc-card {
+  height: 80%;
 }
 
-.mat-card {
-  height: 65%;
-}
-
-.mat-card:hover {
+.mat-mdc-card:hover {
   background-color: #F2F2F2;
   color: black;
   cursor: pointer;
@@ -28,13 +18,4 @@ div.reports-container {
   justify-content: center;
   align-self: center;
   padding-bottom: 24px;
-}
-
-.mat-icon {
-  font-size: 48px;
-}
-
-.reports-card {
-  margin-top: 10px;
-  margin-bottom: 15px;
 }

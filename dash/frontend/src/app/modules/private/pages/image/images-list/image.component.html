@@ -1,35 +1,34 @@
-<div class="image-container">
-  <div class="image-list">
-    <div class="sub-navigation row">
-      <div class="col-lg-4 col-xs-12">
-        <span>Images</span>
-        <button class="image-create-btn" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="openImageCreateDialog()">
-          <mat-icon class="plus-button">add</mat-icon>
-        </button>
-      </div>
-      <div class="col-lg-8 col-xs-12">
-        <div class="row search-scan-col">
-          <mat-form-field class="mr-10px">
-            <mat-label>Search image</mat-label>
-            <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
-          </mat-form-field>
-          <button class="scan-images-button mr-10px" (click)="openAdvancedSearchDialog()" mat-raised-button color="primary">
-            Advanced
-          </button>
-          <button
-            class="scan-images-button"
-            [style.display]="(userIsAdmin)? 'block': 'none'"
-            [disabled]="!(dataSource && dataSource.data)"
-            (click)="openConfirmScanDialog()"
-            mat-raised-button
-            color="primary">
-            Scan Displayed Images
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing">
+      <div class="page-title-div">
+        <div class="page-title">Images
+          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="openImageCreateDialog()">
+            <mat-icon class="plus-button">add</mat-icon>
           </button>
         </div>
       </div>
+      <div class="page-button-spacing flex-display">
+        <mat-form-field class="mr-10px search-image">
+          <mat-label>Search image</mat-label>
+          <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
+        </mat-form-field>&nbsp;
+        <button class="scan-images-button" (click)="openAdvancedSearchDialog()" mat-raised-button color="primary">
+          Advanced
+        </button> &nbsp;
+        <button
+          class="scan-displayed-images-button"
+          [style.display]="(userIsAdmin)? 'block': 'none'"
+          [disabled]="!(dataSource && dataSource.data)"
+          (click)="openConfirmScanDialog()"
+          mat-raised-button
+          color="primary">
+          Scan Displayed Images
+        </button>
+      </div>
     </div>
-    <mat-card>
-      <div class="image-table">
+    <mat-card appearance="outlined">
+      <div class="page-table">
         <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
@@ -75,7 +74,7 @@
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;"
-                   (click)="getImageScannerDetails(row)" class="image-click">
+                   (click)="getImageScannerDetails(row)" class="table-row">
           </mat-row>
         </mat-table>
       </div>

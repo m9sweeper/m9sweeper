@@ -1,34 +1,36 @@
 div {
   display: flex;
-  //height: 60px;
+  height: 60px;
   justify-content: space-between;
   flex-direction: row;
+  // width: 100%;
   > div {
-    &.policy-sub-navigation {
+    &.item-sub-navigation {
       display: flex;
       flex-direction: column;
 
-      div.policy-name {
+      div.item-name {
         font-size: 26px;
         vertical-align: bottom;
-        line-height: 60px;
+        line-height: 1;
       }
     }
   }
 
   > div {
-    &.policy-create {
+    &.item-create {
       > div {
         display: flex;
+        width: fit-content;
         flex-direction: column;
         padding-bottom: 20px;
 
-        &.policy-create-button {
+        &.item-create-button {
           display: flex;
           flex-direction: row;
           align-items: flex-start;
 
-          button.new-policy {
+          button.new-item {
             background-color: #0078d4;
             padding: 2px 25px;
             border-radius: 2px;
@@ -36,9 +38,10 @@ div {
             color: white;
             font-size: 16px;
             cursor: pointer;
+            line-height:0.7;
           }
 
-          mat-icon.more-policy {
+          mat-icon.more-item {
             background-color: #e9e5ee;
             padding: 8px;
             margin-left: 10px;
@@ -48,7 +51,7 @@ div {
         }
       }
 
-      div.policy-search {
+      div.item-search {
         margin-top: 15px;
       }
     }

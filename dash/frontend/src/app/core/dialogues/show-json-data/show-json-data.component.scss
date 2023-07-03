@@ -1,35 +1,14 @@
-.falco-log-more-container{
-  height: 100%;
-  overflow-y: auto;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 15px;
-}
-
-.mat-card-title{
-  width: 100%;
-  white-space: nowrap;
-  display: flex;
-  padding: 15px;
-}
 .falco-card{
   min-width: 400px;
-}
-.details-table{
-  text-align: left;
+  max-height: 1000px; // override mat-dialog container max height
 }
 th, td{
   vertical-align: baseline;
 }
-
-mat-paginator {
-  display: flex;
-  justify-content: center;
-}
-
+.related-event-table {
   mat-table {
-    overflow: auto !important;
-    height: 100%;
+    //overflow: auto !important;
+    height: 50%;
 
     mat-row {
       min-height: 20px !important
@@ -101,8 +80,9 @@ mat-paginator {
       white-space: nowrap;
     }
   }
+}
 .date-link{
-  color: #069;
+  color: blue;
   text-decoration: underline;
   cursor: pointer;
 }

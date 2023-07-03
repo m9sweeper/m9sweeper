@@ -37,11 +37,7 @@
       <mat-icon>vpn_key</mat-icon>
       <span>Change password</span>
     </button>
-    <div class="theme-changer-container">
-      <mat-icon class="nights-stay-icon" color="primary">nights_stay</mat-icon>
-      <mat-slide-toggle color="primary" [checked]="isDarkMode" (change)="changeTheme($event)" (click)="$event.stopPropagation()">
-      </mat-slide-toggle>
-    </div>
+
     <mat-divider style="margin-top: 15px"></mat-divider>
     <button mat-menu-item>
       <a href="/docs/docs" style="text-decoration: none; color: rgba(0, 0, 0, 0.87)">
@@ -55,6 +51,8 @@
     </button>
   </mat-menu>
 </mat-toolbar>
+
+<div style="height: 50px">&nbsp;</div>
 <div class="main-content">
   <router-outlet></router-outlet>
 </div>

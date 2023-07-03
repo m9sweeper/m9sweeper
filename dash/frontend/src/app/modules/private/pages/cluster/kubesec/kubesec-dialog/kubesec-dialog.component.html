@@ -2,15 +2,15 @@
   <div class="kubesec-popup-contents">
     <div class="pod-score row">
       <div class="col-lg-9 col-xs-9 pod-name">
-        <h1> {{displayName}} </h1>
+        <p class="report-dialog-heading"> {{displayName}} </p>
       </div>
-      <div class="col-lg-3 col-xs-3 score" [ngStyle] = "{'background': decideScoreColor(score)}">
+      <div class="col-lg-3 col-xs-3 kubesec-score" [ngStyle] = "{'background': decideScoreColor(score)}">
         <span> {{score}} </span>
       </div>
     </div>
     <div class="message-download row">
-      <h3> {{message}}. </h3>
-      <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)">
+      <p> {{message}}. </p>
+      <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)" class="download-report">
         Download Report
       </a>
     </div>
@@ -27,7 +27,7 @@
             <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.id}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="criticalPoints">
-            <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
             <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.points}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="criticalReason">
@@ -50,7 +50,7 @@
             <mat-cell *matCellDef="let advice"> {{advice?.id}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="advisePoints">
-            <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
             <mat-cell *matCellDef="let advice"> {{advice?.points}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="adviseReason">
@@ -73,7 +73,7 @@
             <mat-cell *matCellDef="let pass"> {{pass?.id}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="passedPoints">
-            <mat-header-cell *matHeaderCellDef disableClear> Points </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
             <mat-cell *matCellDef="let pass"> {{pass?.points}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="passedReason">

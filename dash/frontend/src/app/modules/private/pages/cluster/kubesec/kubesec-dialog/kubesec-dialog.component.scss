@@ -1,64 +1,48 @@
-div.kubesec-popup {
-  & .kubesec-popup-contents {
-    & .pod-score {
-      width: 100%;
-      margin: 0px;
-      .pod-name {
-        padding: 0px;
-      }
-      .score {
-        margin-right: 0px;
-        padding: 0px;
-      }
-    }
-    .message-download {
-      width: 100%;
-      margin: 0px;
-      h3 {
-        margin-right: 10px;
-      }
-    }
-    & .tables {
-      .critical-table {
-        .mat-column-criticalId {
-          max-width: 25%;
-        }
-        .mat-column-criticalPoints {
-          max-width: 5%;
-        }
-      }
-      .advise-table {
-        .mat-column-adviseId {
-          max-width: 25%;
-        }
-        .mat-column-advisePoints {
-          max-width: 5%;
-        }
-      }
-      .passed-table {
-        .mat-column-passedId {
-          max-width: 25%;
-        }
-        .mat-column-passedPoints {
-          max-width: 5%;
-        }
-      }
-    }
+.pod-score {
+  width: 100%;
+  margin: 0;
+  .pod-name {
+    padding: 0px;
+  }
+  .score {
+    margin-right: 0px;
+    padding: 0px;
   }
 }
-
-.score{
-  height: 44px;
-  width: 50px;
-  background-color: cadetblue;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  text-transform: uppercase;
-  color: white;
-  > span {
-    font-size: xx-large;
+.message-download {
+  width: 100%;
+  margin: 0;
+  .download-report {
+    margin: 15px;
+  }
+  h3 {
+    margin-right: 10px;
+  }
+}
+.tables {
+  .critical-table {
+    .mat-column-criticalId {
+      max-width: 25%;
+    }
+    .mat-column-criticalPoints {
+      max-width: 5%;
+    }
+  }
+  .advise-table {
+    .mat-column-adviseId {
+      max-width: 25%;
+    }
+    .mat-column-advisePoints {
+      max-width: 5%;
+    }
+  }
+  .passed-table {
+    .mat-column-passedId {
+      max-width: 25%;
+    }
+    .mat-column-passedPoints {
+      max-width: 5%;
+    }
   }
 }
 
@@ -79,4 +63,12 @@ a {
 }
 .margin-top {
   margin-top: 10px;
+}
+
+.mat-cell-points {
+  padding: 0 !important;
+}
+
+.report-dialog-heading {
+  font: 400 24px/32px Roboto, Helvetica Neue, sans-serif;
 }

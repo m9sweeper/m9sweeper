@@ -1,33 +1,6 @@
-mat-horizontal-stepper {
-  &.mat-stepper-horizontal {
-    margin-top: 8px;
-
-    div {
-      &.cluster-kube-config-container {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-    form {
-      mat-form-field {
-        width: 100%;
-
-        &.mat-form-field {
-          margin-top: 16px;
-        }
-      }
-      .manually-textarea{
-        height: 150px;
-      }
-    }
-    .mat-card-actions {
-      margin-left: 0;
-      margin-top: 20px !important;
-    }
-  }
+.manually-textarea{
+  height: 150px;
 }
-
 .kubeconfig-field {
   display: flex;
   flex-direction: row;
@@ -38,18 +11,10 @@ mat-horizontal-stepper {
     margin-left: 10px;
   }
 }
-
 .mt-8px {
   margin-top: 8px;
 }
 
-.ml-20px {
-  margin-left: 20px;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-}
 // Something was conflicting with the built in hidden rule. Adding this to increase specificity
 [hidden] {
   display: none;

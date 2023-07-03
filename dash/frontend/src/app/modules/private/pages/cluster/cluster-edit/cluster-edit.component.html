@@ -1,8 +1,8 @@
- <div class="create-cluster-form">
-  <form [formGroup]="createClusterForm" class="cluster-form" (ngSubmit)="onSubmit()">
+ <div class="modal-container-margin">
+  <form [formGroup]="createClusterForm" (ngSubmit)="onSubmit()">
     <div>
       <p>
-        <mat-form-field appearance="standard">
+        <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Cluster Name" type="text" formControlName="name">
         </mat-form-field>
@@ -14,31 +14,32 @@
         </mat-form-field>
       </p> -->
     </div>
-    <mat-form-field class="tag-chip-list" id="cluster-tags" style="display:none!important">
-      <mat-chip-list #chipList aria-label="List of Tags">
-        <mat-chip *ngFor="let tag of displayedTags; index as i" [selectable]="selectable"
-                  [removable]="removable" (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
+    <mat-form-field  id="cluster-tags" style="display:none!important">
+      <mat-chip-grid #chipGrid aria-label="List of Tags">
+        <mat-chip-row *ngFor="let tag of displayedTags; index as i" [editable]="selectable"
+                   (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
           {{tag.name}}
           <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
+        </mat-chip-row>
         <input
                placeholder="Add/Remove Tags"
                #tagInput
-               [matChipInputFor]="chipList"
+               [matChipInputFor]="chipGrid"
                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                [matAutocomplete]="auto"
                [formControl]="tagFormCtrl"
                (matChipInputTokenEnd)="addTag($event)"
         >
-      </mat-chip-list>
+      </mat-chip-grid>
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addAutocompleteSuggestionToTags($event)">
         <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
           {{tag.name}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <div mat-dialog-actions>
+    <div class="modal-content-left-align-no-margin">
       <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+      &nbsp;
       <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
     </div>
   </form>

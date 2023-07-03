@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../../core/services/user.service';
@@ -7,6 +7,7 @@ import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IAuthority, IUser, IUserRequestPayload} from '../../../../../core/entities/IUser';
 import { take } from 'rxjs/operators';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-create-user',
@@ -33,7 +34,8 @@ export class CreateUserComponent implements OnInit {
     private alertService: AlertService,
     private router: Router,
     private route: ActivatedRoute,
-    private jwtAuthService: JwtAuthService
+    private jwtAuthService: JwtAuthService,
+    private location: Location,
   ) {
     this.isEdit = this.router.url.indexOf('private/users/edit/') !== -1;
     this.userId = +this.route.snapshot.paramMap.get('id');
@@ -99,6 +101,9 @@ export class CreateUserComponent implements OnInit {
   //   this.selectedFileType = this.selectedFile.type;
   // }
 
+  cancel() {
+    this.location.back();
+  }
   onSubmit() {
     if (!this.isEdit) {
       const userCreatePayload: IUserRequestPayload = {
