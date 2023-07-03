@@ -25,6 +25,7 @@ import {AuthService} from '../../auth/services/auth.service'
 import {AuthorityId} from "../../user/enum/authority-id";
 import {ApiKeyDao} from "../../api-key/dao/api-key.dao";
 import {ApiKeyDto} from "../../api-key/dto/api-key-dto";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Controller()
 export class KubeBenchController {
@@ -34,7 +35,8 @@ export class KubeBenchController {
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
         private readonly apiKeyDao: ApiKeyDao,
-    ) { }
+        private logger: MineLoggerService,
+    ) {}
 
     @Post('/:clusterId')
     // called externally in curl
@@ -49,17 +51,14 @@ export class KubeBenchController {
 
         // if the current user's api is valid
         if (currentUserAuthObj !== null && currentUserAuthObj != undefined ) {
-            console.log("api key is valid");
            //  get all authorities from the current user
             const currentUserAuth = currentUserAuthObj[0].authorities;
-            console.log("currentUserAuthObj: ", currentUserAuth); // ADMIN, KB
             // get Kubebench authority from Authorityid
             let authorityArr: AuthorityId [] = [AuthorityId.KUBEBENCH];
             // is the user a KB user
             let isKBUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
-            console.log("isKBUser: ", isKBUser);
             if (isKBUser) {
-                console.log("authorized: Save KB Scan Report");
+                this.logger.log({label: 'User has been authorized; saving KB scan report', data: { clusterId }}, 'KubeBenchController.saveKubeBenchReport');
                 //return key as any; // no reports;  remove when done
                 const reportAsLogDto = Object.assign(new KubeBenchLogDto(), report);
                 const reportAsDto: KubeBenchDto = {
@@ -69,12 +68,11 @@ export class KubeBenchController {
                     resultsSummary: reportAsLogDto.Totals,
                 };
                 const newEntry = await this.kubeBenchService.saveKubeBenchReport(reportAsDto);
-                console.log("newEntry :", newEntry);
                 if (!newEntry || newEntry.length == 0) throw new HttpException('Internal Server error - log may not have been saved', HttpStatus.INTERNAL_SERVER_ERROR);
                 return newEntry[0];
 
             } else {
-                console.log("unauthorized: Failed to save KB Scan Report");
+                this.logger.log({label: 'User is unauthorized; skip saving KB scan report', data: { clusterId }}, 'KubeBenchController.saveKubeBenchReport');
                 throw new HttpException('Unauthorized  - log may not have been saved', HttpStatus.UNAUTHORIZED);
             }
         }
@@ -89,7 +87,6 @@ export class KubeBenchController {
     })
     async getApiKey(): Promise<ApiKeyDto[]> {
         const apiKeyKB = await this.apiKeyDao.getApiKeyByUserEmail('Kubebench');
-        console.log("apiKeyKB: ", apiKeyKB);
         if (!apiKeyKB) throw new HttpException(`KB APi key ${apiKeyKB} not found`, HttpStatus.NOT_FOUND);
         return apiKeyKB;
     }

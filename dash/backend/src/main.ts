@@ -26,6 +26,7 @@ async function registerSwagger(app) {
 }
 
 async function registerSwaggerBrowserForTrawler(app) {
+  const logger = app.get(MineLoggerService);
   const options = new DocumentBuilder()
       .setTitle('m9sweeper dash')
       .setVersion('1.0')
@@ -51,7 +52,7 @@ async function registerSwaggerBrowserForTrawler(app) {
         try {
           allowedSchemas.push(swaggerYml.paths[path][request]['requestBody']['content']['application/json']['schema']['$ref']);
         } catch (e) {
-
+          logger.error('Error pushing to Swagger request schema to allowedSchemas', e, 'registerSwaggerBrowserForTrawler');
         }
         if (swaggerYml.paths[path][request]['responses']) {
           const responseDef = swaggerYml.paths[path][request]['responses'];
@@ -61,7 +62,7 @@ async function registerSwaggerBrowserForTrawler(app) {
                 allowedSchemas.push(swaggerYml.paths[path][request]['responses'][responseCode]['content']['application/json']['schema']['$ref']);
               }
             } catch (e) {
-
+              logger.error('Error pushing to Swagger response schema to allowedSchemas', e, 'registerSwaggerBrowserForTrawler');
             }
           }
         }
@@ -137,22 +138,10 @@ async function prepareDatabaseMigrationAndSeed(app) {
   }
 }
 
-function customConsole(app) {
-  const mineLoggerService = app.get(MineLoggerService);
-  console.log = console.info = (...args) => {
-    args.slice(2, args.length);
-    mineLoggerService.log(...args);
-  }
-
-  console.error = (...args) => {
-    args.slice(3, args.length);
-    mineLoggerService.error(...args);
-  }
-}
-
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {bodyParser: false});
+  const logger = app.get(MineLoggerService);
 
   // process.env.NO_LOGGER !== '1' && app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
@@ -181,7 +170,7 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true }));
 
   const getRoute = path => {
-    let getPath =  path ? path.replace(/\?.*/g, '') : '';
+    const getPath =  path ? path.replace(/\?.*/g, '') : '';
     return getPath.replace(/\d+/g, '?');
   };
 
@@ -208,14 +197,8 @@ async function bootstrap() {
   try {
     await m9sCronService.updateExceptionAndImageMetrics();
   } catch (e) {
-    console.log('There was an error setting the initial v1 exception and image metrics');
+    logger.error('There was an error setting the initial v1 exception and image metrics', e, 'bootstrap');
   }
-
-  // customConsole(app);
-
-  // console.log('Hello Test console.log','CONSOLE_OVERRIDE_CONTEXT');
-  // console.info('Hello Test console.info','CONSOLE_OVERRIDE_CONTEXT');
-  // console.error({label: 'Error Message', data: {userId: 2}}, new Error('Dummy exception!'),'CONSOLE_OVERRIDE_CONTEXT');
 
   const configurationService = app.get(ConfigService);
 

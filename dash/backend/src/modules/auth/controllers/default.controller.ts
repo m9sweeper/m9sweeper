@@ -34,16 +34,20 @@ import {Authority} from '../../user/enum/Authority';
 import {AuthorityGuard} from '../../../guards/authority.guard';
 import {AuthenticationType} from '../enum/AuthenticationType';
 import {isNil} from '@nestjs/common/utils/shared.utils';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Controller()
 @UseInterceptors(ResponseTransformerInterceptor)
 export class DefaultController {
 
-    constructor(private readonly externalAuthConfigService: ExternalAuthConfigService,
-                private readonly configService: ConfigService,
-                private readonly resetPasswordService: ResetPasswordService,
-                private readonly userProfileService: UserProfileService,
-                @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto){}
+    constructor(
+      private readonly externalAuthConfigService: ExternalAuthConfigService,
+      private readonly configService: ConfigService,
+      private readonly resetPasswordService: ResetPasswordService,
+      private readonly userProfileService: UserProfileService,
+      @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+      private readonly logger: MineLoggerService,
+    ) {}
 
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -176,7 +180,7 @@ export class DefaultController {
                 return true;
             }
         } catch (e) {
-            console.log(e);
+            this.logger.error('Error activating user account', e, 'DefaultController.activateUserAccount');
         }
         throw new BadRequestException('Token invalid or already expired');
     }

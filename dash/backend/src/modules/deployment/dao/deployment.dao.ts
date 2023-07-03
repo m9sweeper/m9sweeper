@@ -4,10 +4,14 @@ import * as knexnest from 'knexnest';
 import { DatabaseService } from '../../shared/services/database.service';
 import { DeploymentDto } from '../dto/deployment-dto';
 import { HistoryDeploymentDto } from '../dto/history-deployment-dto';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class DeploymentDao {
-    constructor(private databaseService: DatabaseService) {}
+    constructor(
+      private databaseService: DatabaseService,
+      private logger: MineLoggerService,
+    ) {}
 
     async getCountOfCurrentDeployments(clusterId: number, namespace: string): Promise<any> {
         const knex = await this.databaseService.getConnection();
@@ -212,7 +216,7 @@ export class DeploymentDao {
         await knex.insert(dtoToPlain).into('kubernetes_deployments').returning('id')
           .then(results => !!results ? results[0]?.id : null)
           .catch(e => {
-            console.log(e);
+            this.logger.error({label: 'Error saving k8s deployment', data: { deployment }}, e, 'DeploymentDao.saveK8sDeployments');
             Promise.reject(0);
         });
         return 0;

@@ -94,7 +94,7 @@ export class GenericLdapService extends LdapAuthProvider {
             }
             return userProfile;
         } catch (e) {
-            console.log(e);
+            this.logger.error({label: 'Error authenticating or in authorization for retrieval of user profile data'}, e, 'GenericLdapService.getUserProfileData')
             if (e instanceof ldap.InvalidCredentialsError) {
                 throw new UnauthorizedException('Invalid Credentials', 'Username or password is incorrect');
             } else {

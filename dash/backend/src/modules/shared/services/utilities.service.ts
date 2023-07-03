@@ -31,8 +31,6 @@ export class UtilitiesService {
 
         repository.image.path = urlSegments.slice(0, urlSegments.length - 1).join('/');
 
-        console.log('urlSegments: ', urlSegments.slice(0, urlSegments.length - 1).join('/'));
-
         return repository;
     }
 

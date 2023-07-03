@@ -5,10 +5,14 @@ import { DatabaseService } from '../../shared/services/database.service';
 import { NamespaceDto } from '../dto/namespace-dto';
 import { HistoryNamespaceDto } from '../dto/history-namespace-dto';
 import { NamespaceComplianceDto } from '../dto/namespace-compliance-dto';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class NamespaceDao {
-    constructor(private databaseService: DatabaseService) {}
+    constructor(
+      private databaseService: DatabaseService,
+      private logger: MineLoggerService,
+    ) {}
 
     async getCountOfCurrentNamespaces(clusterId: number): Promise<any> {
         const knex = await this.databaseService.getConnection();
@@ -130,8 +134,6 @@ export class NamespaceDao {
             .offset(page * limit)
             .orderByRaw(`${sort.field} ${sort.direction}`))
             .then(namespaces => plainToInstance(NamespaceDto, namespaces));
-
-            //console.log(result.sql);
 
         return result;
     }
@@ -262,7 +264,6 @@ export class NamespaceDao {
             .where('c.deleted_at', null)
             .andWhereNot('c.name', null)
             .orderBy('n.name', 'asc');
-        // console.log(query.toSQL());
         return await query.then(namespaces => plainToInstance(NamespaceDto, namespaces));
     }
 
@@ -381,7 +382,7 @@ export class NamespaceDao {
         return await knex.insert(dtoToPlain).into('kubernetes_namespaces')
           .returning('id').then(results => !!results ? results[0]?.id : null)
           .catch(e => {
-            console.log(e);
+            this.logger.error({label: 'Failed to save k8s namespace'}, e, 'NamespaceDao.saveK8sNamespaces');
             Promise.reject(0);
         });
     }

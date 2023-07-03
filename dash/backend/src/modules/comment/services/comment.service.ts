@@ -28,17 +28,8 @@ export class CommentService{
         const getCommentCreatorFullName = await this.commentDao.getCommentCreatorFullName();
         const commentCreatorFullName = getCommentCreatorFullName[0].fullName;
         const commentContent = commentBody['content'];
-        /*
-        console.log("*******COMMENT*******");
-        console.log(" commentcreator fullname: ", commentCreatorFullName);
-        console.log(" commentContent : ", CommentContent );
-        console.log(" exceptiontitle: ", exceptionTitle );
-
-         */
 
         for(const user of getUsers){
-           // console.log("current user is: ", user.fullname);
-
             await this.email.send({
                 to: user.email,
                 from: this.configService.get('email.default.sender'),

@@ -86,7 +86,7 @@ export class NonRedirectableLoginController {
             auditLog.userId = user.id;
             auditLog.data = {message: 'User Login'};
             this.auditLogService.createAuditLog(auditLog).then()
-                .catch((e) => console.log('Error saving audit log: ' + e));
+                .catch((e) => this.logger.error('Error saving audit log', e, 'NonRedirectableLoginController.ldapAuthLoginAction'));
             return {
                 accessToken: await this.jwtUtility.getToken(JSON.stringify(user))
             };
@@ -121,7 +121,7 @@ export class NonRedirectableLoginController {
                     delete user.password;
                     auditLog.data = {message: 'User Login'};
                     this.auditLogService.createAuditLog(auditLog).then()
-                        .catch((e) => console.log('Error saving audit log: ' + e));
+                      .catch((e) => this.logger.error('Error saving audit log', e, 'NonRedirectableLoginController.localAuthLoginAction'));
                     return {
                         accessToken: await this.jwtUtility.getToken(JSON.stringify(user))
                     };
@@ -130,11 +130,11 @@ export class NonRedirectableLoginController {
                 // failed login attempt
                 auditLog.data = {error: 'Failed Login: Invalid Credentials'};
                 this.auditLogService.createAuditLog(auditLog).then()
-                    .catch((e) => console.log('Error saving audit log: ' + e));
+                  .catch((e) => this.logger.error('Error saving audit log', e, 'NonRedirectableLoginController.localAuthLoginAction'));
 
                 // find out how many failed attempts within the hour from the current user
                 const failAttemptInTheLastHour = await this.userProfileService.getUserFailedAttemptCountInLastHour(user.id);
-                console.log("failAttemptInTheLastHour: ", failAttemptInTheLastHour);
+                this.logger.log({label: 'Failed login attempts by user in the past hour', data: { failAttemptInTheLastHour, user_id: user.id }}, 'NonRedirectableLoginController.localAuthLoginAction');
                 // if exceed failed attempt limit, the user cannot log in
                 if (failAttemptInTheLastHour >= common.loginAttemptAllowed){
                     throw new UnauthorizedException('Log in attempts exceed limit. Please try again later.');

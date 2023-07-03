@@ -4,11 +4,14 @@ import { NamespaceDto } from '../dto/namespace-dto';
 import { ClusterEventService } from '../../cluster-event/services/cluster-event.service';
 import { yesterdaysDateAsStr } from '../../../util/date_util';
 import { Exception } from 'handlebars';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class NamespaceService {
     constructor(private readonly namespaceDao:NamespaceDao,
-                private readonly clusterEventService: ClusterEventService) {}
+                private readonly clusterEventService: ClusterEventService,
+                private logger: MineLoggerService,
+    ) {}
 
     async getAllNamespaces(clusterId: number,
                            page  = 0,
@@ -86,9 +89,7 @@ export class NamespaceService {
     async saveK8sNamespaces(namespace: NamespaceDto, clusterId: number): Promise<void> {
         const checkNamespaceExistOrNot = await this.namespaceDao.checkNamespace(namespace, clusterId);
         if (checkNamespaceExistOrNot.length > 0) {
-            // console.log('Namespace exists: ' + namespace.name);
         } else {
-            // console.log('Namespace found: ' + namespace.name);
             try {
                 await this.namespaceDao.saveK8sNamespaces(namespace);
                 const clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Batch Job', 'Create', 'Info', `Namespace ${namespace.name} is created`, namespace);
@@ -105,10 +106,10 @@ export class NamespaceService {
         //const dayStr: string = yesterdaysDateAsStr();
 
         try {
-            console.log("Clearing k8s namespace history for " + dayStr);
+            this.logger.log({label: 'Clearing k8s namespace history for date', data: { numDays: dayStr }}, 'NamespaceService.saveK8sNamespacesHistory');
             await this.namespaceDao.clearNamespaceHistory(dayStr);
         } catch (e) {
-            console.log('Error clearing K8s namespace history for', dayStr);
+            this.logger.error({label: 'Error clearing K8s namespace history for date', data: { numDays: dayStr }}, e, 'NamespaceService.saveK8sNamespacesHistory');
         }
 
         const currentNamespaces = await this.namespaceDao.getCurrentNamespaces();
@@ -116,7 +117,7 @@ export class NamespaceService {
         if (currentNamespaces) {
            for (const namespace of currentNamespaces) {
              try {
-                 console.log(`saving namespace history for ${namespace.name} of cluster ${namespace.clusterId}`);
+                 this.logger.log({label: 'Saving k8s namespace history for date', data: { namespace, numDays: dayStr }}, 'NamespaceService.saveK8sNamespacesHistory');
                  await this.namespaceDao.saveK8sNamespacesHistory(namespace, dayStr);
                  //const clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Namespace History', 'History', 'Info', `History of ${namespace.name}`, null );
                  //await this.clusterEventService.createClusterEvent(clusterEventData, namespace.clusterId);
