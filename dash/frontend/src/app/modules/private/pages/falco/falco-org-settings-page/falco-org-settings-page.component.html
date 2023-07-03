@@ -19,13 +19,13 @@
               <div class="pl-10">
                 <ng-container *ngIf="!rule.allNamespaces">
                   <p>
-                    Event is from <strong>certain namespaces,</strong> including: {{ beautifyArray(rule.namespaces,{ key: 'namespace', elements: 3 }) }}
+                    Event is from <strong>certain namespaces,</strong> including: {{ rule.namespaces | arrayText : { elements: 3, key: 'namespace'} }}
                   </p>
                 </ng-container>
 
                 <ng-container *ngIf="!rule.allClusters">
                   <p>
-                    Event is from <strong>certain clusters,</strong> including: {{ beautifyArray(rule.clusters,{ key: 'name', elements: 3 }) }}
+                    Event is from <strong>certain clusters,</strong> including: {{ rule.clusters | arrayText : { elements: 3, key: 'name'} }}
                   </p>
                 </ng-container>
                 <p *ngIf="!!rule.image">

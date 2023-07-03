@@ -123,8 +123,13 @@ export class FalcoService {
     return this.httpClient.post(`/api/falco/rules`, rule);
   }
 
-  listRules(): Observable<IServerResponse<IFalcoRule[]>> {
-    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/rules`);
+  listRules(options?: { clusterId: number}): Observable<IServerResponse<IFalcoRule[]>> {
+    let params = new HttpParams();
+    if (options?.clusterId) {
+      params = params.set('clusterId', options.clusterId);
+    }
+
+    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/rules`, { params });
   }
 
   updateRule(rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {

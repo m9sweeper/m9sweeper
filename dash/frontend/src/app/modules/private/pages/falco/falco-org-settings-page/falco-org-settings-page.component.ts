@@ -73,17 +73,4 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
         }
       });
   }
-
-  /**
-   * Joins the array elements together in a comma separated list
-   * If a value for key is provided, will instead use only the value of the provided key
-   */
-  beautifyArray(array: string[] | any[], options?: { key?: string, elements?: number}) {
-    if (options?.elements > 0) {
-      array = array.slice(0, options.elements);
-    }
-    return array
-      .map((el) => options?.key ? el[options.key] : el)
-      .join(', ');
-  }
 }

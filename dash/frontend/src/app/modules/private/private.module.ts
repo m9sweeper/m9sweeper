@@ -129,6 +129,8 @@ import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
 import { FalcoOrgSettingsPageComponent } from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
+import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluster-list/falco-rules-cluster-list.component';
+import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 
 
 @NgModule({
@@ -219,6 +221,8 @@ import { FalcoOrgSettingsPageComponent } from './pages/falco/falco-org-settings-
     VulnerabilityDifferenceByDateComponent,
     FalcoRuleAddEditDialogComponent,
     FalcoOrgSettingsPageComponent,
+    FalcoRulesClusterListComponent,
+    ArrayTextPipe,
   ],
   imports: [
     CommonModule,

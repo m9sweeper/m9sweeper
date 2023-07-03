@@ -266,8 +266,8 @@ export class FalcoService {
           .then(id => this.falcoDao.getFalcoRuleById(id));
     }
 
-    async listActiveFalcoRules(): Promise<FalcoRuleDto[]> {
-        return this.falcoDao.listActiveFalcoRules();
+    async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRules(options);
     }
 
     async getFalcoRuleById(ruleId: number): Promise<FalcoRuleDto> {

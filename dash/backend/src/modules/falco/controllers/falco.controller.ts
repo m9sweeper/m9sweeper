@@ -199,8 +199,8 @@ export class FalcoController {
 
     @Get('/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
     @UseGuards(AuthGuard, AuthorityGuard)
-    async listActiveFalcoRulesForCluster(): Promise<FalcoRuleDto[]> {
-        return this.falcoService.listActiveFalcoRules();
+    async listActiveFalcoRulesForCluster(@Query('clusterId') clusterId?: number): Promise<FalcoRuleDto[]> {
+        return this.falcoService.listActiveFalcoRules({ clusterId });
     }
 
     @Put('/rules/:ruleId')
