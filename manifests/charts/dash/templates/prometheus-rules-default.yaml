@@ -1,6 +1,6 @@
 {{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
-{{- if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled) }}
-{{- if or (.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled) }}
+{{- if and .Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled }}
+{{- if or .Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled }}
 {{- $prometheusAppName := include "dash.prom-name" . }}
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -19,29 +19,29 @@ spec:
     {{- if .enabled }}
     - name: NewCVEs
       rules:
-        - alert: ManyNewCVEs
-          annotations:
-            description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
-            summary: The number of new CVEs breached {{ .threshold }}
-          expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
-          labels:
-            severity: warning
+      - alert: ManyNewCVEs
+        annotations:
+          description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
+          summary: The number of new CVEs breached {{ .threshold }}
+        expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
+        labels:
+          severity: warning
     {{- end }}# closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled
     {{- end }}# closes with .Values.prometheusOperator.defaultRules.numNewCVEs
 
-    {{- with .Values.prometheusOperator.defaultRules.percentCompliance }}
+    {{- with .Values.prometheusOperator.defaultRules.percentNoncompliance }}
     {{- if .enabled }}
-    - name: PercentCompliance
+    - name: PercentNoncompliance
       rules:
-        - alert: PodComplianceDecreased
-          annotations:
-            description: Fires when pod compliance falls below {{ .threshold }}%
-            summary: Pod compliance decreased
-          expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
-          labels:
-            severity: warning
-      {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentCompliance.enabled
-      {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
+      - alert: PodComplianceDecreased
+        annotations:
+          description: Fires when pod compliance falls below {{ .threshold }}%
+          summary: Pod compliance decreased
+        expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
+        labels:
+          severity: warning
+      {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled
+      {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentNoncompliance
 
-{{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled)
+{{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled)
 {{- end }}# closes if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled)
