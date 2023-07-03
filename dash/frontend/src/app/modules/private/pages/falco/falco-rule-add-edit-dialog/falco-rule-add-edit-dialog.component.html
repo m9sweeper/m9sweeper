@@ -10,13 +10,27 @@
       </mat-form-field>
     </div>
     <div class="row">
+      <mat-form-field appearance="standard">
+        <mat-label>Clusters</mat-label>
+        <mat-select formControlName="clusters" multiple
+        (selectionChange)="setVisibleNamespaces()">
+          <mat-option
+            *ngFor="let cluster of clusters"
+            [value]="cluster.id"
+          >
+            {{cluster.name}}
+          </mat-option>
+        </mat-select>
+        <mat-hint>Select none to apply for all</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="row">
       <mat-form-field>
         <mat-label>Namespace</mat-label>
-        <mat-select formControlName="namespace">
-          <!--Empty option to allow deselecting a namespace-->
-          <mat-option [value]="''"></mat-option>
+        <mat-select formControlName="namespaces" multiple>
           <mat-option *ngFor="let ns of namespaces" [value]="ns">{{ns}}</mat-option>
         </mat-select>
+        <mat-hint>Select none to apply for all</mat-hint>
       </mat-form-field>
     </div>
     <div class="row">

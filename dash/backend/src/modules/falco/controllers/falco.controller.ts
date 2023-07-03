@@ -31,7 +31,7 @@ import {AuthorityId} from '../../user/enum/authority-id';
 import {FalcoCountDto} from '../dto/falco-count.dto';
 import {FalcoSettingDto} from '../dto/falco-setting.dto';
 import {FalcoCsvDto} from '../dto/falco-csv-dto';
-import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
@@ -126,19 +126,6 @@ export class FalcoController {
         return this.falcoService.getFalcoCsv(clusterId,  limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
-    @Get('/:eventId')
-    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201
-    })
-    async getFalcoLogByEventId(
-        @Param('eventId') eventId: number
-    ): Promise< FalcoDto>
-    {
-        return this.falcoService.getFalcoLogByEventId(eventId);
-    }
-
     @Get('/:clusterid/findsetting')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -199,48 +186,57 @@ export class FalcoController {
         return result;
     }
 
-    @Post(':clusterId/rules')
+    @Post('/rules')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async createFalcoRule(
       @Param('clusterId') clusterId: number,
-      @Body() rule: FalcoRuleDto
+      @Body() rule: FalcoRuleCreateDto
     ): Promise<FalcoRuleDto> {
-        if (rule?.clusterId !== clusterId) {
-            throw new HttpException({ message: 'Cluster id in path does not match cluster ID in body.' }, HttpStatus.BAD_REQUEST);
-        }
         delete rule.id;
         return await this.falcoService.createFalcoRule(rule);
     }
 
-    @Get(':clusterId/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
+    @Get('/rules')    @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY )
     @UseGuards(AuthGuard, AuthorityGuard)
-    async listActiveFalcoRulesForCluster(@Param('clusterId') clusterId: number): Promise<FalcoRuleDto[]> {
-        return this.falcoService.listActiveFalcoRulesForCluster(clusterId);
-
+    async listActiveFalcoRulesForCluster(@Query('clusterId') clusterId?: number): Promise<FalcoRuleDto[]> {
+        return this.falcoService.listActiveFalcoRules({ clusterId });
     }
 
-    @Put(':clusterId/rules/:ruleId')
+    @Put('/rules/:ruleId')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async updateFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number,
-      @Body() rule: FalcoRuleDto
+      @Body() rule: FalcoRuleCreateDto
     ): Promise<FalcoRuleDto> {
-        if (rule?.clusterId !== clusterId || ruleId !== rule?.id) {
-            throw new HttpException({ message: 'rule or cluster id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
+        if (ruleId !== rule?.id) {
+            throw new HttpException({ message: 'rule id in path does not match the body.' }, HttpStatus.BAD_REQUEST);
         }
         return this.falcoService.updateFalcoRule(rule, ruleId);
     }
 
-    @Delete(':clusterId/rules/:ruleId')
+    @Delete('/rules/:ruleId')
     @AllowedAuthorityLevels( Authority.SUPER_ADMIN, Authority.ADMIN )
     @UseGuards(AuthGuard, AuthorityGuard)
     async deleteFalcoRule(
       @Param('clusterId') clusterId: number,
       @Param('ruleId') ruleId: number
-    ): Promise<FalcoRuleDto>  {
+    ): Promise<number>  {
         return this.falcoService.deleteFalcoRule(clusterId, ruleId);
+    }
+
+    @Get('/:eventId')
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 201
+    })
+    async getFalcoLogByEventId(
+      @Param('eventId') eventId: number
+    ): Promise< FalcoDto>
+    {
+        return this.falcoService.getFalcoLogByEventId(eventId);
     }
 }

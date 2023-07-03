@@ -12,7 +12,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
-import {FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
 import {FalcoRuleAction} from '../enums/falco-rule-action';
 import {DataCache} from '../../../util/classes/data-cache';
 
@@ -69,7 +69,7 @@ export class FalcoService {
         for (let i = 0; i <= daysBack; i++) {
             resultSet.filter(result => newDate.toString() === result.date.toString()).forEach(result => value = result.count);
 
-            let newResult = new FalcoCountDto();
+            const newResult = new FalcoCountDto();
             newResult.date = newDate;
             newResult.count = value;
 
@@ -97,7 +97,7 @@ export class FalcoService {
 
         // retrieve filtered falco logs and use the query results to build the csv
         const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
-        let result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
+        const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
         // limit to 1000 or less logs from dao
@@ -261,8 +261,17 @@ export class FalcoService {
         }
     }
 
-    async createFalcoRule(rule: FalcoRuleDto): Promise<FalcoRuleDto> {
-        return this.falcoDao.createFalcoRule(rule);
+    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<FalcoRuleDto> {
+        return this.falcoDao.createFalcoRule(rule)
+          .then(id => this.falcoDao.getFalcoRuleById(id));
+    }
+
+    async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRules(options);
+    }
+
+    async getFalcoRuleById(ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.getFalcoRuleById(ruleId);
     }
 
     async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
@@ -275,28 +284,29 @@ export class FalcoService {
         }
 
         // If we don't use the cache, or there was no unexpired cache, get the rules from the DB and cache them.
-        const rules = await this.falcoDao.listActiveFalcoRulesForCluster(clusterId);
+        const rules = await this.falcoDao.listActiveFalcoRules({ clusterId });
         this.ruleCache.set(clusterId, DataCache.cacheFor(rules, 60000)); // 60000ms = 1min
         return rules;
     }
 
-    async updateFalcoRule(rule: FalcoRuleDto, ruleId: number): Promise<FalcoRuleDto> {
-        return this.falcoDao.updateFalcoRule(rule, ruleId);
+    async updateFalcoRule(rule: FalcoRuleCreateDto, ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.updateFalcoRule(rule, ruleId)
+          .then(() => this.getFalcoRuleById(ruleId));
     }
 
-    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<FalcoRuleDto> {
-        const edits = Object.assign(new FalcoRuleDto(), { deletedAt: Date.now() });
-        return this.falcoDao.updateFalcoRule(edits, ruleId);
+    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<number> {
+        return this.falcoDao.deleteFalcoRule(ruleId);
     }
 
     async checkRules(clusterId: number, falcoEvent: FalcoWebhookInputDto): Promise<FalcoRuleAction | null> {
         const rules = await this.listActiveFalcoRulesForCluster(clusterId, true);
         if (rules?.length) {
             for (const rule of rules) {
-                // For each fo the three fields: if it is blank, consider it a match
-                // Otherwise compare to the value from the falco event
-                const namespaceMatches = !rule.namespace
-                  || rule.namespace?.trim() === falcoEvent?.outputFields?.k8sNamespaceName?.trim();
+                // Considered a namespace match if the rule apples for all namespaces or if any of the listed namespaces match
+                const trimmedNamespace = falcoEvent?.outputFields?.k8sNamespaceName?.trim();
+                const namespaceMatches = rule.allNamespaces || !!rule.namespaces.find(ns => ns.namespace?.trim() === trimmedNamespace);
+                // For both the image and falco rule, it is considered a match if not set on the rule,
+                // or the value on the event matches the provided regex
                 const ruleNameMatches = !rule.falcoRule
                   || new RegExp(rule.falcoRule.trim()).test(falcoEvent?.rule?.trim());
                 const imageNameMatches = !rule.image

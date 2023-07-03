@@ -31,11 +31,11 @@ export class CustomValidatorService {
     }
   }
 
-  /** Group level validator. Requires the at least one of the controls with the specified keys to have a value */
-  atLeastOne(keys: string[]): ValidatorFn {
+  /** Group level validator. Requires the at least one of the controls with the specified keys to have meet its criteria */
+  atLeastOne(params: { key: string, condition: (val: any) => boolean}[]): ValidatorFn {
     return (group: FormGroup) => {
       const controls = group?.controls;
-      const exists = keys.some(key => !!controls?.[key]?.value);
+      const exists = params.some(param => (param.condition(controls?.[param.key]?.value)));
       return exists ? null : { atLeastOne: true };
     };
   }

@@ -97,10 +97,9 @@
       </mat-card>
     </div>
     <div class="col-sm-6" *ngIf="clusterId">
-      <app-falco-rule
-      [clusterId]="clusterId"
-      ></app-falco-rule>
+      <app-falco-rules-cluster-list
+        [clusterId]="clusterId"
+      ></app-falco-rules-cluster-list>
     </div>
   </div>
-
 </div>
