@@ -487,6 +487,21 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'falco',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [{
+          path: '',
+          component: FalcoOrgSettingsPageComponent,
+          data: {
+            title: 'Falco Settings',
+          }
+        }]
+      },
+      {
         path: 'change-password',
         component: ChangePasswordComponent
       },
