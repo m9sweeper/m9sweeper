@@ -47,10 +47,12 @@ prometheusOperator:
   scrapeInterval: "15s"
   defaultRules:
     enabled: true
-    newCVEs:
+    numNewCVEs:
       enabled: true
-    ruleTwo:
+      threshold: 20
+    percentCompliance:
       enabled: true
+      threshold: 20
   additionalRules: {}
 #    rulename:
 #      additionalLabels: {}

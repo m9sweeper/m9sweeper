@@ -1,12 +1,13 @@
 {{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
 {{- if .Values.prometheusOperator.defaultRules.enabled }}
+{{- if or (.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled) }}
 {{- $prometheusAppName := include "dash.prom-name" . }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  {{- $lenRuleOne := len "newCVEs" }}
-  name: {{ printf "%s-newCVEs" ($prometheusAppName | trunc $lenRuleOne | trimSuffix "-") }}
+  {{- $lenRuleOne := len "m9s-alerts" }}
+  name: {{ printf "%s-m9s-alerts" ($prometheusAppName | trunc $lenRuleOne | trimSuffix "-") }}
   namespace: {{ $.Release.Namespace }}
   labels:
     {{- include "dash.labels" $ | nindent 4 }}
@@ -14,29 +15,35 @@ metadata:
     app: {{ printf "%s" $prometheusAppName }}
 spec:
   groups:
-    {{- if .Values.prometheusOperator.defaultRules.newCVEs.enabled }}
-    - name: newCVEs
+    {{- with .Values.prometheusOperator.defaultRules.numNewCVEs }}
+    {{- if .enabled }}
+    - name: NewCVEs
       rules:
         - alert: ManyNewCVEs
           annotations:
             description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
             runbook_url: url_here
-            summary: The number of new CVEs breached 20
-          expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > 20
+            summary: The number of new CVEs breached {{ .threshold }}
+          expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
           labels:
             severity: warning
-    {{- end }}# closes if .Values.prometheusOperator.defaultRules.newCVEs.enabled
-    {{- if .Values.prometheusOperator.defaultRules.ruleTwo.enabled }}
-    - name: ruleTwo
-      rules:
-        - alert: ruleTwoName
-          annotations:
-            description: Description here
-            runbook_url: url_here
-            summary: Summary here
-          expr: (delta(num_major_cves[10m])) > 20
-          labels:
-            severity: warning
-    {{- end }}# closes if .Values.prometheusOperator.defaultRules.ruleTwo.enabled
+    {{- end }}# closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled
+    {{- end }}# closes with .Values.prometheusOperator.defaultRules.numNewCVEs
 
+    {{- with .Values.prometheusOperator.defaultRules.percentCompliance }}
+    {{- if .enabled }}
+    - name: PercentCompliance
+      rules:
+        - alert: PodComplianceDecreased
+          annotations:
+            description: Fires when pod compliance falls below {{ .threshold }}%
+            runbook_url: url_here
+            summary: Pod compliance decreased
+          expr: (something) > {{ .threshold }}
+          labels:
+            severity: warning
+        {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentCompliance.enabled
+        {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
+
+{{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled)
 {{- end }}# closes if .Values.prometheusOperator.defaultRules.enabled
