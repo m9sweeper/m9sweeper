@@ -3,9 +3,13 @@
     <app-sub-navigation title="Falco Settings"></app-sub-navigation>
     <mat-card>
       <mat-card-header>
-        <mat-card-title>
+        <mat-card-title class="falco-title">
           Falco Rules
-          <button mat-raised-button color="primary" (click)="openAddEditModal()">Add Rule</button>
+          <button mat-raised-button *ngIf="isAdmin"
+                  color="primary"
+                  (click)="openAddEditModal()">
+            Add Rule
+          </button>
         </mat-card-title>
       </mat-card-header>
       <div class="row">
@@ -30,7 +34,7 @@
                 <p *ngIf="!!rule.falcoRule">
                   Falco rule matches: <strong>{{ rule.falcoRule }}</strong>
                 </p>
-                <div class="row">
+                <div class="row" *ngIf="isAdmin">
                   <button mat-raised-button color="primary" (click)="openAddEditModal(rule, idx)">Edit</button>
                   <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(rule.id, idx)">Delete</button>
                 </div>

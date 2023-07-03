@@ -8,6 +8,7 @@ import {
   FalcoRuleAddEditDialogComponent
 } from '../falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
 import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 @Component({
   selector: 'app-falco-org-settings-page',
@@ -16,15 +17,18 @@ import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
 })
 export class FalcoOrgSettingsPageComponent implements OnInit {
   rules = [];
+  isAdmin = false;
 
   constructor(
     protected dialog: MatDialog,
     protected kubesecService: KubesecService,
     protected falcoService: FalcoService,
-    protected alert: AlertService
+    protected alert: AlertService,
+    private jwtAuthService: JwtAuthService,
   ) { }
 
   ngOnInit(): void {
+    this.isAdmin = this.jwtAuthService.isAdmin();
     this.falcoService.listRules()
       .pipe(take(1))
       .subscribe({

@@ -12,6 +12,16 @@
   margin-left: 10px;
 }
 
+::ng-deep.mat-card-header-text {
+  width: 100%;
+}
+
+.falco-title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 
 // @TODO: styles below this point are taken from https://github.com/m9sweeper/m9sweeper/pull/90
 // they should be deleted once that PR is merged in
