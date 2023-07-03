@@ -10,8 +10,7 @@ import {ValidationPipe} from '@nestjs/common';
 import {HttpExceptionFilter} from './exception-filters/http-exception.filter';
 import {json, text, urlencoded} from 'express';
 import * as ResponseTime  from 'response-time';
-import {PrometheusService} from "./modules/shared/services/prometheus.service";
-import { M9sweeperCronJobService } from "./cron-jobs/m9sweeper_cron_jobs.service";
+import { PrometheusV1Service } from './modules/metrics/services/prometheus-v1.service';
 
 
 async function registerSwagger(app) {
@@ -153,7 +152,7 @@ async function bootstrap() {
   );
 
   app.useGlobalFilters(new HttpExceptionFilter(app.get(MineLoggerService)));
-  const prometheusService = app.get(PrometheusService);
+  const prometheusService = app.get(PrometheusV1Service);
 
   const requestLimit = process.env.REQUEST_LIMIT || '30mb';
 
@@ -192,13 +191,6 @@ async function bootstrap() {
       prometheusService.responses.labels(req.method, getRoute(req.url), res.statusCode).observe(time);
     }
   }));
-
-  const m9sCronService = app.get(M9sweeperCronJobService);
-  try {
-    await m9sCronService.updateExceptionAndImageMetrics();
-  } catch (e) {
-    logger.error('There was an error setting the initial v1 exception and image metrics', e, 'bootstrap');
-  }
 
   const configurationService = app.get(ConfigService);
 

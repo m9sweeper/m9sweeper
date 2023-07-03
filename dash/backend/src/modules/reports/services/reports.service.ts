@@ -11,6 +11,7 @@ import {
 import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import {ReportsCsvDto} from '../dto/reports-csv-dto';
+import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
 
 
 @Injectable()
@@ -69,12 +70,23 @@ export class ReportsService {
     }
 
     async getRunningVulnerabilities(limit: number, clusterId?: number, namespaces?: Array<string>,
-                                    isCompliant?: string, date?: string)
-        : Promise<ReportsRunningVulnerabilitiesPreviewDto>
+      isCompliant?: string, date?: string)
+      : Promise<ReportsRunningVulnerabilitiesPreviewDto>
     {
+        return this.getRunningVulnerabilitiesNoRequirements(clusterId, limit, namespaces, isCompliant, date);
+    }
+
+    async getRunningVulnerabilitiesNoRequirements(
+      clusterId?: number,
+      limit?: number,
+      namespaces?: Array<string>,
+      isCompliant?: string,
+      date?: string
+    ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
         if (date && date !== format(new Date(), 'yyyy-MM-dd')) {
-            return this.reportsDao.getHistoricalRunningVulnerabilities(clusterId, date,
-                {limit, namespaces, isCompliant});
+            return this.reportsDao.getHistoricalRunningVulnerabilities(
+              clusterId, date, {limit, namespaces, isCompliant}
+            );
         } else {
             return this.reportsDao.getRunningVulnerabilities(clusterId, {namespaces, limit, isCompliant});
         }
@@ -117,6 +129,13 @@ export class ReportsService {
             filename: `Running-Vulnerabilities-${format(new Date(), 'yyyy-MM-dd-hh-mm-ss')}.csv`,
             csv: result.join('\n')
         }
+    }
+
+    async getRunningVulnerabilitiesSummary(
+      clusterId: number,
+      options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string},
+    ): Promise<ReportsRunningVulnerabilitiesSummaryDto> {
+        return await this.reportsDao.getRunningVulnerabilitiesSummary(clusterId, options);
     }
 
     async getHistoricalVulnerabilities(limit: number, clusterId?: number, namespaces?: Array<string>, startDate?: string, endDate?: string)
