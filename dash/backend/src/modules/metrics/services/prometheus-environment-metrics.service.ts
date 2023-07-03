@@ -88,8 +88,7 @@ export class PrometheusEnvironmentMetricsService {
   private async updateNumImagesRunning(cluster: ClusterDto): Promise<void> {
     try {
       const imagesRunningInCluster = await this.imageService.getAllRunningImagesByClusterId(cluster.id);
-      const totalAsNumber = parseFloat(imagesRunningInCluster.total);
-      this.numImagesRunning.labels(cluster.name).set(totalAsNumber);
+      this.numImagesRunning.labels(cluster.name).set(imagesRunningInCluster.total);
       return;
     } catch (e) {
       return;

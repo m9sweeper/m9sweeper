@@ -29,7 +29,7 @@ export class ImageService {
     ) {
     }
 
-    async getAllImagesByClusterId(clusterId: number): Promise<{total: string, listOfImages: ListOfImagesDto[]}> {
+    async getAllImagesByClusterId(clusterId: number): Promise<{total: number, listOfImages: ListOfImagesDto[]}> {
         const images = {
             total: undefined,
             listOfImages: undefined
@@ -45,7 +45,7 @@ export class ImageService {
     }
 
     async getAllRunningImagesByClusterId(clusterId: number):
-      Promise<{total: string, listOfImages: ListOfImagesDto[]}> {
+      Promise<{total: number, listOfImages: ListOfImagesDto[]}> {
         const images = {
             total: undefined,
             listOfImages: undefined
