@@ -42,7 +42,7 @@ service:
   port: 3000
 
 prometheusOperator:
-  enabled: true
+  enabled: false
   port: 9090
   scrapeInterval: "15s"
   defaultRules:

@@ -1,5 +1,5 @@
 {{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
-{{- if .Values.prometheusOperator.defaultRules.enabled }}
+{{- if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled) }}
 {{- if or (.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled) }}
 {{- $prometheusAppName := include "dash.prom-name" . }}
 ---
@@ -44,4 +44,4 @@ spec:
       {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
 
 {{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled)
-{{- end }}# closes if .Values.prometheusOperator.defaultRules.enabled
+{{- end }}# closes if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled)
