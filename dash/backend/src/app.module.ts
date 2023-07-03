@@ -43,7 +43,6 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
-import { ScheduleModule } from '@nestjs/schedule';
 import { MetricsModule } from './modules/metrics/metrics.module';
 
 
