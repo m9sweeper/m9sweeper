@@ -42,7 +42,41 @@ service:
   port: 3000
 
 prometheusOperator:
+  enabled: false
+  port: 9090
+  scrapeInterval: "15s"
+  defaultRules:
+    enabled: true
+    numNewCVEs:
+      enabled: true
+      threshold: 20
+    percentCompliance:
+      enabled: true
+      threshold: 20
+  additionalRules: {}
+#    rulename:
+#      additionalLabels: {}
+#      groups:
+#        - name: test
+#          rules:
+#            - alert: test
+#              annotations:
+#                additionalAnnotations: {}
+#                description: Describe here
+#                runbook_url: url_here
+#                summary: Summarize here
+#              expr: ex
+#              for: 10m
+#              labels:
+#                severity: critical
+#                additionalLabels: {}
+
+grafana:
   enabled: true
+  labels:
+    grafana_dashboard: 1
+  defaultDashboards:
+    enabled: true
 
 replicaCount: 1
 

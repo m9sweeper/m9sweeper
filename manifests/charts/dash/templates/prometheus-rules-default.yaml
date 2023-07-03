@@ -1,0 +1,47 @@
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
+{{- if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled) }}
+{{- if or (.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled) }}
+{{- $prometheusAppName := include "dash.prom-name" . }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  {{- $lenRuleOne := len "m9s-alerts" }}
+  name: {{ printf "%s-m9s-alerts" ($prometheusAppName | trunc $lenRuleOne | trimSuffix "-") }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dash.labels" $ | nindent 4 }}
+    role: alert-rules
+    app: {{ printf "%s" $prometheusAppName }}
+spec:
+  groups:
+    {{- with .Values.prometheusOperator.defaultRules.numNewCVEs }}
+    {{- if .enabled }}
+    - name: NewCVEs
+      rules:
+        - alert: ManyNewCVEs
+          annotations:
+            description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
+            summary: The number of new CVEs breached {{ .threshold }}
+          expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
+          labels:
+            severity: warning
+    {{- end }}# closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled
+    {{- end }}# closes with .Values.prometheusOperator.defaultRules.numNewCVEs
+
+    {{- with .Values.prometheusOperator.defaultRules.percentCompliance }}
+    {{- if .enabled }}
+    - name: PercentCompliance
+      rules:
+        - alert: PodComplianceDecreased
+          annotations:
+            description: Fires when pod compliance falls below {{ .threshold }}%
+            summary: Pod compliance decreased
+          expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
+          labels:
+            severity: warning
+      {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentCompliance.enabled
+      {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
+
+{{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled)
+{{- end }}# closes if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled)
