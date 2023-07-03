@@ -25,5 +25,9 @@ export const prometheusCounters = [
   makeCounterProvider({
     name: 'dash_pods_denied',
     help: 'Number of Pods denied by Webhook'
-  })
+  }),
+  makeCounterProvider({
+    name: "dash_login_counter",
+    help: "Number of logins",
+  }),
 ]

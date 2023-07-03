@@ -142,7 +142,6 @@ export class PrometheusEnvironmentMetricsService {
 
       this.numNegligibleCVEs.labels(cluster.name).set(summary.totalNegligible);
       this.numFixableNegligibleCVEs.labels(cluster.name).set(summary.totalFixableNegligible);
-      return;
     } catch (e) {
       return;
     }

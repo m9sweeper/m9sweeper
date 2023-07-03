@@ -14,7 +14,6 @@ import { MetricsModule } from '../metrics/metrics.module';
   ],
   imports: [
     SharedModule,
-    MetricsModule,
   ],
   controllers: [InfoController]
 })

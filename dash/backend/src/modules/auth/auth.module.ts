@@ -20,7 +20,6 @@ import {ExternalAuthConfController} from './controllers/external-auth-conf.contr
 import { ConfigService } from '@nestjs/config';
 import {AuthService} from './services/auth.service'
 import {AzureOauth2Service} from "./services/oauth2/azure-oauth2.service";
-import { PrometheusV1Service } from '../metrics/services/prometheus-v1.service';
 
 @Global()
 @Module({
@@ -60,12 +59,7 @@ import { PrometheusV1Service } from '../metrics/services/prometheus-v1.service';
     GenericLdapService,
     ResetPasswordDao,
     ResetPasswordService,
-    PrometheusV1Service,
     AuthService,
-    makeCounterProvider({
-      name: "login_counter",
-      help: "metric_help",
-    })
   ]
 })
 export class AuthModule {}
