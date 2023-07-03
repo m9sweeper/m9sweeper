@@ -419,7 +419,7 @@ export class FalcoDao {
           .orderBy(options?.sortField || 'rule.created_at', options?.sortDir || 'asc')
         if (options?.clusterId) {
             query.andWhere(builder => {
-                    builder.where('rule.all_clusters')
+                    builder.where('rule.all_clusters', '=', true)
                       .orWhere('rule_cluster.cluster_id', '=', options.clusterId);
                 })
         }

@@ -92,5 +92,5 @@ export class FalcoRuleNamespaceDto {
   @Expose({name: 'namespace', toPlainOnly: true})
   @ApiProperty()
   @IsOptional()
-  name: string;
+  namespace: string;
 }
