@@ -104,7 +104,6 @@ const myFormatter = info => {
     }),
     HttpModule,
     SharedModule,
-    MetricsModule,
     AuthModule,
     UserModule,
     SettingsModule,
@@ -141,6 +140,7 @@ const myFormatter = info => {
         enabled: true
       },
     }),
+    MetricsModule,
   ],
   providers: [],
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {Counter, Gauge, Summary} from 'prom-client';
-import {InjectMetric} from '@willsoto/nestjs-prometheus';
+import { Counter, Gauge, Summary } from 'prom-client';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
 
 @Injectable()
 export class PrometheusV1Service {
@@ -19,7 +19,7 @@ export class PrometheusV1Service {
     @InjectMetric('dash_active_exception') public activeException: Summary<any>,
     @InjectMetric('dash_num_of_requests') public numOfRequests: Counter<any>,
     @InjectMetric('dash_responses') public responses: Summary<any>,
-    @InjectMetric('login_counter') public loginCounter: Counter<any>,
+    @InjectMetric('dash_login_counter') public loginCounter: Counter<any>,
   ) {}
 
 }

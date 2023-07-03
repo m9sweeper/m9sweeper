@@ -1,4 +1,4 @@
-import {Global, Module} from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { prometheusCounters } from './utilities/prometheus_counters';
 import { prometheusGauges } from './utilities/prometheus_gauges';
 import { prometheusSummaries } from './utilities/prometheus_summaries';
@@ -19,12 +19,12 @@ import { PrometheusEnvironmentMetricsService } from './services/prometheus-envir
   ],
   imports: [],
   providers: [
-    PrometheusEnvironmentMetricsService,
-    PrometheusV1Service,
     ...prometheusCounters,
     ...prometheusGauges,
     ...prometheusSummaries,
     ...MetricDefinitions,
+    PrometheusEnvironmentMetricsService,
+    PrometheusV1Service,
   ],
 })
 export class MetricsModule {}

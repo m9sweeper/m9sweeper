@@ -265,13 +265,9 @@ export class ReportsDao {
             query.limit(options.limit);
         }
 
+        // @ts-ignore
         const queryResults: ReportsRunningVulnerabilitiesDto[] = await query.then((response) => {
-          // plainToInstance returns a single even when it's an array --> proper typing requires longer form
-          const mappedObjects: ReportsRunningVulnerabilitiesDto[] = [];
-          for (const responseInstance of response) {
-            mappedObjects.push(plainToInstance(ReportsRunningVulnerabilitiesDto, responseInstance));
-          }
-          return mappedObjects;
+          return plainToInstance(ReportsRunningVulnerabilitiesDto, response);
         });
 
         return {count, results: queryResults};
