@@ -16,8 +16,3 @@ It is not recommended to use this approach in production environments.
 
 ### Other Container runtimes
 For other container runtimes, refer to their documentation if they have support for emulation x86 images.
-
-
-
-
-
