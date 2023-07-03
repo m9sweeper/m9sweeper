@@ -2,7 +2,7 @@
 
   <div>
     <div class=" row falco-settings-header">
-      <div class="col-sm-6" >
+      <div class="col-sm-12" >
         <div class="row"> Falco Settings</div>
       </div>
       <div class="col-sm-6"></div>
@@ -95,11 +95,6 @@
           </form>
         </mat-card-content>
       </mat-card>
-    </div>
-    <div class="col-sm-6" *ngIf="clusterId">
-      <app-falco-rule
-      [clusterId]="clusterId"
-      ></app-falco-rule>
     </div>
   </div>
 
