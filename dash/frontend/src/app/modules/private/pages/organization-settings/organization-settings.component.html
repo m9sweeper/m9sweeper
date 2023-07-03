@@ -6,52 +6,52 @@
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'settings'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Organization">
           <mat-icon mat-list-item-icon>settings</mat-icon>
-          <span matLine style="padding-left: 10px;">Organization</span>
+          <span matLine class="padding-left-10">Organization</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'users']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Users">
           <mat-icon mat-list-item-icon>folder_shared</mat-icon>
-          <span matLine style="padding-left: 10px;">Users</span>
+          <span matLine class="padding-left-10">Users</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'licenses']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="License">
           <mat-icon mat-list-item-icon>lock_open</mat-icon>
-          <span matLine style="padding-left: 10px;">Licenses</span>
+          <span matLine class="padding-left-10">Licenses</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'policies'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Policies">
           <mat-icon mat-list-item-icon>assignment_turned_in</mat-icon>
-          <span matLine style="padding-left: 10px;">Policies</span>
+          <span matLine class="padding-left-10">Policies</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'exceptions'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Exceptions">
           <mat-icon mat-list-item-icon>assignment_late</mat-icon>
-          <span matLine style="padding-left: 10px;">Exceptions</span>
+          <span matLine class="padding-left-10">Exceptions</span>
         </a>
         <a [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'single-sign-on'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Sign On Methods">
           <mat-icon mat-list-item-icon>vpn_key</mat-icon>
-          <span matLine style="padding-left: 10px;">Sign on Methods</span>
+          <span matLine class="padding-left-10">Sign on Methods</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'docker-registries']" routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Docker Registries">
           <mat-icon mat-list-item-icon>shopping_basket</mat-icon>
-          <span matLine style="padding-left: 10px;">Docker Registries</span>
+          <span matLine class="padding-left-10">Docker Registries</span>
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'api-key'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="API Key Management">
           <mat-icon mat-list-item-icon>code</mat-icon>
-          <span matLine style="padding-left: 10px;">API Key Management</span>
+          <span matLine class="padding-left-10">API Key Management</span>
         </a>
         <a [allowedRoles]="['SUPER_ADMIN']" mat-list-item [routerLink]="['/private', 'audit-logs'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Audit Logs">
           <mat-icon mat-list-item-icon>fingerprint</mat-icon> <!-- alternative icon might be `pets` -->
-          <span matLine style="padding-left: 10px;">Audit Logs</span>
+          <span matLine class="padding-left-10">Audit Logs</span>
         </a>
         <a mat-list-item [routerLink]="['/private', 'falco'] " routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}" title="Falco Settings">
           <img mat-list-icon src="../../../../../../assets/images/falco-icon-black.png" class="falco-img"/>
-          <span matLine *ngIf="isExpanded || isSmallDevice">Falco Settings</span>
+          <span matLine class="padding-left-10">Falco Settings</span>
         </a>
       </mat-list>
     </div>
