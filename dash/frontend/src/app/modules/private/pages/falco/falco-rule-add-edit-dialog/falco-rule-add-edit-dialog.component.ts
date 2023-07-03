@@ -1,15 +1,15 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {FalcoRuleAction} from '../../../../../../core/enum/FalcoRuleAction';
-import {CustomValidatorService} from '../../../../../../core/services/custom-validator.service';
+import {FalcoRuleAction} from '../../../../../core/enum/FalcoRuleAction';
+import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {IFalcoRule} from '../../../../../../core/entities/IFalcoRule';
-import {FalcoService} from '../../../../../../core/services/falco.service';
+import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
+import {FalcoService} from '../../../../../core/services/falco.service';
 import {AlertService} from '@full-fledged/alerts';
 import {switchMap, take} from 'rxjs/operators';
-import {ClusterService} from '../../../../../../core/services/cluster.service';
-import {NamespaceService} from '../../../../../../core/services/namespace.service';
-import {ICluster} from '../../../../../../core/entities/ICluster';
+import {ClusterService} from '../../../../../core/services/cluster.service';
+import {NamespaceService} from '../../../../../core/services/namespace.service';
+import {ICluster} from '../../../../../core/entities/ICluster';
 import {forkJoin, of} from 'rxjs';
 
 @Component({
