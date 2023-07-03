@@ -22,7 +22,6 @@ spec:
         - alert: ManyNewCVEs
           annotations:
             description: Fires when the number of new major + critical CVEs in the last 10m exceeds 20
-            runbook_url: url_here
             summary: The number of new CVEs breached {{ .threshold }}
           expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
           labels:
@@ -37,7 +36,6 @@ spec:
         - alert: PodComplianceDecreased
           annotations:
             description: Fires when pod compliance falls below {{ .threshold }}%
-            runbook_url: url_here
             summary: Pod compliance decreased
           expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
           labels:
