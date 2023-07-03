@@ -35,9 +35,7 @@ export class CustomValidatorService {
   atLeastOne(params: { key: string, condition: (val: any) => boolean}[]): ValidatorFn {
     return (group: FormGroup) => {
       const controls = group?.controls;
-      const exists = params.some(param => {
-        return param.condition(controls?.[param.key]?.value);
-      });
+      const exists = params.some(param => (param.condition(controls?.[param.key]?.value)));
       return exists ? null : { atLeastOne: true };
     };
   }
