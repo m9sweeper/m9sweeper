@@ -11,6 +11,7 @@ import {V1Container} from '@kubernetes/client-node/dist/gen/model/v1Container';
 import {DockerRegistriesDao} from '../../docker-registries/dao/docker-registries.dao';
 import {ImageIdInClusterMap} from "../classes/imageIdInClusterMap";
 import {UtilitiesService} from "../../shared/services/utilities.service";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class K8sImageService {
@@ -21,7 +22,8 @@ export class K8sImageService {
                 private readonly clusterEventService: ClusterEventService,
                 private readonly imageService: ImageService,
                 private readonly dockerRegistriesDao: DockerRegistriesDao,
-                protected readonly utilities: UtilitiesService
+                protected readonly utilities: UtilitiesService,
+                private logger: MineLoggerService,
                 ) {}
 
     async getAllK8sImages(clusterId: number, namespace: string, deployment: string, page: number = 0,
@@ -63,7 +65,7 @@ export class K8sImageService {
 
         for (const imageName of namesOfImagesCurrentlyRunning) {
             // save image
-            console.log("Saving image details: " + imageName);
+            this.logger.log({label: 'Saving image details', data: { imageName }}, 'K8sImageService.saveK8sImages');
 
             // Loop over all the pods for each image
             const name = imageName;
@@ -145,14 +147,13 @@ export class K8sImageService {
                         // already exists!
                         imageIdMapRunningInCluster.setIdRunning(name, k8sImageDto.imageHash, existingImageDto.id);
                         k8sImageDto.imageId = existingImageDto.id;
-                        // console.log("Image already exists in index: " + name);
                     } else {
                         // new! create it!
                         const savedImage = await this.imageService.createImage(image, clusterId, false);
                         if (savedImage && savedImage.id) {
                             imageIdMapRunningInCluster.setIdRunning(name, k8sImageDto.imageHash, existingImageDto.id);
                             k8sImageDto.imageId = savedImage.id;
-                            console.log("New image added to index and scan queued: " + name);
+                            this.logger.log({label: 'New image added to index and scan queued', data: { name }}, 'K8sImageService.saveK8sImages');
                         }
                     }
                     // persist K8sImageDto (saving one instance per namespace to support summary tables)
@@ -168,21 +169,20 @@ export class K8sImageService {
                         try {
                             const newK8sImageId: number[] = await this.k8sImageDao.saveK8sImages(k8sImageDto);
                             kubernetesImageIds.push(...newK8sImageId);
-                            console.log("New image saved to cluster: " + name + " for namespace " + k8sImageDto.namespace);
+                            this.logger.log({label: 'New image saved to cluster', data: { name, namespace: k8sImageDto.namespace }}, 'K8sImageService.saveK8sImages');
                         } catch (e) {
                             allImagesSavedSuccessfully = false;
-                            console.log('K8s Image save error: ', e);
+                            this.logger.error({label: 'K8s image save error'}, e, 'K8sImageService.saveK8sImages');
                             clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Batch Job', 'Create', 'Error', `Error while saving image ${k8sImageDto.name}`, k8sImageDto);
                         } finally {
                             await this.clusterEventService.createClusterEvent(clusterEventData, clusterId);
                         }
                     } else {
                         kubernetesImageIds.push(existingK8sImages[0].id);
-                        // console.log(`Image ${k8sImageDto.image} under cluster ${k8sImageDto.clusterId} already exists.`);
                     }
                 } catch (e) {
                     allImagesSavedSuccessfully = false;
-                    console.log("Error writing image " + name, e);
+                    this.logger.error({label: 'Error writing image', data: { name }}, e, 'K8sImageService.saveK8sImages');
                 }
             }
         }
@@ -194,139 +194,27 @@ export class K8sImageService {
         return { allImagesSavedSuccessfully, imageIdMapRunningInCluster };
     }
 
-
-    /*async saveK8sImagesOLD(clusterId: number, deploymentContainerImageList: {
-        deployment: V1Deployment;
-        relevantPodContainers: V1ContainerStatus[];
-    }): Promise<void> {
-
-        const deploymentImages: K8sImageDto[] = [];
-        const imagesRunningInCluster: number[] = [];
-
-        deploymentContainerImageList.deployment.spec.template.spec.containers.forEach(deploymentContainer => {
-            const deploymentImageDTO = new K8sImageDto();
-
-            deploymentImageDTO.clusterId = clusterId;
-            deploymentImageDTO.clusterName = deploymentContainerImageList.deployment.metadata.clusterName;
-            deploymentImageDTO.compliant = false;
-            deploymentImageDTO.deploymentName = deploymentContainerImageList.deployment.metadata.name;
-            deploymentImageDTO.namespace = deploymentContainerImageList.deployment.metadata.namespace;
-            deploymentImageDTO.name = deploymentContainer.name;
-
-            const matchedImage: V1ContainerStatus = deploymentContainerImageList.relevantPodContainers.find(pc => pc.name === deploymentContainer.name && pc.image === deploymentContainer.image);
-            deploymentImageDTO.imageHash = matchedImage && matchedImage.imageID.indexOf('sha256:') > -1 ? matchedImage.imageID.split('sha256:')[1] : '';
-
-            deploymentImageDTO.image = this.formatDockerImageUrl(matchedImage ? matchedImage.image : deploymentContainer.image);
-
-            deploymentImages.push(deploymentImageDTO);
-
-        });
-
-        for (const deploymentImage of deploymentImages) {
-            const existingContainerImages = await this.k8sImageDao.checkK8sImage({
-                'cluster_id': clusterId,
-                'namespace': deploymentImage.namespace,
-                'deployment_name': deploymentImage.deploymentName,
-                'image': deploymentImage.image,
-                'image_hash': deploymentImage.imageHash
-            });
-
-            console.log('*********************');
-            console.log('existingContainerImages: ', existingContainerImages);
-            console.log('*********************');
-
-            if (existingContainerImages.length === 0) {
-                let clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Batch Job', 'Create', 'Info', `${deploymentImage.name} is created`, null );
-                try {
-                    await this.k8sImageDao.saveK8sImages(deploymentImage);
-                } catch (e) {
-                    console.log('Container Image save error: ', e);
-                    clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Batch Job', 'Create', 'Error', `Error while scanning ${deploymentImage.name}`, null );
-                } finally {
-                    await this.clusterEventService.createClusterEvent(clusterEventData, clusterId);
-                }
-            } else {
-                console.log(`Image ${deploymentImage.image} in Deployment: ${deploymentImage.deploymentName} under cluster ${deploymentImage.clusterId} already exists.`);
-            }
-
-            let existingImageDto: ListOfImagesDto = null;
-            try {
-                existingImageDto = await this.imageService.getImageByImageHash(clusterId, deploymentImage.imageHash);
-            } catch (e) {
-                console.log('Image not found by hash: ', e.message);
-            }
-
-            if (existingImageDto === null) {
-                console.log('Image needs to be created in image table.');
-                const dockerImageDetails:{host: string; path: string; imageName: string; tag: string;} = this.parseDockerImageUrl(deploymentImage.image);
-                const image: ImageDto = new ImageDto();
-                image.dockerImageId = deploymentImage.imageHash;
-                image.url = dockerImageDetails.host;
-                image.name = dockerImageDetails.path !== '' ? dockerImageDetails.path + '/' + dockerImageDetails.imageName : dockerImageDetails.imageName;
-                image.tag = dockerImageDetails.tag;
-                image.runningInCluster = true;
-                image.summary = '';
-                try {
-                    const createdImageDetails = await this.imageService.createImage(image, clusterId);
-                    imagesRunningInCluster.push(+createdImageDetails.id);
-                } catch (e) {
-                    console.log('Image create error: ', e);
-                }
-            } else {
-                imagesRunningInCluster.push(+existingImageDto.id);
-                await this.enqueueScan(deploymentImage.imageHash, clusterId);
-            }
-
-        }
-
-        const existingImages = await this.imageDao.loadImage({
-            'i.cluster_id': +clusterId,
-            'i.deleted_at': null,
-            'i.running_in_cluster': true,
-            'ki.namespace': deploymentContainerImageList.deployment.metadata.namespace
-        });
-        if (existingImages && existingImages.length > 0 && imagesRunningInCluster.length > 0 && existingImages.filter(filterImage => imagesRunningInCluster.indexOf(+filterImage.id) === -1).length > 0) {
-            try {
-                const imageDataToUpdate = {
-                    running_in_cluster: false
-                };
-
-                const searchConditions = [{
-                    field: 'cluster_id',
-                    condition: '=',
-                    value: +clusterId
-                }, {
-                    field: 'id',
-                    condition: 'IN',
-                    value: existingImages.filter(filterImage => imagesRunningInCluster.indexOf(+filterImage.id) === -1).map(mapImage => +mapImage.id)
-                }];
-                await this.imageDao.massUpdateImages(imageDataToUpdate, searchConditions);
-            } catch (e) {
-                console.log('Mass Image update error: ', e);
-            }
-        }
-    }*/
-
     async saveK8sImagesHistory(dayStr: string): Promise<any> {
         // Get yesterday's date as a string formatted yyyy-mm-dd
         //const dayStr: string = yesterdaysDateAsStr();
 
         try {
-            console.log("Clearing k8s image history for " + dayStr);
+            this.logger.log({label: 'Clearing k8s image history for date', data: { date: dayStr }}, 'K8sImageService.saveK8sImagesHistory');
             await this.k8sImageDao.clearK8sImagesHistory(dayStr);
         } catch (e) {
-            console.log('Error clearing K8s image history for', dayStr);
+            this.logger.error({label: 'Error clearing K8s image history for date', data: { date: dayStr }}, e, 'K8sImageService.saveK8sImagesHistory');
         }
         const currentK8sImages = await this.k8sImageDao.getCurrentK8sImages();
 
         if (currentK8sImages) {
             for (const k8sImage of currentK8sImages) {
                 try {
-                    console.log(`Saving kubernetes image ${k8sImage.name} of namespace ${k8sImage.namespace} of cluster ${k8sImage.clusterId}`);
+                    this.logger.log({label: 'Saving kubernetes image', data: { k8sImage }}, 'K8sImageService.saveK8sImagesHistory');
                     await this.k8sImageDao.saveK8sImagesHistory(k8sImage, dayStr);
                     //const clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Kubernetes Image History', 'History', 'Info', `History of ${k8sImage.name}`, null );
                     //await this.clusterEventService.createClusterEvent(clusterEventData, k8sImage.clusterId);
                 } catch (e) {
+                    this.logger.error({label: 'Error saving kubernetes image', data: { k8sImage }}, e, 'K8sImageService.saveK8sImagesHistory');
                     const clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Kubernetes Image History', 'History', 'Error', `Error saving ${k8sImage.name} to history - ${e.detail}`, k8sImage);
                     await this.clusterEventService.createClusterEvent(clusterEventData, k8sImage.clusterId);
                 }

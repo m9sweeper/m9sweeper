@@ -1,9 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../shared/services/database.service';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class HealthDao {
-    constructor(private readonly databaseService: DatabaseService) {}
+    constructor(
+      private readonly databaseService: DatabaseService,
+      private logger: MineLoggerService,
+    ) {}
 
     async getDatabaseStatus(): Promise<{ postgres: string}> {
         // let healthReport = null;
@@ -14,7 +18,7 @@ export class HealthDao {
                     return { postgres: 'OK'};
                 }
             }).catch(error => {
-                console.error(error);
+                this.logger.error({label: 'Error getting the database status'}, error, 'HealthDao.getDatabaseStatus');
                 throw new HttpException({
                     status: HttpStatus.INTERNAL_SERVER_ERROR,
                     message: 'Failed to connect to the database'

@@ -26,6 +26,7 @@ import {AppSettingsType, LicenseSettingsType, SiteSettingsType} from "../enums/s
 import {UserProfileDto} from "../../user/dto/user-profile-dto";
 import {LicensingPortalService} from "../../../integrations/licensing-portal/licensing-portal.service";
 import {LicenseAndInstanceValidityDto} from "../../../integrations/licensing-portal/licensing-portal.dto";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @ApiTags('Site Settings')
 @ApiBearerAuth('jwt-auth')
@@ -37,7 +38,9 @@ export class SiteSettingsController {
                 private readonly appSettingsService: AppSettingsService,
                 private readonly fileManagementService: FileManagementService,
                 private readonly licensingPortalService: LicensingPortalService,
-                private readonly configService: ConfigService){}
+                private readonly configService: ConfigService,
+                private logger: MineLoggerService,
+    ) {}
 
     @Get()
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN)
@@ -106,7 +109,7 @@ export class SiteSettingsController {
                 try {
                     await this.appSettingsService.saveSettings(AppSettingsType.LICENSE_SETTINGS, settings, this._loggedInUser.id);
                 } catch (e) {
-                    console.log('Error saving license expiration date', e);
+                    this.logger.error({label: 'Error saving license expiration date'}, e, 'SiteSettingsController.checkLicenseValidity');
                 }
             }
             return license;
@@ -147,7 +150,6 @@ export class SiteSettingsController {
                             return feature;
                         });
                         settings = [...settings, ...licenseFeatures];
-                        // console.log(settings);
                     }
 
                     if (license.data.quotas && license.data.quotas.length) {
@@ -170,7 +172,7 @@ export class SiteSettingsController {
 
                         await this.appSettingsService.saveSettings(AppSettingsType.LICENSE_SETTINGS, settings, this._loggedInUser.id);
                     } catch (e) {
-                        console.log('Error saving license & instance key', e);
+                        this.logger.error({label: 'Error saving license & instance key'}, e, 'SiteSettingsController.checkLicenseValidityFromLicensingPortal');
                         return;
                     }
                 }
