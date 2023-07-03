@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import {forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common'
 import {instanceToPlain, plainToInstance} from 'class-transformer';
 import {ImageDto} from '../dto/image-dto';
@@ -37,11 +38,28 @@ export class ImageService {
         if (checkClusterById) {
             const listOfImages = await this.imageDao.loadImage({'i.deleted_at': null, 'i.cluster_id': clusterId});
             const total = await this.imageDao.countImage({'i.deleted_at': null, 'i.cluster_id': clusterId});
-            images.total = listOfImages;
-            images.listOfImages = total;
+            images.total = total;
+            images.listOfImages = listOfImages;
             return images;
         }
     }
+
+    async getAllRunningImagesByClusterId(clusterId: number):
+      Promise<{total: number, listOfImages: ListOfImagesDto[]}> {
+        const images = {
+            total: undefined,
+            listOfImages: undefined
+        }
+        const checkClusterById = await this.clusterService.getClusterById(clusterId);
+        const imageSearchClauses = {'i.deleted_at': null, 'i.cluster_id': clusterId, 'i.running_in_cluster': true};
+        if (checkClusterById) {
+            const listOfImages = await this.imageDao.loadImage(imageSearchClauses);
+            images.total = await this.imageDao.countImage(imageSearchClauses);
+            images.listOfImages = listOfImages;
+            return images;
+        }
+    }
+
     async checkIfImageAlreadyExists(imageDto: ImageDto, clusterId: number): Promise<boolean> {
       const imageAsString = imageDto.image = imageDto.url + '/' + imageDto.name + ':' + imageDto.tag;
       const listOfImages = await this.imageDao.loadImage({'i.image': imageAsString, 'i.cluster_id': clusterId, 'i.docker_image_id': imageDto.dockerImageId});

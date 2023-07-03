@@ -54,7 +54,8 @@ Thumbs.db
 /backend/vendor/**/node_modules
 /backend/build/
 /frontend/.angular
-/backend/.env
+/backend/.env*
+!/backend/.env.sample
 /backend/local.env
 /backend/dev-db.env
 /backend/src/static/

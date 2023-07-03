@@ -12,7 +12,7 @@ import { plainToInstance } from 'class-transformer';
 import { ConfigService } from '@nestjs/config';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ClusterEventService } from '../../cluster-event/services/cluster-event.service';
-import {PrometheusService} from '../../shared/services/prometheus.service';
+import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 
 @Controller()
 export class ClusterValidationController {
@@ -21,7 +21,7 @@ export class ClusterValidationController {
     private readonly configService: ConfigService,
     private readonly logger: MineLoggerService,
     private readonly clusterEventService: ClusterEventService,
-    private readonly prometheusService: PrometheusService
+    private readonly prometheusService: PrometheusV1Service
   ) {}
 
   @Post()
@@ -29,7 +29,7 @@ export class ClusterValidationController {
   // @UseGuards(AuthGuard, AuthorityGuard)
   @HttpCode(200)
   async validateRequest(@Req() request: Request, @Body() body: AdmissionReviewDto, @Param('clusterId') clusterId: number): Promise <AdmissionReviewReplyDto> {
-    console.log(`.....................................Validating webhook request for cluster ${clusterId} started at ${new Date().toUTCString()}.....................................`);
+    this.logger.log({label: 'Validating webhook request for cluster', data: { clusterId, startTime: new Date().toUTCString() }}, 'ClusterValidationController.validateRequest');
     const parsedRequest = plainToInstance(AdmissionReviewDto, request.body);
     let response: AdmissionReviewReplyDto;
     this.prometheusService.webhookApiCalled.inc();
@@ -62,7 +62,7 @@ export class ClusterValidationController {
         await this.clusterEventService.createClusterEvent(clusterEventObject, clusterId);
       }
     }
-    console.log(`.....................................Validating webhook request for cluster ${clusterId} ended at ${new Date().toUTCString()}.....................................`);
+    this.logger.log({label: 'Webhook request validation for cluster complete', data: { clusterId, endTime: new Date().toUTCString() }}, 'ClusterValidationController.validateRequest');
     return response;
   }
 }

@@ -48,6 +48,11 @@
           <mat-icon mat-list-item-icon>fingerprint</mat-icon> <!-- alternative icon might be `pets` -->
           <span matLine style="padding-left: 10px;">Audit Logs</span>
         </a>
+        <a mat-list-item [routerLink]="['/private', 'falco'] " routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}" title="Falco Settings">
+          <img mat-list-icon src="../../../../../../assets/images/falco-icon-black.png" class="falco-img"/>
+          <span matLine *ngIf="isExpanded || isSmallDevice">Falco Settings</span>
+        </a>
       </mat-list>
     </div>
 

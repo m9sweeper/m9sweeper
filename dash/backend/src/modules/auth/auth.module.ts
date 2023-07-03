@@ -16,7 +16,6 @@ import {ResetPasswordDao} from './dao/reset-password.dao';
 import {
   makeCounterProvider,
 } from '@willsoto/nestjs-prometheus';
-import { LoginCounterService } from './services/PrometheusService';
 import {ExternalAuthConfController} from './controllers/external-auth-conf.controller';
 import { ConfigService } from '@nestjs/config';
 import {AuthService} from './services/auth.service'
@@ -60,12 +59,7 @@ import {AzureOauth2Service} from "./services/oauth2/azure-oauth2.service";
     GenericLdapService,
     ResetPasswordDao,
     ResetPasswordService,
-    LoginCounterService,
     AuthService,
-    makeCounterProvider({
-      name: "login_counter",
-      help: "metric_help",
-    })
   ]
 })
 export class AuthModule {}

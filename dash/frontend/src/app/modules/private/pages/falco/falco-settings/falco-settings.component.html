@@ -94,47 +94,10 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <!--
-      <div class="event-table col-sm-6">
-        <mat-card style="height:800px; min-width: 400px; display: grid;!important;">
-          <h3>Rules</h3>
-          <div class ="details-content">
-            <div class="section-rules">
-              <div class="section-sublevel-1">
-                <h3>Ignore when following are true: </h3>
-                <div class="section-sublevel-2">
-                   <h3>Namespace is kube-system</h3>
-                  <h3>Type is privilege escalation</h3>
-                </div>
-                <div>
-                  <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                  <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-                </div>
-              </div>
-            </div>
-            <br><br>
-            <div class="section-rules">
-              <div class="section-sublevel-1">
-                <h3>Ignore when following are true: </h3>
-                <div class="section-sublevel-2">
-                  <h3>Namespace is m9sweeper-system</h3>
-                  <h3>Type is privilege escalation</h3>
-                  <h3>Image is rabbitmq/ rabbitmq</h3>
-                </div>
-                <div>
-                  <button mat-raised-button color="primary" type="submit" (click)="onClickEdit()" >Edit</button> &nbsp;&nbsp;
-                  <button mat-raised-button color="primary" type="submit" (click)="onClickDelete()" >Delete</button>
-                </div>
-              </div>
-            </div>
-            <br>
-            <div>
-              <button mat-raised-button color="primary" type="submit" (click)="onClickAddRule()" >Edit</button>
-            </div>
-          </div>
-        </mat-card>
-      </div>
-  -->
+      <div class="col-sm-6" *ngIf="clusterId">
+        <app-falco-rules-cluster-list
+          [clusterId]="clusterId"
+        ></app-falco-rules-cluster-list>
     </div>
   </div>
 </div>

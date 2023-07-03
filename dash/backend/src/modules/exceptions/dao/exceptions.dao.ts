@@ -191,8 +191,6 @@ export class ExceptionsDao {
         //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
         // }
 
-        //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
-
         const result = await knexnest(sql).then(data => data);
         return result ? result : [];
     }
@@ -312,7 +310,6 @@ export class ExceptionsDao {
             .andWhere('cluster_ex.cluster_id', clusterId)
             .andWhere('ex.relevant_for_all_clusters', false)
             .andWhere('ex.deleted_at', null);
-        // console.log(sql.toSQL());
         return await knexnest(sql).then(data => data);
     }
 
@@ -511,8 +508,7 @@ export class ExceptionsDao {
                 'u.email as _email',
                 knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as _fullName`)
             ])
-            .from('users as u')
-        // console.log(query.toSQL());
+            .from('users as u');
         return knexnest(query)
             .then(data => data);
     }
@@ -523,8 +519,7 @@ export class ExceptionsDao {
                 knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as "_fullName"`)
             )
             .from('users as u')
-           .where('u.id', userId)
-        // console.log(query.toSQL());
+           .where('u.id', userId);
         return knexnest(query)
             .then(data => {
                 return data;
@@ -571,8 +566,6 @@ export class ExceptionsDao {
             .whereNull('deleted_at')
             .where('ex.status', 'active')
             .andWhere('end_date', tomorrow);
-
-        // console.log(query.toSQL());
         return knexnest(query)
             .then(data => {
                 return data;

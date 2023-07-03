@@ -5,7 +5,19 @@ export interface IFalcoRule {
   clusterId: number;
   createdAt: number;
   action: FalcoRuleAction;
-  namespace?: string;
+  allNamespaces: boolean;
+  allClusters: boolean;
   falcoRule?: string;
   image?: string;
+  namespaces: IFalcoRuleNamespace[];
+  clusters: IFalcoRuleCluster[];
+}
+
+export interface IFalcoRuleNamespace {
+  namespace: string;
+}
+
+export interface IFalcoRuleCluster {
+  clusterId: number;
+  name?: string;
 }

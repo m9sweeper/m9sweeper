@@ -4,4 +4,5 @@ export class PodComplianceSummaryGroupDto {
     savedDate: Date;
     compliant: boolean;
     clusterId: number;
+    namespace?: string;
 }

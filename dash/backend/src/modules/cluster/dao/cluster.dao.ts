@@ -7,11 +7,14 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Knex } from "knex";
 import {PolicyDto} from "../../policy/dto/policy-dto";
 import {ScannerDto} from "../../scanner/dto/scanner-dto";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class ClusterDao {
-    constructor(private readonly databaseService: DatabaseService) {
-    }
+    constructor(
+      private readonly databaseService: DatabaseService,
+      private logger: MineLoggerService,
+    ) {}
 
     async createCluster(cluster: any): Promise<number> {
         const knex = await this.databaseService.getConnection();
@@ -60,7 +63,7 @@ export class ClusterDao {
       .orderBy('c.id', 'desc'))
       .then((data) => {
         const newInstance = plainToInstance(ClusterDto, data);
-        console.log({data, newInstance});
+        this.logger.log({label: 'Got clusters by id', data: { ids, data, newInstance }}, 'ClusterDao.getClustersById');
         return newInstance;
       });
   }
@@ -163,7 +166,6 @@ export class ClusterDao {
                         OR ("name" LIKE ? AND "group_id" = ?) 
                         OR ("ip_address" like ? AND "group_id"=?) order by id DESC`,
                 [`%${searchTerm.trim()}%`,groupId, `%${searchTerm.trim()}%`, groupId, `%${searchTerm.trim()}%`, groupId]);
-        // console.log(query.toSQL());
         return query
             .then(data => {
                 data.rows = data.rows.filter(row => row.deleted_at === null);
@@ -240,9 +242,7 @@ export class ClusterDao {
     async seedInitialCluster(cluster, clusterGroupName: string, policy: PolicyDto, scanner: ScannerDto, userId: number) {
         const knex = await this.databaseService.getConnection();
         return knex.transaction(async function(trx: Knex.Transaction) {
-                console.log('start transaction', clusterGroupName, 'user', userId);
-                console.log(`Cluster: ${cluster}`)
-                console.log('Saving cluster group', clusterGroupName);
+                this.logger.log({label: 'Saving initial cluster & cluster group', data: { cluster, clusterGroupName, userId }}, 'ClusterDao.seedInitialCluster');
 
                 const cgId = await trx('cluster_group')
                     .insert({
@@ -250,25 +250,26 @@ export class ClusterDao {
                         user_id: userId
                     }).returning('id')
                   .then(results => !!results ? results[0]?.id : null);
-                console.log('saved cluster group', cgId);
+                this.logger.log({label: 'Initial cluster group saved', data: { clusterGroupId: cgId }}, 'ClusterDao.seedInitialCluster');
 
-                console.log('saving cluster');
                 cluster.group_id = cgId;
                 const clusterId = await trx('clusters').insert(cluster)
                   .returning('id').then(results => !!results ? results[0]?.id : null);
+                this.logger.log({label: 'Initial cluster saved', data: { clusterId }}, 'ClusterDao.seedInitialCluster');
 
-                console.log('saving policy');
                 const policyId = await trx('policies').insert(instanceToPlain(policy))
                   .returning('id').then(results => !!results ? results[0]?.id : null);
+                this.logger.log({label: 'Initial policy saved', data: { policyId }}, 'ClusterDao.seedInitialCluster');
 
-                console.log('saving scanner');
                 scanner.policyId = policyId;
                 await trx('scanners').insert(instanceToPlain(scanner));
-                console.log('associating policy to cluster');
+                this.logger.log({label: 'Initial scanner saved' }, 'ClusterDao.seedInitialCluster');
+
                 await trx('policy_cluster').insert({cluster_id: clusterId, policy_id: policyId});
+                this.logger.log({label: 'Policy associated with cluster' }, 'ClusterDao.seedInitialCluster');
         })
-        .then(() => console.log('Saved to DB'))
-        .catch(e => console.log('Error saving to DB', e));
+        .then(() => this.logger.log({label: 'Initial cluster & cluster group saved' }, 'ClusterDao.seedInitialCluster'))
+        .catch(e => this.logger.log({label: 'Error saving initial cluster & cluster group saved' }, e, 'ClusterDao.seedInitialCluster'));
     }
 
 }

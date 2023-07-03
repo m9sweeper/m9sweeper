@@ -14,6 +14,7 @@ import {AuthorityGuard} from "../../../guards/authority.guard";
 import {ApiKeyDto} from "../../api-key/dto/api-key-dto";
 import {ApiKeyDao} from "../../api-key/dao/api-key.dao";
 import {query} from "express";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 
 @Controller()
@@ -23,6 +24,7 @@ export class KubeHunterController {
         private readonly userDao: UserDao,
         private readonly authService: AuthService,
         private readonly apiKeyDao: ApiKeyDao,
+      private logger: MineLoggerService,
     ) {}
 
     @Post('hunter/:clusterId')
@@ -35,27 +37,23 @@ export class KubeHunterController {
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
         // if the current user's api is valid
         if (currentUserAuthObj !== null && currentUserAuthObj != undefined ) {
-            console.log("api key is valid");
             // get all authorities from the current user
             const currentUserAuth = currentUserAuthObj[0].authorities;
-            console.log("currentUserAuthObj: ", currentUserAuth); // ADMIN, KB
             // get Kubehunter authority from Authorityid
             let authorityArr: AuthorityId [] = [AuthorityId.KUBEHUNTER];
             // is the user a KH user
             let isKHUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
-            console.log("isKHUser: ", isKHUser);
             if (isKHUser) {
-                console.log("authorized: Save KH Scan Report");
+                this.logger.log({label: 'User has been authorized; saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
                 //return key as any;// no reports;  remove when done
                 const reportAsDto = Object.assign(new KubeHunterDto(), report);
                 reportAsDto.uuid = uuid();
                 reportAsDto.clusterId = clusterId;
                 const newEntry = await this.kubeHunterService.saveKubeHunterReport(reportAsDto);
-                console.log("newEntry :", newEntry);
                 if (!newEntry || newEntry.length == 0) throw new HttpException('Internal Server error - log may not have been saved', HttpStatus.INTERNAL_SERVER_ERROR);
                 return newEntry[0];
             } else {
-                console.log("unauthorized: Failed to save KH Scan Report");
+                this.logger.log({label: 'User is unauthorized; skip saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
                 throw new HttpException('Unauthorized  - log may not have been saved', HttpStatus.UNAUTHORIZED);
             }
         }
@@ -69,7 +67,6 @@ export class KubeHunterController {
     })
     async getApiKey(): Promise<ApiKeyDto[]> {
         const apiKeyKH = await this.apiKeyDao.getApiKeyByUserEmail('Kubehunter');
-        console.log("apiKeyKH: ", apiKeyKH);
         if (!apiKeyKH) throw new HttpException(`KH APi key ${apiKeyKH} not found`, HttpStatus.NOT_FOUND);
         return apiKeyKH;
     }

@@ -91,7 +91,6 @@ export class PolicyDao {
         if(id){
         query.whereNot('id', +id);
         }
-        // console.log(query.toSQL());
         return query
             .then(data => data);
     }

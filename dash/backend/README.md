@@ -128,32 +128,6 @@ from the repo root to tell git to ignore your changes to that file.
 
 To tell git to watch the file again, you can run `git update-index --no-assume-unchanged backend/vendor/knexnest/knexnest.js`
 
-### Logger suggestion
-We have overridden some of console functions like log, info, error
-```
-log method must use 2 params instead of regular usage.
- 
-Param1: Log message as string or an object which contain two params named label and data 
-Param2: Context of log
-
-console.log('Hello Test console.log','CONSOLE_OVERRIDE_CONTEXT');
-console.log({label: 'Error Message', data: {param1: '', param2: ''}},'CONSOLE_OVERRIDE_CONTEXT');
-
-console.info('Hello Test console.log','CONSOLE_OVERRIDE_CONTEXT');
-console.info({label: 'Error Message', data: {param1: '', param2: ''}},'CONSOLE_OVERRIDE_CONTEXT');
-``` 
-
-```
-error method must use 3 params instead of regular usage.
- 
-Param1: Error message as string or an object which contain two params named label and data 
-Param2: Instance of Error or Exception
-Param3: Context of log
-
-console.error('Error Message', new Error('Dummy exception!!!!'),'CONSOLE_OVERRIDE_CONTEXT');
-console.error({label: 'Error Message', data: {userId: 2}}, new Error('Dummy exception!!!!'),'CONSOLE_OVERRIDE_CONTEXT');
-``` 
-
 ### OpenAPI 3 documentation (Swagger-UI)
 Documentation URL for all rest endpoints
 ```

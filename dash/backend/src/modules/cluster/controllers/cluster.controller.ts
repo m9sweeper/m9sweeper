@@ -33,19 +33,20 @@ import {GatekeeperTemplateDto} from "../dto/gatekeeper-template-dto";
 import {GatekeeperConstraintDetailsDto} from "../dto/gatekeeper-constraint-dto";
 import {KubernetesApiService} from "../../command-line/services/kubernetes-api.service";
 import {AuditLogInterceptor} from "../../../interceptors/audit-log.interceptor";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @ApiTags('Clusters')
 @ApiBearerAuth('jwt-auth')
 @Controller()
 @UseInterceptors(ResponseTransformerInterceptor)
 export class ClusterController {
-    constructor(@Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
-                private readonly clusterService: ClusterService,
-                private readonly kubernetesClusterService: KubernetesClusterService,
-                private readonly  kubernetesApiService: KubernetesApiService,
-                ){
-
-    }
+    constructor(
+      @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+      private readonly clusterService: ClusterService,
+      private readonly kubernetesClusterService: KubernetesClusterService,
+      private readonly  kubernetesApiService: KubernetesApiService,
+      private logger: MineLoggerService
+    ) {}
 
     @Get()
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.SUPER_ADMIN, Authority.ADMIN)
@@ -158,9 +159,9 @@ export class ClusterController {
         const response: ClusterDto  = await this.clusterService.createCluster(cluster, installWebhook, serviceAccountConfig);
         response.metadata = await this.clusterService.calculateClusterMetaData(null, response);
         this.kubernetesClusterService.sync(response).then(results => {
-            console.log('results-->', results);
-        }).catch(error => {
-            console.log('error-->', error);
+            this.logger.log({label: 'K8s cluster synced', data: { results }}, 'ClusterController.createCluster');
+        }).catch(e => {
+            this.logger.error({label: 'Error syncing K8s cluster'}, e, 'ClusterController.createCluster');
         });
         return response;
     }
@@ -238,9 +239,7 @@ export class ClusterController {
         schema: DELETE_CLUSTER_RESPONSE_SCHEMA
     })
     async deployMultipleOPAGateKeeperConstraintTemplates( @Body() templateNames: {templateNames: string[]}, @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
-        console.log('..........................................................................');
-        console.log(templateNames);
-        console.log('..........................................................................');
+        this.logger.log({label: 'About to deploy multiple Gatekeeper constraints', data: { templateNames }}, 'ClusterController.deployMultipleOPAGateKeeperConstraintTemplates');
         return this.clusterService.deployMultipleOPAGateKeeperConstraintTemplates(clusterId, templateNames.templateNames);
     }
 
