@@ -39,11 +39,11 @@ spec:
             description: Fires when pod compliance falls below {{ .threshold }}%
             runbook_url: url_here
             summary: Pod compliance decreased
-          expr: (something) > {{ .threshold }}
+          expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
           labels:
             severity: warning
-        {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentCompliance.enabled
-        {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
+      {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentCompliance.enabled
+      {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentCompliance
 
 {{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentCompliance.enabled)
 {{- end }}# closes if .Values.prometheusOperator.defaultRules.enabled
