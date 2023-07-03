@@ -1,7 +1,7 @@
 {{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
 {{- if and .Values.prometheusOperator.enabled .Values.grafana.enabled .Values.grafana.defaultDashboards.enabled }}
-{{- $files := .Files.Glob "grafana-dashboards/*.json" }}
-{{- $appName := include "dash.grafana-name" }}
+{{- $files := .Files.Glob "../grafana-dashboards/*.json" }}
+{{- $appName := include "dash.grafana-name" . }}
 {{- if $files }}
 apiVersion: v1
 kind: ConfigMapList
@@ -19,6 +19,7 @@ items:
     data:
       {{ $dashboardName }}.json: |
         {{- $.Files.Get $path | toJson | nindent 8 }}
+        {{/*//{{ ($.Files.Glob $path).AsConfig }}// */}}
 {{- end }}
 {{- end }}
 {{- end }}

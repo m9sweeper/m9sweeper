@@ -1,5 +1,5 @@
 {{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
-{{- if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.additionalRules) }}
+{{- if and .Values.prometheusOperator.enabled .Values.prometheusOperator.additionalRules }}
 {{- $prometheusAppName := include "dash.prom-name" . }}
 {{- range $prometheusRuleName, $prometheusRule := .Values.prometheusOperator.additionalRules }}}}
 {{- $prometheusRuleNameLength := len $prometheusRuleName }}
