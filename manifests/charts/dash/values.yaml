@@ -43,7 +43,7 @@ service:
 
 # Creates kube-prometheus-stack CRDs for dashboards, scrapers, and alerts
 prometheusOperator:
-  enabled: false
+  enabled: true
   scrapeInterval: "60s"
   defaultRules:
     enabled: true
