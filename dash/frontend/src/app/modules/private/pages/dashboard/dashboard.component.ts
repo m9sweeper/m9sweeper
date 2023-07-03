@@ -60,10 +60,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.collapseIfSmallScreen();
-
-    this.width = document.documentElement.clientWidth; // for charts?
-    this.screenSizeExpand(this.width); // for charts?
-
     this.getAllClusterByGroupId();
     this.groupId = +this.route.snapshot.params.groupId;
 
@@ -178,29 +174,5 @@ export class DashboardComponent implements OnInit {
     // Emit a window resize event to trigger UI handlers listening for resize events
     window.dispatchEvent(new Event('resize'));
   }
-
-  screenSizeExpand(width: number){
-    let menuWidth: number;
-    let containerWidth: number;
-
-    if (width <= 800) {
-      menuWidth = 65;
-      this.isSmallSize = true;
-      this.isExpanded = false;
-    } else {
-      this.isSmallSize = false;
-      this.isSmallDevice = false;
-      if (this.isExpanded) {
-        menuWidth = 300;
-      } else {
-        menuWidth = 65;
-      }
-    }
-    containerWidth = width - menuWidth;
-   // document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--dashboard-container-width', `${this.mainDivWidth}px`); // for charts?
-   // document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
-  }
-
 
 }
