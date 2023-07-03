@@ -4,9 +4,14 @@ import {LDAPAuthStrategyConfig} from '../../models/auth-configuration';
 import {SourceSystem, UserAuthority, UserProfileDto} from '../../../user/dto/user-profile-dto';
 import * as ldap from 'ldapjs';
 import {AuthorityId} from '../../../user/enum/authority-id';
+import {MineLoggerService} from '../../../shared/services/mine-logger.service';
 
 @Injectable()
 export class GenericLdapService extends LdapAuthProvider {
+
+    constructor(protected readonly logger: MineLoggerService) {
+        super();
+    }
 
     async getUserProfileData(userName: string, password: string): Promise<any> {
 
