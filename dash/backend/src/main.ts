@@ -170,7 +170,7 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true }));
 
   const getRoute = path => {
-    let getPath =  path ? path.replace(/\?.*/g, '') : '';
+    const getPath =  path ? path.replace(/\?.*/g, '') : '';
     return getPath.replace(/\d+/g, '?');
   };
 
@@ -197,7 +197,7 @@ async function bootstrap() {
   try {
     await m9sCronService.updateExceptionAndImageMetrics();
   } catch (e) {
-    logger.log('There was an error setting the initial v1 exception and image metrics', e, 'bootstrap');
+    logger.error('There was an error setting the initial v1 exception and image metrics', e, 'bootstrap');
   }
 
   const configurationService = app.get(ConfigService);
