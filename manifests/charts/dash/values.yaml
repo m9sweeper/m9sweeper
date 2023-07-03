@@ -41,18 +41,21 @@ service:
   type: ClusterIP
   port: 3000
 
+# Creates kube-prometheus-stack CRDs for dashboards, scrapers, and alerts 
 prometheusOperator:
   enabled: false
-  port: 9090
-  scrapeInterval: "15s"
+  scrapeInterval: "60s"
   defaultRules:
     enabled: true
+    # Alert if more than X new unique CVEs discovered in an hour
     numNewCVEs:
-      enabled: true
+      enabled: false
       threshold: 20
+    # Alerts if over X% of pods in the cluster are non-compliant with CVE standards
     percentCompliance:
       enabled: true
       threshold: 20
+  # Convenient way of specifying additional rules
   additionalRules: {}
 #    rulename:
 #      additionalLabels: {}
