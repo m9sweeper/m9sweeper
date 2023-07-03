@@ -6,7 +6,7 @@ import {AlertService} from '@full-fledged/alerts';
 import {take} from 'rxjs/operators';
 import {
   FalcoRuleAddEditDialogComponent
-} from '../falco-settings/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
+} from '../falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
 import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
 
 @Component({
