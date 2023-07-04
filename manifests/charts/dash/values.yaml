@@ -57,22 +57,21 @@ prometheusOperator:
       threshold: 20
   # Convenient way of specifying additional rules
   additionalRules: {}
-#    rulename:
-#      additionalLabels: {}
+#    ruleName:
+#      additionalLabels:
+#        extraLabel: helloWorld
 #      groups:
-#        - name: test
+#        - name: example
 #          rules:
 #            - alert: test
 #              annotations:
-#                additionalAnnotations: {}
 #                description: Describe here
 #                runbook_url: url_here
 #                summary: Summarize here
-#              expr: ex
+#              expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > 20
 #              for: 10m
 #              labels:
 #                severity: critical
-#                additionalLabels: {}
 
 grafana:
   enabled: true
