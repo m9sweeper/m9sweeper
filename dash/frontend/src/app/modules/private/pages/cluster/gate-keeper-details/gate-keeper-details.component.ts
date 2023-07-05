@@ -105,8 +105,8 @@ export class GateKeeperDetailsComponent implements OnInit {
 
   openAddConstraintTemplate() {
     const openAddConstraintTemplate = this.dialog.open(AddTemplateConstraintComponent, {
-      width: '850px',
-      height: '570px',
+      width: '1000px',
+      height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
       data: { clusterId: this.clusterId, templateName: this.templateName, templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
@@ -140,8 +140,8 @@ export class GateKeeperDetailsComponent implements OnInit {
 
   editTemplateConstraint(constraint) {
     const openAddConstraintTemplate = this.dialog.open(AddTemplateConstraintComponent, {
-      width: '850px',
-      height: '570px',
+      width: '1000px',
+      height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
       data: {isEdit: true, constraint, clusterId: this.clusterId, templateName: this.templateName,

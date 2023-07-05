@@ -8,6 +8,7 @@ import {ClusterService} from "../../cluster/services/cluster.service";
 import {Express} from 'express';
 import {V1PodList} from "@kubernetes/client-node";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
+import {ConfigService} from '@nestjs/config';
 
 
 @Injectable()
@@ -17,6 +18,7 @@ export class KubesecService {
         private readonly clusterService: ClusterService,
         private readonly kubernetesApiService: KubernetesApiService,
         private readonly httpService: HttpService,
+        protected readonly configService: ConfigService
     ) {}
 
     async listNamespaces(clusterId: number): Promise<V1NamespaceList> {
@@ -39,7 +41,8 @@ export class KubesecService {
             try {
                 const v1Pod = await this.kubernetesApiService.getNamespacedPod(podName, namespace, cluster.kubeConfig);
                 const plainV1Pod = instanceToPlain(v1Pod);
-                return this.httpService.post('http://localhost:8080/scan', plainV1Pod).pipe(take(1)).toPromise();
+                const url = this.configService.get('kubesec.url') + '/scan';
+                return this.httpService.post(url, plainV1Pod).pipe(take(1)).toPromise();
             } catch (err) {
                 return await new Promise(reject => reject('Pod couldn\'t be reached'));
             }
@@ -50,7 +53,8 @@ export class KubesecService {
         if(podFile){
             try {
                 const podFileContents = podFile.buffer.toString();
-                return this.httpService.post('http://localhost:8080/scan', podFileContents).pipe(take(1)).toPromise();
+                const url = this.configService.get('kubesec.url') + '/scan';
+                return this.httpService.post(url, podFileContents).pipe(take(1)).toPromise();
             } catch (err) {
                 return await new Promise(reject => reject('Pod file couldn\'t be scanned'));
             }

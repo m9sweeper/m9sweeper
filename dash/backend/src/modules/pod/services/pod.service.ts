@@ -10,13 +10,17 @@ import {ImageIdInClusterMap} from "../../k8s-image/classes/imageIdInClusterMap";
 import {V1ContainerStatus} from "@kubernetes/client-node";
 import {V1Container} from "@kubernetes/client-node/dist/gen/model/v1Container";
 import {UtilitiesService} from "../../shared/services/utilities.service";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
+import { PodComplianceForNamespace } from '../dto/pod-compliance-for-namespace';
 
 
 @Injectable()
 export class PodService {
-    constructor(private readonly podDao:PodDao,
-                protected readonly utilities: UtilitiesService
-                ) {}
+    constructor(
+      private readonly podDao:PodDao,
+      protected readonly utilities: UtilitiesService,
+      private logger: MineLoggerService,
+    ) {}
 
     async getAllPods(
       clusterId: number, namespace: string,
@@ -96,11 +100,9 @@ export class PodService {
 
         // pods can't change, so no reason to update. Just create.
         if (checkPodExistOrNot.length == 0) {
-            // console.log("Found pod " + pod.metadata.name + " in cluster " + clusterId);
             await this.podDao.savePod(podDTO, imageIds);
         } else {
             await this.podDao.linkExistingPodImages(checkPodExistOrNot[0].id, imageIds);
-            // console.log("Pod " + pod.metadata.name + " already exists in cluster " + clusterId);
         }
     }
 
@@ -118,10 +120,10 @@ export class PodService {
 
         // clear pod history
         try {
-            console.log("Clearing pod history for " + dayStr);
+            this.logger.log({label: 'Clearing pod history for yesterday', data: { date: dayStr }}, 'PodService.savePodHistory');
             await this.podDao.clearPodHistory(dayStr);
         } catch (e) {
-            console.log('Error clearing K8s namespace history for', dayStr);
+            this.logger.error({label: 'Error clearing K8s namespace history for yesterday', data: { date: dayStr }}, e, 'PodService.savePodHistory');
         }
 
         // copy all pods
@@ -130,10 +132,10 @@ export class PodService {
         if (pods) {
             for (const pod of pods) {
                 try {
-                    console.log(`Saving pod history for ${pod.name} of ${pod.namespace} in cluster ${pod.clusterId}`);
+                    this.logger.log({label: 'Saving pod history', data: { pod }}, 'PodService.savePodHistory');
                     await this.podDao.savePodHistory(pod, dayStr);
-                } catch (error) {
-                    console.log('Error saving history for Pod', {pod, error});
+                } catch (e) {
+                    this.logger.error({label: 'Error saving history for Pod', data: { pod }}, e, 'PodService.savePodHistory');
                 }
             }
         }
@@ -141,6 +143,10 @@ export class PodService {
 
     async getPodByNamespace(namespace: string): Promise<any> {
         return this.podDao.getPodByNamespace(namespace);
+    }
+
+    async getCurrentPodsComplianceSummary(clusterId: number): Promise<PodComplianceForNamespace[]> {
+        return await this.podDao.getCurrentPodsComplianceSummary(clusterId);
     }
 
     async getPodsComplianceSummary(clusterId: number): Promise<PodComplianceSummaryDto[]> {

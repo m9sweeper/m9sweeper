@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,13 +8,14 @@ import {AlertService} from '@full-fledged/alerts';
 import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {ChartSizeService} from '../../services/chart-size.service';
 
 @Component({
   selector: 'app-show-json-data-more',
   templateUrl: './show-json-data-more.component.html',
   styleUrls: ['./show-json-data-more.component.scss']
 })
-export class ShowJsonDataMoreComponent implements OnInit {
+export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   header: string;
 
   constructor(
@@ -22,6 +23,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
               private falcoService: FalcoService,
               private alertService: AlertService,
               private dialog: MatDialog,
+              private chartSizeService: ChartSizeService,
   ) { }
 
   dataSource: MatTableDataSource<IFalcoLog>;
@@ -47,8 +49,10 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   falcoCountData: IFalcoCount[];
   eventData: IFalcoLog;
-
-
+  innerScreenWidth: number;
+  resizeTimeout;
+  breakpointMedium = 800;
+  currentCardSize: string;
   barChartAttributes = {
     view: [] = [550, 300],
     colorScheme: {
@@ -72,11 +76,16 @@ export class ShowJsonDataMoreComponent implements OnInit {
     this.clusterId = this.route.parent.parent.snapshot.params.id;
     this.eventId = this.route.snapshot.params.eventId;
     this.signature = this.route.snapshot.params.signature;
+    this.currentCardSize = 'col-sm-6';
 
     this.getEventById();
     this.getRelatedEvents();
 
     this.buildBarChartData();
+  }
+
+  ngAfterViewInit() {
+    this.setChartHeightWidth();
   }
 
   pageEvent(pageEvent: any) {
@@ -102,7 +111,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
         this.extractProperty = this.extractProperties(this.raw);
         this.eventData = response.data;
       }, (err) => {
-        alert(err);
+        this.alertService.danger(err.error.message);
       });
   }
 
@@ -119,7 +128,7 @@ export class ShowJsonDataMoreComponent implements OnInit {
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        alert(err);
+        this.alertService.danger(err.error.message);
       });
   }
 
@@ -169,7 +178,9 @@ export class ShowJsonDataMoreComponent implements OnInit {
 
   onClickShare(){
       this.dialog.open(ShareEventComponent, {
-      width: '100%'
+      // width: '100%'
+      // minHeight: '600px',
+        height: 'fit-content'
     });
   }
 
@@ -208,5 +219,30 @@ export class ShowJsonDataMoreComponent implements OnInit {
     this.eventId = event.id;
     this.getEventById();
     this.getRelatedEvents();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  calculateScreenSize() {
+    this.setChartHeightWidth();
+  }
+
+  setChartHeightWidth() {
+    // debounce chart resizing
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      const innerWindow = document.getElementsByTagName('app-show-json-data-more').item(0) as HTMLElement;
+      this.innerScreenWidth = innerWindow.offsetWidth;
+      this.barChartAttributes.view = this.chartSizeService.getIncidenceRateChartSize(this.breakpointMedium,
+        this.innerScreenWidth);
+      this.updateFormatting();
+    } , 50);
+  }
+
+  updateFormatting() {
+    if (this.innerScreenWidth >= this.breakpointMedium) {
+      this.currentCardSize = 'col-xs-6';
+    } else {
+      this.currentCardSize = 'col-xs-12';
+    }
   }
 }

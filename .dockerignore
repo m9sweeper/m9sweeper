@@ -1,0 +1,13 @@
+**/charts/
+dash/**/.git/
+**/.cache
+**/Dockerfile
+**/README.md
+**/.idea
+**/.DS_Store
+**/Thumbs.db
+**/.env
+**/.env.sample
+dash/backend/src/config/licensing-portal-config/misc.local.ts
+dash/backend/src/config/licensing-portal-config/misc.dev.ts
+**/node_modules

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
 import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
@@ -163,7 +163,9 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
   }
 
   setChartSize() {
-    this.barChartAttributes.view = this.chartSizeService.getReportChartSize();
+    const innerWindow = document.getElementsByTagName('app-worst-images').item(0) as HTMLElement;
+    const innerScreenWidth = innerWindow.offsetWidth;
+    this.barChartAttributes.view = this.chartSizeService.getReportChartSize(innerScreenWidth);
   }
 
   ngOnDestroy() {

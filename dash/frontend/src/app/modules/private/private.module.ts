@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import {CommonModule, DatePipe, NgOptimizedImage} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,7 +44,6 @@ import { ScannerListComponent } from './pages/scanners/scanner-list/scanner-list
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 import { CreateAppSettingsComponent } from './pages/app-settings/create-app-settings/create-app-settings.component';
 import { SubNavigationComponent } from '../shared/subnavigation/sub-navigation.component';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { ExternalAuthConfigurationListComponent } from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
 import { ExternalAuthConfigurationCreateComponent } from './pages/external-auth-configuration/external-auth-configuration-create/external-auth-configuration-create.component';
@@ -128,6 +127,10 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
+import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
+import { FalcoOrgSettingsPageComponent } from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
+import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluster-list/falco-rules-cluster-list.component';
+import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 
 
 @NgModule({
@@ -216,6 +219,10 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,
+    FalcoRuleAddEditDialogComponent,
+    FalcoOrgSettingsPageComponent,
+    FalcoRulesClusterListComponent,
+    ArrayTextPipe,
   ],
   imports: [
     CommonModule,
@@ -245,7 +252,6 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatTabsModule,
-    NgxMatFileInputModule,
     SharedModule,
     MatNativeDateModule,
     FontAwesomeModule,
@@ -260,6 +266,7 @@ import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keepe
     JsonSchemaFormModule,
     MatExpansionModule,
     MatButtonToggleModule,
+    NgOptimizedImage
   ],
   providers: [
     DatePipe

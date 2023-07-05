@@ -11,11 +11,13 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class ExternalAuthCbComponent implements OnInit, OnDestroy {
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private authService: AuthService,
-              private jwtService: JwtAuthService,
-              private loaderService: NgxUiLoaderService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private jwtService: JwtAuthService,
+    private loaderService: NgxUiLoaderService
+  ) {}
 
   ngOnInit(): void {
     this.loaderService.start('external-auth-handler-page-loader');
@@ -32,7 +34,6 @@ export class ExternalAuthCbComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
 }

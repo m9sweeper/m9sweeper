@@ -15,7 +15,8 @@ RUN mkdir /usr/src/app/backend/vendor
 COPY ./dash/backend/vendor /usr/src/app/backend/vendor
 RUN node --version && npm --version
 RUN npm install -g npm@9.5.0
-RUN npm ci
+RUN npm ci && \
+    chown -R root:root node_modules
 
 COPY /dash/backend /usr/src/app/backend/
 RUN npm run prebuild
@@ -33,9 +34,9 @@ RUN rm -f node_modules/@nestjs-modules/mailer && rm -f node_modules/knexnest && 
 WORKDIR /usr/src/app/frontend
 COPY ./dash/frontend/package.json /usr/src/app/frontend
 COPY ./dash/frontend/package-lock.json /usr/src/app/frontend
-WORKDIR /usr/src/app/frontend/vendor
 COPY ./dash/frontend/vendor /usr/src/app/frontend/vendor
-RUN npm ci
+RUN npm ci && \
+    chown -R root:root node_modules
 
 WORKDIR /usr/src/app
 COPY ./dash/frontend /usr/src/app/frontend

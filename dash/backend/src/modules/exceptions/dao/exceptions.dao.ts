@@ -123,7 +123,7 @@ export class ExceptionsDao {
     ): Promise<ExceptionQueryDto[]> {
         const knex = await this.databaseService.getConnection();
         const today = new Date().toISOString().slice(0, 10); // @TODO: Eventually make this a utility function, perhaps with timezone/locality considered
-        let sql = knex.distinct('ex.id as _id',
+        const sql = knex.distinct('ex.id as _id',
             'ex.issue_identifier as _issueIdentifier',
             'ex.title AS _title',
             'ex.type as _type',
@@ -155,7 +155,7 @@ export class ExceptionsDao {
                     .orWhere('ex.end_date', '>', today);
             })
             .andWhere(function() {
-                let cond = this.where({
+                const cond = this.where({
                     'ex.relevant_for_all_clusters': true
                 });
 
@@ -166,7 +166,7 @@ export class ExceptionsDao {
                 }
             })
             .andWhere(function() {
-                let cond = this.where({
+                const cond = this.where({
                     'ex.relevant_for_all_policies': true
                 });
 
@@ -175,7 +175,7 @@ export class ExceptionsDao {
                 }
             })
             .andWhere(function() {
-                let cond = this.where({
+                const cond = this.where({
                     'ex.relevant_for_all_kubernetes_namespaces': true
                 });
 
@@ -190,8 +190,6 @@ export class ExceptionsDao {
         // if (imageName) {
         //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
         // }
-
-        //console.log('getAllFilteredPolicyExceptions: ', sql.toQuery());
 
         const result = await knexnest(sql).then(data => data);
         return result ? result : [];
@@ -235,7 +233,6 @@ export class ExceptionsDao {
             .leftJoin('clusters AS cl', 'cl.id', 'cluster_ex.cluster_id')
             .where('ex.status', 'active')
             .andWhere('ex.type', 'gatekeeper')
-            .andWhere('ex.issue_identifier', '')
             // .andWhere('ex.relevant_for_all_clusters', true)
             .andWhere('ex.deleted_at', null);
         return await knexnest(sql).then(data => data);
@@ -313,7 +310,6 @@ export class ExceptionsDao {
             .andWhere('cluster_ex.cluster_id', clusterId)
             .andWhere('ex.relevant_for_all_clusters', false)
             .andWhere('ex.deleted_at', null);
-        // console.log(sql.toSQL());
         return await knexnest(sql).then(data => data);
     }
 
@@ -512,8 +508,7 @@ export class ExceptionsDao {
                 'u.email as _email',
                 knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as _fullName`)
             ])
-            .from('users as u')
-        // console.log(query.toSQL());
+            .from('users as u');
         return knexnest(query)
             .then(data => data);
     }
@@ -524,8 +519,7 @@ export class ExceptionsDao {
                 knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as "_fullName"`)
             )
             .from('users as u')
-           .where('u.id', userId)
-        // console.log(query.toSQL());
+           .where('u.id', userId);
         return knexnest(query)
             .then(data => {
                 return data;
@@ -572,8 +566,6 @@ export class ExceptionsDao {
             .whereNull('deleted_at')
             .where('ex.status', 'active')
             .andWhere('end_date', tomorrow);
-
-        // console.log(query.toSQL());
         return knexnest(query)
             .then(data => {
                 return data;

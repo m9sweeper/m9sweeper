@@ -1,0 +1,25 @@
+{{/* https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack */}}
+{{- if and .Values.prometheusOperator.enabled .Values.prometheusOperator.additionalRules }}
+{{- $prometheusAppName := include "dash.prom-name" . }}
+{{- range $prometheusRuleName, $prometheusRule := .Values.prometheusOperator.additionalRules }}}}
+{{- $prometheusRuleNameLength := len $prometheusRuleName }}
+{{- $lengthToAbbreviate := sub 63 $prometheusRuleNameLength }}
+{{- $abbreviatedPromAppName := $prometheusAppName | trunc $lengthToAbbreviate | trimSuffix "-" }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-%s" $abbreviatedPromAppName $prometheusRuleName }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "dash.labels" $ | nindent 4 }}
+    {{- if $prometheusRule.additionalLabels }}
+    {{- toYaml $prometheusRule.additionalLabels | nindent 4 }}
+    {{- end }}# closes if $prometheusRule.additionalLabels
+    role: alert-rules
+    app: {{ printf "%s" $prometheusAppName }}
+spec:
+  groups:
+    {{- toYaml $prometheusRule.groups | nindent 4 }}
+{{- end }}# closes range .Values.prometheusOperator.additionalRules
+{{- end }}# closes if .Values.prometheusOperator.additionalRules

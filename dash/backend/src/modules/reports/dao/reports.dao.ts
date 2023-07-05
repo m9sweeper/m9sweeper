@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../shared/services/database.service';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { ReportsVulnerabilityExportDto } from '../dto/reports-vulnerability-export-dto';
 import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity';
 import { ReportsVulnerabilityExportPreviewDto } from '../dto/reports-vulnerability-export-preview-dto';
@@ -13,6 +13,8 @@ import {ReportsHistoricalVulnerabilitiesDto} from '../dto/reports-historical-vul
 import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
 import {format} from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
+import knex, { Knex } from 'knex';
+import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
 
 
 @Injectable()
@@ -175,74 +177,83 @@ export class ReportsDao {
         return {count, results: queryResults};
     }
 
-    async getRunningVulnerabilities(clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string})
-        : Promise<ReportsRunningVulnerabilitiesPreviewDto> {
-        const knex = await this.databaseService.getConnection();
+    async getRunningVulnerabilitiesQuery(
+      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+    ): Promise<{ query: Knex.QueryBuilder, knex: Knex<any, any[]>}> {
+      const knex = await this.databaseService.getConnection();
 
-        let subQuery = knex.select([
-            'i.id',
-            knex.raw("concat(i.name,':', i.tag) as image"),
-            'i.running_in_cluster',
-            'i.scan_results',
-            'i.last_scanned',
-            knex.raw("array_agg(distinct ki.namespace) as namespaces")
+      let subQuery = knex.select([
+        'i.id',
+        knex.raw("concat(i.name,':', i.tag) as image"),
+        'i.running_in_cluster',
+        'i.scan_results',
+        'i.last_scanned',
+        knex.raw("array_agg(distinct ki.namespace) as namespaces")
+      ])
+        .from('images as i')
+        .innerJoin('clusters as c', 'c.id', 'i.cluster_id')
+        .innerJoin('kubernetes_images as ki', 'ki.image_id', 'i.id')
+        .where('i.running_in_cluster', true)
+        .andWhere('i.deleted_at', null)
+        .andWhere('c.deleted_at', null)
+        .andWhere('i.cluster_id', clusterId)
+        .andWhere('c.id', clusterId)
+        .andWhere('ki.cluster_id', clusterId);
+
+      if (options?.namespaces) {
+        subQuery = subQuery.whereIn('ki.namespace', options.namespaces);
+      }
+      if (options?.isCompliant) {
+        subQuery = subQuery.andWhere('i.scan_results',
+          options.isCompliant === 'true'? 'Compliant' : 'Non-compliant');
+      }
+
+      subQuery = subQuery
+        .groupBy([
+          'i.id',
+          'i.name',
+          'ki.name'
         ])
-            .from('images as i')
-            .innerJoin('clusters as c', 'c.id', 'i.cluster_id')
-            .innerJoin('kubernetes_images as ki', 'ki.image_id', 'i.id')
-            .where('i.running_in_cluster', true)
-            .andWhere('i.deleted_at', null)
-            .andWhere('c.deleted_at', null)
-            .andWhere('i.cluster_id', clusterId)
-            .andWhere('c.id', clusterId)
-            .andWhere('ki.cluster_id', clusterId);
+        .orderByRaw("concat(i.name,':', i.tag) desc");
 
-        if (options?.namespaces) {
-            subQuery = subQuery.whereIn('ki.namespace', options.namespaces);
-        }
-        if (options?.isCompliant) {
-            subQuery = subQuery.andWhere('i.scan_results',
-                options.isCompliant === 'true'? 'Compliant' : 'Non-compliant');
-        }
-
-        subQuery = subQuery
-            .groupBy([
-                'i.id',
-                'i.name',
-                'ki.name'
-            ])
-            .orderByRaw("concat(i.name,':', i.tag) desc");
-
-        const query = knex.select([
-            'image_details.id as image_id',
-            'image_details.image',
-            'image_details.running_in_cluster',
-            'image_details.namespaces',
-            'image_details.scan_results',
-            'image_details.last_scanned',
-            knex.raw("sum(case when severity = 'Critical' then 1 else 0 end) as total_critical"),
-            knex.raw("sum(case when severity = 'Critical' and is_fixable=true then 1 else 0 end) as total_fixable_critical"),
-            knex.raw("sum(case when severity = 'High' then 1 else 0 end) as total_major"),
-            knex.raw("sum(case when severity = 'High' and is_fixable=true then 1 else 0 end) as total_fixable_major"),
-            knex.raw("sum(case when severity = 'Medium' then 1 else 0 end) as total_medium"),
-            knex.raw("sum(case when severity = 'Medium' and is_fixable=true then 1 else 0 end) as total_fixable_medium"),
-            knex.raw("sum(case when severity = 'Low' then 1 else 0 end) as total_low"),
-            knex.raw("sum(case when severity = 'Low' and is_fixable=true then 1 else 0 end) as total_fixable_low"),
-            knex.raw("sum(case when severity = 'Negligible' then 1 else 0 end) as total_negligible"),
-            knex.raw("sum(case when severity = 'Negligible' and is_fixable=true then 1 else 0 end) as total_fixable_negligible")
+      const query = knex.select([
+        'image_details.id as image_id',
+        'image_details.image',
+        'image_details.running_in_cluster',
+        'image_details.namespaces',
+        'image_details.scan_results',
+        'image_details.last_scanned',
+        knex.raw("sum(case when severity = 'Critical' then 1 else 0 end) as total_critical"),
+        knex.raw("sum(case when severity = 'Critical' and is_fixable=true then 1 else 0 end) as total_fixable_critical"),
+        knex.raw("sum(case when severity = 'High' then 1 else 0 end) as total_major"),
+        knex.raw("sum(case when severity = 'High' and is_fixable=true then 1 else 0 end) as total_fixable_major"),
+        knex.raw("sum(case when severity = 'Medium' then 1 else 0 end) as total_medium"),
+        knex.raw("sum(case when severity = 'Medium' and is_fixable=true then 1 else 0 end) as total_fixable_medium"),
+        knex.raw("sum(case when severity = 'Low' then 1 else 0 end) as total_low"),
+        knex.raw("sum(case when severity = 'Low' and is_fixable=true then 1 else 0 end) as total_fixable_low"),
+        knex.raw("sum(case when severity = 'Negligible' then 1 else 0 end) as total_negligible"),
+        knex.raw("sum(case when severity = 'Negligible' and is_fixable=true then 1 else 0 end) as total_fixable_negligible")
+      ])
+        .from(subQuery.as('image_details'))
+        .leftJoin(knex.raw("image_scan_results as isr on isr.image_id = image_details.id and isr.is_latest=true"))
+        .leftJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'))
+        .groupBy([
+          'image_details.id',
+          'image_details.image',
+          'image_details.running_in_cluster',
+          'image_details.namespaces',
+          'image_details.scan_results',
+          'image_details.last_scanned'
         ])
-            .from(subQuery.as('image_details'))
-            .leftJoin(knex.raw("image_scan_results as isr on isr.image_id = image_details.id and isr.is_latest=true"))
-            .leftJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'))
-            .groupBy([
-                'image_details.id',
-                'image_details.image',
-                'image_details.running_in_cluster',
-                'image_details.namespaces',
-                'image_details.scan_results',
-                'image_details.last_scanned'
-            ])
-            .orderBy('image_details.last_scanned', 'desc');
+        .orderBy('image_details.last_scanned', 'desc');
+
+      return { query, knex };
+    }
+
+    async getRunningVulnerabilities(
+      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+    ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
+        const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
 
         const count = await knex
             .count('*', {as: 'entries'})
@@ -254,11 +265,31 @@ export class ReportsDao {
             query.limit(options.limit);
         }
 
-        const queryResults = await query.then((response) => {
-            return plainToClass(ReportsRunningVulnerabilitiesDto, response);
+        // @ts-ignore
+        const queryResults: ReportsRunningVulnerabilitiesDto[] = await query.then((response) => {
+          return plainToInstance(ReportsRunningVulnerabilitiesDto, response);
         });
 
         return {count, results: queryResults};
+    }
+
+    async getRunningVulnerabilitiesSummary(
+      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+    ): Promise<ReportsRunningVulnerabilitiesSummaryDto> {
+      const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
+      const outerquery = knex.select([
+        knex.raw('SUM(summary_info.total_critical) AS total_critical'),
+        knex.raw('SUM(summary_info.total_fixable_critical) AS total_fixable_critical'),
+        knex.raw('SUM(summary_info.total_major) AS total_major'),
+        knex.raw('SUM(summary_info.total_fixable_major) AS total_fixable_major'),
+        knex.raw('SUM(summary_info.total_medium) AS total_medium'),
+        knex.raw('SUM(summary_info.total_fixable_medium) AS total_fixable_medium'),
+        knex.raw('SUM(summary_info.total_low) AS total_low'),
+        knex.raw('SUM(summary_info.total_fixable_low) AS total_fixable_low'),
+        knex.raw('SUM(summary_info.total_negligible) AS total_negligible'),
+        knex.raw('SUM(summary_info.total_fixable_negligible) AS total_fixable_negligible')
+      ]).from(query.as('summary_info'));
+      return outerquery.first().then(result => plainToInstance(ReportsRunningVulnerabilitiesSummaryDto, result));
     }
 
     async getHistoricalRunningVulnerabilities(clusterId: number, date: string, options: {limit?: number, namespaces?: string[], isCompliant?: string})

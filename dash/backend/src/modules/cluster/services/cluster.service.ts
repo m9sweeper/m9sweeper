@@ -28,13 +28,12 @@ import {
   GatekeeperConstraintSpecMatchKind, GateKeeperConstraintViolation
 } from "../dto/gatekeeper-constraint-dto";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
-import {ApiregistrationV1beta1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1beta1Api";
-import {ApiregistrationApi} from "@kubernetes/client-node/dist/gen/api/apiregistrationApi";
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
-import {PrometheusService} from "../../shared/services/prometheus.service";
+import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 import {AuditLogService} from "../../audit-log/services/audit-log.service";
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class ClusterService {
@@ -46,8 +45,9 @@ export class ClusterService {
       private readonly kubernetesClusterService: KubernetesClusterService,
       private readonly exceptionBlockService: ExceptionBlockService,
       private readonly configService: ConfigService,
-      private readonly prometheusService: PrometheusService,
+      private readonly prometheusService: PrometheusV1Service,
       private readonly auditLogService: AuditLogService,
+      private logger: MineLoggerService,
   ) {}
 
   async createCluster(cluster: ClusterDto, installWebhook: boolean, serviceAccountConfig?: string): Promise<ClusterDto> {
@@ -157,6 +157,10 @@ export class ClusterService {
     await this.clusterEventService.createClusterEvent(clusterEventData, id);
 
     if (installWebhook) {
+      // I'm not convinced that this is working as expected.
+      // checkIfWebhookExists should return boolean T/F indicating whether it exists
+      // if it doesn't exist, it should create it
+      // instead, it's creating it if it gets an error
       try {
         await this.checkIfWebhookExists(`m9sweeper-validation-hook-cluster-${id}`, id);
       }
@@ -164,9 +168,8 @@ export class ClusterService {
         try {
           await this.createWebhookForCluster(id);
         } catch (e) {
-          console.log(e);
+          this.logger.error({label: 'Error creating webhook for cluster', data: { clusterId: id }}, e, 'ClusterService.updateCluster');
         }
-        console.log(error);
       }
     }
     await this.kubernetesClusterService.sync(updatedCluster);
@@ -202,10 +205,10 @@ export class ClusterService {
 
     // Clear any existing history entries for this date
     try {
-      console.log("Clearing cluster history for " + dayStr);
+      this.logger.log({label: 'Clearing cluster history for date', data: { date: dayStr }}, 'ClusterService.saveK8sClustersHistory');
       await this.clusterDao.clearK8sClustersHistory(dayStr);
     } catch (e) {
-      console.log('Error clearing K8s history for', dayStr);
+      this.logger.error({label: 'Error clearing K8s history for date', data: { date: dayStr }}, e, 'ClusterService.saveK8sClustersHistory');
     }
 
     // Get all the currently active clusters
@@ -215,7 +218,7 @@ export class ClusterService {
     if (currentClusters) {
       for (const cluster of currentClusters) {
         try {
-          console.log(`Saving cluster history for ${cluster.name}`);
+          this.logger.log({label: 'Saving cluster history', data: { cluster: cluster.name }}, 'ClusterService.saveK8sClustersHistory');
           await this.clusterDao.saveK8sClustersHistory(cluster, dayStr);
           //const clusterEventData = this.clusterEventService.createClusterEventObject(0, 'Cluster History', 'History', 'Info', `History of ${cluster.name}`, null);
           //await this.clusterEventService.createClusterEvent(clusterEventData, cluster.id);
@@ -262,12 +265,12 @@ export class ClusterService {
 
     try {
       const create_webhook = await admissionregistrationV1Api.createValidatingWebhookConfiguration(v1ValidatingWebhookConfiguration);
-      if(create_webhook.body.webhooks.length){
-        console.log(`m9sweeper-validation-hook-cluster-${clusterId} has been created.`);
+      if (create_webhook.body.webhooks.length) {
+        this.logger.log({label: 'Webhook has been created', data: { name: `m9sweeper-validation-hook-cluster-${clusterId}` }}, 'ClusterService.createWebhookForCluster');
       }
     }
     catch (e) {
-      console.log('Error:', e);
+      this.logger.error({label: 'Error creating webhook', data: { clusterId }}, e, 'ClusterService.createWebhookForCluster');
     }
   }
 
@@ -277,10 +280,8 @@ export class ClusterService {
     const webhook = `m9sweeper-validation-hook-cluster-${clusterId}`;
     try {
       const response = await admissionregistrationV1Api.deleteValidatingWebhookConfiguration(webhook);
-      // console.log(response);
     } catch(e) {
-      console.log(`Could not delete ${webhook}`);
-      // console.log(e);
+      this.logger.error({label: 'Error deleting webhook', data: { clusterId, webhook }}, e, 'ClusterService.deleteClusterWebhook');
     }
   }
 
@@ -292,8 +293,7 @@ export class ClusterService {
       const webhooks = checkWebhooks.body.webhooks;
       return !!(webhooks && webhooks.length);
     } catch (e) {
-      console.log(`${webhookName} does not exists.`);
-      // console.log(e);
+      this.logger.error({label: 'Webhook does not exist', data: { clusterId, webhookName }}, e, 'ClusterService.checkIfWebhookExists');
       return false;
     }
 
@@ -315,11 +315,10 @@ export class ClusterService {
 
   async readFolderNames(pathName: string): Promise<string[]> {
     try {
-      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8'));
+      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
       return readDirNamesFromFile.resources;
     } catch (e) {
-      console.log(`Could not read file ${pathName}`);
-      console.log(e);
+      this.logger.error({label: 'Could not read file at path', data: { pathName }}, e, 'ClusterService.readFolderNames');
       return [];
     }
   }
@@ -333,7 +332,6 @@ export class ClusterService {
         const fileName = `${templateDir}/${dir}/kustomization.yaml`;
         dirStructure[dir] = await this.readFolderNames(fileName);
       }
-      // console.log(dirStructure);
     }
     return dirStructure;
   }
@@ -344,9 +342,7 @@ export class ClusterService {
     let installationStatus = false;
     try {
       const resource = await apiRegistration.readAPIService('v1beta1.templates.gatekeeper.sh');
-      console.log('............................Checking GateKeeper Installation Status................................................');
-      console.log(resource.body.status);
-      console.log('....................................................................................................................');
+      this.logger.log({label: 'GateKeeper installation status', data: { clusterId, status: resource.body.status }}, 'ClusterService.checkGatekeeperInstallationStatus');
       installationStatus = resource.body.status.conditions.length ? true : false;
       if (installationStatus) {
         const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -362,7 +358,7 @@ export class ClusterService {
       }
     }
     catch(e) {
-      console.log(e);
+      this.logger.error({label: 'Error checking GateKeeper installation status', data: { clusterId }}, e, 'ClusterService.checkGatekeeperInstallationStatus');
       return {status: installationStatus, message: 'Not Installed', error: e.message};
     }
   }
@@ -380,27 +376,24 @@ export class ClusterService {
         template.constraintsCount = constraintCount;
         template.enforced = constraintCount ? true : false;
       }
-      // console.log('DATA: ', templatesDto);
       return templatesDto;
     }
-    catch(err) {
-      console.log('ERROR: ', err.statusCode);
-      // return null;
-
+    catch(e) {
+      this.logger.error({label: 'Error getting GateKeeper constraint templates', data: { clusterId }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplates');
     }
   }
 
   async deployOPAGateKeeperConstraintTemplates(clusterId: number, templateName: string): Promise<{message: string, statusCode: number}> {
-    console.log('Template Name: ', templateName);
+    this.logger.log({label: 'Going to deploy GateKeeper constraint template', data: { clusterId, templateName }}, 'ClusterService.deployOPAGateKeeperConstraintTemplates');
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
     try {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8'));
+      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       await customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
       return {message: 'Template was deployed successfully', statusCode: 200};
     } catch (e) {
-      console.log( e);
+      this.logger.error({label: 'Error deploying GateKeeper constraint template', data: { clusterId, templateName }}, e, 'ClusterService.deployOPAGateKeeperConstraintTemplates');
       if (e.statusCode === 409) {
         return {message: 'Template already exists', statusCode: e.statusCode};
       }
@@ -414,7 +407,7 @@ export class ClusterService {
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     const createTemplatePromises = []
     for (const templateName of templateNames) {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8'));
+      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
       const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
       createTemplatePromises.push(templateDeployPromise);
     }
@@ -439,9 +432,8 @@ export class ClusterService {
       const templateDto = plainToInstance(GatekeeperTemplateDto, template)
       return templateDto;
     }
-    catch(err) {
-      console.log('ERROR: ', err.statusCode);
-      // return null;
+    catch(e) {
+      this.logger.error({label: 'Error getting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplateByName');
     }
   }
 
@@ -453,9 +445,8 @@ export class ClusterService {
       const template= templateResponse.body;
       return JSON.stringify(template);
     }
-    catch(err) {
-      console.log('ERROR: ', err.statusCode);
-      // return null;
+    catch(e) {
+      this.logger.error({label: 'Error getting raw GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplateByNameRaw');
     }
   }
 
@@ -472,9 +463,8 @@ export class ClusterService {
       const destroyTemplate = await customObjectApi.deleteClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
       return {message: `${templateName} and related constraints were deleted successfully`, status: 200};
     }
-    catch(err) {
-      console.log('ERROR: ', err);
-      return {message: `Could not delete ${templateName}.`, status: err.statusCode};
+    catch(e) {
+      this.logger.error({label: 'Error deleting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.destroyOPAGateKeeperConstraintTemplateByName');
     }
   }
 
@@ -484,10 +474,10 @@ export class ClusterService {
     try {
       const template = jsYaml.load(fs.readFileSync(templatePath, 'utf-8'));
       const templateToDto = plainToInstance(GatekeeperTemplateDto, template);
-      console.log(templateToDto);
+      this.logger.log({label: 'Retrieved GateKeeper template', data: { clusterId, templateToDto }}, 'ClusterService.loadGatekeeperTemplate');
       return templateToDto;
     } catch (e) {
-      console.log('Error: ', e);
+      this.logger.error({label: 'Error retrieving GateKeeper template', data: { clusterId, dir, subDir }}, e, 'ClusterService.loadGatekeeperTemplate');
       return null;
     }
   }
@@ -499,7 +489,7 @@ export class ClusterService {
       const template = jsYaml.load(fs.readFileSync(templatePath, 'utf-8'));
       return template;
     } catch (e) {
-      console.log('Error: ', e);
+      this.logger.error({label: 'Error loading raw GateKeeper template', data: { clusterId, dir, subDir }}, e, 'ClusterService.loadRawGatekeeperTemplate');
       return null;
     }
   }
@@ -510,10 +500,10 @@ export class ClusterService {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       const deployedTemplate = await customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', rawTemplate);
-      console.log(deployedTemplate);
+      this.logger.log({label: 'Deploying GateKeeper constraint template', data: { clusterId, deployedTemplate }}, 'ClusterService.deployRawOPAGateKeeperConstraintTemplates');
       return {message: 'Template was deployed successfully', statusCode: 200};
     } catch (e) {
-      console.log('Error', e);
+      this.logger.error({label: 'Error deploying GateKeeper constraint template', data: { clusterId, template }}, e, 'ClusterService.deployRawOPAGateKeeperConstraintTemplates');
       if (e.statusCode === 409) {
         return await this.patchGateKeeperTemplate(clusterId, rawTemplate);
       }
@@ -535,10 +525,10 @@ export class ClusterService {
       const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
           'v1beta1', 'constrainttemplates', template.metadata.name,
           [patchMetadataName, patchMetadataAnnotations, patchSpecKind], undefined, undefined, undefined, options);
-      console.log(patchTemplate);
+      this.logger.log({label: 'Patched GateKeeper template successfully', data: { clusterId, template }}, 'ClusterService.patchGateKeeperTemplate');
       return {message: 'Patched the template successfully', statusCode: patchTemplate.response.statusCode};
     } catch (e) {
-      console.log('Error', e);
+      this.logger.error({label: 'Error patching GateKeeper template', data: { clusterId, template }}, e, 'ClusterService.patchGateKeeperTemplate');
       return {message: 'Could not Path the template', statusCode: e.statusCode};
     }
   }
@@ -550,11 +540,10 @@ export class ClusterService {
       const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
       return response.body['items'].length;
     }
-    catch(err) {
-      console.log(`No constraint for : ${templateName}`, err.statusCode);
+    catch(e) {
+      this.logger.error({label: 'Error counting GateKeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gateKeeperTemplateConstraintsCount');
       return 0;
     }
-
   }
 
   async gateKeeperTemplateConstraintsDetails(clusterId: number, templateName: string): Promise<GatekeeperConstraintDetailsDto[]> {
@@ -564,11 +553,10 @@ export class ClusterService {
       const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
       const constraintsDetails: any[] = response.body['items'];
       const data = plainToInstance(GatekeeperConstraintDetailsDto, constraintsDetails);
-      // console.log(constraintsDetails.map(d => JSON.stringify(d.status)));
       return plainToInstance(GatekeeperConstraintDetailsDto, constraintsDetails);
     }
-    catch(err) {
-      console.log('ERROR: ', err);
+    catch(e) {
+      this.logger.error({label: 'Error retrieving GateKeeper template constraint details - assuming none exist', data: { clusterId, templateName }}, e, 'ClusterService.gateKeeperTemplateConstraintsDetails');
       return [];
     }
   }
@@ -593,14 +581,14 @@ export class ClusterService {
       }
       return violationList.flat();
     }
-    catch(err) {
-      console.log('ERROR: ', err);
+    catch(e) {
+      this.logger.error({label: 'Error retrieving GateKeeper template constraint details - assuming none exist', data: { clusterId }}, e, 'ClusterService.listGateKeeperTemplateConstraints');
       return [];
     }
   }
 
   async createOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
-    console.log('Constraint body: ', JSON.stringify(constraint));
+    this.logger.log({label: 'Going to create GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.createOPAGateKeeperTemplateConstraint');
     const gatekeeperConstraintDto = new GatekeeperConstraintDetailsDto();
     gatekeeperConstraintDto.metadata = new GatekeeperConstraintMetadata();
     gatekeeperConstraintDto.metadata.annotations= new GatekeeperConstraintMetadataAnnotations();
@@ -636,21 +624,20 @@ export class ClusterService {
      * **/
     gatekeeperConstraintDto.spec.enforcementAction = String(constraint.mode).toLowerCase();
 
-    console.log(JSON.stringify(gatekeeperConstraintDto));
     try {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       const createdConstraint = await customObjectApi.createClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, gatekeeperConstraintDto);
-      console.log(createdConstraint);
+      this.logger.log({label: 'GateKeeper Template Constraint Created', data: { templateName, clusterId, createdConstraint }}, 'ClusterService.createOPAGateKeeperTemplateConstraint');
       return {message: 'Constraint created successfully', statusCode: 200};
-    } catch(err) {
-      console.log(err);
-      return {message: err.body.message, statusCode: err.statusCode};
+    } catch(e) {
+      this.logger.error({label: 'GateKeeper Template Constraint Created', data: { templateName, clusterId, constraint }}, e, 'ClusterService.createOPAGateKeeperTemplateConstraint');
+      return {message: e.body.message, statusCode: e.statusCode};
     }
   }
 
   async patchOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
-    console.log('Constraint: ', constraint);
+    this.logger.log({label: 'Going to patch GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
     try {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -666,9 +653,9 @@ export class ClusterService {
           'v1beta1', templateName, constraint.name, [patchDescription, patchEnforcementAction, patchLabels, patchExcludedNamespaces, patchKinds], undefined, undefined, undefined, options);
 
       return {message: `${constraint.name} has been patched successfully`, statusCode: 200};
-    } catch (err) {
-      console.log(err);
-      return {message: err.body.message, statusCode: err.statusCode};
+    } catch (e) {
+      this.logger.error({label: 'Error patching GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, e, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
+      return {message: e.body.message, statusCode: e.statusCode};
     }
   }
 
@@ -677,11 +664,10 @@ export class ClusterService {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       const deletedConstraint = await customObjectApi.deleteClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, constraintName);
-      // console.log(deletedConstraint);
       return {message: `${constraintName} has been deleted successfully`, statusCode: 200};
-    } catch (err) {
-      console.log(err);
-      return {message: err.body.message, statusCode: err.statusCode};
+    } catch (e) {
+      this.logger.error({label: 'Error destroying GateKeeper Template Constraint by name', data: { templateName, clusterId, constraintName }}, e, 'ClusterService.destroyOPAGateKeeperTemplateConstraintByName');
+      return {message: e.body.message, statusCode: e.statusCode};
     }
   }
 
@@ -697,7 +683,6 @@ export class ClusterService {
           if(template.spec.targets) {
             for(const target of template.spec.targets) {
               target.rego = exceptionBlock;
-              // console.log(target.rego);
             }
           }
         }
@@ -706,11 +691,10 @@ export class ClusterService {
         const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
             'v1beta1', 'constrainttemplates', template.metadata.name,
             [patchSpecTargets], undefined, undefined, undefined, options);
-        // console.log(patchTemplate);
       }
     }
-    catch(err) {
-      console.log('ERROR: ', err);
+    catch(e) {
+      this.logger.error({label: 'Error syncing GateKeeper Template with exception block', data: { exceptionBlock, clusterId }}, e, 'ClusterService.syncDeployedGatekeeperTemplatesWithExceptionBlock');
     }
   }
 
@@ -721,9 +705,8 @@ export class ClusterService {
       const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '');
       const templates: any[] = templateListResponse.body['items'];
       return templates.map(t => t.metadata.name);
-    } catch (error) {
-      console.log(`Could not list deployed templates for ${clusterId}`);
-      console.log(error);
+    } catch (e) {
+      this.logger.error({label: 'Error getting deployed GateKeeper Template list - assuming there are none', data: { clusterId }}, e, 'ClusterService.getDeployedTemplateList');
       return [];
     }
   }
@@ -738,9 +721,9 @@ export class ClusterService {
       const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
           'v1beta1', 'constrainttemplates', templateName,
           [patchSpecTargets], undefined, undefined, undefined, options);
-      console.log(`Template: ${templateName}`, patchTemplate.response.statusCode);
-    } catch (error) {
-      console.log(`Could not patch ${templateName}`, error);
+      this.logger.log({label: 'Patched Gatekeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego, statusCode: patchTemplate.response.statusCode }}, 'ClusterService.patchTemplateWithModifiedRego');
+    } catch (e) {
+      this.logger.error({label: 'Error patching GateKeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego }}, e, 'ClusterService.patchTemplateWithModifiedRego');
     }
 
 
@@ -755,8 +738,8 @@ export class ClusterService {
       // const kubeSystemIndex = namespaceNames.indexOf('kube-system');
       // namespaceNames.splice(kubeSystemIndex, 1);
       return namespaceNames;
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      this.logger.error({label: 'Error getting namespaces by cluster', data: { clusterId }}, e, 'ClusterService.getNamespacesByCluster');
       return [];
     }
   }

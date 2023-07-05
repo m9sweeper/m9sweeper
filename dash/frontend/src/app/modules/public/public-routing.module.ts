@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', canActivate: [LoginGuard], component: LoginComponent },
   { path: 'login-error', component: LoginComponent },
-  { path: 'external-auth/:code', component: ExternalAuthCbComponent },
+  { path: 'external-auth/:code', canActivate: [LoginGuard], component: ExternalAuthCbComponent },
   { path: 'reset-password', canActivate: [LoginGuard], component: SendResetPasswordMailComponent },
   { path: 'reset-password/:token', canActivate: [LoginGuard], component: SavePasswordComponent },
   { path: 'account-activation/:token', canActivate: [LoginGuard], component: SavePasswordComponent }
@@ -20,5 +20,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-
 export class PublicRoutingModule { }

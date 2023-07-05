@@ -1,4 +1,4 @@
-import { Routes } from 'nest-router';
+import { Routes } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module';
 import {SettingsModule} from './modules/settings/settings.module';
 import {SharedModule} from './modules/shared/shared.module';
@@ -28,6 +28,7 @@ import {KubeBenchModule} from "./modules/kube-bench/kube-bench.module";
 import { ReportsModule } from './modules/reports/reports.module';
 import {AuditLogModule} from "./modules/audit-log/audit-log.module";
 import {FalcoModule} from './modules/falco/falco.module';
+import { MetricsModule } from './modules/metrics/metrics.module';
 
 
 export const routes: Routes = [
@@ -42,6 +43,10 @@ export const routes: Routes = [
   {
     path: '/api',
     children: [
+      {
+        path: '/metrics',
+        module: MetricsModule
+      },
       {
         path: '/settings',
         module: SettingsModule

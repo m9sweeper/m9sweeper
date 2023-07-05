@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubNavigationComponent } from './subnavigation.component';
+import { SubNavigationComponent } from './sub-navigation.component';
 
 describe('SubnavigationComponent', () => {
   let component: SubNavigationComponent;

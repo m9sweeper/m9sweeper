@@ -1,13 +1,13 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, } from '@angular/router';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {Form, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
+import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-falco-settings',
@@ -20,10 +20,8 @@ export class FalcoSettingsComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   settingForm: FormGroup;
 
-  savedSeverityLevel: string [];
   isNotifyAnomalyDisabled = true;
   isSpecificEmailHidden = true;
-  foundSavedSeverityLevel = false;
 
   isSummaryDisabled = true;
   isWeeklyDisabled = true;
@@ -56,7 +54,7 @@ export class FalcoSettingsComponent implements OnInit {
     this.route.parent.parent.params
       .pipe(take(1))
       .subscribe(param => {
-        this.clusterId = param.id;
+        this.clusterId = +param.id;
       });
 
     this.displaySetting();

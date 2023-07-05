@@ -1,77 +1,86 @@
-<div class="kube-bench-report">
-  <div class="bench-report-header">
-      <h1 class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-       Kube Bench Test Results
-      </h1>
-    <ng-container *ngIf="report && report.Totals">
-      <h1 id="overallResults" class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        {{report.Totals.total_pass}}/{{report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn}} Tests Passed
-      </h1>
-    </ng-container>
-  </div>
-  <div class="bench-report-header">
-    <h3 id="instructions">Click on a test to learn more. </h3>
-  </div>
-  <ng-container *ngIf="report && report.Controls">
-    <div id="tables-container">
-      <div *ngFor="let section of report.Controls">
-        <h3>{{section.id}}: {{section.text}} ({{section.version}} v{{section.detected_version}})</h3>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing">
+      <div class="page-title">
+        Kube Bench Test Results
+      </div>
+      <div *ngIf="report && report.Totals">
+        <div class="page-title">
+          {{report.Totals.total_pass}}/{{report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn}} Tests Passed
+        </div>
+      </div>
+    </div>
 
-        <div *ngFor="let test of section.tests">
-          <h4>{{test.section}}: {{test.desc}}</h4>
+    <h3>
+      Click on a test to learn more.
+    </h3>
 
-            <mat-table
-                   [dataSource]="test.results"
-                   multiTemplateDataRows
-                   class="mat-elevation-z8">
-              <ng-container matColumnDef="test">
-                <mat-header-cell class="test-main" *matHeaderCellDef>Test</mat-header-cell>
-                <mat-cell class="test-main" *matCellDef="let element"> {{element.test_number}} </mat-cell>
-              </ng-container>
+    <div class="page-card">
+      <ng-container *ngIf="report && report.Controls">
+        <div >
+          <div *ngFor="let section of report.Controls">
+            <h3>{{section.id}}: {{section.text}} ({{section.version}} v{{section.detected_version}})</h3>
 
-              <ng-container matColumnDef="description">
-                <mat-header-cell class="test-description-main" *matHeaderCellDef>Test Description</mat-header-cell>
-                <mat-cell *matCellDef="let element" class="test-description-main"> {{element.test_desc}} </mat-cell>
-              </ng-container>
+            <div *ngFor="let test of section.tests">
+              <h4>{{test.section}}: {{test.desc}}</h4>
 
-              <ng-container matColumnDef="pass/fail">
-                <mat-header-cell class="pass-fail-main" *matHeaderCellDef>Pass/Fail</mat-header-cell>
-                <mat-cell *matCellDef="let element" class="pass-fail-main">
-                  <ng-container *ngIf="element.status === 'PASS'">
-                    <div style="color: green">{{element.status}}</div>
-                  </ng-container>
-                  <ng-container *ngIf="element.status === 'FAIL'">
-                       <div style="color: red">{{element.status}}</div>
-                  </ng-container>
-                  <ng-container *ngIf="element.status === 'WARN'">
-                    <div style="color: orange">{{element.status}}</div>
-                  </ng-container>
-                </mat-cell>
-              </ng-container>
+              <mat-table
+                [dataSource]="test.results"
+                multiTemplateDataRows
+                class="mat-elevation-z8">
+                <ng-container matColumnDef="test">
+                  <mat-header-cell class="test-main" *matHeaderCellDef>Test</mat-header-cell>
+                  <mat-cell class="test-main" *matCellDef="let element"> {{element.test_number}} </mat-cell>
+                </ng-container>
 
-              <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-              <ng-container matColumnDef="expandedDetail">
-                <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                  <div class="expanded-information-row-div"
-                       [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <ng-container matColumnDef="description">
+                  <mat-header-cell class="test-description-main" *matHeaderCellDef>Test Description</mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="test-description-main"> {{element.test_desc}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pass/fail">
+                  <mat-header-cell class="pass-fail-main" *matHeaderCellDef>Pass/Fail</mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="pass-fail-main">
+                    <ng-container *ngIf="element.status === 'PASS'">
+                      <div style="color: green">{{element.status}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="element.status === 'FAIL'">
+                      <div style="color: red">{{element.status}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="element.status === 'WARN'">
+                      <div style="color: orange">{{element.status}}</div>
+                    </ng-container>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                <ng-container matColumnDef="expandedDetail">
+                  <mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="expanded-information-row-div"
+                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
                       <div class="covered-data"><b>Expected:</b> <br />{{element.expected_result === ""? "N/A" : element.expected_result}} </div>
                       <div class="covered-data"><b>Actual:</b> <br />{{element.actual_value === ""? "N/A" : element.actual_value}} </div>
                       <div class="covered-data"><b>Remediation:</b> <br />{{element.remediation === ""? "N/A" : element.remediation}} </div>
                     </div>
-                </mat-cell>
-              </ng-container>
+                  </mat-cell>
+                </ng-container>
 
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-              <mat-row *matRowDef="let element; columns: displayedColumns;"
-                       class="table-row"
-                       [class.expanded-row]="expandedElement === element"
-                       (click)="expandedElement = expandedElement === element ? null : element">
-              </mat-row>
-              <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></mat-row>
-            </mat-table>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let element; columns: displayedColumns;"
+                         class="table-row"
+                         [class.expanded-row]="expandedElement === element"
+                         (click)="expandedElement = expandedElement === element ? null : element">
+                </mat-row>
+                <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="expanded-detail-row"></mat-row>
+              </mat-table>
+            </div>
+          </div>
         </div>
-      </div>
+      </ng-container>
     </div>
-  </ng-container>
+
+
+    </div>
 </div>
+

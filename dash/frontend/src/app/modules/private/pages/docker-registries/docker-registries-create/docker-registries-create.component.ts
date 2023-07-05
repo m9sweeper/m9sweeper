@@ -8,7 +8,7 @@ import {IDockerRegistries} from '../../../../../core/entities/IDockerRegistries'
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {DockerRegistryAuthTypes} from '../../../../../core/enum/DockerRegistryAuthTypes';
 import {take} from 'rxjs/operators';
-import {ACRAuthDetails, GCRAuthDetails} from '../../../../../core/types/DockerRegistryAuthDetails';
+import {ACRAuthDetails, AzureCRAuthDetails, GCRAuthDetails} from '../../../../../core/types/DockerRegistryAuthDetails';
 import {ENTER, SPACE} from '@angular/cdk/keycodes';
 
 @Component({
@@ -25,6 +25,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
   showBasicAuthFields = false;
   showAcrAuthFields = false;
   showGcrAuthFields = false;
+  showAzureAuthFields = false;
   loginRequired = false;
 
   readonly aliasSeparatorKeys = [SPACE, ENTER];
@@ -40,11 +41,18 @@ export class DockerRegistriesCreateComponent implements OnInit {
   ngOnInit(): void {
     let gcrDetails: GCRAuthDetails;
     let acrDetails: ACRAuthDetails;
+    let azureDetails: AzureCRAuthDetails;
     if (this.data.isEdit) {
-      if (this.data.dockerRegistry.authType === DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY) {
-        gcrDetails = this.data.dockerRegistry.authDetails as GCRAuthDetails;
-      } else if (this.data.dockerRegistry.authType === DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY) {
-        acrDetails = this.data.dockerRegistry.authDetails as ACRAuthDetails;
+      switch (this.data.dockerRegistry.authType) {
+        case DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY:
+          gcrDetails = this.data.dockerRegistry.authDetails as GCRAuthDetails;
+          break;
+        case DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY:
+          acrDetails = this.data.dockerRegistry.authDetails as ACRAuthDetails;
+          break;
+        case DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY:
+          azureDetails = this.data.dockerRegistry.authDetails as AzureCRAuthDetails;
+          break;
       }
     }
     this.createDockerRegistryForm = this.formBuilder.group({
@@ -60,6 +68,9 @@ export class DockerRegistriesCreateComponent implements OnInit {
       acrAccessKey: [acrDetails ? acrDetails?.acrAccessKey : ''],
       acrSecretKey: [acrDetails ? acrDetails?.acrSecretKey : ''],
       acrDefaultRegion: [acrDetails ? acrDetails?.acrDefaultRegion : ''],
+      azureClientId: [azureDetails ? azureDetails?.azureClientId : ''],
+      azureClientSecret: [azureDetails ? azureDetails?.azureClientSecret : ''],
+      azureTenantId: [azureDetails ? azureDetails?.azureTenantId : ''],
       aliases: [this.data.isEdit ? new Set(this.data.dockerRegistry.aliases) : new Set()],
       aliasInput: ['']
     });
@@ -68,45 +79,47 @@ export class DockerRegistriesCreateComponent implements OnInit {
       DockerRegistryAuthTypes.NONE,
       DockerRegistryAuthTypes.BASIC,
       DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY,
-      DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY
+      DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY,
+      DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY
     ];
     if (this.data.isEdit) {
       this.loginRequired = this.data.dockerRegistry.loginRequired;
-      switch (this.data.dockerRegistry.authType) {
-        case (DockerRegistryAuthTypes.BASIC):
-          this.showBasicAuthFields = true;
-          break;
-        case (DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY):
-          this.showGcrAuthFields = true;
-          break;
-        case (DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY):
-          this.showAcrAuthFields = true;
-          break;
-      }
+      this.handleHiddenFields({value: this.data.dockerRegistry.authType});
     }
   }
 
   onSubmit() {
     const dockerRegistryData = this.createDockerRegistryForm.getRawValue();
-    if (dockerRegistryData.authType === DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY) {
-      try {
-        // ensure that the input value is a valid JSON format
-        JSON.parse(dockerRegistryData.gcrAuthJson.trim());
+    switch (dockerRegistryData.authType) {
+      case DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY:
+        try {
+          // ensure that the input value is a valid JSON format
+          JSON.parse(dockerRegistryData.gcrAuthJson.trim());
+          dockerRegistryData.authDetails = {
+            gcrAuthJson: dockerRegistryData.gcrAuthJson.trim()
+          };
+        } catch (err) {
+          this.alertService.danger('Error while parsing GCR JSON; please check that the credentials are formatted correctly');
+          return;
+        }
+        break;
+      case DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY:
         dockerRegistryData.authDetails = {
-          gcrAuthJson: dockerRegistryData.gcrAuthJson.trim()
+          acrAccessKey: dockerRegistryData.acrAccessKey.trim(),
+          acrSecretKey: dockerRegistryData.acrSecretKey.trim(),
+          acrDefaultRegion: dockerRegistryData.acrDefaultRegion.trim()
         };
-      } catch (err) {
-        this.alertService.danger('Error while parsing GCR JSON; please check that the credentials are formatted correctly');
-        return;
-      }
-    } else if (dockerRegistryData.authType === DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY) {
-      dockerRegistryData.authDetails = {
-        acrAccessKey: dockerRegistryData.acrAccessKey.trim(),
-        acrSecretKey: dockerRegistryData.acrSecretKey.trim(),
-        acrDefaultRegion: dockerRegistryData.acrDefaultRegion.trim()
-      };
-    } else {
-      dockerRegistryData.authDetails = null;
+        break;
+      case DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY:
+        dockerRegistryData.authDetails = {
+          azureClientId: dockerRegistryData.azureClientId.trim(),
+          azureClientSecret: dockerRegistryData.azureClientSecret.trim(),
+          azureTenantId: dockerRegistryData.azureTenantId.trim()
+        };
+        break;
+      default:
+        dockerRegistryData.authDetails = null;
+        break;
     }
     if (dockerRegistryData.aliasInput) {
       dockerRegistryData.aliases.add(dockerRegistryData.aliasInput.trim());
@@ -154,6 +167,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
         this.deactivateBasicAuth();
         this.deactivateAcrAuth();
         this.deactivateGcrAuth();
+        this.deactivateAzureAuth();
         break;
       case DockerRegistryAuthTypes.BASIC:
         this.showBasicAuthFields = true;
@@ -162,6 +176,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
         this.createDockerRegistryForm.get('loginRequired').setValue(true);
         this.deactivateAcrAuth();
         this.deactivateGcrAuth();
+        this.deactivateAzureAuth();
         break;
       case DockerRegistryAuthTypes.AMAZON_CONTAINER_REGISTRY:
         this.showAcrAuthFields = true;
@@ -170,14 +185,26 @@ export class DockerRegistriesCreateComponent implements OnInit {
         this.createDockerRegistryForm.get('acrDefaultRegion').setValidators([Validators.required]);
         this.deactivateBasicAuth();
         this.deactivateGcrAuth();
+        this.deactivateAzureAuth();
         break;
       case DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY:
         this.showGcrAuthFields = true;
         this.createDockerRegistryForm.get('gcrAuthJson').setValidators([Validators.required]);
         this.deactivateBasicAuth();
         this.deactivateAcrAuth();
+        this.deactivateAzureAuth();
+        break;
+      case DockerRegistryAuthTypes.AZURE_CONTAINER_REGISTRY:
+        this.showAzureAuthFields = true;
+        this.createDockerRegistryForm.get('azureClientId').setValidators([Validators.required]);
+        this.createDockerRegistryForm.get('azureClientSecret').setValidators([Validators.required]);
+        this.createDockerRegistryForm.get('azureTenantId').setValidators([Validators.required]);
+        this.deactivateBasicAuth();
+        this.deactivateAcrAuth();
+        this.deactivateGcrAuth();
         break;
     }
+    this.createDockerRegistryForm.updateValueAndValidity();
   }
 
   deactivateBasicAuth() {
@@ -203,6 +230,16 @@ export class DockerRegistriesCreateComponent implements OnInit {
     this.showGcrAuthFields = false;
     this.createDockerRegistryForm.get('gcrAuthJson').setValidators([Validators.nullValidator]);
     this.createDockerRegistryForm.get('gcrAuthJson').setValue('');
+  }
+
+  deactivateAzureAuth() {
+    this.showAzureAuthFields = false;
+    this.createDockerRegistryForm.get('azureClientId').setValidators([Validators.nullValidator]);
+    this.createDockerRegistryForm.get('azureClientSecret').setValidators([Validators.nullValidator]);
+    this.createDockerRegistryForm.get('azureTenantId').setValidators([Validators.nullValidator]);
+    this.createDockerRegistryForm.get('azureClientId').setValue('');
+    this.createDockerRegistryForm.get('azureClientSecret').setValue('');
+    this.createDockerRegistryForm.get('azureTenantId').setValue('');
   }
 
   addAlias(inputEvent) {

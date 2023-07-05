@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { ApiKeyService } from '../../../../../core/services/api-key.service';
@@ -7,6 +7,7 @@ import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IApiKey } from '../../../../../core/entities/IApiKey';
 import {IAPIKeyUser, IUser} from '../../../../../core/entities/IUser';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-api-key-form',
@@ -28,7 +29,8 @@ export class ApiKeyFormComponent implements OnInit {
     private userService: UserService,
     private alertService: AlertService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +68,9 @@ export class ApiKeyFormComponent implements OnInit {
       this.alertService.danger(error.error.message);
       this.router.navigate(['/private/api-key']);
     });
+  }
+  cancel() {
+    this.location.back();
   }
 
   onSubmit(): void {

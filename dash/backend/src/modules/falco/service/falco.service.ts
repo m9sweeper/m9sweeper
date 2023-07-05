@@ -1,4 +1,4 @@
-import {Injectable, LoggerService} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {FalcoDto} from '../dto/falco.dto';
 import {FalcoDao} from '../dao/falco.dao';
 import {createHash} from 'crypto';
@@ -12,15 +12,20 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import {EmailService} from "../../shared/services/email.service";
 import {ConfigService} from "@nestjs/config";
 import {MineLoggerService} from "../../shared/services/mine-logger.service";
+import {FalcoRuleCreateDto, FalcoRuleDto} from '../dto/falco-rule.dto';
+import {FalcoRuleAction} from '../enums/falco-rule-action';
+import {DataCache} from '../../../util/classes/data-cache';
 
 @Injectable()
 export class FalcoService {
+    protected ruleCache = new Map<number, DataCache<FalcoRuleDto[]>>();
+
     constructor(
         private readonly falcoDao: FalcoDao,
         private readonly csvService: CsvService,
         private readonly email: EmailService,
         private readonly configService: ConfigService,
-        private readonly loggerService: MineLoggerService,
+        private readonly loggerService: MineLoggerService
     ) {}
 
     async getFalcoLogs(
@@ -35,9 +40,8 @@ export class FalcoService {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{  logCount: number, list: FalcoDto[] }> {
-       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature, eventId);
+    ): Promise<{  logCount: number, list: FalcoDto[], }> {
+       return this.falcoDao.getFalcoLogs(clusterId, limit, page, priorities, orderBy, startDate, endDate, namespace, pod, image, signature);
     }
 
     async getFalcoLogByEventId(
@@ -65,7 +69,7 @@ export class FalcoService {
         for (let i = 0; i <= daysBack; i++) {
             resultSet.filter(result => newDate.toString() === result.date.toString()).forEach(result => value = result.count);
 
-            let newResult = new FalcoCountDto();
+            const newResult = new FalcoCountDto();
             newResult.date = newDate;
             newResult.count = value;
 
@@ -78,22 +82,34 @@ export class FalcoService {
         return newResultSet;
     }
 
-    async getFalcoCsv( clusterId: number): Promise<FalcoCsvDto> {
-        const queryResponse = await this.falcoDao.getFalcoLogsForExport(clusterId);
+    async getFalcoCsv( clusterId: number,
+                       limit = 20,
+                       page = 0,
+                       priorities?: string [],
+                       orderBy?: string,
+                       startDate?: string,
+                       endDate?: string,
+                       namespace?: string,
+                       pod?: string,
+                       image?: string,
+                       signature?: string,
+                       ): Promise<FalcoCsvDto> {
+
+        // retrieve filtered falco logs and use the query results to build the csv
+        const queryResp = await this.falcoDao.getFalcoCsvLogs(clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image,);
         const result = [this.csvService.buildLine(['Date', 'Namespace', 'Pod',
             'Image', 'Priority', 'Message'])];
 
-        for (let i = 0; i < queryResponse.logCount; i++) {
-            const falcoCol = queryResponse.fullList[i];
-            result.push(this.csvService.buildLine([
+        // limit to 1000 or less logs from dao
+            queryResp.csvLogList.forEach(falcoCol => result.push(this.csvService.buildLine([
                 String(falcoCol.calendarDate),
                 String(falcoCol.namespace),
                 String(falcoCol.container),
                 String(falcoCol.image),
                 String(falcoCol.level),
                 String(falcoCol.message),
-            ]));
-        }
+            ])));
+
 
         return {
             filename: `Falco-Logs${format(new Date(), 'yyyy-MM-dd-hh-mm-ss')}.csv`,
@@ -101,7 +117,7 @@ export class FalcoService {
         }
     }
 
-    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto): Promise<FalcoDto> {
+    async createFalcoLog(clusterId: number, falcoWebhookLog: FalcoWebhookInputDto, skipAnomalyEmail = false): Promise<FalcoDto> {
         const falcoLog = new FalcoDto;
         falcoLog.clusterId = clusterId;
         falcoLog.rule = falcoWebhookLog.rule;
@@ -127,9 +143,12 @@ export class FalcoService {
             .update(globalSignature)
             .digest('hex');
         const createdLog = await this.falcoDao.createFalcoLog(falcoLog);
-
-        // look up falco settings in order to decide if we need to send email(s) to administrators
-        await this.sendFalcoEmailAlert(clusterId, createdLog);
+        if (!skipAnomalyEmail) {
+            // look up falco settings in order to decide if we need to send email(s) to administrators
+            await this.sendFalcoEmailAlert(clusterId, createdLog);
+        } else {
+            this.loggerService.log('Falco Event silenced', { id: createdLog.id });
+        }
 
         return createdLog;
     }
@@ -240,6 +259,67 @@ export class FalcoService {
                 this.loggerService.log("Failed to send email!");
             }
         }
+    }
+
+    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<FalcoRuleDto> {
+        return this.falcoDao.createFalcoRule(rule)
+          .then(id => this.falcoDao.getFalcoRuleById(id));
+    }
+
+    async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+        return this.falcoDao.listActiveFalcoRules(options);
+    }
+
+    async getFalcoRuleById(ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.getFalcoRuleById(ruleId);
+    }
+
+    async listActiveFalcoRulesForCluster(clusterId: number, useCached = false): Promise<FalcoRuleDto[]> {
+        // If we request the cache, and have unexpired cached data, return that.
+        if (useCached) {
+            const cachedData = this.ruleCache.get(clusterId)?.data;
+            if (cachedData) {
+                return cachedData;
+            }
+        }
+
+        // If we don't use the cache, or there was no unexpired cache, get the rules from the DB and cache them.
+        const rules = await this.falcoDao.listActiveFalcoRules({ clusterId });
+        this.ruleCache.set(clusterId, DataCache.cacheFor(rules, 60000)); // 60000ms = 1min
+        return rules;
+    }
+
+    async updateFalcoRule(rule: FalcoRuleCreateDto, ruleId: number): Promise<FalcoRuleDto> {
+        return this.falcoDao.updateFalcoRule(rule, ruleId)
+          .then(() => this.getFalcoRuleById(ruleId));
+    }
+
+    async deleteFalcoRule(clusterId: number, ruleId: number): Promise<number> {
+        return this.falcoDao.deleteFalcoRule(ruleId);
+    }
+
+    async checkRules(clusterId: number, falcoEvent: FalcoWebhookInputDto): Promise<FalcoRuleAction | null> {
+        const rules = await this.listActiveFalcoRulesForCluster(clusterId, true);
+        if (rules?.length) {
+            for (const rule of rules) {
+                // Considered a namespace match if the rule apples for all namespaces or if any of the listed namespaces match
+                const trimmedNamespace = falcoEvent?.outputFields?.k8sNamespaceName?.trim();
+                const namespaceMatches = rule.allNamespaces || !!rule.namespaces.find(ns => ns.namespace?.trim() === trimmedNamespace);
+                // For both the image and falco rule, it is considered a match if not set on the rule,
+                // or the value on the event matches the provided regex
+                const ruleNameMatches = !rule.falcoRule
+                  || new RegExp(rule.falcoRule.trim()).test(falcoEvent?.rule?.trim());
+                const imageNameMatches = !rule.image
+                  || new RegExp(rule.image).test(falcoEvent?.outputFields?.containerImageRepository);
+
+                // If all 3 sections of the rule were either matches of blank, then this rule applies, return its action.
+                if (namespaceMatches && ruleNameMatches && imageNameMatches) {
+                    return rule.action;
+                }
+            }
+        }
+
+        return null;
     }
 
 }

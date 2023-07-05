@@ -54,7 +54,6 @@ export class CommentDao{
             })
             .where('e.id', exceptionId)
             .andWhere('e.deleted_at', null);
-        // console.log(query.toSQL());
         return knexnest(query).then(data => data);
     }
     async getCommentCreatorFullName(): Promise<any> {
@@ -65,8 +64,7 @@ export class CommentDao{
                 knex.raw(`CONCAT(u.first_name, ' ', u.last_name) as "_fullName"`)
             )
             .from('users as u')
-            .where('u.id', currentUserId)
-        // console.log(query.toSQL());
+            .where('u.id', currentUserId);
         return knexnest(query)
             .then(data => {
                 return data;

@@ -14,6 +14,7 @@ import {LicensingPortalService} from '../../../integrations/licensing-portal/lic
 import {ExceptionBlockService} from '../../command-line/services/exception-block.service';
 import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {ExceptionK8sInfoDto} from '../dto/exception-k8s-info-dto';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 
 @Injectable()
@@ -32,6 +33,7 @@ export class ExceptionsService {
     @Inject(forwardRef(() => LicensingPortalService))
     private readonly licensingPortalService: LicensingPortalService,
     private readonly auditLogService: AuditLogService,
+    private logger: MineLoggerService,
   ) {}
 
 
@@ -55,7 +57,7 @@ export class ExceptionsService {
                       clusterIds.forEach(clusterId =>
                           this.clusterEventService.createK8sClusterEvent(
                               'ExceptionCreated', 'Normal', null, null, message, clusterId, namespace)
-                              .catch(e => console.error('Failed to create kubernetes cluster event: ' + e))
+                              .catch(e => this.logger.error({label: 'Failed to create k8s cluster event'}, e, 'ExceptionsService.createException'))
                       )
               } else {
                   const clusters = await this.clusterService.getAllClusters();
@@ -64,12 +66,12 @@ export class ExceptionsService {
                           .map(cluster => cluster.id)
                           .forEach(clusterId => this.clusterEventService.createK8sClusterEvent(
                                 'ExceptionCreated', 'Normal', null, null, message, clusterId, namespace)
-                              .catch(e => console.error('Failed to create kubernetes cluster event: ' + e))
+                              .catch(e => this.logger.error({label: 'Failed to create k8s cluster event'}, e, 'ExceptionsService.createException'))
                           );
                   }
               }
               if (exceptionArray[0].type === 'gatekeeper') {
-                  this.syncGatekeeperBlocks().catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+                  this.syncGatekeeperBlocks().catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.createException'));
               }
               createdExceptionIds.push(exceptionId);
               createdExceptions.push({exception: exceptionArray[0], k8sInfo: exception.k8sInfo});
@@ -77,7 +79,7 @@ export class ExceptionsService {
       }
       if (!skipEmail && createdExceptions.length > 0) {
           this.sendExceptionEmail(createdExceptions, userId, fromClusterValidation)
-              .catch(e => console.log("Error sending email " + e));
+              .catch(e => this.logger.error({label: 'Error sending email'}, e, 'ExceptionsService.createException'));
 
       }
       return createdExceptionIds;
@@ -107,7 +109,7 @@ export class ExceptionsService {
                       multipleExceptions: exceptionContextArray.length > 1,
                   }
               }).catch(e => {
-                  console.log('Error sending exception creation email: ' + e);
+                 this.logger.error({label: 'Error sending exception creation email'}, e, 'ExceptionsService.sendExceptionEmail');
               });
           }
       } else if (exceptionArray[0].exception.status === ExceptionType.REVIEW) {
@@ -124,7 +126,7 @@ export class ExceptionsService {
                       multipleExceptions: exceptionContextArray.length > 1,
                   }
               }).catch(e => {
-                  console.log('Error sending exception request email: ' + e);
+                this.logger.error({label: 'Error sending exception request email'}, e, 'ExceptionsService.sendExceptionEmail');
               });
           }
       } else if (exceptionArray[0].exception.status === ExceptionType.ACTIVE) {
@@ -141,7 +143,7 @@ export class ExceptionsService {
                       multipleExceptions: exceptionContextArray.length > 1,
                   }
               }).catch(e => {
-                  console.log('Error sending exception creation email: ' + e);
+                 this.logger.error({label: 'Error sending exception creation email'}, e, 'ExceptionsService.sendExceptionEmail');
               });
           }
       }
@@ -215,16 +217,15 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
       const exception = await this.exceptionsDao.getException(exceptionId);
       await this.exceptionsDao.deleteException(exceptionId, userId);
       if (exception && exception.length && exception[0].type === 'gatekeeper') {
-          this.syncGatekeeperBlocks().catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+          this.syncGatekeeperBlocks().catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.deleteExceptionById'));
       }
   }
 
   async updateException(exception: ExceptionCreateDto, exceptionId: number, userId: number): Promise<number> {
     if (await this.validateExceptionCreateDto(exception)) {
       const results =  await this.exceptionsDao.updateException(exception, exceptionId, userId);
-      console.log('------------------>', results);
         if (exception.type === 'gatekeeper') {
-            this.syncGatekeeperBlocks().catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+            this.syncGatekeeperBlocks().catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.updateException'));
         }
       return results;
     }
@@ -285,19 +286,19 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
 
        */
                   this.exceptionBlockService.syncGatekeeperExceptionBlocks()
-                      .catch(e => console.log('Error syncing GateKeeper exception blocks: ' + e));
+                      .catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
       /*
               } else {
                   if (checkLicenseValidity.isLicenseSetup) {
                       if (!checkLicenseValidity.validity) {
-                          console.log('License has been expired');
+                          this.logger.log({label: 'License has expired'}, 'ExceptionsService.syncGatekeeperBlocks');
                       }
                   } else {
-                      console.log('License is not setup.');
+                      this.logger.log({label: 'License not set up'}, 'ExceptionsService.syncGatekeeperBlocks');
                   }
               }
           })
-          .catch(e => console.log('Error checking license validity: ' + e));
+          .catch(e => this.logger.error({label: 'Error checking license validity'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
 
        */
   }

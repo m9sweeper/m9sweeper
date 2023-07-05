@@ -16,17 +16,17 @@ home: "https://m9sweeper.io"
 dependencies:
   - name: dash
     dash_version: 0.0.0
-    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    repository: "https://m9sweeper.github.io/m9sweeper"
   - name: trawler
     trawler_version: 0.0.0
-    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    repository: "https://m9sweeper.github.io/m9sweeper"
   - name: rabbitmq
     rabbitmq_version: 0.0.0
-    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    repository: "https://m9sweeper.github.io/m9sweeper"
     condition: global.rabbitmq.enabled
   - name: postgresql
     postgres_version: 0.0.0
-    repository: "https://helm.m9sweeper.io/chartrepo/m9sweeper"
+    repository: "https://m9sweeper.github.io/m9sweeper"
     condition: global.postgres.enabled
 maintainers:
   - name: m9sweeper Support Team

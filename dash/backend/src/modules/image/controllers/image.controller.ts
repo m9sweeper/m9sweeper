@@ -85,7 +85,6 @@ export class ImageController {
         type: ImageDetailsResponseDto
     })
     async createImage(@Param('clusterId') clusterId: number, @Query('skipImageScan') skipImageScan: boolean, @Body() image: ImageCreateDto): Promise<ImageDetailsDto>{
-        // console.log('skipImageScan: ', skipImageScan);
         return this.imageService.createImage(this.imageService.plaintToImage((image)), clusterId, skipImageScan);
     }
 

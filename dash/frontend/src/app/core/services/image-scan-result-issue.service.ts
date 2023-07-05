@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { IServerResponse } from '../entities/IServerResponse';
 import { IImageScanResultIssue } from '../entities/IImageScanResultIssue';
 import { MatSort } from '@angular/material/sort';
+import {ReportsCsvDto} from '../../../../../backend/src/modules/reports/dto/reports-csv-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,19 @@ export class ImageScanResultIssueService {
     if (policyId) {
       params = params.set('policyId', String(policyId));
     }
+    return this.httpClient.get(url, { params });
+  }
+
+  getImageScanResultsIssuesCsv(imageId: number, imageScanResultsId: number, scanDate: number, all: boolean,
+                               sort: MatSort, policyId: number): Observable<IServerResponse<ReportsCsvDto>> {
+    const url = `/api/images/scan/issues/${imageScanResultsId}/download`;
+    const params = new HttpParams()
+      .set('imageId', String(imageId))
+      .set('scanDate', String(scanDate))
+      .set('sort[field]', sort.active)
+      .set('sort[direction]', sort.direction)
+      .set('all', all ? '1' : '0')
+      .set('policyId', String(policyId));
     return this.httpClient.get(url, { params });
   }
 }

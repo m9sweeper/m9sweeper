@@ -18,6 +18,8 @@ div.kubernetes-pods-container {
 
       & .mat-elevation-z8 {
         // flex: 1;
+        height: auto;
+        min-height: 200px;
         overflow: auto;
         background: #F9F9F9;
         > mat-table {
@@ -61,8 +63,10 @@ app-datepicker-component {
   margin-left: 20px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
 mat-paginator {
-  ::ng-deep .mat-paginator-range-label {
+  ::ng-deep .mat-mdc-paginator-range-label {
     margin: 0;
   }
 }

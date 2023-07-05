@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-data/show-json-data.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, } from '@angular/forms';
 
 import {EnumService} from '../../../../../core/services/enum.service';
 import {format, startOfToday, sub} from 'date-fns';
@@ -18,6 +18,7 @@ import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {AlertService} from '@full-fledged/alerts';
 
 
 
@@ -38,9 +39,9 @@ export class FalcoEventsListComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   orderByOptions: string [] = ['Priority Desc', 'Priority Asc', 'Date Desc', 'Date Asc'];
 
-  logCount: number;
-  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
-  page: number;
+  logCount: number; // accumulated log total per forward/backward click
+  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20; // page size
+  page: number; // number of pages
   startDate: string;
   endDate: string;
   signature: string;
@@ -58,7 +59,7 @@ export class FalcoEventsListComponent implements OnInit {
     private csvService: CsvService,
     private router: Router,
     private jwtAuthService: JwtAuthService,
-
+    private alertService: AlertService,
   ) {}
 
   ngOnInit() {
@@ -76,7 +77,7 @@ export class FalcoEventsListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(param => {
         this.clusterId = param.id;
-        this.getEvents();
+        this.getEvents(); // load logs
       });
     this.getUserAuthority();
 
@@ -86,7 +87,8 @@ export class FalcoEventsListComponent implements OnInit {
     this.limit = pageEvent.pageSize;
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
-    this.getEvents();
+
+    this.getEvents(); // load logs when page event changes
   }
 
   getEvents() {
@@ -115,7 +117,7 @@ export class FalcoEventsListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(response.data.list);
         this.logCount = response.data.logCount;
       }, (err) => {
-          alert(err);
+        this.alertService.danger(err.error.message);
       });
 
   }
@@ -138,14 +140,25 @@ export class FalcoEventsListComponent implements OnInit {
 
   downloadReport() {
     this.loaderService.start('csv-download');
-
-    this.falcoService.downloadFalcoExport(this.clusterId)
+    // should only download filtered logs
+    this.falcoService.downloadFalcoExport( this.clusterId, {
+                                          limit: this.limit,
+                                          page: this.page,
+                                          selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+                                          selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+                                          startDate: this.startDate,
+                                          endDate: this.endDate,
+                                          namespace: this.filterForm.get('namespaceInput').value,
+                                          pod: this.filterForm.get('podInput').value,
+                                          image: this.filterForm.get('imageInput').value,
+                                          signature: this.signature}
+      )
         .pipe(take(1))
         .subscribe((response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
-          alert(`Error downloading report: ${error?.error?.message}`);
+          this.alertService.danger(`Error downloading report: ${error.error.message}`);
         }, () => {
           this.loaderService.stop('csv-download');
         });
@@ -153,7 +166,7 @@ export class FalcoEventsListComponent implements OnInit {
 
   rebuildWithFilters(){
     if (!this.filtersValid) {
-      alert('Invalid filter settings; please recheck filter values');
+      this.alertService.danger('Invalid filter settings; please recheck filter values');
     }else {
         this.getEvents();
     }
@@ -174,8 +187,9 @@ export class FalcoEventsListComponent implements OnInit {
 
   openDialog() {
     const dialog = this.dialog.open(FalcoDialogComponent, {
-      maxWidth: '800px',
+      maxWidth: '1000px',
       maxHeight: '80vh',
+      // width: '100%',
       closeOnNavigation: true,
       disableClose: false,
       data: {

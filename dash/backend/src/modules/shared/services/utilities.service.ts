@@ -31,8 +31,6 @@ export class UtilitiesService {
 
         repository.image.path = urlSegments.slice(0, urlSegments.length - 1).join('/');
 
-        console.log('urlSegments: ', urlSegments.slice(0, urlSegments.length - 1).join('/'));
-
         return repository;
     }
 
@@ -49,6 +47,13 @@ export class UtilitiesService {
      *  */
     extractImageHash(raw: string): string {
         return raw?.indexOf('sha256:') > -1 ? raw.split('sha256:')[1] : '';
+    }
+
+    /** Replaces all characters invalid for a filename with the desired replacement character
+     * Default replacement is an underscore
+     */
+    cleanFileName(raw: string, replacement = '_'): string {
+        return raw.replace(/[/\\?%*:|"<>]/g, replacement);
     }
 
 }

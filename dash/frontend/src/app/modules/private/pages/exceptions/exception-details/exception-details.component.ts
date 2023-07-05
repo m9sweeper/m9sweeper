@@ -6,12 +6,11 @@ import { ExceptionsService } from '../../../../../core/services/exceptions.servi
 import { IException } from '../../../../../core/entities/IException';
 import { ConfirmationDialogComponent } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { CommentService } from '../../../../../core/services/comment.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { IComment } from '../../../../../core/entities/IComment';
 import { Observable } from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
-import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-exception-details',

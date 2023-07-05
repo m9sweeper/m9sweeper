@@ -7,6 +7,8 @@ import {format, set, sub, add} from "date-fns";
 import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
+import { FalcoRuleCreateDto, FalcoRuleDto } from '../dto/falco-rule.dto';
+import {Knex} from 'knex';
 
 
 @Injectable()
@@ -27,9 +29,11 @@ export class FalcoDao {
         pod?: string,
         image?: string,
         signature?: string,
-        eventId?: number
-    ): Promise<{ logCount: number, list: FalcoDto[]}> {
+    ): Promise<{ logCount: number, list: FalcoDto[],}> {
         const knex = await this.databaseService.getConnection();
+
+        // set limit to the less of 1000 or whatever is provided
+        limit = Math.min(limit, 1000);
 
         let query = knex.select()
             .from('project_falco_logs')
@@ -102,26 +106,113 @@ export class FalcoDao {
             query.where('anomaly_signature', signature);
         }
 
-        if (limit){
-            query = query.limit(limit).offset(page * limit)
-        }
+        query = query.limit(limit).offset(page * limit) // limit: page size
 
-        // Find filtered list with pagination
-        const list = await query.then(data => {
+        // Filtered list per page for pagination
+        const filteredPerPageLogList = await query.then(data => {
             return plainToInstance(FalcoDto, data);
         });
 
         // "fake" the calculation of the logCount since count queries in
         // postgresql are slow with WHERE clauses on large tables
         // https://wiki.postgresql.org/wiki/Count_estimate
-        let logCount = limit * page + list?.length;
-        if (list?.length === limit) {
+        let logCount = limit * page + filteredPerPageLogList?.length; // accumulated log total per forward/backward click
+        if (filteredPerPageLogList?.length === limit) {
             logCount += 1; // this implies that there probably is another page of results
         }
 
         return {
-            list: list,
-            logCount: +logCount
+            list: filteredPerPageLogList,
+            logCount: +logCount,
+        }
+    }
+
+    async getFalcoCsvLogs(
+        clusterId: number,
+        priorities?: string [],
+        orderBy?: string,
+        startDate?: string,
+        endDate?: string,
+        namespace?: string,
+        pod?: string,
+        image?: string,
+    ): Promise<{ csvLogList: FalcoDto[] }> {
+        const knex = await this.databaseService.getConnection();
+
+        let query = knex.select()
+            .from('project_falco_logs')
+            .where('cluster_id', clusterId);
+
+        if (priorities) {
+            query = query.whereIn('level', priorities);
+        }
+        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
+            switch (orderBy) {
+                case 'Priority Desc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Emergency\' then 1' +
+                        ' WHEN level = \'Alert\' then 2' +
+                        ' WHEN level = \'Critical\' then 3' +
+                        ' WHEN level = \'Error\' then 4' +
+                        ' WHEN level = \'Warning\' then 5' +
+                        ' WHEN level = \'Notice\' then 6' +
+                        ' WHEN level = \'Informational\' then 7' +
+                        ' WHEN level = \'Debug\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Priority Asc':
+                    query = query.orderByRaw(
+                        'CASE ' +
+                        ' WHEN level = \'Debug\' then 1' +
+                        ' WHEN level = \'Informational\' then 2' +
+                        ' WHEN level = \'Notice\' then 3' +
+                        ' WHEN level = \'Warning\' then 4' +
+                        ' WHEN level = \'Error\' then 5' +
+                        ' WHEN level = \'Critical\' then 6' +
+                        ' WHEN level = \'Alert\' then 7' +
+                        ' WHEN level = \'Emergency\' then 8' +
+                        'END'
+                    );
+                    break;
+                case 'Date Desc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
+                    break;
+                case 'Date Asc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
+                    break;
+                default:
+                    query = query.orderBy([{column: 'id', order: 'desc'}]);
+            }
+        }
+
+        if (startDate) {
+            query = query.andWhere('calendar_date', '>=', startDate);
+        }
+        if (endDate) {
+            query = query.andWhere('calendar_date', '<=', endDate);
+        }
+
+        if (namespace) {
+            query = query.whereRaw(`namespace LIKE ?`, [`%${namespace.trim()}%`]);
+        }
+
+        if (pod) {
+            query = query.whereRaw(`container LIKE ?`, [`%${pod.trim()}%`]);
+        }
+
+        if (image) {
+            query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        // Filtered list for csv - limit to 1000 logs
+        const filteredCsvLoglist = await query.limit(1000).then(data => {
+            return plainToInstance(FalcoDto, data);
+        });
+
+        return {
+            csvLogList: filteredCsvLoglist,
         }
     }
 
@@ -170,32 +261,6 @@ export class FalcoDao {
 
         // handle no query result
         return signatureCountByDate || null;
-    }
-
-    async getFalcoLogsForExport(clusterId: number): Promise<{ logCount: number; fullList: FalcoDto[] }> {
-
-        const knex = await this.databaseService.getConnection();
-
-        let query = knex.select()
-            .from('project_falco_logs')
-            .where('cluster_id', clusterId);
-
-        // Find log count and full list for csv export
-        const findCount = await knex
-            .select( [knex.raw( 'count (*)')])
-            .from(query.as("q"));
-
-        const logCount = ( findCount && findCount[0] && findCount[0].count) ? findCount[0].count : 0;
-
-        const fullList = await query.then(data => {
-            return plainToInstance(FalcoDto, data);
-        });
-
-
-        return {
-            fullList: fullList,
-            logCount: +logCount
-        }
     }
 
     async createFalcoLog(falcoLog: FalcoDto): Promise<FalcoDto> {
@@ -264,7 +329,7 @@ export class FalcoDao {
     }
 
     async addFalcoEmail(emailSentTime: number, clusterId: number, falcoSignature: string): Promise<any> {
-        let falcoEmailObj = new FalcoEmailDto();
+        const falcoEmailObj = new FalcoEmailDto();
         const emailSentDate = format(set(new Date(emailSentTime), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0}),'yyyy-MM-dd');
 
         falcoEmailObj.creationTimestamp = emailSentTime;
@@ -301,5 +366,141 @@ export class FalcoDao {
         } else {
             return null;
         }
+    }
+
+    async createFalcoRule(rule: FalcoRuleCreateDto): Promise<number> {
+        const knex = await this.databaseService.getConnection();
+        return knex.transaction(async (trx) => {
+            rule.allNamespaces = !rule?.namespaces?.length;
+            rule.allClusters = !rule?.clusters?.length;
+            let rawNamespaces = [];
+            if (!rule.allNamespaces) {
+                rawNamespaces = rule.namespaces.map(ns => ({ namespace: ns }))
+            }
+            let rawClusters = [];
+            if (!rule.allClusters) {
+                rawClusters = rule.clusters.map(id => ({ cluster_id: id }))
+            }
+
+            delete rule.namespaces;
+            delete rule.clusters;
+            const raw = instanceToPlain(rule);
+            const id = (await trx.insert(raw, 'id').into('falco_rules'))[0]?.id;
+            if (!rule.allNamespaces) {
+                rawNamespaces.forEach(ns => ns.falco_rule_id = id);
+                await trx.insert(rawNamespaces).into('falco_rules_namespace')
+            }
+            if (!rule.allClusters) {
+                rawClusters.forEach(ns => ns.falco_rule_id = id);
+                await trx.insert(rawClusters).into('falco_rules_cluster')
+            }
+            return id;
+        });
+    }
+
+    async getFalcoRuleById(id: number): Promise<FalcoRuleDto> {
+        console.log(id);
+        const knex = await this.databaseService.getConnection();
+        const query = this.baseFalcoRuleQuery(knex)
+          .where('rule.id', '=', id);
+
+        return knexnest(query)
+          .then(rows => plainToInstance(FalcoRuleDto, rows[0]))
+    }
+
+    async listActiveFalcoRules(options?: { clusterId?: number, sortField?: string, sortDir?: 'desc' | 'asc' }): Promise<FalcoRuleDto[]> {
+        const knex = await this.databaseService.getConnection();
+        const query = this.baseFalcoRuleQuery(knex)
+          .where('rule.deleted_at', 'IS', null)
+          .orderBy(options?.sortField || 'rule.created_at', options?.sortDir || 'asc')
+        if (options?.clusterId) {
+            query.andWhere(builder => {
+                    builder.where('rule.all_clusters', '=', true)
+                      .orWhere('rule_cluster.cluster_id', '=', options.clusterId);
+                })
+        }
+        return knexnest(query)
+          .then(rows => plainToInstance(FalcoRuleDto, rows))
+    }
+
+    async deleteFalcoRule(ruleId: number): Promise<number> {
+        const knex = await this.databaseService.getConnection();
+        return knex.update({ deleted_at: Date.now() })
+          .into('falco_rules')
+          .where('id', '=', ruleId);
+    }
+    async updateFalcoRule(rule: Partial<FalcoRuleCreateDto>, ruleId: number): Promise<void> {
+        // const raw = instanceToPlain(rule);
+        const knex = await this.databaseService.getConnection();
+
+        return knex.transaction(async (trx) => {
+            rule.allNamespaces = !rule?.namespaces?.length;
+            rule.allClusters = !rule?.clusters?.length;
+            let rawNamespaces = [];
+            if (!rule.allNamespaces) {
+                rawNamespaces = rule.namespaces.map(ns => ({ namespace: ns, falco_rule_id: ruleId }))
+            }
+            let rawClusters = [];
+            if (!rule.allClusters) {
+                rawClusters = rule.clusters.map(id => ({ cluster_id: id, falco_rule_id: ruleId }))
+            }
+
+            // Update the rule
+            delete rule.namespaces;
+            delete rule.clusters;
+            delete rule.id;
+            const raw = instanceToPlain(rule);
+            await trx.update(raw).into('falco_rules').where('id', '=', ruleId);
+
+            // Clear the namespace and cluster tables of associated entries
+            await trx.delete().from('falco_rules_cluster')
+              .where('falco_rule_id', '=', ruleId);
+            await trx.delete().from('falco_rules_namespace')
+              .where('falco_rule_id', '=', ruleId);
+
+
+            // (Re)-create the entries in the join tables if needed
+            if (!rule.allNamespaces) {
+                await trx.insert(rawNamespaces).into('falco_rules_namespace')
+            }
+            if (!rule.allClusters) {
+                await trx.insert(rawClusters).into('falco_rules_cluster')
+            }
+        });
+    }
+
+    /**
+     * Will use the provided connection to create the basic query for retrieving falco rules.
+     * It will alias the tables
+     * Table | Alias
+     * falco_rules | rule
+     * falco_rules_namespace | rule_ns
+     * falco_rules_cluster | rule_cluster
+     * clusters | cluster
+     * */
+    protected baseFalcoRuleQuery(knex: Knex) {
+        return knex.from({ rule: 'falco_rules' })
+          .select({
+              '_id': 'rule.id',
+              '_deletedAt': 'rule.deleted_at',
+              '_createdAt': 'rule.created_at',
+              '_image': 'rule.image',
+              '_falcoRule': 'rule.falco_rule',
+              '_action': 'rule.action',
+              '_allNamespaces': 'rule.all_namespaces',
+              '_allClusters': 'rule.all_clusters',
+              '_namespaces__namespace': 'rule_ns.namespace',
+              '_clusters__clusterId': 'rule_cluster.cluster_id',
+              '_clusters__name': 'cluster.name'
+          })
+          .leftJoin({rule_ns: 'falco_rules_namespace'}, function() {
+              this.on('rule_ns.falco_rule_id', '=', 'rule.id')
+          })
+          .leftJoin({rule_cluster: 'falco_rules_cluster'}, function() {
+              this.on('rule_cluster.falco_rule_id', '=', 'rule.id')
+          })
+          .leftJoin({cluster: 'clusters'}, function() {
+              this.on('rule_cluster.cluster_id', '=', 'cluster.id')
+          });
     }
 }

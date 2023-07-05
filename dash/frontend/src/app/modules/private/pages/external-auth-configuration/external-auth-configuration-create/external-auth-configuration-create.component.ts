@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '@full-fledged/alerts';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {IAuthConfig, ILDAPConfigStrategy, IOAUTHConfigStrategy} from '../../../../../core/entities/IAuth';
 import {AuthenticationType} from '../../../../../core/enum/AuthenticationType';
 
@@ -41,6 +40,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
       oauthAuthorizationUri: [''],
       // oauthRedirectUri: [{disabled: true, value: ''}],
       oauthScopes: [''],
+      oauthAllowedDomains: [''],
       ldapUrl: [''],
       ldapUserSearchBase: [''],
       ldapUserNameAttribute: [''],
@@ -69,16 +69,29 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
     if (authType === AuthenticationType.OAUTH2) {
       this.oauthAuthActivated = true;
       this.ldapAuthActivated = false;
-
+      this.authConfigForm.controls.oauthAllowedDomains.setValidators([Validators.required]);
     } else if (authType === AuthenticationType.LDAP) {
       this.oauthAuthActivated = false;
       this.ldapAuthActivated = true;
+      this.authConfigForm.controls.oauthAllowedDomains.removeValidators([Validators.required]);
     }
+    // Recheck the validity of fields which had validators changed
+    this.authConfigForm.controls.oauthAllowedDomains.updateValueAndValidity();
   }
 
   onOAuthProviderTypeChange($event) {
-    if (this.oauthAuthActivated && !this.ldapAuthActivated) {
-
+    if (this.oauthAuthActivated && !this.data.isEdit) {
+      switch ($event.value) {
+        case 'GOOGLE':
+          this.authConfigForm.controls.oauthAccessTokenUri.setValue('https://oauth2.googleapis.com/token');
+          this.authConfigForm.controls.oauthAuthorizationUri.setValue('https://accounts.google.com/o/oauth2/v2/auth');
+          this.authConfigForm.controls.oauthScopes.setValue('profile,openid,email');
+          break;
+        case 'AZURE':
+          this.authConfigForm.controls.oauthAuthorizationUri.setValue('https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize');
+          this.authConfigForm.controls.oauthScopes.setValue('openid');
+          break;
+      }
     }
   }
 
@@ -98,13 +111,15 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         authConfig.authConfig = authConfig.providerType === 'AZURE' ? ({
           clientId: this.authConfigForm.value.oauthClientId,
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
-          scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
+          scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
+          allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
         } as IOAUTHConfigStrategy) : ({
           clientId: this.authConfigForm.value.oauthClientId,
           clientSecret: this.authConfigForm.value.oauthClientSecret,
           accessTokenUri: this.authConfigForm.value.oauthAccessTokenUri,
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
-          scopes: this.scopesToArray(this.authConfigForm.value.oauthScopes)
+          scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
+          allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
         } as IOAUTHConfigStrategy);
         break;
       case AuthenticationType.LDAP :
@@ -171,6 +186,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         }
         this.authConfigForm.controls.oauthAuthorizationUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).authorizationUri);
         this.authConfigForm.controls.oauthScopes.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).scopes.join(','));
+        this.authConfigForm.controls.oauthAllowedDomains.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).allowedDomains.join(','));
         break;
 
       case AuthenticationType.LDAP:
@@ -195,9 +211,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
     }
   }
 
-  private scopesToArray(scopes) {
-    return scopes?.split(',')?.map(scope => scope.trim());
+  private stringToArray(commaSeparatedList) {
+    return commaSeparatedList?.split(',')?.map(item => item.trim().toLowerCase());
   }
 }
-
-

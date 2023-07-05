@@ -56,13 +56,14 @@ import {
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
+import {FalcoOrgSettingsPageComponent} from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
 
 const routes: Routes = [
   {
     path: '',
     component: PrivateComponent,
     children: [
-      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {
         path: 'dashboard',
         component: DashboardComponent,
@@ -71,7 +72,7 @@ const routes: Routes = [
             path: 'group/:groupId',
             component: ClusterListComponent,
             data: {
-                title: 'm9sweeper'
+              title: 'm9sweeper'
             }
           }
         ]
@@ -97,33 +98,33 @@ const routes: Routes = [
             data: {
               title: 'Cluster Info'
             }
-         },
-        {
-          path: 'images',
-          children: [
-            {
-              path: '',
-              component: ImageComponent,
-              data: {
-                title: 'Images'
+          },
+          {
+            path: 'images',
+            children: [
+              {
+                path: '',
+                component: ImageComponent,
+                data: {
+                  title: 'Images'
+                }
+              },
+              {
+                path: 'image-scan/:imageId',
+                component: ImageScanResultComponent,
+                data: {
+                  title: 'Scan result'
+                }
+              },
+              {
+                path: 'image-scan/:imageId/scanner/:scannerId',
+                component: ImageScanResultScannerDetailsComponent,
+                data: {
+                  title: 'Scan result'
+                }
               }
-            },
-            {
-              path: 'image-scan/:imageId',
-              component: ImageScanResultComponent,
-              data: {
-                title: 'Scan result'
-              }
-            },
-            {
-              path: 'image-scan/:imageId/scanner/:scannerId',
-              component: ImageScanResultScannerDetailsComponent,
-              data: {
-                title: 'Scan result'
-              }
-            }
-          ]
-        },
+            ]
+          },
           {
             path: 'falco',
             children: [
@@ -144,9 +145,11 @@ const routes: Routes = [
               {
                 path: 'settings',
                 component: FalcoSettingsComponent,
+                canActivate: [RoleGuard],
                 data: {
-                  title: 'Project Falco Settings'
-                }
+                  title: 'Project Falco Settings',
+                  allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+                },
               }
             ]
           },
@@ -311,275 +314,289 @@ const routes: Routes = [
             }
           },
         ]
-  },
-  {
-    path: 'users', component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-    },
-    children: [
-      {
-        path: '',
-        component: UserListComponent,
-        data: {
-          title: 'Users'
-        }
       },
       {
-        path: 'create',
-        component: CreateUserComponent,
-        canActivate: [RoleGuard],
+        path: 'users', component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
         data: {
-          title: 'Create User',
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      },
-      {
-        path: 'edit/:id',
-        component: CreateUserComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Edit user',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      }
-    ]
-  },
-  {
-    path: 'licenses',
-    component: OrganizationSettingsComponent,
-    canActivate: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-    },
-    children: [
-      {
-        path: '',
-        component: LicensesComponent,
-        data: {
-          title: 'Licenses'
-        }
         },
-    ]
-  },
-  {
-    path: 'single-sign-on', component: OrganizationSettingsComponent,
-    canActivate: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN]
-    },
-    children: [
-      {
-        path: '',
-        component: ExternalAuthConfigurationListComponent,
-        data: {
-          title: 'External Auth'
-        }
-      },
-    ]
-  },
-  {
-    path: 'settings',
-    component: OrganizationSettingsComponent,
-    canActivate: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-    },
-    children: [
-      {
-        path: '',
-        component: AppSettingsComponent,
-        data: {
-          title: 'Settings'
-        }
-      },
-    ]
-  },
-  {
-    path: 'policies',
-    component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-    },
-    children: [
-      {
-        path: '',
-        component: PolicyListComponent,
-        data: {
-          title: 'Policies',
-        }
+        children: [
+          {
+            path: '',
+            component: UserListComponent,
+            data: {
+              title: 'Users'
+            }
+          },
+          {
+            path: 'create',
+            component: CreateUserComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Create User',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          },
+          {
+            path: 'edit/:id',
+            component: CreateUserComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Edit user',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          }
+        ]
       },
       {
-        path: 'create',
-        component: PolicyCreateComponent,
+        path: 'licenses',
+        component: OrganizationSettingsComponent,
         canActivate: [RoleGuard],
         data: {
-          title: 'Create Policy',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      },
-      {
-        path: ':id/edit',
-        component: PolicyCreateComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Edit Policy',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      },
-      {
-        path: 'scanners',
-        component: ScannerListComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Scanners',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      }
-    ]
-  },
-  {
-    path: 'exceptions',
-    component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-    },
-    children: [
-      {
-        path: '',
-        component: ExceptionListComponent,
-        data: {
-          title: 'Exceptions',
-        }
-      },
-      {
-        path: 'create',
-        component: ExceptionCreateComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Create Exception',
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: LicensesComponent,
+            data: {
+              title: 'Licenses'
+            }
+          },
+        ]
       },
       {
-        path: ':id',
-        component: ExceptionDetailsComponent,
+        path: 'single-sign-on', component: OrganizationSettingsComponent,
+        canActivate: [RoleGuard],
         data: {
-          title: 'Exception Details',
+          allowedUserRoles: [Authority.SUPER_ADMIN]
+        },
+        children: [
+          {
+            path: '',
+            component: ExternalAuthConfigurationListComponent,
+            data: {
+              title: 'External Auth'
+            }
+          },
+        ]
+      },
+      {
+        path: 'settings',
+        component: OrganizationSettingsComponent,
+        canActivate: [RoleGuard],
+        data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: AppSettingsComponent,
+            data: {
+              title: 'Settings'
+            }
+          },
+        ]
       },
       {
-        path: ':id/edit',
-        component: ExceptionCreateComponent,
-        canActivate: [RoleGuard],
+        path: 'policies',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
         data: {
-          title: 'Edit Exception',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      },
-    ]
-  },
-  {
-    path: 'change-password',
-    component: ChangePasswordComponent
-  },
-  {
-    path: 'docker-registries',
-    component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-    },
-    children: [
-      {
-        path: '',
-        component: DockerRegistriesListComponent,
-        data: {
-          title: 'Docker Registries',
-        }
-      },
-      {
-        path: 'create',
-        component: DockerRegistriesCreateComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Create Docker Registries',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      },
-      {
-        path: 'edit/:id',
-        component: DockerRegistriesCreateComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Edit Docker Registry',
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        }
-      }
-    ]
-  },
-  {
-    path: 'api-key',
-    component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN]
-    },
-    children: [
-      {
-        path: '',
-        component: ApiKeyListComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'API Key Management',
-        }
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [
+          {
+            path: '',
+            component: PolicyListComponent,
+            data: {
+              title: 'Policies',
+            }
+          },
+          {
+            path: 'create',
+            component: PolicyCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Create Policy',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          },
+          {
+            path: ':id/edit',
+            component: PolicyCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Edit Policy',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          },
+          {
+            path: 'scanners',
+            component: ScannerListComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Scanners',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          }
+        ]
       },
       {
-        path: 'create',
-        component: ApiKeyFormComponent,
-        canActivate: [RoleGuard],
+        path: 'exceptions',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
         data: {
-          title: 'API Key Management',
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [
+          {
+            path: '',
+            component: ExceptionListComponent,
+            data: {
+              title: 'Exceptions',
+            }
+          },
+          {
+            path: 'create',
+            component: ExceptionCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Create Exception',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+            }
+          },
+          {
+            path: ':id',
+            component: ExceptionDetailsComponent,
+            data: {
+              title: 'Exception Details',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+            }
+          },
+          {
+            path: ':id/edit',
+            component: ExceptionCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Edit Exception',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          },
+        ]
+      },
+      {
+        path: 'falco',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [{
+          path: '',
+          component: FalcoOrgSettingsPageComponent,
+          data: {
+            title: 'Falco Settings',
+          }
+        }]
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordComponent
+      },
+      {
+        path: 'docker-registries',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+        },
+        children: [
+          {
+            path: '',
+            component: DockerRegistriesListComponent,
+            data: {
+              title: 'Docker Registries',
+            }
+          },
+          {
+            path: 'create',
+            component: DockerRegistriesCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Create Docker Registries',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          },
+          {
+            path: 'edit/:id',
+            component: DockerRegistriesCreateComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Edit Docker Registry',
+              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
+            }
+          }
+        ]
+      },
+      {
+        path: 'api-key',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
           allowedUserRoles: [Authority.SUPER_ADMIN]
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: ApiKeyListComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'API Key Management',
+            }
+          },
+          {
+            path: 'create',
+            component: ApiKeyFormComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'API Key Management',
+              allowedUserRoles: [Authority.SUPER_ADMIN]
+            }
+          },
+          {
+            path: 'edit/:id',
+            component: ApiKeyFormComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Update Key Management',
+              allowedUserRoles: [Authority.SUPER_ADMIN]
+            }
+          },
+        ]
       },
       {
-        path: 'edit/:id',
-        component: ApiKeyFormComponent,
-        canActivate: [RoleGuard],
+        path: 'audit-logs',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
         data: {
-          title: 'Update Key Management',
           allowedUserRoles: [Authority.SUPER_ADMIN]
-        }
+        },
+        children: [
+          {
+            path: '',
+            component: AuditLogComponent,
+            canActivate: [RoleGuard],
+            data: {
+              title: 'Audit Logs',
+            }
+          },
+        ]
       },
     ]
-  },
-  {
-    path: 'audit-logs',
-    component: OrganizationSettingsComponent,
-    canActivateChild: [RoleGuard],
-    data: {
-      allowedUserRoles: [Authority.SUPER_ADMIN]
-    },
-    children: [
-      {
-        path: '',
-        component: AuditLogComponent,
-        canActivate: [RoleGuard],
-        data: {
-          title: 'Audit Logs',
-        }
-      },
-    ]
-  },
-]
-}
-]
-;
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

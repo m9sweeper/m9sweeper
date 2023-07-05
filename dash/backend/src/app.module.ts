@@ -2,7 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { MiddlewareConsumer } from '@nestjs/common/interfaces/middleware/middleware-consumer.interface';
 import { Module } from '@nestjs/common/decorators/modules/module.decorator';
 import { NestModule } from '@nestjs/common/interfaces/modules/nest-module.interface';
-import { RouterModule } from 'nest-router/router.module';
+import { RouterModule } from '@nestjs/core';
 import { WinstonModule} from 'nest-winston/dist/winston.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { format, transports } from 'winston';
@@ -43,6 +43,7 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
+import { MetricsModule } from './modules/metrics/metrics.module';
 
 
 const myFormatter = info => {
@@ -97,7 +98,7 @@ const myFormatter = info => {
       ignoreEnvFile: true,
       isGlobal: true,
     }),
-    RouterModule.forRoutes(routes),
+    RouterModule.register(routes),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'public'),
     }),
@@ -134,12 +135,14 @@ const myFormatter = info => {
     AuditLogModule,
     FalcoModule,
     PrometheusModule.register({
-          path: '/api/v1/metrics',
-          defaultMetrics: {
-            enabled: true
-          },
-        }),
+      path: '/api/v1/metrics',
+      defaultMetrics: {
+        enabled: true
+      },
+    }),
+    MetricsModule,
   ],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

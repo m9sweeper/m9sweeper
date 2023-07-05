@@ -38,6 +38,7 @@ Kubernetes Security for Everyone!
    SUPER_ADMIN_PASSWORD=password
    TRAWLER_API_KEY=123456
 * `cd dash/backend`
+* `npm run build:local`
 * `npm run cli users:init`
 
 ### Start the Frontend:

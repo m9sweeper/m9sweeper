@@ -62,6 +62,7 @@ $ npm run start:prod
 SUPER_ADMIN_EMAIL=email@intelletive.com  
 SUPER_ADMIN_PASSWORD=password  
 TRAWLER_API_KEY=123456
+* `npm run build:local`
 * `npm run cli users:init`
 
 ## Seeing raw SQL Queries
@@ -91,6 +92,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Note on ngrok
+If you want to test ldap locally, you may need to set up an ngrok temporary URL.
+To start the server, run `ngrok http --host-header=rewrite 4200`
+
+Copy the first URL on the line marked "Forwarding."
+_(It should look something like `https://a-bunch-of-letters-and-numbers.ngrok-free.app`.)_
+
+Paste that value into your .env file as the value of `SERVER_BASE_URL`.
+
+Please note that this won't always work because certain providers require the referring
+URL to be registered with them separately. `http://mine-sweeper.ngrok.io` may work if
+you can set up the ngrok tunnel to use that URL.
+
+
 ## Note on Knexnest
 We have pulled in and updated knexnest as a vendor package.
 Running it locally functions differently than building it for k8s,
@@ -112,32 +127,6 @@ you can run `git update-index --assume-unchanged backend/vendor/knexnest/knexnes
 from the repo root to tell git to ignore your changes to that file.
 
 To tell git to watch the file again, you can run `git update-index --no-assume-unchanged backend/vendor/knexnest/knexnest.js`
-
-### Logger suggestion
-We have overridden some of console functions like log, info, error
-```
-log method must use 2 params instead of regular usage.
- 
-Param1: Log message as string or an object which contain two params named label and data 
-Param2: Context of log
-
-console.log('Hello Test console.log','CONSOLE_OVERRIDE_CONTEXT');
-console.log({label: 'Error Message', data: {param1: '', param2: ''}},'CONSOLE_OVERRIDE_CONTEXT');
-
-console.info('Hello Test console.log','CONSOLE_OVERRIDE_CONTEXT');
-console.info({label: 'Error Message', data: {param1: '', param2: ''}},'CONSOLE_OVERRIDE_CONTEXT');
-``` 
-
-```
-error method must use 3 params instead of regular usage.
- 
-Param1: Error message as string or an object which contain two params named label and data 
-Param2: Instance of Error or Exception
-Param3: Context of log
-
-console.error('Error Message', new Error('Dummy exception!!!!'),'CONSOLE_OVERRIDE_CONTEXT');
-console.error({label: 'Error Message', data: {userId: 2}}, new Error('Dummy exception!!!!'),'CONSOLE_OVERRIDE_CONTEXT');
-``` 
 
 ### OpenAPI 3 documentation (Swagger-UI)
 Documentation URL for all rest endpoints
