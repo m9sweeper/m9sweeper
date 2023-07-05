@@ -13,11 +13,11 @@ import {AddClusterWizardComponent} from '../cluster/add-cluster-wizard/add-clust
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+  templateUrl: './dashboard.component.new.html',
   styleUrls: ['./dashboard.component.scss']
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponentNew implements OnInit {
 
   faIcons: any = {
     arrowDoubleLeft: faAngleDoubleLeft,

@@ -16,7 +16,6 @@ import {AddClusterWizardComponent} from '../cluster/add-cluster-wizard/add-clust
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-
 export class DashboardComponent implements OnInit {
 
   faIcons: any = {
@@ -56,12 +55,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sidenavExpanded = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
-    this.sharedSubscriptionService.setCurrentExpandStatus(this.sidenavExpanded);
-    this.width = document.documentElement.clientWidth;
-    this.height = document.documentElement.clientHeight - 50;
-    this.initialWidth = document.documentElement.clientWidth;
-    this.screenSizeExpand(this.width);
     this.getAllClusterByGroupId();
     this.groupId = +this.route.snapshot.params.groupId;
     // this.route.params.subscribe(routeParams => {
@@ -76,30 +69,10 @@ export class DashboardComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   calculateScreenSize($event?: any) {
-    this.scrHeight = document.documentElement.clientHeight;
-    this.scrWidth = document.documentElement.clientWidth;
-    this.isSmallDevice = false;
-    this.screenSizeExpand(this.scrWidth);
-  }
-
-  set scrHeight(val: number) {
-    if (val !== this.height) {
-      this.height = val - 50;
-    }
-  }
-
-  get scrHeight(): number {
-    return this.height;
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = val;
-    }
-  }
-
-  get scrWidth(): number {
-    return this.width;
+    // this.scrHeight = document.documentElement.clientHeight;
+    // this.scrWidth = document.documentElement.clientWidth;
+    // this.isSmallDevice = false;
+    // this.screenSizeExpand(this.scrWidth);
   }
 
   getClusterByClusterGroupId(groupId: number) {

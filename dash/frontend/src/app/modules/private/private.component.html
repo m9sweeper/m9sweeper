@@ -1,6 +1,11 @@
 <mat-toolbar class="fixed">
   <mat-toolbar-row class="header-bar">
     <div class="loader-row">
+      <fa-icon
+        (click)="sidenav.toggleExpandCollapse()"
+        [icon]="faIcons.bars"
+        style="align-self: center; margin-inline-end: 0.75em; cursor: pointer"
+      ></fa-icon>
       <a [routerLink]="defaultRouteLink">
         <img src="assets/images/m9sweeper-logo.png" alt="m9sweeper" style="margin: 15px 0 10px; max-height: 45px;"/>
       </a>
@@ -54,5 +59,5 @@
 
 <div style="height: 50px">&nbsp;</div>
 <div class="main-content">
-  <router-outlet></router-outlet>
+  <app-side-nav #sidenav style="display:flex; height: 100%"></app-side-nav>
 </div>

@@ -13,6 +13,9 @@ import {MatInputModule} from '@angular/material/input';
 import {CommonModule} from '@angular/common';
 import { CopyToClipboardButtonComponent } from './components/copy-to-clipboard-button/copy-to-clipboard-button.component';
 import {MatButtonModule} from '@angular/material/button';
+import {SideNavComponent} from './side-nav/side-nav.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {RouterOutlet} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import {MatButtonModule} from '@angular/material/button';
     RbacDirective,
     SiteLogoDirective,
     CopyToClipboardButtonComponent,
+    SideNavComponent,
   ],
   imports: [
     MatButtonModule,
@@ -33,12 +37,15 @@ import {MatButtonModule} from '@angular/material/button';
     MatInputModule,
     CommonModule,
     MatButtonModule,
+    MatSidenavModule,
+    RouterOutlet,
   ],
   exports: [
     DatepickerComponent,
     RbacDirective,
     SiteLogoDirective,
     CopyToClipboardButtonComponent,
+    SideNavComponent,
   ]
 })
 export class SharedModule {

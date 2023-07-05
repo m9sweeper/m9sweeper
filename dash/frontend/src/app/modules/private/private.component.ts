@@ -16,6 +16,7 @@ import {UserProfileImageDirective} from '../shared/directives/user-profile-image
 import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-loader';
 import {AlertService} from '@full-fledged/alerts';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-private',
@@ -24,6 +25,10 @@ import {DefaultThemes} from '../../core/enum/DefaultThemes';
 })
 export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+
+  faIcons = {
+    bars: faBars
+  };
 
   theme: ITheme;
   allThemes: ITheme[] = [];
