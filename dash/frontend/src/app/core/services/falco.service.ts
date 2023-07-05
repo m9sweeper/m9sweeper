@@ -119,19 +119,24 @@ export class FalcoService {
     return this.httpClient.get<IServerResponse<{api: string}[]>>(`/api/falco/apiKey`);
   }
 
-  createRule(clusterId: number, rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {
-    return this.httpClient.post(`/api/falco/${clusterId}/rules`, rule);
+  createRule(rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {
+    return this.httpClient.post(`/api/falco/rules`, rule);
   }
 
-  listRules(clusterId: number): Observable<IServerResponse<IFalcoRule[]>> {
-    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/${clusterId}/rules`);
+  listRules(options?: { clusterId: number}): Observable<IServerResponse<IFalcoRule[]>> {
+    let params = new HttpParams();
+    if (options?.clusterId) {
+      params = params.set('clusterId', options.clusterId);
+    }
+
+    return this.httpClient.get<IServerResponse<IFalcoRule[]>>(`/api/falco/rules`, { params });
   }
 
-  updateRule(clusterId: number, rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {
-    return this.httpClient.put(`/api/falco/${clusterId}/rules/${rule.id}`, rule);
+  updateRule(rule: IFalcoRule): Observable<IServerResponse<IFalcoRule>> {
+    return this.httpClient.put(`/api/falco/rules/${rule.id}`, rule);
   }
 
-  deleteRule(clusterId: number, ruleId: number): Observable<IServerResponse<IFalcoRule>> {
-    return this.httpClient.delete(`/api/falco/${clusterId}/rules/${ruleId}`);
+  deleteRule(ruleId: number): Observable<IServerResponse<IFalcoRule>> {
+    return this.httpClient.delete(`/api/falco/rules/${ruleId}`);
   }
 }

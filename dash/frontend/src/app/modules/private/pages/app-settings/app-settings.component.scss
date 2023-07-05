@@ -1,26 +1,7 @@
-:root{
-  --organization-container-height: 981px
+.logo-name {
+  margin-top: 10px;
 }
-div.app-settings-container{
-  height:calc(var(--organization-container-height) - 52px);
-  overflow: auto;
-  > div {
-    &.app-settings-content {
-      margin: 10px;
-      padding: 10px;
-      mat-divider {
-        margin-top: 10px;
-      }
-
-      .logo-name {
-        margin-top: 10px;
-
-        img.organization-logo {
-          max-width:250px;
-          max-height:100px;
-        }
-      }
-    }
-  }
+img.organization-logo {
+  max-width:250px;
+  max-height:100px;
 }
-

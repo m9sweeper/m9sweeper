@@ -1,0 +1,28 @@
+.pl-10 {
+  padding-left: 10px;
+}
+
+.rule-container {
+  border: 2px solid;
+  margin: 15px;
+  padding: 20px;
+}
+
+.falco-rule-card-content {
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+::ng-deep.mat-card-header-text {
+  width: 100%;
+}
+
+.falco-title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

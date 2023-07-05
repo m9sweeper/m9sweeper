@@ -1,9 +1,9 @@
-<div class="external-auth-configuration-list-container">
-  <div class="external-auth-configuration-list">
+<div class="page-container">
+  <div class="page-container-content">
   <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click)="openAddExternalAuthConfigurationDialog(null)">
-    <mat-icon mat-list-icon>add</mat-icon>Add Sign On Method
+    <mat-icon mat-list-item-icon>add</mat-icon>Add Sign On Method
   </app-sub-navigation>
-    <div class="mat-elevation-z8  auth-list-table">
+    <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> No.</th>

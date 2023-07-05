@@ -1,33 +1,34 @@
-<div class="create-docker-registry-form">
-  <form [formGroup]="createDockerRegistryForm" class="docker-registry-form" (ngSubmit)="onSubmit()">
+<div mat-dialog-content class="modal-container-margin">
+  <div class="modal-content-left-align-no-margin">
+  <form [formGroup]="createDockerRegistryForm" (ngSubmit)="onSubmit()">
     <div>
-      <mat-dialog-content>
+      <div>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
             <input matInput placeholder="Name" type="text" formControlName="name">
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Host Name</mat-label>
             <input matInput placeholder="Host Name" type="text" formControlName="hostname">
           </mat-form-field>
         </p>
         <div>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Aliases</mat-label>
-            <mat-chip-list #aliasList
+            <mat-chip-grid #aliasList
                            [hidden]="createDockerRegistryForm.get('aliases').value.size === 0"
                            formControlName="aliases">
-              <mat-chip *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
+              <mat-chip-row *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
               (removed)="removeAlias(alias)">
                 {{alias}}
                 <button matChipRemove>
                   <mat-icon>cancel</mat-icon>
                 </button>
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-row>
+            </mat-chip-grid>
             <input placeholder="Add new alias"
                    class="mat-chip-input"
                    formControlName="aliasInput"
@@ -38,14 +39,14 @@
         </div>
         <div *ngIf="showBasicAuthFields">
           <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="fill">
               <mat-label>Username</mat-label>
               <input matInput placeholder="Username" type="text" formControlName="username">
             </mat-form-field>
           </p>
           <ng-container *ngIf="!this.data.isEdit">
             <p>
-              <mat-form-field appearance="standard">
+              <mat-form-field appearance="fill">
                 <mat-label>Password</mat-label>
                 <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
   <!--              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>-->
@@ -54,7 +55,7 @@
           </ng-container>
           <ng-container *ngIf="this.data.isEdit">
             <p>
-              <mat-form-field appearance="standard">
+              <mat-form-field appearance="fill">
                 <mat-label>Password</mat-label>
                 <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
                 <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -64,20 +65,20 @@
         </div>
         <div *ngIf="showAcrAuthFields">
           <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="fill">
               <mat-label>ACR Access Key</mat-label>
               <input matInput placeholder="Access Key" type="text" formControlName="acrAccessKey">
             </mat-form-field>
           </p>
           <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="fill">
               <mat-label>ACR Secret Key</mat-label>
               <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="acrSecretKey">
               <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
           </p>
           <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="fill">
               <mat-label>ACR Default Region</mat-label>
               <input matInput placeholder="Default Region" type="text" formControlName="acrDefaultRegion">
             </mat-form-field>
@@ -85,7 +86,7 @@
         </div>
         <div *ngIf="showGcrAuthFields">
           <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="fill">
               <mat-label>GCR Authorization JSON</mat-label>
               <textarea matInput placeholder="Enter full GCR JSON contents here..." formControlName="gcrAuthJson"></textarea>
             </mat-form-field>
@@ -122,7 +123,7 @@
           </p>
         </div>
         <p>
-          <mat-form-field appearance="standard">
+          <mat-form-field appearance="fill">
             <mat-label>Registry Authentication Type</mat-label>
             <mat-select formControlName="authType" (selectionChange)="handleHiddenFields($event)">
               <mat-option *ngFor="let type of authTypes"
@@ -132,11 +133,13 @@
             </mat-select>
           </mat-form-field>
         </p>
-      </mat-dialog-content>
-      <div mat-dialog-actions>
+      </div>
+      <div class="modal-content-left-align-no-margin">
         <button [disabled]="!createDockerRegistryForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+        &nbsp;
         <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
       </div>
     </div>
   </form>
+  </div>
 </div>

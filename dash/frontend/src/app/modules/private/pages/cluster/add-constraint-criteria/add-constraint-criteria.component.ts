@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 
 @Component({

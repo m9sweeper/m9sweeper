@@ -19,6 +19,7 @@ items:
     data:
       {{ $dashboardName }}.json: |
         {{- $.Files.Get $path | toJson | nindent 8 }}
+        {{/*//{{ ($.Files.Glob $path).AsConfig }}// */}}
 {{- end }}
 {{- end }}
 {{- end }}

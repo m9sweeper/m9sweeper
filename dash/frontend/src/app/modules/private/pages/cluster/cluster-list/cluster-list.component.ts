@@ -112,6 +112,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   dateInMil = Date.now();
   breakpointLarge = 1200;
   breakpointMedium = 800;
+  innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
@@ -183,9 +184,11 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     // debounce chart resizing
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
+      const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
+      this.innerScreenWidth = innerWindow.offsetWidth;
       this.isChartInSmallDevice = window.innerWidth <= 500;
       this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, true);
+        this.breakpointMedium, this.innerScreenWidth);
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
       this.updateFormatting();
@@ -461,12 +464,9 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Resize elements based on the space available outside of sidebar nav components instead of window size */
   updateFormatting() {
-    const screenWidth = +document.documentElement.style
-      .getPropertyValue('--dashboard-container-width')
-      .replace('px', '');
-    if (screenWidth >= this.breakpointLarge) {
+    if (this.innerScreenWidth >= this.breakpointLarge) {
       this.currentCardSize = 'col-xs-4';
-    } else if (screenWidth >= this.breakpointMedium) {
+    } else if (this.innerScreenWidth >= this.breakpointMedium) {
       this.currentCardSize = 'col-xs-6';
     } else {
       this.currentCardSize = 'col-xs-12';

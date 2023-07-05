@@ -1,92 +1,13 @@
-.page {
-  padding: 20px 15px 10px 15px;
-  font-size: 26px;
+.mr-10px {
+  margin-right: 10px;
 }
-
-.page-title {
-  margin-bottom: 15px;
-  padding-left: 0;
-  justify-content: left;
+.report-header{
+  width:100%;
 }
-
-.falco-container{
-  height: 100%;
-  overflow-y: auto;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 15px;
-}
-
-.falco-filter-card {
-  margin-bottom: 15px;
-  margin-top: 10px;
-}
-
-.falco-filter-content {
-  display: flex;
-  padding-left: 15px;
-}
-
-.report-header {
-  width: 100%
-}
-
-.table-card-header{
-  display: flex;
-  justify-content: left;
-  align-content: center;
-  padding-left: 0;
-}
-
-.filter-button {
-  display: flex;
-  justify-content: left;
-  padding-left: 14px;
-  align-content: center;
-}
-
-.card-list-header {
-  width: 100%;
-  white-space: nowrap;
-  display: flex;
-  }
-
-.event-row:hover {
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
-}
-
-.event-row:first-of-type {
-  background-color: rgb(255, 255, 255);
-  cursor: pointer;
-  border-top: 1px solid #E0E0E0;
-}
-
-  .mat-form-field {
-    //margin-right: 10px;
-    width: 100%;
-  }
-
-  mat-paginator {
-    display: flex;
-    justify-content: center;
-  }
-
-  .mat-card-title{
-    //padding-left: 30px;
-    //padding-right: 20px;
-    width: 100%;
-    white-space: nowrap;
-    display: flex;
-  }
 
 .falco-table {
-  // flex: 1;
   overflow-y: auto !important;
-
   mat-table {
-    min-width: 800px;
-
     mat-row {
       min-height: 24px !important
     }
@@ -157,8 +78,4 @@
       white-space: nowrap;
     }
   }
-}
-
-.custom-mat-header {
-  margin-bottom: -15px;
 }

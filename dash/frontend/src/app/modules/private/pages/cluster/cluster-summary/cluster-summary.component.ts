@@ -12,13 +12,13 @@ import { IClusterEvent } from '../../../../../core/entities/IClusterEvent';
 import { FormatDate } from '../../../../shared/format-date/format-date';
 import { MatDialog } from '@angular/material/dialog';
 import { ClusterEventComponent } from '../cluster-event/cluster-event.component';
-import {SharedSubscriptionService} from '../../../../../core/services/shared.subscription.service';
-import {merge, Subscription, Subject} from 'rxjs';
-import {MatSort} from '@angular/material/sort';
+import { SharedSubscriptionService } from '../../../../../core/services/shared.subscription.service';
+import { merge, Subscription, Subject } from 'rxjs';
+import { MatSort} from '@angular/material/sort';
 import { PodService } from 'src/app/core/services/pod.service';
-import {format, sub} from 'date-fns';
-import {take, takeUntil} from 'rxjs/operators';
-import {ChartSizeService} from '../../../../../core/services/chart-size.service';
+import { format, sub } from 'date-fns';
+import { take, takeUntil } from 'rxjs/operators';
+import { ChartSizeService } from '../../../../../core/services/chart-size.service';
 
 @Component({
   selector: 'app-cluster-summary',
@@ -107,6 +107,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   breakpointLarge = 1200;
   breakpointMedium = 800;
   resizeTimeout;
+  innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
@@ -167,9 +168,11 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   setChartHeightWidth(){
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
+      const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
+      this.innerScreenWidth = innerWindow.offsetWidth;
       this.updateFormatting();
       this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, false);
+        this.breakpointMedium, this.innerScreenWidth);
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
     }, 50);
@@ -379,12 +382,9 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   updateFormatting() {
-    const screenWidth = +document.documentElement.style
-      .getPropertyValue('--cluster-container-width')
-      .replace('px', '');
-    if (screenWidth >= this.breakpointLarge) {
+    if (this.innerScreenWidth >= this.breakpointLarge) {
       this.currentCardSize = 'col-xs-4';
-    } else if (screenWidth >= this.breakpointMedium) {
+    } else if (this.innerScreenWidth >= this.breakpointMedium) {
       this.currentCardSize = 'col-xs-6';
     } else {
       this.currentCardSize = 'col-xs-12';

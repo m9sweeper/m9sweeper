@@ -1,5 +1,6 @@
 <!-- start of the upper part of the menu-->
-<div>
+<div class="page-container">
+  <div class="page-container-content">
   <div class="row negative-margin-bottom-20">
     <div class="col-xs-12 col-md-6 cluster-group-name no-padding">
       <div class="margin-top-10 header-font">
@@ -19,10 +20,10 @@
   <div class="row margin-top-10" *ngIf="clustersList && clustersList.length">
     <div class="dashboard-card margin-top-10 no-padding no-margin full-height"
     [ngClass]="this.currentCardSize">
-      <mat-card class="" id="top-graph-1">
+      <mat-card appearance="outlined" class="" id="top-graph-1">
         <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
         <mat-card-content>
-          <div class="graph dark-theme">
+          <div class="graph">
             <ngx-charts-line-chart
               [view]="complianceSummaryLineChartAttributes.view"
               [scheme]="complianceSummaryLineChartAttributes.colorScheme"
@@ -65,10 +66,10 @@
 
     <div class="dashboard-card widget margin-top-10 no-padding no-margin full-height"
          [ngClass]="this.currentCardSize">
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-title class="center-xs">Scan History</mat-card-title>
         <mat-card-content>
-          <div class="graph dark-theme">
+          <div class="graph">
             <ngx-charts-line-chart
               [view]="lineChartAttributes.view"
               [scheme]="lineChartAttributes.colorScheme"
@@ -110,10 +111,10 @@
 
     <div class="dashboard-card no-padding no-margin margin-top-10 full-height"
          [ngClass]="this.currentCardSize">
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
         <mat-card-content>
-          <div class="graph dark-theme">
+          <div class="graph">
             <ngx-charts-bar-vertical-stacked
               [view]="barChartAttributes.view"
               [scheme]="barChartAttributes.colorScheme"
@@ -146,10 +147,10 @@
   <!--start of the error messages-->
 
   <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
-    <mat-card >No cluster added for this group</mat-card>
+    <mat-card appearance="outlined" >No cluster added for this group</mat-card>
   </div>
   <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 margin-top-10 text-center">
-    <mat-card>No cluster found.</mat-card>
+    <mat-card appearance="outlined">No cluster found.</mat-card>
   </div>
 
   <!--start of showing the clusters-->
@@ -157,7 +158,7 @@
     <div class="dashboard-card cluster-element margin-bottom-6 no-padding pointer"
          [ngClass]="this.currentCardSize"
          *ngFor="let cluster of clustersList; index as i">
-      <mat-card (click)="showCluster(cluster)" class="padding-top-10 cluster-card"
+      <mat-card appearance="outlined" (click)="showCluster(cluster)" class="padding-top-10 cluster-card"
                 [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
         <div class="row">
           <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
@@ -189,17 +190,18 @@
         </div>
         <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
         <ng-template #moreThanSixTags>
-          <mat-chip-list aria-label="tag list">
-            <mat-chip *ngFor="let tag of cluster['tags'].slice(0, 6); index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip>
+          <mat-chip-listbox aria-label="tag list">
+            <mat-chip-option *ngFor="let tag of cluster['tags'].slice(0, 6); index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip-option>
             <a [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]">{{limitTagList(cluster['tags'])}}</a>
-          </mat-chip-list>
+          </mat-chip-listbox>
         </ng-template>
         <ng-template #lessThanSixTags>
-          <mat-chip-list aria-label="tag list">
-            <mat-chip *ngFor="let tag of cluster['tags'] || []; index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip>
-          </mat-chip-list>
+          <mat-chip-listbox aria-label="tag list">
+            <mat-chip-option *ngFor="let tag of cluster['tags'] || []; index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip-option>
+          </mat-chip-listbox>
         </ng-template>
       </mat-card>
     </div>
+  </div>
   </div>
 </div>

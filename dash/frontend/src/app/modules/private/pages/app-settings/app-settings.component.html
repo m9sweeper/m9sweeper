@@ -1,19 +1,34 @@
-<div class="app-settings-container">
-  <div class="app-settings-content">
+<div class=" page-container">
+  <div class="page-container-content">
     <ng-container>
       <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
-                          [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
+                          (click)="openAddSettingDialog()"></app-sub-navigation>
     </ng-container>
-    <button mat-raised-button (click)="openAddSettingDialog()">{{buttonText}}</button>
-    <mat-divider></mat-divider>
-    <div class="logo-name">
-      <p *ngIf="organizationName">Organization Name: {{organizationName}}</p>
-      <ng-container *ngIf="displayLogo">
-        <p>
-          Organization Logo:
-        </p>
-        <img class="organization-logo" [src]="organizationLogo"/>
-      </ng-container>
+    <div class="page-card">
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <div class="page-card-header">
+            <div class=" page-card-title">
+              Organization Details
+            </div>
+          </div>
+        </mat-card-header>
+        <div class="page-card-content">
+        <mat-card-content>
+          <div class="logo-name">
+            <p class="page-card-line-content" *ngIf="organizationName">Organization Name: {{organizationName}}</p>
+            <ng-container *ngIf="displayLogo">
+              <p class="page-card-line-content">
+                Organization Logo:
+              </p>
+              <p class="page-card-line-content">
+                <img class="organization-logo" [src]="organizationLogo"/>
+              </p>
+            </ng-container>
+          </div>
+        </mat-card-content>
+        </div>
+      </mat-card>
     </div>
   </div>
 </div>

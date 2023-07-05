@@ -1,18 +1,21 @@
-@import '~@angular/material/theming';
+// @import '@angular/material/theming';
+@use '@angular/material' as mat;
+
 
 @mixin cluster-details-component-light-theme($theme) {
+
   app-cluster-details {
     .cluster-details-container {
       .cluster-menu {
-        background-color: map-get($mat-grey, A100);
+        background-color: mat.get-color-from-palette(mat.$gray-palette, A100);
       }
       .cluster-details-dashboard{
-        background-color: mat-color($mat-grey, 300);
+        background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
       }
     }
   }
 }
-
+/*
 @mixin cluster-details-component-dark-theme($theme) {
   app-cluster-details {
     .cluster-details-container {
@@ -72,3 +75,5 @@
     }
   }
 }
+
+ */

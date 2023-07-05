@@ -25,7 +25,9 @@
               "path": "./custom-webpack.config.ts",
               "replaceDuplicatePlugins": true
             },
-            "allowedCommonJsDependencies": ["url"],
+            "allowedCommonJsDependencies": [
+              "url"
+            ],
             "outputPath": "../backend/dist/public",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -152,8 +154,15 @@
       }
     }
   },
-  "defaultProject": "frontend",
   "cli": {
     "analytics": "edb4b403-b9e0-4575-bbca-a2faaaadbb53"
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }

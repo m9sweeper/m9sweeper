@@ -24,7 +24,6 @@ spec:
           severity: warning
     {{- end }}{{/* closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled */}}
     {{- end }}{{/* closes with .Values.prometheusOperator.defaultRules.numNewCVEs */}}
-
     {{- with .Values.prometheusOperator.defaultRules.percentNoncompliance }}
     {{- if .enabled }}
     - name: PercentNoncompliance

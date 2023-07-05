@@ -1,60 +1,5 @@
-#kube-hunter-container {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-}
-
-.page {
-  padding: 20px 15px 10px 15px;
-  font-size: 26px;
-}
-
 .last-run-data {
   text-align: center;
-}
-
-.text-style-red {
-  color: red;
-}
-
-.font-size-em {
-  font-size: 1.5em;
-}
-
-.card-height {
-  min-height: 100px;
-}
-
-.margin-top-bottom-15 {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.margin-top-10{
-  margin-top: 10px;
-}
-
-.text-align-end{
-  text-align: end;
-}
-
-.description {
-  padding-bottom: 1em;
-}
-
-#hunter-table-card {
-  padding-top: 20px;
-  min-width: 500px;
-}
-
-#hunter-audit-header {
-  display: flex;
-}
-
-#hunter-audit-header-button {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
 }
 
 .row {
@@ -73,8 +18,4 @@ th, td {
 .report-click:hover{
   background-color: rgba(0, 0, 0, .05);
   cursor: pointer;
-}
-mat-paginator {
-  display: flex;
-  justify-content: center;
 }

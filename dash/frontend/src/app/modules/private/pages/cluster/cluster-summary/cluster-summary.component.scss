@@ -1,73 +1,34 @@
-.padding-left{
-  padding-left: 3%;
-}
-
-.row{
-  padding-left: 30px;
-  padding-right: 20px;
-}
-
-.cluster-summary-container {
-  --cluster-summary-height: 300px;
-  --cluster-summary-widget-container-height: calc((var(--cluster-summary-height) - 10px) / 2);
-  height: calc(var(--cluster-details-height) - 52px);
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
-.image-click:hover{
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
-}
-
-.mat-card{
+.mat-mdc-card{
   padding: 0;
   margin: 10px 10px 0 0;
-}
-
-.cluster-summary-card {
-  height: 100%;
-}
-
-.cluster-card {
-  width: 100%;
-}
-
-.pointer{
-  cursor: pointer;
 }
 
 .label {
   padding-top: 10px;
   font-weight: bold;
   text-align: center;
+  font-size: 14px;
+  margin-top: -16px;
 }
 
 .total {
   font-size: xx-large;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 10px;
 }
 
-.header-font{
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.edit-cluster-group-icon{
-  padding-bottom: 10px;
-}
-
-.mat-card-title {
+.mat-mdc-card-title {
   padding-top: 10px;
 }
 
 .cluster-element {
-  display:flex;
-  margin-top:15px;
+  display: flex;
+  margin-top: 15px;
+}
+
+.cluster-summary-card {
+  height: 80%;
 }
 
 .namespaces-table {
@@ -88,7 +49,7 @@
 }
 
 .search-results {
-  height: 130px;
+  height: 180px;
   overflow-x: hidden;
   overflow-y: scroll;
   flex: none;
@@ -110,16 +71,18 @@
 }
 
 .cluster-events-card {
-  position: absolute;
-  width: calc(100% - 43px);
+  // position: absolute;
+  width: 98.4%;
   left: 1px;
   bottom: 0;
   padding: 15px 0 0 15px;
 }
 
 .cluster-events {
-  padding-top: 160px;
+  padding-top: 30px;
   max-height: 50%;
+  padding-right: 0 !important;
+  padding-left: 3px !important;
   position: sticky;
   position: -webkit-sticky; /* Safari */
   bottom: 0;
@@ -127,8 +90,28 @@
     padding-top: 0;
   }
   width: calc(var(--cluster-container-width) - 10px);
-  margin: 0 0 0 13px;
-  .mat-card:not([class*=mat-elevation-z]) {
-    box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
+
+  margin: 0 0 0 10px;
+  height: 200px;
+  .mat-mdc-card:not([class*=mat-elevation-z]) {
+
+    // box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
   }
+}
+
+.hide-scrollbar {
+  overflow: hidden !important;
+}
+
+.hide-x-scrollbar {
+  overflow-x: hidden !important;
+}
+
+.container-margin {
+  margin: 0 !important;
+}
+
+.graph-row {
+  margin-top: -22px;
+  margin-bottom: -10px;
 }

@@ -1,0 +1,37 @@
+.rule-container {
+  border: 2px solid;
+  margin: 15px;
+  padding: 20px;
+}
+
+.pl-10 {
+  padding-left: 10px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+::ng-deep.mat-card-header-text {
+  width: 100%;
+}
+
+.falco-title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+// @TODO: styles below this point are taken from https://github.com/m9sweeper/m9sweeper/pull/90
+// they should be deleted once that PR is merged in
+.page-container {
+  height: 100%;
+  display: block;
+  flex: 1;
+  width: 100%;
+  overflow: auto;
+}
+.page-container-content{
+  margin: 20px;
+}

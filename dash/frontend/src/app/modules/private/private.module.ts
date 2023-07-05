@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import {CommonModule, DatePipe, NgOptimizedImage} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -127,8 +127,10 @@ import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-setting
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
 import {GateKeeperInstallWizardDialogComponent} from './pages/cluster/gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
-import { FalcoRuleComponent } from './pages/falco/falco-settings/falco-rule/falco-rule.component';
-import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-settings/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
+import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
+import { FalcoOrgSettingsPageComponent } from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
+import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluster-list/falco-rules-cluster-list.component';
+import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 
 
 @NgModule({
@@ -217,8 +219,10 @@ import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-settings/fa
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,
-    FalcoRuleComponent,
     FalcoRuleAddEditDialogComponent,
+    FalcoOrgSettingsPageComponent,
+    FalcoRulesClusterListComponent,
+    ArrayTextPipe,
   ],
   imports: [
     CommonModule,
@@ -262,6 +266,7 @@ import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-settings/fa
     JsonSchemaFormModule,
     MatExpansionModule,
     MatButtonToggleModule,
+    NgOptimizedImage
   ],
   providers: [
     DatePipe

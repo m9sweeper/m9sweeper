@@ -1,24 +1,20 @@
-<div class="kubernetes-object-container">
-  <div class="kubernetes-object-list">
-    <div class="kubernetes-object-sub-navigation">
-      <div class="kubernetes-object-header">
-        <div class="content-breadcrumbs">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              namespaces
-            </li>
-          </ol>
-        </div>
-        <div class="content-name">
-          <p>Namespaces</p>
-        </div>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing adjust-height">
+      <div class="content-breadcrumbs">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            namespaces
+          </li>
+        </ol>
+        <p class="page-title">Namespaces</p>
       </div>
       <div class="calendar-date-picker">
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [initialDate]="date"></app-datepicker-component>
       </div>
     </div>
     <mat-card>
-      <div class="namespaces-table">
+      <div class="page-table">
         <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
@@ -51,10 +47,10 @@
           </ng-container>
           <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="click-event"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="table-row"></mat-row>
         </mat-table>
       </div>
-      <div class="paginator">
+      <div>
         <mat-paginator
           [length]="totalData"
           [pageSize]="limit"

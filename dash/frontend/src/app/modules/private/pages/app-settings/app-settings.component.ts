@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../../core/services/app-settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateAppSettingsComponent } from './create-app-settings/create-app-settings.component';
-import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
 import { Subscription } from 'rxjs';
 import {IServerResponse} from '../../../../core/entities/IServerResponse';
 import {ISetting} from '../../../../core/entities/ISetting';
@@ -30,7 +29,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private domSanitizer: DomSanitizer) {
     this.isEdit = this.displayLogo = false;
-    this.buttonText = 'Add Settings';
+    this.subNavigationButtonTitle = 'Add Settings';
   }
 
   ngOnInit(): void {
@@ -41,7 +40,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
     this.getUpdatedSettings = this.appSettingsService.getUpdatedSettingsData().subscribe(data => {
       if (data.length > 0) {
         this.isEdit = true;
-        this.buttonText = 'Edit Organization';
+        this.subNavigationButtonTitle = 'Edit Organization';
         this.organizationName = data.find(setting => setting.name === 'SITE_NAME')?.value;
         const organizationLogoFileId = data.find(setting => setting.name === 'SITE_LOGO')?.value;
         if (organizationLogoFileId && organizationLogoFileId !== '') {
