@@ -7,6 +7,8 @@ volumes:
 services:
   rabbitmq:
     image: rabbitmq:3.12-alpine
+    container_name: rabbitmq
+    restart: always
     ports:
       - '56729:5672'
     healthcheck:
@@ -18,6 +20,7 @@ services:
 
   postgres:
     image: postgres:15.3-alpine
+    container_name: postgres
     restart: always
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER" ]
@@ -37,6 +40,7 @@ services:
   dash-init:
     build: ..
     image: m9sweeper-dash
+    container_name: dash-init
     entrypoint: "npm run cli:init:all"
     depends_on:
       postgres:
@@ -62,6 +66,8 @@ services:
   dash:
     build: ..
     image: m9sweeper-dash
+    container_name: m9sweeper-dash
+    restart: always
     depends_on:
       postgres:
         condition: service_healthy
@@ -112,6 +118,8 @@ services:
   trawler:
     build: ../trawler
     image: m9sweeper-trawler
+    container_name: m9sweeper-trawler
+    restart: always
     environment:
       # TrawlerConfig
       TRAWLER_PARALLEL_SCANNERS: 1
@@ -132,6 +140,8 @@ services:
 
   kubesec:
     image: kubesec/kubesec:v2.13.0
+    container_name: kubesec
+    restart: always
     platform: linux/amd64
     command: ["http", "${KUBESEC_PORT}"]
     ports:
