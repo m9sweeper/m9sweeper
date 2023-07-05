@@ -15,7 +15,8 @@ import { CopyToClipboardButtonComponent } from './components/copy-to-clipboard-b
 import {MatButtonModule} from '@angular/material/button';
 import {SideNavComponent} from './side-nav/side-nav.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import {RouterOutlet} from '@angular/router';
+import {RouterModule, RouterOutlet} from '@angular/router';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,8 @@ import {RouterOutlet} from '@angular/router';
     MatButtonModule,
     MatSidenavModule,
     RouterOutlet,
+    RouterModule,
+    MatListModule,
   ],
   exports: [
     DatepickerComponent,

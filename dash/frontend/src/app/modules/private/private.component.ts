@@ -8,8 +8,8 @@ import { ClusterService } from '../../core/services/cluster.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ITheme } from '../../core/entities/ITheme';
 import { ThemeService } from '../../core/services/theme.service';
-import {fromEvent, Subject, Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, startWith, takeUntil, tap} from 'rxjs/operators';
+import {fromEvent, Observable, Subject, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, shareReplay, startWith, takeUntil, tap} from 'rxjs/operators';
 import {UpdateUserProfileComponent} from './pages/user/update-user-profile/update-user-profile.component';
 import {UserService} from '../../core/services/user.service';
 import {UserProfileImageDirective} from '../shared/directives/user-profile-image.directive';
@@ -17,6 +17,8 @@ import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-l
 import {AlertService} from '@full-fledged/alerts';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {IMenuItems} from '../shared/side-nav/menu-items.interface';
 
 @Component({
   selector: 'app-private',
@@ -25,6 +27,24 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 })
 export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+  public isHandsetOrXS$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
+
+  menuItems: IMenuItems[] = [
+    {
+      name: 'test',
+      path: ['test'],
+      icon: 'test',
+    },
+    {
+      name: 'test2',
+      path: ['test2'],
+      icon: 'test2',
+    },
+  ];
 
   faIcons = {
     bars: faBars
@@ -54,16 +74,18 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     bgsPosition: POSITION.centerLeft,
   };
 
-  constructor(private router: Router,
-              private jwtAuthService: JwtAuthService,
-              private dialog: MatDialog,
-              private clusterGroupService: ClusterGroupService,
-              private clusterService: ClusterService,
-              private themeService: ThemeService,
-              private userService: UserService,
-              private alertService: AlertService,
-              private loaderService: NgxUiLoaderService)
-  {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private jwtAuthService: JwtAuthService,
+    private dialog: MatDialog,
+    private clusterGroupService: ClusterGroupService,
+    private clusterService: ClusterService,
+    private themeService: ThemeService,
+    private userService: UserService,
+    private alertService: AlertService,
+    private loaderService: NgxUiLoaderService
+  ) {
     this.allThemes.push(...[{name: 'Dark', cssClass: 'dark-theme'}, {name: 'Light', cssClass: 'light-theme'}, {name: 'Default', cssClass: 'default-theme'}]);
     const currentLoggedInUser = this.jwtAuthService.currentUser;
     this.isLocalAuthUser = this.jwtAuthService.isLocalUser();

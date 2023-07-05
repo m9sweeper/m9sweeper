@@ -19,9 +19,10 @@
       }
     }
   }
-  mat-list {
-    a {
-      font-weight: bold !important;
+  span.mat-mdc-list-item-unscoped-content {
+    display: flex !important;
+    mat-icon {
+      padding-right: 0.25em;
     }
   }
 }

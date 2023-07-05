@@ -1,10 +1,40 @@
-<mat-sidenav-container>
+<mat-sidenav-container *ngIf="menuItems.length" style="width: 100%">
   <mat-sidenav
-    [(opened)]="sidenavExpanded"
+    [attr.role]="(isHandsetOrXS | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandsetOrXS | async) ? 'over' : 'side'"
+    [opened]="(isHandsetOrXS | async) === false"
   >
-    this is the side nav
+    <mat-nav-list id="main-list">
+      <mat-list-item *ngFor="let menuItem of menuItems">
+        <a mat-list-item
+          [routerLink]="menuItem.path"
+         >
+          <mat-icon [title]="menuItem.name">{{menuItem.icon}}</mat-icon>
+          {{menuItem.name}}
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <mat-nav-list id="settings-link">
+      <a mat-list-item
+         *ngIf="isAdmin"
+         [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+         [routerLink]="['/private', 'users']"
+      >
+        <mat-icon title="Organization Settings">settings</mat-icon>
+        Organization Settings
+      </a>
+      <a mat-list-item
+         *ngIf="!isAdmin"
+         [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']"
+         [routerLink]="['/private', 'policies']"
+      >
+        <mat-icon title="Organization Settings">settings</mat-icon>
+        Organization Settings
+      </a>
+    </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-container>
+  <mat-sidenav-content style="height: 100%">
     <router-outlet></router-outlet>
-  </mat-sidenav-container>
+  </mat-sidenav-content>
 </mat-sidenav-container>
