@@ -36,12 +36,6 @@ $ms-default-theme: mat.define-light-theme((
   ),
 ));
 
-
-button {
-  font-weight: 600;
-  letter-spacing: normal;
-}
-
 //<app-root></app-root> theme
 @import "./app/app.component.theme";
 @import './app/modules/private/pages/dashboard/dashboard.component.theme';

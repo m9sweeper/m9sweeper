@@ -58,10 +58,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.sidenavExpanded = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
     this.sharedSubscriptionService.setCurrentExpandStatus(this.sidenavExpanded);
-    this.width = document.documentElement.clientWidth;
-    this.height = document.documentElement.clientHeight - 50;
-    this.initialWidth = document.documentElement.clientWidth;
-    this.screenSizeExpand(this.width);
     this.getAllClusterByGroupId();
     this.groupId = +this.route.snapshot.params.groupId;
     // this.route.params.subscribe(routeParams => {
@@ -74,32 +70,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  calculateScreenSize($event?: any) {
-    this.scrHeight = document.documentElement.clientHeight;
-    this.scrWidth = document.documentElement.clientWidth;
-    this.isSmallDevice = false;
-    this.screenSizeExpand(this.scrWidth);
+  expandSidenav(willBeOpen: boolean) {
+    this.sidenavExpanded = willBeOpen;
+    this.sharedSubscriptionService.setCurrentExpandStatus(this.sidenavExpanded);
   }
-
-  set scrHeight(val: number) {
-    if (val !== this.height) {
-      this.height = val - 50;
-    }
-  }
-
-  get scrHeight(): number {
-    return this.height;
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = val;
-    }
-  }
-
-  get scrWidth(): number {
-    return this.width;
+  toggleExpandCollapse() {
+    this.expandSidenav(!this.sidenavExpanded);
   }
 
   getClusterByClusterGroupId(groupId: number) {
@@ -142,7 +118,7 @@ export class DashboardComponent implements OnInit {
   }
 
   openAddGroupDialog() {
-    this.menubarCollapse();
+    this.expandSidenav(false);
     const confirmDialog = this.dialog.open(ClusterGroupCreateComponent, {
       width: '520px',
       closeOnNavigation: true,
@@ -170,67 +146,5 @@ export class DashboardComponent implements OnInit {
       return this.azureColorSchema[rowIndex];
     }
     return this.azureColorSchema[rowIndex % 7];
-  }
-
-  toggleExpandCollapse() {
-    this.sidenavExpanded = !this.sidenavExpanded;
-  }
-
-  menubarCollapse(){
-    if (this.isSmallDevice){
-      this.expand();
-    }
-  }
-  expand(){
-    if (this.isSmallSize) {
-      this.isSmallDevice = !this.isSmallDevice;
-      this.expandMenuBarForSmallDevice(this.width);
-    } else {
-      this.sidenavExpanded = !this.sidenavExpanded;
-      localStorage.setItem('expand', `${this.sidenavExpanded}`);
-      this.screenSizeExpand(this.width);
-    }
-    this.sharedSubscriptionService.setCurrentExpandStatus(this.sidenavExpanded);
-  }
-
-  expandMenuBarForSmallDevice(width: number){
-    let menuWidth: number;
-    let containerWidth: number;
-    if (this.isSmallDevice){
-      this.sidenavExpanded = true;
-      menuWidth = 300;
-      containerWidth =  width;
-    }
-    else {
-      this.sidenavExpanded = false;
-      menuWidth = 65;
-      containerWidth = width - menuWidth;
-    }
-    document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--dashboard-container-width', `${containerWidth}px`);
-    document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
-  }
-
-  screenSizeExpand(width: number){
-    let menuWidth: number;
-    let containerWidth: number;
-
-    if (width <= 800) {
-      menuWidth = 65;
-      this.isSmallSize = true;
-      this.sidenavExpanded = false;
-    } else {
-      this.isSmallSize = false;
-      this.isSmallDevice = false;
-      if (this.sidenavExpanded) {
-        menuWidth = 300;
-      } else {
-        menuWidth = 65;
-      }
-    }
-    containerWidth = width - menuWidth;
-    document.documentElement.style.setProperty('--dashboard-container-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--dashboard-container-width', `${containerWidth}px`);
-    document.documentElement.style.setProperty('--dashboard-navbar-menu-width', `${menuWidth}px`);
   }
 }

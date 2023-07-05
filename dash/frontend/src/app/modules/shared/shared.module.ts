@@ -24,6 +24,7 @@ import {MatButtonModule} from '@angular/material/button';
     CopyToClipboardButtonComponent,
   ],
   imports: [
+    MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,

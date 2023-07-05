@@ -1,9 +1,152 @@
-.mat-icon{ // for mat-icon in dashboard
-  padding-left: 10px;
-  margin-right: 25px;
-  // margin-left: 5px;
-  height: 40px;
+:root{
+  --dashboard-container-height: 981px;
+  --dashboard-container-width: 1000px;
+  --dashboard-navbar-menu-width: 250px;
 }
-.material-icons{
-  line-height:2.5;
+
+div {
+  &.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    > div {
+      &.cluster-group-menu-small-device {
+        width: var(--dashboard-navbar-menu-width);
+        z-index: 99999;
+      }
+      &.cluster-group-menu {
+        width: var(--dashboard-navbar-menu-width);
+        height: var(--dashboard-container-height);
+        background-color: #FFFFFF;
+        display: flex;
+        border-right: #b0aeaf 1px solid;
+        flex-direction: column;
+        div.create-cluster-group {
+          cursor: pointer;
+          mat-list {
+            padding-top: 0;
+            a{
+              font-size: 14px;
+              &:hover {
+                background-color: #e3dede;
+              }
+            }
+          }
+        }
+        div.cluster-item {
+          overflow: hidden auto;
+          &::-webkit-scrollbar {
+            width: 2.5px;
+          }
+          &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #888;
+          }
+          &::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+          mat-list {
+            padding-top: 0;
+            &.cluster-group-list-isExpand:last-child {
+              margin-bottom: 60px;
+            }
+            &.cluster-group-list-isNotExpand:last-child{
+              margin-bottom: 100px;
+            }
+            a {
+              background-color: #FFFFFF;
+              color: black;
+              display: block;
+              text-decoration: none;
+              &.cluster-group-name {
+                text-decoration: none;
+                font-size: 14px;
+              }
+              &:hover{
+                background-color: #F2F2F2;
+              }
+              &.active{
+                background-color: #C7E0F4;
+                color: black;
+                border-left: #0078d4 3px solid;
+                &:hover{
+                  background-color: #b3d3f1;
+                  color: black;
+                }
+              }
+              span.cluster-group-name-full {
+                padding-left: 10px;
+              }
+              span.cluster-group-name-short {
+                border-radius: 3px;
+                width: 24px;
+                height: 24px;
+                padding: 4px;
+                text-align: center;
+                color: white;
+                text-transform: uppercase;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+        div.organization-settings {
+          bottom: 0;
+          position: fixed;
+          width: calc(var(--dashboard-navbar-menu-width) - 1px);
+          display: flex;
+          align-items: center;
+          mat-list {
+            display: flex;
+            width: 100%;
+            &.expanded {
+              flex-direction: row;
+            }
+            &.closed {
+              flex-direction: column;
+            }
+            &.mat-list-base {
+              padding-top: 0 !important;
+            }
+            a {
+              text-decoration: none;
+              font-size: 1vw;
+            }
+
+            > .mat-list-item {
+              &:hover {
+                background-color: #F2F2F2;
+              }
+            }
+
+            .expanded-item {
+              display: flex;
+              flex-direction: row;
+              width: 100%;
+              &:hover {
+                background-color: #F2F2F2;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .organization-settings-text {
+    font-size: 14px;
+  }
+  > div {
+    &.cluster-dashboard-small-device {
+      position: fixed;
+      opacity: 0.5;
+      width: var(--dashboard-container-width);
+      height: var(--dashboard-container-height);
+      display: flex;
+    }
+    &.cluster-dashboard {
+      width: var(--dashboard-container-width);
+      flex-direction: column;
+    }
+  }
 }
