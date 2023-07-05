@@ -9,10 +9,6 @@ metadata:
   {{- $lenRuleOne := len "m9s-alerts" }}
   name: {{ printf "%s-m9s-alerts" ($prometheusAppName | trunc $lenRuleOne | trimSuffix "-") }}
   namespace: {{ $.Release.Namespace }}
-  labels:
-    {{- include "dash.labels" $ | nindent 4 }}
-    role: alert-rules
-    app: {{ printf "%s" $prometheusAppName }}
 spec:
   groups:
     {{- with .Values.prometheusOperator.defaultRules.numNewCVEs }}
@@ -26,9 +22,8 @@ spec:
         expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
         labels:
           severity: warning
-    {{- end }}# closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled
-    {{- end }}# closes with .Values.prometheusOperator.defaultRules.numNewCVEs
-
+    {{- end }}{{/* closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled */}}
+    {{- end }}{{/* closes with .Values.prometheusOperator.defaultRules.numNewCVEs */}}
     {{- with .Values.prometheusOperator.defaultRules.percentNoncompliance }}
     {{- if .enabled }}
     - name: PercentNoncompliance
@@ -40,8 +35,8 @@ spec:
         expr: (((sum by (cluster) (num_pods_compliant))/((sum by (cluster) (num_pods_compliant))+(sum by (cluster) (num_pods_noncompliant))))*100) < {{ .threshold }}
         labels:
           severity: warning
-      {{- end }}# closes if .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled
-      {{- end }}# closes with .Values.prometheusOperator.defaultRules.percentNoncompliance
+      {{- end }}{{/*  closes if .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled */}}
+      {{- end }}{{/*  closes with .Values.prometheusOperator.defaultRules.percentNoncompliance */}}
 
-{{- end }}# closes if or(.Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled)
-{{- end }}# closes if and(.Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled)
+{{- end }}{{/*  closes if or .Values.prometheusOperator.defaultRules.numNewCVEs.enabled .Values.prometheusOperator.defaultRules.percentNoncompliance.enabled */}}
+{{- end }}{{/*  closes if and .Values.prometheusOperator.enabled .Values.prometheusOperator.defaultRules.enabled */}}
