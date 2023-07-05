@@ -90,6 +90,8 @@ export class DockerRegistriesCreateComponent implements OnInit {
 
   onSubmit() {
     const dockerRegistryData = this.createDockerRegistryForm.getRawValue();
+    // New Angular version returns sets as arrays in getRawValue, correct that here
+    dockerRegistryData.aliases = new Set(dockerRegistryData.aliases);
     switch (dockerRegistryData.authType) {
       case DockerRegistryAuthTypes.GOOGLE_CONTAINER_REGISTRY:
         try {
