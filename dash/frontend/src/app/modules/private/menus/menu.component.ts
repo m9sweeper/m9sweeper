@@ -6,6 +6,7 @@ import {Router, NavigationStart, Event as NavigationEvent, NavigationEnd, Activa
 import {Component, Injectable, OnDestroy} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map, shareReplay} from 'rxjs/operators';
+import {SettingsMenuService} from './services/settings-menu.service';
 
 
 @Component({
@@ -28,10 +29,17 @@ export class MenuComponent implements OnDestroy {
   private clusterListMenuItems: IMenuItem[] = [];
   private clusterListMenuContentTriggers: IMenuContentTrigger[] = [];
 
+  menuOptions = {
+    clusterList: 'cluster-list',
+    settings: 'settings',
+  };
+  currentMenuToUse = this.menuOptions.settings;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private clusterListMenu: ClusterListMenuService,
     private router: Router,
+    private settingsMenu: SettingsMenuService,
   ) {
     this.updateMenuItems();
     this.initSubscriptions();
@@ -39,10 +47,12 @@ export class MenuComponent implements OnDestroy {
 
   initSubscriptions() {
     this.routerEvent$ = this.router.events.subscribe((event: NavigationEvent) => {
-      if (event instanceof NavigationStart) {
+      if (event instanceof NavigationEnd) {
         this.updateMenuItems();
       }
     });
+    this.instantiateClusterListMenuSubscriptions();
+    this.instantiateSettingsMenuSubscriptions();
   }
 
   ngOnDestroy() {
@@ -53,6 +63,8 @@ export class MenuComponent implements OnDestroy {
   unsubscribeFromAll() {
     this.clusterListMenu.currentMenuItems.unsubscribe();
     this.clusterListMenu.currentMenuContentTriggers.unsubscribe();
+    this.settingsMenu.currentMenuItems.unsubscribe();
+    this.settingsMenu.currentMenuContentTriggers.unsubscribe();
   }
 
   toggleMenuExpansion() {
@@ -61,20 +73,48 @@ export class MenuComponent implements OnDestroy {
 
   updateMenuItems() {
     const currentURL = this.router.url;
-    const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));;
+    // this.unsubscribeFromAll();
+    const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
+    console.log('menuShouldBeClusterList', menuShouldBeClusterList);
     if (menuShouldBeClusterList) {
-      this.useClusterListMenu();
+      console.log('use cluster list menu');
+      this.currentMenuToUse = this.menuOptions.clusterList;
+      this.currentMenuItems = this.clusterListMenu.currentMenuItems.getValue();
+      this.currentMenuContentTriggers = this.clusterListMenu.currentMenuContentTriggers.getValue();
+    } else {
+      this.currentMenuToUse = this.menuOptions.settings;
+      this.currentMenuItems = this.settingsMenu.currentMenuItems.getValue();
+      this.currentMenuContentTriggers = this.settingsMenu.currentMenuContentTriggers.getValue();
     }
   }
 
-  useClusterListMenu() {
+  instantiateClusterListMenuSubscriptions() {
     this.clusterListMenu.currentMenuItems.subscribe(newMenuItems => {
-      this.currentMenuItems = newMenuItems;
-      console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
+      if (this.currentMenuToUse === this.menuOptions.clusterList) {
+        this.currentMenuItems = newMenuItems;
+        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
     });
     this.clusterListMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
-      this.currentMenuContentTriggers = newMenuTriggers;
-      console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
+      if (this.currentMenuToUse === this.menuOptions.clusterList) {
+        this.currentMenuContentTriggers = newMenuTriggers;
+        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
+    });
+  }
+
+  instantiateSettingsMenuSubscriptions() {
+    this.settingsMenu.currentMenuItems.subscribe(newMenuItems => {
+      if (this.currentMenuToUse === this.menuOptions.settings) {
+        this.currentMenuItems = newMenuItems;
+        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
+    });
+    this.settingsMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
+      if (this.currentMenuToUse === this.menuOptions.settings) {
+        this.currentMenuContentTriggers = newMenuTriggers;
+        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
     });
   }
 

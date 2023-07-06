@@ -27,6 +27,12 @@
           >
             {{menuItem.abbreviation.letters}}
           </span>
+          <img
+            *ngIf="menuItem.image"
+            style="width:2.25em; height:2em"
+            src="{{menuItem.image.src}}"
+            alt="{{menuItem.image.alt}}"
+            class="{{menuItem.image.classes}}"/>
           <span class="menu-item-name">{{menuItem.name}}</span>
         </a>
       </div>

@@ -6,4 +6,9 @@ export class IMenuItem {
     backgroundColor: string,
     letters: string,
   };
+  image?: {
+    src: string,
+    alt: string,
+    classes?: string
+  };
 }
