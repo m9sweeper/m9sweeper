@@ -21,6 +21,7 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {IMenuItem} from '../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {AddClusterWizardComponent} from './pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
+import {MenuService} from './menus/menu.service';
 
 @Component({
   selector: 'app-private',
@@ -36,7 +37,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
   menuItems: IMenuItem[] = [];
-  abbreviationBackgroundColors = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   menuContentTriggers: IMenuContentTrigger[] = [];
 
   faIcons = {
@@ -78,6 +78,7 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     private userService: UserService,
     private alertService: AlertService,
     private loaderService: NgxUiLoaderService,
+    private menuService: MenuService,
   ) {
     this.allThemes.push(...[{name: 'Dark', cssClass: 'dark-theme'}, {name: 'Light', cssClass: 'light-theme'}, {name: 'Default', cssClass: 'default-theme'}]);
     const currentLoggedInUser = this.jwtAuthService.currentUser;
@@ -101,9 +102,18 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.setShowSearchBar();
       });
-
-    this.buildClusterMenu();
-    this.buildClusterListTriggers();
+    this.menuService.currentMenuItems.subscribe(
+      (newItems) => {
+        console.log('new currentMenuItems', newItems);
+        this.menuItems = newItems;
+      },
+      (error) => {
+        console.log('subscription error', error);
+      },
+      () => {
+        console.log('subscription complete');
+      }
+    );
 
     /*if (this.isAdmin) {
       this.clusterService.checkLicenseValidity().subscribe(response => {
@@ -122,6 +132,12 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
           this.alertService.danger(errMsg);
         });
     }*/
+  }
+
+  ngOnDestroy() {
+    this.menuService.currentMenuItems.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   getUserProfile(){
@@ -218,79 +234,8 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
-
-  buildClusterMenu() {
-    this.clusterGroupService.getClusterGroups().subscribe(groups => {
-      console.log('clusters', groups);
-      if (groups.data) {
-        this.menuItems = [];
-        groups.data.forEach((group, index): IMenuItem => {
-          console.log(group);
-          if (!group) { return; }
-          const name = group.name;
-          const path = ['/private', 'dashboard', 'group', group?.id];
-          const abbreviation = {
-            backgroundColor: this.calculateMenuColor(index),
-            letters: this.buildAbbreviation(group.name),
-          };
-          this.menuItems.push({ name, path, abbreviation });
-        });
-      }
-      this.menuItems.push({
-        name: 'test',
-        path: ['test'],
-        icon: 'settings',
-      });
-    });
-  }
-  calculateMenuColor(rowIndex: number ) {
-    if (rowIndex < 5) {
-      return this.abbreviationBackgroundColors[rowIndex];
-    }
-    return this.abbreviationBackgroundColors[rowIndex % 7];
-  }
-  buildAbbreviation(name: string){
-    const trimmedName = name.trim();
-    if (trimmedName.length > 1 ) {
-      const splitNameArray = trimmedName.split(' ').filter(value => value);
-      return splitNameArray.length > 1 ? splitNameArray[0][0] + splitNameArray[1][0] : splitNameArray[0].substr(0, 2);
-    }
-    return trimmedName;
-  }
-
   callMenuContentTriggerCallback(contentTriggerName: string) {
     const triggeredItem = this.menuContentTriggers.find(element => element.name = contentTriggerName);
     triggeredItem.callback(this);
-  }
-
-  buildClusterListTriggers() {
-    this.menuContentTriggers = [{
-      name: 'add-cluster-group',
-      title: 'Add Cluster Group',
-      icon: 'add',
-      callback: this.openDefaultCreateClusterDialog,
-    }];
-  }
-  openDefaultCreateClusterDialog(parent: PrivateComponent) {
-    const openAddCluster = parent.dialog.open(
-      AddClusterWizardComponent,
-      {
-        width: '900px',
-        height: '75%',
-        minHeight: '300px',
-        closeOnNavigation: true,
-        disableClose: true,
-        data: { groupId:  null},
-      }
-    );
-    openAddCluster.afterClosed().subscribe(response => {
-      if (response && response?.result === true) {
-        parent.buildClusterMenu();
-      }
-    });
   }
 }
