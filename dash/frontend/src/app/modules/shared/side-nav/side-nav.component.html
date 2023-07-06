@@ -1,28 +1,49 @@
-<mat-sidenav-container *ngIf="menuItems.length" style="width: 100%">
+<mat-sidenav-container class="primary-side-nav" *ngIf="menuItems?.length" style="width: 100%">
   <mat-sidenav
     [attr.role]="(isHandsetOrXS | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandsetOrXS | async) ? 'over' : 'side'"
     [opened]="(isHandsetOrXS | async) === false"
+    style="height: 100%; display: flex;"
   >
+
     <mat-nav-list id="main-list">
-      <mat-list-item *ngFor="let menuItem of menuItems">
+      <div *ngFor="let contentTrigger of contentTriggerButtons">
+        <mat-list-item (click)="contentTriggerClicked(contentTrigger.name)">
+          <mat-icon title="Add Cluster Group">{{ contentTrigger.icon }}</mat-icon>
+          {{ contentTrigger.title }}
+        </mat-list-item>
+      </div>
+
+      <mat-divider *ngIf="contentTriggerButtons.length" style="margin-top: 0.5em; margin-bottom: 0.5em;"></mat-divider>
+
+      <div *ngFor="let menuItem of menuItems">
         <a mat-list-item
           [routerLink]="menuItem.path"
          >
-          <mat-icon [title]="menuItem.name">{{menuItem.icon}}</mat-icon>
-          {{menuItem.name}}
+          <mat-icon *ngIf="menuItem.icon" [title]="menuItem.name">{{menuItem.icon}}</mat-icon>
+          <span *ngIf="menuItem.abbreviation"
+            [ngStyle]="{'background': menuItem.abbreviation.backgroundColor}"
+            class="cluster-group-name-short menu-item-abbreviation"
+          >
+            {{menuItem.abbreviation.letters}}
+          </span>
+          <span class="menu-item-name">{{menuItem.name}}</span>
         </a>
-      </mat-list-item>
+      </div>
     </mat-nav-list>
 
+    <mat-nav-list style="flex:1"></mat-nav-list>
+
     <mat-nav-list id="settings-link">
+      <mat-divider></mat-divider>
       <a mat-list-item
          *ngIf="isAdmin"
          [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
          [routerLink]="['/private', 'users']"
+         style="align-self: flex-end"
       >
         <mat-icon title="Organization Settings">settings</mat-icon>
-        Organization Settings
+        <span class="menu-item-name">Organization Settings</span>
       </a>
       <a mat-list-item
          *ngIf="!isAdmin"
@@ -30,9 +51,10 @@
          [routerLink]="['/private', 'policies']"
       >
         <mat-icon title="Organization Settings">settings</mat-icon>
-        Organization Settings
+        <span class="menu-item-name">Organization Settings</span>
       </a>
     </mat-nav-list>
+
   </mat-sidenav>
   <mat-sidenav-content style="height: 100%">
     <router-outlet></router-outlet>

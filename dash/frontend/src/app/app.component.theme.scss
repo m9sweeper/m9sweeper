@@ -19,10 +19,42 @@
       }
     }
   }
-  span.mat-mdc-list-item-unscoped-content {
-    display: flex !important;
-    mat-icon {
-      padding-right: 0.25em;
+  .primary-side-nav {
+    span.mat-mdc-list-item-unscoped-content {
+      display: flex !important;
+      align-items: center;
+
+      .menu-item-name {
+        margin-left: 0.55em;
+      }
+      .menu-item-abbreviation {
+        align-self: center;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        border-radius: 0.5em;
+        width: 0.75em;
+        height: 0.75em;
+        color: white;
+        text-transform: uppercase;
+        padding: 0.8em;
+        font-size: 0.95em;
+      }
+      mat-icon {
+        font-size: 2em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+        height: 100%;
+        width: 1.15em;
+      }
+    }
+
+    .mat-drawer-inner-container {
+      display: flex;
+      flex-direction: column;
     }
   }
 }

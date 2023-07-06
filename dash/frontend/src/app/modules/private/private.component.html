@@ -64,5 +64,7 @@
     #sidenav
     [isHandsetOrXS]="isHandsetOrXS$"
     [menuItems]="menuItems"
+    [contentTriggerButtons]="menuContentTriggers"
+    (contentTriggerButtonClicked)="callMenuContentTriggerCallback($event)"
     style="display:flex; height: 100%"></app-side-nav>
 </div>

@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subject} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {IMenuItems} from './menu-items.interface';
+import {IMenuItem} from './interfaces/menu-item.interface';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
+import {IMenuContentTrigger} from './interfaces/menu-content-trigger.interface';
 
 @Component({
   selector: 'app-side-nav',
@@ -14,7 +15,9 @@ import {JwtAuthService} from '../../../core/services/jwt-auth.service';
 export class SideNavComponent implements AfterViewInit {
   sidenavExpanded = true;
   @Input() isHandsetOrXS: Observable<boolean>;
-  @Input() menuItems: IMenuItems[];
+  @Input() menuItems: IMenuItem[] = [];
+  @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
+  @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
   isAdmin: boolean;
 
@@ -22,7 +25,8 @@ export class SideNavComponent implements AfterViewInit {
     private jwtAuthService: JwtAuthService,
     private router: Router,
   ) {
-    this.isAdmin = this.jwtAuthService.isAdmin();}
+    this.isAdmin = this.jwtAuthService.isAdmin();
+  }
 
   ngAfterViewInit() {
     this.isHandsetOrXS.subscribe(val => {
@@ -37,12 +41,8 @@ export class SideNavComponent implements AfterViewInit {
     this.expandSidenav(!this.sidenavExpanded);
   }
 
-  pathToURL(path: string | string[]): string {
-    if (!Array.isArray(path)) {
-      path = [path];
-    }
-    console.log('url path', path.join('/'));
-    return path.join('/');
+  contentTriggerClicked(nameOfTriggeredItem) {
+    this.contentTriggerButtonClicked.emit(nameOfTriggeredItem);
   }
 
   route(path: string | string[]) {
