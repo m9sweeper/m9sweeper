@@ -1,6 +1,12 @@
 <mat-toolbar class="fixed">
   <mat-toolbar-row class="header-bar">
     <div class="loader-row">
+      <fa-icon
+        (click)="sidenav.toggleMenuExpansion()"
+        [icon]="faIcons.bars"
+        *ngIf="(isHandsetOrXS$ | async) === true"
+        style="align-self: center; margin-inline-end: 0.75em; cursor: pointer"
+      ></fa-icon>
       <a [routerLink]="defaultRouteLink">
         <img src="assets/images/m9sweeper-logo.png" alt="m9sweeper" style="margin: 15px 0 10px; max-height: 45px;"/>
       </a>
@@ -54,5 +60,5 @@
 
 <div style="height: 50px">&nbsp;</div>
 <div class="main-content">
-  <router-outlet></router-outlet>
+  <app-menu-component #sidenav></app-menu-component>
 </div>

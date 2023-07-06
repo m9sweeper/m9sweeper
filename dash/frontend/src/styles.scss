@@ -15,23 +15,26 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 $ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
 $ms-default-accent: mat.define-palette(mat.$light-blue-palette);
 $ms-default-warn: mat.define-palette(mat.$pink-palette, 600);
-/*
-$ms-default-level: mat.define-typography-level(
+
+$ms-button-styling: mat.define-typography-level(
   $font-family: "Roboto, 'Helvetica Neue', sans-serif",
-  $font-weight: 400,
-  $font-size: 1rem,
-  $line-height: 1,
+  $font-weight: 600,
+  $font-size: 14px,
+  $line-height: 48px,
   $letter-spacing: normal,
 );
- */
+
 $ms-default-theme: mat.define-light-theme((
   color: (
     primary: $ms-default-primary,
     accent: $ms-default-accent,
     warn: $ms-default-warn
-  )
+  ),
+  typography: mat.define-typography-config(
+    $font-family: "Roboto, 'Helvetica Neue', sans-serif",
+    $button: $ms-button-styling,
+  ),
 ));
-
 
 //<app-root></app-root> theme
 @import "./app/app.component.theme";
@@ -77,6 +80,10 @@ $ms-default-theme: mat.define-light-theme((
   @include custom-toolbar-light-theme($ms-default-theme);
   @include custom-organization-settings-light-theme($ms-default-theme);
   @include custom-audit-log-light-theme($ms-default-theme);
+}
+
+button {
+  @include app-root-theme($ms-default-theme);
 }
 
 .mat-mdc-dialog-container .mdc-dialog__content {
@@ -640,17 +647,6 @@ span.cluster-group-name-full {
   padding-left: 10px;
   vertical-align: text-bottom;
 }
-span.cluster-group-name-short {
-  width: 15px;
-  height: 60px;
-  padding:15px;
-  text-align: center;
-  color: white;
-  text-transform: uppercase;
-  font-size: 10px;
-  vertical-align: text-bottom;
-  margin: 4px;
-}
 
 div.cluster-group-name {
   text-decoration: none;
@@ -677,7 +673,7 @@ div.collapse-item {
   }
 }
 div.cluster-dashboard {
-  width: calc(100% - 300px);
+  //width: calc(100% - 300px);
   flex-direction: column;
   background-color: #e0e0e0;
 }
@@ -718,7 +714,7 @@ div.cluster-group-menu.responsive {
   }
 }
 div.cluster-dashboard.responsive {
-  width: calc(100% - 65px);
+  //width: calc(100% - 65px);
   flex-direction: column;
 }
 
