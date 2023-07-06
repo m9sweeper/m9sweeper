@@ -3,14 +3,18 @@
     <app-sub-navigation title="Falco Settings"></app-sub-navigation>
     <mat-card>
       <mat-card-header>
-        <mat-card-title class="falco-title">
-          Falco Rules
-          <button mat-raised-button *ngIf="isAdmin"
-                  color="primary"
-                  (click)="openAddEditModal()">
-            Add Rule
-          </button>
-        </mat-card-title>
+          <div class = "col-sm-3 no-padding">
+            <mat-card-title class="falco-title">
+            Falco Rules
+            </mat-card-title>
+          </div>
+          <div class="col-sm-9 page-card-title-button-group-right-align">
+            <button mat-raised-button *ngIf="isAdmin"
+                    color="primary"
+                    (click)="openAddEditModal()">
+              Add Rule
+            </button>
+          </div>
       </mat-card-header>
       <div class="row">
         <div class="col-xs-12 col-md-6 col-lg-4" *ngFor="let rule of rules; index as idx">

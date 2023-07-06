@@ -245,6 +245,7 @@ app-private {
 .page-card-title{
   font-size: 20px;
   font-weight: bold;
+  line-height: 3;
 }
 .page-card-content{
   margin-bottom: 30px;
@@ -281,7 +282,7 @@ app-private {
 .page-title{
   font-size: 26px;
   vertical-align: bottom;
-  line-height: 1;
+  line-height: 2;
 }
 .page-title-button-group-spacing{
   display: flex;
@@ -653,7 +654,8 @@ span.cluster-group-name-short {
 
 div.cluster-group-name {
   text-decoration: none;
-  font-size: 14px;
+  font-size: 26px;
+  line-height: 2.5;
 }
 div.organization-settings { // left nav 3)
   flex-direction: row;

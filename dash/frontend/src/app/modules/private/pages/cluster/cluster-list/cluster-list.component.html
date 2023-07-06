@@ -1,21 +1,18 @@
 <!-- start of the upper part of the menu-->
 <div class="page-container">
   <div class="page-container-content">
-  <div class="row negative-margin-bottom-20">
-    <div class="col-xs-12 col-md-6 cluster-group-name no-padding">
-      <div class="margin-top-10 header-font">
+    <div class="page-title-button-group-spacing">
+      <div class=" cluster-group-name page-button-spacing">
         {{ clusterGroupName }}
         <button  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button  (click)="editClusterGroupNameDialog()">
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
+      <div>
+        <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="warn" [disabled]="!clustersList || clustersList.length || disableOnSearch" (click)="deleteClusterGroup()">Delete Cluster Group</button>
+        <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openClusterDialog()">Add Cluster</button>
+      </div>
     </div>
-    <div class="col-xs-12 col-md-6 text-align-right no-padding">
-      <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="warn" [disabled]="!clustersList || clustersList.length || disableOnSearch" (click)="deleteClusterGroup()">Delete Cluster Group</button>
-      <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openClusterDialog()">Add Cluster</button>
-    </div>
-  </div>
-
   <!-- start of the first row of graphs-->
   <div class="row margin-top-10" *ngIf="clustersList && clustersList.length">
     <div class="dashboard-card margin-top-10 no-padding no-margin full-height"
