@@ -7,6 +7,7 @@ import {Component, Injectable, OnDestroy} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {map, shareReplay} from 'rxjs/operators';
 import {SettingsMenuService} from './services/settings-menu.service';
+import {ClusterInfoMenuService} from './services/cluster-info-menu.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class MenuComponent implements OnDestroy {
 
   menuOptions = {
     clusterList: 'cluster-list',
+    clusterInfo: 'cluster-info',
     settings: 'settings',
   };
   currentMenuToUse = this.menuOptions.settings;
@@ -38,6 +40,7 @@ export class MenuComponent implements OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private clusterListMenu: ClusterListMenuService,
+    private clusterInfoMenu: ClusterInfoMenuService,
     private router: Router,
     private settingsMenu: SettingsMenuService,
   ) {
@@ -52,6 +55,7 @@ export class MenuComponent implements OnDestroy {
       }
     });
     this.instantiateClusterListMenuSubscriptions();
+    this.instantiateClusterInfoMenuSubscriptions();
     this.instantiateSettingsMenuSubscriptions();
   }
 
@@ -75,12 +79,16 @@ export class MenuComponent implements OnDestroy {
     const currentURL = this.router.url;
     // this.unsubscribeFromAll();
     const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
+    const menuShouldBeClusterInfo = this.clusterInfoMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     console.log('menuShouldBeClusterList', menuShouldBeClusterList);
     if (menuShouldBeClusterList) {
-      console.log('use cluster list menu');
       this.currentMenuToUse = this.menuOptions.clusterList;
       this.currentMenuItems = this.clusterListMenu.currentMenuItems.getValue();
       this.currentMenuContentTriggers = this.clusterListMenu.currentMenuContentTriggers.getValue();
+    } else if (menuShouldBeClusterInfo) {
+      this.currentMenuToUse = this.menuOptions.clusterInfo;
+      this.currentMenuItems = this.clusterInfoMenu.currentMenuItems.getValue();
+      this.currentMenuContentTriggers = this.clusterInfoMenu.currentMenuContentTriggers.getValue();
     } else {
       this.currentMenuToUse = this.menuOptions.settings;
       this.currentMenuItems = this.settingsMenu.currentMenuItems.getValue();
@@ -97,6 +105,21 @@ export class MenuComponent implements OnDestroy {
     });
     this.clusterListMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
       if (this.currentMenuToUse === this.menuOptions.clusterList) {
+        this.currentMenuContentTriggers = newMenuTriggers;
+        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
+    });
+  }
+
+  instantiateClusterInfoMenuSubscriptions() {
+    this.clusterInfoMenu.currentMenuItems.subscribe(newMenuItems => {
+      if (this.currentMenuToUse === this.menuOptions.clusterInfo) {
+        this.currentMenuItems = newMenuItems;
+        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
+      }
+    });
+    this.clusterInfoMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
+      if (this.currentMenuToUse === this.menuOptions.clusterInfo) {
         this.currentMenuContentTriggers = newMenuTriggers;
         console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
       }
