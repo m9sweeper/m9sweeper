@@ -18,9 +18,9 @@
 
       <div *ngFor="let menuItem of menuItems">
         <a mat-list-item
+           class="side-nav-menu-item"
            [routerLink]="menuItem.path"
            routerLinkActive="active"
-           class="side-nav-menu-item"
            [routerLinkActiveOptions]="{exact: true}"
          >
           <mat-icon *ngIf="menuItem.icon" [title]="menuItem.name">{{menuItem.icon}}</mat-icon>

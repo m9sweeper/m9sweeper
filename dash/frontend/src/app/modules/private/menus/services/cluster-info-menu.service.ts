@@ -1,15 +1,14 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {NavServiceInterface} from './nav-service.interface';
 import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {ActivatedRoute, Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
-import {stringify} from 'yaml';
+import {Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClusterInfoMenuService implements NavServiceInterface, OnInit, OnDestroy {
+export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
   menuItems: IMenuItem[];
   menuContentTriggers: IMenuContentTrigger[];
 
@@ -26,17 +25,6 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnInit, OnDe
   ) {
     this.getClusterId();
     this.buildMenu();
-  }
-
-  getClusterId() {
-    const urlParts = this.router.url.split('/');
-    if (urlParts.length > 2 && urlParts[2] === 'clusters') {
-      this.clusterId = urlParts[3];
-    }
-    console.log(this.clusterId);
-  }
-
-  ngOnInit() {
     this.routerEvent$ = this.router.events.subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationEnd) {
         this.getClusterId();
@@ -45,13 +33,19 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnInit, OnDe
     });
   }
 
+  getClusterId() {
+    const urlParts = this.router.url.split('/');
+    if (urlParts.length > 2 && urlParts[2] === 'clusters') {
+      this.clusterId = urlParts[3];
+    }
+  }
+
   ngOnDestroy() {
     this.currentMenuItems.complete();
     this.currentMenuContentTriggers.complete();
   }
 
   buildMenu() {
-    console.log('clusterID', this.clusterId);
     this.menuItems = [
       {
         name: 'Summary',
