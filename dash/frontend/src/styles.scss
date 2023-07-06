@@ -730,6 +730,10 @@ div.cluster-dashboard.responsive {
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .action-button-row {
   display: flex;
   justify-content: end;
@@ -749,3 +753,18 @@ div.cluster-dashboard.responsive {
   padding-left: 10px;
 }
 
+.w-100 {
+  width: 100%;
+}
+
+/** Hides the increment/decrement arrows on number inputs */
+input[type=number].no-spin-button {
+  -moz-appearance:textfield; /* Firefox */
+
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    // Gets rid of the margin on the (invisible) arrows
+    margin: 0;
+  }
+}

@@ -51,7 +51,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
   origSelectedClusters: string[];
   origSelectedNamespaces: string[];
 
-  gatekeeperConstraintList: Observable<IGateKeeperConstraintDetails[]>;
+  gatekeeperConstraintList: Observable<IGateKeeperConstraintDetails[]> = of([]);
   filteredGatekeeperConstraints: Observable<IGateKeeperConstraintDetails[]>;
 
   @ViewChild('issueIdentifierLabel') issueIdentifierLabel;
