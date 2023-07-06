@@ -730,6 +730,10 @@ div.cluster-dashboard.responsive {
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .action-button-row {
   display: flex;
   justify-content: end;
