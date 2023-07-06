@@ -131,6 +131,7 @@ import { FalcoRuleAddEditDialogComponent } from './pages/falco/falco-rule-add-ed
 import { FalcoOrgSettingsPageComponent } from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
 import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluster-list/falco-rules-cluster-list.component';
 import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
+import {MenuComponent} from './menus/menu.component';
 
 
 @NgModule({
@@ -223,6 +224,7 @@ import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
     FalcoOrgSettingsPageComponent,
     FalcoRulesClusterListComponent,
     ArrayTextPipe,
+    MenuComponent,
   ],
   imports: [
       CommonModule,

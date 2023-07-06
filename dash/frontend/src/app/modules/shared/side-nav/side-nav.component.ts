@@ -17,6 +17,7 @@ export class SideNavComponent implements AfterViewInit {
   @Input() isHandsetOrXS: Observable<boolean>;
   @Input() menuItems: IMenuItem[] = [];
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
+  @Input() toggleExpandCollapseObservable: Observable<void>;
   @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
   isAdmin: boolean;
@@ -32,6 +33,7 @@ export class SideNavComponent implements AfterViewInit {
     this.isHandsetOrXS.subscribe(val => {
       console.log('new isHandsetOrXS value', val);
     });
+    this.toggleExpandCollapseObservable.subscribe(() => this.toggleExpandCollapse());
   }
 
   expandSidenav(willBeOpen: boolean) {

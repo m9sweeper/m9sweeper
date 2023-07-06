@@ -1,16 +1,16 @@
 import {NavServiceInterface} from './nav-service.interface';
-import {IMenuItem} from '../../shared/side-nav/interfaces/menu-item.interface';
-import {IMenuContentTrigger} from '../../shared/side-nav/interfaces/menu-content-trigger.interface';
+import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface';
+import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {Injectable, OnDestroy, OnInit} from '@angular/core';
-import {AddClusterWizardComponent} from '../pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
+import {AddClusterWizardComponent} from '../../pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
 import {MatDialog} from '@angular/material/dialog';
-import {ClusterGroupService} from '../../../core/services/cluster-group.service';
+import {ClusterGroupService} from '../../../../core/services/cluster-group.service';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClusterListMenuService implements NavServiceInterface, OnInit, OnDestroy {
+export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
   menuItems: IMenuItem[];
   menuContentTriggers: IMenuContentTrigger[];
   abbreviationBackgroundColors = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
@@ -25,9 +25,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnInit, OnDe
   constructor(
     private clusterGroupService: ClusterGroupService,
     private dialog: MatDialog,
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.buildClusterMenu();
     this.buildClusterListTriggers();
   }
@@ -38,6 +36,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnInit, OnDe
   }
 
   buildClusterMenu() {
+    console.log('building cluster menu');
     this.clusterGroupService.getClusterGroups().subscribe(groups => {
       if (groups.data) {
         this.menuItems = [];
@@ -52,14 +51,9 @@ export class ClusterListMenuService implements NavServiceInterface, OnInit, OnDe
           };
           this.menuItems.push({ name, path, abbreviation });
         });
+        this.currentMenuItems.next(this.menuItems);
       }
-      this.menuItems.push({
-        name: 'test',
-        path: ['test'],
-        icon: 'settings',
-      });
     });
-    this.currentMenuItems.next(this.menuItems);
   }
   calculateMenuColor(rowIndex: number ) {
     if (rowIndex < 5) {

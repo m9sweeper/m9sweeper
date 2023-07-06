@@ -17,11 +17,10 @@ import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-l
 import {AlertService} from '@full-fledged/alerts';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {IMenuItem} from '../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {AddClusterWizardComponent} from './pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
-import {MenuService} from './menus/menu.service';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-private',
@@ -35,9 +34,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       map(result => result.matches),
       shareReplay()
     );
-
-  menuItems: IMenuItem[] = [];
-  menuContentTriggers: IMenuContentTrigger[] = [];
 
   faIcons = {
     bars: faBars
@@ -78,7 +74,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     private userService: UserService,
     private alertService: AlertService,
     private loaderService: NgxUiLoaderService,
-    private menuService: MenuService,
   ) {
     this.allThemes.push(...[{name: 'Dark', cssClass: 'dark-theme'}, {name: 'Light', cssClass: 'light-theme'}, {name: 'Default', cssClass: 'default-theme'}]);
     const currentLoggedInUser = this.jwtAuthService.currentUser;
@@ -102,18 +97,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.setShowSearchBar();
       });
-    this.menuService.currentMenuItems.subscribe(
-      (newItems) => {
-        console.log('new currentMenuItems', newItems);
-        this.menuItems = newItems;
-      },
-      (error) => {
-        console.log('subscription error', error);
-      },
-      () => {
-        console.log('subscription complete');
-      }
-    );
 
     /*if (this.isAdmin) {
       this.clusterService.checkLicenseValidity().subscribe(response => {
@@ -135,7 +118,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.menuService.currentMenuItems.unsubscribe();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -232,10 +214,5 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.directive.ngOnInit();
       this.getUserProfile();
     });
-  }
-
-  callMenuContentTriggerCallback(contentTriggerName: string) {
-    const triggeredItem = this.menuContentTriggers.find(element => element.name = contentTriggerName);
-    triggeredItem.callback(this);
   }
 }
