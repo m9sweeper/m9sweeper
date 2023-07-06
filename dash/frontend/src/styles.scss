@@ -671,7 +671,7 @@ div.collapse-item {
   }
 }
 div.cluster-dashboard {
-  width: calc(100% - 300px);
+  //width: calc(100% - 300px);
   flex-direction: column;
   background-color: #e0e0e0;
 }
@@ -712,7 +712,7 @@ div.cluster-group-menu.responsive {
   }
 }
 div.cluster-dashboard.responsive {
-  width: calc(100% - 65px);
+  //width: calc(100% - 65px);
   flex-direction: column;
 }
 

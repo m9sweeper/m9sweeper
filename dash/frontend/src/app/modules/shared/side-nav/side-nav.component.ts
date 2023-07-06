@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {IMenuItem} from './interfaces/menu-item.interface';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
 import {IMenuContentTrigger} from './interfaces/menu-content-trigger.interface';
+import {Authority, AuthorityValues} from '../../../core/enum/Authority';
 
 @Component({
   selector: 'app-side-nav',
@@ -21,6 +22,8 @@ export class SideNavComponent implements AfterViewInit {
   @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
   isAdmin: boolean;
+
+  allUserRoles = AuthorityValues;
 
   constructor(
     private jwtAuthService: JwtAuthService,

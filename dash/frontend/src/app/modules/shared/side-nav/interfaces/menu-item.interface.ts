@@ -1,3 +1,5 @@
+import {Authority} from '../../../../core/enum/Authority';
+
 export class IMenuItem {
   name: string;
   path: string[];
@@ -11,4 +13,5 @@ export class IMenuItem {
     alt: string,
     classes?: string
   };
+  allowedRoles?: Authority[];
 }

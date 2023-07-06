@@ -4,6 +4,7 @@ import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface
 import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {Event as NavigationEvent, NavigationEnd, Router} from '@angular/router';
+import {Authority} from '../../../../core/enum/Authority';
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +88,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         name: 'API Key Management',
         path: ['/private', 'api-key'],
         icon: 'code',
+        allowedRoles: [Authority.SUPER_ADMIN],
       },
       {
         name: 'Kube Hunter',

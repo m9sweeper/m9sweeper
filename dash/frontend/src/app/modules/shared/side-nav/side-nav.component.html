@@ -19,6 +19,7 @@
       <div *ngFor="let menuItem of menuItems">
         <a mat-list-item
            class="side-nav-menu-item"
+           [allowedRoles]="(menuItem.allowedRoles && menuItem.allowedRoles.length) ? menuItem.allowedRoles : allUserRoles"
            [routerLink]="menuItem.path"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
