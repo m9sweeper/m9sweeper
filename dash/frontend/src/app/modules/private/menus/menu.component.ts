@@ -77,7 +77,6 @@ export class MenuComponent implements OnDestroy {
 
   updateMenuItems() {
     const currentURL = this.router.url;
-    // this.unsubscribeFromAll();
     const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     const menuShouldBeClusterInfo = this.clusterInfoMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     console.log('menuShouldBeClusterList', menuShouldBeClusterList);

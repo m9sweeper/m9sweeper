@@ -82,17 +82,17 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnInit, OnDe
         },
       },
       {
-        name: 'API Key Management',
-        path: ['/private', 'api-key'],
-        icon: 'code',
-      },
-      {
         name: 'KubeSec',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubesec'],
         image: {
           src: '/assets/images/kubesec-logo.png',
           alt: 'KubeSec Logo',
         },
+      },
+      {
+        name: 'API Key Management',
+        path: ['/private', 'api-key'],
+        icon: 'code',
       },
       {
         name: 'Kube Hunter',
