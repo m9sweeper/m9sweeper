@@ -20,6 +20,11 @@
     }
   }
   .primary-side-nav {
+    a.side-nav-menu-item.active {
+      background-color: #c7e0f4;
+      border-left: #0078d4 3px solid;
+    }
+
     span.mat-mdc-list-item-unscoped-content {
       display: flex !important;
       align-items: center;
