@@ -19,7 +19,7 @@
           <ng-container matColumnDef="isActive">
             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Active</th>
             <td mat-cell *matCellDef="let apikey">
-              <mat-checkbox [checked]="apikey.isActive" disabled="true">
+              <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="apikey.isActive">
               </mat-checkbox>
             </td>
           </ng-container>

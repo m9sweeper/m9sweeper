@@ -24,7 +24,7 @@
         <ng-container matColumnDef="isActive">
           <th mat-header-cell *matHeaderCellDef>Active</th>
           <td mat-cell *matCellDef="let authConfig">
-            <mat-checkbox [checked]=authConfig?.isActive></mat-checkbox>
+            <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]=authConfig?.isActive></mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="actions">
