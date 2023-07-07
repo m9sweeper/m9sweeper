@@ -13,9 +13,21 @@ export class NamespaceService {
   constructor( private httpClient: HttpClient ) { }
 
   getAllK8sNamespaces(clusterId: number, limit?: number, page?: number, sort?: MatSort): Observable<IServerResponse<INamespace[]>> {
-    const {active, direction} = sort ? sort : {active: 'id', direction: 'asc'};
-    const url = `/api/namespaces?clusterId=${clusterId}&limit=${limit}&page=${page}&sort[field]=${active}&sort[direction]=${direction}`;
-    return this.httpClient.get(url);
+    let params = new HttpParams({
+      fromObject: {
+        clusterId,
+        'sort[field]': sort?.active || 'name',
+        'sort[direction]': sort?.direction || 'asc'
+      }
+    });
+    if (limit) {
+      params = params.set('limit', limit);
+    }
+    if (page) {
+      params = params.set('page', page);
+    }
+
+    return this.httpClient.get('/api/namespaces', { params });
   }
   getAllNamespacesBySelectedDate(clusterId: number, startTime: string, endTime: string, limit: number, page: number, sort: MatSort):
     Observable<IServerResponse<INamespace[]>> {
