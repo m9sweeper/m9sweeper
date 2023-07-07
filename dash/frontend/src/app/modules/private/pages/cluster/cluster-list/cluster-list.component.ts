@@ -45,7 +45,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   subNavigationData: any;
   expandStatus: boolean;
   resizeTimeout;
-  currentCardSize: string;
+  currentCardSize = 'col-xs-12 col-md-6 col-lg-4';
 
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   imageScanData: IImageScanCount[];
@@ -140,7 +140,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.width = ((window.innerWidth - 20) * 10) / 12;
     this.height = window.innerHeight;
     // default column sizes before calculating them
-    this.currentCardSize = 'col-xs-12 col-md-6 col-lg-4';
     document.documentElement.style.setProperty('--cluster-container-height', `${this.height}px`);
     document.documentElement.style.setProperty('--cluster-container-width', `${this.width}px`);
     this.route.params.subscribe(routeParams => {
@@ -164,7 +163,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(status => {
         this.expandStatus = status;
-        this.setChartHeightWidth();
+        // this.setChartHeightWidth();
     });
     this.expandStatus = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
   }
@@ -191,9 +190,20 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.breakpointMedium, this.innerScreenWidth);
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-      this.updateFormatting();
+      // this.updateFormatting();
     } , 50);
   }
+
+  /** Resize elements based on the space available outside of sidebar nav components instead of window size */
+  // updateFormatting() {
+  //   if (this.innerScreenWidth >= this.breakpointLarge) {
+  //     // this.currentCardSize = 'col-xs-4';
+  //   } else if (this.innerScreenWidth >= this.breakpointMedium) {
+  //     // this.currentCardSize = 'col-xs-6';
+  //   } else {
+  //     // this.currentCardSize = 'col-xs-12';
+  //   }
+  // }
 
   set scrHeight(val: number) {
     if (val !== this.height) {
@@ -459,17 +469,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   limitTagList(tags: string) {
     if (tags.length && tags.length > 6) {
       return 'more...';
-    }
-  }
-
-  /** Resize elements based on the space available outside of sidebar nav components instead of window size */
-  updateFormatting() {
-    if (this.innerScreenWidth >= this.breakpointLarge) {
-      this.currentCardSize = 'col-xs-4';
-    } else if (this.innerScreenWidth >= this.breakpointMedium) {
-      this.currentCardSize = 'col-xs-6';
-    } else {
-      this.currentCardSize = 'col-xs-12';
     }
   }
 }
