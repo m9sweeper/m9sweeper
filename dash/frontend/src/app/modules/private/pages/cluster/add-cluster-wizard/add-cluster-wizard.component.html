@@ -161,10 +161,10 @@
     <div class="modal-content-left-align-no-margin">
       <h3>Done!</h3>
       <div class="row">
-        <span class="col-md-9">
+        <span class="col-xs-12 col-md-8">
           Your cluster is set up and being scanned now!
         </span>
-        <span [style]="displayWebhookText()" class="col-md-3">
+        <span [style]="displayWebhookText()" class="col-xs-12 col-md-4 text-align-right">
           <app-copy-to-clipboard-button
             [text]="defaultWebhookTextArea.value"
             successMessage="Command copied to clipboard!"
