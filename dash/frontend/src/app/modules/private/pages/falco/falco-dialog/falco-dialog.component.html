@@ -8,10 +8,10 @@
           {{level}}
         </mat-option>
       </mat-select>
+      <a class="padding-10" matIconSuffix target="_blank" href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
+        <mat-icon mat-list-item-icon>info</mat-icon>
+      </a>
     </mat-form-field>
-    <div mat-list-item href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
-      <mat-icon mat-list-item-icon>info</mat-icon>
-    </div>
     <div class="page-title-button-group-spacing">
       <div class="padding-top-15">Run Falco using the following CLI command:</div>
       <div>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div>
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
+          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
 helm upgrade --install falco falcosecurity/falco \
   --wait --version 2.5.5 \
