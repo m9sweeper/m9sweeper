@@ -55,8 +55,6 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
     });
     setTimeout(
       () => {
-        console.log('updating cluster list menu items');
-        this.menuItems.push({ name: 'test', path: ['test'], icon: 'settings'});
         this.currentMenuItems.next(this.menuItems);
       },
       20000
