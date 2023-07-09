@@ -11,12 +11,6 @@ description: >
 
 ## Install
 
-### License
-
-To claim a free license go to [m9sweeper licensing](licensing.m9sweeper.io). Claiming a license
-is optional, but if you setup a license our online portal will enable remote monitoring. We can notify you, for example,
-if you a new version is available or if your environment is no longer being monitored for some reason.
-
 ### Installation
 
 We recommend putting your configuration in a values.yaml file and then deploying our app using helm. This

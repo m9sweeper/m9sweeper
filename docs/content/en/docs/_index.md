@@ -34,10 +34,7 @@ cluster. m9sweeper makes kubernetes security *finally accessible* (and free!) fo
 
 ## Getting Started
 
-The easiest way to get started is to visit our [registration portal](getting-started/registration-portal/), which will 
-walk you through step-by-step setting up m9sweeper in your organization. 
-
-If you do not want to register, you can go to our [easy install tutorial](getting-started/easy-install/). 
+The easiest way to get started is you can go to our [easy install tutorial](getting-started/easy-install/). 
 
 ## Support
 
