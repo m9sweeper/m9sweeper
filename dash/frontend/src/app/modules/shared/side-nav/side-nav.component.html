@@ -45,7 +45,7 @@
 
     <mat-nav-list style="flex:1"></mat-nav-list>
 
-    <mat-nav-list id="settings-link">
+    <mat-nav-list id="settings-link" *ngIf="showOrgSettingsButton">
       <mat-divider></mat-divider>
       <a mat-list-item
          *ngIf="isAdmin"

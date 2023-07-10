@@ -6,18 +6,4 @@ import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-s
   templateUrl: './organization-settings.component.html',
   styleUrls: ['./organization-settings.component.scss']
 })
-export class OrganizationSettingsComponent implements OnInit {
-
-  faIcons: any = {
-    arrowDoubleLeft: faAngleDoubleLeft,
-    arrowDoubleRight: faAngleDoubleRight
-  };
-
-  leftNavWidth: number;
-  mainDivWidth: number;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {}
-}
+export class OrganizationSettingsComponent {}

@@ -18,6 +18,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
   ];
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
+  public showOrgSettingsButton = true;
 
   private routerEvent$: Subscription;
   clusterId;

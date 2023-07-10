@@ -19,6 +19,7 @@ export class SideNavComponent implements AfterViewInit {
   @Input() menuItems: IMenuItem[] = [];
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
   @Input() toggleExpandCollapseObservable: Observable<void>;
+  @Input() showOrgSettingsButton = true;
   @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
   isAdmin: boolean;
