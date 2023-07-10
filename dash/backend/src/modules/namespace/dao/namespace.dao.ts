@@ -37,12 +37,10 @@ export class NamespaceDao {
         const knex = await this.databaseService.getConnection();
 
         const sortFieldMap = {
-            'id': 'n.id',
+            'id': '_id',
             'name': 'n.name',
-            'compliant': 'n.compliant',
-            'imagesScanned': 'i.name',
-            'pod': 'p.name',
-            'creationTime': 'n.creation_timestamp'
+            'compliant': '_compliant',
+            'pod': '"_kubernetesPods"'
         };
 
         sort.field = sortFieldMap[sort.field] !== undefined ? sortFieldMap[sort.field] : sortFieldMap['id'];
@@ -57,7 +55,7 @@ export class NamespaceDao {
                 knex.raw('MAX(n.resource_version) as "_resourceVersion"'),
                 knex.raw('MAX(n.creation_timestamp) as "_creationTimestamp"'),
                 knex.raw('EVERY(n.compliant) as _compliant'),
-                knex.raw('MAX(p.pods) as "_kubernetesPods"')
+                knex.raw('COALESCE(MAX(p.pods), 0) as "_kubernetesPods"')
             ]).from('kubernetes_namespaces as n')
             .leftJoin(
                 knex('kubernetes_pods as kp')
@@ -73,7 +71,7 @@ export class NamespaceDao {
                 'n.name'
             )
             .where('n.cluster_id', clusterId)
-            .groupBy('n.name', 'n.id')
+            .groupBy('n.name')
             .limit(limit)
             .offset(page * limit)
             .orderByRaw(`${sort.field} ${sort.direction}`);

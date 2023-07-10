@@ -17,9 +17,6 @@ import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-l
 import {AlertService} from '@full-fledged/alerts';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import {IMenuItem} from '../shared/side-nav/interfaces/menu-item.interface';
-import {IMenuContentTrigger} from '../shared/side-nav/interfaces/menu-content-trigger.interface';
-import {AddClusterWizardComponent} from './pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
@@ -31,7 +28,9 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   public isHandsetOrXS$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
     .pipe(
-      map(result => result.matches),
+      map(result => {
+        return result.matches;
+      }),
       shareReplay()
     );
 

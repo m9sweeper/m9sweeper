@@ -15,12 +15,12 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
   menuContentTriggers: IMenuContentTrigger[];
   abbreviationBackgroundColors = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
 
-
   public associatedRegexPaths = [
     new RegExp('^(/private/dashboard)(.*)'),
   ];
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
+  public showOrgSettingsButton = true;
 
   constructor(
     private clusterGroupService: ClusterGroupService,
@@ -40,7 +40,6 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       if (groups.data) {
         this.menuItems = [];
         groups.data.forEach((group, index): IMenuItem => {
-          console.log(group);
           if (!group) { return; }
           const name = group.name;
           const path = ['/private', 'dashboard', 'group', group?.id];
@@ -53,14 +52,6 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
         this.currentMenuItems.next(this.menuItems);
       }
     });
-    setTimeout(
-      () => {
-        console.log('updating cluster list menu items');
-        this.menuItems.push({ name: 'test', path: ['test'], icon: 'settings'});
-        this.currentMenuItems.next(this.menuItems);
-      },
-      20000
-    );
   }
   calculateMenuColor(rowIndex: number ) {
     if (rowIndex < 5) {

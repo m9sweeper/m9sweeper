@@ -13,7 +13,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 //Default theme
 $ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
-$ms-default-accent: mat.define-palette(mat.$light-blue-palette);
+$ms-default-accent: mat.define-palette(mat.$light-blue-palette, 800, 300, 900);
 $ms-default-warn: mat.define-palette(mat.$pink-palette, 600);
 
 $ms-button-styling: mat.define-typography-level(
@@ -172,6 +172,10 @@ button {
 
 .justify-content-center{
   justify-content: center;
+}
+
+.justify-content-right {
+  justify-content: right;
 }
 
 .margin-bottom-6{
@@ -753,6 +757,10 @@ div.cluster-dashboard.responsive {
 
 .w-100 {
   width: 100%;
+}
+
+.align-items-center {
+  align-items: center!important;
 }
 
 /** Hides the increment/decrement arrows on number inputs */
