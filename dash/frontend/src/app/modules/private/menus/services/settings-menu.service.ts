@@ -3,6 +3,7 @@ import {NavServiceInterface} from './nav-service.interface';
 import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {BehaviorSubject} from 'rxjs';
+import {Authority} from '../../../../core/enum/Authority';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,7 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         name: 'Organization',
         path: ['/private', 'settings'],
         icon: 'settings',
+        allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
       },
       {
         name: 'Users',
@@ -59,6 +61,7 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         name: 'Sign on Methods',
         path: ['/private', 'single-sign-on'],
         icon: 'vpn_key',
+        allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
       },
       {
         name: 'Docker Registries',
@@ -69,11 +72,13 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         name: 'API Key Management',
         path: ['/private', 'api-key'],
         icon: 'code',
+        allowedRoles: [Authority.SUPER_ADMIN],
       },
       {
         name: 'Audit Logs',
         path: ['/private', 'audit-logs'],
         icon: 'fingerprint',
+        allowedRoles: [Authority.SUPER_ADMIN],
       },
       {
         name: 'Falco Settings',
