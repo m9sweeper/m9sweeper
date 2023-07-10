@@ -1,9 +1,9 @@
 <mat-sidenav-container class="primary-side-nav" *ngIf="menuItems?.length" style="width: 100%">
   <mat-sidenav
     #sidenav
-    [attr.role]="(isHandsetOrXS | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandsetOrXS | async) ? 'over' : 'side'"
-    [opened]="((isHandsetOrXS | async) === false) || sidenavExpanded"
+    [attr.role]="isHandsetOrXS ? 'dialog' : 'navigation'"
+    [mode]="isHandsetOrXS ? 'over' : 'side'"
+    [opened]="(isHandsetOrXS === false) || sidenavExpanded"
     style="height: 100%; display: flex;"
   >
 
