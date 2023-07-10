@@ -1,11 +1,11 @@
 import { ClusterListMenuService } from './services/cluster-list-menu.service';
-import {BehaviorSubject, Observable, Subject, Subscription} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { IMenuItem } from '../../shared/side-nav/interfaces/menu-item.interface';
 import { IMenuContentTrigger } from '../../shared/side-nav/interfaces/menu-content-trigger.interface';
-import {Router, NavigationStart, Event as NavigationEvent, NavigationEnd, ActivatedRoute} from '@angular/router';
-import {Component, Injectable, OnDestroy} from '@angular/core';
+import {Router,  Event as NavigationEvent, NavigationEnd} from '@angular/router';
+import {Component, OnDestroy} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {map, shareReplay} from 'rxjs/operators';
+import {map, shareReplay, takeUntil} from 'rxjs/operators';
 import {SettingsMenuService} from './services/settings-menu.service';
 import {ClusterInfoMenuService} from './services/cluster-info-menu.service';
 
@@ -16,6 +16,7 @@ import {ClusterInfoMenuService} from './services/cluster-info-menu.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnDestroy {
+  protected readonly unsubscribe$ = new Subject<void>();
   public currentMenuItems: IMenuItem[] = [];
   public currentMenuContentTriggers: IMenuContentTrigger[] = [];
   public showOrgSettingsButton = true;
@@ -25,11 +26,7 @@ export class MenuComponent implements OnDestroy {
       map(result => result.matches),
       shareReplay()
     );
-  private routerEvent$: Subscription;
   toggleMenuExpansionEvents: Subject<void> = new Subject<void>();
-
-  private clusterListMenuItems: IMenuItem[] = [];
-  private clusterListMenuContentTriggers: IMenuContentTrigger[] = [];
 
   menuOptions = {
     clusterList: 'cluster-list',
@@ -50,26 +47,31 @@ export class MenuComponent implements OnDestroy {
   }
 
   initSubscriptions() {
-    this.routerEvent$ = this.router.events.subscribe((event: NavigationEvent) => {
-      if (event instanceof NavigationEnd) {
-        this.updateMenuItems();
-      }
-    });
+    this.router.events
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (event: NavigationEvent) => {
+          if (event instanceof NavigationEnd) {
+            this.updateMenuItems();
+          }
+        }
+      });
     this.instantiateClusterListMenuSubscriptions();
     this.instantiateClusterInfoMenuSubscriptions();
     this.instantiateSettingsMenuSubscriptions();
   }
 
   ngOnDestroy() {
-    this.routerEvent$.unsubscribe();
-    this.unsubscribeFromAll();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    this.completeSubjects();
   }
 
-  unsubscribeFromAll() {
-    this.clusterListMenu.currentMenuItems.unsubscribe();
-    this.clusterListMenu.currentMenuContentTriggers.unsubscribe();
-    this.settingsMenu.currentMenuItems.unsubscribe();
-    this.settingsMenu.currentMenuContentTriggers.unsubscribe();
+  completeSubjects() {
+    this.clusterListMenu.currentMenuItems.complete();
+    this.clusterListMenu.currentMenuContentTriggers.complete();
+    this.settingsMenu.currentMenuItems.complete();
+    this.settingsMenu.currentMenuContentTriggers.complete();
   }
 
   toggleMenuExpansion() {
