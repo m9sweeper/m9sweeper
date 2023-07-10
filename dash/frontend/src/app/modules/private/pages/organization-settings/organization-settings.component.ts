@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './organization-settings.component.html',
   styleUrls: ['./organization-settings.component.scss']
 })
-export class OrganizationSettingsComponent {
-
-}
+export class OrganizationSettingsComponent {}

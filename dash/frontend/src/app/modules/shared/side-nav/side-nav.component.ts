@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subject} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
@@ -7,6 +7,7 @@ import {IMenuItem} from './interfaces/menu-item.interface';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
 import {IMenuContentTrigger} from './interfaces/menu-content-trigger.interface';
 import {Authority, AuthorityValues} from '../../../core/enum/Authority';
+import {MatSidenav} from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-side-nav',
@@ -14,13 +15,16 @@ import {Authority, AuthorityValues} from '../../../core/enum/Authority';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements AfterViewInit {
-  sidenavExpanded = true;
   @Input() isHandsetOrXS: Observable<boolean>;
   @Input() menuItems: IMenuItem[] = [];
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
-  @Input() toggleExpandCollapseObservable: Observable<void>;
+  @Input() toggleSidenavObservable: Observable<void>;
+  @Input() showOrgSettingsButton = true;
   @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
+  @ViewChild(MatSidenav) sidenav: MatSidenav;
+
+  sidenavExpanded = false;
   isAdmin: boolean;
 
   allUserRoles = AuthorityValues;
@@ -36,17 +40,17 @@ export class SideNavComponent implements AfterViewInit {
     this.isHandsetOrXS.subscribe(val => {
       console.log('new isHandsetOrXS value', val);
     });
-    this.toggleExpandCollapseObservable.subscribe(() => this.toggleExpandCollapse());
+    this.toggleSidenavObservable.subscribe(() => {
+      this.toggleSidenav();
+    });
   }
 
-  expandSidenav(willBeOpen: boolean) {
-    this.sidenavExpanded = willBeOpen;
-  }
-  public toggleExpandCollapse() {
-    this.expandSidenav(!this.sidenavExpanded);
+  public toggleSidenav() {
+    this.sidenav.toggle().then();
   }
 
   contentTriggerClicked(nameOfTriggeredItem) {
+    this.toggleSidenav();
     this.contentTriggerButtonClicked.emit(nameOfTriggeredItem);
   }
 

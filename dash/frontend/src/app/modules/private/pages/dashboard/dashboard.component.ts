@@ -145,7 +145,7 @@ export class DashboardComponent implements OnInit {
     return this.azureColorSchema[rowIndex % 7];
   }
 
-  toggleExpandCollapse() {
+  toggleSidenav() {
     this.sidenavExpanded = !this.sidenavExpanded;
   }
 
