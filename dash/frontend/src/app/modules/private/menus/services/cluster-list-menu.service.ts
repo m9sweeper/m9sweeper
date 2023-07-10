@@ -53,14 +53,6 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
         this.currentMenuItems.next(this.menuItems);
       }
     });
-    setTimeout(
-      () => {
-        console.log('updating cluster list menu items');
-        this.menuItems.push({ name: 'test', path: ['test'], icon: 'settings'});
-        this.currentMenuItems.next(this.menuItems);
-      },
-      20000
-    );
   }
   calculateMenuColor(rowIndex: number ) {
     if (rowIndex < 5) {

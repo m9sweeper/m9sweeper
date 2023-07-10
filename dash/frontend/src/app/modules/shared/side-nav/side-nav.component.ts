@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable, Subject} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
@@ -14,7 +14,7 @@ import {Authority, AuthorityValues} from '../../../core/enum/Authority';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements AfterViewInit {
-  sidenavExpanded = true;
+  sidenavExpanded = false;
   @Input() isHandsetOrXS: Observable<boolean>;
   @Input() menuItems: IMenuItem[] = [];
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
@@ -36,10 +36,13 @@ export class SideNavComponent implements AfterViewInit {
     this.isHandsetOrXS.subscribe(val => {
       console.log('new isHandsetOrXS value', val);
     });
-    this.toggleExpandCollapseObservable.subscribe(() => this.toggleExpandCollapse());
+    this.toggleExpandCollapseObservable.subscribe(() => {
+      this.toggleExpandCollapse();
+    });
   }
 
   expandSidenav(willBeOpen: boolean) {
+    console.log('expandSidenav', willBeOpen);
     this.sidenavExpanded = willBeOpen;
   }
   public toggleExpandCollapse() {
@@ -47,6 +50,7 @@ export class SideNavComponent implements AfterViewInit {
   }
 
   contentTriggerClicked(nameOfTriggeredItem) {
+    this.toggleExpandCollapse();
     this.contentTriggerButtonClicked.emit(nameOfTriggeredItem);
   }
 

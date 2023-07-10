@@ -79,7 +79,6 @@ export class MenuComponent implements OnDestroy {
     const currentURL = this.router.url;
     const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     const menuShouldBeClusterInfo = this.clusterInfoMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
-    console.log('menuShouldBeClusterList', menuShouldBeClusterList);
     if (menuShouldBeClusterList) {
       this.currentMenuToUse = this.menuOptions.clusterList;
       this.currentMenuItems = this.clusterListMenu.currentMenuItems.getValue();
@@ -99,13 +98,11 @@ export class MenuComponent implements OnDestroy {
     this.clusterListMenu.currentMenuItems.subscribe(newMenuItems => {
       if (this.currentMenuToUse === this.menuOptions.clusterList) {
         this.currentMenuItems = newMenuItems;
-        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
     this.clusterListMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
       if (this.currentMenuToUse === this.menuOptions.clusterList) {
         this.currentMenuContentTriggers = newMenuTriggers;
-        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
   }
@@ -114,13 +111,11 @@ export class MenuComponent implements OnDestroy {
     this.clusterInfoMenu.currentMenuItems.subscribe(newMenuItems => {
       if (this.currentMenuToUse === this.menuOptions.clusterInfo) {
         this.currentMenuItems = newMenuItems;
-        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
     this.clusterInfoMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
       if (this.currentMenuToUse === this.menuOptions.clusterInfo) {
         this.currentMenuContentTriggers = newMenuTriggers;
-        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
   }
@@ -129,19 +124,26 @@ export class MenuComponent implements OnDestroy {
     this.settingsMenu.currentMenuItems.subscribe(newMenuItems => {
       if (this.currentMenuToUse === this.menuOptions.settings) {
         this.currentMenuItems = newMenuItems;
-        console.log('updated currentMenuItems', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
     this.settingsMenu.currentMenuContentTriggers.subscribe(newMenuTriggers => {
       if (this.currentMenuToUse === this.menuOptions.settings) {
         this.currentMenuContentTriggers = newMenuTriggers;
-        console.log('updated currentMenuContentTriggers', this.currentMenuItems, this.currentMenuContentTriggers);
       }
     });
   }
 
   callMenuContentTriggerCallback(contentTriggerName: string) {
     const triggeredItem = this.currentMenuContentTriggers.find(element => element.name = contentTriggerName);
-    triggeredItem.callback(this);
+    switch (this.currentMenuToUse) {
+      case this.menuOptions.clusterList:
+        // return this.clusterListMenu[triggeredItem.callback];
+        // return triggeredItem.callback(ClusterListMenuService);
+        return triggeredItem.callback(this.clusterListMenu);
+      case this.menuOptions.clusterInfo:
+        return triggeredItem.callback(this.clusterInfoMenu);
+      default:
+        return triggeredItem.callback(this.settingsMenu);
+    }
   }
 }
