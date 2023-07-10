@@ -19,6 +19,7 @@ export class AuthService {
 
   login(username: string, password: string, authenticationMethodology: IAuthenticationMethod): Observable<IServerResponse<IAuth>> {
     if ([AuthenticationType.LDAP, AuthenticationType.LOCAL].includes(authenticationMethodology.type)) {
+      console.log('about to post the creds');
       return this.httpClient.post(authenticationMethodology.requestHandlerPath, {username, password});
     }
     return throwError(new Error('Invalid authentication method'));

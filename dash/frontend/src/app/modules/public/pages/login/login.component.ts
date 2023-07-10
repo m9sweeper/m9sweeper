@@ -82,7 +82,14 @@ export class LoginComponent implements OnInit {
       const token: string = response.data.accessToken;
       if (token !== null && token.trim() !== '') {
         this.jwtService.saveToken(token);
-        this.router.navigate(['/private']).then(() => this.loaderService.stop('login'));
+        this.router.navigate(['/private'])
+          .then(() => this.loaderService.stop('login'))
+          .catch((error) => {
+            this.alertService.warning('Please refresh the page to be redirected to your dashboard');
+            console.log('Error forwarding on to private pages', error);
+            this.loaderService.stop('login');
+          })
+        ;
       } else {
         this.loaderService.stop('login');
         console.log('Invalid JWT');
@@ -90,7 +97,7 @@ export class LoginComponent implements OnInit {
     }, error => {
       console.log('Error: ', error);
       this.loaderService.stop('login');
-      this.alertService.danger(error.error.message);
+      this.alertService.warning(error.error.message);
     });
 
   }
