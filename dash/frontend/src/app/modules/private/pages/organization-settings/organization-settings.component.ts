@@ -1,5 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-organization-settings',

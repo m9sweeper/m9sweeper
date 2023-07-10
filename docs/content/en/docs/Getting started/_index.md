@@ -18,8 +18,7 @@ clusters. This requires that you ingress traffic to m9sweeper, and is preferred 
 
 ![img_1.png](img_1.png)
 
-**There are 3 ways to get started:**
+**There are 2 ways to get started:**
 
- - [Sign up for our registration portal](registration-portal/), which will use a step-by-step wizard to guide you through the setup process
  - [Easy Install Guide](easy-install/) - If you do not want a step-by-step wizard but still want to get it booted up with largely the defaults, start here.
  - [Advanced Install Guide](advanced-install/) - This covers all the options short of reviewing the reference materials. 
