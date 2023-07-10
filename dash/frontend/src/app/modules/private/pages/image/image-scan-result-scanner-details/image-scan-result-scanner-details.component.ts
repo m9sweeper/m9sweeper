@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ImageService} from '../../../../../core/services/image.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {AlertService} from '@full-fledged/alerts';
 import {FormatDate} from '../../../../shared/format-date/format-date';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

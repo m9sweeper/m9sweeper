@@ -19,12 +19,9 @@ import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { UserProfileImageDirective } from './modules/shared/directives/user-profile-image.directive';
-import {SiteLogoDirective} from './modules/shared/directives/site-logo.directive';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {DatePipe} from '@angular/common';
-import { TablifyPipe } from './core/pipe/tablify.pipe';
 import {MatButtonModule} from '@angular/material/button';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
