@@ -1,5 +1,6 @@
 <mat-sidenav-container class="primary-side-nav" *ngIf="menuItems?.length" style="width: 100%">
   <mat-sidenav
+    #sidenav
     [attr.role]="(isHandsetOrXS | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandsetOrXS | async) ? 'over' : 'side'"
     [opened]="((isHandsetOrXS | async) === false) || sidenavExpanded"
@@ -23,7 +24,7 @@
            [routerLink]="menuItem.path"
            routerLinkActive="active"
            [routerLinkActiveOptions]="{exact: true}"
-           (click)="toggleExpandCollapse()"
+           (click)="toggleSidenav()"
          >
           <mat-icon *ngIf="menuItem.icon" [title]="menuItem.name">{{menuItem.icon}}</mat-icon>
           <span *ngIf="menuItem.abbreviation"
@@ -52,7 +53,7 @@
          [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
          [routerLink]="['/private', 'users']"
          style="align-self: flex-end"
-         (click)="toggleExpandCollapse()"
+         (click)="toggleSidenav()"
       >
         <mat-icon title="Organization Settings">settings</mat-icon>
         <span class="menu-item-name">Organization Settings</span>
