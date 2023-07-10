@@ -3,7 +3,6 @@ import {IKubeBenchReport} from '../../../../../../core/entities/IKubeBenchReport
 import {FormBuilder} from '@angular/forms';
 import {KubeBenchService} from '../../../../../../core/services/kube-bench.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CommonService} from '../../../../../../core/services/common.service';
 import {take} from 'rxjs/operators';
 
@@ -15,8 +14,6 @@ import {take} from 'rxjs/operators';
 
 export class KubeBenchDialogComponent implements OnInit{
   selectedProvider = '';
-  allConfigs: string;
-  cliCommand: string;
   backendUrl: string;
   clusterId: number;
   report: IKubeBenchReport;
@@ -35,7 +32,6 @@ export class KubeBenchDialogComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: { clusterId: number },
     private formBuilder: FormBuilder,
     private kubeBenchService: KubeBenchService,
-    private loaderService: NgxUiLoaderService,
     private commonService: CommonService,
   ) { }
 
