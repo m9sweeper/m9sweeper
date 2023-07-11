@@ -73,12 +73,19 @@ export class RunningVulnerabilitiesComponent implements OnInit {
         this.vulnerabilityCount = response.data.count;
         this.vulnerabilities = response.data.results;
         this.dataSource = new MatTableDataSource(response.data.results);
+        this.limit = limit;
         if (this.vulnerabilityCount < this.limit) {
           this.limit = this.vulnerabilityCount;
         }
         this.loaderService.stop();
       }, (err) => {
-        this.alertService.warning((err));
+        if (err?.error && err.error?.message) {
+          this.alertService.warning(err.error.message);
+        } else if (err?.error) {
+          this.alertService.warning(err.error);
+        } else {
+          this.alertService.warning(err);
+        }
         this.loaderService.stop();
       });
   }
@@ -88,7 +95,7 @@ export class RunningVulnerabilitiesComponent implements OnInit {
       this.alertService.warning('Invalid filter settings; please recheck filter values');
     }
     else {
-      this.limit = this.filterForm.get('limit').value;
+      const newLimit = this.filterForm.get('limit').value;
       this.previousRequest = {
         namespaces: this.filterForm.get('namespaces').value,
         isCompliant: this.filterForm.get('isCompliant').value
@@ -98,7 +105,7 @@ export class RunningVulnerabilitiesComponent implements OnInit {
         date = format(new Date(this.filterForm.get('date').value), 'yyyy-MM-dd');
       }
       this.buildReport(
-        this.limit,
+        newLimit,
         this.clusterId,
         this.filterForm.get('namespaces').value,
         date,
