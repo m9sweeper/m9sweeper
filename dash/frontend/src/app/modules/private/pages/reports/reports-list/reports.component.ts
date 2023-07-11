@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SharedSubscriptionService } from '../../../../../core/services/shared.subscription.service';
 
 @Component({
   selector: 'app-reports',
@@ -14,81 +13,75 @@ export class ReportsComponent implements OnInit, OnDestroy {
   clusterId: number;
   private unsubscribe$ = new Subject<void>();
 
+  listOfReports: {
+    title: string,
+    description: string,
+    path: string[],
+    icon: string,
+  }[] = [];
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private sharedSubscriptionService: SharedSubscriptionService,
-  ){}
+  ) {}
 
   ngOnInit(): void {
-    this.updateFormatting();
-
     this.route.parent.parent.params
       .pipe(take(1))
-      .subscribe(param => this.clusterId = param.id);
-
-    this.sharedSubscriptionService.getCurrentExpandStatus()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.updateFormatting();
+      .subscribe(param => {
+        this.clusterId = param.id;
+        this.buildListOfReports();
       });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  setScreenSize($event?: any) {
-    this.updateFormatting();
-  }
-
-  navigateVulnerabilityExport() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'vulnerability-export']);
-  }
-
-  navigateImageVisualization() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'vulnerability-visualization']);
-  }
-
-  navigateRunningVulnerabilities() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'running-vulnerabilities']);
-  }
-
-  navigateHistoricalVulnerabilities() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'historical-vulnerabilities']);
-  }
-
-  navigateWorstImages() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'worst-images']);
-  }
-
-  navigateDifferenceOverTime() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'vulnerability-difference-over-time']);
-  }
-
-  navigateDifferenceByDate() {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'reports', 'vulnerability-difference-by-date']);
-  }
-
-  /** Adjust size and number per row of report cards based on the size of the container element instead of
-   * the overall screen size. Allows card items to resize when the left navigation bar expands or contracts. */
-  updateFormatting() {
-    const innerWindow = document.getElementsByTagName('app-reports').item(0) as HTMLElement;
-    const innerScreenWidth = innerWindow.offsetWidth;
-    let className = 'reports-item ';
-    if (innerScreenWidth >= 1200) {
-      className = className.concat('col-xs-4');
-    } else if (innerScreenWidth >= 900) {
-      className = className.concat('col-xs-6');
-    } else {
-      className = className.concat('col-xs-12');
-    }
-    const cards = document.getElementsByClassName('reports-item');
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards.item(i);
-      card.className = className;
-    }
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  buildListOfReports() {
+    this.listOfReports = [
+      {
+        title: 'Vulnerability Export',
+        description: 'Export details about every CVE that is running or was running in the cluster',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'vulnerability-export'],
+        icon: 'list_alt',
+      },
+      {
+        title: 'Vulnerability Visualization',
+        description: 'Display a visualization of vulnerabilities on the cluster',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'vulnerability-visualization'],
+        icon: 'analytics',
+      },
+      {
+        title: 'Running Vulnerabilities',
+        description: 'A description of every running image and the total vulnerabilities it has',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'running-vulnerabilities'],
+        icon: 'warning',
+      },
+      {
+        title: 'Vulnerability History',
+        description: 'A break down of your overall security posture by day over the past month.',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'historical-vulnerabilities'],
+        icon: 'history',
+      },
+      {
+        title: 'Worst CVE by Image',
+        description: 'Display a visualization of all images running on the cluster organized by the worst vulnerability present on each',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'worst-images'],
+        icon: 'stacked_bar_chart',
+      },
+      {
+        title: 'Vulnerability Difference Over Time',
+        description: 'Display a chart of how many vulnerabilities in the cluster have been removed or added by day',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'vulnerability-difference-over-time'],
+        icon: 'query_stats',
+      },
+      {
+        title: 'Vulnerability Difference By Date',
+        description: 'Display a list of vulnerabilities fixed and vulnerabilities added between two dates',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'vulnerability-difference-by-date'],
+        icon: 'addchart',
+      },
+    ];
   }
 }
