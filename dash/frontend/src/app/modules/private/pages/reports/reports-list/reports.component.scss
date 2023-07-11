@@ -17,5 +17,16 @@
   display: flex;
   justify-content: center;
   align-self: center;
-  padding-bottom: 24px;
+  mat-icon {
+    height: unset;
+    width: unset;
+    font-size: 3em;
+  }
+}
+
+.report-title {
+  margin-block-end: 0.5em;
+}
+.report-description {
+  margin-block-start: 0.5em;
 }

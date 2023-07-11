@@ -48,17 +48,23 @@
   overflow: auto;
 }
 
-.search-results {
-  height: 180px;
+#cluster-events-card {
+  margin-top: 0;
+  padding: 15px;
+}
+
+#cluster-event-items {
+  max-height: 8em;  // smaller than the #cluster-events element to account for margins & header
   overflow-x: hidden;
   overflow-y: scroll;
   flex: none;
+
   table {
     width: 100%;
     font-size: 11px;
     td {
       font-size: 11px;
-      font-family: "Courier New";
+      font-family: "Courier New", monospace;
       cursor: pointer;
     }
     .cluster-error-event {
@@ -70,33 +76,34 @@
   }
 }
 
-.cluster-events-card {
-  // position: absolute;
-  width: 98.4%;
-  left: 1px;
-  bottom: 0;
-  padding: 15px 0 0 15px;
-}
-
-.cluster-events {
-  padding-top: 30px;
-  max-height: 50%;
-  padding-right: 0 !important;
-  padding-left: 3px !important;
+#cluster-events {
+  // top right bottom left
+  margin: 0.625em 0 0.25em 0.85em;
+  width: calc(100% - 1.1em);
+  padding: 0 0 0 0;
+  height: 12em;
   position: sticky;
   position: -webkit-sticky; /* Safari */
   bottom: 0;
+
+  @media all and (min-width: 280px) and (max-width: 842px) {
+    width: calc(100% - 10px);
+  }
   @media only screen and (min-width: 280px) and (max-width: 1024px) {
     padding-top: 0;
   }
-  width: calc(var(--cluster-container-width) - 10px);
 
-  margin: 0 0 0 10px;
-  height: 200px;
-  .mat-mdc-card:not([class*=mat-elevation-z]) {
+  //padding-top: 30px;
+  //max-height: 50%;
+  //padding-right: 0 !important;
+  //padding-left: 3px !important;
+  //width: calc(var(--cluster-container-width) - 10px);
+  //
+  //margin: 0 0 0 10px;
+  //height: 200px;
+  //.mat-mdc-card:not([class*=mat-elevation-z]) {
 
-    // box-shadow: 0 -5px 5px -5px rgba(0,0,0,1);
-  }
+  //}
 }
 
 .hide-scrollbar {

@@ -23,6 +23,7 @@
            [allowedRoles]="(menuItem.allowedRoles && menuItem.allowedRoles.length) ? menuItem.allowedRoles : allUserRoles"
            [routerLink]="menuItem.path"
            routerLinkActive="active"
+           [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions ? menuItem.routerLinkActiveOptions : { exact: false }"
            (click)="toggleSidenav()"
          >
           <mat-icon *ngIf="menuItem.icon" [title]="menuItem.name">{{menuItem.icon}}</mat-icon>

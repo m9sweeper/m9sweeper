@@ -358,6 +358,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
 
   onScroll() {
     this.page = this.page + 1;
+    console.log('hitting onScroll');
     this.getClusterEvents(this.limit, this.page);
   }
 
