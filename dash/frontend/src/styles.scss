@@ -18,7 +18,7 @@ $ms-default-warn: mat.define-palette(mat.$pink-palette, 600);
 
 $ms-button-styling: mat.define-typography-level(
   $font-family: "Roboto, 'Helvetica Neue', sans-serif",
-  $font-weight: 600,
+  $font-weight: 900,
   $font-size: 14px,
   $line-height: 48px,
   $letter-spacing: normal,
@@ -33,6 +33,13 @@ $ms-default-theme: mat.define-light-theme((
   typography: mat.define-typography-config(
     $font-family: "Roboto, 'Helvetica Neue', sans-serif",
     $button: $ms-button-styling,
+    $headline-5: mat.define-typography-level(24px, 32px, 400),
+    $headline-6: mat.define-typography-level(24px, 32px, 400),
+    $subtitle-1: mat.define-typography-level(24px, 20px, 400),
+    $body-1: mat.define-typography-level(14px, 20px, 400),
+    $body-2: mat.define-typography-level(14px, 20px, 400),
+    $subtitle-2: mat.define-typography-level(14px, 20px, 400),
+
   ),
 ));
 
@@ -45,7 +52,10 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
-
+.mat-mdc-card-content {
+  font-size: 14px;
+  line-height: 20px;
+}
 
 @mixin custom-components-theme($theme) {
   @include app-root-theme($theme);
@@ -132,7 +142,7 @@ button {
 }
 .padding-top-15 {
   padding-top:15px;
-  padding-left: 0px;
+  padding-left: 0;
 }
 .padding-left-3 {
   padding-left: 3%;
@@ -195,7 +205,7 @@ button {
 
 .table-format td, .table-format th {
   border: 1px #AAA solid ;
-  margin: 0px;
+  margin: 0;
   padding: 2px;
   border-collapse: collapse;
   vertical-align: baseline;
@@ -221,7 +231,7 @@ app-private {
 .main-content {
   flex: 1;
   height: auto;
-  margin-top: 0px !important
+  margin-top: 0 !important
 }
 
 // Org setting pages uses app-sub-navigation for titles and buttons
@@ -229,7 +239,7 @@ app-private {
 .mat-mdc-card-header{
   display: flex;
   padding: 0;
-  margin-left: 0px;
+  margin-left: 0;
 }
 .page-container {
   height: 100%;
@@ -244,13 +254,13 @@ app-private {
   // width:fit-content;
 }
 .page-card{
-  margin: 0px;
+  margin: 0;
   overflow-x: auto;
 }
 .page-card-header{
   display:flex;
-  padding:0px;
-  margin-left: 0px;
+  padding:0;
+  margin-left: 0;
   width: 100%;
 }
 .page-card-title{
@@ -266,10 +276,10 @@ app-private {
 }
 .page-card-title-button-group-right-align{
   text-align: right;
-  padding:0px;
+  padding:0;
 }
 .page-card-left-align {
-  margin-left: 0px;
+  margin-left: 0;
 }
 .page-table-container-with-paginator{
   width: fit-content; // align paginator with table width
@@ -311,11 +321,11 @@ app-private {
   padding: 30px;
 }
 .modal-content-left-align-no-margin{
-  margin: 0px;
+  margin: 0;
   text-align: left;
 }
 .modal-content-no-right-margin{
-  margin-right: 0px;
+  margin-right: 0;
 }
 
 .cluster-card {

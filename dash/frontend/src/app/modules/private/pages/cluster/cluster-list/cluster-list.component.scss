@@ -9,10 +9,6 @@
   margin: 10px 10px 0 0;
 }
 
-.cluster-card {
-  width: 100%;
-}
-
 .cluster-name-short {
   height: 44px;
   width: 50px;
@@ -24,35 +20,7 @@
   text-transform: uppercase;
   color: white;
   margin-left: 6px;
-}
-
-.cluster-item-details {
-  overflow: hidden;
-  width: inherit;
-  div.cluster-content{
-    margin-left: 15px;
-  }
-  div.cluster-header {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
-  }
-  div.cluster-scanned-date {
-    margin-left: 15px;
-    p {
-      font-style: italic;
-    }
-  }
-}
-
-
-.pointer{
-  cursor: pointer;
-}
-
-.header-font{
-  font-size: 30px;
-  font-weight: bold;
+  font-size: 16px;
 }
 
 .edit-cluster-group-icon{
