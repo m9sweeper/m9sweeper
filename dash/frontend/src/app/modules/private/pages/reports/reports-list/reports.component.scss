@@ -15,8 +15,9 @@
 
 .report-icon {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-self: center;
+  padding-right: 0;
   mat-icon {
     height: unset;
     width: unset;
