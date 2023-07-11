@@ -4,24 +4,27 @@
       <span>Reports</span>
     </div>
     <div class="row">
-      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-        <mat-card
-          appearance="outlined"
-          class="cluster-card"
+      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 card-div">
+        <a
           [routerLink]="reportInfo.path"
+          class="report-card"
         >
-          <mat-card-content>
-            <div class="row">
-              <div class="col-xs-3 report-icon">
-                <mat-icon>{{reportInfo.icon}}</mat-icon>
+          <mat-card
+            appearance="outlined"
+          >
+            <mat-card-content>
+              <div class="row" style="display: flex; flex-direction: row">
+                <div class="report-icon">
+                  <mat-icon>{{reportInfo.icon}}</mat-icon>
+                </div>
+                <div class="report-info">
+                  <p class="title-font report-title">{{reportInfo.title}}</p>
+                  <p class="report-description">{{reportInfo.description}}</p>
+                </div>
               </div>
-              <div class="col-xs-9 report-info">
-                <p class="title-font report-title">{{reportInfo.title}}</p>
-                <p class="report-description">{{reportInfo.description}}</p>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
+            </mat-card-content>
+          </mat-card>
+        </a>
       </div>
     </div>
   </div>
