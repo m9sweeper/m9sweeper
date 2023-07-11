@@ -53,12 +53,14 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private jwtAuthService: JwtAuthService
+    private jwtAuthService: JwtAuthService,
   ) {
-    this.cve = this.router.getCurrentNavigation().extras.state?.cve;
-    const running = this.router.getCurrentNavigation().extras.state?.onlyRunning;
-    this.onlyRunning = running !== 'NO';
-    this.imageName = this.router.getCurrentNavigation().extras.state?.imageName;
+    // .getCurrentNavigation() may return null due to a bug in Angular 15
+    // https://stackoverflow.com/questions/54891110/router-getcurrentnavigation-always-returns-null
+    const currentNavigation = this.router.getCurrentNavigation();
+    this.cve = currentNavigation?.extras?.state?.cve;
+    this.onlyRunning = currentNavigation?.extras?.state?.onlyRunning !== 'NO';
+    this.imageName = currentNavigation?.extras?.state?.imageName;
   }
 
   ngOnInit(): void {
