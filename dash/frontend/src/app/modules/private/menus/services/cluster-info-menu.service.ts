@@ -86,12 +86,6 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         },
       },
       {
-        name: 'API Key Management',
-        path: ['/private', 'api-key'],
-        icon: 'code',
-        allowedRoles: [Authority.SUPER_ADMIN],
-      },
-      {
         name: 'Kube Hunter',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubehunter'],
         image: {
