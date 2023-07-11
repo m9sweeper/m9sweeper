@@ -9,6 +9,7 @@ import { IAuth } from '../../../../core/entities/IAuth';
 import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -77,7 +78,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.value.username,
       this.loginForm.value.password,
       this.selectedInSiteCredentialAuthenticationMethod
-    ).subscribe((response: IServerResponse<IAuth>) => {
+    ).pipe(take(1)).subscribe((response: IServerResponse<IAuth>) => {
       this.alertService.success('Login successful');
       const token: string = response.data.accessToken;
       if (token !== null && token.trim() !== '') {

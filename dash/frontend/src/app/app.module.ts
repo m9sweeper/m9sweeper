@@ -19,13 +19,11 @@ import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { UserProfileImageDirective } from './modules/shared/directives/user-profile-image.directive';
-import {SiteLogoDirective} from './modules/shared/directives/site-logo.directive';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {DatePipe} from '@angular/common';
-import { TablifyPipe } from './core/pipe/tablify.pipe';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
@@ -63,22 +61,23 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     AppComponent,
     AlertDialogComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        OverlayModule,
-        NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
-        NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
-        AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
-        MatSlideToggleModule,
-        MatIconModule,
-        MatDialogModule,
-        FontAwesomeModule,
-        InfiniteScrollModule,
-        MatButtonModule
-    ],
+  imports: [
+    AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    FontAwesomeModule,
+    HttpClientModule,
+    InfiniteScrollModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatSelectModule,  // can't be lazy-loaded (needed in modules that may not be active at call-time)
+    MatSlideToggleModule,
+    NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
+    OverlayModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

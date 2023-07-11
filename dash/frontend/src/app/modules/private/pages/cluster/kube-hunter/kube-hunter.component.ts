@@ -9,8 +9,6 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {KubeHunterDialogComponent} from './kube-hunter-dialog/kube-hunter-dialog.component';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {IImage} from '../../../../../core/entities/IImage';
 
 @Component({
   selector: 'app-kube-hunter',

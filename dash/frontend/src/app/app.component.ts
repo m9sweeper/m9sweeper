@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { ITheme } from './core/entities/ITheme';
 import { ThemeService } from './core/services/theme.service';
-import { Subscription, timer, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { filter } from 'rxjs/operators';
@@ -18,7 +18,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   theme: ITheme;
 
-  private themeChangeSubscriber: Subscription;
   private unsubscribe$ = new Subject<void>();
 
   @HostBinding('class') componentCssClass;
@@ -40,9 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
           this.titleService.setTitle(data.title); });
       });
 
-    this.themeChangeSubscriber = this.themeService.theme.subscribe((currentTheme: ITheme) => {
-      this.theme = currentTheme;
-    });
+    this.themeService.theme
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((currentTheme: ITheme) => {
+        this.theme = currentTheme;
+      });
 
     // timer(0, 10000)
     //   .pipe(takeUntil(this.unsubscribe$))
@@ -58,7 +59,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.themeChangeSubscriber) { this.themeChangeSubscriber.unsubscribe(); }
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

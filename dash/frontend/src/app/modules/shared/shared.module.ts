@@ -29,7 +29,6 @@ import {MatListModule} from '@angular/material/list';
     SideNavComponent,
   ],
   imports: [
-    MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
