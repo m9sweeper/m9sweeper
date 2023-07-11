@@ -155,36 +155,32 @@
     <div class="dashboard-card cluster-element margin-bottom-6 no-padding pointer"
          [ngClass]="this.currentCardSize"
          *ngFor="let cluster of clustersList; index as i">
-      <mat-card appearance="outlined" (click)="showCluster(cluster)" class="padding-top-10 cluster-card"
+      <mat-card appearance="outlined" (click)="showCluster(cluster)" class="padding-top-10 w-100"
                 [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
-        <div class="row">
-          <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
-          <span>
-            {{shortGroupName(cluster.name)}}
-          </span>
-          </div>
-          <span class="font-size-20 margin-left-7">
-            {{cluster.name}}
-          </span>
-        </div>
-        <div class="cluster-item-details">
-          <div class="cluster-header">
-            <mat-card-header>
-              <mat-card-subtitle>{{cluster.ipAddress}}</mat-card-subtitle>
-            </mat-card-header>
-            <span class="cluster-status"></span>
-          </div>
-          <div class="cluster-content">
-            <mat-card-content>
-              <p>{{cluster.context}}</p>
-            </mat-card-content>
-          </div>
-          <div class="cluster-scanned-date" *ngIf="cluster.lastScannedAt">
-            <mat-card-content>
-              <p>Last synced: {{+cluster.lastScannedAt | date: 'short'}}</p>
-            </mat-card-content>
-          </div>
-        </div>
+          <mat-card-header>
+            <mat-card-title>
+              <div class="row">
+                <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
+                  <span>
+                    {{shortGroupName(cluster.name)}}
+                  </span>
+                </div>
+                <span class="font-size-20 margin-left-7">
+                  {{cluster.name}}
+                </span>
+              </div>
+            </mat-card-title>
+            <mat-card-subtitle>
+              <div class="row">{{cluster.ipAddress}}</div>
+
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{cluster.context}}</p>
+            <i *ngIf="cluster.lastScannedAt">
+              Last synced: {{+cluster.lastScannedAt | date: 'short'}}
+            </i>
+          </mat-card-content>
         <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
         <ng-template #moreThanSixTags>
           <mat-chip-listbox aria-label="tag list">
