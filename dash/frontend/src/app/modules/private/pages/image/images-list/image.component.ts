@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Location} from '@angular/common';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
@@ -54,13 +55,16 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private jwtAuthService: JwtAuthService,
+    private location: Location,
   ) {
     // .getCurrentNavigation() may return null due to a bug in Angular 15
     // https://stackoverflow.com/questions/54891110/router-getcurrentnavigation-always-returns-null
-    const currentNavigation = this.router.getCurrentNavigation();
-    this.cve = currentNavigation?.extras?.state?.cve;
-    this.onlyRunning = currentNavigation?.extras?.state?.onlyRunning !== 'NO';
-    this.imageName = currentNavigation?.extras?.state?.imageName;
+    // const currentNavigation = this.router.getCurrentNavigation();
+    const currentState: any = this.location.getState();
+    console.log({stateFromLocation: this.location.getState()});
+    this.cve = currentState?.cve;
+    this.onlyRunning = currentState?.onlyRunning !== 'NO';
+    this.imageName = currentState?.imageName;
   }
 
   ngOnInit(): void {
