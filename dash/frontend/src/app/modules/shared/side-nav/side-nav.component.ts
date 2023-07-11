@@ -15,7 +15,7 @@ import {MatSidenav} from '@angular/material/sidenav';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements AfterViewInit {
-  @Input() isHandsetOrXS: Observable<boolean>;
+  @Input() isHandsetOrXSObservable: Observable<boolean>;
   @Input() menuItems: IMenuItem[] = [];
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
   @Input() toggleSidenavObservable: Observable<void>;
@@ -24,6 +24,7 @@ export class SideNavComponent implements AfterViewInit {
 
   @ViewChild(MatSidenav) sidenav: MatSidenav;
 
+  isHandsetOrXS: boolean;
   sidenavExpanded = false;
   isAdmin: boolean;
 
@@ -37,8 +38,8 @@ export class SideNavComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.isHandsetOrXS.subscribe(val => {
-      console.log('new isHandsetOrXS value', val);
+    this.isHandsetOrXSObservable.subscribe((newIsHandsetOrXS) => {
+      this.isHandsetOrXS = newIsHandsetOrXS;
     });
     this.toggleSidenavObservable.subscribe(() => {
       this.toggleSidenav();
@@ -46,7 +47,9 @@ export class SideNavComponent implements AfterViewInit {
   }
 
   public toggleSidenav() {
-    this.sidenav.toggle().then();
+    if (this.isHandsetOrXS) {
+      this.sidenav.toggle().then();
+    }
   }
 
   contentTriggerClicked(nameOfTriggeredItem) {
