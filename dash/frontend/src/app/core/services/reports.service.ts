@@ -53,7 +53,8 @@ export class ReportsService {
                                    date?: string
                                    startDate?: string
                                    endDate?: string
-                                   compliant?: boolean
+                                   compliant?: boolean,
+                                   page?: number,
                                  }
                                  ): HttpParams {
     let exportParams = new HttpParams()
@@ -86,12 +87,15 @@ export class ReportsService {
     if (options?.compliant?.toString()) {
       exportParams = exportParams.set('compliant', options.compliant.toString());
     }
+    if (options?.page?.toString()) {
+      exportParams = exportParams.set('page', options.page.toString());
+    }
     return exportParams;
   }
 
-  getRunningVulnerabilities(limit: number, clusterId: number, namespaces?: Array<string>, date?: string, compliant?: boolean):
+  getRunningVulnerabilities(limit: number, clusterId: number, namespaces?: Array<string>, date?: string, compliant?: boolean, page?: number):
     Observable<IServerResponse<IRunningVulnerabilitiesPreview>> {
-    const params = this.buildReportQueryParams(clusterId, {namespaces, limit, date, compliant});
+    const params = this.buildReportQueryParams(clusterId, {namespaces, limit, date, compliant, page});
     return this.httpClient.get(`${this.baseUrl}/running-vulnerabilities`, {params});
   }
 

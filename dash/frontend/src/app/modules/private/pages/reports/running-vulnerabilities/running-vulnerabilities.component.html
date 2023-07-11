@@ -71,7 +71,7 @@
         <mat-card-header>
           <div class="row full-width">
             <div class="col-xs-9 vulnerability-count">
-              <p class="title-font title-margin">Displaying {{limit}} out of {{vulnerabilityCount}} vulnerabilities</p>
+              <p class="title-font title-margin">Displaying {{lowNumCurrentShownVulnerabilities}}-{{highNumCurrentShownVulnerabilities}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
             <div class="col-xs-3 vulnerability-download-button">
               <button (click)="downloadReport()"
@@ -142,10 +142,15 @@
                 <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableNegligible}}</mat-cell>
               </ng-container>
 
-
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+            <mat-paginator
+              [length]="vulnerabilityCount"
+              [pageSize]="20"
+              [pageSizeOptions]="[ 10, 20, 50 ]"
+              (page)="pageEvent($event)"
+            ></mat-paginator>
           </div>
         </mat-card-content>
       </mat-card>

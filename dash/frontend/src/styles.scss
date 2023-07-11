@@ -253,6 +253,7 @@ app-private {
   margin: 20px;
   // width:fit-content;
 }
+
 .page-card{
   margin: 0;
   overflow-x: auto;
@@ -328,12 +329,6 @@ app-private {
   margin-right: 0;
 }
 
-.cluster-card {
-  height: 100%;
-  margin-top: 5px;
-  margin-bottom: 30px;
-}
-
 .table-row {
   &:hover {
     background-color: rgba(0, 0, 0, .05);
@@ -403,11 +398,18 @@ mat-form-field {
   mat-table {
     min-width: 800px;
 
+    mat-row {
+      height: unset;
+    }
+
     mat-cell, mat-header-cell, mat-footer-cell {
       overflow: visible;
       word-break: break-word;
       overflow-wrap: break-word;
-      padding-right: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-right: unset;
+      min-width: 8em;
     }
 
     & .mat-column-date {
@@ -566,7 +568,7 @@ mat-form-field {
 
 .mat-column-image {
   word-break: break-all;
-  margin-right: 10px
+  padding-right: 10px
 }
 
 .mat-column-type {

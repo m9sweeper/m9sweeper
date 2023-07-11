@@ -21,8 +21,6 @@ import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AlertService} from '@full-fledged/alerts';
 
 
-
-
 @Component({
   selector: 'app-falco-events-list',
   templateUrl: './falco-events-list.component.html',

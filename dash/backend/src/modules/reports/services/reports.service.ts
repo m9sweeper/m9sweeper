@@ -70,10 +70,10 @@ export class ReportsService {
     }
 
     async getRunningVulnerabilities(limit: number, clusterId?: number, namespaces?: Array<string>,
-      isCompliant?: string, date?: string)
+      isCompliant?: string, date?: string, page?: string)
       : Promise<ReportsRunningVulnerabilitiesPreviewDto>
     {
-        return this.getRunningVulnerabilitiesNoRequirements(clusterId, limit, namespaces, isCompliant, date);
+        return this.getRunningVulnerabilitiesNoRequirements(clusterId, limit, namespaces, isCompliant, date, page);
     }
 
     async getRunningVulnerabilitiesNoRequirements(
@@ -81,14 +81,19 @@ export class ReportsService {
       limit?: number,
       namespaces?: Array<string>,
       isCompliant?: string,
-      date?: string
+      date?: string,
+      page?: string,
     ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
+        let pageAsNum = 0;
+        if (page) {
+            pageAsNum = parseInt(page);
+        }
         if (date && date !== format(new Date(), 'yyyy-MM-dd')) {
             return this.reportsDao.getHistoricalRunningVulnerabilities(
-              clusterId, date, {limit, namespaces, isCompliant}
+              clusterId, date, {limit, namespaces, isCompliant, page: pageAsNum }
             );
         } else {
-            return this.reportsDao.getRunningVulnerabilities(clusterId, {namespaces, limit, isCompliant});
+            return this.reportsDao.getRunningVulnerabilities(clusterId, {namespaces, limit, isCompliant, page: pageAsNum });
         }
     }
 

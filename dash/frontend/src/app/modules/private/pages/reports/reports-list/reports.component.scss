@@ -9,14 +9,28 @@
 
 .mat-mdc-card:hover {
   background-color: #F2F2F2;
-  color: black;
-  cursor: pointer;
+}
+
+.card-div {
+  margin: 1em 0 1em 0;
+
+  .report-card {
+    color: black;
+    text-decoration: none;
+
+    mat-card {
+      height: 100%;
+    }
+  }
 }
 
 .report-icon {
   display: flex;
   justify-content: center;
   align-self: center;
+  padding-right: 0;
+  margin: 0 0.5em 0 0.5em;
+  width: 3em;
   mat-icon {
     height: unset;
     width: unset;
@@ -24,9 +38,15 @@
   }
 }
 
-.report-title {
-  margin-block-end: 0.5em;
-}
-.report-description {
-  margin-block-start: 0.5em;
+.report-info {
+  flex: 1;
+  margin: 0 0.5em 0 0.25em;
+
+  .report-title {
+    margin-block-end: 0.5em;
+  }
+
+  .report-description {
+    margin-block-start: 0.5em;
+  }
 }
