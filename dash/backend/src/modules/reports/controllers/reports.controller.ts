@@ -75,7 +75,7 @@ export class ReportsController {
         @Query('compliant') isCompliant?: string,
     ) {
         if (!limit || limit < 1 || limit > 100) {
-            throw new BadRequestException();
+            throw new BadRequestException('Please provide a limit between 1 and 100');
         }
         return this.reportsService.getRunningVulnerabilities(limit, clusterId, namespaces, isCompliant, date);
     }
