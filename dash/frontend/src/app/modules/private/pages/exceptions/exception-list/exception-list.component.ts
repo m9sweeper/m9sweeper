@@ -7,8 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
-import {JwtAuthService} from "../../../../../core/services/jwt-auth.service";
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-policy-list',
@@ -59,23 +60,26 @@ export class ExceptionListComponent implements OnInit {
   deleteException($event: Event, id) {
       // stopPropagation() will discard the row click event that routes to the exception details.
       $event.stopPropagation();
-      const confirmModal = this.dialog.open(ConfirmationDialogComponent, {
+      const confirmModal = this.dialog.open(AlertDialogComponent, {
         width: '400px',
         closeOnNavigation: true,
         disableClose: true
       });
 
-      confirmModal.afterClosed().subscribe(result => {
-        if (result === undefined) {
-          this.exceptionsService.deleteExceptionById(id).subscribe(
-            _ => {
-              this.getExceptionList();
-              this.alertService.success('Exception deleted');
-            },
-            _ => this.alertService.danger('Something went wrong. Please try again later')
-          );
-        }
-      });
+      confirmModal.afterClosed().pipe(take(1))
+        .subscribe({
+          next: result => {
+            if (result === true) {
+              this.exceptionsService.deleteExceptionById(id).subscribe(
+                _ => {
+                  this.getExceptionList();
+                  this.alertService.success('Exception deleted');
+                },
+                _ => this.alertService.danger('Something went wrong. Please try again later')
+              );
+            }
+          }
+        });
   }
 
   viewExceptionDetails(id: number) {

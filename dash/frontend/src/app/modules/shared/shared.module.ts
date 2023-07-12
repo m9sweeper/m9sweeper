@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {SiteLogoDirective} from './directives/site-logo.directive';
 import {RbacDirective} from './directives/rbac.directive';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { GenericErrorDialogComponent } from './generic-error-dialog/generic-error-dialog.component';
 import {DatepickerComponent} from './datepicker-component/datepicker.component';
@@ -20,7 +19,6 @@ import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
-    ConfirmationDialogComponent,
     DatepickerComponent,
     GenericErrorDialogComponent,
     RbacDirective,

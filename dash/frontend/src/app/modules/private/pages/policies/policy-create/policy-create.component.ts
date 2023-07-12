@@ -15,7 +15,8 @@ import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ClusterService} from '../../../../../core/services/cluster.service';
-import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
+import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-policy-create',
@@ -31,7 +32,6 @@ export class PolicyCreateComponent implements OnInit {
   policyId: number;
   dataSource: MatTableDataSource<IScanner>;
   displayedColumns: string[] = ['enabled', 'required', 'name', 'description', 'type', 'actions'];
-  scannerData: ScannerData[] = new Array();
   @ViewChild(ScannerListComponent) scannerList;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   currentScannerData: any;
@@ -119,7 +119,7 @@ export class PolicyCreateComponent implements OnInit {
         }
         return groupByData;
       }, []);
-    }, error => {
+    }, () => {
       this.alertService.danger('Clusters not found in this cluster group');
     });
   }
@@ -136,7 +136,7 @@ export class PolicyCreateComponent implements OnInit {
         this.policyForm.get('clusters').setValue(this.policyClusterMap.map(pcm => pcm.id));
         this.relevantForAllClusters = false;
         this.relevantForSpecificClusters = true;
-      }, error => {
+      }, () => {
         this.alertService.danger('Failed to load policy cluster map');
       });
     }
@@ -157,7 +157,7 @@ export class PolicyCreateComponent implements OnInit {
   onSubmit() {
     const policy = this.policyForm.getRawValue();
     const clusters = policy.clusters.includes('all') ? [] : policy.clusters;
-    policy.relevantForAllClusters = policy.clusters.includes('all') ? true : false;
+    policy.relevantForAllClusters = !!policy.clusters.includes('all');
     delete policy.clusters;
     const scanners = policy.scanners;
     delete policy.scanners;
@@ -175,7 +175,7 @@ export class PolicyCreateComponent implements OnInit {
     };
 
     if (this.checkIfEdit) {
-      this.policyService.updatePolicy(policyCreateData, this.policyId).subscribe((response) => {
+      this.policyService.updatePolicy(policyCreateData, this.policyId).subscribe(() => {
         this.alertService.success('Policy updated successfully');
       }, error => {
         this.alertService.danger(error.error.message);
@@ -183,7 +183,7 @@ export class PolicyCreateComponent implements OnInit {
         this.router.navigate(['/private', 'policies']);
       });
     } else {
-      this.policyService.createPolicy(policyCreateData).subscribe((response) => {
+      this.policyService.createPolicy(policyCreateData).subscribe(() => {
         this.alertService.success('Policy added successfully');
       }, error => {
         this.alertService.danger(error.error.message);
@@ -247,25 +247,29 @@ export class PolicyCreateComponent implements OnInit {
     });
   }
 
-  alertDeletePolicy(id: number, index: number) {
-    const openRemoveDialog = this.dialog.open(ConfirmationDialogComponent, {
+  alertDeleteScanner(id: number, index: number) {
+    const openRemoveDialog = this.dialog.open(AlertDialogComponent, {
       width: '400px',
       closeOnNavigation: true,
       disableClose: true
     });
 
-    openRemoveDialog.afterClosed().subscribe(result => {
-      if (result === undefined) {
-        if (this.checkIfEdit){
-          this.deleteScannerById(id);
-        } else {
-          this.policyForm.controls.scanners.value.splice(index, 1);
-          this.policyForm.controls.scanners.updateValueAndValidity();
-          this.dataSource = new MatTableDataSource<IScanner>(this.policyForm.controls.scanners.value);
-          this.dataSource.sort = this.sort;
+    openRemoveDialog.afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: result => {
+          if (result === true) {
+            if (this.checkIfEdit){
+              this.deleteScannerById(id);
+            } else {
+              this.policyForm.controls.scanners.value.splice(index, 1);
+              this.policyForm.controls.scanners.updateValueAndValidity();
+              this.dataSource = new MatTableDataSource<IScanner>(this.policyForm.controls.scanners.value);
+              this.dataSource.sort = this.sort;
+            }
+          }
         }
-      }
-    });
+      });
   }
 
   deleteScannerById(id: number) {

@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '@full-fledged/alerts';
 import { ExceptionsService } from '../../../../../core/services/exceptions.service';
 import { IException } from '../../../../../core/entities/IException';
-import { ConfirmationDialogComponent } from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import { CommentService } from '../../../../../core/services/comment.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
@@ -64,14 +63,14 @@ export class ExceptionDetailsComponent implements OnInit {
   }
 
   deleteException() {
-    const confirmModal = this.dialog.open(ConfirmationDialogComponent, {
+    const confirmModal = this.dialog.open(AlertDialogComponent, {
       width: '400px',
       closeOnNavigation: true,
       disableClose: true
     });
 
     confirmModal.afterClosed().subscribe(result => {
-      if (result === undefined) {
+      if (result === true) {
         this.exceptionsService.deleteExceptionById(this.exceptionId).subscribe(
           _ => {
             this.router.navigate(['/private', 'exceptions']);
@@ -101,10 +100,10 @@ export class ExceptionDetailsComponent implements OnInit {
       userId: currentUser.id,
       exceptionId: Number(this.exceptionId)
     };
-    this.commentService.createComment(comment).subscribe(data => {
+    this.commentService.createComment(comment).subscribe(() => {
       this.reset();
       this.getAllComments();
-    }, err => {
+    }, () => {
       this.alertService.warning('Something went wrong. Cannot post message');
     }, () => {
       this.isSubmitting = false;
