@@ -1,10 +1,16 @@
-<div mat-dialog-content class ="modal-container-margin">
-<div class="modal-content-left-align-no-margin">
-  <div class="page-title"> {{header}}</div>
-  <br>
-  <div class="falco-card">
-    <mat-card appearance="outlined">
-      <table class="left-align-text-with-margin" style="min-width: 500px">
+<mat-dialog-content class="modal-container-margin">
+  <div id="modal-header" class="row page-title-button-group-spacing">
+    <div class="page-title col-9">{{header}}</div>
+    <div id="action-buttons" class="col-3">
+      <a mat-raised-button color="primary"
+         [routerLink]="['/private', 'clusters', this.clusterId, 'falco', 'more', this.eventId, 'signature', this.signature]"
+         (click)="onClickMore()">More</a>
+      <button mat-raised-button color="accent"  (click)="onClose()">Close</button>
+    </div>
+  </div>
+  <div id="modal-content">
+    <mat-card class="row" id="logDetails" appearance="outlined">
+      <table style="min-width: 500px">
         <tr>
           <th>Namespace</th> <td>{{namespace}}</td>
         </tr>
@@ -22,19 +28,16 @@
         </tr>
       </table>
     </mat-card>
-    <br>
-  <div class="falco-card">
-    <mat-card appearance="outlined">
-      <div class="margin: 0px; text-align: left;">
-        <div class="page-title-button-group-spacing" >
+    <mat-card class="row" id="relatedEvents" appearance="outlined">
+      <div style="max-width: 100%;">
+        <div id="relatedEventsTitle" class="page-title-button-group-spacing">
           <div class="page-card-title">
-           Related Events
+            Related Events
           </div >
           <div >Signature: &nbsp;&nbsp;{{signature}}</div>
         </div>
         <div>
-          <div class="related-event-table">
-          <mat-table [dataSource]="dataSource">
+          <mat-table id="related-event-table" [dataSource]="dataSource">
             <ng-container matColumnDef="calendarDate">
               <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
               <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
@@ -60,30 +63,17 @@
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
           </mat-table>
-          </div>
-            <mat-paginator
-              [length]="logCount"
-              [pageSize]="limit"
-              [pageSizeOptions]="[ 20, 50, 100]"
-              (page)="pageEvent($event)"
-              showFirstLastButtons>
-            </mat-paginator>
+          <mat-paginator
+            [length]="logCount"
+            [pageSize]="limit"
+            [pageSizeOptions]="[ 20, 50, 100]"
+            (page)="pageEvent($event)"
+            style="max-width:750px"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
       <br>
     </mat-card>
-    <br>
-    <div class="modal-content-left-align-no-margin">
-      <a mat-raised-button color="primary" [routerLink]="['/private', 'clusters', this.clusterId, 'falco', 'more', this.eventId, 'signature', this.signature]" (click)="onClickMore()">More</a>
-
-      <button mat-raised-button color="primary"  (click)="onClose()">Close</button>
-    </div>
   </div>
-
-  </div>
-</div>
-
-</div>
-
-
-
+</mat-dialog-content>

@@ -1,83 +1,105 @@
-.falco-card{
+#modal-content{
   min-width: 400px;
   max-height: 1000px; // override mat-dialog container max height
 }
+
+.mat-mdc-raised-button {
+  margin-block-end: 0.25em;
+  margin-block-start: 0.25em;
+  margin-inline-end: 0.25em;
+  margin-inline-start: 0.25em;
+}
+
 th, td{
   vertical-align: baseline;
 }
-.related-event-table {
-  mat-table {
-    //overflow: auto !important;
-    height: 50%;
+#logDetails {
 
-    mat-row {
-      min-height: 20px !important
-    }
+  margin-bottom: 1.5em;
+  th {
+    text-align: start;
+    padding-inline-end: 1em;
+  }
+}
+#relatedEventsTitle {
+  align-items: center;
+  margin-inline-start: 1.25em;
+  margin-inline-end: 1.25em;
+}
 
-    mat-header {
-      min-height: 32px !important
-    }
+#related-event-table {
+  color: blue !important;
+  //overflow: auto !important;
+  height: 50%;
 
-    mat-cell, mat-header-cell, mat-footer-cell {
-      overflow: visible;
-    }
+  mat-row {
+    height: 4em;
+    text-wrap: none;
+  }
 
-    .mat-column-calendarDate {
-      width: 100px;
-      min-width: 50px;
-      max-width: 100px;
-      padding-right: 5px;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  mat-header {
+    min-height: 32px !important
+  }
 
-    .mat-column-namespace {
-      width: 120px;
-      min-width: 100px;
-      max-width: 120px;;
-      padding-right: 10px;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  mat-cell, mat-header-cell, mat-footer-cell {
+    overflow-x: visible;
+  }
 
-    .mat-column-pod {
-      width: 120px;
-      min-width: 100px;
-      max-width:120px;;
-      //max-width: 7%;
-      padding-right: 10px;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  .mat-column-calendarDate {
+    width: 100px;
+    min-width: 50px;
+    max-width: 100px;
+    padding-right: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .mat-column-image {
-      //max-width: 7%;
-      width: 150px;
-      min-width: 100px;
-      max-width: 150px;;
-      padding-right: 10px;
-      //white-space: nowrap;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  .mat-column-namespace {
+    width: 120px;
+    min-width: 100px;
+    max-width: 120px;;
+    padding-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .mat-column-priority {
-      width: 100px;
-      min-width: 50px;
-      max-width:100px;
-      padding-right: 10px;
-      overflow: hidden;
-      white-space: nowrap;
-    }
+  .mat-column-pod {
+    width: 120px;
+    min-width: 100px;
+    max-width:120px;;
+    //max-width: 7%;
+    padding-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .mat-column-message {
-      //max-width: 60%;
-      //width: 200px;
-      min-width: 200px;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+  .mat-column-image {
+    //max-width: 7%;
+    width: 150px;
+    min-width: 100px;
+    max-width: 150px;;
+    padding-right: 10px;
+    //white-space: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .mat-column-priority {
+    width: 100px;
+    min-width: 50px;
+    max-width:100px;
+    padding-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .mat-column-message {
+    //max-width: 60%;
+    //width: 200px;
+    min-width: 200px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 .date-link{
