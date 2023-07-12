@@ -8,8 +8,8 @@
       <button mat-raised-button color="accent"  (click)="onClose()">Close</button>
     </div>
   </div>
-  <div id="modal-content">
-    <mat-card class="row" id="logDetails" appearance="outlined">
+  <div id="modal-content" class="row">
+    <mat-card id="logDetails" appearance="outlined">
       <table style="min-width: 500px">
         <tr>
           <th>Namespace</th> <td>{{namespace}}</td>
@@ -28,16 +28,26 @@
         </tr>
       </table>
     </mat-card>
-    <mat-card class="row" id="relatedEvents" appearance="outlined">
+    <mat-card id="relatedEvents" appearance="outlined">
       <div style="max-width: 100%;">
         <div id="relatedEventsTitle" class="page-title-button-group-spacing">
           <div class="page-card-title">
             Related Events
           </div >
-          <div >Signature: &nbsp;&nbsp;{{signature}}</div>
+          <div>Signature: &nbsp;&nbsp;{{signature}}</div>
         </div>
-        <div>
+        <div id="starDescription">
+          * denotes the current log
+        </div>
+        <div style="width: 100%; overflow-x: auto; overflow-y: visible">
           <mat-table id="related-event-table" [dataSource]="dataSource">
+            <ng-container matColumnDef="isCurrent">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let log" class="">
+                {{log.isCurrent ? '*' : ''}}
+              </mat-cell>
+              <mat-cell *matCellDef="let log" class="">*</mat-cell>
+            </ng-container>
             <ng-container matColumnDef="calendarDate">
               <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
               <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>

@@ -29,7 +29,7 @@ export class ShowJsonDataComponent implements OnInit {
   ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
-  displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
+  displayedColumns = ['isCurrent', 'calendarDate', 'namespace', 'pod', 'image', 'message'];
   namespace = this.data.content.namespace;
   date = this.data.content.calendarDate;
   dateTime  = new Date(+(this.data.content.timestamp));
@@ -62,10 +62,18 @@ export class ShowJsonDataComponent implements OnInit {
       .subscribe(response => {
         const dataList = response.data.list;
         // one less log count - without the current event log
-        this.logCount = response.data.logCount - 1;
+        // current problem: we pop out the one that matches the id of the current event log
+        // but if we say "-1", we remove the trigger that indicates there's another page
+        this.logCount = response.data.logCount;
 
         // create a new data list without the current event log
-        const newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        // const newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        const newDataList = [];
+        dataList.forEach((eventLog) => {
+          const modifiedEvent = structuredClone(eventLog);
+          modifiedEvent.isCurrent = eventLog.id === this.data.content.id;
+          newDataList.push(modifiedEvent);
+        });
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
