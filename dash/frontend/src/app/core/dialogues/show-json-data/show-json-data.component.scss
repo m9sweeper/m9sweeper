@@ -26,7 +26,7 @@ th, td{
       width: 100px;
       min-width: 50px;
       max-width: 100px;
-      margin-right: 5px;
+      padding-right: 5px;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -35,7 +35,7 @@ th, td{
       width: 120px;
       min-width: 100px;
       max-width: 120px;;
-      margin-right: 10px;
+      padding-right: 10px;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -45,7 +45,7 @@ th, td{
       min-width: 100px;
       max-width:120px;;
       //max-width: 7%;
-      margin-right: 10px;
+      padding-right: 10px;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -55,7 +55,7 @@ th, td{
       width: 150px;
       min-width: 100px;
       max-width: 150px;;
-      margin-right: 10px;
+      padding-right: 10px;
       //white-space: nowrap;
       overflow: hidden;
       white-space: nowrap;
@@ -65,7 +65,7 @@ th, td{
       width: 100px;
       min-width: 50px;
       max-width:100px;
-      margin-right: 10px;
+      padding-right: 10px;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -77,7 +77,6 @@ th, td{
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
-      white-space: nowrap;
     }
   }
 }

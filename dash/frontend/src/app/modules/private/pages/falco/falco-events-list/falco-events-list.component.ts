@@ -19,6 +19,7 @@ import {CsvService} from '../../../../../core/services/csv.service';
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AlertService} from '@full-fledged/alerts';
+import {UtilService} from '../../../../../core/services/util.service';
 
 
 @Component({
@@ -58,6 +59,7 @@ export class FalcoEventsListComponent implements OnInit {
     private router: Router,
     private jwtAuthService: JwtAuthService,
     private alertService: AlertService,
+    private utilService: UtilService,
   ) {}
 
   ngOnInit() {
@@ -115,7 +117,15 @@ export class FalcoEventsListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(response.data.list);
         this.logCount = response.data.logCount;
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        if (err?.error?.message) {
+          this.alertService.danger(err.error.message);
+        } else if (err?.error) {
+          this.alertService.danger(err.error);
+        } else if (err?.message) {
+          this.alertService.danger(err.message);
+        } else {
+          this.alertService.danger(err);
+        }
       });
 
   }
@@ -134,7 +144,6 @@ export class FalcoEventsListComponent implements OnInit {
       data: {content: event, header: 'Event Log Details'}
     });
   }
-
 
   downloadReport() {
     this.loaderService.start('csv-download');
@@ -184,16 +193,19 @@ export class FalcoEventsListComponent implements OnInit {
 
 
   openDialog() {
-    const dialog = this.dialog.open(FalcoDialogComponent, {
-      maxWidth: '1000px',
-      maxHeight: '80vh',
-      // width: '100%',
-      closeOnNavigation: true,
-      disableClose: false,
-      data: {
-        clusterId: this.clusterId,
-      }
-    });
+    const dialog = this.dialog.open(
+      FalcoDialogComponent,
+      {
+        maxWidth: '1000px',
+        maxHeight: '80vh',
+        // width: '100%',
+        closeOnNavigation: true,
+        disableClose: false,
+        data: {
+          clusterId: this.clusterId,
+        }
+      },
+    );
 
     dialog.afterClosed()
       .pipe(take(1))
@@ -207,19 +219,12 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   stripDomainName(image: string): string {
-
     if (!image) { return image; }
 
-    const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
-    const group = image.split(regex);
-    // strip domain, only image
-    if (group[2] !== undefined && group[3] === undefined){
-      return (group[2]);
-    } else if (group[3] !== undefined){
-      return (group[2] + group [3]);
-    } else if (group[2] === undefined){
-      return '';
-    }
+    // if we want to return the repository name with the domain stripped out, use this instead
+    // return this.utilService.getImageNameWithRepository(image);
+
+    return this.utilService.getImageName(image);
   }
 
   onClickSettings(){

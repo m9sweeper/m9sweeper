@@ -8,7 +8,8 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
 import { FalcoRuleCreateDto, FalcoRuleDto } from '../dto/falco-rule.dto';
-import {Knex} from 'knex';
+import { knex, Knex } from 'knex';
+import QueryBuilder = knex.QueryBuilder;
 
 
 @Injectable()
@@ -17,59 +18,60 @@ export class FalcoDao {
         private readonly databaseService: DatabaseService,
     ) {}
 
-    async getFalcoLogs(
-        clusterId: number,
-        limit = 20,
-        page = 0,
-        priorities?: string [],
-        orderBy?: string,
-        startDate?: string,
-        endDate?: string,
-        namespace?: string,
-        pod?: string,
-        image?: string,
-        signature?: string,
-    ): Promise<{ logCount: number, list: FalcoDto[],}> {
-        const knex = await this.databaseService.getConnection();
-
-        // set limit to the less of 1000 or whatever is provided
-        limit = Math.min(limit, 1000);
-
+    private async buildFalcoLogQuery(
+      knex: Knex<any, any[]>,
+      clusterId: number,
+      priorities?: string [],
+      orderBy?: string,
+      startDate?: string,
+      endDate?: string,
+      namespace?: string,
+      pod?: string,
+      image?: string,
+      ): Promise<Knex.QueryBuilder> {
         let query = knex.select()
-            .from('project_falco_logs')
-            .where('cluster_id', clusterId);
+          .from('project_falco_logs')
+          .where('cluster_id', clusterId);
 
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
+        const relevantOrderBys = [
+          'Priority Desc',
+          'Priority Asc',
+          'Date Desc',
+          'Date Asc',
+          null,
+          undefined,
+        ];
+        if (orderBy in relevantOrderBys) {
             switch (orderBy) {
                 case 'Priority Desc':
                     query = query.orderByRaw(
-                        'CASE ' +
-                        ' WHEN level = \'Emergency\' then 1' +
-                        ' WHEN level = \'Alert\' then 2' +
-                        ' WHEN level = \'Critical\' then 3' +
-                        ' WHEN level = \'Error\' then 4' +
-                        ' WHEN level = \'Warning\' then 5' +
-                        ' WHEN level = \'Notice\' then 6' +
-                        ' WHEN level = \'Informational\' then 7' +
-                        ' WHEN level = \'Debug\' then 8' +
-                        'END'
+                      'CASE ' +
+                      ' WHEN level = \'Emergency\' then 1' +
+                      ' WHEN level = \'Alert\' then 2' +
+                      ' WHEN level = \'Critical\' then 3' +
+                      ' WHEN level = \'Error\' then 4' +
+                      ' WHEN level = \'Warning\' then 5' +
+                      ' WHEN level = \'Notice\' then 6' +
+                      ' WHEN level = \'Informational\' then 7' +
+                      ' WHEN level = \'Debug\' then 8' +
+                      'END'
                     );
                     break;
                 case 'Priority Asc':
                     query = query.orderByRaw(
-                        'CASE ' +
-                        ' WHEN level = \'Debug\' then 1' +
-                        ' WHEN level = \'Informational\' then 2' +
-                        ' WHEN level = \'Notice\' then 3' +
-                        ' WHEN level = \'Warning\' then 4' +
-                        ' WHEN level = \'Error\' then 5' +
-                        ' WHEN level = \'Critical\' then 6' +
-                        ' WHEN level = \'Alert\' then 7' +
-                        ' WHEN level = \'Emergency\' then 8' +
-                        'END'
+                      'CASE ' +
+                      ' WHEN level = \'Debug\' then 1' +
+                      ' WHEN level = \'Informational\' then 2' +
+                      ' WHEN level = \'Notice\' then 3' +
+                      ' WHEN level = \'Warning\' then 4' +
+                      ' WHEN level = \'Error\' then 5' +
+                      ' WHEN level = \'Critical\' then 6' +
+                      ' WHEN level = \'Alert\' then 7' +
+                      ' WHEN level = \'Emergency\' then 8' +
+                      'END'
                     );
                     break;
                 case 'Date Desc':
@@ -102,10 +104,108 @@ export class FalcoDao {
             query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
         }
 
-        if(signature){
+        return query;
+    }
+
+    async getFalcoLogs(
+        clusterId: number,
+        limit = 20,
+        page = 0,
+        priorities?: string [],
+        orderBy?: string,
+        startDate?: string,
+        endDate?: string,
+        namespace?: string,
+        pod?: string,
+        image?: string,
+        signature?: string,
+    ): Promise<{ logCount: number, list: FalcoDto[],}> {
+        const knex = await this.databaseService.getConnection();
+
+        // for some reason, the returned query never makes it back. it hits the return statement then gets lost somewhere
+        // let query = await this.buildFalcoLogQuery(knex, clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image);
+
+        let query = knex.select()
+          .from('project_falco_logs')
+          .where('cluster_id', clusterId);
+
+        if (priorities) {
+            query = query.whereIn('level', priorities);
+        }
+        const relevantOrderBys = [
+            'Priority Desc',
+            'Priority Asc',
+            'Date Desc',
+            'Date Asc',
+            null,
+            undefined,
+        ];
+        if (orderBy in relevantOrderBys) {
+            switch (orderBy) {
+                case 'Priority Desc':
+                    query = query.orderByRaw(
+                      'CASE ' +
+                      ' WHEN level = \'Emergency\' then 1' +
+                      ' WHEN level = \'Alert\' then 2' +
+                      ' WHEN level = \'Critical\' then 3' +
+                      ' WHEN level = \'Error\' then 4' +
+                      ' WHEN level = \'Warning\' then 5' +
+                      ' WHEN level = \'Notice\' then 6' +
+                      ' WHEN level = \'Informational\' then 7' +
+                      ' WHEN level = \'Debug\' then 8' +
+                      'END'
+                    );
+                    break;
+                case 'Priority Asc':
+                    query = query.orderByRaw(
+                      'CASE ' +
+                      ' WHEN level = \'Debug\' then 1' +
+                      ' WHEN level = \'Informational\' then 2' +
+                      ' WHEN level = \'Notice\' then 3' +
+                      ' WHEN level = \'Warning\' then 4' +
+                      ' WHEN level = \'Error\' then 5' +
+                      ' WHEN level = \'Critical\' then 6' +
+                      ' WHEN level = \'Alert\' then 7' +
+                      ' WHEN level = \'Emergency\' then 8' +
+                      'END'
+                    );
+                    break;
+                case 'Date Desc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
+                    break;
+                case 'Date Asc':
+                    query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
+                    break;
+                default:
+                    query = query.orderBy([{column: 'id', order: 'desc'}]);
+            }
+        }
+
+        if (startDate) {
+            query = query.andWhere('calendar_date', '>=', startDate);
+        }
+        if (endDate) {
+            query = query.andWhere('calendar_date', '<=', endDate);
+        }
+
+        if (namespace) {
+            query = query.whereRaw(`namespace LIKE ?`, [`%${namespace.trim()}%`]);
+        }
+
+        if (pod) {
+            query = query.whereRaw(`container LIKE ?`, [`%${pod.trim()}%`]);
+        }
+
+        if (image) {
+            query = query.whereRaw(`image LIKE ?`, [`%${image.trim()}%`]);
+        }
+
+        if (signature){
             query.where('anomaly_signature', signature);
         }
 
+        // set limit to whichever is lower: 1000 or whatever is provided
+        limit = Math.min(limit, 1000);
         query = query.limit(limit).offset(page * limit) // limit: page size
 
         // Filtered list per page for pagination
@@ -139,41 +239,52 @@ export class FalcoDao {
     ): Promise<{ csvLogList: FalcoDto[] }> {
         const knex = await this.databaseService.getConnection();
 
+        // for some reason, the returned query never makes it back. it hits the return statement then gets lost somewhere
+        // let query = await this.buildFalcoLogQuery(knex, clusterId, priorities, orderBy, startDate, endDate, namespace, pod, image);
+
         let query = knex.select()
-            .from('project_falco_logs')
-            .where('cluster_id', clusterId);
+          .from('project_falco_logs')
+          .where('cluster_id', clusterId);
 
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-        if (orderBy == 'Priority Desc' || orderBy =='Priority Asc' ||  orderBy =='Date Desc'||  orderBy =='Date Asc' ||  orderBy == null ||  orderBy == undefined) {
+        const relevantOrderBys = [
+            'Priority Desc',
+            'Priority Asc',
+            'Date Desc',
+            'Date Asc',
+            null,
+            undefined,
+        ];
+        if (orderBy in relevantOrderBys) {
             switch (orderBy) {
                 case 'Priority Desc':
                     query = query.orderByRaw(
-                        'CASE ' +
-                        ' WHEN level = \'Emergency\' then 1' +
-                        ' WHEN level = \'Alert\' then 2' +
-                        ' WHEN level = \'Critical\' then 3' +
-                        ' WHEN level = \'Error\' then 4' +
-                        ' WHEN level = \'Warning\' then 5' +
-                        ' WHEN level = \'Notice\' then 6' +
-                        ' WHEN level = \'Informational\' then 7' +
-                        ' WHEN level = \'Debug\' then 8' +
-                        'END'
+                      'CASE ' +
+                      ' WHEN level = \'Emergency\' then 1' +
+                      ' WHEN level = \'Alert\' then 2' +
+                      ' WHEN level = \'Critical\' then 3' +
+                      ' WHEN level = \'Error\' then 4' +
+                      ' WHEN level = \'Warning\' then 5' +
+                      ' WHEN level = \'Notice\' then 6' +
+                      ' WHEN level = \'Informational\' then 7' +
+                      ' WHEN level = \'Debug\' then 8' +
+                      'END'
                     );
                     break;
                 case 'Priority Asc':
                     query = query.orderByRaw(
-                        'CASE ' +
-                        ' WHEN level = \'Debug\' then 1' +
-                        ' WHEN level = \'Informational\' then 2' +
-                        ' WHEN level = \'Notice\' then 3' +
-                        ' WHEN level = \'Warning\' then 4' +
-                        ' WHEN level = \'Error\' then 5' +
-                        ' WHEN level = \'Critical\' then 6' +
-                        ' WHEN level = \'Alert\' then 7' +
-                        ' WHEN level = \'Emergency\' then 8' +
-                        'END'
+                      'CASE ' +
+                      ' WHEN level = \'Debug\' then 1' +
+                      ' WHEN level = \'Informational\' then 2' +
+                      ' WHEN level = \'Notice\' then 3' +
+                      ' WHEN level = \'Warning\' then 4' +
+                      ' WHEN level = \'Error\' then 5' +
+                      ' WHEN level = \'Critical\' then 6' +
+                      ' WHEN level = \'Alert\' then 7' +
+                      ' WHEN level = \'Emergency\' then 8' +
+                      'END'
                     );
                     break;
                 case 'Date Desc':
@@ -300,7 +411,10 @@ export class FalcoDao {
         const knex = await this.databaseService.getConnection();
 
         // see if any settings matches the clusterid
-        const query = plainToInstance(FalcoSettingDto, await knex.select().from('falco_settings').where('cluster_id', clusterId));
+        const query = plainToInstance(
+          FalcoSettingDto,
+          await knex.select().from('falco_settings').where('cluster_id', clusterId)
+        );
 
         // if there is, return the record
         if (query.length > 0){

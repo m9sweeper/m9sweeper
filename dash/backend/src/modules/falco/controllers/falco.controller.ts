@@ -47,7 +47,6 @@ export class FalcoController {
         private readonly authService: AuthService,
         protected readonly logger: MineLoggerService
         // private readonly falcoEmailCommand: FalcoEmailCommand,
-
     ) {}
 
     @Get()
@@ -166,7 +165,8 @@ export class FalcoController {
                 clusterId,
                 namespace: falcoLog?.outputFields?.k8sNamespaceName,
                 rule: falcoLog?.rule,
-                image: falcoLog?.outputFields?.containerImageRepository,
+                image: falcoLog?.outputFields?.containerImage,
+                imageRepository: falcoLog?.outputFields?.containerImageRepository,
             });
             return;
         }

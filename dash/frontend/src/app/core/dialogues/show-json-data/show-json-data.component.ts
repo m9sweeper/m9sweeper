@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
+import {UtilService} from '../../services/util.service';
 
 
 @Component({
@@ -16,14 +17,16 @@ import {AlertService} from '@full-fledged/alerts';
 export class ShowJsonDataComponent implements OnInit {
   header: string;
 
-  constructor(public dialogRef: MatDialogRef<ShowJsonDataComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
-              private route: ActivatedRoute,
-              private router: Router,
-              private falcoService: FalcoService,
-              private dialog: MatDialog,
-              private alertService: AlertService,
-  ) { }
+  constructor(
+    public dialogRef: MatDialogRef<ShowJsonDataComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
+    private route: ActivatedRoute,
+    private router: Router,
+    private falcoService: FalcoService,
+    private dialog: MatDialog,
+    private alertService: AlertService,
+    private utilService: UtilService,
+  ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
   displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
@@ -66,21 +69,18 @@ export class ShowJsonDataComponent implements OnInit {
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        if (err?.error?.message) {
+          this.alertService.danger(err.error.message);
+        } else if (err?.error) {
+          this.alertService.danger(err.error);
+        } else {
+          this.alertService.danger(err);
+        }
       });
   }
 
   stripDomainName(image: string): string {
-    const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
-    const group = image.split(regex);
-    // strip domain, only image
-    if (group[2] !== undefined && group[3] === undefined){
-      return (group[2]);
-    } else if (group[3] !== undefined){
-      return (group[2] + group [3]);
-    } else if (group[2] === undefined){
-      return '';
-    }
+    return this.utilService.getImageName(image);
   }
 
   getLimitFromLocalStorage(): string | null {
@@ -93,7 +93,6 @@ export class ShowJsonDataComponent implements OnInit {
 
   onClickMore(){
     this.dialogRef.close();
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'more', this.eventId, 'signature', this.signature]);
   }
 
   onClose() {

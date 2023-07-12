@@ -9,6 +9,7 @@ import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ChartSizeService} from '../../services/chart-size.service';
+import {UtilService} from '../../services/util.service';
 
 @Component({
   selector: 'app-show-json-data-more',
@@ -19,12 +20,13 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   header: string;
 
   constructor(
-              private route: ActivatedRoute,
-              private falcoService: FalcoService,
-              private alertService: AlertService,
-              private dialog: MatDialog,
-              private chartSizeService: ChartSizeService,
-  ) { }
+    private route: ActivatedRoute,
+    private falcoService: FalcoService,
+    private alertService: AlertService,
+    private dialog: MatDialog,
+    private chartSizeService: ChartSizeService,
+    private utilService: UtilService,
+  ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
   displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
@@ -79,7 +81,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     this.currentCardSize = 'col-sm-6';
 
     this.getEventById();
-    this.getRelatedEvents();
 
     this.buildBarChartData();
   }
@@ -93,7 +94,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
     this.getEventById();
-    this.getRelatedEvents();
     this.buildBarChartData();
 
   }
@@ -110,6 +110,9 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
         this.raw = response.data.raw;
         this.extractProperty = this.extractProperties(this.raw);
         this.eventData = response.data;
+
+        // all calls to related events are moved here to avoid a race condition
+        this.getRelatedEvents();
       }, (err) => {
         this.alertService.danger(err.error.message);
       });
@@ -133,16 +136,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   }
 
   stripDomainName(image: string): string {
-    const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
-    const group = image.split(regex);
-    // strip domain, only image
-    if (group[2] !== undefined && group[3] === undefined){
-      return (group[2]);
-    } else if (group[3] !== undefined){
-      return (group[2] + group [3]);
-    } else if (group[2] === undefined){
-      return '';
-    }
+    return this.utilService.getImageName(image);
   }
 
   getLimitFromLocalStorage(): string | null {
@@ -218,7 +212,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   displayEventDetails(event: IFalcoLog) {
     this.eventId = event.id;
     this.getEventById();
-    this.getRelatedEvents();
   }
 
   @HostListener('window:resize', ['$event'])
