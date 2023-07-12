@@ -251,7 +251,7 @@ export class ReportsDao {
     }
 
     async getRunningVulnerabilities(
-      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string}
+      clusterId?: number, options?: {namespaces?: Array<string>, limit?: number, isCompliant?: string, page?: number, }
     ): Promise<ReportsRunningVulnerabilitiesPreviewDto> {
         const {  query, knex } = await this.getRunningVulnerabilitiesQuery(clusterId, options);
 
@@ -263,6 +263,9 @@ export class ReportsDao {
 
         if (options?.limit) {
             query.limit(options.limit);
+        }
+        if (options?.page && options?.limit) {
+            query.offset(options.page * options.limit);
         }
 
         // @ts-ignore
@@ -292,7 +295,7 @@ export class ReportsDao {
       return outerquery.first().then(result => plainToInstance(ReportsRunningVulnerabilitiesSummaryDto, result));
     }
 
-    async getHistoricalRunningVulnerabilities(clusterId: number, date: string, options: {limit?: number, namespaces?: string[], isCompliant?: string})
+    async getHistoricalRunningVulnerabilities(clusterId: number, date: string, options: {limit?: number, namespaces?: string[], isCompliant?: string, page?: number})
         : Promise<ReportsRunningVulnerabilitiesPreviewDto> {
         const knex = await this.databaseService.getConnection();
 
@@ -354,6 +357,9 @@ export class ReportsDao {
 
         if (options?.limit) {
             query.limit(options.limit);
+        }
+        if (options?.page && options?.limit) {
+            query.offset(options.page * options.limit);
         }
 
         const queryResults = await query.then((response) => {

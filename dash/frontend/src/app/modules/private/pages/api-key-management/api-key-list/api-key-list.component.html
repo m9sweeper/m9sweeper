@@ -39,12 +39,12 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-          <mat-paginator
-            [length]="totalCount"
-            [pageSize]="limit"
-            [pageSizeOptions]="[10, 20, 50, 100]"
-            (page)="pageEvent($event)"
-            showFirstLastButtons></mat-paginator>
+        <mat-paginator
+          [length]="totalCount"
+          [pageSize]="limit"
+          [pageSizeOptions]="[10, 20, 50, 100]"
+          (page)="pageEvent($event)"
+          showFirstLastButtons></mat-paginator>
       </div>
     </div>
 </div>

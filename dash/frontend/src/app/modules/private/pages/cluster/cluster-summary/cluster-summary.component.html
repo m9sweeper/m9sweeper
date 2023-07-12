@@ -192,25 +192,27 @@
         </mat-card>
       </div>
     </div>
-    <div class="cluster-events no-padding col-xs-12">
-      <mat-card appearance="outlined" class="cluster-events-card">
-        <h3>Logs</h3>
-        <div
-          class="search-results"
-          infiniteScroll
-          [infiniteScrollDistance]="2"
-          [infiniteScrollThrottle]="50"
-          (scrolled)="onScroll()"
-          [scrollWindow]="false">
-          <table>
-            <tbody>
-            <tr mdbTableCol [ngClass]="event.level === 'Error' ? 'cluster-error-event' : ''" *ngFor="let event of clusterEvents">
-              <td (click)="openEventDetailsDialog(event)">{{(event?.createdDate) | date: 'yyyy-MM-dd hh:mm:ss'}}: {{event.description}}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </mat-card>
+    <div class="row cluster-page-row" id="cluster-events">
+      <div class="col-xs-12 no-padding">
+        <mat-card appearance="outlined" id="cluster-events-card">
+          <h3>Logs</h3>
+          <div
+            id="cluster-event-items"
+            infiniteScroll
+            [infiniteScrollDistance]="2"
+            [infiniteScrollThrottle]="50"
+            (scrolled)="onScroll()"
+            [scrollWindow]="false">
+            <table>
+              <tbody>
+              <tr mdbTableCol [ngClass]="event.level === 'Error' ? 'cluster-error-event' : ''" *ngFor="let event of clusterEvents">
+                <td (click)="openEventDetailsDialog(event)">{{(event?.createdDate) | date: 'yyyy-MM-dd hh:mm:ss'}}: {{event.description}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

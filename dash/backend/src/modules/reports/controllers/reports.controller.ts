@@ -73,11 +73,12 @@ export class ReportsController {
         @Query('namespaces') namespaces?: Array<string>,
         @Query('date') date?: string,
         @Query('compliant') isCompliant?: string,
+        @Query('page') page?: string,
     ) {
         if (!limit || limit < 1 || limit > 100) {
-            throw new BadRequestException();
+            throw new BadRequestException('Please provide a limit between 1 and 100');
         }
-        return this.reportsService.getRunningVulnerabilities(limit, clusterId, namespaces, isCompliant, date);
+        return this.reportsService.getRunningVulnerabilities(limit, clusterId, namespaces, isCompliant, date, page);
     }
 
     @Get('/running-vulnerabilities/download')

@@ -1,4 +1,5 @@
 import {Authority} from '../../../../core/enum/Authority';
+import {IsActiveMatchOptions} from '@angular/router';
 
 export class IMenuItem {
   name: string;
@@ -14,4 +15,7 @@ export class IMenuItem {
     classes?: string
   };
   allowedRoles?: Authority[];
+  routerLinkActiveOptions?: {
+    exact: boolean;
+  } | IsActiveMatchOptions;
 }
