@@ -17,7 +17,7 @@
             </mat-expansion-panel-header>
 
               <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
-                <mat-checkbox #checkboxes id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
+                <mat-checkbox class="no-padding" id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
               </div>
           </mat-expansion-panel>
         </div>
