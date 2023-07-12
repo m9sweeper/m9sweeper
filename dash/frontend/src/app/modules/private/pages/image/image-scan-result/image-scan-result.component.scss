@@ -121,7 +121,9 @@
 
 .issues-list {
   width: 99.5%;
+  overflow-x: auto;
   // try setting min widths with percentages
+ /*
   .mat-column-scanner {
     width: 10%;
     padding-right: 5px;
@@ -150,13 +152,14 @@
     width: 5%;
   }
 
+  */
+
   div.mat-elevation-z8 {
     overflow-x: auto;
     @media all and (max-width: 685px) {
       overflow-x: scroll;
     }
   }
-
 }
 
 .advanced-search {
@@ -187,7 +190,7 @@ mat-paginator {
 
 
 .type-margin {
-  margin-top: 24px;
+  margin-top: 20px;
 
 }
 
