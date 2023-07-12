@@ -2,7 +2,6 @@ import {NavServiceInterface} from './nav-service.interface';
 import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
 import {Injectable, OnDestroy} from '@angular/core';
-import {AddClusterWizardComponent} from '../../pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
 import {MatDialog} from '@angular/material/dialog';
 import {ClusterGroupService} from '../../../../core/services/cluster-group.service';
 import {BehaviorSubject} from 'rxjs';
@@ -94,29 +93,9 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       data: {}
     });
     confirmDialog.afterClosed().subscribe(result => {
-      if (result === undefined) {
+      if (result === true) {
         parent.buildClusterMenu();
       }
     });
   }
-  openDefaultCreateClusterDialog(parent: ClusterListMenuService) {
-    console.log(parent);
-    const openAddCluster = parent.dialog.open(
-      AddClusterWizardComponent,
-      {
-        width: '900px',
-        height: '75%',
-        minHeight: '300px',
-        closeOnNavigation: true,
-        disableClose: true,
-        data: { groupId:  null},
-      }
-    );
-    openAddCluster.afterClosed().subscribe(response => {
-      if (response && response?.result === true) {
-        parent.buildClusterMenu();
-      }
-    });
-  }
-
 }
