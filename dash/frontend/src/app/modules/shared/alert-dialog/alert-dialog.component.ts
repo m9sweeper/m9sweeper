@@ -37,7 +37,7 @@ export class AlertDialogComponent {
     }
   }
 
-  onNoClick(){
+  cancel(){
     this.matDialogRef.close(false);
   }
 
