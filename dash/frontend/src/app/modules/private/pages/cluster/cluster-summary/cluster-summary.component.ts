@@ -171,8 +171,13 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
       this.innerScreenWidth = innerWindow.offsetWidth;
       this.updateFormatting();
-      this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, this.innerScreenWidth);
+      this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(
+        window.innerWidth - 10, this.innerScreenWidth,
+        40,
+        30, 20,
+        16, 10,
+        this.breakpointLarge, this.breakpointMedium,
+      );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
     }, 50);

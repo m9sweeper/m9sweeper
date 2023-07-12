@@ -12,12 +12,12 @@ import { ImageService } from '../../../../../core/services/image.service';
 import { AlertService } from '@full-fledged/alerts';
 import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dialog/generic-error-dialog.component';
-import {SharedSubscriptionService} from '../../../../../core/services/shared.subscription.service';
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
 import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-cluster-list',
@@ -41,9 +41,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   barPadding = 25;
   width: number;
   height: number;
-  isChartInSmallDevice: boolean;
   subNavigationData: any;
-  expandStatus: boolean;
   resizeTimeout;
   currentCardSize = 'col-xs-12 col-md-6 col-lg-4';
 
@@ -116,19 +114,19 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
-  constructor(private clusterService: ClusterService,
-              private clusterGroupService: ClusterGroupService,
-              private sharedSubscriptionService: SharedSubscriptionService,
-              private deploymentService: DeploymentService,
-              private podService: PodService,
-              private imageService: ImageService,
-              private alertService: AlertService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private dialog: MatDialog,
-              private chartSizeService: ChartSizeService,
-              )
-  {
+  constructor(
+    private clusterService: ClusterService,
+    private clusterGroupService: ClusterGroupService,
+    private deploymentService: DeploymentService,
+    private podService: PodService,
+    private imageService: ImageService,
+    private alertService: AlertService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
+    private chartSizeService: ChartSizeService,
+    private breakpointObserver: BreakpointObserver,  // @TODO: implement observations to set the breakpoints instead of using the set numbers in various components
+  ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
       title: 'Cluster List',
@@ -140,8 +138,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.width = ((window.innerWidth - 20) * 10) / 12;
     this.height = window.innerHeight;
     // default column sizes before calculating them
-    document.documentElement.style.setProperty('--cluster-container-height', `${this.height}px`);
-    document.documentElement.style.setProperty('--cluster-container-width', `${this.width}px`);
     this.route.params.subscribe(routeParams => {
       this.groupId = +routeParams.groupId;
       this.clusterGroupService.getClusterGroupById(+routeParams.groupId)
@@ -159,13 +155,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(updatedClusterGroup => {
       this.clusterGroupName = updatedClusterGroup.name;
     });
-    this.sharedSubscriptionService.getCurrentExpandStatus()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(status => {
-        this.expandStatus = status;
-        // this.setChartHeightWidth();
-    });
-    this.expandStatus = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
   }
 
   ngAfterViewInit() {
@@ -184,12 +173,20 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
       const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
+      console.log({innerWindow, offsetWidth: innerWindow.offsetWidth, offsetHeight: innerWindow.offsetHeight});
+      console.log({complianceSummaryLineChartCard: document.getElementById('complianceSummaryLineChartCard')});
       this.innerScreenWidth = innerWindow.offsetWidth;
-      this.isChartInSmallDevice = window.innerWidth <= 500;
-      this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, this.innerScreenWidth);
+      const newDimensions = this.chartSizeService.getDashboardChartSize(
+        window.innerWidth - 10, this.innerScreenWidth,
+        40,
+        30, 20,
+        16, 10,
+        this.breakpointLarge, this.breakpointMedium,
+      );
+      this.lineChartAttributes.view = newDimensions;
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
+      console.log({lineChartDimensions: this.lineChartAttributes.view, barChartDimensions: this.barChartAttributes.view, complianceSummaryLineChartDimensions: this.complianceSummaryLineChartAttributes.view});
       // this.updateFormatting();
     } , 50);
   }
@@ -208,23 +205,13 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   set scrHeight(val: number) {
     if (val !== this.height) {
       this.height = val;
-      document.documentElement.style.setProperty('--cluster-container-height', `${this.height}px`);
     }
-  }
-
-  get scrHeight(): number {
-    return this.height;
   }
 
   set scrWidth(val: number) {
     if (val !== this.width) {
       this.width = ((val - 20) * 10) / 12;
-      document.documentElement.style.setProperty('--cluster-container-width', `${this.width}px`);
     }
-  }
-
-  get scrWidth(): number {
-    return this.width;
   }
 
   ngOnDestroy() {
