@@ -153,6 +153,11 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.setChartHeightWidth();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   @HostListener('window:resize', ['$event'])
   calculateScreenSize($event?: any) {
     this.setChartHeightWidth();
@@ -175,11 +180,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
     } , 50);
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   getClustersByClusterGroupId(groupId: number) {
