@@ -156,7 +156,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
       this.isDatePicker = false;
       this.namespaceService.getAllNamespacesBySelectedDate(this.clusterId,
         this.formatData(this.startTime).split(' ')[0], this.formatData(this.endTime).split(' ')[0], this.limit, this.page, this.sort).subscribe((response: IServerResponse<INamespace[]>) => {
-          this.dataSource = new MatTableDataSource(response.data);
+          this.dataSource = new MatTableDataSource(response.data || []);
           this.dataSource.sort = this.sort;
         },
         error => {

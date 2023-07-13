@@ -1,28 +1,25 @@
-<div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
-
-    <div class="mat-dialog-container" style="overflow-y: hidden;">
-      <mat-toolbar color="primary">
+<div mat-dialog-content class="modal-container-margin no-padding">
+  <mat-toolbar color="primary">
         <h3 class="header-left">Library</h3>
         <h3 class="header-right">Add Constraint Template(s)</h3>
       </mat-toolbar>
-
-    <mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav-container class="example-container" autosize>
       <mat-sidenav #sidenav class="sidenav" mode="side" opened="true" style="height: 600px">
-        <div *ngFor="let dir of topDirs" >
-          <mat-list-item (click)="displaySubMenu(dir)" >
-            <mat-icon mat-list-item-icon>home</mat-icon>
-            <span class="full-width">{{dir}}</span>
+        <div *ngFor="let dir of topDirs">
+          <mat-expansion-panel class="no-padding">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>home</mat-icon>
+                <span class="margin-left-7">
+                  {{dir}}
+                </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-            <mat-icon class="menu-button" [ngClass]="{'rotated' : submenuStatus[dir]}">expand_more</mat-icon>
-          </mat-list-item>
-          <div class="submenu" style="height:280px" [ngClass]="{'expanded' : submenuStatus[dir]}" [style]="{'display': submenuStatus[dir] ? '' : 'none'}">
-            <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
-              <a  href="javascript:void(0)">
-                <mat-checkbox #checkboxes id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
-              </a>
-            </div>
-          </div>
+              <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
+                <mat-checkbox class="no-padding" id="{{subDir}}" (change)="loadTemplate(dir, subDir, $event)" >{{subDir}}</mat-checkbox>
+              </div>
+          </mat-expansion-panel>
         </div>
       </mat-sidenav>
 
@@ -53,9 +50,5 @@
           </div>
         </div>
       </mat-sidenav-content>
-
     </mat-sidenav-container>
-
-    </div>
-  </div>
 </div>

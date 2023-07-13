@@ -10,10 +10,11 @@ import {
 import {MatSidenav} from '@angular/material/sidenav';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {IGatekeeperTemplate, IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
+import {IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-constraint-dialog',
@@ -23,45 +24,38 @@ import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 export class AddConstraintDialogComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChildren('checkboxes') checkboxes: QueryList<ElementRef<MatCheckbox>>;
-  isExpanded = true;
-  showSubmenu = false;
-  isShowing = false;
-  showSubSubMenu = false;
-  // encapsulation: ViewEncapsulation.None;
+
   clusterId: number;
   topDirs: string[];
   dirStructure: { [dirName: string]: string[] };
-  submenuStatus = {};
   currentlySelectedTemplates: IGSelectedTemplate[] = [];
 
   constructor(private gateKeeperService: GateKeeperService,
               private dialogRef: MatDialogRef<AddConstraintDialogComponent>,
               private alertService: AlertService,
               private dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) public data) {
+              @Inject(MAT_DIALOG_DATA) public data) {  }
 
+  ngOnInit(): void {
     this.clusterId = this.data.clusterId;
-    this.gateKeeperService.gateKeeperTemplateDirList(this.clusterId).subscribe(dirs => {
-      this.dirStructure = dirs;
-      this.topDirs = Object.keys(dirs);
-      for (const dir of this.topDirs) {
-        this.submenuStatus[dir] = false;
+    this.gateKeeperService.gateKeeperTemplateDirList(this.clusterId)
+      .pipe(take(1)).subscribe({
+      next: (dirs) => {
+        this.dirStructure = dirs;
+        this.topDirs = Object.keys(dirs);
       }
     });
   }
 
-  ngOnInit(): void {
-  }
-
-  displaySubMenu(dirName: string) {
-      this.submenuStatus[dirName] = this.submenuStatus[dirName] === false;
-  }
-
   loadTemplate(dir: string, subDir: string, $event) {
     if ($event.checked) {
-      this.gateKeeperService.loadGateKeeperTemplate(this.clusterId, dir, subDir).subscribe(template => {
-        this.currentlySelectedTemplates.push({selectedTemplate: template, selectedTemplateName: subDir, selectedTopDir: dir, displayTemplateContent: true});
-      });
+      this.gateKeeperService.loadGateKeeperTemplate(this.clusterId, dir, subDir)
+        .pipe(take(1))
+        .subscribe({
+          next: template => {
+            this.currentlySelectedTemplates.push({selectedTemplate: template, selectedTemplateName: subDir, selectedTopDir: dir, displayTemplateContent: true});
+          }
+        });
     } else {
       this.currentlySelectedTemplates = this.currentlySelectedTemplates.filter(t => t.selectedTemplateName !== subDir);
     }
@@ -69,14 +63,18 @@ export class AddConstraintDialogComponent implements OnInit {
 
   deployMultipleGateKeeperTemplates() {
     const templates = this.currentlySelectedTemplates.map(t => `${t.selectedTopDir}/${t.selectedTemplateName}`);
-    this.gateKeeperService.deployMultipleGateKeeperTemplates(this.clusterId, templates).subscribe(response => {
-      if (response.data.statusCode === 200) {
-        this.alertService.success(response.data.message);
-      }
-      else {
-        this.alertService.danger(response.data.message);
-      }
-    });
+    this.gateKeeperService.deployMultipleGateKeeperTemplates(this.clusterId, templates)
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response.data.statusCode === 200) {
+            this.alertService.success(response.data.message);
+          }
+          else {
+            this.alertService.danger(response.data.message);
+          }
+        }
+      });
     this.dialogRef.close({reloadData: true});
   }
 
@@ -93,13 +91,17 @@ export class AddConstraintDialogComponent implements OnInit {
       disableClose: false,
       data: {clusterId: this.clusterId, dir: template.selectedTopDir, subDir: template.selectedTemplateName}
     });
-    openAddConstraint.afterClosed().subscribe(response => {
-      if (response && response.closeParentDialog) {
-        setTimeout(() => {
-          this.dialogRef.close({reload: true});
-        }, 1000);
-      }
-    });
+    openAddConstraint.afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response && response.closeParentDialog) {
+            setTimeout(() => {
+              this.dialogRef.close({reload: true});
+            }, 1000);
+          }
+        }
+      });
   }
 
   unselectTemplate(template: IGSelectedTemplate, $event: MatCheckboxChange) {

@@ -202,7 +202,7 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  openAddGroupDialog() {
+  openUpdateUserProfile() {
     const confirmDialog = this.dialog.open(UpdateUserProfileComponent, {
       width: '500px',
       closeOnNavigation: true,

@@ -5,23 +5,22 @@
     </div>
 
     <div class="page-card-left-align">
-      <div class="row">
-
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3" style="height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined">
+      <div class="row align-items-stretch">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-5 margin-y-5">
+          <mat-card appearance="outlined" class="h-100">
             <mat-card-header>
               <div class="page-card-title">Status:</div>
             </mat-card-header>
             <mat-card-content>
-              <h3 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h3>
-              <h3 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h3>
-              <h3 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h3>
+              <h2 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h2>
+              <h2 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h2>
+              <h2 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h2>
             </mat-card-content>
           </mat-card>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-y-5">
+          <mat-card appearance="outlined" class="h-100">
             <mat-card-header>
               <div class="page-card-title">Recommendation:</div>
             </mat-card-header>
@@ -59,8 +58,8 @@
           </mat-card>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3" style="height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined" class="box">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-y-5">
+          <mat-card appearance="outlined" class="box h-100">
             <mat-card-header>
               <div class="page-card-title">License:</div>
             </mat-card-header>

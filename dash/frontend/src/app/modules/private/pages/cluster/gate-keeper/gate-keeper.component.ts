@@ -2,14 +2,13 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import { Observable } from 'rxjs';
-import {IGateKeeperConstraint, IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
+import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {MatDialog} from '@angular/material/dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
-import {FalcoDialogComponent} from '../../falco/falco-dialog/falco-dialog.component';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 
 @Component({
@@ -74,7 +73,6 @@ export class GateKeeperComponent implements OnInit {
       height: '800px',
       closeOnNavigation: true,
       disableClose: false,
-      panelClass: ['remove-dialog-padding', 'example-toolbar'],
       data: {clusterId: this.clusterId}
     });
 
