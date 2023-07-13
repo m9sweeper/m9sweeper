@@ -55,64 +55,30 @@ export class ChartSizeService implements OnInit, OnDestroy {
     }
   }
 
-  calculateNumElementsInRow(numElementsByScreenSize: {xs: number, s: number, m: number, l: number, xl: number}): number {
-    let numElements = 1;
-    switch (this.currentBreakpoint) {
-      case Breakpoints.XSmall:
-        numElements = numElementsByScreenSize.xs;
-        break;
-      case Breakpoints.Small:
-        numElements = numElementsByScreenSize.s;
-        break;
-      case Breakpoints.Medium:
-        numElements = numElementsByScreenSize.m;
-        break;
-      case Breakpoints.Large:
-        numElements = numElementsByScreenSize.l;
-        break;
-      case Breakpoints.XLarge:
-        numElements = numElementsByScreenSize.xl;
-        break;
-      default:
-        numElements = numElementsByScreenSize.l;
-        break;
-    }
-    return numElements ? numElements : 1;
-  }
+  // getReportChartSize(cardHeight: number, cardWidth: number): [number, number] {
+  //   let chartWidth: number, chartHeight: number;
+  //
+  //   return [chartWidth, chartHeight];
+  // }
 
-  getChartSize(
-    componentScreenWidthInPx: number,
-    numElementsInRowByScreenSize = {
-      xs: 1, s: 1,
-      m: 2,
-      l: 3, xl: 3
-    },
-    pageMarginPlusPaddingInPx = {
-      left: 40, right: 40
-    },
-    rowMarginPlusPaddingInPx = {
-      left: 30, right: 20
-    },
-    betweenChartMarginPlusPaddingInPx = {
-      left: 10, right: 10
-    },
-    chartMarginPlusPaddingInPx = {
-      left: 10, right: 10
+  /** Get the size for fullscreen charts displayed on the reports pages based on
+   * the current window size
+   */
+  getReportChartSize(screenWidth: number): [number, number] {
+    let chartWidth: number;
+    if (screenWidth < 600) {
+      chartWidth = 600;
+    } else if (screenWidth > 2000) {
+      chartWidth = 1950;
+    } else {
+      chartWidth = screenWidth - 110;
     }
-  ): [number, number] {
-    console.log('current breakpoint: ', this.currentBreakpoint);
-    const spaceInRow = componentScreenWidthInPx - pageMarginPlusPaddingInPx.left - pageMarginPlusPaddingInPx.right - rowMarginPlusPaddingInPx.left - rowMarginPlusPaddingInPx.right;
-    const numElementsInRow = this.calculateNumElementsInRow(numElementsInRowByScreenSize);
-    const sumOfSpaceBetweenGraphs = (betweenChartMarginPlusPaddingInPx.left + betweenChartMarginPlusPaddingInPx.right) * (numElementsInRow - 1);
-    const sumOfSpaceOnGraphs = (chartMarginPlusPaddingInPx.left + chartMarginPlusPaddingInPx.right) * numElementsInRow;
-    const spaceForAllGraphs = spaceInRow - sumOfSpaceBetweenGraphs - sumOfSpaceOnGraphs;
-    const chartWidth = Math.floor(spaceForAllGraphs / numElementsInRow);
-
     // Keep the chart at a consistent aspect ratio through window size changes
-    const chartHeight = Math.floor((chartWidth * 8) / 16);
+    const chartHeight = Math.floor((chartWidth * 7) / 16);
     return [chartWidth, chartHeight];
   }
 
+  // marginPaddingOnScreen defaults to 20px on each side
   getDashboardChartSize(
     fullScreenWidth: number,
     chartScreenWidth: number,
@@ -144,5 +110,15 @@ export class ChartSizeService implements OnInit, OnDestroy {
     return [chartWidth, chartHeight];
   }
 
-
+  getIncidenceRateChartSize(breakpointMedium = 800,
+                            screenWidth: number): [number, number] {
+    let chartWidth: number;
+    if (screenWidth >= breakpointMedium) {
+      chartWidth = Math.floor(screenWidth / 2) - 100;
+    } else {
+      chartWidth = screenWidth - 110;
+    }
+    const chartHeight = Math.floor((chartWidth * 8) / 16);
+    return [chartWidth, chartHeight];
+  }
 }

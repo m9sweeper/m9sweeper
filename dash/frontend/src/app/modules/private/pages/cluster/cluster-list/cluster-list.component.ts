@@ -15,9 +15,9 @@ import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dial
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
-import { take, takeUntil } from 'rxjs/operators';
+import {map, shareReplay, take, takeUntil} from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-cluster-list',
@@ -32,6 +32,18 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   clusterGroupName = '';
   clusterGroupNameLoaded = false;
   disableOnSearch = false;
+  readonly currentBreakpoint$ = this.breakpointObserver
+    .observe([
+      Breakpoints.XLarge, Breakpoints.Large,
+      Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall
+    ])
+    .pipe(
+      map(value => {
+        console.log('cluster-list new breakpoint:', value);
+        return value;
+      }),
+      shareReplay(),
+    );
 
   areaChart: any[];
   view: any[];
@@ -43,7 +55,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   height: number;
   subNavigationData: any;
   resizeTimeout;
-  currentCardSize = 'col-xs-12 col-md-6 col-lg-4';
+  currentCardSize = 'col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3';
 
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   imageScanData: IImageScanCount[];
@@ -108,9 +120,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   };
   date = new Date();
   dateInMil = Date.now();
-  breakpointLarge = 1200;
-  breakpointMedium = 800;
-  innerScreenWidth: number;
+
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
@@ -173,16 +183,16 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
       const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
-      console.log({innerWindow, offsetWidth: innerWindow.offsetWidth, offsetHeight: innerWindow.offsetHeight});
-      console.log({complianceSummaryLineChartCard: document.getElementById('complianceSummaryLineChartCard')});
-      this.innerScreenWidth = innerWindow.offsetWidth;
-      const newDimensions = this.chartSizeService.getDashboardChartSize(
-        window.innerWidth - 10, this.innerScreenWidth,
-        40,
-        30, 20,
-        16, 10,
-        this.breakpointLarge, this.breakpointMedium,
+
+      const newDimensions = this.chartSizeService.getChartSize(
+        innerWindow.offsetWidth,
+        { xs: 1, s: 1, m: 2, l: 3 },
+        { left: 20, right: 20 },
+        { left: 30, right: 20 },
+        { left: 10, right: 10 },
+        { left: 8, right: 8 },
       );
+      console.log('new chart dimensions: ', newDimensions);
       this.lineChartAttributes.view = newDimensions;
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
