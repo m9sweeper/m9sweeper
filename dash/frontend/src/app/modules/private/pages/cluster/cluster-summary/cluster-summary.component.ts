@@ -99,13 +99,8 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   page = 0;
   limit = 10;
   clusterEvents: IClusterEvent[];
-  headElements = ['Description', 'Type', 'Level', 'Data', 'Entity Type', 'Creation Time'];
-  formatData = FormatDate.formatLastScannedDate;
   expandStatus: boolean;
   expandSubscription: Subscription;
-  currentCardSize: 'col-xs-12 col-md-6 col-lg-4';
-  breakpointLarge = 1200;
-  breakpointMedium = 800;
   resizeTimeout;
   innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
