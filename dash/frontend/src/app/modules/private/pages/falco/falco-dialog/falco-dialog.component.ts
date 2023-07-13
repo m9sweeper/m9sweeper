@@ -26,8 +26,7 @@ export class FalcoDialogComponent implements OnInit {
     private commonService: CommonService,
     private loaderService: NgxUiLoaderService,
     private falcoService: FalcoService,
-
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loaderService.start();

@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
+import {UtilService} from '../../services/util.service';
 
 
 @Component({
@@ -16,17 +17,19 @@ import {AlertService} from '@full-fledged/alerts';
 export class ShowJsonDataComponent implements OnInit {
   header: string;
 
-  constructor(public dialogRef: MatDialogRef<ShowJsonDataComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
-              private route: ActivatedRoute,
-              private router: Router,
-              private falcoService: FalcoService,
-              private dialog: MatDialog,
-              private alertService: AlertService,
-  ) { }
+  constructor(
+    public dialogRef: MatDialogRef<ShowJsonDataComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
+    private route: ActivatedRoute,
+    private router: Router,
+    private falcoService: FalcoService,
+    private dialog: MatDialog,
+    private alertService: AlertService,
+    private utilService: UtilService,
+  ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
-  displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
+  displayedColumns = ['isCurrent', 'calendarDate', 'namespace', 'pod', 'image', 'message'];
   namespace = this.data.content.namespace;
   date = this.data.content.calendarDate;
   dateTime  = new Date(+(this.data.content.timestamp));
@@ -59,28 +62,33 @@ export class ShowJsonDataComponent implements OnInit {
       .subscribe(response => {
         const dataList = response.data.list;
         // one less log count - without the current event log
-        this.logCount = response.data.logCount - 1;
+        // current problem: we pop out the one that matches the id of the current event log
+        // but if we say "-1", we remove the trigger that indicates there's another page
+        this.logCount = response.data.logCount;
 
         // create a new data list without the current event log
-        const newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        // const newDataList = dataList.filter(i => i.id !== this.data.content.id);
+        const newDataList = [];
+        dataList.forEach((eventLog) => {
+          const modifiedEvent = structuredClone(eventLog);
+          modifiedEvent.isCurrent = eventLog.id === this.data.content.id;
+          newDataList.push(modifiedEvent);
+        });
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        if (err?.error?.message) {
+          this.alertService.danger(err.error.message);
+        } else if (err?.error) {
+          this.alertService.danger(err.error);
+        } else {
+          this.alertService.danger(err);
+        }
       });
   }
 
   stripDomainName(image: string): string {
-    const regex = /^([a-zA-Z0-9]+\.[a-zA-Z0-9\.]+)?\/?([a-zA-Z0-9\/]+)?\:?([a-zA-Z0-9\.]+)?$/g;
-    const group = image.split(regex);
-    // strip domain, only image
-    if (group[2] !== undefined && group[3] === undefined){
-      return (group[2]);
-    } else if (group[3] !== undefined){
-      return (group[2] + group [3]);
-    } else if (group[2] === undefined){
-      return '';
-    }
+    return this.utilService.getImageName(image);
   }
 
   getLimitFromLocalStorage(): string | null {
@@ -93,7 +101,6 @@ export class ShowJsonDataComponent implements OnInit {
 
   onClickMore(){
     this.dialogRef.close();
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'more', this.eventId, 'signature', this.signature]);
   }
 
   onClose() {
