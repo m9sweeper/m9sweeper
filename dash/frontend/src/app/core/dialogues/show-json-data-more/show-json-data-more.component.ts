@@ -53,7 +53,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   eventData: IFalcoLog;
   innerScreenWidth: number;
   resizeTimeout;
-  breakpointMedium = 800;
   barChartAttributes = {
     view: [] = [550, 300],
     colorScheme: {
@@ -229,6 +228,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
         { left: 20, right: 20 },
         { left: 16, right: 16 },
         { left: 16, right: 16 },
+        600,
       );
     } , 100);
   }

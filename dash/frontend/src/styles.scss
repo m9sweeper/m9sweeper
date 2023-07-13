@@ -620,8 +620,10 @@ mat-form-field {
 }
 
 .graph-card {
-  min-width: 625px;
   padding-bottom: 20px;
+  mat-card {
+    overflow: scroll;
+  }
 }
 
 // CSS for Report pages [END]

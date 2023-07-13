@@ -7,7 +7,6 @@ import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
 import {AlertService} from '@full-fledged/alerts';
 import { Subject } from 'rxjs';
-import { SharedSubscriptionService } from '../../../../../core/services/shared.subscription.service';
 import { VulnerabilitySeverity } from '../../../../../core/enum/VulnerabilitySeverity';
 import { ReportsService } from '../../../../../core/services/reports.service';
 import {ChartSizeService} from '../../../../../core/services/chart-size.service';
@@ -44,6 +43,7 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
   startDate: string;
   endDate: string;
   namespaces: Array<string>;
+  resizeTimeout;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +51,6 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
     private namespaceService: NamespaceService,
     private imageService: ImageService,
     private alertService: AlertService,
-    private sharedSubscriptionService: SharedSubscriptionService,
     private reportService: ReportsService,
     private chartSizeService: ChartSizeService,
     private customValidatorService: CustomValidatorService,
@@ -85,13 +84,7 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
 
     this.buildBarChartData();
 
-    this.sharedSubscriptionService.getCurrentExpandStatus()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => {
-        this.setChartSize();
-      });
-
-    this.setChartSize();
+    this.setChartSize(true);
   }
 
   buildBarChartData() {
@@ -162,10 +155,35 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
     this.setChartSize();
   }
 
-  setChartSize() {
+  setChartSize(isInitial = false) {
+    // debounce chart resizing
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      this.executeResize(isInitial);
+    }, 100);
+  }
+
+  executeResize(isInitial = false) {
     const innerWindow = document.getElementsByTagName('app-worst-images').item(0) as HTMLElement;
-    const innerScreenWidth = innerWindow.offsetWidth;
-    this.barChartAttributes.view = this.chartSizeService.getReportChartSize(innerScreenWidth);
+    let innerScreenWidth = innerWindow.offsetWidth;
+    if (isInitial) {
+      const sideNav = document.getElementById('primary-side-nav');
+      if (sideNav.style.visibility !== 'hidden') {
+        // have to do this the first time b/c the side nav is not yet in place
+        // --> the width retrieved doesn't take it into account
+        innerScreenWidth -= sideNav.clientWidth;
+      }
+    }
+    const newValues = this.chartSizeService.getChartSize(
+      innerScreenWidth,
+      { xs: 1, s: 1, m: 1, l: 1 },
+      { left: 20, right: 20 },
+      { left: 0, right: 0 },
+      { left: 0, right: 0 },
+      { left: 16, right: 16 },
+      600,
+    );
+    this.barChartAttributes.view = newValues;
   }
 
   ngOnDestroy() {
