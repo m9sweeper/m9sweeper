@@ -411,29 +411,6 @@ mat-form-field {
       margin-right: unset;
       min-width: 8em;
     }
-
-    & .mat-column-date {
-      width: 150px;
-      max-width: 150px;
-    }
-
-    & .mat-column-runningCluster {
-      width: 120px;
-      max-width: 120px;
-      text-align: center;
-    }
-
-    & .mat-column-scanResult {
-      width: 100px;
-      max-width: 100px;
-      text-align: center;
-    }
-
-    & .mat-column-Crt, & .mat-column-Maj, & .mat-column-Med, & .mat-column-Min, & .mat-column-Neg {
-      width: 50px;
-      max-width: 50px;
-      text-align: center;
-    }
   }
 }
 
