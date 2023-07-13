@@ -174,7 +174,7 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
         innerScreenWidth -= sideNav.clientWidth;
       }
     }
-    const newValues = this.chartSizeService.getChartSize(
+    this.barChartAttributes.view = this.chartSizeService.getChartSize(
       innerScreenWidth,
       { xs: 1, s: 1, m: 1, l: 1 },
       { left: 20, right: 20 },
@@ -183,7 +183,6 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
       { left: 16, right: 16 },
       600,
     );
-    this.barChartAttributes.view = newValues;
   }
 
   ngOnDestroy() {
