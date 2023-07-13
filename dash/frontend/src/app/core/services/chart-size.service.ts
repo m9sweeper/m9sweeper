@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {HostListener, Injectable, OnDestroy, OnInit} from '@angular/core';
 import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {distinctUntilChanged, map, shareReplay, tap} from 'rxjs/operators';
@@ -7,76 +7,50 @@ import {distinctUntilChanged, map, shareReplay, tap} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ChartSizeService implements OnInit, OnDestroy {
-  protected readonly unsubscribe$ = new Subject<void>();
-  private currentBreakpoint: any;
-  readonly currentBreakpoint$ = this.breakpointObserver
-    .observe([
-      Breakpoints.XLarge, Breakpoints.Large,
-      Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall
-    ])
-    .pipe(
-      map(value => {
-        console.log('new breakpoint:', value);
-        return value;
-      }),
-      shareReplay(),
-    );
+export class ChartSizeService {
+  currentScreenWidthInPx: number;
+  currentScreenWidthInEM: number;
 
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-  ) {}
+  private FlexBoxMinWidthsInEm = {
+    XSmall: 0,
+    Small: 48,
+    Medium: 62,
+    Large: 75,
+  };
 
-  ngOnInit() {
-    // console.log('helloworld');
-    // console.log('current breakpoint: ', this.currentBreakpoint);
-    this.currentBreakpoint$.subscribe(value => {
-      console.log('subscription shows a new breakpoint', value);
-      this.updateBreakpoint();
-    });
+  constructor() {
+    this.calculateScreenWidth();
   }
 
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  private calculateScreenWidth() {
+    const fullHTML = document.getElementsByTagName('html').item(0) as HTMLElement;
+    const computedFontSize = window.getComputedStyle(fullHTML).fontSize;
+    const computedFontNumber = parseFloat(computedFontSize.split('px')[0]);  // pull off the 'px' and parse
+    const windowWidthInEm = (window.innerWidth / computedFontNumber);
+
+    this.currentScreenWidthInPx = window.innerWidth;
+    this.currentScreenWidthInEM = windowWidthInEm;
   }
 
-  updateBreakpoint() {
-    if (this.breakpointObserver.isMatched(Breakpoints.XLarge)) {
-      this.currentBreakpoint = Breakpoints.XLarge;
-    } else if (this.breakpointObserver.isMatched(Breakpoints.Large)) {
-      this.currentBreakpoint = Breakpoints.Large;
-    } else if (this.breakpointObserver.isMatched(Breakpoints.Medium)) {
-      this.currentBreakpoint = Breakpoints.Medium;
-    } else if (this.breakpointObserver.isMatched(Breakpoints.Small)) {
-      this.currentBreakpoint = Breakpoints.Small;
-    } else if (this.breakpointObserver.isMatched(Breakpoints.XSmall)) {
-      this.currentBreakpoint = Breakpoints.XSmall;
-    }
-  }
-
-  calculateNumElementsInRow(numElementsByScreenSize: {xs: number, s: number, m: number, l: number, xl: number}): number {
+  private calculateNumElementsInRow(
+    numElementsByScreenSize: {xs: number, s: number, m: number, l: number}
+  ): number {
+    this.calculateScreenWidth();
     let numElements = 1;
-    switch (this.currentBreakpoint) {
-      case Breakpoints.XSmall:
-        numElements = numElementsByScreenSize.xs;
-        break;
-      case Breakpoints.Small:
-        numElements = numElementsByScreenSize.s;
-        break;
-      case Breakpoints.Medium:
-        numElements = numElementsByScreenSize.m;
-        break;
-      case Breakpoints.Large:
-        numElements = numElementsByScreenSize.l;
-        break;
-      case Breakpoints.XLarge:
-        numElements = numElementsByScreenSize.xl;
-        break;
-      default:
-        numElements = numElementsByScreenSize.l;
-        break;
+    if (this.currentScreenWidthInEM > this.FlexBoxMinWidthsInEm.Large) {
+      numElements = numElementsByScreenSize.l;
+    } else if (this.currentScreenWidthInEM > this.FlexBoxMinWidthsInEm.Medium) {
+      numElements = numElementsByScreenSize.m;
+    } else if (this.currentScreenWidthInEM > this.FlexBoxMinWidthsInEm.Small) {
+      numElements = numElementsByScreenSize.s;
+    } else {
+      numElements = numElementsByScreenSize.xs;
     }
+    console.log({
+      FlexBoxMinWidthsInEm: this.FlexBoxMinWidthsInEm,
+      currentScreenWidthInEM: this.currentScreenWidthInEM,
+      numElements,
+    });
     return numElements ? numElements : 1;
   }
 
@@ -84,8 +58,7 @@ export class ChartSizeService implements OnInit, OnDestroy {
     componentScreenWidthInPx: number,
     numElementsInRowByScreenSize = {
       xs: 1, s: 1,
-      m: 2,
-      l: 3, xl: 3
+      m: 2, l: 3,
     },
     pageMarginPlusPaddingInPx = {
       left: 40, right: 40
@@ -100,12 +73,14 @@ export class ChartSizeService implements OnInit, OnDestroy {
       left: 10, right: 10
     }
   ): [number, number] {
-    console.log('current breakpoint: ', this.currentBreakpoint);
-    const spaceInRow = componentScreenWidthInPx - pageMarginPlusPaddingInPx.left - pageMarginPlusPaddingInPx.right - rowMarginPlusPaddingInPx.left - rowMarginPlusPaddingInPx.right;
     const numElementsInRow = this.calculateNumElementsInRow(numElementsInRowByScreenSize);
+    console.log('new method, # charts per row', numElementsInRow);
+    const spaceInRow = componentScreenWidthInPx - pageMarginPlusPaddingInPx.left - pageMarginPlusPaddingInPx.right - rowMarginPlusPaddingInPx.left - rowMarginPlusPaddingInPx.right;
+    console.log('new method space in row: ', spaceInRow);
     const sumOfSpaceBetweenGraphs = (betweenChartMarginPlusPaddingInPx.left + betweenChartMarginPlusPaddingInPx.right) * (numElementsInRow - 1);
     const sumOfSpaceOnGraphs = (chartMarginPlusPaddingInPx.left + chartMarginPlusPaddingInPx.right) * numElementsInRow;
     const spaceForAllGraphs = spaceInRow - sumOfSpaceBetweenGraphs - sumOfSpaceOnGraphs;
+    console.log('new method, sums', sumOfSpaceBetweenGraphs, sumOfSpaceOnGraphs);
     const chartWidth = Math.floor(spaceForAllGraphs / numElementsInRow);
 
     // Keep the chart at a consistent aspect ratio through window size changes
@@ -124,18 +99,24 @@ export class ChartSizeService implements OnInit, OnDestroy {
     breakpointLarge = 1200,
     breakpointMedium = 800,
   ): [number, number] {  // returns [chartWidth, chartHeight]
-    console.log('current breakpoint: ', this.currentBreakpoint);
     let screenToWorkWith = chartScreenWidth - marginPaddingOnScreen - paddingLeftOfGraphsInPx - paddingRightOfGraphsInPx;
+    console.log('old method space in row: ', screenToWorkWith);
     let chartWidth;
     if (fullScreenWidth > breakpointLarge) {
+      console.log('old method, # charts per row', 3);
+      console.log('old method, lg breakpoint, sums', marginBetweenGraphsInPx * 2, paddingOnGraphsInPx * 3);
       screenToWorkWith -= (marginBetweenGraphsInPx * 2);
       screenToWorkWith -= (paddingOnGraphsInPx * 3);
       chartWidth = Math.floor(screenToWorkWith / 3);
     } else if (fullScreenWidth > breakpointMedium) {
+      console.log('old method, # charts per row', 2);
+      console.log('old method, md breakpoint, sums', marginBetweenGraphsInPx * 1, paddingOnGraphsInPx * 2);
       screenToWorkWith -= marginBetweenGraphsInPx;  // aka (marginBetweenGraphsInPx * 1)
       screenToWorkWith -= (paddingOnGraphsInPx * 2);
       chartWidth = Math.floor(screenToWorkWith / 2);
     } else {
+      console.log('old method, # charts per row', 1);
+      console.log('old method, sm breakpoint, sums', marginBetweenGraphsInPx * 0, paddingOnGraphsInPx * 1);
       screenToWorkWith -= paddingOnGraphsInPx;  // aka (paddingOnGraphsInPx * 1)
       chartWidth = Math.floor(screenToWorkWith);
     }
