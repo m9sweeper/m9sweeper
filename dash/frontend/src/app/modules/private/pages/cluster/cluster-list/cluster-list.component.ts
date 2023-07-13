@@ -5,7 +5,6 @@ import { Subject } from 'rxjs';
 import { ClusterGroupService } from '../../../../../core/services/cluster-group.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ClusterGroupCreateComponent } from '../../cluster-group/cluster-group-create/cluster-group-create.component';
-import { DeploymentService } from '../../../../../core/services/deployment.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { ImageService } from '../../../../../core/services/image.service';
@@ -15,9 +14,8 @@ import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dial
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
-import {map, shareReplay, take, takeUntil} from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-cluster-list',
@@ -32,24 +30,10 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   clusterGroupName = '';
   clusterGroupNameLoaded = false;
   disableOnSearch = false;
-  readonly currentBreakpoint$ = this.breakpointObserver
-    .observe([
-      Breakpoints.XLarge, Breakpoints.Large,
-      Breakpoints.Medium, Breakpoints.Small, Breakpoints.XSmall
-    ])
-    .pipe(
-      map(value => {
-        console.log('cluster-list new breakpoint:', value);
-        return value;
-      }),
-      shareReplay(),
-    );
 
-  areaChart: any[];
   view: any[];
   showXAxis = true;
   showYAxis = true;
-  rotateXAxisTicks = false;
   barPadding = 25;
   width: number;
   height: number;
@@ -58,8 +42,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   imageScanData: IImageScanCount[];
-  totalVulnerabilities: number;
-  countOfTotalImagesRunning: number;
   barChartAttributes = {
     view: [],
     colorScheme: {
@@ -126,7 +108,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private clusterService: ClusterService,
     private clusterGroupService: ClusterGroupService,
-    private deploymentService: DeploymentService,
     private podService: PodService,
     private imageService: ImageService,
     private alertService: AlertService,
@@ -134,7 +115,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
-    private breakpointObserver: BreakpointObserver,  // @TODO: implement observations to set the breakpoints instead of using the set numbers in various components
   ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
@@ -172,8 +152,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   calculateScreenSize($event?: any) {
-    this.scrHeight = window.innerHeight;
-    this.scrWidth = window.innerWidth;
     this.setChartHeightWidth();
   }
 
@@ -183,7 +161,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.resizeTimeout = setTimeout(() => {
       const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
 
-      const newDimensions = this.chartSizeService.getChartSize(
+      this.lineChartAttributes.view = this.chartSizeService.getChartSize(
         innerWindow.offsetWidth,
         { xs: 1, s: 1, m: 2, l: 3 },
         { left: 20, right: 20 },
@@ -191,36 +169,9 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         { left: 10, right: 10 },
         { left: 8, right: 8 },
       );
-      console.log('new chart dimensions: ', newDimensions);
-      this.lineChartAttributes.view = newDimensions;
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-      console.log({lineChartDimensions: this.lineChartAttributes.view, barChartDimensions: this.barChartAttributes.view, complianceSummaryLineChartDimensions: this.complianceSummaryLineChartAttributes.view});
-      // this.updateFormatting();
     } , 50);
-  }
-
-  /** Resize elements based on the space available outside of sidebar nav components instead of window size */
-  // updateFormatting() {
-  //   if (this.innerScreenWidth >= this.breakpointLarge) {
-  //     // this.currentCardSize = 'col-xs-4';
-  //   } else if (this.innerScreenWidth >= this.breakpointMedium) {
-  //     // this.currentCardSize = 'col-xs-6';
-  //   } else {
-  //     // this.currentCardSize = 'col-xs-12';
-  //   }
-  // }
-
-  set scrHeight(val: number) {
-    if (val !== this.height) {
-      this.height = val;
-    }
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = ((val - 20) * 10) / 12;
-    }
   }
 
   ngOnDestroy() {
