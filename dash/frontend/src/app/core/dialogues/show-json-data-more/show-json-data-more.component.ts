@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
-import {take} from 'rxjs/operators';
+import {take, timeout} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
 import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
@@ -54,7 +54,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   innerScreenWidth: number;
   resizeTimeout;
   breakpointMedium = 800;
-  currentCardSize: string;
   barChartAttributes = {
     view: [] = [550, 300],
     colorScheme: {
@@ -74,11 +73,9 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   };
 
   ngOnInit(): void {
-
     this.clusterId = this.route.parent.parent.snapshot.params.id;
     this.eventId = this.route.snapshot.params.eventId;
     this.signature = this.route.snapshot.params.signature;
-    this.currentCardSize = 'col-sm-6';
 
     this.getEventById();
 
@@ -225,17 +222,14 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     this.resizeTimeout = setTimeout(() => {
       const innerWindow = document.getElementsByTagName('app-show-json-data-more').item(0) as HTMLElement;
       this.innerScreenWidth = innerWindow.offsetWidth;
-      this.barChartAttributes.view = this.chartSizeService.getIncidenceRateChartSize(this.breakpointMedium,
-        this.innerScreenWidth);
-      this.updateFormatting();
-    } , 50);
-  }
-
-  updateFormatting() {
-    if (this.innerScreenWidth >= this.breakpointMedium) {
-      this.currentCardSize = 'col-xs-6';
-    } else {
-      this.currentCardSize = 'col-xs-12';
-    }
+      this.barChartAttributes.view = this.chartSizeService.getChartSize(
+        innerWindow.offsetWidth,
+        { xs: 1, s: 1, m: 2, l: 2},
+        { left: 10, right: 10 },
+        { left: 20, right: 20 },
+        { left: 16, right: 16 },
+        { left: 16, right: 16 },
+      );
+    } , 100);
   }
 }

@@ -73,6 +73,7 @@ export class ChartSizeService {
       left: 10, right: 10
     }
   ): [number, number] {
+    console.log({ componentScreenWidthInPx, numElementsInRowByScreenSize, pageMarginPlusPaddingInPx, rowMarginPlusPaddingInPx, betweenChartMarginPlusPaddingInPx, chartMarginPlusPaddingInPx });
     const numElementsInRow = this.calculateNumElementsInRow(numElementsInRowByScreenSize);
     console.log('new method, # charts per row', numElementsInRow);
     const spaceInRow = componentScreenWidthInPx - pageMarginPlusPaddingInPx.left - pageMarginPlusPaddingInPx.right - rowMarginPlusPaddingInPx.left - rowMarginPlusPaddingInPx.right;
@@ -87,43 +88,4 @@ export class ChartSizeService {
     const chartHeight = Math.floor((chartWidth * 8) / 16);
     return [chartWidth, chartHeight];
   }
-
-  getDashboardChartSize(
-    fullScreenWidth: number,
-    chartScreenWidth: number,
-    marginPaddingOnScreen = 40,
-    paddingLeftOfGraphsInPx = 30,
-    paddingRightOfGraphsInPx = 20,
-    paddingOnGraphsInPx: number,
-    marginBetweenGraphsInPx = 10,
-    breakpointLarge = 1200,
-    breakpointMedium = 800,
-  ): [number, number] {  // returns [chartWidth, chartHeight]
-    let screenToWorkWith = chartScreenWidth - marginPaddingOnScreen - paddingLeftOfGraphsInPx - paddingRightOfGraphsInPx;
-    console.log('old method space in row: ', screenToWorkWith);
-    let chartWidth;
-    if (fullScreenWidth > breakpointLarge) {
-      console.log('old method, # charts per row', 3);
-      console.log('old method, lg breakpoint, sums', marginBetweenGraphsInPx * 2, paddingOnGraphsInPx * 3);
-      screenToWorkWith -= (marginBetweenGraphsInPx * 2);
-      screenToWorkWith -= (paddingOnGraphsInPx * 3);
-      chartWidth = Math.floor(screenToWorkWith / 3);
-    } else if (fullScreenWidth > breakpointMedium) {
-      console.log('old method, # charts per row', 2);
-      console.log('old method, md breakpoint, sums', marginBetweenGraphsInPx * 1, paddingOnGraphsInPx * 2);
-      screenToWorkWith -= marginBetweenGraphsInPx;  // aka (marginBetweenGraphsInPx * 1)
-      screenToWorkWith -= (paddingOnGraphsInPx * 2);
-      chartWidth = Math.floor(screenToWorkWith / 2);
-    } else {
-      console.log('old method, # charts per row', 1);
-      console.log('old method, sm breakpoint, sums', marginBetweenGraphsInPx * 0, paddingOnGraphsInPx * 1);
-      screenToWorkWith -= paddingOnGraphsInPx;  // aka (paddingOnGraphsInPx * 1)
-      chartWidth = Math.floor(screenToWorkWith);
-    }
-    // Keep the chart at a consistent aspect ratio through window size changes
-    const chartHeight = Math.floor((chartWidth * 8) / 16);
-    return [chartWidth, chartHeight];
-  }
-
-
 }
