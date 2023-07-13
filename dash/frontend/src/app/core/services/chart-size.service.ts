@@ -46,11 +46,6 @@ export class ChartSizeService {
     } else {
       numElements = numElementsByScreenSize.xs;
     }
-    console.log({
-      FlexBoxMinWidthsInEm: this.FlexBoxMinWidthsInEm,
-      currentScreenWidthInEM: this.currentScreenWidthInEM,
-      numElements,
-    });
     return numElements ? numElements : 1;
   }
 
@@ -74,15 +69,15 @@ export class ChartSizeService {
     },
     minWidth?: number,
   ): [number, number] {
-    console.log({ componentScreenWidthInPx, numElementsInRowByScreenSize, pageMarginPlusPaddingInPx, rowMarginPlusPaddingInPx, betweenChartMarginPlusPaddingInPx, chartMarginPlusPaddingInPx });
+
     const numElementsInRow = this.calculateNumElementsInRow(numElementsInRowByScreenSize);
-    console.log('new method, # charts per row', numElementsInRow);
+
     const spaceInRow = componentScreenWidthInPx - pageMarginPlusPaddingInPx.left - pageMarginPlusPaddingInPx.right - rowMarginPlusPaddingInPx.left - rowMarginPlusPaddingInPx.right;
-    console.log('new method space in row: ', spaceInRow);
+
     const sumOfSpaceBetweenGraphs = (betweenChartMarginPlusPaddingInPx.left + betweenChartMarginPlusPaddingInPx.right) * (numElementsInRow - 1);
     const sumOfSpaceOnGraphs = (chartMarginPlusPaddingInPx.left + chartMarginPlusPaddingInPx.right) * numElementsInRow;
     const spaceForAllGraphs = spaceInRow - sumOfSpaceBetweenGraphs - sumOfSpaceOnGraphs;
-    console.log('new method, sums', sumOfSpaceBetweenGraphs, sumOfSpaceOnGraphs);
+
     let chartWidth = Math.floor(spaceForAllGraphs / numElementsInRow);
 
     if (minWidth && chartWidth < minWidth) {
