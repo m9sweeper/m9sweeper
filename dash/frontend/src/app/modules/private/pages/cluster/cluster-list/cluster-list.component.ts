@@ -9,13 +9,14 @@ import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { ImageService } from '../../../../../core/services/image.service';
 import { AlertService } from '@full-fledged/alerts';
-import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dialog/generic-error-dialog.component';
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
 import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
+import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
+import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
 
 @Component({
   selector: 'app-cluster-list',
@@ -105,6 +106,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
+
   constructor(
     private clusterService: ClusterService,
     private clusterGroupService: ClusterGroupService,
@@ -115,6 +117,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
+    protected clusterListMenuService: ClusterListMenuService
   ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
@@ -205,7 +208,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteClusterGroup() {
-    const confirmModal = this.dialog.open(ConfirmationDialogComponent, {
+    const confirmModal = this.dialog.open(AlertDialogComponent, {
       width: '400px',
       closeOnNavigation: true,
       disableClose: true
@@ -213,27 +216,36 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     confirmModal.afterClosed()
       .pipe(take(1))
-      .subscribe(result => {
-      if (result === undefined) {
-        this.clusterGroupService.deleteClusterGroup(this.groupId).subscribe(resp => {
-          // Forces the component to reload
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.navigate(['/private/dashboard']);
-        }, err => {
-          if (err.error && err.error.message === 'err_has_clusters') {
-            this.displayErrorModal({
-              title: 'Cluster group not deleted',
-              message: `Delete all associated clusters before you can delete this cluster group.`
+      .subscribe({
+        next: result => {
+          if (result === true) {
+            this.clusterGroupService.deleteClusterGroup(this.groupId)
+              .pipe(take(1))
+              .subscribe({
+                next: () => {
+                  this.clusterListMenuService.buildClusterMenu();
+                  // Forces the component to reload
+                  this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+                  this.router.navigate(['/private/dashboard']);
+                },
+                error: err => {
+                  if (err.error && err.error.message === 'err_has_clusters') {
+                    this.displayErrorModal({
+                      title: 'Cluster group not deleted',
+                      message: `Delete all associated clusters before you can delete this cluster group.`
+                    });
+                  } else {
+                    this.displayErrorModal();
+                  }
+                }
             });
           }
-          else { this.displayErrorModal(); }
-        });
-      }
-    });
+        }
+      });
   }
 
   displayErrorModal(data?: {title?: string, message?: string, btnText?: string}) {
-    const confirmModal = this.dialog.open(GenericErrorDialogComponent, {
+    this.dialog.open(GenericErrorDialogComponent, {
       width: '400px',
       closeOnNavigation: true,
       disableClose: true,
@@ -262,7 +274,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   editClusterGroupNameDialog(){
-    const confirmDialog = this.dialog.open(ClusterGroupCreateComponent, {
+    this.dialog.open(ClusterGroupCreateComponent, {
       width: '520px',
       closeOnNavigation: true,
       disableClose: true,

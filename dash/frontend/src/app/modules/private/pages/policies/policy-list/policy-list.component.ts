@@ -9,8 +9,9 @@ import { PolicyService } from '../../../../../core/services/policy.service';
 import { AlertService } from '@full-fledged/alerts';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { PolicyCreateComponent } from '../policy-create/policy-create.component';
-import {ConfirmationDialogComponent} from '../../../../shared/confirmation-dialog/confirmation-dialog.component';
 import {merge} from 'rxjs';
+import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-policy-list',
@@ -71,37 +72,29 @@ export class PolicyListComponent implements OnInit, AfterViewInit{
   }
 
   alertDeletePolicy(id: number) {
-    const openRemoveDialog = this.dialog.open(ConfirmationDialogComponent, {
+    const openRemoveDialog = this.dialog.open(AlertDialogComponent , {
       width: '400px',
       closeOnNavigation: true,
       disableClose: true
     });
 
-    openRemoveDialog.afterClosed().subscribe(result => {
-      if (result === undefined) {
-        this.deletePolicyById(id);
-      }
-    });
+    openRemoveDialog.afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: result => {
+          if (result === true) {
+            this.deletePolicyById(id);
+          }
+        }
+      });
   }
 
   deletePolicyById(id: number){
-    this.policyService.deletePolicyById(id).subscribe((response: IServerResponse<number>) => {
+    this.policyService.deletePolicyById(id).subscribe(() => {
         this.alertService.success('Policy deleted successfully');
     }, error => {
       this.alertService.danger(error.error.message);
     }, () => {
-      this.getPolicyList();
-    });
-  }
-
-  openPolicyDialog(id: number) {
-    const openPolicyDialog = this.dialog.open(PolicyCreateComponent, {
-      width: '600px',
-      closeOnNavigation: true,
-      disableClose: true,
-      // data: {clusterId: this.clusterId}
-    });
-    openPolicyDialog.afterClosed().subscribe(result => {
       this.getPolicyList();
     });
   }
