@@ -55,7 +55,6 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   height: number;
   subNavigationData: any;
   resizeTimeout;
-  currentCardSize = 'col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3';
 
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   imageScanData: IImageScanCount[];
