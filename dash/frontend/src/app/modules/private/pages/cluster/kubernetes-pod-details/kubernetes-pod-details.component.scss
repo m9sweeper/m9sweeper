@@ -1,49 +1,5 @@
-:root{
-  --cluster-details-height: 981px;
-}
-
-div.kubernetes-pod-details-container {
-  height:calc(var(--cluster-details-height) - 52px);
-  overflow: auto;
-  > div {
-    &.kubernetes-object-list {
-      margin: 20px 25px;
-      display: flex;
-      flex-direction: column;
-      max-height: calc(var(--cluster-details-height) - 110px);
-      height: 100%;
-      & .pod-table {
-        // flex: 1;
-        overflow: auto;
-        background: #F9F9F9;
-        height:auto;
-        min-height: 100px;
-        > mat-table {
-          min-width: 800px;
-
-          .mat-column-dockerImageId {
-            word-break: break-word;
-            flex: 2;
-            padding-right: 5px;
-          }
-
-          &.mat-column-summary {
-            padding-right: 5px;
-          }
-
-          &.mat-column-lastScanned {
-            padding-right: 5px;
-          }
-        }
-      }
-    }
-  }
-}
-
-.content-name {
-  p{
-    font-weight: normal;
-  }
+div {
+  height: auto !important;
 }
 
 mat-form-field {
@@ -62,20 +18,6 @@ mat-form-field {
   }
 }
 
-.click-event:hover {
-  background-color: rgba(0, 0, 0, .08);
-  cursor: pointer;
-}
-.breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 12px 0px;
-}
-
-.content-breadcrumbs {
-  height: fit-content !important;
-}
-
 .calendar-date-picker {
   display: flex;
   justify-content: right;
@@ -83,15 +25,17 @@ mat-form-field {
 
 .action-button {
   margin-bottom: 15px;
+  height: 59px !important;
 }
 
-app-datepicker-component {
-  margin-left: 20px;
-}
 p {
-  font-weight: bold;
   font-size: 26px;
   margin-top: 15px;
   line-height: 1;
 }
 
+.kubesec-logo {
+  max-width: 50px;
+  max-height: 30px;
+  margin-top: 15px;
+}
