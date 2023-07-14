@@ -19,7 +19,7 @@ export class ClusterGroupDao {
             .where('cg.id', id)
             .andWhere('cg.deleted_at', null)
         )
-            .then(clusterGroup => plainToInstance(ClusterGroupDto, clusterGroup[0]));
+            .then(clusterGroup => plainToInstance(ClusterGroupDto, clusterGroup?.[0]));
     }
 
     async getClusterGroups(): Promise<ClusterGroupDto[]> {

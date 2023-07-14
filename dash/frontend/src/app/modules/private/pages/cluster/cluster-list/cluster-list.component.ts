@@ -117,7 +117,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
-    protected clusterListMenuService: ClusterListMenuService
+    protected clusterListMenuService: ClusterListMenuService,
   ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
@@ -134,11 +134,19 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.groupId = +routeParams.groupId;
       this.clusterGroupService.getClusterGroupById(+routeParams.groupId)
         .pipe(take(1))
-        .subscribe(result => {
-        this.clusterGroupName = result.data.name;
-        this.subNavigationData.title = this.clusterGroupName;
-        this.clusterGroupNameLoaded = true;
-      });
+        .subscribe({
+          next: result => {
+            this.clusterGroupName = result.data.name;
+            this.subNavigationData.title = this.clusterGroupName;
+            this.clusterGroupNameLoaded = true;
+          },
+          error: err => {
+            if (err?.status === 404) {
+              this.alertService.danger('Cluster Group Does does not exist');
+              this.router.navigate(['/private', 'dashboard']);
+            }
+          }
+        });
       this.clusterGroupService.setCurrentGroupId(this.groupId);
       this.getClustersByClusterGroupId(this.groupId);
     });
