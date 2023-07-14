@@ -3,13 +3,12 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { JwtAuthService } from '../../core/services/jwt-auth.service';
 import { ClusterGroupService } from '../../core/services/cluster-group.service';
-import { IClusterGroup } from '../../core/entities/IClusterGroup';
 import { ClusterService } from '../../core/services/cluster.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ITheme } from '../../core/entities/ITheme';
 import { ThemeService } from '../../core/services/theme.service';
 import {fromEvent, Observable, Subject, Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, shareReplay, startWith, takeUntil, tap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, shareReplay, startWith, take, takeUntil, tap} from 'rxjs/operators';
 import {UpdateUserProfileComponent} from './pages/user/update-user-profile/update-user-profile.component';
 import {UserService} from '../../core/services/user.service';
 import {UserProfileImageDirective} from '../shared/directives/user-profile-image.directive';
@@ -41,9 +40,7 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   theme: ITheme;
   allThemes: ITheme[] = [];
   loggedInUserName = null;
-  userClusterGroupItems: IClusterGroup[];
   userId: number;
-  userLogo: string;
   defaultRouteLink = ['/private', 'dashboard'];
   currentGroupId: number;
   width: number;
@@ -51,7 +48,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   isDarkMode: boolean;
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild(UserProfileImageDirective) directive = null;
-  getUpdatedLogo: Subscription;
   showSearchBar: boolean;
   isLocalAuthUser = true;
   isAdmin: boolean;
@@ -122,9 +118,13 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getUserProfile(){
-    this.userService.getUserProfileSetting().subscribe( response => {
-      this.loggedInUserName = `${response.data.firstName} ${response.data.lastName}`;
-    });
+    this.userService.getUserProfileSetting()
+      .pipe(take(1))
+      .subscribe( {
+        next: response => {
+          this.loggedInUserName = `${response.data.firstName} ${response.data.lastName}`;
+        }
+      });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -176,12 +176,19 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   defaultLink() {
-    this.clusterGroupService.getCurrentGroupId().subscribe(groupId => {
-      if (!isNaN(groupId)) {
-        setTimeout(() => this.defaultRouteLink = ['/private', 'dashboard', 'group', String(groupId)] );
-        this.currentGroupId = groupId;
-      }
-    });
+    this.clusterGroupService.getCurrentGroupId()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: groupId => {
+          // Due to JS "magic", nulls are treated as 0 by isNaN()
+          if (!isNaN(groupId) && groupId !== null) {
+            this.defaultRouteLink = ['/private', 'dashboard', 'group', String(groupId)];
+          } else {
+            this.defaultRouteLink = ['/private', 'dashboard'];
+          }
+          this.currentGroupId = groupId;
+        }
+      });
   }
 
   // Checks if we are on a page that should display the search bar
