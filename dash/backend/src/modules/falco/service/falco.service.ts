@@ -122,7 +122,7 @@ export class FalcoService {
         falcoLog.clusterId = clusterId;
         falcoLog.rule = falcoWebhookLog.rule;
         falcoLog.namespace = falcoWebhookLog.outputFields.k8sNamespaceName;
-        falcoLog.image = falcoWebhookLog.outputFields.containerImageRepository;
+        falcoLog.image = falcoWebhookLog.outputFields.containerImage;
         falcoLog.container = falcoWebhookLog.outputFields.k8sPodName;
         falcoLog.level = falcoWebhookLog.priority;
         falcoLog.message = falcoWebhookLog.output;

@@ -29,7 +29,7 @@
     </div>
     <mat-card appearance="outlined">
       <div class="page-table">
-        <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
+        <table mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
             <mat-cell *matCellDef="let image"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
@@ -76,7 +76,7 @@
           <mat-row *matRowDef="let row; columns: displayedColumns;"
                    (click)="getImageScannerDetails(row)" class="table-row">
           </mat-row>
-        </mat-table>
+        </table>
       </div>
       <div class="paginator">
         <mat-paginator [length]="totalCount"

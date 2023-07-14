@@ -130,32 +130,32 @@
     </div>
     <div class="issues-list" *ngIf="displayComplianceAndIssueTable">
       <mat-toolbar>
-        <div>
+        <div class="col-sm-3 no-padding">
           <span class="subnav-title">Issues</span>
         </div>
-        <div class="ml-a">
+        <div class="col-sm-9 page-card-title-button-group-right-align">
           <button mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
         </div>
       </mat-toolbar>
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="imageScanResultIssueData" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="scanner">
-            <th style="width: 7%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</th>
-            <td style="width: 7%;" mat-cell *matCellDef="let issue"> {{issue.scannerName}} </td>
+            <th style="width: 3%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</th>
+            <td style="width: 3%;" mat-cell *matCellDef="let issue"> {{issue.scannerName}} </td>
           </ng-container>
           <ng-container matColumnDef="name">
-            <th style="width: 39%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</th>
-            <td style="width: 39%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
+            <th style="width: 23%;" mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</th>
+            <td style="width: 23%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
               {{issue.name}}
             </td>
           </ng-container>
           <ng-container matColumnDef="severity">
-            <th style="width: 4%;" mat-header-cell *matHeaderCellDef mat-sort-header="severity" disableClear> Severity </th>
-            <td style="width: 4%;" mat-cell *matCellDef="let issue"> {{issue.severity}} </td>
+            <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header="severity" disableClear> Severity </th>
+            <td style="width: 5%;" mat-cell *matCellDef="let issue"> {{issue.severity}} </td>
           </ng-container>
           <ng-container matColumnDef="type">
-            <th style="width: 15%;" mat-header-cell *matHeaderCellDef mat-sort-header="type" disableClear> Type </th>
-            <td style="width: 15%;" mat-cell *matCellDef="let issue">
+            <th style="width: 20%;" mat-header-cell *matHeaderCellDef mat-sort-header="type" disableClear> Type </th>
+            <td style="width: 20%;" mat-cell *matCellDef="let issue">
               <div class="row">
                 <div class="col type-margin">
                   <ng-container *ngIf="issue.vulnerabilityDescUrl">
@@ -176,31 +176,33 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
-            <th style="width: 3%;" mat-header-cell *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</th>
-            <td style="width: 3%;" mat-cell *matCellDef="let issue">
+            <th style="width: 10%;" mat-header-cell *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</th>
+            <td style="width: 10%;" mat-cell *matCellDef="let issue">
               <div class="row pad-left-20">
                 <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="issue.isCompliant" class="pad-right-5">
                 </mat-checkbox>
-                <mat-icon *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
+                <div >
+                <mat-icon style="margin-top: 8px" *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
+                </div>
               </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="isFixable" >
-            <th style="width: 12%;" mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </th>
-            <td style="width: 12%;" mat-cell *matCellDef="let issue">
+            <th style="width: 25%;" mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </th>
+            <td style="width: 25%;" mat-cell *matCellDef="let issue">
               <mat-checkbox  disableRipple (click)="$event.preventDefault()"  [checked]="issue.isFixable"></mat-checkbox>
               <span *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
             </td>
           </ng-container>
           <ng-container matColumnDef="packageName">
-            <th style="width: 7%;" mat-header-cell *matHeaderCellDef mat-sort-header="package_name" disableClear> Package </th>
-            <td style="width: 7%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.packageName">
+            <th style="width: 3%;" mat-header-cell *matHeaderCellDef mat-sort-header="package_name" disableClear> Package </th>
+            <td style="width: 3%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.packageName">
               {{ issue.packageName ? issue.packageName : 'N/A' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="installedVersion">
-            <th style="width: 8%;" mat-header-cell *matHeaderCellDef mat-sort-header="installed_version" disableClear> Installed </th>
-            <td style="width: 8%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.installedVersion">
+            <th style="width: 5%;" mat-header-cell *matHeaderCellDef mat-sort-header="installed_version" disableClear> Installed </th>
+            <td style="width: 5%;" mat-cell *matCellDef="let issue" [matTooltip]="issue.installedVersion">
               {{ issue.installedVersion ? issue.installedVersion : 'N/A' }}
             </td>
           </ng-container>
@@ -214,8 +216,8 @@
 <!--            </td>-->
 <!--          </ng-container>-->
           <ng-container matColumnDef="more">
-            <th style="width: 6%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
-            <td style="width: 6%;" mat-cell *matCellDef="let issue">
+            <th style="width: 8%;" mat-header-cell matSort="false" *matHeaderCellDef disableClear></th>
+            <td style="width: 8%;" mat-cell *matCellDef="let issue">
               <a mat-button (click)="showMoreIssueDetails(issue)">+more</a>
               <button color="primary" class="request-exception-button" mat-raised-button *ngIf="issue.isFixable"
                  [routerLink]="['/private', 'exceptions','create']"

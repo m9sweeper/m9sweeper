@@ -1,11 +1,14 @@
 import {NavServiceInterface} from './nav-service.interface';
 import {IMenuItem} from '../../../shared/side-nav/interfaces/menu-item.interface';
 import {IMenuContentTrigger} from '../../../shared/side-nav/interfaces/menu-content-trigger.interface';
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
-import {AddClusterWizardComponent} from '../../pages/cluster/add-cluster-wizard/add-cluster-wizard.component';
+import {Injectable, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ClusterGroupService} from '../../../../core/services/cluster-group.service';
 import {BehaviorSubject} from 'rxjs';
+import {
+  ClusterGroupCreateComponent
+} from '../../pages/cluster-group/cluster-group-create/cluster-group-create.component';
+import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -36,22 +39,26 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
   }
 
   buildClusterMenu() {
-    this.clusterGroupService.getClusterGroups().subscribe(groups => {
-      if (groups.data) {
-        this.menuItems = [];
-        groups.data.forEach((group, index): IMenuItem => {
-          if (!group) { return; }
-          const name = group.name;
-          const path = ['/private', 'dashboard', 'group', group?.id];
-          const abbreviation = {
-            backgroundColor: this.calculateMenuColor(index),
-            letters: this.buildAbbreviation(group.name),
-          };
-          this.menuItems.push({ name, path, abbreviation });
-        });
-        this.currentMenuItems.next(this.menuItems);
-      }
-    });
+    this.clusterGroupService.getClusterGroups()
+      .pipe(take(1))
+      .subscribe({
+        next: (groups) => {
+          if (groups.data) {
+            this.menuItems = [];
+            groups.data.forEach((group, index): IMenuItem => {
+              if (!group) { return; }
+              const name = group.name;
+              const path = ['/private', 'dashboard', 'group', group?.id];
+              const abbreviation = {
+                backgroundColor: this.calculateMenuColor(index),
+                letters: this.buildAbbreviation(group.name),
+              };
+              this.menuItems.push({ name, path, abbreviation });
+            });
+            this.currentMenuItems.next(this.menuItems);
+          }
+        }
+      });
   }
   calculateMenuColor(rowIndex: number ) {
     if (rowIndex < 5) {
@@ -73,28 +80,22 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       name: 'add-cluster-group',
       title: 'Add Cluster Group',
       icon: 'add',
-      callback: this.openDefaultCreateClusterDialog,
+      callback: this.openAddGroupDialog,
     }];
     this.currentMenuContentTriggers.next(this.menuContentTriggers);
   }
-  openDefaultCreateClusterDialog(parent: ClusterListMenuService) {
-    console.log(parent);
-    const openAddCluster = parent.dialog.open(
-      AddClusterWizardComponent,
-      {
-        width: '900px',
-        height: '75%',
-        minHeight: '300px',
-        closeOnNavigation: true,
-        disableClose: true,
-        data: { groupId:  null},
-      }
-    );
-    openAddCluster.afterClosed().subscribe(response => {
-      if (response && response?.result === true) {
+
+  openAddGroupDialog(parent: ClusterListMenuService) {
+    const confirmDialog = parent.dialog.open(ClusterGroupCreateComponent, {
+      width: '520px',
+      closeOnNavigation: true,
+      disableClose: true,
+      data: {}
+    });
+    confirmDialog.afterClosed().subscribe(result => {
+      if (result === true) {
         parent.buildClusterMenu();
       }
     });
   }
-
 }

@@ -15,9 +15,8 @@
     </div>
   <!-- start of the first row of graphs-->
   <div class="row margin-top-10" *ngIf="clustersList && clustersList.length">
-    <div class="dashboard-card margin-top-10 no-padding no-margin full-height"
-    [ngClass]="this.currentCardSize">
-      <mat-card appearance="outlined" class="" id="top-graph-1">
+    <div class="dashboard-card margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card appearance="outlined" class="" id="complianceSummaryLineChartCard">
         <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -61,9 +60,8 @@
       </mat-card>
     </div>
 
-    <div class="dashboard-card widget margin-top-10 no-padding no-margin full-height"
-         [ngClass]="this.currentCardSize">
-      <mat-card appearance="outlined">
+    <div class="dashboard-card widget margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card appearance="outlined" id="lineChartCard">
         <mat-card-title class="center-xs">Scan History</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -106,9 +104,8 @@
       </mat-card>
     </div>
 
-    <div class="dashboard-card no-padding no-margin margin-top-10 full-height"
-         [ngClass]="this.currentCardSize">
-      <mat-card appearance="outlined">
+    <div class="dashboard-card no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card appearance="outlined" id="barChartCard">
         <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -152,8 +149,7 @@
 
   <!--start of showing the clusters-->
   <div class="row margin-bottom-20">
-    <div class="dashboard-card cluster-element margin-bottom-6 no-padding pointer"
-         [ngClass]="this.currentCardSize"
+    <div class="dashboard-card cluster-element margin-bottom-6 no-padding pointer col-xs-12 col-md-6 col-lg-4"
          *ngFor="let cluster of clustersList; index as i">
       <mat-card appearance="outlined" (click)="showCluster(cluster)" class="padding-top-10 w-100"
                 [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">

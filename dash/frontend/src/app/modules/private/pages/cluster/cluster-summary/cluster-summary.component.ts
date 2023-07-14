@@ -99,13 +99,8 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   page = 0;
   limit = 10;
   clusterEvents: IClusterEvent[];
-  headElements = ['Description', 'Type', 'Level', 'Data', 'Entity Type', 'Creation Time'];
-  formatData = FormatDate.formatLastScannedDate;
   expandStatus: boolean;
   expandSubscription: Subscription;
-  currentCardSize: string;
-  breakpointLarge = 1200;
-  breakpointMedium = 800;
   resizeTimeout;
   innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
@@ -135,7 +130,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     // default card sizes, will be overridden in code
-    this.currentCardSize = 'col-xs-12 col-md-6 col-lg-4';
 
     this.getCountOfImageScan(this.clusterId);
     this.getCountOfVulnerabilities(this.clusterId);
@@ -170,9 +164,21 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.resizeTimeout = setTimeout(() => {
       const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
       this.innerScreenWidth = innerWindow.offsetWidth;
-      this.updateFormatting();
-      this.lineChartAttributes.view = this.chartSizeService.getDashboardChartSize(this.breakpointLarge,
-        this.breakpointMedium, this.innerScreenWidth);
+      this.lineChartAttributes.view = this.chartSizeService.getChartSize(
+        this.innerScreenWidth,
+        { xs: 1, s: 1, m: 2, l: 3},
+        { left: 20, right: 20 },
+        { left: 30, right: 20 },
+        { left: 10, right: 10 },
+        { left: 8, right: 8 },
+      );
+      // const oldValues = this.chartSizeService.getDashboardChartSize(
+      //   window.innerWidth - 10, this.innerScreenWidth,
+      //   40,
+      //   30, 20,
+      //   16, 10,
+      //   this.breakpointLarge, this.breakpointMedium,
+      // );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
     }, 50);
@@ -368,27 +374,9 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     }
   }
 
-  get scrHeight(): number {
-    return this.height;
-  }
-
   set scrWidth(val: number) {
     if (val !== this.width) {
       this.width = val;
-    }
-  }
-
-  get scrWidth(): number {
-    return this.width;
-  }
-
-  updateFormatting() {
-    if (this.innerScreenWidth >= this.breakpointLarge) {
-      this.currentCardSize = 'col-xs-4';
-    } else if (this.innerScreenWidth >= this.breakpointMedium) {
-      this.currentCardSize = 'col-xs-6';
-    } else {
-      this.currentCardSize = 'col-xs-12';
     }
   }
 }

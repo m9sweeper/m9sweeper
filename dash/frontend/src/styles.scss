@@ -129,12 +129,17 @@ button {
   }
 }
 
-.no-padding{
-  padding: 0;
+.no-padding {
+  padding: 0!important;
 }
 
 .margin-top-10{
   margin-top: 10px;
+}
+
+.margin-y-5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .padding-top-10{
@@ -154,6 +159,10 @@ button {
 
 .margin-right-10{
   margin-right: 10px;
+}
+
+.text-align-center {
+  text-align: center;
 }
 
 .text-align-right{
@@ -185,7 +194,7 @@ button {
 }
 
 .justify-content-right {
-  justify-content: right;
+  justify-content: right!important;
 }
 
 .margin-bottom-6{
@@ -267,7 +276,7 @@ app-private {
 .page-card-title{
   font-size: 20px;
   font-weight: bold;
-  line-height: 3;
+  line-height: 1.5em;
 }
 .page-card-content{
   margin-bottom: 30px;
@@ -324,6 +333,10 @@ app-private {
 .modal-content-left-align-no-margin{
   margin: 0;
   text-align: left;
+}
+.modal-content-right-align-no-margin{
+  margin: 0;
+  text-align: right;
 }
 .modal-content-no-right-margin{
   margin-right: 0;
@@ -394,12 +407,12 @@ mat-form-field {
   // flex: 1;
   overflow: auto;
   background: #F9F9F9;
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+
   mat-table {
     min-width: 800px;
 
     mat-row {
-      height: unset;
+      height: unset !important;  // overrides the height imposition set by the generic data table template
     }
 
     mat-cell, mat-header-cell, mat-footer-cell {
@@ -410,29 +423,6 @@ mat-form-field {
       padding-right: 10px;
       margin-right: unset;
       min-width: 8em;
-    }
-
-    & .mat-column-date {
-      width: 150px;
-      max-width: 150px;
-    }
-
-    & .mat-column-runningCluster {
-      width: 120px;
-      max-width: 120px;
-      text-align: center;
-    }
-
-    & .mat-column-scanResult {
-      width: 100px;
-      max-width: 100px;
-      text-align: center;
-    }
-
-    & .mat-column-Crt, & .mat-column-Maj, & .mat-column-Med, & .mat-column-Min, & .mat-column-Neg {
-      width: 50px;
-      max-width: 50px;
-      text-align: center;
     }
   }
 }
@@ -613,8 +603,10 @@ mat-form-field {
 }
 
 .graph-card {
-  min-width: 625px;
   padding-bottom: 20px;
+  mat-card {
+    overflow: scroll;
+  }
 }
 
 // CSS for Report pages [END]
@@ -756,7 +748,7 @@ div.cluster-dashboard.responsive {
 }
 
 .padding-10 {
-  padding: 10px;
+  padding: 10px!important;
 }
 
 .padding-top-4 {
@@ -771,8 +763,16 @@ div.cluster-dashboard.responsive {
   width: 100%;
 }
 
+.h-100 {
+  height: 100%;
+}
+
 .align-items-center {
   align-items: center!important;
+}
+
+.align-items-stretch {
+  align-items: stretch;
 }
 
 /** Hides the increment/decrement arrows on number inputs */

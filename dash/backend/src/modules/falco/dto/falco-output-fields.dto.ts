@@ -8,10 +8,20 @@ export class FalcoOutputFieldsDto {
     @IsOptional()
     containerId: string;
 
+    @Expose({name: 'container.image'})
+    @IsString()
+    @IsOptional()
+    containerImage: string;
+
     @Expose({name: 'container.image.repository'})
     @IsString()
     @IsOptional()
     containerImageRepository: string;
+
+    @Expose({name: 'container.image.tag'})
+    @IsString()
+    @IsOptional()
+    containerImageTag: string;
 
     @Expose({name: 'evt.arg.uid'})
     @IsString()

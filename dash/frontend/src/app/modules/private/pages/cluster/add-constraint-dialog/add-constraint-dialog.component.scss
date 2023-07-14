@@ -20,16 +20,6 @@
   flex-wrap: wrap;
   justify-content: flex-start;
 
-  mat-card-title {
-    margin-bottom: 0;
-    padding-bottom: 20px;
-  }
-
-  .checkbox-style {
-    padding-right: 0;
-    margin-right: 0px;
-  }
-
   .right-content {
     padding-left: 0;
     padding-bottom: 10px;
@@ -78,33 +68,11 @@
   }
 }
 
-.full-width {
-  width: 100%;
-}
-
-.menu-button {
-  transition: 300ms ease-in-out;
-  transform: rotate(0deg);
-}
-
-.menu-button.rotated {
-  transform: rotate(180deg);
-}
-
-.submenu {
-  overflow-y: hidden;
-  transition: transform 300ms ease;
-  transform: scaleY(0);
-  transform-origin: top;
-}
-
-.submenu.expanded {
-  transform: scaleY(1);
-}
-
 .constraints-header {
   padding-left: 20px;
 }
-.mat-mdc-card-title, .mat-mdc-subtitle{
-  margin-top: 10px;
+
+::ng-deep .mat-mdc-dialog-surface,
+::ng-deep .mat-expansion-panel-body {
+    padding: 0!important;
 }

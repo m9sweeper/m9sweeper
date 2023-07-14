@@ -61,8 +61,7 @@ export class FalcoService {
     return this.httpClient.get(`/api/falco/${clusterId}/findsetting`);
   }
 
-  buildParams(clusterId: number, options?: FalcoLogOptions
-  ): HttpParams {
+  buildParams(clusterId: number, options?: FalcoLogOptions): HttpParams {
     let params: HttpParams = new HttpParams();
     params = params.set('cluster-id', clusterId.toString());
 
