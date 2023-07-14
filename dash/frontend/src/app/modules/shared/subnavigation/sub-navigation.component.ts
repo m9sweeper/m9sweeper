@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sub-navigation',
@@ -9,7 +9,6 @@ export class SubNavigationComponent implements OnInit {
   @Input() buttonTitle: string;
   @Input() buttonUrl: any;
   @Input() title: string;
-  @Input() clickFunction: any;
   constructor() {}
 
   ngOnInit(): void {
