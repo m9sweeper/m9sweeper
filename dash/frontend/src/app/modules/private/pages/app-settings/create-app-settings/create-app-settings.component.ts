@@ -1,11 +1,20 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
 import {FileManagementService} from '../../../../../core/services/file-management.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IFile} from '../../../../../core/entities/IFile';
+import {SafeUrl} from '@angular/platform-browser';
 
+
+interface CreateAppSettingsDialogData {
+  isEdit: boolean;
+  appSettingsData: {
+    organizationName: string;
+    organizationLogo: SafeUrl;
+  };
+}
 @Component({
   selector: 'app-create-app-settings',
   templateUrl: './create-app-settings.component.html',
@@ -13,12 +22,13 @@ import {IFile} from '../../../../../core/entities/IFile';
 })
 export class CreateAppSettingsComponent implements OnInit {
   createAppSettingsForm: FormGroup;
+  imageUrl: string | SafeUrl;
 
   constructor(private dialogRef: MatDialogRef<CreateAppSettingsComponent>,
               private formBuilder: FormBuilder,
               private appSettingsService: AppSettingsService,
               private fileManagementService: FileManagementService,
-              @Inject(MAT_DIALOG_DATA) public data: any
+              @Inject(MAT_DIALOG_DATA) public data: CreateAppSettingsDialogData
               )
   {
     this.createAppSettingsForm = this.formBuilder.group({
@@ -29,21 +39,11 @@ export class CreateAppSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.data);
+    this.imageUrl = this.data?.appSettingsData?.organizationLogo;
   }
 
   onSubmit() {
-    // const currentUserId = this.jwtAuthService.getCurrentUserData().id;
-    // const appSettingsData = {...this.createAppSettingsForm.value, logo: this.selectedLogoAsBase64,
-    //   logo_type: this.selectedLogoType, user_id: currentUserId};
-    // if (this.data.isEdit) {
-    //   this.appSettingsService.updateAppSettings(this.data.appSettingsData.id, appSettingsData).subscribe(result => {
-    //     this.appSettingsService.sendUpdatedSettingsData({...appSettingsData, id: result.data.id});
-    //   });
-    // } else {
-    //   this.appSettingsService.createAppSettings(appSettingsData).subscribe(result => {
-    //     this.appSettingsService.sendUpdatedSettingsData({...appSettingsData, id: result.data[0].id});
-    //   });
-    // }
     const formData = new FormData();
     formData.append('files', this.createAppSettingsForm.get('fileSource').value);
 
@@ -80,15 +80,11 @@ export class CreateAppSettingsComponent implements OnInit {
       this.createAppSettingsForm.patchValue({
         fileSource: file
       });
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
-  //
-  // private toBase64(file: File) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = error => reject(error);
-  //   });
-  // }
 }
