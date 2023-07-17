@@ -168,10 +168,10 @@
             <mat-card-subtitle>
               {{cluster.ipAddress}}
             </mat-card-subtitle>
-            <mat-card-content>
+            <mat-card-content class="no-padding">
               <p>{{cluster.context}}</p>
               <i *ngIf="cluster.lastScannedAt">
-                Last synced: {{+cluster.lastScannedAt | date: 'short'}}
+                last synced: {{+cluster.lastScannedAt | date: 'short'}}
               </i>
             </mat-card-content>
 
