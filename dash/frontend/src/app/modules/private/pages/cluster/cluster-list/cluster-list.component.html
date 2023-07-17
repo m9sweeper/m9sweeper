@@ -139,7 +139,6 @@
   </div>
 
   <!--start of the error messages-->
-
   <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
     <mat-card >No cluster added for this group</mat-card>
   </div>
@@ -154,7 +153,7 @@
       <mat-card (click)="showCluster(cluster)" class="w-100"
                 [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
         <div class="row">
-          <div class="col-xs-2 cluster-icon">
+          <div class="col-xs-1 cluster-icon">
             <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
               <span>
                 {{shortGroupName(cluster.name)}}

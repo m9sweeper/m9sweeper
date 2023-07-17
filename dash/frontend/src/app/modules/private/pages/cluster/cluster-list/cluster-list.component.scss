@@ -3,6 +3,12 @@
   padding-right: 20px;
 }
 
+mat-card.overview-graph-card {
+  mat-card-content {
+    margin: 6px 16px 16px 6px !important;
+    padding: unset;
+  }
+}
 
 .cluster-element {
   display: flex;

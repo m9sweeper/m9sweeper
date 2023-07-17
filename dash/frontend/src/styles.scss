@@ -48,19 +48,11 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/dashboard/dashboard.component.theme';
 @import './app/modules/private/pages/cluster/cluster-details/cluster-details.component.theme';
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
-@import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
 mat-card {
   margin: 10px 5px 0 5px;  // set to match legacy margins
   //padding: 0 10px;
-
-  &.overview-graph-card {
-    mat-card-content {
-      margin: 6px 16px 16px 6px !important;
-      padding: unset;
-    }
-  }
 
   mat-card-title {
     font-weight: bold;
@@ -372,11 +364,6 @@ app-private {
   &.mark {
     background: rgba(0, 0, 0, .05);
   }
-}
-
-.cluster-page-row {
-  padding-left: 30px;
-  padding-right: 20px;
 }
 
 .pointer {

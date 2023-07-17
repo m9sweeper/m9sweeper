@@ -179,7 +179,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-    } , 50);
+    } , 100);
   }
 
   getClustersByClusterGroupId(groupId: number) {
