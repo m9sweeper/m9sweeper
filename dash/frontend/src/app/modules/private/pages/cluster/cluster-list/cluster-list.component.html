@@ -168,13 +168,16 @@
             <mat-card-subtitle>
               {{cluster.ipAddress}}
             </mat-card-subtitle>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs">
             <mat-card-content class="no-padding">
               <p>{{cluster.context}}</p>
               <i *ngIf="cluster.lastScannedAt">
                 last synced: {{+cluster.lastScannedAt | date: 'short'}}
               </i>
             </mat-card-content>
-
           </div>
         </div>
         <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
