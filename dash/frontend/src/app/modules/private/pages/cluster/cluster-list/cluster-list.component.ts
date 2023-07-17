@@ -174,8 +174,8 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         { xs: 1, s: 1, m: 2, l: 3 },
         { left: 20, right: 20 },
         { left: 20, right: 20 },
-        { left: 10, right: 10 },
-        { left: 4, right: 8 },
+        { left: 5, right: 5 },
+        { left: 6, right: 16 },
       );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;

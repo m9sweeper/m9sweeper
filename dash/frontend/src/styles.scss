@@ -53,11 +53,13 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
 mat-card {
-  margin: 10px 10px 0 0;  // set to match legacy margins
+  margin: 10px 5px 0 5px;  // set to match legacy margins
+  //padding: 0 10px;
 
   &.overview-graph-card {
     mat-card-content {
-      padding: 6px 16px 16px 8px !important;
+      margin: 6px 16px 16px 6px !important;
+      padding: unset;
     }
   }
 
