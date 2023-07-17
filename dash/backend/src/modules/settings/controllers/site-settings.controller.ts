@@ -2,12 +2,9 @@ import {
     Body,
     Controller,
     Get,
-    HttpException,
-    HttpStatus,
-    Inject, Param,
+    Inject,
     Post,
     Put, Query,
-    Res,
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
@@ -22,7 +19,7 @@ import {AllowedAuthorityLevels} from '../../../decorators/allowed-authority-leve
 import {Authority} from '../../user/enum/Authority';
 import {AuthorityGuard} from '../../../guards/authority.guard';
 import {ConfigService} from '@nestjs/config';
-import {AppSettingsType, LicenseSettingsType, SiteSettingsType} from "../enums/settings-enums";
+import {AppSettingsType, LicenseSettingsType} from "../enums/settings-enums";
 import {UserProfileDto} from "../../user/dto/user-profile-dto";
 import {LicensingPortalService} from "../../../integrations/licensing-portal/licensing-portal.service";
 import {LicenseAndInstanceValidityDto} from "../../../integrations/licensing-portal/licensing-portal.dto";

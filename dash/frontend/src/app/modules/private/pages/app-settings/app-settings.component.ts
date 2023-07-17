@@ -35,13 +35,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.appSettingsService.getAppSettings()
-      .pipe(take(1))
-      .subscribe({
-        next: (result: IServerResponse<ISetting[]>) => {
-          this.appSettingsService.setSettingsData(result.data);
-        }
-      });
+    this.loadSiteSettings();
 
     this.appSettingsService.getUpdatedSettingsData()
       .pipe(takeUntil(this.unsubscribe$))
@@ -72,6 +66,16 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
     this.subNavigationTitle = 'Organization';
   }
 
+  loadSiteSettings(): void {
+    this.appSettingsService.getAppSettings()
+      .pipe(take(1))
+      .subscribe({
+        next: (result: IServerResponse<ISetting[]>) => {
+          this.appSettingsService.setSettingsData(result.data);
+        }
+      });
+  }
+
   openAddSettingDialog() {
     const openAddCluster = this.dialog.open(CreateAppSettingsComponent, {
       width: '600px',
@@ -87,9 +91,9 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
       }
     });
     openAddCluster.afterClosed().pipe(take(1)).subscribe({
-      next: result => {
-        if (result && result.updatedSiteSettings) {
-          this.appSettingsService.setSettingsData(result.updatedSiteSettings);
+      next: (result: { refresh?: boolean}) => {
+        if (result?.refresh) {
+          this.loadSiteSettings();
         }
       }
     });

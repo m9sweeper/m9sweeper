@@ -6,6 +6,8 @@ import {FileManagementService} from '../../../../../core/services/file-managemen
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IFile} from '../../../../../core/entities/IFile';
 import {SafeUrl} from '@angular/platform-browser';
+import {Observable, of} from 'rxjs';
+import {switchMap, take} from 'rxjs/operators';
 
 
 interface CreateAppSettingsDialogData {
@@ -33,8 +35,8 @@ export class CreateAppSettingsComponent implements OnInit {
   {
     this.createAppSettingsForm = this.formBuilder.group({
       name: [this.data.isEdit ? this.data.appSettingsData.organizationName : '' , Validators.required],
-      file: ['', Validators.required],
-      fileSource: ['', Validators.required]
+      file: [''],
+      fileSource: ['']
     });
   }
 
@@ -44,34 +46,44 @@ export class CreateAppSettingsComponent implements OnInit {
   }
 
   onSubmit() {
-    const formData = new FormData();
-    formData.append('files', this.createAppSettingsForm.get('fileSource').value);
+    let logoSubmit: Observable<IServerResponse<IFile[]>>;
+    if (this.createAppSettingsForm.get('fileSource').value) {
+      const formData = new FormData();
+      formData.append('files', this.createAppSettingsForm.get('fileSource').value);
+      logoSubmit = this.fileManagementService.upload(formData);
+    } else {
+      logoSubmit = of(null);
+    }
 
-    this.fileManagementService.upload(formData).subscribe((fileSaveResponse: IServerResponse<IFile[]>) => {
-      console.log('Response: ', fileSaveResponse);
-      if (fileSaveResponse.data.length > 0 ) {
-        const siteName = this.createAppSettingsForm.get('name').value;
-        const siteLogoFileId = fileSaveResponse.data[0].fileId;
+    logoSubmit.pipe(
+      switchMap((resp) => {
         const siteSettings = [
           {
             name: 'SITE_NAME',
-            value: siteName
+            value: this.createAppSettingsForm.get('name').value
           },
-          {
-            name: 'SITE_LOGO',
-            value: siteLogoFileId
-          }
         ];
-        this.appSettingsService.saveAppSettings(siteSettings, this.data.isEdit).subscribe(saveSiteSettingsResponse => {
-          console.log('Save app settings: ', saveSiteSettingsResponse);
-          this.dialogRef.close({updatedSiteSettings: saveSiteSettingsResponse.data});
-        });
-      }
-    });
+
+        if (resp?.data) {
+          siteSettings.push({
+            name: 'SITE_LOGO',
+            value: resp.data[0].fileId
+          });
+        }
+
+        return this.appSettingsService.saveAppSettings(siteSettings, this.data.isEdit);
+      }),
+      take(1)
+    )
+      .subscribe({
+        next: () => {
+          this.dialogRef.close({ refresh: true });
+        }
+      });
   }
 
   onNoClick() {
-    this.dialogRef.close();
+    this.dialogRef.close({ refresh: false });
   }
 
   onLogoChange(event) {
