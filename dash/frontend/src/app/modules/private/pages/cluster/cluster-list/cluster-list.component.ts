@@ -187,6 +187,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(take(1))
       .subscribe(response => {
       this.clustersList = response.data;
+      this.clustersList = this.clustersList.concat(response.data).concat(response.data);
       this.backupClusterList = response.data;
       for (const cluster of this.clustersList) {
         if (cluster.tags) {
@@ -289,6 +290,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       if (response.result) {
         if (response.result.data.length) {
           this.clustersList = response.result.data;
+          this.clustersList = this.clustersList.concat(response.result.data).concat(response.result.data);
           const clusterIds = (this.clustersList && this.clustersList.length) ?
             this.clustersList.map(value => value.id ) : [];
           this.getCountOfImageScan(clusterIds);

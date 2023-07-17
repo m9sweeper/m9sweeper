@@ -47,7 +47,6 @@ $ms-default-theme: mat.define-light-theme((
 @import "./app/app.component.theme";
 @import './app/modules/private/pages/dashboard/dashboard.component.theme';
 @import './app/modules/private/pages/cluster/cluster-details/cluster-details.component.theme';
-@import './app/modules/private/pages/cluster/cluster-list/cluster-list.component.theme';
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
