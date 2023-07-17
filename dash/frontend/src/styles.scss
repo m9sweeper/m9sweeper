@@ -52,9 +52,30 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
-.mat-mdc-card-content {
-  font-size: 14px;
-  line-height: 20px;
+mat-card {
+  margin: 10px 10px 0 0;  // set to match legacy margins
+
+  &.overview-graph-card {
+    mat-card-content {
+      padding: 6px 16px 16px 8px !important;
+    }
+  }
+
+  mat-card-title {
+    font-weight: bold;
+  }
+
+  .mat-mdc-card-content {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.graph-card {
+  padding-bottom: 20px;
+  mat-card {
+    overflow: scroll;
+  }
 }
 
 @mixin custom-components-theme($theme) {
@@ -600,13 +621,6 @@ mat-form-field {
 
 .fix-margin {
   margin-left: 18px;
-}
-
-.graph-card {
-  padding-bottom: 20px;
-  mat-card {
-    overflow: scroll;
-  }
 }
 
 // CSS for Report pages [END]
