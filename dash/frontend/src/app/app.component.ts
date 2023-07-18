@@ -44,18 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((currentTheme: ITheme) => {
         this.theme = currentTheme;
       });
-
-    // timer(0, 10000)
-    //   .pipe(takeUntil(this.unsubscribe$))
-    //   .subscribe(() => {
-    //     if (this.jwtAuthService.isTokenExpired()) {
-    //       console.log('rerouting to the login page');
-    //       this.jwtAuthService.clearToken();
-    //       this.router.navigate(['/login']);
-    //     }
-    //   });
-
-    console.log('overlayContainer.getContainerElement ===> ', Array.from(this.overlayContainer.getContainerElement().classList));
   }
 
   ngOnDestroy(): void {

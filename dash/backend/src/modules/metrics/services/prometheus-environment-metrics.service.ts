@@ -7,6 +7,7 @@ import { ImageService } from "../../image/services/image.service";
 import { ClusterDto } from 'src/modules/cluster/dto/cluster-dto';
 import { ReportsService } from '../../reports/services/reports.service';
 import { PodService } from '../../pod/services/pod.service';
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 @Injectable()
 export class PrometheusEnvironmentMetricsService {
@@ -35,6 +36,7 @@ export class PrometheusEnvironmentMetricsService {
     private imageService: ImageService,
     private reportsService: ReportsService,
     private podService: PodService,
+    protected readonly logger: MineLoggerService,
   ) {}
 
   async environmentMetrics() {
@@ -81,7 +83,7 @@ export class PrometheusEnvironmentMetricsService {
       }
       this.envMetricsUpdatedTimestamp = Date.now();
     } catch (e) {
-      console.log(e);
+      this.logger.error('Error updating metrics', e, 'PrometheusEnvironmentMetricsService.updateEnvMEtrics');
     }
   }
 

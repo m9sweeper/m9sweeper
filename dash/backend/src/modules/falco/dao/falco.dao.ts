@@ -365,7 +365,6 @@ export class FalcoDao {
     }
 
     async getFalcoRuleById(id: number): Promise<FalcoRuleDto> {
-        console.log(id);
         const knex = await this.databaseService.getConnection();
         const query = this.baseFalcoRuleQuery(knex)
           .where('rule.id', '=', id);

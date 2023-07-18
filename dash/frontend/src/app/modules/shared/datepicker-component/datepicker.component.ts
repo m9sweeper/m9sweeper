@@ -33,7 +33,6 @@ export class DatepickerComponent implements OnInit {
       const previousUrl = event[0].url.split('/').includes('kubernetes-namespaces');
       if (previousUrl) {
         const desiredDate = parseInt(localStorage.getItem('dateSearchTerm'), 10);
-        console.log({previousDateExists: desiredDate});
         this.emitEvent(new Date(desiredDate));
       } else {
         this.setDatepickerToToday();
@@ -42,18 +41,15 @@ export class DatepickerComponent implements OnInit {
   }
 
   setDatepickerToToday() {
-    console.log({today: this.today});
     this.emitEvent(this.today);
   }
 
   dateChange(event) {
     const desiredDate = event?.value ? new Date(event.value) : new Date();
-    console.log({event, desiredDate});
     this.emitEvent(desiredDate);
   }
 
   emitEvent(desiredDate: Date) {
-    console.log({emitEventDate: desiredDate, stringified: desiredDate.valueOf().toString()});
     localStorage.setItem('dateSearchTerm', desiredDate.valueOf().toString());
     const isToday = (
       this.today.getFullYear() === desiredDate.getFullYear() &&

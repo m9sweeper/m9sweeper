@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../shared/services/database.service';
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 /**
  * This command is used mainly by init containers and stuff to verify database connectivity before attempting to start pods to helm with errors
@@ -7,7 +8,10 @@ import { DatabaseService } from '../../shared/services/database.service';
 @Injectable()
 export class DatabaseStatusCommand {
     // Create the constructor so that we can utilize the DatabaseService for this command
-    constructor(private readonly databaseService: DatabaseService) {}
+    constructor(
+      private readonly databaseService: DatabaseService,
+      protected readonly logger: MineLoggerService,
+    ) {}
 
     /**
      * Run a check against the defined database to ensure it is responding to queries.

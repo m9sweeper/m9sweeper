@@ -157,7 +157,7 @@ export class KubernetesClusterService {
       let somePodsFailed = false;
       for (const pod of runningPods) {
         try {
-          console.log("Saving pod " + pod.metadata.name + " of " + pod.metadata.namespace);
+          this.loggerService.log({label: 'Saving pod', data: { name: pod.metadata.name, namespace: pod.metadata.namespace}}, 'KubernetesClusterService.saveK8sPod');
           await this.podService.savePod(pod, clusterId, imageIdMap);
         } catch (e) {
           somePodsFailed = true;
@@ -198,61 +198,4 @@ export class KubernetesClusterService {
             return {numNodes: null, numCPU: null, amountRAM: null};
         }
     }
-
-    // @TODO: dead code, used as reference for syncPods
-    /*private async syncDeployments(namespace: NamespaceDto, cluster: ClusterDto, coreApi: CoreV1Api, k8sApi: k8s.AppsV1Api): Promise<void> {
-        try {
-            const result = await k8sApi.listNamespacedDeployment(namespace.name);
-            const deployments: V1Deployment[] = result.body.items;
-
-            const resultPodList = await coreApi.listNamespacedPod(namespace.name);
-            const pods: V1Pod[] = resultPodList.body.items.filter(p => ['Running'].includes(p.status.phase) && p.metadata.ownerReferences && p.metadata.ownerReferences.findIndex(pm => pm.kind !== 'Job') > -1);
-
-            for (const deployment of deployments) {
-                await this.deploymentService.saveK8sDeployments(deployment, cluster.id);
-
-                const deploymentContainerImageList: {
-                    deployment: V1Deployment;
-                    relevantPodContainers: V1ContainerStatus[];
-                } = {
-                    deployment: deployment,
-                    relevantPodContainers: (deployment.spec.template.spec.containers as V1Container[]).reduce((acc, dc) => {
-                        pods.forEach(p => {
-                            acc.push(...p.status.containerStatuses.filter(pc => pc.name === dc.name && pc.image === dc.image));
-                        });
-                        return acc;
-                    }, [])
-                };
-
-                await this.k8sImageService.saveK8sImagesOLD(cluster.id, deploymentContainerImageList);
-            }
-
-
-            try {
-                const existingPods: PodDto[] = await this.podService.getAllPods(cluster.id, namespace.name);
-                if (existingPods && existingPods.length > 0) {
-                    await Promise.all(existingPods.map(p => {
-                        p.podStatus = null;
-                        return this.podService.updatePod(p);
-                    }));
-                }
-            } catch (err) {
-                console.log('Error when updating all existing pod status to null. ', err);
-            }
-
-            try {
-                await Promise.all(pods.map(p => this.podService.savePods(p, cluster.id)));
-            } catch (err) {
-                console.log('Error when saving new pods data. ', err);
-            }
-
-            try {
-                await this.podService.deletePod({cluster_id: cluster.id, namespace: namespace.name, pod_status: null});
-            } catch (err) {
-                console.log('Error when deleting existing pods with status null. ', err);
-            }
-        } catch (err) {
-            console.log('Error when sync deployments. ', err);
-        }
-    }*/
 }
