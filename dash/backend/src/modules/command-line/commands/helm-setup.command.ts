@@ -11,7 +11,6 @@ import { ExceptionsService } from '../../exceptions/services/exceptions.service'
 import { ExceptionCreateDto } from '../../exceptions/dto/exceptioncreateDto';
 import { IcliRegistry, IHelmInputRegistry } from "../dto/IHelmInputRegistry";
 import {generateRandomString} from "./generate-random-string";
-import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 /**
@@ -26,7 +25,6 @@ export class HelmSetupCommand {
                 private readonly apiKeyDao: ApiKeyDao,
                 private readonly kubernetesApiService: KubernetesApiService,
                 private readonly registryDao: DockerRegistriesDao,
-                protected readonly logger: MineLoggerService,
                 private readonly exceptionService: ExceptionsService) {
     }
 
@@ -36,11 +34,11 @@ export class HelmSetupCommand {
             promises.push(this.databaseService.getConnection().then(knex => {
                 // Try both ts & js version
                 const ts = knex.seed.run({specific: 'super-admin-seed.ts'})
-                    .then(r => this.logger.log({ label: 'Seeding ts', data: r}, 'HelmSetupCommand.runSeed'));
+                    .then(r => console.log('Seeding ts', r));
                 const js = knex.seed.run({specific: 'super-admin-seed.js'})
-                    .then(r => this.logger.log({ label: 'Seeding js', data: r}, 'HelmSetupCommand.runSeed'));
+                    .then(r => console.log('Seeding js', r));
                 return Promise.all([ts, js]);
-            }).catch(e => this.logger.error('Error running Super admin seed', e, 'HelmSetupCommand.runSeed')));
+            }).catch(e => console.log(e)));
         }
 
         if (process.env.TRAWLER_API_KEY) {
@@ -66,7 +64,8 @@ export class HelmSetupCommand {
                         }))
                         .catch());
             } else {
-              this.logger.log({ label: 'Skipping creation of Trawler user - already exists'}, 'HelmSetupCommand.runSeed');
+                // @TODO: clean up this message when making cli commands silent
+                console.log('Trawler user exists.... skipping');
             }
         }
         
@@ -99,7 +98,8 @@ export class HelmSetupCommand {
                     )
                     .catch());
         } else {
-          this.logger.log({ label: 'Skipping creation of KubeBench user - already exists'}, 'HelmSetupCommand.runSeed');
+            // @TODO: clean up this message when making cli commands silent
+            console.log('Kubebench user exists.... skipping');
         }
 
         const kubehunterUserExists = !!(await this.userDao.loadUser({email: 'Kubehunter'}));
@@ -124,7 +124,8 @@ export class HelmSetupCommand {
                     }))
                     .catch());
         } else {
-          this.logger.log({ label: 'Skipping creation of KubeHunter user - already exists'}, 'HelmSetupCommand.runSeed');
+            // @TODO: clean up this message when making cli commands silent
+            console.log('KubeHUNTER user exists.... skipping');
         }
 
         const falcoUserExists = !!(await this.userDao.loadUser({email: 'Falco'}));
@@ -149,7 +150,8 @@ export class HelmSetupCommand {
                     }))
                     .catch());
         } else {
-          this.logger.log({ label: 'Skipping creation of Falco user - already exists'}, 'HelmSetupCommand.runSeed');
+            // @TODO: clean up this message when making cli commands silent
+            console.log('Falco user exists.... skipping');
         }
 
       await Promise.all(promises);
@@ -165,13 +167,13 @@ export class HelmSetupCommand {
         try {
             registries = (JSON.parse(Buffer.from(b64Registries, "base64").toString("ascii")) as IHelmInputRegistry)?.registries;
         } catch (e) {
-          this.logger.error('Could not parse JSON', e, 'HelmSetupCommand.populateRegistries');
-          return false;
+            console.log('Could not parse JSON', e);
+            return false;
         }
 
         if (!registries?.length) {
-          this.logger.log({ label: 'Registry data not present or could not be read'}, 'HelmSetupCommand.populateRegistries');
-          return false;
+            console.log('Data not present or could not be read');
+            return false;
         }
 
         const existingRegistries = await this.registryDao.getDockerRegistries(null);
@@ -187,13 +189,13 @@ export class HelmSetupCommand {
                     const registryInfo: DockerRegistriesDto = plainToInstance(DockerRegistriesDto, registry);
                     promises.push(
                         this.registryDao.createDockerRegistry(registryInfo).then(() => 0)
-                            .catch(er => this.logger.error({label: 'Error saving registry', data: registry}, er, 'HelmSetupCommand.populateRegistries'))
+                            .catch(er => console.log("Error saving", registry, "ERROR", er))
                     );
                 } else {
-                  this.logger.log({ label: 'Registry already exists with hostname', data: { registry, hostname: registry.hostname}}, 'HelmSetupCommand.populateRegistries');
+                    console.log(`Registry with hostname ${registry.hostname} already exists, skipping`, registry);
                 }
             } else {
-              this.logger.log({label: 'Skipping registry due to missing required fields', data: { registry }}, 'HelmSetupCommand.populateRegistries');
+                console.log('Skipped due to missing required field:', registry)
             }
         }
 
@@ -201,6 +203,41 @@ export class HelmSetupCommand {
         return true;
     }
 
+    // @TODO: clean up log messages to make this silent
+    // Manually triggers the hourly cronjob scraper
+/*    @Command({command: "cronjob:trigger", describe: "Accepts cronjob name and namespace then triggers instance of it in the same namespace"})
+    async triggerCronjob(): Promise<any[] | void> {
+        const cronJobName = process.env.CRONJOB_NAME;
+        const namespace = process.env.CRONJOB_NAMESPACE;
+        const jobName = 'initial-scrape-job'
+
+        const config: KubeConfig = this.kubernetesApiService.loadConfigFromCluster();
+        const batchV1Api = config.makeApiClient(k8s.BatchV1Api);
+        const batchV1beta1Api = config.makeApiClient(k8s.BatchV1beta1Api);
+        try {
+            const cronJob = await batchV1beta1Api.readNamespacedCronJob(cronJobName, namespace);
+            const cronJobSpec = cronJob.body.spec.jobTemplate.spec;
+            const job = new k8s.V1Job();
+            const metadata = new k8s.V1ObjectMeta();
+            job.apiVersion = 'batch/v1';
+            job.kind = 'Job';
+            job.spec = cronJobSpec;
+            metadata.name = jobName;
+            metadata.annotations = {
+                'cronjob.kubernetes.io/instantiate': 'manual',
+                'helm.sh/hook': 'post-install,post-upgrade',
+                'helm.sh/hook-weight': '2',
+                'helm.sh/hook-delete-policy': 'before-hook-creation',
+            };
+            job.metadata = metadata;
+            const result = await batchV1Api.createNamespacedJob(namespace, job);
+            console.log('job created');
+        } catch (err) {
+            console.error(`failed to create job: ${err.message}`);
+            throw err;
+        }
+    }
+*/
     async loadDefaultNamespaceExceptions(): Promise<boolean> {
         if ((await this.exceptionService.getAllExceptions()).length === 0) {
             // create a default namespace exception
@@ -225,13 +262,11 @@ export class HelmSetupCommand {
             exception.title = 'Whitelist Certain Kubernetes Namespaces';
             exception.reason = 'Provide reasonable defaults for the set of namespaces that can be ' +
               'safely ignored in a typical environment. ';
-            this.logger.log({label: 'Creating default namespace exceptions', data: { namespaces: exception.namespaces}}, 'HelmSetupCommand.loadDefaultNamespaceExceptions');
+            console.log("Creating default namespace exception for namespaces " + exception.namespaces.join(','));
             const id = await this.exceptionService.createException([{exception}], null, false, true);
-            if (id[0]) {
-              this.logger.log({label: 'Exception successfully created'}, 'HelmSetupCommand.loadDefaultNamespaceExceptions');
-            }
+            if (id[0]) console.log("Successfully created exception");
         } else {
-          this.logger.log({label: 'Skipping creation of default namespace exceptions - exceptions already exist'}, 'HelmSetupCommand.loadDefaultNamespaceExceptions');
+            console.log("Not creating default namespace exception - exceptions already exist");
         }
         return true;
     }
