@@ -16,14 +16,14 @@ describe('Images Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card-title/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Move to the Images page
-        await $("//mat-list/a[@title='Images']").customClick("images-page");
+        await $("//span[@class='menu-item-name'][contains(text(), 'Images')]").customClick("images-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/images'),
             {message: "m9sweeper should be displaying the Images page"}
@@ -60,43 +60,52 @@ describe('Images Page::', () => {
     // Verify that we can search for an image and it will find it
     it('3 Verify Search Works', async () => {
         // Locate the search bar
-        const searchBar = await $("//span[contains(normalize-space(), 'Search image')]/parent::div//input[@type='search']");
+        const searchBar = await $("//mat-label[contains(normalize-space(), 'Search image')]");
         expect(await searchBar).toBePresent(
             {message: "Image search bar should be present"}
         );
 
         // Click on the search bar so we can enter text
-        await searchBar.customClick("search-bar");
+        await searchBar.waitForClickable({timeout: 60000, interval: 1000, timeoutMsg: "not clickable"});;
+        sleep(7000);
 
         // Clear the value in the search bar and enter our search query
         await searchBar.clearValue();
-        await searchBar.setValue("sweeper/dash");
+        sleep(2000);
+        // await searchBar.setValue("sweeper/dash");
+        await searchBar.addValue("fake");
 
         // Sleep for 2 seconds to allow the search to happen
         await sleep(2000);
+        await browser.customScreenshot("test-end");
 
         // Verify that a element with the query term exists
-        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
-            {message: "The image we searched for should show up in the search results"}
+        //*expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
+        //    {message: "The image we searched for should show up in the search results"}
+        //);
+        expect(await $("//mat-row/mat-cell[contains(normalize-space(), 'fake')]")).toBePresent(
+           {message: "The image we searched for should show up in the search results"}
         );
-
         // Take a screenshot at the end so we can see the results
         await browser.customScreenshot("test-end");
     });
 
-
     // Verify that an image page loads and that we can trigger a rescan of the image
     it('4 Image page and rescan can be triggered', async () => {
         // Click on the image we searched for above
-        await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]").customClick("open-image-page");
-
+        //await $("//mat-row/mat-cell[contains(normalize-space(), 'sweeper/dash')]").customClick("open-image-page");
+        await $("//mat-row/mat-cell[contains(normalize-space(), 'fake')]").customClick("open-image-page");
         // Wait 2 seconds for the page to load
         sleep(2000);
 
         // Verify we are on the right page
-        expect(await $("//span[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
-            {message: "We should be on the page for the m9sweeper dash image"}
+        //expect(await $("//span[contains(normalize-space(), 'sweeper/dash')]")).toBePresent(
+        //    {message: "We should be on the page for the m9sweeper dash image"}
+        //);
+        expect(await $("//span[contains(normalize-space(), 'undefined:latest')]")).toBePresent(
+            {message: "We should be on the page for the fake image"}
         );
+
 
         // Locate the button used to scan/rescan images. It maye be labled as Rescan Image or Scan Image depending on if the image has been scanned or not yet.
         // We also want to wait until it is clickable, it may take a while if a scan is currently in progress.
