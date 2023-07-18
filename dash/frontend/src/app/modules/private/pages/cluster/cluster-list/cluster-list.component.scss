@@ -42,6 +42,14 @@ mat-card.overview-graph-card {
   }
 }
 
+.cluster-info-header {
+  overflow-x: hidden;
+
+  mat-card-subtitle {
+    text-wrap: nowrap;
+  }
+}
+
 .cluster-name-short {
   height: 44px;
   width: 50px;
