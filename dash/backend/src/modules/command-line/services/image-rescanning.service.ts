@@ -4,6 +4,7 @@ import { ClusterDao } from "../../cluster/dao/cluster.dao";
 import { ImageService } from "../../image/services/image.service";
 import { PolicyService } from "../../policy/services/policy-service";
 import { differenceInMilliseconds, add } from 'date-fns';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 
 @Injectable()
@@ -12,6 +13,7 @@ export class ImageRescanningService {
     constructor(private readonly imageService: ImageService, 
         private readonly policyService: PolicyService,
         private readonly imageDao: ImageDao,
+        protected readonly logger: MineLoggerService,
         private readonly clusterDao: ClusterDao,
         ) {}
 
@@ -35,7 +37,7 @@ export class ImageRescanningService {
                             
                             if (image.lastScanned && +image.lastScanned > 0) {
 
-                                let timeWhenRescanRequired = add(new Date(+image.lastScanned), {days: policy.rescanGracePeriod - 1});
+                                const timeWhenRescanRequired = add(new Date(+image.lastScanned), {days: policy.rescanGracePeriod - 1});
 
                                 if (differenceInMilliseconds(new Date(), timeWhenRescanRequired) < 0) {
                                     continue;
@@ -50,7 +52,7 @@ export class ImageRescanningService {
                 
             }
             catch (error) {
-                console.log(error);
+                this.logger.error('Error rescanning image', error, 'ImageRescanningService.rescanIfNeeded');
             }
         }
     }
