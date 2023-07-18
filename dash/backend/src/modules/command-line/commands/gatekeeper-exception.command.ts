@@ -4,6 +4,7 @@ import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
 import {LicensingPortalService} from "../../../integrations/licensing-portal/licensing-portal.service";
 import {ExceptionBlockService} from "../services/exception-block.service";
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 /**
@@ -18,6 +19,7 @@ export class GatekeeperExceptionCommand {
         private readonly clusterService: ClusterService,
         private readonly licensingPortalService: LicensingPortalService,
         private readonly exceptionBlockService: ExceptionBlockService,
+        protected readonly logger: MineLoggerService,
     ) {
     }
 
@@ -30,7 +32,7 @@ export class GatekeeperExceptionCommand {
                     return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
                         .then(() => true)
                         .catch(e => {
-                            console.log('Error syncing GateKeeper exception blocks: ' + e);
+                          this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'GatekeeperExceptionCommand.syncGatekeeperExceptionBlocks');
                             return false;
                         });
          /*

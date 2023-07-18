@@ -17,6 +17,7 @@ async function cli () {
 }
 
 cli().catch(e => {
-    console.log(e);``
+    // Logger may or may not be available, depending on the cause of the error
+    console.log(e);
     process.exit(1); // it failed!
 });
