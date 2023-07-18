@@ -1,0 +1,28 @@
+.mat-column-name {
+  min-width: 80px;
+  flex: 20%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.mat-column-description {
+  min-width: 120px;
+  flex: 30%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.mat-column-mode {
+  min-width: 80px;
+  flex: 15%;
+}
+
+.mat-column-action {
+  min-width: 120px;
+  flex: 20%;
+}
+
+.mat-column-violations {
+  min-width: 80px;
+  flex: 20%;
+}

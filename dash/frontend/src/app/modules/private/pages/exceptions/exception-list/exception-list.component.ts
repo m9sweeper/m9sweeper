@@ -17,7 +17,7 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./exception-list.component.scss']
 })
 export class ExceptionListComponent implements OnInit {
-  displayedColumns: string[] = ['title', 'status', 'start_date', 'end_date', 'actions'];
+  displayedColumns: string[] = ['title', 'status', 'start_date', 'end_date', 'edit', 'delete'];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

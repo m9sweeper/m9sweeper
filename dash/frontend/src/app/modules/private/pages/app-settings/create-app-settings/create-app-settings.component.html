@@ -14,6 +14,9 @@
           type="file"
           (change)="onLogoChange($event)">
       </p>
+      <p *ngIf="imageUrl">
+        <img class="organization-logo" [src]="imageUrl">
+      </p>
     </div>
 
     <div>

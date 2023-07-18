@@ -20,7 +20,8 @@ import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistrie
 })
 export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
   subMenuTitle = 'All Docker Registries';
-  displayedColumns: string[] = ['name', 'hostname', 'authType', 'username', 'password', 'actions'];
+  displayedColumns: string[] = ['name', 'hostname', 'authType', 'username', 'password', 'edit', 'delete'];
+  displayedColumnsNonAdmin: string[] = ['name', 'hostname', 'authType', 'username', 'password'];
   dataSource: MatTableDataSource<IDockerRegistries>;
   userId: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -32,6 +33,7 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
   page = 0;
   totalCount = 0;
   data: IDockerRegistries[] = [];
+  isAdmin: boolean;
 
   constructor(
     private dockerRegistriesService: DockerRegistriesService,
@@ -40,7 +42,12 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
     private jwtAuthService: JwtAuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
+    if (!this.isAdmin) {
+      this.displayedColumns = this.displayedColumnsNonAdmin;
+    }
+  }
 
   ngOnInit(): void {
     this.subNavigationTitle = 'Docker Registries';

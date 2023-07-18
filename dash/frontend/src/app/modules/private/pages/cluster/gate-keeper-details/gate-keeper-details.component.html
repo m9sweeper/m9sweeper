@@ -64,51 +64,51 @@
     <div class="page-card">
           <mat-card appearance="outlined" >
             <mat-card-header id="constraint-header">
-              <div class="col-sm-3 no-padding">
+              <div class="col-xs-3 no-padding">
                 <div class="page-card-title">
                   Constraints
                 </div>
               </div>
-              <div class="col-sm-9 page-card-title-button-group-right-align">
+              <div class="col-xs-9 page-card-title-button-group-right-align">
                 <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openAddConstraintTemplate()"><mat-icon>add</mat-icon>Add More</button>
               </div>
             </mat-card-header>
             <mat-card-content>
               <div >
-                <table mat-table [dataSource]="constraintsList" >
+                <mat-table [dataSource]="constraintsList" >
                   <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                    <td mat-cell *matCellDef="let constraint">{{constraint.metadata.name}}</td>
+                    <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                    <mat-cell *matCellDef="let constraint" [matTooltip]="constraint.metadata.name">{{constraint.metadata.name}}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef > Description</th>
-                    <td mat-cell *matCellDef="let constraint">{{constraint.metadata.annotations.description}}</td>
+                    <mat-header-cell *matHeaderCellDef > Description</mat-header-cell>
+                    <mat-cell *matCellDef="let constraint" [matTooltip]="constraint.metadata.annotations.description">{{constraint.metadata.annotations.description}}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="mode">
-                    <th mat-header-cell *matHeaderCellDef > Mode</th>
-                    <td mat-cell *matCellDef="let constraint">{{constraint.spec.enforcementAction}}</td>
+                    <mat-header-cell *matHeaderCellDef > Mode</mat-header-cell>
+                    <mat-cell *matCellDef="let constraint">{{constraint.spec.enforcementAction}}</mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef >Action</th>
-                    <td mat-cell *matCellDef="let constraint">
+                    <mat-header-cell *matHeaderCellDef >Action</mat-header-cell>
+                    <mat-cell *matCellDef="let constraint">
                       <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="editTemplateConstraint(constraint)">
                         <mat-icon>edit</mat-icon>
                       </button>
                       <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="destroyTemplateConstraint(constraint)">
                         <mat-icon>delete_forever</mat-icon>
                       </button>
-                    </td>
+                    </mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="violations">
-                    <th mat-header-cell *matHeaderCellDef >Violations</th>
-                    <td mat-cell *matCellDef="let constraint">
+                    <mat-header-cell *matHeaderCellDef >Violations</mat-header-cell>
+                    <mat-cell *matCellDef="let constraint">
                       <a href="javascript:void(0);" *ngIf="constraint.status.totalViolations" (click)="showViolations(constraint)">{{constraint.status.totalViolations}}</a>
                       <a *ngIf="!constraint.status.totalViolations" >{{constraint.status.totalViolations}}</a>
-                    </td>
+                    </mat-cell>
                   </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click"></tr>
-                </table>
+                  <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-header-row mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click"></mat-header-row>
+                </mat-table>
               </div>
             </mat-card-content>
           </mat-card>
