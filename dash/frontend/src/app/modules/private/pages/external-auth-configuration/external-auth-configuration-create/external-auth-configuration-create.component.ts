@@ -149,14 +149,12 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
 
     if (this.data.isEdit) {
       this.externalAuthConfigurationService.updateExternalAuth(authConfig, this.data.authConfigData.id).subscribe(data => {
-          console.log('Updating: ', data);
           this.dialogRef.close();
       }, error => {
           this.alertService.danger(error.error.message);
       });
     } else {
       this.externalAuthConfigurationService.createExternalAuth(authConfig).subscribe(data => {
-        console.log('Creating: ', data);
         this.dialogRef.close();
       }, error => {
         this.alertService.danger(error.error.message);

@@ -9,7 +9,6 @@ import { ImageService } from '../../../../../core/services/image.service';
 import { ClusterService } from '../../../../../core/services/cluster.service';
 import { INamespaceTotalVulnerability } from '../../../../../core/entities/INamespaceTotalVulnerability';
 import { IClusterEvent } from '../../../../../core/entities/IClusterEvent';
-import { FormatDate } from '../../../../shared/format-date/format-date';
 import { MatDialog } from '@angular/material/dialog';
 import { ClusterEventComponent } from '../cluster-event/cluster-event.component';
 import { SharedSubscriptionService } from '../../../../../core/services/shared.subscription.service';
@@ -19,6 +18,7 @@ import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
 import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
+import {environment} from '../../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-cluster-summary',
@@ -221,7 +221,9 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         }
       ];
     }, error => {
-      console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+      if (!environment.production) {
+        console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+      }
     });
   }
 
@@ -247,8 +249,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
           })
         }
       ];
-      console.log('result: ', this.lineChartAttributes.results);
-      console.log('result type: ', typeof(this.lineChartAttributes.results));
     }, error => {
       this.alertService.danger(error.error.message);
     });
@@ -260,7 +260,9 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe(response => {
       this.countOfTotalImagesRunning = +response.data;
     }, error => {
-      console.log(`Error in get image summary`, error);
+        if (!environment.production) {
+          console.log(`Error in get image summary`, error);
+        }
     });
   }
 
@@ -364,7 +366,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
 
   onScroll() {
     this.page = this.page + 1;
-    console.log('hitting onScroll');
     this.getClusterEvents(this.limit, this.page);
   }
 

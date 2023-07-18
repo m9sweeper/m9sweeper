@@ -45,7 +45,6 @@ export class ClusterGroupCreateComponent implements OnInit {
       this.clusterGroupService.updateClusterGroup(formData, this.data.clusterGroupId).pipe(take(1))
         .subscribe({
           next: response => {
-            console.log('cluster group update response=>', response);
             if (response?.data) {
               this.successMsg = 'Cluster group updated successfully';
               this.alertService.success('Cluster group updated successfully');
@@ -64,7 +63,6 @@ export class ClusterGroupCreateComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: isCreated => {
-            console.log('cluster group created response=>', isCreated);
             if (+isCreated?.data?.id > 0 ) {
               this.successMsg = 'Cluster group created successfully';
               this.alertService.success('Cluster group created successfully');

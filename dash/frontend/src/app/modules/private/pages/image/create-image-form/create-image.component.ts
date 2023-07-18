@@ -66,7 +66,6 @@ export class CreateImageComponent implements OnInit {
       containerPath += `${splitOnSlash.shift()}/`;
     }
     containerPath += splitOnSlash.shift();
-    // console.log({containerRegistry, containerPath, imageTag});
     this.imageForm.get('url').setValue(containerRegistry);
     this.imageForm.get('name').setValue(containerPath);
     this.imageForm.get('tag').setValue(imageTag);

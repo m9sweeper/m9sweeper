@@ -28,7 +28,6 @@ export class SiteLogoDirective implements OnInit, OnDestroy {
           // });
         }
       }, error => {
-          console.log('Site title loading error.', error);
       }, () => {
         // this.appSettingsService.getSiteLogo().subscribe(blob => {
         //   this.parseAndCacheImage(blob);
@@ -53,7 +52,6 @@ export class SiteLogoDirective implements OnInit, OnDestroy {
   }
 
   private parseAndCacheImage(blob) {
-    console.log('From ', SiteLogoDirective.name);
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = () => {

@@ -331,7 +331,6 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   onClusterChange($event){
-    console.log('cluster changed ......', $event.value);
     this.loadNamespacesForSelectedClusters($event.value);
     if (this.exceptionForm.controls.type.value === 'policy') {
       this.gatekeeperConstraintList = of([]);
@@ -411,7 +410,6 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     let namespaces = this.exceptionForm.value.namespaces;
     if (namespaces.length) {
       namespaces = namespaces.map(n => n.split(':')[0]);
-      // console.log(namespaces);
       return namespaces.join(', ');
     }
   }

@@ -1,17 +1,11 @@
-import {Directive, ElementRef, OnInit} from '@angular/core';
-import {UserService} from '../../../core/services/user.service';
+import {Directive, ElementRef} from '@angular/core';
 
 @Directive({
   selector: '[appUserProfileImage]'
 })
-export class UserProfileImageDirective implements OnInit {
+export class UserProfileImageDirective {
 
-  constructor(private el: ElementRef<HTMLImageElement>,
-              private readonly userService: UserService) {
-  }
-
-  ngOnInit(): void {
-    console.log('UserProfileImageDirective->ngOnInit');
+  constructor(private el: ElementRef<HTMLImageElement>) {
   }
 
 }

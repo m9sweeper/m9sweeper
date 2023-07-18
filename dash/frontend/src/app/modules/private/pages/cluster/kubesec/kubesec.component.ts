@@ -204,7 +204,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
     let subtotal = 0;
     if ( section.length > 0) {
       section.forEach(e => subtotal = subtotal + e['points']);
-      console.log(subtotal);
     }
     return subtotal;
   }

@@ -61,7 +61,6 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     // https://stackoverflow.com/questions/54891110/router-getcurrentnavigation-always-returns-null
     // const currentNavigation = this.router.getCurrentNavigation();
     const currentState: any = this.location.getState();
-    console.log({stateFromLocation: this.location.getState()});
     this.cve = currentState?.cve;
     this.onlyRunning = currentState?.onlyRunning !== 'NO';
     this.imageName = currentState?.imageName;

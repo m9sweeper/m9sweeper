@@ -106,12 +106,10 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
     if (value?.trim()) {
       this.tagService.createTag({name: value.trim(), groupId: this.createClusterForm.controls.groupId.value})
         .subscribe(response => {
-          // console.log({response});
           if (!this.displayedTags.includes(value)) {
             this.displayedTags.push({name: value.trim(), id: response.data.id, groupId: response.data.groupId});
           }
         }, error => {
-          // console.log({error});
           this.alertService.warning(error?.error?.message);
         });
     }

@@ -183,7 +183,6 @@ export class ClusterInfoComponent implements OnInit {
     });
     openAddCluster.afterClosed().subscribe(response => {
       if (response && response?.result === true) {
-        console.log(response);
         this.router.navigate(['/private/clusters', this.cluster.id, 'summary']);
       }
     });

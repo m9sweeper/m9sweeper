@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
     });
     this.authService.getAvailableAuthenticationMethods().subscribe((response: IServerResponse<IAuthenticationMethod[]>) => {
       const authenticationMethods = response.data;
-      console.log('authenticationMethods: ', authenticationMethods);
       this.inSiteCredentialAuthenticationMethods = authenticationMethods;
       this.selectedInSiteCredentialAuthenticationMethod = this.inSiteCredentialAuthenticationMethods.find(iscam => iscam.type === 'LOCAL_AUTH');
     }, error => {
@@ -72,7 +71,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    console.log('this.selectedInSiteCredentialAuthenticationMethod: ', this.selectedInSiteCredentialAuthenticationMethod);
     this.loaderService.start('login');
     this.authService.login(
       this.loginForm.value.username,
@@ -86,10 +84,8 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/private']).then(() => this.loaderService.stop('login'));
       } else {
         this.loaderService.stop('login');
-        console.log('Invalid JWT');
       }
     }, error => {
-      console.log('Error: ', error);
       this.loaderService.stop('login');
       this.alertService.danger(error.error.message);
     });

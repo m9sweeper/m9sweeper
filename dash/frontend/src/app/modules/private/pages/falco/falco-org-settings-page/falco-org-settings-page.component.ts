@@ -37,7 +37,6 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
   }
 
   openAddEditModal(rule?: IFalcoRule, existingRuleIndex?: number) {
-    console.log('opening modal');
     const ref = this.dialog.open(FalcoRuleAddEditDialogComponent, {
       data: {
         rule

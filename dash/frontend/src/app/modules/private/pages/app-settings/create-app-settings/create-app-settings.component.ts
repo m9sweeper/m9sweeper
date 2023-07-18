@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AppSettingsService} from '../../../../../core/services/app-settings.service';
@@ -48,7 +48,6 @@ export class CreateAppSettingsComponent implements OnInit {
     formData.append('files', this.createAppSettingsForm.get('fileSource').value);
 
     this.fileManagementService.upload(formData).subscribe((fileSaveResponse: IServerResponse<IFile[]>) => {
-      console.log('Response: ', fileSaveResponse);
       if (fileSaveResponse.data.length > 0 ) {
         const siteName = this.createAppSettingsForm.get('name').value;
         const siteLogoFileId = fileSaveResponse.data[0].fileId;
@@ -63,7 +62,6 @@ export class CreateAppSettingsComponent implements OnInit {
           }
         ];
         this.appSettingsService.saveAppSettings(siteSettings, this.data.isEdit).subscribe(saveSiteSettingsResponse => {
-          console.log('Save app settings: ', saveSiteSettingsResponse);
           this.dialogRef.close({updatedSiteSettings: saveSiteSettingsResponse.data});
         });
       }

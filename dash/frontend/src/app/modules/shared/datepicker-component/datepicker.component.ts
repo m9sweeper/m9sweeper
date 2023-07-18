@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {filter, pairwise} from 'rxjs/operators';
-import {merge} from 'rxjs';
 
 @Component({
   selector: 'app-datepicker-component',
@@ -66,7 +65,6 @@ export class DatepickerComponent implements OnInit {
     const mutableDate = new Date(desiredDate.getTime());
     const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();
     const endTime = mutableDate.setHours(23, 59, 59, 999).valueOf();
-    console.log({isToday, desiredDate, startTime, endTime});
     this.newDateSelected.emit({isToday, desiredDate, startTime, endTime});
   }
 }
