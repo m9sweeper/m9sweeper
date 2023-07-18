@@ -24,11 +24,30 @@ export class GatekeeperExceptionCommand {
     }
 
     async syncGatekeeperExceptionBlocks(): Promise<boolean> {
-      return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
-          .then(() => true)
-          .catch(e => {
-            this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'GatekeeperExceptionCommand.syncGatekeeperExceptionBlocks');
-              return false;
-          });
+        /*
+        this.licensingPortalService.checkLicenseValidityFromDash()
+            .then((checkLicenseValidity) => {
+                if (checkLicenseValidity.isLicenseSetup && checkLicenseValidity.validity) {
+         */
+                    return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
+                        .then(() => true)
+                        .catch(e => {
+                            console.log('Error syncing GateKeeper exception blocks: ' + e);
+                            return false;
+                        });
+         /*
+                } else {
+                    if (checkLicenseValidity.isLicenseSetup) {
+                        if (!checkLicenseValidity.validity) {
+                            console.log('License has been expired');
+                        }
+                    } else {
+                        console.log('License is not setup.');
+                    }
+                }
+            })
+            .catch(e => console.log('Error checking license validity: ' + e));
+
+          */
     }
 }

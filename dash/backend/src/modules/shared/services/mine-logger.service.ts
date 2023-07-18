@@ -66,7 +66,6 @@ export class MineLoggerService extends ConsoleLogger {
         });
       }
     } catch (e) {
-      // Using console.log as the error is with the logger
       console.log('An error occurred while attempting to log an error message. Information: ', message, trace, context, { loggingError: e });
     }
   }

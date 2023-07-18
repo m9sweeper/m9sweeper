@@ -4,8 +4,8 @@ import * as bcrypt from 'bcryptjs';
 exports.seed = async function (knex: Knex): Promise<any> {
   const hasUser = !!(await knex('users').returning('id').then(results => !!results ? results[0]?.id : null));
   if (hasUser) {
-    // Logger not available during seeds, using console.log instead
-    console.log('A user exists, skipping super admin seeding');
+    //@TODO: remove log message when cleaning up CLI messages
+    console.log('User exists... skipping');
     return Promise.resolve(true);
   }
   return knex('users').insert({

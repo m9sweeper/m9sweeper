@@ -71,14 +71,14 @@ export class ClusterCommand {
                 this.loggerService.log({label: 'License settings already exist - skipping creation.'});
             }
         } catch (e) {
-            this.loggerService.error('Error saving license & instance key', e, 'ClusterCommand.seedCluster')
+            console.log('Error saving license & instance key', e);
             return false;
         }
 
         // Do not attempt to create the cluster or cluster group if the cluster group already exists
         const existingGroups = await this.clusterGroupService.countClusterGroups();
         if (existingGroups > 0) {
-            this.loggerService.log({ label: 'Cluster groups already exist. Skipping Cluster & Cluster group creation'})
+            console.log(`Cluster groups already exist. Skipping Cluster & Cluster group creation`);
             return true;
         }
 
@@ -92,7 +92,7 @@ export class ClusterCommand {
                 return false;
             }
         } catch (e) {
-            this.loggerService.error('Failed to retrieve user', e, 'ClusterCommand.seedCluster')
+            console.log('Failed to retrieve user', e);
             return false;
         }
 
@@ -103,23 +103,23 @@ export class ClusterCommand {
         let config: KubeConfig;
         let k8sApi: CoreV1Api;
         try {
-            this.loggerService.log({label: 'Connecting to default server'});
+            console.log('Connecting to default server');
             config = this.kubernetesApiService.loadConfigFromCluster();
-            this.loggerService.log({label: 'Config', data: config});
+            console.log('Config', config);
             k8sApi = await this.kubernetesApiService.makeValidApi(config);
             if (!k8sApi) {
-                this.loggerService.log({label: 'Couldn\'t connect to default server'});
+                console.log('Couldn\'t connect to default server');
                 config = null;
             }
         } catch(e) {
-            this.loggerService.error('Error connecting to default server', e, 'ClusterCommand.seedCluster');
+            console.log('Error connecting to default server', e)
             config = k8sApi = null;
         }
 
         // Save to database if connection was successful
         if (config) {
             try {
-                this.loggerService.log({label: 'Prepping to save to DB'});
+                console.log('Prepping to save to to DB');
                 // Get context & cluster data
                 const currentContextName = config.getCurrentContext();
                 const currentCluster = config.getCurrentCluster();
@@ -133,11 +133,11 @@ export class ClusterCommand {
                 const port = parsedUrl.port;
 
                 // Encode config in base64 as JSON
-                this.loggerService.log({label: 'Encoding Config as base64 JSON'});
+                console.log('Encoding Config as base64 JSON');
                 const configJson = config.exportConfig();
                 const configBuffer = Buffer.from(configJson, "utf8");
                 const encodedConfig = configBuffer.toString("base64");
-                this.loggerService.log({label: 'Encoded config'});
+                console.log('Encoded config')
 
                 const cluster = {
                     name: clusterName,
@@ -174,10 +174,11 @@ export class ClusterCommand {
                     unFixableLow : 1000,
                     unFixableNegligible : 1000
                 };
-                this.loggerService.log({label: 'About to send to DB to be saved', data: cluster});
+
+                console.log('About to send to DB to be saved', cluster);
                 await this.clusterDao.seedInitialCluster(cluster, clusterGroupName, policy, scanner, userId);
             } catch (e) {
-                this.loggerService.error('Error saving to DB', e, 'ClusterCommand.seedCluster');
+                console.log("Error saving to DB", e);
                 return false;
             }
         } else {
