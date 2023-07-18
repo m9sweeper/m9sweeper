@@ -35,28 +35,18 @@ export class KubeHunterController {
 
         // find user authority by user's apikey
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);
-        // if the current user's api is valid
-        if (currentUserAuthObj !== null && currentUserAuthObj != undefined ) {
-            // get all authorities from the current user
-            const currentUserAuth = currentUserAuthObj[0].authorities;
-            // get Kubehunter authority from Authorityid
-            let authorityArr: AuthorityId [] = [AuthorityId.KUBEHUNTER];
-            // is the user a KH user
-            let isKHUser = this.authService.checkAuthority(currentUserAuth, authorityArr);
-            if (isKHUser) {
-                this.logger.log({label: 'User has been authorized; saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
-                //return key as any;// no reports;  remove when done
-                const reportAsDto = Object.assign(new KubeHunterDto(), report);
-                reportAsDto.uuid = uuid();
-                reportAsDto.clusterId = clusterId;
-                const newEntry = await this.kubeHunterService.saveKubeHunterReport(reportAsDto);
-                if (!newEntry || newEntry.length == 0) throw new HttpException('Internal Server error - log may not have been saved', HttpStatus.INTERNAL_SERVER_ERROR);
-                return newEntry[0];
-            } else {
-                this.logger.log({label: 'User is unauthorized; skip saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
-                throw new HttpException('Unauthorized  - log may not have been saved', HttpStatus.UNAUTHORIZED);
-            }
+        if (!currentUserAuthObj || !this.authService.checkAuthority(currentUserAuthObj[0].authorities, [AuthorityId.KUBEHUNTER])) {
+            this.logger.log({label: 'User is unauthorized; skip saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
+            throw new HttpException('Unauthorized  - log may not have been saved', HttpStatus.UNAUTHORIZED);
         }
+
+        this.logger.log({label: 'User has been authorized; saving KH scan report', data: { clusterId }}, 'KubeHunterController.saveKubeHunterReport');
+        const reportAsDto = Object.assign(new KubeHunterDto(), report);
+        reportAsDto.uuid = uuid();
+        reportAsDto.clusterId = clusterId;
+        const newEntry = await this.kubeHunterService.saveKubeHunterReport(reportAsDto);
+        if (!newEntry || newEntry.length == 0) throw new HttpException('Internal Server error - log may not have been saved', HttpStatus.INTERNAL_SERVER_ERROR);
+        return newEntry[0];
     }
 
     @Get('/apiKey')

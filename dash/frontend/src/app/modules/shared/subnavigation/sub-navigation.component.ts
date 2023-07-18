@@ -1,17 +1,12 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sub-navigation',
   templateUrl: './sub-navigation.component.html',
   styleUrls: ['./sub-navigation.component.scss']
 })
-export class SubNavigationComponent implements OnInit {
+export class SubNavigationComponent {
   @Input() buttonTitle: string;
   @Input() buttonUrl: any;
   @Input() title: string;
-  @Input() clickFunction: any;
-  constructor() {}
-
-  ngOnInit(): void {
-  }
 }

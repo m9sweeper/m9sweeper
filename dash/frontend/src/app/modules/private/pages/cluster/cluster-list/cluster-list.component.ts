@@ -117,7 +117,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
-    protected clusterListMenuService: ClusterListMenuService
+    protected clusterListMenuService: ClusterListMenuService,
   ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
@@ -132,21 +132,32 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     // default column sizes before calculating them
     this.route.params.subscribe(routeParams => {
       this.groupId = +routeParams.groupId;
+      this.clusterGroupService.setCurrentGroupId(this.groupId);
       this.clusterGroupService.getClusterGroupById(+routeParams.groupId)
         .pipe(take(1))
-        .subscribe(result => {
-        this.clusterGroupName = result.data.name;
-        this.subNavigationData.title = this.clusterGroupName;
-        this.clusterGroupNameLoaded = true;
-      });
-      this.clusterGroupService.setCurrentGroupId(this.groupId);
+        .subscribe({
+          next: result => {
+            this.clusterGroupName = result.data.name;
+            this.subNavigationData.title = this.clusterGroupName;
+            this.clusterGroupNameLoaded = true;
+          },
+          error: err => {
+            if (err?.status === 404) {
+              this.alertService.danger('Cluster Group Does does not exist');
+              this.clusterGroupService.setCurrentGroupId(null);
+              this.router.navigate(['/private', 'dashboard']);
+            }
+          }
+        });
       this.getClustersByClusterGroupId(this.groupId);
     });
     this.clusterGroupService.getCurrentGroup()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(updatedClusterGroup => {
-      this.clusterGroupName = updatedClusterGroup.name;
-    });
+      .subscribe({
+        next: updatedClusterGroup => {
+          this.clusterGroupName = updatedClusterGroup?.name || '';
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -170,7 +181,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
 
       this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-        innerWindow.offsetWidth,
+        innerWindow?.offsetWidth,
         { xs: 1, s: 1, m: 2, l: 3 },
         { left: 20, right: 20 },
         { left: 30, right: 20 },

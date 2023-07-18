@@ -44,8 +44,8 @@ export class AppSettingsDao {
                     .returning(['id AS id', 'name AS name', 'value AS value',
                         'created_by AS createdBy', 'created_at AS createdAt',
                         'updated_by AS updatedBy', 'updated_at AS updatedAt'])
-                    .then((result: any) => {
-                        return Array.isArray(result.rows) && result.rows.length > 0 ? result.rows[0] : null;
+                    .then((result: any[]) => {
+                        return Array.isArray(result) && result.length > 0 ? result[0] : null;
                     });
             }));
         });

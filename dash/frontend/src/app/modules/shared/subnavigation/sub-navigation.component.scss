@@ -1,60 +1,18 @@
-div {
+.sub-navigation-wrapper {
   display: flex;
   height: 60px;
   justify-content: space-between;
   flex-direction: row;
-  // width: 100%;
-  > div {
-    &.item-sub-navigation {
-      display: flex;
-      flex-direction: column;
+}
 
-      div.item-name {
-        font-size: 26px;
-        vertical-align: bottom;
-        line-height: 1;
-      }
-    }
-  }
+.item-sub-navigation {
+  display: flex;
+  flex-direction: column;
+}
 
-  > div {
-    &.item-create {
-      > div {
-        display: flex;
-        width: fit-content;
-        flex-direction: column;
-        padding-bottom: 20px;
-
-        &.item-create-button {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-
-          button.new-item {
-            background-color: #0078d4;
-            padding: 2px 25px;
-            border-radius: 2px;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            line-height:0.7;
-          }
-
-          mat-icon.more-item {
-            background-color: #e9e5ee;
-            padding: 8px;
-            margin-left: 10px;
-            cursor: pointer;
-          }
-
-        }
-      }
-
-      div.item-search {
-        margin-top: 15px;
-      }
-    }
-  }
+.item-name {
+  font-size: 26px;
+  vertical-align: bottom;
+  line-height: 1;
 }
 

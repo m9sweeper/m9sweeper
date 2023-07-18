@@ -1,14 +1,10 @@
-<div>
+<div class="sub-navigation-wrapper">
   <div class="item-sub-navigation">
     <div class="item-name">
       {{ title }}
     </div>
   </div>
-  <div class="item-create">
-    <div class="item-create-button" *ngIf="buttonTitle || buttonUrl || clickFunction">
-      <button mat-button class="new-item" [routerLink]="buttonUrl">{{buttonTitle}}</button>
-    </div>
-    <div class="item-search">
-    </div>
+  <div *ngIf="buttonTitle || buttonUrl">
+    <button mat-raised-button color="primary" [routerLink]="buttonUrl">{{buttonTitle}}</button>
   </div>
 </div>

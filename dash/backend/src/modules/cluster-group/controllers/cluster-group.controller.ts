@@ -5,6 +5,7 @@ import {
     Delete,
     Get,
     Inject,
+    NotFoundException,
     Param,
     Post,
     Put,
@@ -37,7 +38,13 @@ export class ClusterGroupController {
         schema: CLUSTER_GROUP_RESPONSE_SCHEMA
     })
     async getClusterGroupById(@Param('clusterGroupId') clusterGroupId: number): Promise<ClusterGroupDto> {
-        return this.clusterGroupService.getClusterGroupById(clusterGroupId);
+        return this.clusterGroupService.getClusterGroupById(clusterGroupId)
+          .then(group => {
+              if (!group) {
+                  throw new NotFoundException('Cluster Group not found');
+              }
+              return group;
+          });
     }
 
     @Post()

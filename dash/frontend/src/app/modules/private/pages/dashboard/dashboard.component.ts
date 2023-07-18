@@ -1,13 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClusterService } from '../../../../core/services/cluster.service';
 import { IClusterGroup } from '../../../../core/entities/IClusterGroup';
 import { ClusterGroupService } from '../../../../core/services/cluster-group.service';
 import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
-import { ClusterGroupCreateComponent } from '../cluster-group/cluster-group-create/cluster-group-create.component';
 import { Subscription } from 'rxjs';
-import { faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import {SharedSubscriptionService} from '../../../../core/services/shared.subscription.service';
 import {AddClusterWizardComponent} from '../cluster/add-cluster-wizard/add-cluster-wizard.component';
 
@@ -49,11 +47,16 @@ export class DashboardComponent implements OnInit {
     // this.route.params.subscribe(routeParams => {
     //   this.getClusterByClusterGroupId(routeParams.groupId);
     // });
-    this.updatedClusterGroup = this.clusterGroupService.getCurrentGroup().subscribe(updatedClusterGroup => {
-      const tempGroup = this.userClusterGroups.filter(group => group.id === updatedClusterGroup.groupId);
-      const previousClusterGroupIndex = this.userClusterGroups.indexOf(tempGroup[0]);
-      this.userClusterGroups[previousClusterGroupIndex].name = updatedClusterGroup.name;
-    });
+    this.updatedClusterGroup = this.clusterGroupService.getCurrentGroup()
+      .subscribe({
+        next: updatedClusterGroup => {
+          if (updatedClusterGroup) {
+            const tempGroup = this.userClusterGroups?.filter(group => group.id === updatedClusterGroup.groupId) || [];
+            const previousClusterGroupIndex = this.userClusterGroups?.indexOf(tempGroup[0]);
+            this.userClusterGroups[previousClusterGroupIndex].name = updatedClusterGroup?.name || '';
+          }
+        }
+      });
   }
 
   getAllClusterByGroupId(){
