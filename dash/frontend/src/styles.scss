@@ -259,11 +259,11 @@ app-private {
 
 // Org setting pages uses app-sub-navigation for titles and buttons
 // The following are for lining up other page elements
-.mat-mdc-card-header{
-  display: flex;
-  padding: 0;
-  margin-left: 0;
-}
+//.mat-mdc-card-header{
+//  display: flex;
+//  padding: 0;
+//  margin-left: 0;
+//}
 .page-container {
   height: 100%;
   display: block;
@@ -275,6 +275,18 @@ app-private {
 .page-container-content{
   margin: 20px;
   // width:fit-content;
+}
+
+.settings-card {
+  > div:first-child {
+    overflow-x: scroll;
+    display: flex;
+  }
+  th {
+    font-weight: bold;
+  }
+  mat-card-header {}
+  mat-card-content {}
 }
 
 .page-card{

@@ -1,34 +1,30 @@
 <div class=" page-container">
   <div class="page-container-content">
-    <ng-container>
-      <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
-                          (click)="openAddSettingDialog()"></app-sub-navigation>
-    </ng-container>
-    <div class="page-card">
-      <mat-card appearance="outlined">
-        <mat-card-header>
-          <div class="page-card-header">
-            <div class=" page-card-title">
-              Organization Details
-            </div>
+    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
+                        (click)="openAddSettingDialog()"></app-sub-navigation>
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <div class="page-card-header">
+          <div class="page-card-title">
+            Organization Details
           </div>
-        </mat-card-header>
-        <div class="page-card-content">
-        <mat-card-content>
-          <div class="logo-name">
-            <p class="page-card-line-content" *ngIf="organizationName">Organization Name: {{organizationName}}</p>
-            <ng-container *ngIf="displayLogo">
-              <p class="page-card-line-content">
-                Organization Logo:
-              </p>
-              <p class="page-card-line-content">
-                <img class="organization-logo" [src]="organizationLogo"/>
-              </p>
-            </ng-container>
-          </div>
-        </mat-card-content>
         </div>
-      </mat-card>
-    </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="logo-name">
+          <p class="page-card-line-content" *ngIf="organizationName">
+            Organization Name: {{organizationName}}
+          </p>
+          <ng-container *ngIf="displayLogo">
+            <p class="page-card-line-content">
+              Organization Logo:
+            </p>
+            <p class="page-card-line-content">
+              <img class="organization-logo" [src]="organizationLogo"/>
+            </p>
+          </ng-container>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
