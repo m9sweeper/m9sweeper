@@ -24,4 +24,9 @@ own username/password and the API Key to something random/unpredictable.
 Many more options are available. For serious enterprise deployments, we recommend creating a helm
 values.yaml file and versioning this in a code repository to make upgrades easier.
 
-For more information, see the [advanced install guide](../advanced-install).
+For more information, please see the [advanced installation guide](../advanced-install).
+
+{{% alert title="Installation Note" color="primary" %}}
+If you are installing this on Azure Kubernetes Services (AKS) or Google Kubernetes Engine (GKE) or any other installation where the kubernetes API is blocked from reaching
+out to external URL for things such as Validating Webhooks, please see the section reguarding Validating Webhook installations in the [advanced installation guide](../advanced-install).
+{{% /alert %}}
