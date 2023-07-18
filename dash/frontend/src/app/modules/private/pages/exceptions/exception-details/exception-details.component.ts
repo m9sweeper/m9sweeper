@@ -10,6 +10,7 @@ import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { IComment } from '../../../../../core/entities/IComment';
 import { Observable } from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-exception-details',
@@ -49,9 +50,9 @@ export class ExceptionDetailsComponent implements OnInit {
   }
 
   getExceptionDetails(id: number) {
-    this.exceptionsService.getExceptionById(id).subscribe(
-      response => {this.exception = response.data[0]; console.log(this.exception); },
-        error => console.log(error));
+    this.exceptionsService.getExceptionById(id).pipe(take(1)).subscribe({
+      next: response => this.exception = response.data[0]
+    });
   }
 
   editException() {
@@ -92,7 +93,6 @@ export class ExceptionDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.commentForm.value);
     this.isSubmitting = true;
     const currentUser = this.jwtAuthService.currentUser;
     const comment: IComment = {
@@ -126,7 +126,6 @@ export class ExceptionDetailsComponent implements OnInit {
     });
 
     deleteCommentDialog.afterClosed().subscribe(result => {
-      console.log(result);
       if (result) {
         this.getAllComments();
       }

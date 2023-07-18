@@ -17,6 +17,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
+import {environment} from '../../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-cluster-list',
@@ -360,7 +361,9 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       ];
     }, error => {
-      console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+        if (!environment.production) {
+          console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+        }
     });
   }
 

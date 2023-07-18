@@ -1,12 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ExternalAuthConfigurationCreateComponent} from '../external-auth-configuration-create/external-auth-configuration-create.component';
 import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IAuthConfig} from '../../../../../core/entities/IAuth';
 import {AuthenticationType} from '../../../../../core/enum/AuthenticationType';
+import {take} from 'rxjs/operators';
+import {environment} from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-external-auth-configuration-list',
@@ -35,16 +36,17 @@ export class ExternalAuthConfigurationListComponent implements OnInit {
   }
 
   getExternalAuthConfigs(){
-    this.externalAuthConfigurationService.loadProviderList()
+    this.externalAuthConfigurationService.loadProviderList().pipe(take(1))
       .subscribe((response: IServerResponse<IAuthConfig[]>) => {
         this.dataSource = new MatTableDataSource<IAuthConfig>(response.data);
       }, error => {
-        console.log('External Auth Provider list load error: ', error);
+        if (!environment.production) {
+          console.log('External Auth Provider list load error: ', error);
+        }
       });
   }
 
   openAddExternalAuthConfigurationDialog(authConfig?: IAuthConfig) {
-    console.log('Auth Config: ', JSON.stringify(authConfig));
     if (authConfig && authConfig.authType === AuthenticationType.LOCAL) {
       return;
     }

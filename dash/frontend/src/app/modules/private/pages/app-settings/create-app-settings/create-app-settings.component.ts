@@ -54,7 +54,6 @@ export class CreateAppSettingsComponent implements OnInit {
     } else {
       logoSubmit = of(null);
     }
-
     logoSubmit.pipe(
       switchMap((resp) => {
         const siteSettings = [

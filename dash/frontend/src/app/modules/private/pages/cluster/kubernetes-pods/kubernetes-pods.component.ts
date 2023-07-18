@@ -7,7 +7,6 @@ import {IPod} from '../../../../../core/entities/IPod';
 import {MatTableDataSource} from '@angular/material/table';
 import {AlertService} from '@full-fledged/alerts';
 import {PodService} from '../../../../../core/services/pod.service';
-import {FormatDate} from '../../../../shared/format-date/format-date';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
@@ -28,7 +27,6 @@ export class KubernetesPodsComponent implements OnInit {
   namespace: null;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  formatDate = FormatDate;
   initialDate = new Date();
   totalNumPods: number;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
@@ -151,14 +149,9 @@ export class KubernetesPodsComponent implements OnInit {
       extraData: [],
     };
     issue.extraData = element.violations;
-    this.dialogRef = this.dialog.open(ImageIssueMoreDataDialogComponent, {
+    this.dialog.open(ImageIssueMoreDataDialogComponent, {
       width: 'auto',
       data: {issue}
     });
-
-    this.dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
   }
-
 }

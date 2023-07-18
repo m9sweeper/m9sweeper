@@ -6,8 +6,6 @@ import {AlertService} from '@full-fledged/alerts';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {FileManagementService} from '../../../../../core/services/file-management.service';
-import {IFile} from '../../../../../core/entities/IFile';
 
 @Component({
   selector: 'app-update-user-profile',
@@ -19,14 +17,12 @@ export class UpdateUserProfileComponent implements OnInit {
   userProfileData: IUser;
   authorities: IAuthority[];
   currentUserId = null;
-  profileImageFileId = '';
 
   constructor(private dialogRef: MatDialogRef<UpdateUserProfileComponent>,
               private formBuilder: FormBuilder,
               private userService: UserService,
               private alertService: AlertService,
-              private jwtAuthService: JwtAuthService,
-              private fileManagementService: FileManagementService) {
+              private jwtAuthService: JwtAuthService) {
     this.updateUserForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -36,7 +32,6 @@ export class UpdateUserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUserId = this.jwtAuthService.getCurrentUserData().id;
-    console.log('currentUserId', this.currentUserId);
     this.populateUserForm();
   }
 

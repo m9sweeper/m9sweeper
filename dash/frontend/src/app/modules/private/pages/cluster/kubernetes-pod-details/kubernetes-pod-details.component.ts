@@ -12,10 +12,9 @@ import {IImage, ImagesAndCount} from '../../../../../core/entities/IImage';
 import {IPod} from '../../../../../core/entities/IPod';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {take} from 'rxjs/operators';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {KubesecDialogComponent} from '../kubesec/kubesec-dialog/kubesec-dialog.component';
-import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
-import {GatekeeperViolationDialogComponent} from "../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component";
+import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 
 
 @Component({
@@ -41,7 +40,6 @@ export class KubernetesPodDetailsComponent implements OnInit {
   limit = 10;
   page = 0;
   kubesecReport: string;
-  dialogRef: MatDialogRef<GatekeeperViolationDialogComponent>;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +68,6 @@ export class KubernetesPodDetailsComponent implements OnInit {
   }
 
   dateChanged(dateData: { isToday: boolean, desiredDate: Date, startTime: number, endTime: number }) {
-    console.log({'date changed': dateData});
     this.page = 0;
     if (dateData.isToday) {
       this.loadCurrentImages();
@@ -196,14 +193,9 @@ export class KubernetesPodDetailsComponent implements OnInit {
       this.alertService.warning('No violation yet.');
       return;
     }
-    this.dialogRef = this.dialog.open(GatekeeperViolationDialogComponent, {
+    this.dialog.open(GatekeeperViolationDialogComponent, {
       width: 'auto',
       data: {violations: this.podInfo.violations}
     });
-
-    this.dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
   }
-
 }

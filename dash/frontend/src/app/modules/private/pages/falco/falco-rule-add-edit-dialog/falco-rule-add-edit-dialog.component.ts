@@ -89,7 +89,6 @@ export class FalcoRuleAddEditDialogComponent implements OnInit {
               this.namespaceClusterMap.set(ns.clusterId, [ns.name]);
             }
           });
-          console.log(this.namespaceClusterMap);
           return of(this.namespaceClusterMap);
         })
       );

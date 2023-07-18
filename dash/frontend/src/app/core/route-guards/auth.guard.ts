@@ -7,6 +7,7 @@ import {catchError, map} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { JwtAuthService } from '../services/jwt-auth.service';
 import { IServerResponse } from '../entities/IServerResponse';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,9 @@ export class AuthGuard implements CanActivate {
         this.authFailed();
         return false;
       }), catchError((err: HttpErrorResponse) => {
-        console.log('AuthGuard catch. error:', err);
+        if (!environment.production) {
+          console.log('AuthGuard catch. error:', err);
+        }
         this.authFailed();
         return of(false);
       })

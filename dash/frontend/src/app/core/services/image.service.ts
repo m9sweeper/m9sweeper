@@ -6,7 +6,7 @@ import { IServerResponse } from '../entities/IServerResponse';
 import {MatSort} from '@angular/material/sort';
 import { map, retry, share, switchMap, takeUntil } from 'rxjs/operators';
 import { FormatDate } from '../../modules/shared/format-date/format-date';
-import {ICountOfVulnerabilities} from "../entities/ICountOfVulnerabilities";
+import {ICountOfVulnerabilities} from '../entities/ICountOfVulnerabilities';
 
 @Injectable({
   providedIn: 'root'
@@ -188,7 +188,6 @@ export class ImageService implements OnDestroy{
         switchMap(() => this.httpClient.get<IServerResponse<boolean>>(`api/clusters/images/${imageId}/scan-queue-status`)),
         map(response => response.data),
         retry(),
-        // tap(console.log),
         share(),
         takeUntil(this.stopPolling)
       );

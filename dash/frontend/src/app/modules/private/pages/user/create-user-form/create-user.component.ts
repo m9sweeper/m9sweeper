@@ -93,14 +93,6 @@ export class CreateUserComponent implements OnInit {
     });
   }
 
-  // async onFileChange(event) {
-  //   this.selectedFile = event.target.files[0];
-  //   console.log(this.selectedFile);
-  //   const data = await this.toBase64(this.selectedFile);
-  //   this.selectedFileTo64base = data;
-  //   this.selectedFileType = this.selectedFile.type;
-  // }
-
   cancel() {
     this.location.back();
   }
@@ -146,47 +138,5 @@ export class CreateUserComponent implements OnInit {
         this.alertService.danger(event.error.message);
       });
     }
-    // this.loaderService.start();
-    // if (this.userId) {
-    //   this.userService
-    //     .updateUserInfo(+this.userId, {...this.userForm.value, logo: this.selectedFileTo64base, logo_type: this.selectedFileType})
-    //     .subscribe((response) => {
-    //       this.alertService.success('Information updated');
-    //       this.router.navigate(['/private/users']);
-    //     }, e => {
-    //       this.alertService.danger(e.error.message);
-    //       this.loaderService.stop();
-    //     }, () => {
-    //       this.loaderService.stop();
-    //     });
-    // } else {
-    //
-    //   this.userService
-    //     .addUser({...this.userForm.value, logo: this.selectedFileTo64base, logo_type: this.selectedFileType})
-    //     .subscribe((response) => {
-    //       if (response.data.length > 0) {
-    //         console.log('create user response:', response);
-    //         this.alertService.success('Account created successfully.');
-    //         this.router.navigate(['/private/users']);
-    //       }
-    //     }, event => {
-    //       this.alertService.danger(event.error.message);
-    //       this.loaderService.stop();
-    //     }, () => {
-    //       this.loaderService.stop();
-    //     });
-    // }
-    // if (+this.userId === this.currentUserId) {
-    //   this.userService.sendUpdatedLogo(this.selectedFileTo64base);
-    // }
   }
-
-  // private toBase64(file: File) {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = error => reject(error);
-  //   });
-  // }
 }

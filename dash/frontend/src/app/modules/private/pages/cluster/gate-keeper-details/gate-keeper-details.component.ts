@@ -5,7 +5,7 @@ import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTempl
 import {MatTableDataSource} from '@angular/material/table';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
@@ -41,7 +41,6 @@ export class GateKeeperDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.gatekeeperService.gateKeeperTemplateByName(this.clusterId, this.templateName).subscribe(data => {
       this.gatekeeperTemplate = data;
-      // console.log(data);
     });
     this.gatekeeperConstraintsByTemplate(this.templateName);
     this.gateKeeperTemplateByNameRaw();
@@ -57,7 +56,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       for (const key of propertyKeys) {
         this.openapiProperties.push([key, tempProperties[key].type]);
       }
-      // console.log(this.openapiProperties);
     });
   }
 
@@ -114,7 +112,6 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
 
     openAddConstraintTemplate.afterClosed().subscribe(response => {
-      console.log(response);
       if (response && !response.cancel) {
         this.gatekeeperConstraintsByTemplate(this.templateName);
       }
@@ -122,7 +119,6 @@ export class GateKeeperDetailsComponent implements OnInit {
   }
 
   destroyTemplateConstraint(constraint: IGateKeeperConstraintDetails) {
-    console.log(constraint);
     const openDestroyConstraintTemplate = this.dialog.open(AlertDialogComponent, {
       width: '850px',
       height: 'auto',
@@ -151,7 +147,6 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
 
     openAddConstraintTemplate.afterClosed().subscribe(response => {
-      console.log(response);
       if (response && !response.cancel) {
         this.gatekeeperConstraintsByTemplate(this.templateName);
       }
@@ -161,13 +156,9 @@ export class GateKeeperDetailsComponent implements OnInit {
 
   // @TODO: if needed we will replace ImageIssueMoreDataDialogComponent with a new gatekeeper specific component. For now it works.
   showViolations(constraint: IGateKeeperConstraintDetails) {
-    const dialogRef = this.dialog.open(GatekeeperViolationDialogComponent, {
+    this.dialog.open(GatekeeperViolationDialogComponent, {
       width: 'auto',
       data: {violations: constraint.status.violations}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 }

@@ -12,7 +12,6 @@ import { DockerRegistriesService } from '../../../../../core/services/docker-reg
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { AlertDialogComponent } from '../../../../shared/alert-dialog/alert-dialog.component';
 import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistries';
-import { DockerRegistryAuthTypes } from '../../../../../core/enum/DockerRegistryAuthTypes';
 
 @Component({
   selector: 'app-docker-registries-list',
@@ -87,8 +86,6 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
       }
     });
     confirmDialog.afterClosed().subscribe(result => {
-      console.log('Closed.');
-      console.log(result);
       if (result === undefined) {
         this.getDockerRegistryList();
       }

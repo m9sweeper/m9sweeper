@@ -36,14 +36,12 @@ export class ExceptionListComponent implements OnInit {
   ngOnInit(): void {
     this.getExceptionList();
     this.subNavigationTitle = 'Exceptions';
-    console.log(this.jwtAuthService.isAdmin());
     this.subNavigationButtonTitle = this.jwtAuthService.isAdmin() ?  'New Exception' : 'Request Exception';
     this.subNavigationButtonUrl = ['/private', 'exceptions', 'create'];
   }
 
   getExceptionList() {
     this.exceptionsService.getAllExceptions().subscribe((response: IServerResponse<any[]>) => {
-      console.log(response);
       this.dataSource = new MatTableDataSource(response.data.map(row => {
         row.start_date = row.start_date ??  null;
         row.end_date = row.end_date ?? null;

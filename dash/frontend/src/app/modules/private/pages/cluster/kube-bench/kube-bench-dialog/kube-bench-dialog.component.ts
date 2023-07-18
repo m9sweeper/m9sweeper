@@ -58,22 +58,7 @@ export class KubeBenchDialogComponent implements OnInit{
       });
   }
 
-  // getConfigFileContents() {
-  //   this.kubeBenchService.getConfigFileContents(this.selected)
-  //     .pipe(take(1))
-  //     .subscribe(rtrn => {
-  //       const tempCLi = rtrn.data;
-  //       this.cliCommand = tempCLi.replace('{SITE URL HERE}', this.backendUrl).replace('{CLUSTER ID ETC HERE}', String(this.clusterId));
-  //     });
-  // }
-
-  /** Trims the '.yaml' off the end of filenames */
-  trimYamlExtension(input: string) {
-    return input.substring(0, input.length - 5);
-  }
-
   proceedToNext($event) {
-    console.log(this.selectedProvider);
     this.nextButtonDisabled = false;
   }
 }

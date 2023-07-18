@@ -6,6 +6,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import { IServerResponse } from '../entities/IServerResponse';
 import { JwtAuthService } from '../services/jwt-auth.service';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,9 @@ export class LoginGuard implements CanActivate {
         this.jwtAuthService.clearToken();
         return true;
       }), catchError((err: HttpErrorResponse) => {
-        console.log('LoginGuard catch. error:', err);
+        if (!environment.production) {
+          console.log('LoginGuard catch. error:', err);
+        }
         return of(true);
       })
     );

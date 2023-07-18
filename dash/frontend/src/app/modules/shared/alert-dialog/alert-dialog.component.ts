@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {take} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment.prod';
 
 interface AlertDialogData {
   functionToRun?: Observable<any>;
@@ -26,7 +27,11 @@ export class AlertDialogComponent {
       this.data.functionToRun
         .pipe(take(1))
         .subscribe({
-          next: result => console.log(result)
+          next: result => {
+            if (!environment.production) {
+              console.log(result);
+            }
+          }
         });
     }
     this.matDialogRef.close(true);

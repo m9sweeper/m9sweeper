@@ -9,7 +9,7 @@ import {AlertService} from '@full-fledged/alerts';
 import {PolicyService} from '../../../../../core/services/policy.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
 import {ScannerListComponent} from '../../scanners/scanner-list/scanner-list.component';
-import {IScanner, IScannerDialogData, ScannerData} from '../../../../../core/entities/IScanner';
+import {IScanner, IScannerDialogData} from '../../../../../core/entities/IScanner';
 import {ScannerCreateComponent} from '../../scanners/scanner-create/scanner-create.component';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
@@ -72,7 +72,6 @@ export class PolicyCreateComponent implements OnInit {
     }, {validators: [CustomValidators.validateActivePolicyScanners()]});
 
     if (this.checkIfEdit) {
-      console.log('policy name: ', this.policyService);
       this.subMenuTitle = 'Edit Policy';
     } else {
       this.subMenuTitle = 'Create Policy';
@@ -132,7 +131,6 @@ export class PolicyCreateComponent implements OnInit {
     } else {
       this.policyService.getPolicyClusterMapById(policyId).subscribe(response => {
         this.policyClusterMap = response.data;
-        console.log('PCM: ', this.policyClusterMap.map(pcm => pcm.id));
         this.policyForm.get('clusters').setValue(this.policyClusterMap.map(pcm => pcm.id));
         this.relevantForAllClusters = false;
         this.relevantForSpecificClusters = true;
