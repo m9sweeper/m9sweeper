@@ -13,6 +13,11 @@ description: >
 
 ### Installation
 
+{{% alert title="Installation Note" color="primary" %}}
+If you are installing this on Azure Kubernetes Services (AKS) or Google Kubernetes Engine (GKE) or any other installation where the kubernetes API is blocked from reaching
+out to external URL for things such as Validating Webhooks, please see the section below reguarding Validating Webhook installations.
+{{% /alert %}}
+
 We recommend putting your configuration in a values.yaml file and then deploying our app using helm. This
 example uses "helm upgrade --install", which is an idempotent way of installing and/or upgrading the app. This
 is repeatable and the same command can be run regardless of whether you intend to upgrade or install the app.
@@ -36,13 +41,12 @@ which chart version you are deploying. By default, it installs the latest versio
 ## Validating Webhook
 
 If you wish to have m9sweeper prevent applications from booting up that are not compliant with your specified
-policies, you will need the validating webhook. This installs automatically and should work without any configuration.
+policies, you will need the validating webhook. This installs automatically and should work without any configuration in most installations.
 
-However, **if you are running in Azure Kubernetes Service** OR have the kubernetes api firewalled in such a way that it
-cannot reach out to a remote url for the validating webhook, then you will need to
-[setup an nginx reverse proxy](https://github.com/m9sweeper/m9sweeper/blob/main/dash/backend/scripts/proxy-webhook/README.md)
-using our reverse proxy self-installer. This script will generate a CA Certificate Bundle and Nginx configuration
-to enable the reverse proxy to work in Azure Kubernetes Service.
+However, in some installations of Kubernetes such as Azure Kubernetes Services (AKS) and Google Kubernetes Engine (GKE) as well as some others depending upon configuration, the kubernetes' API is not allowed to reach out to a remote cluster or
+a remote ingress when validating whether a pod is allowed to boot or not. Therefore, we have to set it up to connect to a pod in the local cluster as well as setup the appropriate Certificate Authority, Public, and Private Keys to enable SSL.
+This will allow the validating webhook to be hit by the Kubernetes API when validating whether a pod is compliant and allowed to boot up. To assist in this process we have developed a script that will install a nginx reverse proxy that will allow
+your kubernetes API to reach the validating webhook. For information on utilizing this script, please see the scripts documentation on our GitHub page [here](https://github.com/m9sweeper/m9sweeper/blob/main/dash/backend/scripts/proxy-webhook/README.md).
 
 ## Falco bulkhead Deployment
 

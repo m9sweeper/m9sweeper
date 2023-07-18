@@ -56,6 +56,9 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
               this.menuItems.push({ name, path, abbreviation });
             });
             this.currentMenuItems.next(this.menuItems);
+          } else {
+            this.menuItems = [];
+            this.currentMenuItems.next([]);
           }
         }
       });

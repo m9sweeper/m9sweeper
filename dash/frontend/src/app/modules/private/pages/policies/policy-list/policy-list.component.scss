@@ -1,1 +1,31 @@
+.page-container-content table {
+  overflow-x: scroll;
+  display: block;
+}
 
+.mat-column-name {
+  min-width: 120px;
+  flex: 20%;
+  align-items: initial;
+  overflow: hidden;
+}
+
+.mat-column-description {
+  min-width: 180px;
+  flex: 30%;
+  align-items: initial;
+  overflow: hidden;
+}
+
+.mat-column-new_scan_grace_period {
+  min-width: 132px;
+  flex: 15;
+}
+.mat-column-rescan_grace_period {
+  min-width: 132px;
+  flex: 15%;
+}
+.mat-column-actions {
+  min-width: 120px;
+  flex: 20%;
+}
