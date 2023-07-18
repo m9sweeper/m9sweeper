@@ -8,7 +8,6 @@ import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
 import {DEFAULT_SCHEMA} from "js-yaml";
-import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 @Injectable()
@@ -17,7 +16,6 @@ export class ExceptionBlockService {
     constructor(private readonly configService: ConfigService,
                 private readonly exceptionsService: ExceptionsService,
                 private readonly kubernetesNamespaceService: NamespaceService,
-                protected readonly logger: MineLoggerService,
                 @Inject(forwardRef(() => ClusterService))
                 private readonly clusterService: ClusterService) {
         this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
@@ -25,10 +23,10 @@ export class ExceptionBlockService {
 
 
     async syncGatekeeperExceptionBlocks(): Promise<void> {
-        this.logger.log({label: 'Beginning exception block syncing'}, 'ExceptionBlockService.syncGatekeeperExceptionBlocks')
+        console.log(`.....................................Exception Block Syncing Started at ${new Date().toUTCString()}.....................................`);
         const clusters = await this.clusterService.getAllClusters();
         for (const cluster of clusters) {
-            this.logger.log({label: 'Syncing exception blocks for cluster', data: {clusterId: cluster.id, clusterName: cluster.name}}, 'ExceptionBlockService.syncGatekeeperExceptionBlocks')
+            console.log(`Starting for cluster Name: ${cluster.name} Id: ${cluster.id}......................................`);
             const deployedTemplateList = await this.clusterService.getDeployedTemplateList(cluster.id);
             const commonExceptionBlock = await this.calculateCommonExceptionBlocks(cluster.id);
             const clusterTemplatesExists = await this.copyGatekeeperTemplatesForCluster(cluster.id);
@@ -45,19 +43,17 @@ export class ExceptionBlockService {
                                 if (deployedTemplateList.includes(templateObj.metadata.name)) {
                                     this.clusterService.patchTemplateWithModifiedRego(templateObj.metadata.name,
                                         templateWithModifiedRego, cluster.id)
-                                        .catch(e => {
-                                            this.logger.error('Error patching template', e, 'ExceptionBlockService.syncGatekeeperExceptionBlocks')
-                                        });
+                                        .catch(e => {console.log('Error patching template: ' + e);});
                                 }
                             }
                         } catch (error) {
-                            this.logger.error({label: 'Error reading template', data: {templatePath}}, error, 'ExceptionBlockService.syncGatekeeperExceptionBlocks');
+                            console.log(`Could not read ${templatePath}`, error);
                         }
                     }
                 }
             }
         }
-        this.logger.log({label: 'Exception block syncing complete'}, 'ExceptionBlockService.syncGatekeeperExceptionBlocks')
+        console.log(`.....................................Exception Block Syncing Ended at ${new Date().toUTCString()}.....................................`);
     }
     
     
@@ -82,6 +78,9 @@ export class ExceptionBlockService {
                 commonExceptionBlockWithImagePattern += exceptionBlock.exceptionBlockWithImagePattern;
             }
         }
+        // console.log(`''''''''''''''''''''''''''''''''${clusterId}''''''''''''''''''''''''''''''''`);
+        // console.log(commonExceptionBlock);
+        // console.log(`''''''''''''''''''''''''''''''''${clusterId}''''''''''''''''''''''''''''''''`);
         return {commonExceptionBlock, commonExceptionBlockWithImagePattern};
     }
 
@@ -107,6 +106,9 @@ export class ExceptionBlockService {
                 commonExceptionBlockWithIssueIdentifierWithImagePattern += exceptionBlockWithIssueIdentifier.exceptionBlockWithImagePattern;
             }
         }
+        // console.log(`''''''''''''''''''''''''''''''''${clusterId}''''''''''''''''''''''''''''''''`);
+        // console.log(commonExceptionBlock);
+        // console.log(`''''''''''''''''''''''''''''''''${clusterId}''''''''''''''''''''''''''''''''`);
         return {commonExceptionBlockWithIssueIdentifier, commonExceptionBlockWithIssueIdentifierWithImagePattern};
     }
 
@@ -149,6 +151,7 @@ export class ExceptionBlockService {
     async saveExceptionBlockToTemplateFile(templatePath: string, templateObj: any, exceptionBlock:{templateExceptionBlock: string, templateExceptionBlockWithImagePattern: string}): Promise<any> {
         let modifiedRego= '';
         let rego = templateObj.spec.targets[0].rego;
+        // console.log(rego);
         rego = rego.split('# START M9S EXCEPTION BLOCK 1#');
         rego.splice(1, 0, exceptionBlock.templateExceptionBlock);
         modifiedRego = [rego[0], rego[1]].join('# START M9S EXCEPTION BLOCK 1#\n  ');
@@ -169,6 +172,7 @@ export class ExceptionBlockService {
         }
         modifiedRego += existingCode.join('');
 
+        // console.log(modifiedRego);
         templateObj.spec.targets[0].rego = modifiedRego;
         const objectToYaml = jsYaml.dump(templateObj, {schema: DEFAULT_SCHEMA});
         fs.writeFileSync(templatePath, objectToYaml, 'utf-8');
@@ -180,14 +184,14 @@ export class ExceptionBlockService {
         if (! await fse.pathExists(folderName)) {
             try {
                 await fse.copy(this.defaultTemplateDir, folderName);
-                this.logger.log({label: 'Gatekeeper templates copies', data: {folderName}}, 'ExceptionBlockService.copyGatekeeperTemplatesForCluster');
+                console.log(`Templates were copied to ${folderName}`);
                 return true;
             } catch (err) {
-                this.logger.error({label: 'Error copying gatekeeper templates', data: {clusterId, folderName}}, err, 'ExceptionBlockService.copyGatekeeperTemplatesForCluster');
+                console.log(err);
                 return false;
             }
         } else {
-            this.logger.log({label: 'Gatekeeper template folder already exists', data: { folderName }}, 'ExceptionBlockService.copyGatekeeperTemplatesForCluster');
+            console.log(`${folderName} already Exists!`);
             return true;
         }
     }
@@ -198,7 +202,7 @@ export class ExceptionBlockService {
             await fse.remove(folderName);
             return true;
         } catch (err) {
-            this.logger.error({label: 'Error deleting gatekeeper templates', data: {folderName, clusterId}}, err, 'ExceptionBlockService.deleteGatekeeperTemplatesForCluster');
+            console.log(err);
             return false;
         }
     }
@@ -208,7 +212,8 @@ export class ExceptionBlockService {
             const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
             return readDirNamesFromFile.resources;
         } catch (e) {
-            this.logger.error({label: 'Error reading file'}, e, 'ExceptionBlockService.readFolderNames');
+            console.log(`Could not read file ${pathName}`);
+            console.log(e);
             return [];
         }
     }
@@ -222,6 +227,7 @@ export class ExceptionBlockService {
                 const fileName = `${clusterTemplateDir}/${dir}/kustomization.yaml`;
                 dirStructure[dir] = await this.readFolderNames(fileName);
             }
+            // console.log(dirStructure);
         }
         return dirStructure;
     }

@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import {
     KubernetesObject,
     KubernetesObjectApi,
+    PatchUtils,
     RbacAuthorizationV1Api,
     V1ClusterRole,
     V1ObjectMeta, V1PodList,
@@ -14,7 +15,6 @@ import {
 import {V1Pod} from "@kubernetes/client-node/dist/gen/model/v1Pod";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
 import {ConfigService} from "@nestjs/config";
-import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 
 @Injectable()
@@ -82,10 +82,7 @@ export class KubernetesApiService {
             verbs: ['get', 'watch', 'list', 'create', 'update', 'patch', 'delete']
         }),
     ];
-    constructor(
-      private readonly configService: ConfigService,
-      protected readonly logger: MineLoggerService
-    ) {
+    constructor(private readonly configService: ConfigService) {
     }
     /**
      * Retrieves the config that the cluster is currently on
@@ -104,7 +101,7 @@ export class KubernetesApiService {
             config.loadFromString(decodedJson);
             return config;
         } catch (error) {
-            this.logger.error('Error decoding base 64 kubeconfig', error, 'KubernetesApiService.loadConfigFromBase64Json');
+            console.log(error);
         }
     }
 
@@ -116,7 +113,7 @@ export class KubernetesApiService {
         try {
             return config?.makeApiClient(CoreV1Api) || null;
         } catch (error) {
-            this.logger.error('Error building core v1 api from kubeconfig', error, 'KubernetesApiService.makeCoreV1ApiFromConfig');
+            console.log(error);
         }
     }
 
@@ -131,7 +128,7 @@ export class KubernetesApiService {
             const namespaceList = res.body;
             return namespaceList;
         }).catch(err => {
-            this.logger.error('Error listing namespaces', err, 'KubernetesApiService.listNamespaces');
+            console.log(err);
             return null;
         });
     }
@@ -143,7 +140,7 @@ export class KubernetesApiService {
             const podList = res.body;
             return podList;
         }).catch(err => {
-            this.logger.error('Error listing pods', err, 'KubernetesApiService.listPods');
+            console.log(err);
             return null;
         });
     }
@@ -155,7 +152,7 @@ export class KubernetesApiService {
             const pod = res.body;
             return pod;
         }).catch(err => {
-            this.logger.error({label: 'Error retrieveing namespaced pod', data: { podName, namespace }}, err, 'KubernetesApiService.getNamespacedPod');
+            console.log(err);
             return null;
         });
     }
@@ -166,10 +163,7 @@ export class KubernetesApiService {
     async testApi(k8sApi: CoreV1Api): Promise<boolean> {
         return k8sApi?.listNamespace()
             .then(() => true)
-            .catch(e => {
-                this.logger.error('Kubernetes Cluster connection Failed', e, 'KubernetesApiService.testApi');
-                return false;
-            })
+            .catch(e => {console.log(e); return false;})
             || Promise.resolve(false);
     }
 
@@ -303,17 +297,17 @@ export class KubernetesApiService {
             return (await objApi.patch(obj)).body;
         } catch (e) { // objApi throws errors if it can't find the object
             if (e.statusCode === 401) {
-                this.logger.error('Kubeconfig lacks permission to read the object', e, 'KubernetesApiService.applyK8sObject');
+                console.log('User does not have permission to read the object');
                  return null;
             }
             return await objApi.create(obj)
                 .then(res => res.body)
                 .catch(er => {
                    if (er.statusCode === 401) {
-                       this.logger.error('Kubeconfig lacks permission to read the object', er, 'KubernetesApiService.applyK8sObject');
+                       console.log('user does not have permission to create the object');
                        return null;
                    }
-                    this.logger.error('Error creating Kubernetes object', e, 'KubernetesApiService.applyK8sObject');
+                   console.log('Error creating object', e);
                    return null;
                 });
 
@@ -363,7 +357,7 @@ export class KubernetesApiService {
         let canContinue = true;
 
         if (newServiceAccount) {
-            this.logger.log({label: 'Creating service account', data: { namespace: serviceAccountNamespace }}, 'KubernetesApiService.AddServiceAccount');
+            console.log(`Creating a new service account in ${serviceAccountNamespace}`);
 
             // Build the service account
             serviceAccount = new V1ServiceAccount();
@@ -376,22 +370,16 @@ export class KubernetesApiService {
             // Save the service account in the cluster
             canContinue = !!(await this.applyK8sObject(serviceAccount, config));
             if (!canContinue) {
-                this.logger.error({label: 'Failed to create service account', data: {namespace: serviceAccountNamespace}}, null, 'KubernetesApiService.AddServiceAccount');
+                console.log(`Failed to create service account`);
                 return null;
             }
         } else {
             // already exists, so no need to patch it (nothing ever changes here).
-            this.logger.log({
-                  label: 'Service account already exists - no need to update',
-                  data: {
-                      serviceAccountName: existingServiceAccount?.metadata.name,
-                      namespace: serviceAccountNamespace
-                  }},
-              'KubernetesApiService.AddServiceAccount');
+            console.log(`${existingServiceAccount?.metadata.name} already exists at ${serviceAccountNamespace} namespace.`);
         }
 
-        // Build the secret
-        this.logger.log({label: 'Creating Kubernetes Secret', data: {namespace: serviceAccountNamespace}}, 'KubernetesApiService.AddServiceAccount');
+        //Build the secret
+        console.log(`Creating a secret in ${serviceAccountNamespace}`);
         const secret : V1Secret = new V1Secret();
         secret.kind = "Secret";
         secret.apiVersion = 'v1';
@@ -402,12 +390,12 @@ export class KubernetesApiService {
         secret.metadata.annotations={'kubernetes.io/service-account.name': "m9sweeper"};     
         const secretResponse = await this.applyK8sObject(secret, config)
         if (!secretResponse){
-            this.logger.log({label: 'Create secret response', data: { secretResponse }}, 'KubernetesApiService.AddServiceAccount');
-
+            console.log("secret response", secretResponse);
+            
         }
 
-        // Build the clusterRole w/the rules
-        this.logger.log({label: 'Creating cluster role', data: { namespace: serviceAccountNamespace}}, 'KubernetesApiService.AddServiceAccount');
+        // Build the clusterRole w/the rules 
+        console.log(`Creating a cluster role in ${serviceAccountNamespace}`);
         const clusterRole: V1ClusterRole = new V1ClusterRole();
         clusterRole.apiVersion = 'rbac.authorization.k8s.io/v1';
         clusterRole.kind = 'ClusterRole';
@@ -419,12 +407,12 @@ export class KubernetesApiService {
         // Create the Cluster Role in the cluster or patch it (in case it got corrupted)
         canContinue = !!(await this.applyK8sObject(clusterRole, config));
         if (!canContinue) {
-            this.logger.error({label: 'Could not create cluster role', data: {namespace: serviceAccountNamespace}}, null, 'KubernetesApiService.AddServiceAccount');
+            console.log(`Failed to create cluster role`);
             return null;
         }
 
         // build a rolebinding linking the previously created service account & role
-        this.logger.log({label: 'Creating cluster role binding', data: {namespace: serviceAccountNamespace}}, 'KubernetesApiService.AddServiceAccount');
+        console.log(`Creating a cluster role binding in ${serviceAccountNamespace}`);
         const roleBinding = new V1RoleBinding();
         roleBinding.apiVersion = 'rbac.authorization.k8s.io/v1';
         roleBinding.kind = 'ClusterRoleBinding';
@@ -444,7 +432,7 @@ export class KubernetesApiService {
         // Create the rolebinding in the cluster or patch it (in case it got corrupted)
         canContinue = !!(await this.applyK8sObject(roleBinding, config));
         if(!canContinue)  {
-            this.logger.error({label: 'Error decoding base 64 kubeconfig', data: { namespace: serviceAccountNamespace}}, null, 'KubernetesApiService.AddServiceAccount');
+            console.log(`Failed to create cluster role binding`);
             return null;
         }
 
@@ -468,4 +456,68 @@ export class KubernetesApiService {
         const listExistingServiceAccounts = await coreApi.listNamespacedServiceAccount(namespace);
         return listExistingServiceAccounts.body.items.filter(sc => sc.metadata.name === 'm9sweeper');
     }
+
+    async patchServiceAccountClusterRole(base64KubeConfig: string): Promise<V1ClusterRole | null> {
+        const config = this.loadConfigFromBase64Json(base64KubeConfig);
+        const rbacApi = this.makeRbacApiFromConfig(config);
+
+        const clusterRole: V1ClusterRole = new V1ClusterRole();
+        clusterRole.apiVersion = 'rbac.authorization.k8s.io/v1';
+        clusterRole.kind = 'ClusterRole';
+        clusterRole.metadata = new V1ObjectMeta();
+        clusterRole.metadata.name = 'm9sweeper';
+
+        clusterRole.rules = this.clusterRoles;
+        const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_MERGE_PATCH }};
+
+        try {
+            const result = await rbacApi.patchClusterRole(clusterRole.metadata.name, clusterRole, undefined, undefined, undefined, undefined, undefined, options);
+            console.log('Cluster Role Patch Status: ', result.response.statusCode);
+            return result.body;
+        } catch (e) {
+            console.log(`Error updating Cluster Role ${clusterRole.metadata.name}`, e);
+            return null;
+        }
+    }
+
+    async getServiceAccountDetails(name: string, kubeConfig: string): Promise<void> {
+        const releaseNamespace = this.configService.get('releaseNamespace.serviceAccountNamespace');
+        try {
+            const config = this.loadConfigFromBase64Json(kubeConfig);
+            const coreApi = this.makeCoreV1ApiFromConfig(config);
+            const acc = await coreApi.readNamespacedServiceAccount(name, releaseNamespace);
+            console.log('Service Account Details: ');
+            console.log(acc);
+        } catch (e) {
+            console.log('Something went wrong during reading service account.');
+            console.log(e);
+        }
+    }
+
+    async getClusterRoleDetails(name: string, kubeConfig: string): Promise<void> {
+        try {
+            const config = this.loadConfigFromBase64Json(kubeConfig);
+            const rbacApi = this.makeRbacApiFromConfig(config);
+            const clusterRole = await rbacApi.readClusterRole(name);
+            console.log('Cluster Role Details: ');
+            console.log(clusterRole);
+        } catch (e) {
+            console.log('Something went wrong during reading cluster role.');
+            console.log(e);
+        }
+    }
+
+    async getClusterRoleBindingDetails(name: string, kubeConfig: string): Promise<void> {
+        try {
+            const config = this.loadConfigFromBase64Json(kubeConfig);
+            const rbacApi = this.makeRbacApiFromConfig(config);
+            const clusterRoleBinding = await rbacApi.readClusterRoleBinding(name);
+            console.log('Cluster Role Binding Details: ');
+            console.log(clusterRoleBinding);
+        } catch (e) {
+            console.log('Something went wrong during reading cluster role binding.');
+            console.log(e);
+        }
+    }
+
 }
