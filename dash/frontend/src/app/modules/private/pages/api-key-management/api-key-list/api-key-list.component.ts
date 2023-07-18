@@ -10,16 +10,17 @@ import {MatPaginator} from '@angular/material/paginator';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {merge} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 @Component({
   selector: 'app-api-key-list',
   templateUrl: './api-key-list.component.html',
   styleUrls: ['./api-key-list.component.scss']
 })
-
 export class ApiKeyListComponent implements OnInit, AfterViewInit {
   subMenuTitle = 'API Key Management';
-  displayedColumns: string[] = ['name', 'api', 'username', 'isActive', 'actions'];
+  displayedColumns: string[] = ['name', 'api', 'username', 'isActive', 'edit', 'delete'];
+  displayedColumnsNonAdmin: string[] = ['name', 'api', 'username', 'isActive'];
   dataSource: MatTableDataSource<IApiKey>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -30,13 +31,20 @@ export class ApiKeyListComponent implements OnInit, AfterViewInit {
   page = 0;
   totalCount = 0;
   data: IApiKey[] = [];
+  isAdmin: boolean;
 
   constructor(
+    private jwtAuthService: JwtAuthService,
     private apiKeyService: ApiKeyService,
     private dialog: MatDialog,
     private alertService: AlertService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
+    if (!this.isAdmin) {
+      this.displayedColumns = this.displayedColumnsNonAdmin;
+    }
+  }
 
   ngOnInit(): void {
     this.subNavigationTitle = 'API Key Management';

@@ -15,8 +15,8 @@
     </div>
   <!-- start of the first row of graphs-->
   <div class="row margin-top-10" *ngIf="clustersList && clustersList.length">
-    <div class="dashboard-card margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" class="" id="complianceSummaryLineChartCard">
+    <div class="margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card class="overview-graph-card" id="complianceSummaryLineChartCard">
         <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -60,8 +60,8 @@
       </mat-card>
     </div>
 
-    <div class="dashboard-card widget margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" id="lineChartCard">
+    <div class="widget margin-top-10 no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card class="overview-graph-card" id="lineChartCard">
         <mat-card-title class="center-xs">Scan History</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -104,8 +104,8 @@
       </mat-card>
     </div>
 
-    <div class="dashboard-card no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card appearance="outlined" id="barChartCard">
+    <div class="no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
+      <mat-card class="overview-graph-card" id="barChartCard">
         <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
         <mat-card-content>
           <div class="graph">
@@ -139,44 +139,47 @@
   </div>
 
   <!--start of the error messages-->
-
   <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
-    <mat-card appearance="outlined" >No cluster added for this group</mat-card>
+    <mat-card >No cluster added for this group</mat-card>
   </div>
   <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 margin-top-10 text-center">
-    <mat-card appearance="outlined">No cluster found.</mat-card>
+    <mat-card>No cluster found.</mat-card>
   </div>
 
   <!--start of showing the clusters-->
   <div class="row margin-bottom-20">
-    <div class="dashboard-card cluster-element margin-bottom-6 no-padding pointer col-xs-12 col-md-6 col-lg-4"
+    <div class="cluster-element margin-bottom-6 no-padding pointer col-xs-12 col-md-6 col-lg-4"
          *ngFor="let cluster of clustersList; index as i">
-      <mat-card appearance="outlined" (click)="showCluster(cluster)" class="padding-top-10 w-100"
+      <mat-card (click)="showCluster(cluster)" class="w-100"
                 [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
-          <mat-card-header>
-            <mat-card-title>
-              <div class="row">
-                <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
-                  <span>
-                    {{shortGroupName(cluster.name)}}
-                  </span>
-                </div>
-                <span class="font-size-20 margin-left-7">
-                  {{cluster.name}}
-                </span>
-              </div>
-            </mat-card-title>
-            <mat-card-subtitle>
-              <div class="row">{{cluster.ipAddress}}</div>
+        <div class="row">
+          <div class="col-xs-1 cluster-icon">
+            <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
+              <span>
+                {{shortGroupName(cluster.name)}}
+              </span>
+            </div>
+          </div>
 
+          <div class="cluster-info-header col-xs">
+            <mat-card-title>
+              {{cluster.name}}
+            </mat-card-title>
+            <mat-card-subtitle title="{{cluster.ipAddress}}">
+              {{cluster.ipAddress}}
             </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>{{cluster.context}}</p>
-            <i *ngIf="cluster.lastScannedAt">
-              Last synced: {{+cluster.lastScannedAt | date: 'short'}}
-            </i>
-          </mat-card-content>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs">
+            <mat-card-content class="no-padding">
+              <p>{{cluster.context}}</p>
+              <i *ngIf="cluster.lastScannedAt">
+                last synced: {{+cluster.lastScannedAt | date: 'short'}}
+              </i>
+            </mat-card-content>
+          </div>
+        </div>
         <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
         <ng-template #moreThanSixTags>
           <mat-chip-listbox aria-label="tag list">

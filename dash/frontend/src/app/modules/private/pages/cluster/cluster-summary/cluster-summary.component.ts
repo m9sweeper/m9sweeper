@@ -12,7 +12,6 @@ import { IClusterEvent } from '../../../../../core/entities/IClusterEvent';
 import { FormatDate } from '../../../../shared/format-date/format-date';
 import { MatDialog } from '@angular/material/dialog';
 import { ClusterEventComponent } from '../cluster-event/cluster-event.component';
-import { SharedSubscriptionService } from '../../../../../core/services/shared.subscription.service';
 import { merge, Subscription, Subject } from 'rxjs';
 import { MatSort} from '@angular/material/sort';
 import { PodService } from 'src/app/core/services/pod.service';
@@ -23,15 +22,13 @@ import { ChartSizeService } from '../../../../../core/services/chart-size.servic
 @Component({
   selector: 'app-cluster-summary',
   templateUrl: './cluster-summary.component.html',
-  styleUrls: ['./cluster-summary.component.scss', '../../../../../../styles.scss']
+  styleUrls: ['../../../../../../styles.scss', './cluster-summary.component.scss']
 })
 
 export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   subNavigationTitle: string;
   subNavigationButtonTitle: string;
-  width: number;
-  height: number;
   clusterId: number;
   imageScanData: IImageScanCount[];
   totalVulnerabilities = 0;
@@ -102,14 +99,12 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   expandStatus: boolean;
   expandSubscription: Subscription;
   resizeTimeout;
-  innerScreenWidth: number;
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
   constructor(private route: ActivatedRoute,
               private router: Router,
               private imageService: ImageService,
-              private sharedSubscriptionService: SharedSubscriptionService,
               private clusterService: ClusterService,
               private podService: PodService,
               private deploymentService: DeploymentService,
@@ -124,27 +119,18 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.route.parent.params
       .pipe(take(1))
       .subscribe(param => {
-      this.clusterId = param.id;
-    });
+        this.clusterId = param.id;
+        this.setChartHeightWidthWithoutTimeout();  // starts at a reasonable size
 
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
-    // default card sizes, will be overridden in code
-
-    this.getCountOfImageScan(this.clusterId);
-    this.getCountOfVulnerabilities(this.clusterId);
-    this.getTotalVulnerabilities(this.clusterId);
-    this.getPolicyViolationCount(this.clusterId);
-    this.getCountOfFilteredImages({clusterId: this.clusterId, runningInCluster: true});
-    this.getPodComplianceSummaryForAllClusters(this.clusterId);
-    this.getClusterEvents(this.limit, this.page);
-    this.expandSubscription = this.sharedSubscriptionService.getCurrentExpandStatus()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(status => {
-      this.expandStatus = status;
-      this.setChartHeightWidth();
-    });
-    this.expandStatus = localStorage.getItem('expand') ? JSON.parse(localStorage.getItem('expand')) : true;
+        this.getCountOfImageScan(this.clusterId);
+        this.getCountOfVulnerabilities(this.clusterId);
+        this.getTotalVulnerabilities(this.clusterId);
+        this.getPolicyViolationCount(this.clusterId);
+        this.getCountOfFilteredImages({clusterId: this.clusterId, runningInCluster: true});
+        this.getPodComplianceSummaryForAllClusters(this.clusterId);
+        this.getClusterEvents(this.limit, this.page);
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -159,29 +145,31 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.unsubscribe$.complete();
   }
 
+  @HostListener('window:resize', ['$event'])
+  calculateScreenSize($event?: any) {
+    this.setChartHeightWidth();
+  }
+
   setChartHeightWidth(){
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
-      this.innerScreenWidth = innerWindow.offsetWidth;
-      this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-        this.innerScreenWidth,
-        { xs: 1, s: 1, m: 2, l: 3},
-        { left: 20, right: 20 },
-        { left: 30, right: 20 },
-        { left: 10, right: 10 },
-        { left: 8, right: 8 },
-      );
-      // const oldValues = this.chartSizeService.getDashboardChartSize(
-      //   window.innerWidth - 10, this.innerScreenWidth,
-      //   40,
-      //   30, 20,
-      //   16, 10,
-      //   this.breakpointLarge, this.breakpointMedium,
-      // );
-      this.barChartAttributes.view = this.lineChartAttributes.view;
-      this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-    }, 50);
+      this.setChartHeightWidthWithoutTimeout();
+    }, 1000);
+  }
+
+  setChartHeightWidthWithoutTimeout() {
+    const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
+
+    this.lineChartAttributes.view = this.chartSizeService.getChartSize(
+      innerWindow.offsetWidth,
+      { xs: 1, s: 1, m: 2, l: 3},
+      { left: 20, right: 20 },
+      { left: 20, right: 20 },
+      { left: 5, right: 5 },
+      { left: 6, right: 16 },
+    );
+    this.barChartAttributes.view = this.lineChartAttributes.view;
+    this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
   }
 
   namespaceTotalVulnerabilityByClusterId(){
@@ -192,13 +180,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     }, error => {
       this.alertService.danger(error.error.message);
     });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  calculateScreenSize($event?: any) {
-    this.scrHeight = window.innerHeight;
-    this.scrWidth = window.innerWidth;
-    this.setChartHeightWidth();
   }
 
   getPodComplianceSummaryForAllClusters(clusterId: number) {
@@ -229,29 +210,30 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.imageService.getCountOfImageScan([clusterId])
       .pipe(take(1))
       .subscribe((response: IServerResponse<IImageScanCount[]>) => {
-      this.imageScanData = response.data;
-      if (this.imageScanData && this.imageScanData.length === 0) {
-        return false;
-      }
-      const imageCounts = response.data.map(r => r.count);
-      const lineChartRange = this.clusterService.calculateScanHistoryChartRange(imageCounts);
-      this.lineChartAttributes.yAxisTicks = lineChartRange.yAxisTicks;
-      this.lineChartAttributes.results = [
-        {
-          name: '',
-          series: this.imageScanData.map(imageScan => {
-            return {
-              name: imageScan.date.split('T')[0],
-              value: +imageScan.count
-            };
-          })
+        this.imageScanData = response.data;
+        if (this.imageScanData && this.imageScanData.length === 0) {
+          return false;
         }
-      ];
-      console.log('result: ', this.lineChartAttributes.results);
-      console.log('result type: ', typeof(this.lineChartAttributes.results));
-    }, error => {
-      this.alertService.danger(error.error.message);
-    });
+        const imageCounts = response.data.map(r => r.count);
+        const lineChartRange = this.clusterService.calculateScanHistoryChartRange(imageCounts);
+        this.lineChartAttributes.yAxisTicks = lineChartRange.yAxisTicks;
+        this.lineChartAttributes.results = [
+          {
+            name: '',
+            series: this.imageScanData.map(imageScan => {
+              return {
+                name: imageScan.date.split('T')[0],
+                value: +imageScan.count
+              };
+            })
+          }
+        ];
+        console.log('result: ', this.lineChartAttributes.results);
+        console.log('result type: ', typeof(this.lineChartAttributes.results));
+      }, error => {
+        this.alertService.danger(error.error.message);
+      }
+    );
   }
 
   getCountOfFilteredImages(filterBy: {clusterId: number, runningInCluster?: boolean}) {
@@ -366,17 +348,5 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     this.page = this.page + 1;
     console.log('hitting onScroll');
     this.getClusterEvents(this.limit, this.page);
-  }
-
-  set scrHeight(val: number) {
-    if (val !== this.height) {
-      this.height = val;
-    }
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = val;
-    }
   }
 }

@@ -1,11 +1,12 @@
 <div class="page-container">
   <div class="page-container-content">
-    <app-sub-navigation [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" [title]="subNavigationTitle"
+    <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                        [title]="subNavigationTitle"
                         [buttonTitle]="subNavigationButtonTitle"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <app-sub-navigation [allowedRoles]="['READ_ONLY']" [title]="subNavigationTitle"></app-sub-navigation>
-
-    <div class="mat-elevation-z8 page-card">
+    <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
+                        [title]="subNavigationTitle"></app-sub-navigation>
+    <mat-card>
       <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="w-100"
              matSortDirection="desc">
         <ng-container matColumnDef="name">
@@ -39,12 +40,11 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       </mat-table>
-
       <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
                      [length]="totalCount"
                      [pageSize]="limit"
                      (page)="pageEvent($event)"
                      showFirstLastButtons></mat-paginator>
-    </div>
+    </mat-card>
   </div>
 </div>

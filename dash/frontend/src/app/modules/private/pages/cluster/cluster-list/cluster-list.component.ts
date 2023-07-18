@@ -184,13 +184,13 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         innerWindow?.offsetWidth,
         { xs: 1, s: 1, m: 2, l: 3 },
         { left: 20, right: 20 },
-        { left: 30, right: 20 },
-        { left: 10, right: 10 },
-        { left: 8, right: 8 },
+        { left: 20, right: 20 },
+        { left: 5, right: 5 },
+        { left: 6, right: 16 },
       );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-    } , 50);
+    } , 100);
   }
 
   getClustersByClusterGroupId(groupId: number) {
