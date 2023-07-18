@@ -20,17 +20,17 @@ describe('KubeBench Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card/mat-card-header/div/mat-card-title/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Move to the KubeBench page
-        await $("//mat-list/a[@title='Kube Bench']").customClick("kubebench-page");
+        await $("//span[@class='menu-item-name'][contains(text(), 'Kube Bench')]").customClick("kube-bench-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubebench'),
-            {message: "m9sweeper should be displaying the KubeHunter page"}
+            {message: "m9sweeper should be displaying the KubeBench page"}
         );
 
         // Take a screenshot at the end so we can see the results
@@ -42,20 +42,22 @@ describe('KubeBench Page::', () => {
     it('2 Run a one-time KubeBench scan', async () => {
         // Locate and click the Run Audit button
         await $("//mat-card-content//button[contains(normalize-space(), 'Run Audit')]").customClick('run-audit');
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-kube-bench-dialog")).toBePresent(
+        expect(await $("//div/app-kube-bench-dialog")).toBePresent(
             {message: "The KubeBench environment selection window should be visable"}
         );
 
         // Locate the Environments dropdown and click on it to open the dropdown menu
-        await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(normalize-space(), 'Environments')]/parent::div//mat-select")
-            .customClick("open-environments-dropdown");
+        const foundEnvMenu = await $("//mat-form-field/div[1]/div[2]/div/label/mat-label[contains(normalize-space(), 'Environments')]")
+        await foundEnvMenu.waitForClickable({timeout: 60000, interval: 1000, timeoutMsg: "not clickable"});
+        await foundEnvMenu.customClick('open menu');
+
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'Standard Kubernetes Environment - Just Master Benchmarks')]"))
             .toBePresent({message: "The Environments dropdown menu should be visable"});
 
         // Locate and click the Standard Kubernetes Environment - Just Master Benchmarks option from the dropdown
         await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'Standard Kubernetes Environment - Just Master Benchmarks')]")
             .customClick('select-environment');
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(normalize-space(), 'Standard Kubernetes Environment - Just Master Benchmarks')]"))
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'Standard Kubernetes Environment - Just Master Benchmarks')]"))
             .toBePresent({message: "The Standard Kubernetes Environment - Just Master Benchmarks option should be selected"});
 
         // Locate and click the next button
@@ -75,7 +77,7 @@ describe('KubeBench Page::', () => {
 
         // Close the popup dialog
         await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Done')]").customClick('done');
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-kube-bench-dialog")).not.toBePresent(
+        expect(await $("//div/app-kube-bench-dialog")).not.toBePresent(
             {message: "Kube Hunter Run configuration window should not be visable"}
         );
 

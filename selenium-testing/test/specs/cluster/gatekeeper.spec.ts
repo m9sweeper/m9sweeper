@@ -24,14 +24,14 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card/mat-card-header/div/mat-card-title/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Move to the Gatekeeper page
-        await $("//mat-list/a[@title='GateKeeper']").customClick("gatekeeper-page");
+        await $("//span[@class='menu-item-name'][contains(text(), 'GateKeeper')]").customClick("gatekeeper-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/gatekeeper'),
             {message: "m9sweeper should be displaying the GateKeeper page"}
@@ -46,7 +46,7 @@ describe('Gatekeeper Page::', () => {
     it('2 Install GateKeeper with Helm', async () => {
         // Get the gatekeeper status field so we can tell if its is installed or not. We do not need to run
         // this test if it is already installed. This likely can happen if running tests locally.
-        const statusText = await (await $("//mat-card-content//h1")).getText();
+        const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
         // If gatekeeper is installed then we should skip this test
         if (statusText !== "Not Installed") {
@@ -54,7 +54,7 @@ describe('Gatekeeper Page::', () => {
         }
 
         // Make sure gatekeeper is not yet installed
-        expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Not Installed')]")).toBePresent(
+        expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Not Installed')]")).toBePresent(
             {message: "m9sweeper should be showing Gatekeeper as Not Installed"}
         );
 
@@ -101,7 +101,7 @@ describe('Gatekeeper Page::', () => {
         await sleep(5000);
 
         // Make sure Gatekeeper is showing as installed but not yet setup
-        expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Not Setup')]")).toBePresent(
+        expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Not Setup')]")).toBePresent(
             {message: "m9sweeper should be showing GateKeeper as installed, but in the Not Setup status"}
         );
 
@@ -114,7 +114,7 @@ describe('Gatekeeper Page::', () => {
     it('3 Setup Gatekeeper', async () => {
         // Get the gatekeeper status field so we can tell if its is setup or not. We do not need to run
         // this test if it is already setup. This likely can happen if running tests locally.
-        const statusText = await (await $("//mat-card-content//h1")).getText();
+        const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
         // If gatekeeper is already setup then we should skip this test
         if (statusText !== "Not Setup") {
@@ -179,7 +179,7 @@ describe('Gatekeeper Page::', () => {
 
         // Get the constraint status field so we can tell if its is setup or not. We do not need to run
         // this test if it is already setup. This likely can happen if running tests locally.
-        const statusText = await (await $("//mat-card-content//h1")).getText();
+        const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
         // If the constraint is already setup then we should skip this test
         if (statusText !== "Not Setup") {
@@ -187,7 +187,7 @@ describe('Gatekeeper Page::', () => {
         }
 
         // Verify that the constraint template has not been configured yet
-        expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Not Setup')]")).toBePresent(
+        expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Not Setup')]")).toBePresent(
             {message: "k8scontainerlimits status should be showing as Not Setup"}
         );
 
@@ -240,7 +240,7 @@ describe('Gatekeeper Page::', () => {
             .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created sucessfully."});
 
         // Verify the status text is now showing Gatekeeper as setup
-        expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
+        expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "The k8scontainerlimits constraint should be showing as setup."}
         );
 

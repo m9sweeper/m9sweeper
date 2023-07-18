@@ -8,7 +8,7 @@ import { sleep } from "./sleep.js";
  */
 export async function logout(baseUrl = config.BASE_URL) {
     // find profile
-    await $("//span[contains(@class, 'mat-menu-trigger')]/img[contains(@class, 'profile')]").customClick("logout-profile");
+    await $("//span[contains(@class, 'mat-mdc-menu-trigger')]/img[contains(@class, 'profile')]").customClick("logout-profile");
     await sleep(3000);
 
     // logout
