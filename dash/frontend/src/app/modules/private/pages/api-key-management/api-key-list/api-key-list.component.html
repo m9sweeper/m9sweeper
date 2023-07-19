@@ -40,7 +40,7 @@
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let apiKey">
                 <button mat-icon-button [allowedRoles]="['SUPER_ADMIN']" (click)="alertDeleteApiKey(apiKey?.id)">
-                  <mat-icon>delete_forever</mat-icon>
+                  <mat-icon>delete</mat-icon>
                 </button>
               </td>
             </ng-container>

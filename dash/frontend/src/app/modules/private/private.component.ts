@@ -199,7 +199,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {}
     });
     confirmDialog.afterClosed().subscribe(result => {
-      this.directive.ngOnInit();
       this.getUserProfile();
     });
   }

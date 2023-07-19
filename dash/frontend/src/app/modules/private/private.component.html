@@ -30,7 +30,7 @@
     </div>
   </mat-toolbar-row>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item style="cursor:unset">
       <mat-icon>face</mat-icon>
       <span>Hi, {{loggedInUserName}}</span>
     </button>
@@ -39,15 +39,16 @@
       <mat-icon>person</mat-icon>
       <span>Update Profile</span>
     </button>
-    <button *ngIf="isLocalAuthUser" mat-menu-item [routerLink]="['/private', 'change-password']">
-      <mat-icon>vpn_key</mat-icon>
-      <span>Change password</span>
+    <button *ngIf="isLocalAuthUser" mat-menu-item>
+      <a href="/private/change-password" style="text-decoration: none;" >
+        <mat-icon>vpn_key</mat-icon>
+        <span style="vertical-align: super">Change password</span>
+      </a>
     </button>
-
-    <mat-divider style="margin-top: 15px"></mat-divider>
+    <mat-divider></mat-divider>
     <button mat-menu-item>
-      <a href="/docs/docs" style="text-decoration: none; color: rgba(0, 0, 0, 0.87)">
-        <mat-icon>description</mat-icon>
+      <a href="/docs/docs" target="_blank" style="text-decoration: none; color: rgba(0, 0, 0, 0.87);">
+        <mat-icon style="vertical-align: bottom">description</mat-icon>
         <span>Documentation</span>
       </a>
     </button>
