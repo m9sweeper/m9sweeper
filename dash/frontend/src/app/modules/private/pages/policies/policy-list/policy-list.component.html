@@ -7,7 +7,7 @@
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
     <mat-card class="settings-card">
-      <div>
+      <div class="table-wrapper">
         <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="w-100"
                matSortDirection="desc">
           <ng-container matColumnDef="name">
