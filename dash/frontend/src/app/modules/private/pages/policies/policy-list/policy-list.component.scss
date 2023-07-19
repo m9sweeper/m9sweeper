@@ -1,19 +1,18 @@
-.page-container-content table {
-  overflow-x: scroll;
-  display: block;
+mat-row {
+  height: 80px;
 }
 
 .mat-column-name {
   min-width: 120px;
   flex: 20%;
-  align-items: initial;
+  //align-items: initial;
   overflow: hidden;
 }
 
 .mat-column-description {
   min-width: 180px;
   flex: 30%;
-  align-items: initial;
+  //align-items: initial;
   overflow: hidden;
 }
 
@@ -25,7 +24,11 @@
   min-width: 132px;
   flex: 15%;
 }
-.mat-column-actions {
-  min-width: 120px;
-  flex: 20%;
+.mat-column-edit {
+  min-width: 90px;
+  flex: 5%;
+}
+.mat-column-delete {
+  min-width: 90px;
+  flex: 6%;
 }
