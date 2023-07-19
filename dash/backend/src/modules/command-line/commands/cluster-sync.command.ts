@@ -10,6 +10,7 @@ import {ClusterGroupService} from '../../cluster-group/services/cluster-group-se
 import {NamespaceComplianceService} from '../../namespace/services/namespace_compliance.service';
 import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {ClusterEventCreateDto} from '../../cluster-event/dto/cluster-event-create-dto';
+import {ClusterSummaryDto} from '../dto/cluster-summary-dato';
 
 @Injectable()
 export class ClusterSyncCommand {
@@ -41,6 +42,18 @@ export class ClusterSyncCommand {
     if (!clusters?.length) {
       this.log('No clusters matching the given ID found, skipping syncing', { clusterID }, 'syncCluster');
       return true;
+    }
+
+    try {
+      // run sync
+      const clusterSummaries: ClusterSummaryDto[] = await this._getClusterSummaries(clusters);
+      this.log('cluster summaries retrieved', {clusterSummaries}, 'syncCluster');
+    } catch (e) {
+      this.log('Error syncing cluster(s)', {error: {stack: e.stack, message: e.message}}, 'syncCluster');
+      const clusterEventObject = this.clusterEventService.createClusterEventObject(0,
+        'License Validation', 'Create', 'Error',
+        `Scraping was canceled: An error occurred`, e.message);
+      await this._saveClusterEventForAllClusters(clusters, clusterEventObject);
     }
 
     await this.namespaceComplianceService
@@ -85,5 +98,23 @@ export class ClusterSyncCommand {
       throw new Error('Invalid cluster identification. clusterIDs must be either a list or the word "all." ');
     }
     return clusters;
+  }
+
+  private async _getClusterSummaries(clusters: ClusterDto[]): Promise<ClusterSummaryDto[]> {
+    const clusterSummaries: ClusterSummaryDto[] = [];
+    for (const cluster of clusters) {
+      try {
+        this.log('Syncing cluster', {clusterId: cluster?.id}, '_getClusterSummaries');
+        const syncResults = await this.kubernetesClusterService.sync(cluster);
+        this.log('Got the k8s node summary: ', {clusterId: cluster?.id, ...syncResults.nodeSummary}, '_getClusterSummaries');
+        clusterSummaries.push({clusterId: cluster?.id, clusterName: cluster?.name, ...syncResults.nodeSummary});
+        if (syncResults.everythingSuccessfullySynced) {
+          await this.clusterDao.updateClusterLastScanned(cluster?.id);
+        }
+      } catch (e) {
+        this.log('Error syncing cluster', {name: cluster?.name, id: cluster?.id, error: {stack: e.stack, message: e.message}}, '_getClusterSummaries');
+      }
+    }
+    return clusterSummaries;
   }
 }
