@@ -35,7 +35,7 @@
             <input id="password" matInput type="password" formControlName="password">
           </mat-form-field>
           <div class="form-action-button" *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH' || selectedInSiteCredentialAuthenticationMethod?.type === 'LDAP'">
-            <button id="submit'" mat-raised-button type="submit">Login</button>
+            <button id="submit'" mat-raised-button mat-button type="submit">Login</button>
           </div>
           <ng-container *ngIf="selectedInSiteCredentialAuthenticationMethod?.type === 'LOCAL_AUTH'">
             <div class="reset-password">

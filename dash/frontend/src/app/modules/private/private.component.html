@@ -30,31 +30,38 @@
     </div>
   </mat-toolbar-row>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    &nbsp;
+    <button mat-menu-item style="cursor:unset">
       <mat-icon>face</mat-icon>
       <span>Hi, {{loggedInUserName}}</span>
     </button>
+    &nbsp;
     <mat-divider></mat-divider>
+    &nbsp;
     <button (click)="openUpdateUserProfile()" mat-menu-item>
       <mat-icon>person</mat-icon>
       <span>Update Profile</span>
     </button>
+    &nbsp;
     <button *ngIf="isLocalAuthUser" mat-menu-item [routerLink]="['/private', 'change-password']">
       <mat-icon>vpn_key</mat-icon>
       <span>Change password</span>
     </button>
-
+    &nbsp;
     <mat-divider style="margin-top: 15px"></mat-divider>
+    &nbsp;
     <button mat-menu-item>
-      <a href="/docs/docs" style="text-decoration: none; color: rgba(0, 0, 0, 0.87)">
-        <mat-icon>description</mat-icon>
+      <a href="/docs/docs" target="_blank" style="text-decoration: none; color: rgba(0, 0, 0, 0.87);">
+        <mat-icon style="vertical-align: bottom">description</mat-icon>
         <span>Documentation</span>
       </a>
     </button>
+    &nbsp;
     <button mat-menu-item (click)="userSignOut()">
       <mat-icon>exit_to_app</mat-icon>
       <span>Sign Out</span>
     </button>
+    &nbsp;
   </mat-menu>
 </mat-toolbar>
 

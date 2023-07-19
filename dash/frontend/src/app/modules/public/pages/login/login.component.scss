@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 div {
   &.login-container {
     display: flex;
@@ -32,6 +33,7 @@ div {
                 margin: 5px 0;
                 button{
                   width: 100%;
+                  background-color:  mat.get-color-from-palette(mat.$gray-palette, 300);
                 }
               }
               &.reset-password{
