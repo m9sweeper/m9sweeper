@@ -278,8 +278,8 @@ app-private {
 }
 
 .settings-card, .scrollable-table-card {
-  > div:first-child {
-    overflow-x: scroll;
+  div.table-wrapper {
+    overflow-x: auto;
     display: flex;
   }
   th {

@@ -3,7 +3,7 @@
       <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
                           [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
       <mat-card class="settings-card">
-        <div>
+        <div class="table-wrapper">
           <table mat-table [dataSource]="dataSource"  matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Name</th>
