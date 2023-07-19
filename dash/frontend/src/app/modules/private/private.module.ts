@@ -77,8 +77,6 @@ import { GateKeeperComponent } from './pages/cluster/gate-keeper/gate-keeper.com
 import { GateKeeperDetailsComponent } from './pages/cluster/gate-keeper-details/gate-keeper-details.component';
 import { KubernetesPodDetailsComponent } from './pages/cluster/kubernetes-pod-details/kubernetes-pod-details.component';
 import { MatSliderModule } from '@angular/material/slider';
-import { LicensesComponent } from './pages/license/licenses/licenses.component';
-import { LicenseCheckComponent } from './pages/license/license-check/license-check.component';
 import { AddConstraintDialogComponent } from './pages/cluster/add-constraint-dialog/add-constraint-dialog.component';
 import { AddCustomConstraintTemplateComponent } from './pages/cluster/add-custom-constraint-template/add-custom-constraint-template.component';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
@@ -183,8 +181,6 @@ import {MenuComponent} from './menus/menu.component';
     GateKeeperComponent,
     GateKeeperDetailsComponent,
     GateKeeperInstallWizardDialogComponent,
-    LicensesComponent,
-    LicenseCheckComponent,
     AddConstraintDialogComponent,
     AddCustomConstraintTemplateComponent,
     AddTemplateConstraintComponent,

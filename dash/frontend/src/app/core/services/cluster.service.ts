@@ -27,18 +27,6 @@ export class ClusterService implements OnDestroy{
     return this.httpClient.put(`/api/clusters/${id}`, cluster);
   }
 
-  checkLicenseValidity(): Observable<any> {
-    return this.httpClient.get('/api/settings/site/license/validity');
-  }
-
-  checkLicenseValidityFromLicensingPortal(licenseKey: string, instanceKey: string): Observable<any> {
-    return this.httpClient.get('/api/settings/site/license/validity/from/portal',
-      { params: new HttpParams()
-          .set('licenseKey', licenseKey)
-          .set('instanceKey', instanceKey)
-      });
-  }
-
   testServiceAccount(token: string, server: string, context: string): Observable<IServerResponse<{valid: boolean, config: string, context?: string}>> {
     return this.httpClient.post<IServerResponse<{valid: boolean, config: string}>>('/api/clusters/test-service-account', {token, server, context});
   }

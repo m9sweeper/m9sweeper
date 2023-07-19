@@ -54,7 +54,6 @@ export const config: Options.Testrunner = {
             // Run the tests for managing the organization
             // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
-            // './test/specs/organization/licenses.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
             // './test/specs/organization/sign-on-methods.spec.ts',
@@ -97,7 +96,6 @@ export const config: Options.Testrunner = {
         organization: [
             // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
-            // './test/specs/organization/licenses.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
             // './test/specs/organization/sign-on-methods.spec.ts',

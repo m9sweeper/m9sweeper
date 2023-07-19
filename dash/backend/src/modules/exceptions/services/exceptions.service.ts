@@ -10,7 +10,6 @@ import {PodService} from '../../pod/services/pod.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterService} from '../../cluster/services/cluster.service';
 import {NamespaceService} from '../../namespace/services/namespace.service';
-import {LicensingPortalService} from '../../../integrations/licensing-portal/licensing-portal.service';
 import {ExceptionBlockService} from '../../command-line/services/exception-block.service';
 import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {ExceptionK8sInfoDto} from '../dto/exception-k8s-info-dto';
@@ -30,8 +29,6 @@ export class ExceptionsService {
     private readonly podService: PodService,
     private readonly clusterEventService: ClusterEventService,
     private readonly kubernetesNamespaceService: NamespaceService,
-    @Inject(forwardRef(() => LicensingPortalService))
-    private readonly licensingPortalService: LicensingPortalService,
     private readonly auditLogService: AuditLogService,
     private logger: MineLoggerService,
   ) {}
@@ -279,27 +276,7 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
   }
 
   async syncGatekeeperBlocks(): Promise<void> {
-      /*
-      this.licensingPortalService.checkLicenseValidityFromDash()
-          .then((checkLicenseValidity) => {
-              if (checkLicenseValidity.isLicenseSetup && checkLicenseValidity.validity) {
-
-       */
-                  this.exceptionBlockService.syncGatekeeperExceptionBlocks()
-                      .catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
-      /*
-              } else {
-                  if (checkLicenseValidity.isLicenseSetup) {
-                      if (!checkLicenseValidity.validity) {
-                          this.logger.log({label: 'License has expired'}, 'ExceptionsService.syncGatekeeperBlocks');
-                      }
-                  } else {
-                      this.logger.log({label: 'License not set up'}, 'ExceptionsService.syncGatekeeperBlocks');
-                  }
-              }
-          })
-          .catch(e => this.logger.error({label: 'Error checking license validity'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
-
-       */
+    this.exceptionBlockService.syncGatekeeperExceptionBlocks()
+        .catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
   }
 }

@@ -43,11 +43,6 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         icon: 'folder_shared',
       },
       {
-        name: 'Licenses',
-        path: ['/private', 'licenses'],
-        icon: 'lock_open',
-      },
-      {
         name: 'Policies',
         path: ['/private', 'policies'],
         icon: 'assignment_turned_in',

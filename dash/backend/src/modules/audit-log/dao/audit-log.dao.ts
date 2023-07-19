@@ -49,7 +49,6 @@ export class AuditLogDao {
                     {entityType:"Exception"},
                     {entityType:"Image Scan"},
                     {entityType:"Kubernetes Image History"},
-                    {entityType:"License Validation"},
                     {entityType:"Policy"},
                     {entityType:"Unknown"}
             ];

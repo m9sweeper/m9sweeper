@@ -10,7 +10,6 @@ import {K8sImageService} from '../../k8s-image/services/k8s-image.service';
 import {ExceptionsService} from '../../exceptions/services/exceptions.service';
 import {ClusterService} from '../../cluster/services/cluster.service';
 import {ClusterDto} from '../../cluster/dto/cluster-dto';
-import {LicensingPortalService} from '../../../integrations/licensing-portal/licensing-portal.service';
 import {AppSettingsService} from '../../settings/services/app-settings.service';
 import { PodComplianceService } from '../../pod/services/pod-compliance.service';
 import { PodComplianceDto } from '../../pod/dto/pod-history-compliance-dto';
@@ -27,7 +26,6 @@ export class ClusterValidationService {
                 private readonly configService: ConfigService,
                 private readonly exceptionService: ExceptionsService,
                 private readonly k8sImageService: K8sImageService,
-                private readonly licensingPortalService: LicensingPortalService,
                 private readonly appSettingsService: AppSettingsService,
                 private readonly clusterService: ClusterService,
                 private readonly podComplianceService: PodComplianceService,
@@ -56,25 +54,6 @@ export class ClusterValidationService {
         // get associated cluster and check whether enforcement is enabled
         const cluster: ClusterDto = await this.clusterService.getClusterById(clusterId);
 
-        // validate license and only enforce if license is valid
-        const checkLicenseValidity = await this.licensingPortalService.checkLicenseValidityFromDash();
-
-        // If enforcement isn't supported or enforced, skip validation
-        /*if (checkLicenseValidity.isLicenseSetup === false) {
-            // is license is not setup, let everything through, no need to validate the image.
-            response.response.allowed = true;
-            response.licenseStatusMessage = `${validationRequest.request.name} in ${validationRequest.request.namespace} was allowed without scanning because license was not setup.`;
-            return response;
-        } else if (!checkLicenseValidity.validity) { // its NO LONGER valid (it expired)
-            response.response.allowed = true;
-            response.licenseStatusMessage = `${validationRequest.request.name} in ${validationRequest.request.namespace} was allowed without scanning because license has been expired.`;
-            return response;
-        } else if (await this.appSettingsService.doesLicenseHaveImageScanningEnforcement() === false) {
-            response.response.allowed = true;
-            response.licenseStatusMessage = `${validationRequest.request.name} in ${validationRequest.request.namespace} was allowed without scanning because license does not have image scanning feature.`;
-            return response;
-        } else */
-        
         if (!cluster.isEnforcementEnabled) {
             response.response.allowed = true;
             response.enforcementMessage = 'Webhook Enforcement has been disabled. Thus Image Validation is being skipped.';
@@ -92,7 +71,7 @@ export class ClusterValidationService {
 
         const listOfImages: ListOfImagesDto[] = [];
 
-        for (const container of pod.spec?.containers) {
+        for (const container of pod?.spec?.containers || []) {
             const imageInfo = this.k8sImageService.parseDockerImageUrl(container.image);
             // The parse docker image url sometimes puts the image name in the path and has the image name empty due to how it matches.
             // This will join them with a slash if both are defined, otherwise it will only use the non-empty one.
