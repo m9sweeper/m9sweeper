@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {ICluster} from '../../../../../core/entities/ICluster';
@@ -9,7 +9,10 @@ import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-togg
 import { AlertService } from '@full-fledged/alerts';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
-import {take} from 'rxjs/operators';
+import {map, take, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 
 @Component({
@@ -18,13 +21,15 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./cluster-info.component.scss']
 })
 
-export class ClusterInfoComponent implements OnInit {
+export class ClusterInfoComponent implements OnInit, OnDestroy {
+  protected readonly unsubscribe$ = new Subject<void>();
+
   clusterId: number;
   cluster: ICluster;
   m9ver: string;
   commitSHA: string;
   buildDate: string;
-  width: number;
+  isAdmin: boolean;
   isMobileDevice = false;
   isClusterLoaded = false;
   isEnforcementEnabled = false;
@@ -32,17 +37,31 @@ export class ClusterInfoComponent implements OnInit {
   azureColorSchema = ['#004C1A', '#AA0000', '#2F6C71', '#B600A0', '#008272', '#001E51', '#004B51'];
   @ViewChild('matSlideToggle') matSlideToggle: MatSlideToggle;
   @ViewChild('matSlideToggleForImageScanning') matSlideToggleForImageScanning: MatSlideToggle;
-  constructor(private clusterService: ClusterService,
-              private infoService: InfoService,
-              private router: Router,
-              private route: ActivatedRoute,
-              private dialog: MatDialog,
-              private alertService: AlertService) {
+
+  awaitingWebhookEnforcementResponse = false;
+  awaitingImageScanningEnforcementResponse = false;
+
+  constructor(
+    private alertService: AlertService,
+    private breakpointObserver: BreakpointObserver,
+    private clusterService: ClusterService,
+    private dialog: MatDialog,
+    private infoService: InfoService,
+    private jwtAuthService: JwtAuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
   }
 
   ngOnInit(): void {
-    this.width = window.innerWidth;
-    this.screenSizeCollapse(this.width);
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
+      .pipe(
+        map(result => result.matches),
+        takeUntil(this.unsubscribe$)
+      ).subscribe((newIsHandsetOrXS) => {
+        this.isMobileDevice = newIsHandsetOrXS;
+      });
     this.route.parent.params.subscribe(params => {
       this.clusterService.getClusterById(params.id).subscribe(response => {
         this.isClusterLoaded = true;
@@ -58,24 +77,9 @@ export class ClusterInfoComponent implements OnInit {
     });
   }
 
-  @HostListener('window:resize', ['$event'])
-  calculateScreenSize($event?: any) {
-    this.scrWidth = window.innerWidth;
-    this.screenSizeCollapse(this.scrWidth);
-  }
-
-  set scrWidth(val: number) {
-    if (val !== this.width) {
-      this.width = val;
-    }
-  }
-
-  get scrWidth(): number {
-    return this.width;
-  }
-
-  screenSizeCollapse(width: number) {
-    this.isMobileDevice = width < 500;
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   getClusterById(clusterId: number) {
@@ -132,12 +136,15 @@ export class ClusterInfoComponent implements OnInit {
     const changedValue = $event.checked;
     this.cluster.isEnforcementEnabled = changedValue;
     const displayText = changedValue ? 'enabled' : 'disabled';
+    this.awaitingWebhookEnforcementResponse = true;
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(response => {
+        this.awaitingWebhookEnforcementResponse = false;
         if (response.success) {
           this.alertService.success(`Webhook Enforcement has been ${displayText}.`);
         }
       },
       error => {
+        this.awaitingWebhookEnforcementResponse = false;
         this.alertService.danger('Could not update Webhook Enforcement');
         setTimeout(() => {
           this.matSlideToggle.toggle();
@@ -147,14 +154,17 @@ export class ClusterInfoComponent implements OnInit {
 
   changeImageScanningEnforcementValue($event: MatSlideToggleChange) {
     const changedValue = $event.checked;
-    const displayText = changedValue ? 'enabled' : 'disabled';
     this.cluster.isImageScanningEnforcementEnabled = changedValue;
+    const displayText = changedValue ? 'enabled' : 'disabled';
+    this.awaitingImageScanningEnforcementResponse = true;
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
+        this.awaitingImageScanningEnforcementResponse = false;
         if (clusterUpdateResponse.success) {
           this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);
         }
       },
       error => {
+        this.awaitingImageScanningEnforcementResponse = false;
         this.alertService.danger('Something went wrong while saving Image Scanning Enforcement.');
         setTimeout(() => {
           this.matSlideToggle.toggle();
