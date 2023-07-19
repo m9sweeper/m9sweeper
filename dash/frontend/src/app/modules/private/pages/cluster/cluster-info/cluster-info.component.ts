@@ -7,8 +7,6 @@ import {ClusterEditComponent} from '../cluster-edit/cluster-edit.component';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
 import { AlertService } from '@full-fledged/alerts';
-import {ILicense} from '../../../../../core/entities/ILicense';
-import {LicenseFeatures} from '../../../../../core/enum/LicenseFeatures';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
 import {take} from 'rxjs/operators';
@@ -51,14 +49,6 @@ export class ClusterInfoComponent implements OnInit {
         this.cluster = response.data;
         this.isEnforcementEnabled = this.cluster.isEnforcementEnabled;
 
-        this.clusterService.checkLicenseValidity().subscribe(licenseValidityResponse => {
-          const licenseData: ILicense = licenseValidityResponse.data.data;
-          const featureNames = licenseData ? licenseData.features.map(feature => feature.name) : [];
-          const licenseHasImageScanningEnforcement = featureNames.includes(LicenseFeatures.IMAGE_SCANNING_ENFORCEMENT);
-          if (licenseHasImageScanningEnforcement && this.cluster.isImageScanningEnforcementEnabled) {
-            this.isImageScanningEnforcementEnabled = true;
-          }
-        });
         this.infoService.getDatabaseStatus().pipe(take(1)).subscribe(res => {
           this.m9ver = res.data.git_tag;
           this.commitSHA = res.data.git_sha;

@@ -43,10 +43,6 @@ spec:
             value: {{ .Values.init.superAdminEmail | quote }}
           - name: SUPER_ADMIN_PASSWORD
             value: {{ .Values.init.superAdminPassword | quote }}
-          - name: LICENSE_KEY
-            value: {{ .Values.init.licenseKey | quote }}
-          - name: INSTANCE_KEY
-            value: {{ .Values.init.instanceKey | quote }}
           - name: INITIAL_REGISTRIES_JSON
             value: {{ .Values.init.docker | toJson | b64enc | quote }}
           - name: DEFAULT_NAMESPACE_EXCEPTIONS

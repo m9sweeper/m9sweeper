@@ -125,13 +125,6 @@ describe('Check Navigation::', () => {
             {message: "m9sweeper should be displaying the users page"}
         );
 
-        // Navigate to the Licenses page
-        await $("//mat-list/a[@title='License']").customClick("licenses-page");
-        expect(browser).toHaveUrl(
-            buildUrl('private/licenses'),
-            {message: "m9sweeper should be displaying the licenses page"}
-        );
-
         // Navigate to the Policies page
         await $("//mat-list/a[@title='Policies']").customClick("policies-page");
         expect(browser).toHaveUrl(
