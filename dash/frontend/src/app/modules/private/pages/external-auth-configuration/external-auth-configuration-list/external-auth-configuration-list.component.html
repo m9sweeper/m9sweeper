@@ -1,45 +1,47 @@
 <div class="page-container">
   <div class="page-container-content">
-  <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click)="openAddExternalAuthConfigurationDialog(null)">
-    <mat-icon mat-list-item-icon>add</mat-icon>Add Sign On Method
-  </app-sub-navigation>
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef> No.</th>
-          <td mat-cell *matCellDef="let authConfig"> {{authConfig?.id}} </td>
-        </ng-container>
-        <ng-container matColumnDef="authName">
-          <th mat-header-cell *matHeaderCellDef>Auth Name</th>
-          <td mat-cell *matCellDef="let authConfig"> {{authConfig?.authName}} </td>
-        </ng-container>
-        <ng-container matColumnDef="authType">
-          <th mat-header-cell *matHeaderCellDef>Auth Type</th>
-          <td mat-cell *matCellDef="let authConfig"> {{authConfig?.authType}} </td>
-        </ng-container>
-        <ng-container matColumnDef="authProvider">
-          <th mat-header-cell *matHeaderCellDef>Auth Provider</th>
-          <td mat-cell *matCellDef="let authConfig"> {{authConfig?.providerType}} </td>
-        </ng-container>
-        <ng-container matColumnDef="isActive">
-          <th mat-header-cell *matHeaderCellDef>Active</th>
-          <td mat-cell *matCellDef="let authConfig">
-            <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]=authConfig?.isActive></mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let authConfig" >
-            <ng-container *ngIf="authConfig?.authType !== authenticationType.LOCAL">
-              <button mat-icon-button (click) = "openAddExternalAuthConfigurationDialog(authConfig)">
-                <mat-icon>create</mat-icon>
-              </button>
-            </ng-container>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef = "displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
+    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click)="openAddExternalAuthConfigurationDialog(null)">
+      <mat-icon>add</mat-icon>Add Sign On Method
+    </app-sub-navigation>
+    <mat-card class="settings-card">
+      <div>
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> No.</th>
+            <td mat-cell *matCellDef="let authConfig"> {{authConfig?.id}} </td>
+          </ng-container>
+          <ng-container matColumnDef="authName">
+            <th mat-header-cell *matHeaderCellDef>Auth Name</th>
+            <td mat-cell *matCellDef="let authConfig"> {{authConfig?.authName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="authType">
+            <th mat-header-cell *matHeaderCellDef>Auth Type</th>
+            <td mat-cell *matCellDef="let authConfig"> {{authConfig?.authType}} </td>
+          </ng-container>
+          <ng-container matColumnDef="authProvider">
+            <th mat-header-cell *matHeaderCellDef>Auth Provider</th>
+            <td mat-cell *matCellDef="let authConfig"> {{authConfig?.providerType}} </td>
+          </ng-container>
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef>Active</th>
+            <td mat-cell *matCellDef="let authConfig">
+              <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]=authConfig?.isActive></mat-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let authConfig" >
+              <ng-container *ngIf="authConfig?.authType !== authenticationType.LOCAL">
+                <button mat-icon-button (click) = "openAddExternalAuthConfigurationDialog(authConfig)">
+                  <mat-icon>create</mat-icon>
+                </button>
+              </ng-container>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef = "displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card>
   </div>
 </div>

@@ -98,7 +98,6 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
         this.limit = limit;
         this.paginator.pageSize = limit;
         this.filterForm.get('limit').setValue(limit);
-        console.log({limit: this.limit, page: this.page, response});
         this.lowNumCurrentShownVulnerabilities = (this.limit * this.page) + 1;
         this.highNumCurrentShownVulnerabilities = (this.limit * this.page) + response.data.results.length;
         if (this.vulnerabilityCount < this.limit) {

@@ -42,7 +42,6 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
 
   }
   setEditorContent(event) {
-    // console.log(event, typeof event);
   }
 
   onNoClick() {

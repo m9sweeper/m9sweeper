@@ -23,7 +23,6 @@ export class JwtAuthService {
   private parseToken(token: string): IUser {
     try {
       const decoded = jwt_decode(token) as IUser;
-      console.log('parseToken decoded: ', decoded);
       return decoded;
     } catch (e) {
       return null;
@@ -34,16 +33,13 @@ export class JwtAuthService {
     try {
       const rawToken = localStorage.getItem('__token__');
       const decoded = this.parseToken(rawToken);
-      console.log('getCurrentUserData decoded:', decoded);
       return decoded;
     } catch (e) {
-      console.log('getCurrentUserData error: ', e);
       return null;
     }
   }
 
   saveToken(token: string) {
-    console.log('saving token');
     localStorage.setItem('__token__', token);
     const user: IUser = this.parseToken(token);
     this.CURRENT_USER_SUBJECT.next(user);
@@ -78,7 +74,6 @@ export class JwtAuthService {
       const expirationTime = decoded.exp;
       return expirationTime <= Date.now() / 1000;
     } catch (e) {
-      console.log('isTokenExpired: ', e);
       return null;
     }
   }

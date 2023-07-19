@@ -1,7 +1,7 @@
-<div class="kubernetes-pod-details-container">
-  <div class="kubernetes-object-list">
-    <div class="row kubernetes-object-sub-navigation">
-      <div class="col-xs-12 col-md-6 kubernetes-object-header">
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="row page-title-button-group-spacing k8-adjust-height">
+      <div class="col-xs-12 col-md-6">
         <div class="content-breadcrumbs">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -22,24 +22,24 @@
             </li>
           </ol>
         </div>
-        <div class="content-name">
+        <div class="subnav-title">
           <p>{{podName}}</p>
         </div>
       </div>
 
       <div class="col-xs-12 col-md-6 calendar-date-picker">
         <button class="action-button" type="button" mat-raised-button style="background-color: transparent;" (click)="getViolations()">
-          <img src="assets/images/opa-icon.png" alt="OPA" style="max-width: 50px; max-height: 30px;"/>
+          <img src="assets/images/opa-icon.png" alt="OPA" class="kubesec-logo"/>
         </button>
         &nbsp;&nbsp;
         <button type="button" class="run-kubesec-button action-button" mat-raised-button style="background-color: transparent;" (click)="runKubesec()">
-          <img src="assets/images/kubesec-logo.png" alt="kubesec" style="max-width: 50px; max-height: 30px;"/>
+          <img src="assets/images/kubesec-logo.png" alt="kubesec" class="kubesec-logo"/>
         </button>
         <app-datepicker-component (newDateSelected)="dateChanged($event)" [initialDate]="initialDate"></app-datepicker-component>
       </div>
     </div>
-    <h3 style="margin-top: 20px">Images</h3>
-    <div class="mat-elevation-z8 pod-table">
+    <h3 class="title-font margin-0">Images</h3>
+    <div class="mat-elevation-z8 page-table k8-adjust-height">
       <mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
@@ -66,7 +66,7 @@
         </ng-container>
         <mat-header-row ></mat-header-row>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getImageDetails(row)" class="click-event"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getImageDetails(row)" class="table-row"></mat-row>
       </mat-table>
     </div>
     <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>

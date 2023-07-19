@@ -132,8 +132,6 @@ export class FalcoEventsListComponent implements OnInit {
   getUserAuthority() {
     const currentUserRoles = this.jwtAuthService.currentUserAuthorities as string[];
     this.isAllowed = this.allowedRoles.filter(role => currentUserRoles.includes(role))?.length > 0;
-    console.log('user role', currentUserRoles);
-    console.log('is allow', this.isAllowed);
   }
 
   displayEventDetails(event: IFalcoLog) {

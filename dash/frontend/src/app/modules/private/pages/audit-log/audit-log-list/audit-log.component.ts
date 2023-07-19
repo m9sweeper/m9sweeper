@@ -48,10 +48,7 @@ export class AuditLogComponent implements OnInit {
       width: 'auto',
       data: {content: auditLog.data, header: 'MetaData'}
     });
-
-    this.dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });  }
+  }
 
   filterAuditLogs() {
     const entityType = this.filterAuditLogForm.value.entityTypes;

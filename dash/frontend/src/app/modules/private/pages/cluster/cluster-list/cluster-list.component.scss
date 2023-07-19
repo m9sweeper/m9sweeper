@@ -1,13 +1,54 @@
 .row {
-  padding-left: 30px;
+  padding-left: 20px;
   padding-right: 20px;
 }
 
-//.mat-mdc-card{
-//  padding: 0;
-//  height: 100%;
-//  margin: 10px 10px 0 0;
-//}
+mat-card.overview-graph-card {
+  mat-card-content {
+    margin: 6px 16px 16px 6px !important;
+    padding: unset;
+  }
+}
+
+.cluster-element {
+  display: flex;
+  margin-top: 15px;
+
+  mat-card {
+    padding: 1em 0.5em;
+
+    .row {
+      div {
+        padding-left: 0;
+        padding-right: 0;
+        //margin: 0 0.75em 0 0;
+      }
+    }
+    .cluster-icon {
+      min-width: 60px;
+      padding-right: 10px;
+    }
+
+    mat-card-title {
+      padding-top: 0;
+    }
+    mat-card-subtitle {
+      font-style: italic;
+      font-size: 11px;
+    }
+    mat-card-content {
+      padding-left: 0;
+    }
+  }
+}
+
+.cluster-info-header {
+  overflow-x: hidden;
+
+  mat-card-subtitle {
+    text-wrap: nowrap;
+  }
+}
 
 .cluster-name-short {
   height: 44px;
@@ -19,7 +60,7 @@
   border-radius: 4px;
   text-transform: uppercase;
   color: white;
-  margin-left: 6px;
+  //margin-left: 6px;
   font-size: 16px;
 }
 
@@ -33,9 +74,4 @@
 
 .mat-mdc-card-title {
   padding-top: 10px;
-}
-
-.cluster-element {
-  display:flex;
-  margin-top:15px;
 }

@@ -42,7 +42,6 @@ export class SendResetPasswordMailComponent {
         }
 
       }, e => {
-        console.log('Error: ', e.error);
         this.alertService.danger(e.error.message);
       },
         () => this.loadingService.stop('send-reset-email'));

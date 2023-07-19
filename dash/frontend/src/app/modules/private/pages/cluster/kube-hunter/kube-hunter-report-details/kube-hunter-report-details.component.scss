@@ -1,29 +1,37 @@
-mat-table {
-  min-width: 500px;
-}
-
 .column-severity {
   padding-right: 1%;
-  flex: 4%;
+  min-width: 80px;
+  flex: 10%;
 }
 
 .column-category {
   padding: 0 1%;
-  flex: 13%;
+  min-width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 10%;
 }
 
 .column-vulnerability {
   padding-right: 1%;
-  flex: 24%;
+  min-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 20%;
 }
 
 .column-description {
   padding-right: 1%;
-  flex: 34%;
+  min-width: 200px;
+  flex: 30%;
+  overflow: hidden;
+  white-space: nowrap;
+  width: fit-content;
 }
 
 .column-additionalInfo {
   padding-right: 1%;
-  flex: 19%;
+  min-width: 150px;
+  flex: 20%;
 }
 

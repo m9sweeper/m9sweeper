@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import { IClusterGroupUpdate } from '../entities/IClusterGroup';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { IClusterGroupUpdate } from '../entities/IClusterGroup';
 })
 export class ClusterGroupService {
   private currentGroupId = new Subject<number>();
-  private updatedClusterGroup = new Subject<IClusterGroupUpdate>();
+  private updatedClusterGroup = new BehaviorSubject<IClusterGroupUpdate>(null);
 
   constructor(private httpClient: HttpClient) { }
 

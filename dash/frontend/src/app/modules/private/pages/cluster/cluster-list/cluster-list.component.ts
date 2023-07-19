@@ -17,6 +17,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
+import {environment} from '../../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-cluster-list',
@@ -117,7 +118,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
-    protected clusterListMenuService: ClusterListMenuService
+    protected clusterListMenuService: ClusterListMenuService,
   ) {
     this.subNavigationData = {
       tabItem: ['Recent', 'All', 'Runs'],
@@ -132,21 +133,32 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     // default column sizes before calculating them
     this.route.params.subscribe(routeParams => {
       this.groupId = +routeParams.groupId;
+      this.clusterGroupService.setCurrentGroupId(this.groupId);
       this.clusterGroupService.getClusterGroupById(+routeParams.groupId)
         .pipe(take(1))
-        .subscribe(result => {
-        this.clusterGroupName = result.data.name;
-        this.subNavigationData.title = this.clusterGroupName;
-        this.clusterGroupNameLoaded = true;
-      });
-      this.clusterGroupService.setCurrentGroupId(this.groupId);
+        .subscribe({
+          next: result => {
+            this.clusterGroupName = result.data.name;
+            this.subNavigationData.title = this.clusterGroupName;
+            this.clusterGroupNameLoaded = true;
+          },
+          error: err => {
+            if (err?.status === 404) {
+              this.alertService.danger('Cluster Group Does does not exist');
+              this.clusterGroupService.setCurrentGroupId(null);
+              this.router.navigate(['/private', 'dashboard']);
+            }
+          }
+        });
       this.getClustersByClusterGroupId(this.groupId);
     });
     this.clusterGroupService.getCurrentGroup()
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(updatedClusterGroup => {
-      this.clusterGroupName = updatedClusterGroup.name;
-    });
+      .subscribe({
+        next: updatedClusterGroup => {
+          this.clusterGroupName = updatedClusterGroup?.name || '';
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -170,16 +182,16 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
 
       this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-        innerWindow.offsetWidth,
+        innerWindow?.offsetWidth,
         { xs: 1, s: 1, m: 2, l: 3 },
         { left: 20, right: 20 },
-        { left: 30, right: 20 },
-        { left: 10, right: 10 },
-        { left: 8, right: 8 },
+        { left: 20, right: 20 },
+        { left: 5, right: 5 },
+        { left: 6, right: 16 },
       );
       this.barChartAttributes.view = this.lineChartAttributes.view;
       this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-    } , 50);
+    } , 100);
   }
 
   getClustersByClusterGroupId(groupId: number) {
@@ -349,7 +361,9 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       ];
     }, error => {
-      console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+        if (!environment.production) {
+          console.log(`Error in Get Count Of Deployment By Compliant Status`, error);
+        }
     });
   }
 

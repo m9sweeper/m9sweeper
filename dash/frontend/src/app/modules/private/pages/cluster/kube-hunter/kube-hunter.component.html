@@ -72,7 +72,7 @@
     <div class="page-card">
       <mat-card appearance="outlined">
         <mat-card-header >
-          <div class=" col-sm-3 no-padding">
+          <div class=" col-sm-3">
             <div class="page-card-title">
               Past Audits
             </div>
@@ -81,38 +81,40 @@
             <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
           </div>
         </mat-card-header>
-        <mat-card-content *ngIf="allReportsForCluster">
-          <div >
-            Click on an audit to learn more about this cluster's vulnerabilities<br>
-          </div>
+        <mat-card-content >
+          <ng-container>
+            <div *ngIf="allReportsForCluster">
+              Click on an audit to learn more about this cluster's vulnerabilities<br>
+            </div>
 
-          <table mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef> Date </th>
-              <td mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </td>
-            </ng-container>
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef> Time </th>
-              <td mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </td>
-            </ng-container>
-            <ng-container matColumnDef="numVulnerabilities">
-              <th mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </th>
-              <td mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"
-                class="report-click"></tr>
-          </table>
+            <table mat-table [dataSource]="dataSource">
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Date </th>
+                <td mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </td>
+              </ng-container>
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef> Time </th>
+                <td mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </td>
+              </ng-container>
+              <ng-container matColumnDef="numVulnerabilities">
+                <th mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </th>
+                <td mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"
+                  class="report-click"></tr>
+            </table>
 
-          <div>
-            <mat-paginator
-              [length]="reportCount"
-              [pageSize]="limit"
-              [pageSizeOptions]="[ 20, 50, 100]"
-              (page)="pageEvent($event)"
-              showFirstLastButtons>
-            </mat-paginator>
-          </div>
+            <div>
+              <mat-paginator
+                [length]="reportCount"
+                [pageSize]="limit"
+                [pageSizeOptions]="[ 20, 50, 100]"
+                (page)="pageEvent($event)"
+                showFirstLastButtons>
+              </mat-paginator>
+            </div>
+          </ng-container>
         </mat-card-content>
 
       </mat-card>

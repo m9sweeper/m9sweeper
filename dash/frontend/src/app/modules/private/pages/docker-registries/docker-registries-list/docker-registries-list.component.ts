@@ -12,7 +12,6 @@ import { DockerRegistriesService } from '../../../../../core/services/docker-reg
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { AlertDialogComponent } from '../../../../shared/alert-dialog/alert-dialog.component';
 import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistries';
-import { DockerRegistryAuthTypes } from '../../../../../core/enum/DockerRegistryAuthTypes';
 
 @Component({
   selector: 'app-docker-registries-list',
@@ -21,7 +20,8 @@ import { DockerRegistryAuthTypes } from '../../../../../core/enum/DockerRegistry
 })
 export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
   subMenuTitle = 'All Docker Registries';
-  displayedColumns: string[] = ['name', 'hostname', 'authType', 'username', 'password', 'actions'];
+  displayedColumns: string[] = ['name', 'hostname', 'authType', 'username', 'password', 'edit', 'delete'];
+  displayedColumnsNonAdmin: string[] = ['name', 'hostname', 'authType', 'username', 'password'];
   dataSource: MatTableDataSource<IDockerRegistries>;
   userId: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -33,6 +33,7 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
   page = 0;
   totalCount = 0;
   data: IDockerRegistries[] = [];
+  isAdmin: boolean;
 
   constructor(
     private dockerRegistriesService: DockerRegistriesService,
@@ -41,7 +42,12 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
     private jwtAuthService: JwtAuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
+    if (!this.isAdmin) {
+      this.displayedColumns = this.displayedColumnsNonAdmin;
+    }
+  }
 
   ngOnInit(): void {
     this.subNavigationTitle = 'Docker Registries';
@@ -80,8 +86,6 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit {
       }
     });
     confirmDialog.afterClosed().subscribe(result => {
-      console.log('Closed.');
-      console.log(result);
       if (result === undefined) {
         this.getDockerRegistryList();
       }

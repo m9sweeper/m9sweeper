@@ -18,7 +18,6 @@ export class TagService {
     return this.httpClient.post('/api/tags', tag);
   }
   deleteTag(id: number, clusterId: number) {
-    console.log('Tag id for DEL: ', id);
     return this.httpClient.delete(`/api/tags/${id}/${clusterId}`);
   }
 }

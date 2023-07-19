@@ -47,14 +47,28 @@ $ms-default-theme: mat.define-light-theme((
 @import "./app/app.component.theme";
 @import './app/modules/private/pages/dashboard/dashboard.component.theme';
 @import './app/modules/private/pages/cluster/cluster-details/cluster-details.component.theme';
-@import './app/modules/private/pages/cluster/cluster-list/cluster-list.component.theme';
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
-@import './app/modules/private/pages/cluster/cluster-summary/cluster-summary.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
-.mat-mdc-card-content {
-  font-size: 14px;
-  line-height: 20px;
+mat-card {
+  margin: 10px 5px 0 5px;  // set to match legacy margins
+  //padding: 0 10px;
+
+  mat-card-title {
+    font-weight: bold;
+  }
+
+  .mat-mdc-card-content {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.graph-card {
+  padding-bottom: 20px;
+  mat-card {
+    overflow: scroll;
+  }
 }
 
 @mixin custom-components-theme($theme) {
@@ -245,11 +259,11 @@ app-private {
 
 // Org setting pages uses app-sub-navigation for titles and buttons
 // The following are for lining up other page elements
-.mat-mdc-card-header{
-  display: flex;
-  padding: 0;
-  margin-left: 0;
-}
+//.mat-mdc-card-header{
+//  display: flex;
+//  padding: 0;
+//  margin-left: 0;
+//}
 .page-container {
   height: 100%;
   display: block;
@@ -261,6 +275,18 @@ app-private {
 .page-container-content{
   margin: 20px;
   // width:fit-content;
+}
+
+.settings-card {
+  > div:first-child {
+    overflow-x: scroll;
+    display: flex;
+  }
+  th {
+    font-weight: bold;
+  }
+  mat-card-header {}
+  mat-card-content {}
 }
 
 .page-card{
@@ -350,11 +376,6 @@ app-private {
   &.mark {
     background: rgba(0, 0, 0, .05);
   }
-}
-
-.cluster-page-row {
-  padding-left: 30px;
-  padding-right: 20px;
 }
 
 .pointer {
@@ -602,13 +623,6 @@ mat-form-field {
   margin-left: 18px;
 }
 
-.graph-card {
-  padding-bottom: 20px;
-  mat-card {
-    overflow: scroll;
-  }
-}
-
 // CSS for Report pages [END]
 
 // CSS for left nav [begin]
@@ -785,4 +799,8 @@ input[type=number].no-spin-button {
     // Gets rid of the margin on the (invisible) arrows
     margin: 0;
   }
+}
+
+app-datepicker-component {
+  margin-left: 20px;
 }

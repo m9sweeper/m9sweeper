@@ -4,8 +4,9 @@ import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-con
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from '@full-fledged/alerts';
-import {IConstraintCriteria, IGateKeeperConstraint} from '../../../../../core/entities/IGateKeeperConstraint';
+import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
+import {take} from 'rxjs/operators';
 
 
 @Component({
@@ -93,7 +94,6 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
     openConstraintCriteriaDialog.afterClosed().subscribe(response => {
       if (response && response.constraintCriteria) {
         this.templateConstraintCriteria.push(response.constraintCriteria);
-        console.log(this.templateConstraintCriteria);
       }
     });
   }
@@ -102,14 +102,10 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
     if (!this.templateConstraintCriteria.length) {
       this.alertService.danger('Please add at least one match criteria');
     } else {
-      console.log(this.dynamicProperties);
       this.addTemplateConstraintForm.value.properties = this.dynamicProperties;
-      console.log(this.addTemplateConstraintForm.value);
       this.addTemplateConstraintForm.value.criterias = this.templateConstraintCriteria;
       if (this.data && this.data.isEdit) {
-        console.log('Patching Constraint Template....');
         this.gatekeeperService.patchGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
-          // console.log('CONSTRAINT: ', response);
           if (response.data.statusCode === 200 ) {
             this.alertService.success(response.data.message);
             this.dialogRef.close({reload: true});
@@ -119,7 +115,6 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
         });
       } else {
         this.gatekeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
-          // console.log('CONSTRAINT: ', response);
           if (response.data.statusCode === 200 ) {
             this.alertService.success(response.data.message);
             this.dialogRef.close({reload: true});
@@ -145,8 +140,6 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
     const formValues = this.addTemplateConstraintForm.value;
     formValues.criterias = this.templateConstraintCriteria;
     // formValues.labels = this.addTemplateConstraintForm.controls.labels.value.split(',').map(label => label.trim());
-    console.log(this.dynamicProperties);
-    console.log('form: ', formValues);
     const openTemplateConstraintDialog = this.dialog.open(TemplateConstraintManifestComponent, {
       width: '650px',
       height: 'auto',
@@ -155,8 +148,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       data: {clusterId: this.data.clusterId, templateData: formValues, dynamicProperties: this.dynamicProperties}
     });
 
-    openTemplateConstraintDialog.afterClosed().subscribe(response => {
-      console.log(response.manifestData);
+    openTemplateConstraintDialog.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response.manifestData) {
         this.addTemplateConstraintForm.controls.name.setValue(response.manifestData.metadata.name);
         this.addTemplateConstraintForm.controls.description.setValue(response.manifestData.metadata.annotations.description);
@@ -195,7 +187,6 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   }
 
   modelChange($event: any) {
-    console.log('Model Change', $event);
   }
 
   prepareTemplateConstraintCriteria() {
@@ -210,7 +201,6 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       }
     } else {
       for (let i = 0; i < m9sApiGroup.length; i++) {
-        console.log(m9sApiGroup[i].trim());
         const kind = m9sKinds[i] === undefined ? m9sKinds[0] === undefined ? [] : [m9sKinds[0]] : [m9sKinds[i]];
         const criteria: IConstraintCriteria = {kinds: kind, apiGroups: [m9sApiGroup[i]]};
         this.templateConstraintCriteria.push(criteria);

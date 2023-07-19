@@ -16,6 +16,8 @@ import {ServiceAccountWizardComponent} from '../service-account-wizard/service-a
 import {take} from 'rxjs/operators';
 import {MatSelectChange} from '@angular/material/select';
 import {MatRadioChange} from '@angular/material/radio';
+import {environment} from '../../../../../../environments/environment.prod';
+import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
 
 @Component({
   selector: 'app-add-cluster-wizard',
@@ -48,6 +50,7 @@ export class AddClusterWizardComponent implements OnInit {
                private alertService: AlertService,
                private commonService: CommonService,
                protected dialog: MatDialog,
+               protected clusterListMenuService: ClusterListMenuService,
                @Inject(MAT_DIALOG_DATA) public data: any) {
       this.createClusterForm = this.formBuilder.group({
       name: ['', [CustomValidators.requiredNoTrim, Validators.maxLength(100)]],
@@ -112,6 +115,7 @@ export class AddClusterWizardComponent implements OnInit {
         this.clusterGroupService.createClusterGroup(formData).subscribe(response => {
           formValues.groupId = response.data.id;
           this.createCluster(formValues, stepper);
+          this.clusterListMenuService.buildClusterMenu();
         }, error => {
         });
       }
@@ -307,7 +311,9 @@ webhooks:
     try {
       this.defaultWebhookTextArea.nativeElement.innerHTML = text;
     } catch (e) {
-      console.log('could not read native element', e);
+      if (!environment.production) {
+        console.log('could not read native element', e);
+      }
     }
   }
 

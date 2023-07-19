@@ -12,6 +12,7 @@ import { PolicyCreateComponent } from '../policy-create/policy-create.component'
 import {merge} from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 @Component({
   selector: 'app-policy-list',
@@ -20,7 +21,8 @@ import {take} from 'rxjs/operators';
 })
 export class PolicyListComponent implements OnInit, AfterViewInit{
   subMenuTitle = 'All Policies';
-  displayedColumns: string[] = ['name', 'description', 'new_scan_grace_period', 'rescan_grace_period', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'new_scan_grace_period', 'rescan_grace_period', 'edit', 'delete'];
+  displayedColumnsNonAdmin: string[] = ['name', 'description', 'new_scan_grace_period', 'rescan_grace_period', 'edit'];
   dataSource: MatTableDataSource<IPolicy>;
   clusterId: number;
   subNavigationData: any;
@@ -34,13 +36,21 @@ export class PolicyListComponent implements OnInit, AfterViewInit{
   page = 0;
   totalCount = 0;
   data: IPolicy[] = [];
+  isAdmin: boolean;
 
   constructor(
+    private jwtAuthService: JwtAuthService,
     private policyService: PolicyService,
     private router: Router,
     private route: ActivatedRoute,
     private alertService: AlertService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog
+  ) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
+    if (!this.isAdmin) {
+      this.displayedColumns = this.displayedColumnsNonAdmin;
+    }
+  }
 
   ngOnInit(): void {
     this.subNavigationTitle = 'Policies';

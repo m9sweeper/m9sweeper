@@ -11,7 +11,6 @@ export class ExceptionsService {
   constructor(private httpClient: HttpClient) {}
 
   createException(data: ExceptionCreateDto): Observable<any>{
-    console.log('Creating Exception', data);
     return this.httpClient.post('/api/exceptions/create', data);
   }
   getAllExceptions(): Observable<any>{
