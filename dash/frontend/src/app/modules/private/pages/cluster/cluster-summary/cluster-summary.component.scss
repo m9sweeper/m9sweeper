@@ -43,10 +43,12 @@ mat-card-title {
 
 #cluster-vulnerability-table-row {
   mat-card {
-    overflow: scroll;
-
     mat-table {
       min-width: 500px;
+
+      .mat-column-namespace {
+        min-width: 120px;
+      }
     }
   }
 }

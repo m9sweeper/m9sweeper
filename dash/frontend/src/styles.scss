@@ -277,13 +277,16 @@ app-private {
   // width:fit-content;
 }
 
-.settings-card {
+.settings-card, .scrollable-table-card {
   > div:first-child {
     overflow-x: scroll;
     display: flex;
   }
   th {
     font-weight: bold;
+  }
+  mat-header-cell {
+    font-weight: 550;
   }
   mat-card-header {}
   mat-card-content {}
@@ -610,10 +613,10 @@ mat-form-field {
   margin-right: 10px;
 }
 
-.mat-column-namespaces {
-  margin-right: 10px;
-  word-break: break-all;
-}
+//.mat-column-namespaces {
+//  margin-right: 10px;
+//  word-break: break-all;
+//}
 
 .mat-mdc-form-field {
   margin-right: 10px;
