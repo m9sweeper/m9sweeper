@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {ICluster} from '../../../../../core/entities/ICluster';
@@ -11,9 +11,8 @@ import {ILicense} from '../../../../../core/entities/ILicense';
 import {LicenseFeatures} from '../../../../../core/enum/LicenseFeatures';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
-import {map, shareReplay, take} from 'rxjs/operators';
-import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-loader';
-import {Observable, Subject} from 'rxjs';
+import {map, take, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
@@ -24,13 +23,8 @@ import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
   styleUrls: ['./cluster-info.component.scss']
 })
 
-export class ClusterInfoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ClusterInfoComponent implements OnInit, OnDestroy {
   protected readonly unsubscribe$ = new Subject<void>();
-  public isHandsetOrXS$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
 
   clusterId: number;
   cluster: ICluster;
@@ -63,6 +57,13 @@ export class ClusterInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
+      .pipe(
+        map(result => result.matches),
+        takeUntil(this.unsubscribe$)
+      ).subscribe((newIsHandsetOrXS) => {
+        this.isMobileDevice = newIsHandsetOrXS;
+      });
     this.route.parent.params.subscribe(params => {
       this.clusterService.getClusterById(params.id).subscribe(response => {
         this.isClusterLoaded = true;
@@ -83,12 +84,6 @@ export class ClusterInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           this.buildDate = res.data.build_date;
         });
       });
-    });
-  }
-
-  ngAfterViewInit() {
-    this.isHandsetOrXS$.subscribe((newIsHandsetOrXS) => {
-      this.isMobileDevice = newIsHandsetOrXS;
     });
   }
 
