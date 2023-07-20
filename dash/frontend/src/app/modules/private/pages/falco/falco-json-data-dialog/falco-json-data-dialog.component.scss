@@ -1,0 +1,140 @@
+#modal-header {
+  height: 100%;
+  margin-block-end: 1.5em;
+}
+
+#modal-content{
+  min-width: 400px;
+  max-height: 1000px; // override mat-dialog container max height
+}
+
+.mat-mdc-raised-button {
+  margin-block-end: 0.25em;
+  margin-block-start: 0.25em;
+  margin-inline-end: 0.25em;
+  margin-inline-start: 0.25em;
+}
+
+.mat-mdc-card {
+  min-width: 800px;
+}
+
+th, td {
+  vertical-align: baseline;
+}
+#logDetails {
+  margin-bottom: 1.5em;
+
+  th {
+    text-align: start;
+    padding-inline-end: 1em;
+  }
+}
+
+#relatedEvents {
+  overflow: hidden;
+
+  #relatedEventsTitle {
+    align-items: center;
+    margin-inline-start: 1.25em;
+    margin-inline-end: 1.25em;
+    div.page-card-title {
+      line-height: unset;
+    }
+  }
+
+  #starDescription {
+    font-style: italic;
+    margin-inline-start: 1.25em;
+    margin-inline-end: 1.25em;
+  }
+
+  #related-event-table {
+    color: blue !important;
+    //overflow: auto !important;
+    height: 50%;
+
+    mat-row {
+      height: 4em;
+      text-wrap: none;
+    }
+
+    mat-header {
+      min-height: 32px !important
+    }
+
+    mat-cell, mat-header-cell, mat-footer-cell {
+      overflow-x: visible;
+    }
+
+    .mat-column-isCurrent {
+      min-width: 1em;
+      max-width: 1em;
+      padding-left: 7px;
+      padding-right: 0;
+    }
+
+    .mat-column-calendarDate {
+      width: 100px;
+      min-width: 100px;
+      max-width: 100px;
+      padding-right: 5px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mat-column-namespace {
+      width: 120px;
+      min-width: 100px;
+      max-width: 120px;;
+      padding-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mat-column-pod {
+      width: 120px;
+      min-width: 100px;
+      max-width: 120px;;
+      //max-width: 7%;
+      padding-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mat-column-image {
+      //max-width: 7%;
+      width: 150px;
+      min-width: 100px;
+      max-width: 150px;;
+      padding-right: 10px;
+      //white-space: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mat-column-priority {
+      width: 100px;
+      min-width: 50px;
+      max-width: 100px;
+      padding-right: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .mat-column-message {
+      //max-width: 60%;
+      //width: 200px;
+      min-width: 200px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}
+.date-link{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
