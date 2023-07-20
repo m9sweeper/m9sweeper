@@ -34,7 +34,6 @@ import {ExceptionDetailsComponent} from './pages/exceptions/exception-details/ex
 import {GateKeeperComponent} from './pages/cluster/gate-keeper/gate-keeper.component';
 import {GateKeeperDetailsComponent} from './pages/cluster/gate-keeper-details/gate-keeper-details.component';
 import {KubernetesPodDetailsComponent} from './pages/cluster/kubernetes-pod-details/kubernetes-pod-details.component';
-import {LicensesComponent } from './pages/license/licenses/licenses.component';
 import {KubesecComponent} from './pages/cluster/kubesec/kubesec.component';
 import {KubeHunterReportDetailsComponent} from './pages/cluster/kube-hunter/kube-hunter-report-details/kube-hunter-report-details.component';
 import {KubeHunterComponent} from './pages/cluster/kube-hunter/kube-hunter.component';
@@ -347,23 +346,6 @@ const routes: Routes = [
               allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
             }
           }
-        ]
-      },
-      {
-        path: 'licenses',
-        component: OrganizationSettingsComponent,
-        canActivate: [RoleGuard],
-        data: {
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
-        },
-        children: [
-          {
-            path: '',
-            component: LicensesComponent,
-            data: {
-              title: 'Licenses'
-            }
-          },
         ]
       },
       {

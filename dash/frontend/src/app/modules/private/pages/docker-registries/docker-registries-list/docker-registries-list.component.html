@@ -7,7 +7,7 @@
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
     <mat-card class="settings-card">
-      <div>
+      <div class="table-wrapper">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear
                matSortDirection="asc">
           <ng-container matColumnDef="name">
@@ -47,7 +47,7 @@
               <ng-container>
                 <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
                         (click)="alertDeleteDockerRegistry(dockerRegistry.id)">
-                  <mat-icon>delete_forever</mat-icon>
+                  <mat-icon>delete</mat-icon>
                 </button>
               </ng-container>
             </td>

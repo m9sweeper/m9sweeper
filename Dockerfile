@@ -21,7 +21,6 @@ RUN npm ci && \
 COPY /dash/backend /usr/src/app/backend/
 RUN npm run prebuild
 
-RUN cp src/config/licensing-portal-config/misc.prod.ts src/config/misc.ts
 RUN npm run build:prod:webpack
 RUN npm prune --production
 

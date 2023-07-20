@@ -9,12 +9,8 @@ import * as Url from 'url';
 import {UserDao} from '../../user/dao/user.dao';
 import {PolicyDto} from '../../policy/dto/policy-dto';
 import {ScannerDto} from '../../scanner/dto/scanner-dto';
-import {AppSettingsService} from '../../settings/services/app-settings.service';
-import {AppSettingsType, LicenseSettingsType} from '../../settings/enums/settings-enums';
-import {LicensingPortalService} from '../../../integrations/licensing-portal/licensing-portal.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
-import { AppSettingsDto } from "../../settings/dto/app-settings-dto";
 
 
 /**
@@ -29,9 +25,6 @@ export class ClusterCommand {
       private readonly kubernetesApiService: KubernetesApiService,
       private readonly clusterDao: ClusterDao,
       private readonly userDao: UserDao,
-      private readonly settingsService: AppSettingsService,
-      private readonly licensingPortalService: LicensingPortalService,
-      private readonly appSettingsService:AppSettingsService,
       private readonly clusterEventService: ClusterEventService,
       private readonly clusterGroupService: ClusterGroupService
     ) {}
@@ -42,37 +35,11 @@ export class ClusterCommand {
         const clusterName = process.env.FIRST_CLUSTER_NAME;
         const clusterGroupName = process.env.FIRST_CLUSTER_GROUP_NAME;
         const superAdminEmail = process.env.SUPER_ADMIN_EMAIL;
-        const licenseKey = process.env.LICENSE_KEY || "";
-        const instanceKey = process.env.INSTANCE_KEY || "";
 
         // validate required fields are present
         if (!(superAdminEmail && clusterGroupName && clusterName)) {
             this.loggerService.log({label: 'Skipping seeding cluster - missing SUPER_ADMIN_EMAIL, FIRST_CLUSTER_GROUP_NAME, or FIRST_CLUSTER_NAME.'});
             return true;
-        }
-
-        // save license & instance key if neither already exist in the DB
-        try {
-            const settings: AppSettingsDto[] = await this.settingsService.getLicenseSettings();
-            if (!settings.some(s => s.name === LicenseSettingsType.LICENSE_KEY) && !settings.some(s => s.name === LicenseSettingsType.INSTANCE_KEY)) {
-                await this.settingsService.saveSettings(
-                  AppSettingsType.LICENSE_SETTINGS, [
-                      {
-                          name: LicenseSettingsType.LICENSE_KEY,
-                          value: licenseKey
-                      },
-                      {
-                          name: LicenseSettingsType.INSTANCE_KEY,
-                          value: instanceKey
-                      }
-                  ], 0
-                );
-            } else {
-                this.loggerService.log({label: 'License settings already exist - skipping creation.'});
-            }
-        } catch (e) {
-            console.log('Error saving license & instance key', e);
-            return false;
         }
 
         // Do not attempt to create the cluster or cluster group if the cluster group already exists

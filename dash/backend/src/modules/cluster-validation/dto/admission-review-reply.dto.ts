@@ -44,8 +44,4 @@ export class AdmissionReviewReplyDto {
   @ApiProperty()
   @IsOptional()
   enforcementMessage: string;
-
-  @ApiProperty()
-  @IsOptional()
-  licenseStatusMessage: string;
 }

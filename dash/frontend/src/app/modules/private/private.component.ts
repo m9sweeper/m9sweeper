@@ -92,24 +92,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.setShowSearchBar();
       });
-
-    /*if (this.isAdmin) {
-      this.clusterService.checkLicenseValidity().subscribe(response => {
-          if (response.data.success) {
-            const expirationDate = response.data.data.licenseExpirationDate;
-            if (Date.now() > expirationDate) {
-              this.alertService.danger('The License key appeared to have expired.');
-            }
-          } else {
-            const errMsg = response.data.message;
-            this.alertService.danger('License key was entered but not considered valid when we made an API request');
-          }
-        },
-        error => {
-          const errMsg = error.error.message;
-          this.alertService.danger(errMsg);
-        });
-    }*/
   }
 
   ngOnDestroy() {
@@ -217,7 +199,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {}
     });
     confirmDialog.afterClosed().subscribe(result => {
-      this.directive.ngOnInit();
       this.getUserProfile();
     });
   }

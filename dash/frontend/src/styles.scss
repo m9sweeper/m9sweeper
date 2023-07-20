@@ -277,13 +277,16 @@ app-private {
   // width:fit-content;
 }
 
-.settings-card {
-  > div:first-child {
-    overflow-x: scroll;
+.settings-card, .scrollable-table-card {
+  div.table-wrapper {
+    overflow-x: auto;
     display: flex;
   }
   th {
     font-weight: bold;
+  }
+  mat-header-cell {
+    font-weight: 550;
   }
   mat-card-header {}
   mat-card-content {}
@@ -341,9 +344,8 @@ app-private {
   vertical-align: bottom;
   line-height: 2;
 }
-.page-title-button-group-spacing{
+.page-title-button-group-spacing {
   display: flex;
-  height: 60px;
   justify-content: space-between;
   flex-direction: row;
 }
@@ -610,10 +612,10 @@ mat-form-field {
   margin-right: 10px;
 }
 
-.mat-column-namespaces {
-  margin-right: 10px;
-  word-break: break-all;
-}
+//.mat-column-namespaces {
+//  margin-right: 10px;
+//  word-break: break-all;
+//}
 
 .mat-mdc-form-field {
   margin-right: 10px;
