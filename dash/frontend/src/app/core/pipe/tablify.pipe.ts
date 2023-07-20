@@ -35,17 +35,13 @@ export class TablifyPipe implements PipeTransform {
 
     const type = typeof(obj);
     if (Array.isArray(obj)) {
-      return '<table>' + obj.map(o => {
-        return '<tr><td>' + this.tablify(o, depth + 1, maxdepth) + '</td></tr>';
-      }).join('') + '</table>';
+      return '<table>' + obj.map(o => '<tr><td>' + this.tablify(o, depth + 1, maxdepth) + '</td></tr>').join('') + '</table>';
     }
 
     switch (type) {
       case 'object':
         return '<table>' +
-          Object.entries(obj).map(o => {
-            return '<tr><td>' + this.tablify(o[0], depth + 1, maxdepth) + '</td><td>' + this.tablify(o[1], depth + 1, maxdepth) + '</td></tr>'
-          }).join('') +
+          Object.entries(obj).map(o => '<tr><td>' + this.tablify(o[0], depth + 1, maxdepth) + '</td><td>' + this.tablify(o[1], depth + 1, maxdepth) + '</td></tr>').join('') +
           '</table>';
       case null:
         return 'null';
