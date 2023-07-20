@@ -8,6 +8,7 @@ mat-card-title {
 
 #cluster-summary-row {
   mat-card {
+    margin: 10px 5px 0 5px;  // set to match legacy margins
     height: 80%;
 
     .label {
@@ -29,7 +30,8 @@ mat-card-title {
 
 #cluster-graphs-row {
   mat-card {
-    //padding: 16px 8px;  // use px instead of em b/c used in calculating graph size
+    margin: 10px 5px 0 5px;  // set to match legacy margins
+
     mat-card-content {
       margin: 6px 16px 16px 6px !important;
       padding: unset;
@@ -43,6 +45,7 @@ mat-card-title {
 
 #cluster-vulnerability-table-row {
   mat-card {
+    margin: 10px 5px 0 5px;  // set to match legacy margins
     mat-table {
       min-width: 500px;
 
@@ -54,6 +57,7 @@ mat-card-title {
 }
 
 #cluster-events-row {
+  margin: 10px 5px 0 5px;  // set to match legacy margins
   // top right bottom left
   padding: 0 0 0 0;
   height: 12em;
