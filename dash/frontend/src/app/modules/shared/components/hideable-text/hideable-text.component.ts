@@ -11,8 +11,7 @@ export class HideableTextComponent {
   protected _text: string;
   stars = '';
 
-  /** Enables/disables the copy to clipboard button */
-  @Input() canCopy = false;
+
 
   /** The text to be hidden/shown (and copied if enabled) */
   @Input('text')
@@ -28,7 +27,10 @@ export class HideableTextComponent {
   get text(): string {
     return this._text;
   }
+  /** Enables/disables the copy to clipboard button */
+  @Input() canCopy = false;
 
+  /** Set the hidden (When a variable passed here is changed, it will override the current status) */
   @Input('hidden') hidden = true;
 
   toggleHidden() {
