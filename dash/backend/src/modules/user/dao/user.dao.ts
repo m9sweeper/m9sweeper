@@ -100,20 +100,33 @@ export class UserDao {
 
     sort.field = sortFieldMap[sort.field] !== undefined ? sortFieldMap[sort.field] : sortFieldMap['id'];
     sort.direction = sort.direction === 'desc' ? 'desc' : 'asc';
-    return knexnest(knex.select([
-      'u.id AS _id', 'u.first_name as _firstName', 'u.last_name as _lastName', 'u.email AS _email', 'u.phone AS _phone', 'u.is_active as _isActive', 'u.password as _password',
-      'u.source_system_id as _sourceSystem_id', 'u.source_system_type as _sourceSystem_type', 'u.source_system_user_id as _sourceSystem_uid',
-      'authority_levels.id as _authorities__id', 'authority_levels.name as _authorities__name'
-    ]).from('users AS u')
+
+    // Inner query with limiting & sorting to get the users that should be included
+    const userQuery = knex.select('*')
+      .from('users as u')
+      .where(searchClause)
+      .limit(limit)
+      .offset(page * limit)
+      .orderBy(sort.field, sort.direction);
+
+    // Outer query joins the pre-sorted & limited user query to the authorities.
+    // Doing the limit one the sub query ensures we always have the right number of users per page, and usersonly appear once
+    // If we limited on the outer query, users with multiple authorities would count as multiple users towards the limit,
+    // which would cause pages with seemingly fewer users than requested, and users who could appear on multiple pages
+    const query = knex
+      .from(userQuery.as('u'))
+      .select([
+           'u.id AS _id', 'u.first_name as _firstName', 'u.last_name as _lastName', 'u.email AS _email', 'u.phone AS _phone', 'u.is_active as _isActive', 'u.password as _password',
+           'u.source_system_id as _sourceSystem_id', 'u.source_system_type as _sourceSystem_type', 'u.source_system_user_id as _sourceSystem_uid',
+           'authority_levels.id as _authorities__id', 'authority_levels.name as _authorities__name'
+         ])
       .leftJoin('user_authorities as user_auth', function () {
         this.on('u.id', '=', 'user_auth.user_id').andOn('user_auth.active', '=', knex.raw('?', [true]));
       }).leftJoin('authority_levels', function () {
         this.on('user_auth.authority_id', '=', 'authority_levels.id');
-      }).where(searchClause)
-      .limit(limit)
-      .offset(page * limit)
-      .orderByRaw(`${sort.field} ${sort.direction}`))
-      .then(user => plainToInstance(UserProfileDto, user));
+      });
+
+    return knexnest(query).then(user => plainToInstance(UserProfileDto, user));
   }
 
   async loadUserByApiKey(key: string): Promise<UserProfileDto> {

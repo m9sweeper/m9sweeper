@@ -1,0 +1,14 @@
+
+  <div class="display-flex align-items-center">
+    <p>
+      {{ hidden ? stars : _text }}
+    </p>
+
+  <button mat-icon-button (click)="toggleHidden()">
+    <mat-icon>{{hidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+  </button>
+  <app-copy-to-clipboard-button
+    *ngIf="canCopy"
+    [iconButton]="true"
+    [text]="text"></app-copy-to-clipboard-button>
+</div>

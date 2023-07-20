@@ -16,6 +16,9 @@ export class CopyToClipboardButtonComponent {
   /** The message that will be shown in a toast if the text can't be copied. */
   @Input() errorMessage = 'Text could not be copied to clipboard.';
 
+  /** Display only an icon as the button if true */
+  @Input() iconButton = false;
+
   constructor(
     private cb: Clipboard,
     private readonly alertService: AlertService

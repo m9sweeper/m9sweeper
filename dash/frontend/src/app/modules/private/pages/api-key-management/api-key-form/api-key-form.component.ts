@@ -6,8 +6,9 @@ import { ApiKeyService } from '../../../../../core/services/api-key.service';
 import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IApiKey } from '../../../../../core/entities/IApiKey';
-import {IAPIKeyUser, IUser} from '../../../../../core/entities/IUser';
+import {IAPIKeyUser} from '../../../../../core/entities/IUser';
 import {Location} from '@angular/common';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-api-key-form',
@@ -53,20 +54,27 @@ export class ApiKeyFormComponent implements OnInit {
   }
 
   loadUserList(): void {
-    this.userService.loadAllActiveUsers().subscribe(response => {
-      this.userList = response.data;
-    });
+    this.userService.loadAllActiveUsers()
+      .pipe(take(1))
+      .subscribe({
+        next: response => this.userList = response.data
+      });
   }
 
   populateApiKeyForm(apiKeyId): void {
-    this.apiKeyService.getApiKeyById(apiKeyId).subscribe((response: IServerResponse<IApiKey>) => {
-      this.apiKeyData = response.data[0];
-      this.apiKeyForm.get('name').setValue(this.apiKeyData.name);
-      this.apiKeyForm.get('isActive').setValue(this.apiKeyData.isActive);
-      this.apiKeyForm.get('userId').setValue(this.apiKeyData.userId);
-    }, error => {
-      this.alertService.danger(error.error.message);
-      this.router.navigate(['/private/api-key']);
+    this.apiKeyService.getApiKeyById(apiKeyId)
+      .pipe(take(1))
+      .subscribe({
+        next: (response: IServerResponse<IApiKey>) => {
+          this.apiKeyData = response.data[0];
+          this.apiKeyForm.get('name').setValue(this.apiKeyData.name);
+          this.apiKeyForm.get('isActive').setValue(this.apiKeyData.isActive);
+          this.apiKeyForm.get('userId').setValue(this.apiKeyData.userId);
+        },
+        error: error => {
+          this.alertService.danger(error.error.message);
+          this.router.navigate(['/private/api-key']);
+        }
     });
   }
   cancel() {
@@ -81,12 +89,17 @@ export class ApiKeyFormComponent implements OnInit {
         isActive: this.apiKeyForm.get('isActive').value,
       };
 
-      this.apiKeyService.addApiKey(data).subscribe((response: IServerResponse<IApiKey>) => {
-        this.alertService.success('Api Key created successfully.');
-        this.router.navigate(['/private/api-key']);
-      }, error => {
-        this.alertService.danger(error.error.message);
-      });
+      this.apiKeyService.addApiKey(data)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.alertService.success('Api Key created successfully.');
+            this.router.navigate(['/private/api-key']);
+          },
+          error: error => {
+            this.alertService.danger(error.error.message);
+          }
+        });
     } else {
       const data: IApiKey = {
         name: this.apiKeyForm.get('name').value,
@@ -94,14 +107,16 @@ export class ApiKeyFormComponent implements OnInit {
         isActive: this.apiKeyForm.get('isActive').value,
       };
 
-      this.apiKeyService.updateApiKey(
-        this.apiKeyData.id,
-        data
-      ).subscribe((response: IServerResponse<IApiKey>) => {
-        this.alertService.success('Api Key updated successfully.');
-        this.router.navigate(['/private/api-key']);
-      }, error => {
-        this.alertService.danger(error.error.message);
+      this.apiKeyService.updateApiKey(this.apiKeyData.id, data)
+        .pipe(take(1))
+        .subscribe({
+          next: () => {
+            this.alertService.success('Api Key updated successfully.');
+            this.router.navigate(['/private/api-key']);
+          },
+          error: error => {
+            this.alertService.danger(error.error.message);
+          }
       });
     }
   }

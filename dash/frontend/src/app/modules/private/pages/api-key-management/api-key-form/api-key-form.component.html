@@ -26,10 +26,9 @@
                 <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
               </p>
             </form>
-            <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" (click)="onSubmit()" class="create-api-button">
+            <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" color="primary" (click)="onSubmit()" class="create-api-button margin-right-10">
               {{ isEdit ? 'Update' : 'Create'}}
             </button>
-            &nbsp;
             <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
 
           </mat-card-content>
