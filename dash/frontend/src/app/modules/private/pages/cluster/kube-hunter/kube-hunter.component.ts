@@ -30,6 +30,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
   reportCount = 0;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   page = 0;
+  ourAdvice: string;
 
   constructor(
     private kubeHunterService: KubeHunterService,
@@ -71,6 +72,11 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
           this.allReportsForCluster = res.list;
           if (res.list[0] != null){
             this.daysPassed = Math.floor((Date.now() - res.list[0].createdAt) / (1000 * 60 * 60 * 24));
+            if (this.daysPassed >= 90){
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you ran Kube Hunter. You should run it again soon.';
+            } else {
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter. The current report is still valid.';
+            }
             res.list[0].vulnerabilities?.value?.value?.forEach( vulnerability => {
               if (vulnerability.severity === 'low') {
                 this.mostRecentVulnerabilities.low += 1;
@@ -84,7 +90,11 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
           this.reportCount = res.reportCount;
           this.populateTable();
         }
-      }, () => {},
+      }, (e) => {
+        if (e.status === 404) {
+          this.ourAdvice = 'Run Kube Hunter to find vulnerabilities within your cluster.';
+        }
+        },
         () => this.loaderService.stop());
   }
 

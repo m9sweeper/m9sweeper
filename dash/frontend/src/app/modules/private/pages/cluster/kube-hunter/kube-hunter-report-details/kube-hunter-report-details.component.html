@@ -19,6 +19,7 @@
               </div>
             </mat-card-header>
             <mat-card-content>
+              <div class="page-table">
             <mat-table [dataSource]="data">
               <ng-container matColumnDef="severity">
                 <mat-header-cell class="column-severity" *matHeaderCellDef> Severity </mat-header-cell>
@@ -43,6 +44,7 @@
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+              </div>
             </mat-card-content>
           </div>
         </div>

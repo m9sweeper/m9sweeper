@@ -6,7 +6,7 @@
     <div class="page-card">
       <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; ">
           <mat-card appearance="outlined">
             <mat-card-header>
               <div class="page-card-title">CIS Benchmark Status:</div>
@@ -18,7 +18,7 @@
           </mat-card>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; ">
           <mat-card appearance="outlined">
             <mat-card-header >
               <div class="page-card-title">Results of Last Run:</div>
@@ -40,7 +40,7 @@
           </mat-card>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-top-10" style="margin: 0; padding-left:0; padding-right:0; height:150px; display: grid;!important; overflow: auto">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 margin-top-10" style="margin: 0; padding-left:0; padding-right:0; height:150px; display: grid;!important; ">
           <mat-card appearance="outlined">
             <mat-card-header>
               <div class="page-card-title">Our Advice:</div>
@@ -122,7 +122,7 @@
                     </ng-container>
 
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row class="bench-audit-row" *matRowDef="let row; columns: displayedColumns" (click)="toReportDetails(row.id)"></mat-row>
+                    <mat-row class="bench-audit-row" *matRowDef="let row; columns: displayedColumns" (click)="toReportDetails(row.id)"  [ngStyle]="{'cursor': 'pointer'}"></mat-row>
                   </mat-table>
 
               <div >
