@@ -11,7 +11,12 @@
             </ng-container>
             <ng-container matColumnDef="api">
               <th mat-header-cell *matHeaderCellDef> API Key</th>
-              <td mat-cell *matCellDef="let apiKey"> {{apiKey?.api}} </td>
+              <td mat-cell *matCellDef="let apiKey">
+                <app-hideable-text
+                  [canCopy]="true"
+                  [text]="apiKey?.api"
+                ></app-hideable-text>
+              </td>
             </ng-container>
             <ng-container matColumnDef="username">
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> User Name</th>

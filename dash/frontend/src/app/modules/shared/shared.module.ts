@@ -16,6 +16,7 @@ import {SideNavComponent} from './side-nav/side-nav.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
+import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {MatListModule} from '@angular/material/list';
     SiteLogoDirective,
     CopyToClipboardButtonComponent,
     SideNavComponent,
+    HideableTextComponent,
   ],
   imports: [
     MatDialogModule,
@@ -46,6 +48,7 @@ import {MatListModule} from '@angular/material/list';
     SiteLogoDirective,
     CopyToClipboardButtonComponent,
     SideNavComponent,
+    HideableTextComponent,
   ]
 })
 export class SharedModule {

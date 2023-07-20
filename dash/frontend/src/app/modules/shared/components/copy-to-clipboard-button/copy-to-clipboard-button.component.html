@@ -1,8 +1,17 @@
-<button
-  mat-raised-button
-  color="primary"
-  (click)="copy()"
+<button *ngIf="iconButton else textButton"
+        mat-icon-button
+        (click)="copy()"
 >
   <mat-icon>content_copy</mat-icon>
-  Copy to clipboard
 </button>
+
+<ng-template #textButton>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="copy()"
+  >
+    <mat-icon>content_copy</mat-icon>
+    Copy to clipboard
+  </button>
+</ng-template>
