@@ -132,6 +132,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.height = window.innerHeight;
     // default column sizes before calculating them
     this.route.params.subscribe(routeParams => {
+      this.setChartHeightWidthWithoutTimeout();  // starts at a reasonable size
       this.groupId = +routeParams.groupId;
       this.clusterGroupService.setCurrentGroupId(this.groupId);
       this.clusterGroupService.getClusterGroupById(+routeParams.groupId)
@@ -176,22 +177,25 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setChartHeightWidth(){
-    // debounce chart resizing
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
+      this.setChartHeightWidthWithoutTimeout();
+    }, 1000);
+  }
 
-      this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-        innerWindow?.offsetWidth,
-        { xs: 1, s: 1, m: 2, l: 3 },
-        { left: 20, right: 20 },
-        { left: 20, right: 20 },
-        { left: 5, right: 5 },
-        { left: 6, right: 16 },
-      );
-      this.barChartAttributes.view = this.lineChartAttributes.view;
-      this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
-    } , 100);
+  setChartHeightWidthWithoutTimeout(){
+    const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
+
+    this.lineChartAttributes.view = this.chartSizeService.getChartSize(
+      innerWindow?.offsetWidth,
+      { xs: 1, s: 1, m: 2, l: 3 },
+      { left: 20, right: 20 },
+      { left: 20, right: 20 },
+      { left: 5, right: 5 },
+      { left: 6, right: 16 },
+    );
+    this.barChartAttributes.view = this.lineChartAttributes.view;
+    this.complianceSummaryLineChartAttributes.view = this.lineChartAttributes.view;
   }
 
   getClustersByClusterGroupId(groupId: number) {
