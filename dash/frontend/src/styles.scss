@@ -286,7 +286,7 @@ app-private {
     font-weight: bold;
   }
   mat-header-cell {
-    font-weight: 550;
+    font-weight: 550 !important;
   }
   mat-card-header {}
   mat-card-content {}
@@ -582,11 +582,6 @@ mat-form-field {
 .mat-column-image {
   word-break: break-all;
   padding-right: 10px
-}
-
-.mat-column-type {
-  word-break: break-all;
-  margin-right: 10px;
 }
 
 .mat-column-package {

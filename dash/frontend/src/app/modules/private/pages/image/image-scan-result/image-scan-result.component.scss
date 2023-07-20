@@ -1,6 +1,8 @@
+@use '@angular/material' as mat;
+
 .scanner-error {
   width: 99.5%;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border: red 1px solid;
   background: white;
   text-transform: capitalize;
@@ -10,53 +12,47 @@
   }
 }
 
+mat-card {
+  margin-bottom: 20px;
+}
+
+/*
+align-self: center;
+justify-self: center;
+align-content: center;
+justify-content: center;
+align-items: center;
+justify-items: center;
+text-align: center;
+vertical-align: middle;
+*/
+
+.header-row {
+  margin: 0;
+
+  div {
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+  }
+}
+
 .image-scan-list {
   flex: 3;
   width: 99.5%;
-  padding-bottom: 20px;
 
-  > mat-toolbar {
-    padding-bottom: 10px;
-    @media all and (max-width: 850px) {
-      height: fit-content;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      //padding-bottom: 80px;
-    }
-
-    .mat-toolbar-row {
-      width: 100%;
-      flex-wrap: wrap;
-      padding-left: 0;
-
-      &.image-id-row {
-        height: 20%;
-        font-weight: normal;
-        font-size: 15px;
-      }
-
-      .col-lg-9 {
-        align-items: center;
-        display: flex;
-        min-width: 0px;
-      }
-
-      .col-lg-2 {
-        display: flex;
-        margin-left: auto;
-        padding: 0px;
-        flex-basis: auto;
-      }
-    }
+  #image-name{
+    font-size: 26px;
+    text-wrap: initial;
   }
 
   .image-details {
+    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     @media all and (max-width: 1186px) {
-      overflow-x: scroll;
+      overflow-x: auto;
     }
 
     .left-elements {
@@ -66,11 +62,7 @@
       .elements {
         display: flex;
         flex-direction: column;
-        margin: 10px 50px 0 15px;
-
-        .first-element-content {
-          color: green;
-        }
+        margin: 10px 30px 0 15px;
       }
     }
 
@@ -93,114 +85,120 @@
   flex: 3;
   width: 99.5%;
 
-  > mat-toolbar {
-    @media all and (max-width: 850px) {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .image-subnav-title {
-      @media all and (max-width: 850px) {
-        width: 250px;
-        white-space: nowrap;
-      }
-      @media all and (max-width: 377px) {
-        width: 100px;
-        white-space: nowrap;
-      }
+  #compliance-report-title {
+    span {
+      font-size: 26px;
+      font-weight: normal;
     }
   }
+  #compliance-report-buttons {}
 
-  div.mat-elevation-z8 {
-    overflow-x: auto;
-    @media all and (max-width: 685px) {
-      overflow-x: scroll;
-    }
+  .mat-column-policy {
+    min-width: 150px;
+  }
+  .mat-column-status {
+    min-width: 70px;
+  }
+  .mat-column-compliant {
+    max-width: 150px;
+    min-width: 85px;
+  }
+  .mat-column-required {
+    max-width: 150px;
+    min-width: 75px;
+  }
+
+  .mat-column-critical_issues, .mat-column-major_issues,
+  .mat-column-medium_issues, .mat-column-low_issues,
+  .mat-column-negligible_issues {
+    min-width: 50px;
+    max-width: 100px;
   }
 }
 
 .issues-list {
   width: 99.5%;
   overflow-x: auto;
-  // try setting min widths with percentages
- /*
-  .mat-column-scanner {
-    width: 10%;
-    padding-right: 5px;
+
+  #issues-title {
+    span {
+      font-size: 26px;
+      font-weight: normal;
+    }
+  }
+  #issues-buttons {
+    justify-content: end;
   }
 
-  .mat-column-scanner_name {
-    width: 60%;
-    padding-right: 5px;
+  .mat-column-scanner {
+    min-width: 100px;
+    max-width: 150px;
+  }
+
+  .mat-column-isCompliant {
+    min-width: 100px;
+    max-width: 150px;
   }
 
   .mat-column-severity {
-    width: 5%;
-    padding-right: 5px;
+    min-width: 75px;
+    max-width: 100px;
   }
 
   .mat-column-type {
-    width: 15%;
-    padding-right: 5px;
-  }
-
-  .mat-column-required_for_compliance {
-    width: 5%;
-  }
-
-  .mat-column-is_fixable {
-    width: 5%;
-  }
-
-  */
-
-  div.mat-elevation-z8 {
-    overflow-x: auto;
-    @media all and (max-width: 685px) {
-      overflow-x: scroll;
+    min-width: 185px;
+    max-width: 250px;
+    .col-xs-8 {
+      display: flex;
+      align-self: center;
+      padding-right: 0;
+    }
+    .col-xs-4 {
+      padding-left: 0;
     }
   }
+
+  .mat-column-packageName {
+    min-width: 150px;
+    max-width: 200px;
+  }
+
+  .mat-column-name {
+    min-width: 250px;
+  }
+
+  .mat-column-installedVersion {
+    min-width: 80px;
+    max-width: 100px;
+  }
+
+  .mat-column-isFixable {
+    min-width: 130px;
+    .row {
+      margin: 0;
+    }
+  }
+
+  .mat-column-more {
+    min-width: 280px;
+  }
+
+  .mat-column-request_exception {}
+
+  #details-button {
+    min-width: 80px;
+    margin-right: 0.25em;
+  }
+
+  #request-exception-button {
+    min-width: 155px;
+    margin-left: 0.25em;
+  }
+
 }
 
-.advanced-search {
-  flex: 1 1 auto;
-  text-align: end;
-}
-
-mat-icon-button {
-  margin-left: 5px;
-}
-
-.mr-15px {
-  margin-right: 15px;
-}
 
 /*TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
 mat-paginator {
   padding-top: 10px;
-}
-
-.pad-left-20 {
-  padding-left: 20px;
-}
-
-.pad-right-5 {
-  padding-right: 5px;
-}
-
-
-.type-margin {
-  margin-top: 20px;
-
-}
-
-.request-exception-button {
-  display: inline-block;
-  white-space: nowrap;
-  text-decoration: none;
-  vertical-align: baseline;
-  text-align: center;
-  margin: 0;
-  min-width: 64px;
-  line-height: 36px;
 }

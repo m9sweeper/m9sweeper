@@ -8,7 +8,7 @@
           </button>
         </div>
       </div>
-      <div class="page-button-spacing flex-display">
+      <div class="page-button-spacing flex-display" id="images-buttons">
         <mat-form-field class="mr-10px search-image">
           <mat-label>Search image</mat-label>
           <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
@@ -18,7 +18,7 @@
         </button> &nbsp;
         <button
           class="scan-displayed-images-button"
-          [style.display]="(userIsAdmin)? 'block': 'none'"
+          *ngIf="userIsAdmin"
           [disabled]="!(dataSource && dataSource.data)"
           (click)="openConfirmScanDialog()"
           mat-raised-button
@@ -27,9 +27,9 @@
         </button>
       </div>
     </div>
-    <mat-card appearance="outlined">
-      <div class="page-table">
-        <table mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
+    <mat-card class="scrollable-table-card">
+      <div class="table-wrapper">
+        <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
             <mat-cell *matCellDef="let image"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
@@ -76,7 +76,7 @@
           <mat-row *matRowDef="let row; columns: displayedColumns;"
                    (click)="getImageScannerDetails(row)" class="table-row">
           </mat-row>
-        </table>
+        </mat-table>
       </div>
       <div class="paginator">
         <mat-paginator [length]="totalCount"
