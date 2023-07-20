@@ -35,7 +35,8 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     'major_issues',
     'medium_issues',
     'low_issues',
-    'negligible_issues'];
+    'negligible_issues'
+  ];
   issuesDisplayedColumns: string[] = [
     'scanner',
     'isCompliant',

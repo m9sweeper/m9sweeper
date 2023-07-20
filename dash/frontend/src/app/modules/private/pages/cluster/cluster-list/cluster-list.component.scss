@@ -4,6 +4,8 @@
 }
 
 mat-card.overview-graph-card {
+  margin: 10px 5px 0 5px;  // set to match legacy margins
+
   mat-card-content {
     margin: 6px 16px 16px 6px !important;
     padding: unset;
