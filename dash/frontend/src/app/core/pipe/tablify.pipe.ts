@@ -27,16 +27,16 @@ export class TablifyPipe implements PipeTransform {
     if (depth >= maxdepth) {
       return 'max depth reached'; // too deep
     }
-    const type = typeof(obj);
 
     // typeof(null) === 'object', so filter out the null values
     if (obj === null) {
       return 'null';
     }
 
+    const type = typeof(obj);
     if (Array.isArray(obj)) {
       return '<table>' + obj.map(o => {
-        return `<tr><td>${this.tablify(o, depth + 1, maxdepth)}</td></tr>`;
+        return '<tr><td>' + this.tablify(o, depth + 1, maxdepth) + '</td></tr>';
       }).join('') + '</table>';
     }
 
@@ -44,12 +44,15 @@ export class TablifyPipe implements PipeTransform {
       case 'object':
         return '<table>' +
           Object.entries(obj).map(o => {
-            return `<tr><td>${this.tablify(o[0], depth + 1, maxdepth)}</td><td>${this.tablify(o[1], depth + 1, maxdepth)}</td></tr>`;
+            return '<tr><td>' + this.tablify(o[0], depth + 1, maxdepth) + '</td><td>' + this.tablify(o[1], depth + 1, maxdepth) + '</td></tr>'
           }).join('') +
           '</table>';
+      case null:
+        return 'null';
       case undefined:
         return 'undefined';
     }
+
     // anything else, just return it
     return this.escapeHtml(obj);
   }
