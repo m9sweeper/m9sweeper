@@ -44,9 +44,13 @@ export class AuditLogComponent implements OnInit {
   }
 
   showMetaDataDetails(auditLog: IAuditLog) {
+    console.log(auditLog);
     this.dialogRef = this.dialog.open(ShowJsonDataComponent, {
       width: 'auto',
-      data: {content: auditLog.data, header: 'MetaData'}
+      data: {
+        content: auditLog,
+        header: `${auditLog.entityType} ${auditLog.id}`,
+      }
     });
   }
 

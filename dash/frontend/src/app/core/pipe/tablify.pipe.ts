@@ -28,6 +28,11 @@ export class TablifyPipe implements PipeTransform {
       return 'max depth reached'; // too deep
     }
 
+    // typeof(null) === 'object', so filter out the null values
+    if (obj === null) {
+      return 'null';
+    }
+
     const type = typeof(obj);
     if (Array.isArray(obj)) {
       return '<table>' + obj.map(o => '<tr><td>' + this.tablify(o, depth + 1, maxdepth) + '</td></tr>').join('') + '</table>';
