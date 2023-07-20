@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FalcoJsonDataDialogComponent } from './falco-json-data-dialog.component';
 
-describe('ShowJsonDataComponent', () => {
+describe('FalcoJsonDataDialogComponent', () => {
   let component: FalcoJsonDataDialogComponent;
   let fixture: ComponentFixture<FalcoJsonDataDialogComponent>;
 
