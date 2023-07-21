@@ -17,20 +17,10 @@ div.pod-selection-container {
     margin-right: 10px;
     margin-bottom: 10px;
   }
-  & .upload-file-content {
-    justify-content: center;
-    & .file-upload-button {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  }
   & .select-pod-content {
     padding-left: 15px;
     width: 24%;
   }
-}
-.run-kubesec-button {
-  width: 100%;
 }
 
 div.kubesec-popup {
