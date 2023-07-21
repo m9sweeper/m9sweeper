@@ -10,6 +10,9 @@ import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
+import {take} from 'rxjs/operators';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {Authority} from '../../../../../core/enum/Authority';
 
 @Component({
   selector: 'app-gate-keeper-details',
@@ -24,7 +27,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   clusterId: number;
   templateName: string;
   constraintsList: MatTableDataSource<IGateKeeperConstraintDetails>;
-  displayedColumns: string[] = ['name', 'description', 'mode', 'action', 'violations'];
+  displayedColumns: string[];
   rawTemplate: any;
   openapiProperties = [];
   openApiSchema: any;
@@ -33,7 +36,9 @@ export class GateKeeperDetailsComponent implements OnInit {
               private route: ActivatedRoute,
               private dialog: MatDialog,
               private alertService: AlertService,
-              private router: Router) {
+              private router: Router,
+              private jwtAuthService: JwtAuthService,
+              ) {
     this.clusterId = +this.route.parent.snapshot.paramMap.get('id');
     this.templateName = this.route.snapshot.paramMap.get('templateName');
   }
@@ -44,6 +49,11 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
     this.gatekeeperConstraintsByTemplate(this.templateName);
     this.gateKeeperTemplateByNameRaw();
+    if (this.jwtAuthService.isAdmin()) {
+      this.displayedColumns = ['name', 'description', 'mode', 'action', 'violations'];
+    } else {
+      this.displayedColumns = ['name', 'description', 'mode', 'violations'];
+    }
   }
 
   gateKeeperTemplateByNameRaw() {
@@ -82,8 +92,12 @@ export class GateKeeperDetailsComponent implements OnInit {
       }
     });
 
-    openDestroyTemplateDialog.afterClosed().subscribe(response => {
-      this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
+    openDestroyTemplateDialog.afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
+      if (response === true) {
+        this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
+      }
     });
   }
 
@@ -96,7 +110,9 @@ export class GateKeeperDetailsComponent implements OnInit {
       data: {clusterId: this.clusterId, subDir: this.templateName, templateContent: this.rawTemplate, referer: 'gate-keeper-details'}
     });
 
-    rawTemplate.afterClosed().subscribe(response => {
+    rawTemplate.afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
       this.gateKeeperTemplateByNameRaw();
     });
   }
@@ -111,7 +127,9 @@ export class GateKeeperDetailsComponent implements OnInit {
               openapiProperties: this.openapiProperties, openApiSchema: this.openApiSchema, annotations: this.gatekeeperTemplate.metadata.annotations }
     });
 
-    openAddConstraintTemplate.afterClosed().subscribe(response => {
+    openAddConstraintTemplate.afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
       if (response && !response.cancel) {
         this.gatekeeperConstraintsByTemplate(this.templateName);
       }
@@ -129,7 +147,9 @@ export class GateKeeperDetailsComponent implements OnInit {
       }
     });
 
-    openDestroyConstraintTemplate.afterClosed().subscribe(() => {
+    openDestroyConstraintTemplate.afterClosed()
+      .pipe(take(1))
+      .subscribe(() => {
       this.gatekeeperConstraintsByTemplate(this.templateName);
     });
   }
@@ -146,7 +166,9 @@ export class GateKeeperDetailsComponent implements OnInit {
             }
     });
 
-    openAddConstraintTemplate.afterClosed().subscribe(response => {
+    openAddConstraintTemplate.afterClosed()
+      .pipe(take(1))
+      .subscribe(response => {
       if (response && !response.cancel) {
         this.gatekeeperConstraintsByTemplate(this.templateName);
       }
