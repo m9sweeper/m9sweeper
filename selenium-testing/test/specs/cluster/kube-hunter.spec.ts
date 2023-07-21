@@ -20,14 +20,14 @@ describe('KubeHunter Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Move to the KubeHunter page
-        await $("//mat-list/a[@title='Kube Hunter']").customClick("kubehunter-page");
+        await $("//span[@class='menu-item-name'][contains(text(), 'Kube Hunter')]").customClick("kubehunter-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubehunter'),
             {message: "m9sweeper should be displaying the KubeHunter page"}
@@ -48,8 +48,8 @@ describe('KubeHunter Page::', () => {
 
         // Locate and select the Run one time option
         await $("//div[contains(@class, 'cdk-overlay-container')]//label[contains(normalize-space(), 'Run one time')]").customClick("choose-run-one-time");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//label[contains(normalize-space(), 'Run one time')]/parent::mat-radio-button")).toHaveElementClassContaining(
-            "mat-radio-checked",
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//label[contains(normalize-space(), 'Run one time')]/parent::div/parent::mat-radio-button")).toHaveElementClassContaining(
+            "mat-mdc-radio-checked",
             {message: "The Run on time radio button should be selected"}
         );
 
@@ -58,6 +58,12 @@ describe('KubeHunter Page::', () => {
 
         // Capture a screenshot so we can see the command that was copied for troubleshooting if needed
         await browser.customScreenshot('helm-command');
+
+        // Locate the next button and make sure it goes to the next page
+        await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Next')]").customClick('next');
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//h3[contains(normalize-space(), 'After running the CLI command')]")).toBePresent(
+            {message: "The screen displaying the information about viewing the report should be visable."}
+        );
 
         // Close the popup dialog by pressing the escape key
         await browser.keys(Key.Escape);

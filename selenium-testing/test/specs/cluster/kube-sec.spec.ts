@@ -19,18 +19,21 @@ describe('KubeSec Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Move to the kubesec page
-        await $("//mat-list/a[@title='KubeSec']").customClick("kubesec-page");
+        await $("//span[@class='menu-item-name'][contains(text(), 'KubeSec')]").customClick("kubesec-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubesec'),
             {message: "m9sweeper should be displaying the KubeSec page"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -38,33 +41,33 @@ describe('KubeSec Page::', () => {
     it('2 Run a KubeSec scan for single image', async () => {
         // Locate and selec the Choose pods from your cluster option
         await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]").customClick("choose-pods-from-cluster");
-        expect(await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]/parent::mat-radio-button")).toHaveElementClassContaining(
-            "mat-radio-checked",
+        expect(await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]/parent::div/parent::mat-radio-button")).toHaveElementClassContaining(
+            "mat-mdc-radio-checked",
             {message: "The Choose pods from your cluster radio button should be selected"}
         );
 
         // Locate the Select Namespace dropdown and click on it to open it up
         await $("//mat-select[@formcontrolname='namespaceFormControl']").customClick("open-namespace-selection");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).toBePresent(
             {message: "The dropdown for selecting a namespace should be visable"}
         );
 
         // Select the m9sweeper-system namespace
         await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'm9sweeper-system')]").customClick("select-m9sweeper-system");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'm9sweeper-system')]")).toHaveElementClassContaining(
-            "mat-selected",
+            "mat-mdc-option-active",
             {message: "The m9sweeper-system namespace should be selected"}
         );
 
         // Close the dropdown by sending the escape character
         await browser.keys(Key.Escape);
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).not.toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).not.toBePresent(
             {message: "The dropdown for selecting a namespace should not be visable"}
         );
 
         // Locate the Select a pod dropdown and click on it to open it up
         await $("//mat-select[@formcontrolname='podFormControl']").customClick("open-pod-selection");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).toBePresent(
             {message: "The dropdown for selecting a pod should be visable"}
         );
 
@@ -73,13 +76,13 @@ describe('KubeSec Page::', () => {
             .customClick("select-m9sweeper-pod");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'm9sweeper-dash-') and not(contains(normalize-space(), 'init'))]"))
             .toHaveElementClassContaining(
-                "mat-selected",
+                "mat-mdc-option-active",
                 {message: "The m9sweeper-dash pod should be selected"}
             );
 
         // Close the dropdown by sending the escape character
         await browser.keys(Key.Escape);
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).not.toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).not.toBePresent(
             {message: "The dropdown for selecting a pod should not be visable"}
         );
 
@@ -104,6 +107,9 @@ describe('KubeSec Page::', () => {
         expect(await $("//div[@class='tables']")).toBePresent(
             {message: "The section for the tables should be present"}
         );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 
 
@@ -127,33 +133,33 @@ describe('KubeSec Page::', () => {
 
         // Locate and selec the Choose pods from your cluster option
         await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]").customClick("choose-pods-from-cluster");
-        expect(await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]/parent::mat-radio-button")).toHaveElementClassContaining(
-            "mat-radio-checked",
+        expect(await $("//label[contains(normalize-space(), 'Choose pods from your cluster')]/parent::div/parent::mat-radio-button")).toHaveElementClassContaining(
+            "mat-mdc-radio-checked",
             {message: "The Choose pods from your cluster radio button should be selected"}
         );
 
         // Locate the Select Namespace dropdown and click on it to open it up
         await $("//mat-select[@formcontrolname='namespaceFormControl']").customClick("open-namespace-selection");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).toBePresent(
             {message: "The dropdown for selecting a namespace should be visable"}
         );
 
         // Select the m9sweeper-system namespace
         await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'm9sweeper-system')]").customClick("select-m9sweeper-system");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'm9sweeper-system')]")).toHaveElementClassContaining(
-            "mat-selected",
+            "mat-mdc-option-active",
             {message: "The m9sweeper-system namespace should be selected"}
         );
 
         // Close the dropdown by sending the escape character
         await browser.keys(Key.Escape);
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).not.toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).not.toBePresent(
             {message: "The dropdown for selecting a namespace should not be visable"}
         );
 
         // Locate the Select a pod dropdown and click on it to open it up
         await $("//mat-select[@formcontrolname='podFormControl']").customClick("open-pod-selection");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).toBePresent(
             {message: "The dropdown for selecting a pod should be visable"}
         );
 
@@ -162,13 +168,13 @@ describe('KubeSec Page::', () => {
             .customClick("select-all-items");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]"))
             .toHaveElementClassContaining(
-                "mat-selected",
+                "mdc-list-item--selected",
                 {message: "The All items option should be selected"}
             );
 
         // Close the dropdown by sending the escape character
         await browser.keys(Key.Escape);
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-option[contains(normalize-space(), 'All items')]")).not.toBePresent(
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//div[@role='listbox']")).not.toBePresent(
             {message: "The dropdown for selecting a pod should not be visable"}
         );
 
@@ -194,5 +200,8 @@ describe('KubeSec Page::', () => {
         // expect(await $("")).toBePresent(
         //     {message: "The m9sweeper-dash pod's report should be open in a popup window"}
         // );
+
+        // Take a screenshot at the end so we can see the results
+        await browser.customScreenshot("test-end");
     });
 });
