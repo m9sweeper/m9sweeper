@@ -18,24 +18,26 @@
             </mat-radio-group>
             <div class="upload-file-content" *ngIf="podSelectionOpt === 1">
               <input type="file" style="display: none;" #podFileInput (change)="onFileChange($event)"/>
-              <button type="button" class="file-upload-button" mat-raised-button color="accent" (click)="podFileInput.click()">
+              <button type="button" class="mt-half-rem" mat-raised-button color="accent" (click)="podFileInput.click()">
                 Select Pod File
               </button>
               <p class="heading" *ngIf="podFile">You've uploaded {{podFile.name}}</p>
             </div>
-            <div class="select-pod-content row" *ngIf="podSelectionOpt === 2">
-              <mat-form-field appearance="fill" class="margin-right-10" *ngIf="currentNamespaces">
-                <mat-label>Select namespaces</mat-label>
-                <form [formGroup]="namespaceForm">
-                  <mat-select formControlName="namespaceFormControl" multiple>
-                    <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All items</mat-option>
-                    <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name" (click)="togglePerOne(mySelBranch, true)">
-                      {{namespace.metadata.name}}
-                    </mat-option>
-                  </mat-select>
-                </form>
-              </mat-form-field>
-              <div *ngIf="namespaceForm.controls.namespaceFormControl.value">
+            <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
+              <div class="row">
+                <mat-form-field appearance="fill" class="margin-right-10" *ngIf="currentNamespaces">
+                  <mat-label>Select namespaces</mat-label>
+                  <form [formGroup]="namespaceForm">
+                    <mat-select formControlName="namespaceFormControl" multiple>
+                      <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All items</mat-option>
+                      <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name" (click)="togglePerOne(mySelBranch, true)">
+                        {{namespace.metadata.name}}
+                      </mat-option>
+                    </mat-select>
+                  </form>
+                </mat-form-field>
+              </div>
+              <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value">
                 <mat-form-field appearance="fill">
                   <mat-label>Select a pod</mat-label>
                   <form [formGroup]="podForm">
@@ -56,7 +58,7 @@
             </div>
           </div>
           <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
-            <button type="button" class="run-kubesec-button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
+            <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
               Run Kubesec
             </button>
           </div>
@@ -193,7 +195,7 @@
               </div>
             </div>
           </div>
-          <button class="margin-top" mat-raised-button matStepperPrevious>Back</button>
+          <button class="margin-top" mat-raised-button matStepperPrevious color="primary">Back</button>
         </mat-step>
       </mat-horizontal-stepper>
     </mat-card>
