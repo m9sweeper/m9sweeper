@@ -4,5 +4,5 @@ export default {
     BASE_URL: process.env.BASE_URL || 'http://127.0.0.1:3000',
     GATEKEEPER_VERSION: process.env.GATEKEEPER_VERSION || '3.10.0',
     DOCKER_REGISTRY: process.env.DOCKER_REGISTRY || '',
-    SKIP_GATEKEEPER_TESTS: process.env.SKIP_GATEKEEPER_TESTS === 'false'
+    SKIP_GATEKEEPER_TESTS: process.env.SKIP_GATEKEEPER_TESTS === 'true'
 };

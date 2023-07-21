@@ -20,6 +20,8 @@
     "test:all": "wdio run wdio.local.conf.ts --suite all",
     "test:cluster": "wdio run wdio.local.conf.ts --suite cluster",
     "test:organization": "wdio run wdio.local.conf.ts --suit organization",
+    "test:smoke": "wdio run wdio.local.conf.ts --suit smoke",
+    "test:user": "wdio run wdio.local.conf.ts --suite user",
     "test:pipeline": "wdio run wdio.pipeline.conf.ts --suite all"
   }
 }

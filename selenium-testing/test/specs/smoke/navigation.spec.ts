@@ -7,10 +7,11 @@ import { buildUrl } from '../../functions/build-url.js';
 describe('Check Navigation::', () => {
     // Login to m9sweeper and make sure we are on the default page
     it('1 Login and navigate to page', async () => {
+        // Login to m9sweeper
         await login();
         expect(browser).toHaveUrl(
             buildUrl('private/dashboard/group/1'),
-            {message: "m9sweeper should be displaying the default dashboard page"}
+            {message: "m9sweeper should have logged in and loaded the default dashboard"}
         );
 
         // Take a screenshot at the end so we can see the results
@@ -21,10 +22,10 @@ describe('Check Navigation::', () => {
     // Verify the navigation is correct for the cluster pages using the default cluster
     it('2 Verify Cluster Navigation', async () => {
         // Load the default cluster so we can test the cluster navigatione menu
-        await $("//mat-card/mat-card-header/div/mat-card-title/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
-            {message: "m9sweeper should be displaying the cluster summary page"}
+            {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
         );
 
         // Navigate to the Summary page
@@ -125,13 +126,6 @@ describe('Check Navigation::', () => {
             {message: "m9sweeper should be displaying the users page"}
         );
 
-        // Navigate to the Licenses page
-        await $("//span[@class='menu-item-name'][contains(text(), 'Licenses')]").customClick("licenses-page");
-        expect(browser).toHaveUrl(
-            buildUrl('private/licenses'),
-            {message: "m9sweeper should be displaying the licenses page"}
-        );
-
         // Navigate to the Policies page
         await $("//span[@class='menu-item-name'][contains(text(), 'Policies')]").customClick("policies-page");
         expect(browser).toHaveUrl(
@@ -172,6 +166,13 @@ describe('Check Navigation::', () => {
         expect(browser).toHaveUrl(
             buildUrl('private/audit-logs'),
             {message: "m9sweeper should be displaying the audit logs page"}
+        );
+
+        // Navigate to the Falco Settings page
+        await $("//span[@class='menu-item-name'][contains(text(), 'Falco Settings')]").customClick("falco-settings-page");
+        expect(browser).toHaveUrl(
+            buildUrl('private/falco'),
+            {message: "m9sweeper should be displaying the falco settings page"}
         );
 
         // Take a screenshot at the end so we can see the results

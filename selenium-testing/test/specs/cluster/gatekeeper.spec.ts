@@ -24,7 +24,7 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Open the default cluster
-        await $("//mat-card/mat-card-header/div/mat-card-title/div/span[contains(text(),'default-cluster')]").customClick("load-default-cluster");
+        await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
             {message: "m9sweeper should be displaying the cluster summary for the default cluster"}
@@ -56,6 +56,18 @@ describe('Gatekeeper Page::', () => {
         // Make sure gatekeeper is not yet installed
         expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Not Installed')]")).toBePresent(
             {message: "m9sweeper should be showing Gatekeeper as Not Installed"}
+        );
+
+        // Locate the install button and click it
+        await $("//button/span[contains(normalize-space(), 'Install')]").customClick('install');
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-gate-keeper-install-wizard-dialog")).toBePresent(
+            {message: "The GateKeeper installation instructions window should be visable"}
+        );
+
+        // Locate the Done button and click it
+        await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(normalize-space(), 'Done')]").customClick('done');
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-gate-keeper-install-wizard-dialog")).not.toBePresent(
+            {message: "The GateKeeper installation instructions window should no longer be visable"}
         );
 
         // Take a screenshot for records

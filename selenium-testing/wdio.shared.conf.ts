@@ -54,13 +54,13 @@ export const config: Options.Testrunner = {
             // Run the tests for managing the organization
             // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
-            // './test/specs/organization/licenses.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
             // './test/specs/organization/sign-on-methods.spec.ts',
             // './test/specs/organization/docker-registries.spec.ts',
             // './test/specs/organization/api-key-management.spec.ts',
             // './test/specs/organization/audit-logs.spec.ts',
+            // './test/specs/organization/falco-settings.spec.ts',
 
             // Run the tests for managing a cluster
             // './test/specs/cluster/summary.spec.ts',
@@ -71,13 +71,15 @@ export const config: Options.Testrunner = {
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
-            './test/specs/cluster/gatekeeper.spec.ts'
+            './test/specs/cluster/gatekeeper.spec.ts',
+            // './test/specs/user/update-profile.spec.ts',
+            // './test/specs/user/change-password.spec.ts'
         ],
 
         // Smoke tests suite
         smoke: [
             './test/specs/smoke/login-logout.spec.ts',
-            './test/specs/smoke/navigation.spec.ts',
+            './test/specs/smoke/navigation.spec.ts'
         ],
 
         // Cluster Tests
@@ -90,20 +92,26 @@ export const config: Options.Testrunner = {
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
-            './test/specs/cluster/gatekeeper.spec.ts',
+            './test/specs/cluster/gatekeeper.spec.ts'
         ],
 
         // organization tests
         organization: [
             // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
-            // './test/specs/organization/licenses.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
             // './test/specs/organization/sign-on-methods.spec.ts',
             // './test/specs/organization/docker-registries.spec.ts',
             // './test/specs/organization/api-key-management.spec.ts',
             // './test/specs/organization/audit-logs.spec.ts',
+            // './test/specs/organization/falco-settings.spec.ts'
+        ],
+
+        // User account tests
+        user: [
+            // './test/specs/user/update-profile.spec.ts',
+            // './test/specs/user/change-password.spec.ts'
         ]
     },
 
