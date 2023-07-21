@@ -20,7 +20,7 @@ export class DockerRegistriesService {
     if (limit) { params = params.set('limit', limit); }
     if (sort) {
       const {active, direction} = sort;
-      params = params.set('sort-field', active);
+      params = params.set('sort-by', active);
       params = params.set('sort-direction', direction);
     }
     return this.httpClient.get(this.baseUrl, {params});
