@@ -11,6 +11,7 @@ import {filter, pairwise} from 'rxjs/operators';
 })
 export class DatepickerComponent implements OnInit {
   @Input() initialDate = new Date();
+  @Input() allowFutureDate = true;
 
   @Output() newDateSelected: EventEmitter<{ isToday: boolean, desiredDate: Date, startTime: number, endTime: number }> = new EventEmitter();
 
@@ -25,46 +26,55 @@ export class DatepickerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      pairwise()
-    ).subscribe((event: any[]) => {
-      const previousUrl = event[0].url.split('/').includes('kubernetes-namespaces');
-      if (previousUrl) {
-        const desiredDate = parseInt(localStorage.getItem('dateSearchTerm'), 10);
-        this.emitEvent(new Date(desiredDate));
-      } else {
-        this.setDatepickerToToday();
-      }
+    this.setInitialDatepickerValue();
+  }
+
+  setInitialDatepickerValue() {
+    const currentUrl = this.router.url;
+    const urlPieces = currentUrl.split('/');
+    const includesWorkloadPath = urlPieces.includes('kubernetes-namespaces');
+    const storedDateAsNumber = parseInt(localStorage.getItem('dateSearchTerm'), 10);
+
+    if (includesWorkloadPath && storedDateAsNumber) {
+      this.currentlySelectedDate = new Date(storedDateAsNumber);
+    } else {
+      this.currentlySelectedDate = this.today;
+    }
+
+    this.emitEvent();
+  }
+
+  clearDatepicker() {
+    this.currentlySelectedDate = null;
+    this.datePickerFilled = false;
+    localStorage.setItem('dateSearchTerm', this.today.valueOf().toString());
+    const mutableDate = new Date(this.today.getTime());
+    const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();
+    const endTime = mutableDate.setHours(23, 59, 59, 999).valueOf();
+    this.newDateSelected.emit({
+      isToday: true,
+      desiredDate: this.today,
+      startTime,
+      endTime
     });
   }
 
-  setDatepickerToToday() {
-    this.emitEvent(this.today);
-  }
-
   dateChange(event) {
-    const desiredDate = event?.value ? new Date(event.value) : new Date();
-    this.emitEvent(desiredDate);
+    this.currentlySelectedDate = event?.value ? new Date(event.value) : this.today;
+    this.emitEvent();
   }
 
-  emitEvent(desiredDate: Date) {
-    localStorage.setItem('dateSearchTerm', desiredDate.valueOf().toString());
+  emitEvent() {
+    localStorage.setItem('dateSearchTerm', this.currentlySelectedDate.valueOf().toString());
     const isToday = (
-      this.today.getFullYear() === desiredDate.getFullYear() &&
-      this.today.getMonth() === desiredDate.getMonth() &&
-      this.today.getDate() === desiredDate.getDate()
+      this.today.getFullYear() === this.currentlySelectedDate.getFullYear() &&
+      this.today.getMonth() === this.currentlySelectedDate.getMonth() &&
+      this.today.getDate() === this.currentlySelectedDate.getDate()
     );
-    if (isToday) {
-      this.currentlySelectedDate = null;
-      this.datePickerFilled = false;
-    } else {
-      this.currentlySelectedDate = desiredDate;
-      this.datePickerFilled = true;
-    }
-    const mutableDate = new Date(desiredDate.getTime());
+    this.datePickerFilled = true;
+    const mutableDate = new Date(this.currentlySelectedDate.getTime());
     const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();
     const endTime = mutableDate.setHours(23, 59, 59, 999).valueOf();
-    this.newDateSelected.emit({isToday, desiredDate, startTime, endTime});
+    this.newDateSelected.emit({isToday, desiredDate: this.currentlySelectedDate, startTime, endTime});
   }
 }

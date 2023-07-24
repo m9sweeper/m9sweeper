@@ -27,7 +27,6 @@ export class KubernetesPodsComponent implements OnInit {
   namespace: null;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  initialDate = new Date();
   totalNumPods: number;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
   page = 0;
@@ -125,14 +124,6 @@ export class KubernetesPodsComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.alertService.danger(error.error.message);
-  }
-
-  getPodDetails(row: IPod) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', row?.name]);
-  }
-
-  routePages(url: any) {
-    this.router.navigate(url);
   }
 
   // @TODO: server side pagination

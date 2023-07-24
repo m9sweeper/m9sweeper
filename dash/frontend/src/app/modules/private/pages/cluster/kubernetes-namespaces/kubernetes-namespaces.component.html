@@ -10,7 +10,7 @@
         <p class="page-title">Namespaces</p>
       </div>
       <div class="calendar-date-picker">
-        <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [initialDate]="date"></app-datepicker-component>
+        <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
     <mat-card>
@@ -19,31 +19,40 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
-              {{namespace?.name}}
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+                {{namespace?.name}}
+              </a>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="compliant">
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
-              {{namespace?.compliant ? 'Yes' : 'No'}}
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+                <mat-icon *ngIf="namespace?.compliant === true">check_circle</mat-icon>
+                <mat-icon *ngIf="namespace?.compliant !== true">highlight_off</mat-icon>
+              </a>
             </mat-cell>
           </ng-container>
-  <!--          this field has been disabled.-->
+          <!-- this field has been disabled -->
           <ng-container matColumnDef="imagesScanned">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Number of Images Scanned</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
-              {{namespace?.kubernetesImages? namespace.kubernetesImages : 0}}
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+                {{namespace?.kubernetesImages? namespace.kubernetesImages : 0}}
+              </a>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="pod">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
             <mat-cell *matCellDef="let namespace" >
-              {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+                {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
+              </a>
             </mat-cell>
           </ng-container>
           <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getK8sPods(row)" class="table-row"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']" class="table-row"></mat-row>
         </mat-table>
       </div>
       <div>

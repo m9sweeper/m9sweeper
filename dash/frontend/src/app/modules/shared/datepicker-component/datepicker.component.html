@@ -1,12 +1,14 @@
 <mat-form-field appearance="fill">
   <input class="mat-datepicker-input" matInput
+         [value]="currentlySelectedDate"
          (click)="picker.open()"
          (focus)="picker.open()"
          [matDatepicker]="picker"
          (dateInput)="dateChange($event)"
          [(ngModel)]="currentlySelectedDate"
+         [max]="allowFutureDate ? '' : today"
          readonly>
-  <mat-icon *ngIf="datePickerFilled" matDatepickerToggleIcon (click)="setDatepickerToToday()">clear</mat-icon>
+  <mat-icon *ngIf="datePickerFilled" matDatepickerToggleIcon (click)="clearDatepicker()">clear</mat-icon>
   <mat-datepicker-toggle *ngIf="!datePickerFilled" matSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>

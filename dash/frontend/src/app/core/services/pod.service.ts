@@ -39,7 +39,15 @@ export class PodService {
       {params: new HttpParams().set('clusterId', clusterId.toString()).set('namespace', namespace).set('podId', podName)}
       );
   }
-  getPodByNameAndDate(clusterId: number, namespace: string, podName: string, startTime: number, endTime: number): Observable<IServerResponse<IPod>> {
+
+  /**
+   * @param clusterId which cluster to query
+   * @param namespace which namespace to search
+   * @param podName which pod to retrieve
+   * @param startTime should be in the format YYYY-MM-DD
+   * @param endTime should be in the format YYYY-MM-DD
+   */
+  getPodByNameAndDate(clusterId: number, namespace: string, podName: string, startTime: string, endTime: string): Observable<IServerResponse<IPod>> {
     return this.httpClient.get(`/api/k8s-pods/${podName}/history`,
       {params: new HttpParams()
           .set('clusterId', clusterId.toString())

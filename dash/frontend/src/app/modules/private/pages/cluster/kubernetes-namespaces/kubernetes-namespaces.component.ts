@@ -35,7 +35,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
   browserTitle: string;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   formatData = FormatDate.formatLastScannedDate;
-  date = new Date();
   formatDate = FormatDate;
 
 
@@ -82,13 +81,11 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     if (previousRoute) {
       if (localStorage.getItem('dateSearchTerm')) {
         this.dateEvent = new Date(Number(localStorage.getItem('dateSearchTerm')));
-        this.date = this.dateEvent;
         this.getNamespacesInfo(this.dateEvent);
       } else {
         this.getNamespacesInfo(new Date());
       }
     } else {
-      localStorage.removeItem('dateSearchTerm');
       this.getNamespacesInfo(new Date());
     }
   }
@@ -106,7 +103,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     const startOfToday = new Date().setHours(0, 0, 0, 0).valueOf();
     const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
     if (this.startTime === startOfToday && this.endTime === endOfToday) {
-      this.date = null;
       this.isDatePicker = true;
       this.namespaceService.getCountOfCurrentNamespaces(this.clusterId).subscribe((response: IServerResponse<number>) => {
           if (response.data) {
@@ -141,7 +137,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     const startOfToday = new Date().setHours(0, 0, 0, 0).valueOf();
     const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
     if (this.startTime === startOfToday && this.endTime === endOfToday) {
-      this.date = null;
       this.isDatePicker = true;
       this.namespaceService.getAllK8sNamespaces(this.clusterId, this.limit, this.page, this.sort).subscribe((response: IServerResponse<INamespace[]>) => {
             this.dataSource = new MatTableDataSource(response.data);
@@ -167,20 +162,8 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clearDate(event) {
-    event.stopPropagation();
-    this.date = null;
-    localStorage.removeItem('dateSearchTerm');
-    this.isDatePicker = true;
-    this.getNamespacesInfo(new Date());
-  }
-
   getK8sDeployments(row: INamespace) {
     this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'deployments']);
-  }
-
-  getK8sPods(row: INamespace) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']);
   }
 
   setLimitToLocalStorage(limit: number) {

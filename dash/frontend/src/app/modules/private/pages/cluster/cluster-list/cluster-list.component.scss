@@ -18,6 +18,7 @@ mat-card.overview-graph-card {
 
   mat-card {
     padding: 1em 0.5em;
+    margin: 10px 5px 0 5px;  // set to match legacy margins
 
     .row {
       div {
