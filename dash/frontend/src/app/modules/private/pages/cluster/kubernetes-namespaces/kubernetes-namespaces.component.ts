@@ -94,6 +94,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
   }
 
   getNamespacesInfo(event) {
+    console.log('new event', event);
     // this.limit = 10;
     this.page = 0;
     let time = event ? (event.value ? new Date(event.value) : event) : new Date();
@@ -177,10 +178,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
 
   getK8sDeployments(row: INamespace) {
     this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'deployments']);
-  }
-
-  getK8sPods(row: INamespace) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']);
   }
 
   setLimitToLocalStorage(limit: number) {

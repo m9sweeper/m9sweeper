@@ -5,6 +5,7 @@
          [matDatepicker]="picker"
          (dateInput)="dateChange($event)"
          [(ngModel)]="currentlySelectedDate"
+         [max]="allowFutureDate ? '' : today"
          readonly>
   <mat-icon *ngIf="datePickerFilled" matDatepickerToggleIcon (click)="setDatepickerToToday()">clear</mat-icon>
   <mat-datepicker-toggle *ngIf="!datePickerFilled" matSuffix [for]="picker"></mat-datepicker-toggle>

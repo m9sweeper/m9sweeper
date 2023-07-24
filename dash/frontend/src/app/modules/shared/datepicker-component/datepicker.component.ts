@@ -11,6 +11,7 @@ import {filter, pairwise} from 'rxjs/operators';
 })
 export class DatepickerComponent implements OnInit {
   @Input() initialDate = new Date();
+  @Input() allowFutureDate = true;
 
   @Output() newDateSelected: EventEmitter<{ isToday: boolean, desiredDate: Date, startTime: number, endTime: number }> = new EventEmitter();
 
