@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
-import { Observable } from 'rxjs';
+import {Subject} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -10,15 +10,17 @@ import {MatDialog} from '@angular/material/dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-gate-keeper',
   templateUrl: './gate-keeper.component.html',
   styleUrls: ['./gate-keeper.component.scss']
 })
-export class GateKeeperComponent implements OnInit {
+export class GateKeeperComponent implements OnInit, OnDestroy {
   clusterId: number;
-  gatekeeperConstraintTemplates$: Observable<IGateKeeperConstraintDetails[]>;
+  gatekeeperConstraintTemplates: IGateKeeperConstraintDetails[];
+  unsubscribe$ = new Subject<void>();
   gatekeeperTemplates: MatTableDataSource<IGateKeeperConstraintDetails>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -36,20 +38,35 @@ export class GateKeeperComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkGatekeeperStatus();
-    this.gatekeeperConstraintTemplates$ = this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId);
+    this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: response => {
+          this.gatekeeperConstraintTemplates = response;
+        },
+        error: err => {
+          console.error(err);
+          this.gatekeeperConstraintTemplates = null;
+        }
+      });
     this.loadGateKeeperConstraintTemplates();
   }
 
-  loadGateKeeperConstraintTemplates() {
-    this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId).subscribe(data => {
-      this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
-      this.gatekeeperTemplates.paginator = this.paginator;
-    });
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
-  // viewConstraintDetails(constraint: IGateKeeperConstraint){
-  //   this.router.navigate(['/private', 'clusters', this.clusterId, 'gatekeeper', constraint.name]);
-  // }
+  loadGateKeeperConstraintTemplates() {
+    this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
+      .pipe(take(1))
+      .subscribe({
+        next: data => {
+          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
+          this.gatekeeperTemplates.paginator = this.paginator;
+        }
+      });
+  }
 
   openInstallWizard() {
    this.dialog.open(GateKeeperInstallWizardDialogComponent, {
@@ -76,19 +93,27 @@ export class GateKeeperComponent implements OnInit {
       data: {clusterId: this.clusterId}
     });
 
-    openAddConstraint.afterClosed().subscribe(response => {
-      if (response && !response.cancel) {
-        this.loadGateKeeperConstraintTemplates();
-        this.checkGatekeeperStatus();
-      }
-    });
+    openAddConstraint.afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: response => {
+          if (response && !response.cancel) {
+            this.loadGateKeeperConstraintTemplates();
+            this.checkGatekeeperStatus();
+          }
+        }
+      });
   }
 
   checkGatekeeperStatus(){
-    this.gateKeeperService.checkGatekeeperInstallationStatus(this.clusterId).subscribe(data => {
-      this.gatekeeperStatusLoaded = true;
-      this.gatekeeperInstallationStatus = data;
-    });
+    this.gateKeeperService.checkGatekeeperInstallationStatus(this.clusterId)
+      .pipe(take(1))
+      .subscribe({
+        next: data => {
+          this.gatekeeperStatusLoaded = true;
+          this.gatekeeperInstallationStatus = data;
+        }
+      });
   }
 
 }
