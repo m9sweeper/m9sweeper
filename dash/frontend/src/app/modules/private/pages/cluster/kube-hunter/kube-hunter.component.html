@@ -3,76 +3,70 @@
     <div class="page-title-button-group-spacing">
       <div class="page-title">KubeHunter</div>
     </div>
-  <div class="page-card">
-    <div class="row">
+    <div class="page-card" style="overflow-y: hidden">
+      <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10"  style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined" >
-            <mat-card-header>
-              <div class="page-card-title">Penetration Test Status:</div>
-            </mat-card-header>
-            <mat-card-content>
-              <h3 class="text-style-red " *ngIf="daysPassed > 10"> Report Outdated </h3>
-              <h3 *ngIf="daysPassed < 10" class="text-style-green"> Report still valid</h3>
-              <h3 class="text-style-red" *ngIf="!allReportsForCluster"></h3>
-            </mat-card-content>
-          </mat-card>
-        </div>
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10"  style="margin: 0; padding-left:0; padding-right:0;  height:150px; display: grid;!important; ">
+            <mat-card appearance="outlined" >
+              <mat-card-header>
+                <div class="page-card-title">Penetration Test Status:</div>
+              </mat-card-header>
+              <mat-card-content>
+                <h3 class="text-style-red " *ngIf="daysPassed > 10"> Report Outdated </h3>
+                <h3 *ngIf="daysPassed < 10" class="text-style-green"> Report Valid</h3>
+                <h3 class="text-style-red" *ngIf="!allReportsForCluster"></h3>
+              </mat-card-content>
+            </mat-card>
+          </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined">
-            <mat-card-header>
-              <div class="page-card-title">Vulnerabilities in Last Run:</div>
-            </mat-card-header>
-            <mat-card-content >
-              <table>
-                <tr>
-                  <th>Low</th>
-                  <th>Medium</th>
-                  <th>High</th>
-                </tr>
-                <tr>
-                  <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : ''}}</td>
-                  <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : ''}}</td>
-                  <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : ''}}</td>
-                </tr>
-              </table>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 margin-top-10" style=" margin: 0; padding-left:0; padding-right:0; height:150px; display: grid;!important; overflow: auto">
-          <mat-card appearance="outlined">
-            <mat-card-header>
-              <div class="page-card-title">Our Advice:</div>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="page-card-header">
-                <div class=" col-sm-8 no-padding">
-                  <p *ngIf="daysPassed >= 90">
-                    It has been {{daysPassed}} days since you ran Kube Hunter. You should run it again soon.
-                  </p>
-                  <p *ngIf="daysPassed < 90">
-                    It has been {{daysPassed}} days since you last ran Kube Hunter. The current report is still valid.
-                  </p>
-                  <p *ngIf="!allReportsForCluster">
-                    Run Kube Hunter to find vulnerabilities within your cluster.
-                  </p>
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 margin-top-10" style="margin: 0; padding-left:0; padding-right:0;  height:150px; display: grid;!important; ">
+            <mat-card appearance="outlined">
+              <mat-card-header>
+                <div class="page-card-title">Vulnerabilities in Last Run:</div>
+              </mat-card-header>
+              <mat-card-content >
+                <table>
+                  <tr>
+                    <th>Low</th>
+                    <th>Medium</th>
+                    <th>High</th>
+                  </tr>
+                  <tr>
+                    <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : ''}}</td>
+                    <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : ''}}</td>
+                    <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : ''}}</td>
+                  </tr>
+                </table>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 margin-top-10" style=" margin: 0; padding-left:0; padding-right:0; height:150px; display: grid;!important;">
+            <mat-card appearance="outlined">
+              <mat-card-header>
+                <div class="page-card-title">Our Advice:</div>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="page-card-header">
+                  <div class=" col-sm-7 col-xs-7 no-padding">
+                    <p>
+                      {{ourAdvice}}
+                    </p>
+                  </div>
+                  <div class="col-sm-5 col-xs-5 page-card-title-button-group-right-align">
+                    <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+                  </div>
                 </div>
-                <div class="col-sm-4 page-card-title-button-group-right-align">
-                  <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </div>
-  </div>
+    </div>
 
     <br>
     <div class="page-card">
       <mat-card appearance="outlined">
         <mat-card-header >
-          <div class=" col-sm-3">
+          <div class=" col-sm-3 no-padding">
             <div class="page-card-title">
               Past Audits
             </div>
@@ -82,28 +76,28 @@
           </div>
         </mat-card-header>
         <mat-card-content >
-          <ng-container>
+
             <div *ngIf="allReportsForCluster">
               Click on an audit to learn more about this cluster's vulnerabilities<br>
             </div>
 
-            <table mat-table [dataSource]="dataSource">
+            <mat-table [dataSource]="dataSource">
               <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef> Date </th>
-                <td mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </td>
+                <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+                <mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </mat-cell>
               </ng-container>
               <ng-container matColumnDef="time">
-                <th mat-header-cell *matHeaderCellDef> Time </th>
-                <td mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </td>
+                <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>\
+                <mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </mat-cell>
               </ng-container>
               <ng-container matColumnDef="numVulnerabilities">
-                <th mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </th>
-                <td mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </td>
+                <mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </mat-header-cell>
+                <mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </mat-cell>
               </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"
-                  class="report-click"></tr>
-            </table>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"  [ngStyle]="{'cursor': 'pointer'}"
+                       class="report-click"></mat-row>
+            </mat-table>
 
             <div>
               <mat-paginator
@@ -114,7 +108,7 @@
                 showFirstLastButtons>
               </mat-paginator>
             </div>
-          </ng-container>
+
         </mat-card-content>
 
       </mat-card>
