@@ -15,6 +15,7 @@ import {take} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
 import {KubesecDialogComponent} from '../kubesec/kubesec-dialog/kubesec-dialog.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
+import {DatePipe} from '@angular/common';
 
 
 @Component({
@@ -35,11 +36,11 @@ export class KubernetesPodDetailsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   formatDate = FormatDate;
-  initialDate = new Date();
   totalNumImages: number;
   limit = 10;
   page = 0;
   kubesecReport: string;
+  currentDateData: { isToday: boolean, desiredDate: Date, startTime: number, endTime: number };
 
   constructor(
     private route: ActivatedRoute,
@@ -49,51 +50,38 @@ export class KubernetesPodDetailsComponent implements OnInit {
     private imageService: ImageService,
     private kubesecService: KubesecService,
     private router: Router,
+    public datepipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
     this.route.parent.parent.parent.parent.params.subscribe(param => {
       this.clusterId = param.id;
       if (this.namespace && this.podName) {
-        this.setPodAndImages();
+        this.loadImages();
       }
     });
     this.route.params.subscribe(routeParams => {
       this.namespace = routeParams.namespace;
       this.podName = routeParams.pod;
       if (this.clusterId) {
-        this.setPodAndImages();
+        this.loadImages();
       }
     });
   }
 
   dateChanged(dateData: { isToday: boolean, desiredDate: Date, startTime: number, endTime: number }) {
-    this.page = 0;
-    if (dateData.isToday) {
-      this.loadCurrentImages();
-    } else {
-      this.loadHistoricalImages(dateData.startTime, dateData.endTime);
-    }
+    this.currentDateData = dateData;
+    this.loadImages();
   }
 
-  setPodAndImages() {
-    const today = new Date();
-    const desiredDateAsString = parseInt(localStorage.getItem('dateSearchTerm'), 10);
-    const desiredDate = new Date(desiredDateAsString);
-    const isToday = (
-      today.getFullYear() === desiredDate.getFullYear() &&
-      today.getMonth() === desiredDate.getMonth() &&
-      today.getDate() === desiredDate.getDate()
-    );
-    if (isToday) {
+  loadImages() {
+    this.page = 0;
+    if (!this.currentDateData || this.currentDateData.isToday) {
       this.getPodInfo();
       this.loadCurrentImages();
     } else {
-      const mutableDate = new Date(desiredDate.getTime());
-      const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();
-      const endTime = mutableDate.setHours(23, 59, 59, 999).valueOf();
-      this.getHistoricalPodInfo(startTime, endTime);
-      this.loadHistoricalImages(startTime, endTime);
+      this.getHistoricalPodInfo(this.currentDateData.startTime, this.currentDateData.endTime);
+      this.loadHistoricalImages(this.currentDateData.startTime, this.currentDateData.endTime);
     }
   }
 
@@ -103,24 +91,26 @@ export class KubernetesPodDetailsComponent implements OnInit {
         this.podInfo = response?.data;
       },
       (error) => {
+        console.log(error);
+        this.alertService.danger('There was an error loading the pod details');
         this.podInfo = error?.data ? error.data : null;
       }
     );
   }
 
   getHistoricalPodInfo(startTime: number, endTime: number) {
-    this.podService.getPodByNameAndDate(this.clusterId, this.namespace, this.podName, startTime, endTime).subscribe(
+    const transformedStartTime = this.datepipe.transform(startTime, 'yyyy-MM-dd');
+    const transformedEndTime = this.datepipe.transform(endTime, 'yyyy-MM-dd');
+    this.podService.getPodByNameAndDate(this.clusterId, this.namespace, this.podName, transformedStartTime, transformedEndTime).subscribe(
       (response: IServerResponse<IPod>) => {
         this.podInfo = response?.data;
       },
       (error) => {
+        console.log(error);
+        this.alertService.danger('There was an error loading the pod details');
         this.podInfo = error?.data ? error.data : null;
       }
     );
-  }
-
-  getImageDetails(row: IImage) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'images', 'image-scan', row?.id]);
   }
 
   loadCurrentImages() {
@@ -156,6 +146,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
     }
   }
   handleGetImagesErrorResponse(error) {
+    this.alertService.danger('There was an error loading the image details');
     try {
       this.dataSource = new MatTableDataSource(error.data.listOfImages);
       this.totalNumImages = parseInt(error.data.total.toString(), 10);

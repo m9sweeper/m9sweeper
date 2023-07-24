@@ -27,7 +27,6 @@ export class KubernetesPodsComponent implements OnInit {
   namespace: null;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  initialDate = new Date();
   totalNumPods: number;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
   page = 0;
