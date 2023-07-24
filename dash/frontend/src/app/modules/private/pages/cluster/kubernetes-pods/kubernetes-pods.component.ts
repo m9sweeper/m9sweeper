@@ -127,14 +127,6 @@ export class KubernetesPodsComponent implements OnInit {
     this.alertService.danger(error.error.message);
   }
 
-  getPodDetails(row: IPod) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', row?.name]);
-  }
-
-  routePages(url: any) {
-    this.router.navigate(url);
-  }
-
   // @TODO: server side pagination
 
   setLimitToLocalStorage(limit: number) {

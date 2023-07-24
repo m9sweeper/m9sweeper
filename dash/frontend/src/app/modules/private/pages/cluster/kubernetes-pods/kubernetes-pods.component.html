@@ -1,64 +1,80 @@
-<div class="kubernetes-pods-container">
-  <div class="kubernetes-object-list">
-    <div class="kubernetes-object-sub-navigation">
-      <div class="kubernetes-object-header">
-        <div class="content-breadcrumbs">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a [routerLink]="['/private', 'clusters', clusterId, 'kubernetes-namespaces']" id="breadcrumbs-url">
-                namespaces
-              </a>
-            </li>
-            <li class="breadcrumb-item">
-              {{namespace}}
-            </li>
-            <li class="breadcrumb-item">
-              pods
-            </li>
-          </ol>
-          <p class="page-title">Pods in {{namespace}}</p>
-        </div>
+<div class="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing adjust-height">
+      <div class="content-breadcrumbs">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['/private', 'clusters', clusterId, 'kubernetes-namespaces']" id="breadcrumbs-url">
+              namespaces
+            </a>
+          </li>
+          <li class="breadcrumb-item">
+            {{namespace}}
+          </li>
+          <li class="breadcrumb-item">
+            pods
+          </li>
+        </ol>
+        <p class="page-title">Pods in {{namespace}}</p>
       </div>
       <div class="calendar-date-picker">
-        <app-datepicker-component (newDateSelected)="dateChanged($event)" [initialDate]="initialDate"></app-datepicker-component>
+        <app-datepicker-component (newDateSelected)="dateChanged($event)" [initialDate]="initialDate" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
-    <div class="mat-elevation-z8 kubernetes-object-list-table">
-      <mat-table [dataSource]="dataSource" matSort>
-        <div *matNoDataRow class="text-align-center">
-          No pods found
-        </div>
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="resourceVersion">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Resource Version </mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.resourceVersion}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="generateName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Generation Name </mat-header-cell>
-          <mat-cell *matCellDef="let element">{{element.generateName}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="compliant">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Compliant </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <mat-icon *ngIf="element?.compliant === true">check_circle</mat-icon>
-            <mat-icon *ngIf="element?.compliant !== true">highlight_off</mat-icon>
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="violations">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Violations </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-<!--            <a *ngIf="element.violations.length"  (mouseover)="showViolations(element)">{{element.violations.length}}</a>-->
-            <a>{{element.violations.length}}</a>
-          </mat-cell>
-        </ng-container>
-        <mat-header-row ></mat-header-row>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getPodDetails(row)" class="click-event"></mat-row>
-      </mat-table>
-    </div>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+    <mat-card>
+      <div class="page-table kubernetes-object-list-table">
+        <mat-table [dataSource]="dataSource" matSort>
+          <div *matNoDataRow class="text-align-center">
+            No pods found
+          </div>
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
+                {{element?.name}}
+              </a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="resourceVersion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Resource Version </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
+                {{element?.resourceVersion}}
+              </a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="generateName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Generation Name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
+                {{element.generateName}}
+              </a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="compliant">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Compliant </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
+                <mat-icon *ngIf="element?.compliant === true">check_circle</mat-icon>
+                <mat-icon *ngIf="element?.compliant !== true">highlight_off</mat-icon>
+              </a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="violations">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Violations </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
+                {{element.violations.length}}
+              </a>
+<!--              <a *ngIf="element.violations.length"  (mouseover)="showViolations(element)">{{element.violations.length}}</a>-->
+            </mat-cell>
+          </ng-container>
+          <mat-header-row ></mat-header-row>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" class="click-event"></mat-row>
+        </mat-table>
+      </div>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card>
   </div>
 </div>

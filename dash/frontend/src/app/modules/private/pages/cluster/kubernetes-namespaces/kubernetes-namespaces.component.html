@@ -28,7 +28,8 @@
             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                {{namespace?.compliant ? 'Yes' : 'No'}}
+                <mat-icon *ngIf="namespace?.compliant === true">check_circle</mat-icon>
+                <mat-icon *ngIf="namespace?.compliant !== true">highlight_off</mat-icon>
               </a>
             </mat-cell>
           </ng-container>
