@@ -23,14 +23,13 @@ export class DatepickerComponent implements OnInit {
 
   constructor(
     private router: Router,
-  ) {
+  ) {}
+
+  ngOnInit() {
     this.setInitialDatepickerValue();
   }
 
-  ngOnInit() {}
-
   setInitialDatepickerValue() {
-    console.log('datepicker setInitialDatepickerValue');
     const currentUrl = this.router.url;
     const urlPieces = currentUrl.split('/');
     const includesWorkloadPath = urlPieces.includes('kubernetes-namespaces');
