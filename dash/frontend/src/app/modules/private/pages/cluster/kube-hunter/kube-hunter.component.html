@@ -6,20 +6,20 @@
     <div class="page-card" style="overflow-y: hidden">
       <div class="row">
 
-          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10"  style="margin: 0; padding-left:0; height:150px; display: grid;!important; ">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 margin-top-10"  style="margin: 0; padding-left:0; padding-right:0;  height:150px; display: grid;!important; ">
             <mat-card appearance="outlined" >
               <mat-card-header>
                 <div class="page-card-title">Penetration Test Status:</div>
               </mat-card-header>
               <mat-card-content>
                 <h3 class="text-style-red " *ngIf="daysPassed > 10"> Report Outdated </h3>
-                <h3 *ngIf="daysPassed < 10" class="text-style-green"> Report still valid</h3>
+                <h3 *ngIf="daysPassed < 10" class="text-style-green"> Report Valid</h3>
                 <h3 class="text-style-red" *ngIf="!allReportsForCluster"></h3>
               </mat-card-content>
             </mat-card>
           </div>
 
-          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 margin-top-10" style="margin: 0; padding-left:0; height:150px; display: grid;!important; ">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 margin-top-10" style="margin: 0; padding-left:0; padding-right:0;  height:150px; display: grid;!important; ">
             <mat-card appearance="outlined">
               <mat-card-header>
                 <div class="page-card-title">Vulnerabilities in Last Run:</div>
@@ -47,12 +47,12 @@
               </mat-card-header>
               <mat-card-content>
                 <div class="page-card-header">
-                  <div class=" col-sm-8 col-xs-6 no-padding">
+                  <div class=" col-sm-7 col-xs-7 no-padding">
                     <p>
                       {{ourAdvice}}
                     </p>
                   </div>
-                  <div class="col-sm-4 col-xs-6 page-card-title-button-group-right-align">
+                  <div class="col-sm-5 col-xs-5 page-card-title-button-group-right-align">
                     <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
                   </div>
                 </div>

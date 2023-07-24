@@ -75,7 +75,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
             if (this.daysPassed >= 90){
               this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you ran Kube Hunter. You should run it again soon.';
             } else {
-              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter. The current report is still valid.';
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter.';
             }
             res.list[0].vulnerabilities?.value?.value?.forEach( vulnerability => {
               if (vulnerability.severity === 'low') {
