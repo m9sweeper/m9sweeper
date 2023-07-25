@@ -6,7 +6,10 @@
       </div>
       <div class="page-button-spacing">
         <button mat-raised-button color="primary" (click)="openDialog()">Install</button>&nbsp;
-        <button mat-raised-button color="primary" *ngIf="isAllowed" (click)="onClickSettings()">Settings</button>
+        <button mat-raised-button color="primary"
+                *ngIf="isAllowed"
+                [routerLink]="['/private', 'clusters', this.clusterId, 'falco', 'settings']"
+        >Settings</button>
       </div>
     </div>
 

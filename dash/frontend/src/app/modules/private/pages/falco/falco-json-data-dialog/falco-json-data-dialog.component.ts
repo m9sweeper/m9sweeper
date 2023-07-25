@@ -7,6 +7,7 @@ import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {take} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
 import {UtilService} from '../../../../../core/services/util.service';
+import {MatTab} from '@angular/material/tabs';
 
 
 @Component({
@@ -15,53 +16,78 @@ import {UtilService} from '../../../../../core/services/util.service';
   styleUrls: ['./falco-json-data-dialog.component.scss']
 })
 export class FalcoJsonDataDialogComponent implements OnInit {
-  header: string;
-
   constructor(
     public dialogRef: MatDialogRef<FalcoJsonDataDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {content: any, header: string},
+    @Inject(MAT_DIALOG_DATA) public data: {
+      namespace: string,
+      timestamp: string,
+      container: string,
+      image: string,
+      message: string,
+      anomalySignature: string,
+      clusterId: number,
+      id: number,
+      raw: any,
+    },
     private route: ActivatedRoute,
     private router: Router,
     private falcoService: FalcoService,
     private dialog: MatDialog,
     private alertService: AlertService,
     private utilService: UtilService,
-  ) {
-    console.log('hello from the falco json data dialog component');
-  }
+  ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
   displayedColumns = ['isCurrent', 'calendarDate', 'namespace', 'pod', 'image', 'message'];
-  namespace = this.data.content.namespace;
-  date = this.data.content.calendarDate;
-  dateTime  = new Date(+(this.data.content.timestamp));
-  pod = this.data.content.container;
-  image = this.data.content.image;
-  message = this.data.content.message;
-  signature = this.data.content.anomalySignature;
-  clusterId = this.data.content.clusterId;
-  eventId = this.data.content.id;
+
+  eventDetails = new MatTableDataSource( [
+    {
+      title: 'Namespace',
+      value: this.data.namespace,
+    },
+    {
+      title: 'Date',
+      value: new Date(+(this.data.timestamp)),
+    },
+    {
+      title: 'Pod',
+      value: this.data.container,
+    },
+    {
+      title: 'Image',
+      value: this.data.image,
+    },
+    {
+      title: 'Priority',
+      value: this.data.raw.priority,
+    },
+    {
+      title: 'Message',
+      value: this.data.message,
+    },
+  ]);
 
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
   logCount: number;
   page: number;
 
   ngOnInit(): void {
-    this.header = this.data.header ? this.data.header : 'Json Data';
-    this.getFalcoEvents();
+    console.log(this.data);
+    this.getRelatedEvents();
   }
 
   pageEvent(pageEvent: any) {
     this.limit = pageEvent.pageSize;
     this.page = pageEvent.pageIndex;
     this.setLimitToLocalStorage(this.limit);
-    this.getFalcoEvents();
+    this.getRelatedEvents();
   }
 
-  getFalcoEvents(){
-    this.falcoService.getFalcoLogs(this.clusterId,  { limit: this.limit, page: this.page, signature: this.signature})
+  getRelatedEvents(){
+    this.falcoService.getFalcoLogs(this.data.clusterId,  { limit: this.limit, page: this.page, signature: this.data.anomalySignature})
       .pipe(take(1))
       .subscribe(response => {
+        console.log(response);
         const dataList = response.data.list;
         // one less log count - without the current event log
         // current problem: we pop out the one that matches the id of the current event log
@@ -73,7 +99,7 @@ export class FalcoJsonDataDialogComponent implements OnInit {
         const newDataList = [];
         dataList.forEach((eventLog) => {
           const modifiedEvent = structuredClone(eventLog);
-          modifiedEvent.isCurrent = eventLog.id === this.data.content.id;
+          modifiedEvent.isCurrent = eventLog.id === this.data.id;
           newDataList.push(modifiedEvent);
         });
         // use the new data list to display related events
@@ -114,7 +140,7 @@ export class FalcoJsonDataDialogComponent implements OnInit {
       width: 'auto',
       height: '100%',
       autoFocus: false,
-      data: {content: event, header: 'Event Log Details'}
+      data: {content: event}
     });
   }
 

@@ -115,6 +115,7 @@ export class FalcoEventsListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         this.dataSource = new MatTableDataSource(response.data.list);
+        this.displayEventDetails(response.data.list[0]);
         this.logCount = response.data.logCount;
       }, (err) => {
         if (err?.error?.message) {
@@ -139,34 +140,38 @@ export class FalcoEventsListComponent implements OnInit {
       width: 'auto',
       height: '100%',
       autoFocus: false,
-      data: {content: event, header: 'Event Log Details'}
+      data: event,
     });
   }
 
   downloadReport() {
     this.loaderService.start('csv-download');
     // should only download filtered logs
-    this.falcoService.downloadFalcoExport( this.clusterId, {
-                                          limit: this.limit,
-                                          page: this.page,
-                                          selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
-                                          selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
-                                          startDate: this.startDate,
-                                          endDate: this.endDate,
-                                          namespace: this.filterForm.get('namespaceInput').value,
-                                          pod: this.filterForm.get('podInput').value,
-                                          image: this.filterForm.get('imageInput').value,
-                                          signature: this.signature}
-      )
-        .pipe(take(1))
-        .subscribe((response) => {
+    this.falcoService.downloadFalcoExport(
+      this.clusterId, {
+        limit: this.limit,
+        page: this.page,
+        selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+        selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        namespace: this.filterForm.get('namespaceInput').value,
+        pod: this.filterForm.get('podInput').value,
+        image: this.filterForm.get('imageInput').value,
+        signature: this.signature
+      }
+    )
+      .pipe(take(1))
+      .subscribe(
+        (response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
           this.alertService.danger(`Error downloading report: ${error.error.message}`);
         }, () => {
           this.loaderService.stop('csv-download');
-        });
+        }
+      );
     }
 
   rebuildWithFilters(){
@@ -188,7 +193,6 @@ export class FalcoEventsListComponent implements OnInit {
   setLimitToLocalStorage(limit: number) {
     localStorage.setItem('falco_table_limit', String(limit));
   }
-
 
   openDialog() {
     const dialog = this.dialog.open(
@@ -228,14 +232,8 @@ export class FalcoEventsListComponent implements OnInit {
 
   stripDomainName(image: string): string {
     if (!image) { return image; }
-
-    // if we want to return the repository name with the domain stripped out, use this instead
-    // return this.utilService.getImageNameWithRepository(image);
-
     return this.utilService.getImageName(image);
-  }
-
-  onClickSettings(){
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'falco', 'settings']);
+    // if we want to return the repository name with the domain stripped out, use this instead:
+    // return this.utilService.getImageNameWithRepository(image);
   }
 }

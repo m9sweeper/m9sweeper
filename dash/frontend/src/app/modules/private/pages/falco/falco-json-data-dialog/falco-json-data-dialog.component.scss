@@ -1,1 +1,18 @@
+#falco-dialog-buttons {
+  padding-right: 24px;
+  align-self: center;
+  justify-content: end;
+  display: flex;
+  a {
+    margin-right: 1em;
+  }
+}
 
+#event-details {
+  mat-header-row {
+    display: none;
+  }
+  .mat-column-title {
+    max-width: 100px;
+  }
+}
