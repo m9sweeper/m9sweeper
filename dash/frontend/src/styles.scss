@@ -285,8 +285,10 @@ app-private {
   mat-header-cell {
     font-weight: 550 !important;
   }
-  mat-card-header {}
-  mat-card-content {}
+  mat-cell {
+    touch-action: auto !important;
+    -webkit-user-drag: auto !important;
+  }
 }
 
 .page-card{
