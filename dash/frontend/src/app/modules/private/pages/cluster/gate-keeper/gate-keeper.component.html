@@ -28,26 +28,26 @@
             <div class="row">
 
               <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-                  <p *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationText">
-                    We recommend you install Gatekeeper so that you can use M9sweeper to manager policies in your Kubernetes cluster.
+                  <p *ngIf="gatekeeperConstraintTemplates === null; else recommendationText">
+                    We recommend installing Gatekeeper to manage policies in your Kubernetes cluster.
                   </p>
                   <ng-template #recommendationText>
-                    <p *ngIf="(gatekeeperConstraintTemplates$ | async).length === 0">
-                      We strongly recommend you use our setup wizard to setup reasonable defaults for Gatekeeper.
+                    <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
+                      Gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
                     </p>
-                    <p *ngIf="(gatekeeperConstraintTemplates$ | async).length > 0">
-                      Well done! We recommend you regularly review the constraints you have setup as well as the current compliance of each application in your cluster!
+                    <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
+                      Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
                     </p>
                   </ng-template>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                 <div class="text-align-right">
-                  <button  mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="(gatekeeperConstraintTemplates$ | async) === null; else recommendationButton">
+                  <button  mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
                     Install
                   </button>
                   <ng-template #recommendationButton>
-                    <button  mat-raised-button color="primary" (click)="openAddConstraintDialog()" *ngIf="(gatekeeperConstraintTemplates$ | async).length === 0">
+                    <button  mat-raised-button color="primary" (click)="openAddConstraintDialog()" *ngIf="gatekeeperConstraintTemplates?.length === 0">
                       Setup
                     </button>
                   </ng-template>

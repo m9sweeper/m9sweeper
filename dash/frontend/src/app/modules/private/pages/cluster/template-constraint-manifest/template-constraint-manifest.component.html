@@ -1,26 +1,16 @@
-<mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
-    <mat-card appearance="outlined">
-      <mat-card-header class="page-card-title">
-        <h4>Edit Manifest</h4>
-      </mat-card-header>
-      <mat-card-content>
-        <ngx-codemirror #codemirror
-                        [options]="codeMirrorOptions"
-                        [(ngModel)]="rawTemplate"
-                        (ngModelChange)="setEditorContent($event)">
-
-        </ngx-codemirror>
-
-      </mat-card-content>
-      <br>
-      <mat-card-actions class="modal-content-left-align-no-margin">
-        <div >
-          <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="saveManifest()">Save Changes</button>
-          &nbsp;
-          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-        </div>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+<div mat-dialog-title
+>Edit Manifest
+</div>
+<mat-dialog-content>
+  <ngx-codemirror #codemirror
+                  [options]="codeMirrorOptions"
+                  [(ngModel)]="rawTemplate"
+                  (ngModelChange)="setEditorContent($event)">
+  </ngx-codemirror>
 </mat-dialog-content>
+<mat-dialog-actions>
+  <div class="ps-one-rem">
+    <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="saveManifest()">Save Changes</button>
+    <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+  </div>
+</mat-dialog-actions>
