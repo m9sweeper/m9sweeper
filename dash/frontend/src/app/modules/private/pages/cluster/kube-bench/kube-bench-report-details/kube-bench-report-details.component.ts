@@ -26,7 +26,6 @@ export class KubeBenchReportDetailsComponent implements OnInit {
     this.kubeBenchService.getKubeBenchReportById(this.id)
       .pipe(take(1))
       .subscribe(rtrn => {
-        console.log({rtrn});
         this.report = rtrn.resultsJson;
     });
   }

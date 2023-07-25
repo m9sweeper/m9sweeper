@@ -3,7 +3,7 @@
     <div class="page-title">
       Kube Bench Test Results
     </div>
-    <div *ngIf="report && report.Totals" style="font-weight: bold; margin-bottom: 1em;">
+    <div *ngIf="report && report.Totals" class="page-subtitle">
       {{report.Totals.total_pass}}/{{report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn}} Tests Passed
     </div>
 
@@ -13,8 +13,7 @@
 
     <div *ngIf="report && report.Controls">
       <mat-accordion *ngFor="let section of report.Controls" multi class="control-accordions">
-        <div>
-          <mat-expansion-panel>
+          <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 {{section.id}}
@@ -94,7 +93,6 @@
               </mat-expansion-panel>
             </mat-accordion>
           </mat-expansion-panel>
-        </div>
       </mat-accordion>
     </div>
 
