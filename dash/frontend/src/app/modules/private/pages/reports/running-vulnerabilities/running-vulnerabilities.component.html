@@ -70,15 +70,16 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <div class="row full-width">
-            <div class="col-md-9 col-sm-6 col-xs-12 vulnerability-count">
+            <div class="col-xs-10 vulnerability-count">
               <p class="title-font title-margin">Displaying {{lowNumCurrentShownVulnerabilities}}-{{highNumCurrentShownVulnerabilities}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12 vulnerability-download-button">
+            <div class="col-xs-2 vulnerability-download-button">
               <button (click)="downloadReport()"
-                      mat-raised-button
+                      mat-mini-fab
                       color="primary"
                       class="mb-half-rem"
-                      type="button">Download Report
+                      matTooltip="Download Report"
+                      type="button"><mat-icon>save_alt</mat-icon>
               </button>
             </div>
           </div>
