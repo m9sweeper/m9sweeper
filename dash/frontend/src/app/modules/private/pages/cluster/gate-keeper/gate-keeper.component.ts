@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
-import {Subject} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -10,17 +9,16 @@ import {MatDialog} from '@angular/material/dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
-import {take, takeUntil} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-gate-keeper',
   templateUrl: './gate-keeper.component.html',
   styleUrls: ['./gate-keeper.component.scss']
 })
-export class GateKeeperComponent implements OnInit, OnDestroy {
+export class GateKeeperComponent implements OnInit {
   clusterId: number;
   gatekeeperConstraintTemplates: IGateKeeperConstraintDetails[];
-  unsubscribe$ = new Subject<void>();
   gatekeeperTemplates: MatTableDataSource<IGateKeeperConstraintDetails>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -39,7 +37,7 @@ export class GateKeeperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.checkGatekeeperStatus();
     this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(take(1))
       .subscribe({
         next: response => {
           this.gatekeeperConstraintTemplates = response;
@@ -50,11 +48,6 @@ export class GateKeeperComponent implements OnInit, OnDestroy {
         }
       });
     this.loadGateKeeperConstraintTemplates();
-  }
-
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   loadGateKeeperConstraintTemplates() {
