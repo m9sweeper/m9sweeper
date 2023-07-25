@@ -442,7 +442,6 @@ mat-form-field {
       padding-left: 10px;
       padding-right: 10px;
       margin-right: unset;
-      min-width: 8em;
     }
   }
 }
@@ -556,6 +555,7 @@ mat-form-field {
   justify-content: right;
   padding-right: 15px;
   align-content: center;
+  align-items: center;
 }
 
 .vulnerability-count {
@@ -566,7 +566,7 @@ mat-form-field {
 }
 
 .vulnerability-card {
-  min-width: 800px;
+  min-width: 350px;
   padding-bottom: 20px;
 }
 
@@ -801,4 +801,26 @@ app-datepicker-component {
 
 .mt-half-rem {
   margin-top: 0.5rem;
+}
+
+.mb-half-rem {
+  margin-bottom: 0.5rem;
+}
+
+.min-width-8 {
+  min-width: 8rem;
+}
+
+.min-width-4 {
+  min-width: 4rem;
+}
+
+.min-width-3 {
+  min-width: 3rem;
+}
+
+.ngx-charts .bar,
+.ngx-charts .bar,
+.ngx-charts .circle {
+  cursor: default !important; // disable ngx-chart's default behavior of changing the cursor to a pointer on hover
 }
