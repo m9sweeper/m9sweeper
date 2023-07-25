@@ -9,19 +9,9 @@ import {IKubeBenchLog} from '../../../../../../core/entities/IKubeBenchReport';
   selector: 'app-kube-bench-report-details',
   templateUrl: './kube-bench-report-details.component.html',
   styleUrls: ['./kube-bench-report-details.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-    transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-])
-  ]
 })
 export class KubeBenchReportDetailsComponent implements OnInit {
-
-  displayedColumns = ['test', 'description', 'pass/fail'];
   id: number;
-  expandedElement: any | null;
   report: IKubeBenchLog;
 
   constructor(
@@ -36,6 +26,7 @@ export class KubeBenchReportDetailsComponent implements OnInit {
     this.kubeBenchService.getKubeBenchReportById(this.id)
       .pipe(take(1))
       .subscribe(rtrn => {
+        console.log({rtrn});
         this.report = rtrn.resultsJson;
     });
   }
