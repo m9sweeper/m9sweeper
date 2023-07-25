@@ -2,22 +2,30 @@
   line-height: 1.5;
 }
 
-.mat-column-severity {
-  min-width: 100px;
-}
+mat-card {
+  margin: 1em 0;
+  mat-table {
+    margin-bottom: 0.5em;
+  }
 
-.mat-column-category {
-  min-width: 300px;
-}
+  .mat-column-severity {
+    min-width: 100px;
+  }
 
-.mat-column-vulnerability {
-  min-width: 200px;
-}
+  .mat-column-category {
+    min-width: 300px;
+  }
 
-.mat-column-description {
-  min-width: 400px;
-}
+  .mat-column-vulnerability {
+    min-width: 200px;
+  }
 
-.mat-column-additionalInfo {
-  min-width: 400px;
+  .mat-column-description {
+    min-width: 400px;
+  }
+
+  .mat-column-additionalInfo {
+    min-width: 400px;
+  }
+
 }
