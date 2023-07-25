@@ -70,13 +70,14 @@
       <mat-card appearance="outlined">
         <mat-card-header>
           <div class="row full-width">
-            <div class="col-xs-9 vulnerability-count">
+            <div class="col-md-9 col-sm-6 col-xs-12 vulnerability-count">
               <p class="title-font title-margin">Displaying {{lowNumCurrentShownVulnerabilities}}-{{highNumCurrentShownVulnerabilities}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
-            <div class="col-xs-3 vulnerability-download-button">
+            <div class="col-md-3 col-sm-6 col-xs-12 vulnerability-download-button">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"
+                      class="mb-half-rem"
                       type="button">Download Report
               </button>
             </div>
@@ -86,73 +87,75 @@
           <div class="page-table">
             <mat-table [dataSource]="dataSource">
               <ng-container matColumnDef="image" class="column-word-break">
-                <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.image}}</mat-cell>
+                <mat-header-cell class="min-width-8" *matHeaderCellDef>Image</mat-header-cell>
+                <mat-cell class="min-width-8" *matCellDef="let vulnerability">{{vulnerability.image}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="namespaces">
-                <mat-header-cell *matHeaderCellDef>Namespace(s)</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.namespaces}}</mat-cell>
+                <mat-header-cell class="min-width-8" *matHeaderCellDef>Namespace(s)</mat-header-cell>
+                <mat-cell class="min-width-8" *matCellDef="let vulnerability">{{vulnerability.namespaces}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="scanResults">
-                <mat-header-cell *matHeaderCellDef>Compliance</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.scanResults}}</mat-cell>
+                <mat-header-cell class="min-width-4" *matHeaderCellDef>Compliance</mat-header-cell>
+                <mat-cell class="min-width-4" *matCellDef="let vulnerability">{{vulnerability.scanResults}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="lastScanned" class="column-word-break">
-                <mat-header-cell *matHeaderCellDef>Date Scanned</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.lastScanned | date: 'M/d/yyyy'}}</mat-cell>
+                <mat-header-cell class="min-width-4" *matHeaderCellDef>Date Scanned</mat-header-cell>
+                <mat-cell class="min-width-4" *matCellDef="let vulnerability">{{vulnerability.lastScanned | date: 'M/d/yyyy'}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalCritical" class="column-word-break">
-                <mat-header-cell *matHeaderCellDef>Critical</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalCritical}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Critical</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalCritical}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalMajor">
-                <mat-header-cell *matHeaderCellDef>Major</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalMajor}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Major</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalMajor}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalMedium">
-                <mat-header-cell *matHeaderCellDef>Medium</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalMedium}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Medium</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalMedium}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalLow">
-                <mat-header-cell *matHeaderCellDef>Low</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalLow}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Low</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalLow}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalNegligible">
-                <mat-header-cell *matHeaderCellDef>Negligible</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalNegligible}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Negligible</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalNegligible}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableCritical" class="column-word-break">
-                <mat-header-cell *matHeaderCellDef>Critical Fixable</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableCritical}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Critical Fixable</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableCritical}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableMajor">
-                <mat-header-cell *matHeaderCellDef>Major Fixable</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableMajor}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Major Fixable</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableMajor}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableMedium">
-                <mat-header-cell *matHeaderCellDef>Medium Fixable</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableMedium}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Medium Fixable</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableMedium}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableLow">
-                <mat-header-cell *matHeaderCellDef>Low Fixable</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableLow}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Low Fixable</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableLow}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableNegligible">
-                <mat-header-cell *matHeaderCellDef>Negligible Fixable</mat-header-cell>
-                <mat-cell *matCellDef="let vulnerability">{{vulnerability.totalFixableNegligible}}</mat-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>Negligible Fixable</mat-header-cell>
+                <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableNegligible}}</mat-cell>
               </ng-container>
 
               <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
-            <mat-paginator
-              [length]="vulnerabilityCount"
-              [pageSize]="20"
-              [pageSizeOptions]="[ 10, 20, 50 ]"
-              (page)="pageEvent($event)"
-            ></mat-paginator>
           </div>
         </mat-card-content>
+        <mat-card-footer>
+          <mat-paginator
+            [length]="vulnerabilityCount"
+            [pageSize]="20"
+            [pageSizeOptions]="[ 10, 20, 50 ]"
+            (page)="pageEvent($event)"
+          ></mat-paginator>
+        </mat-card-footer>
       </mat-card>
     </div>
   </div>
