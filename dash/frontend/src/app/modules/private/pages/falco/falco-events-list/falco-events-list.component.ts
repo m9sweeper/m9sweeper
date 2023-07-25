@@ -216,6 +216,16 @@ export class FalcoEventsListComponent implements OnInit {
       });
   }
 
+  truncateString(rawString) {
+    if (!rawString) {
+      return rawString;
+    }
+    if (rawString.length <= 17) {
+      return rawString;
+    }
+    return `${rawString.substring(0, 17)}...`;
+  }
+
   stripDomainName(image: string): string {
     if (!image) { return image; }
 

@@ -1,64 +1,45 @@
-.mr-10px {
-  margin-right: 10px;
-}
-.report-header{
-  width:100%;
+mat-card {
+  margin-block: 1em;
 }
 
-.falco-table {
-  .mat-column-calendarDate {
-    width: 100px;
-    min-width: 50px;
-    max-width: 100px;
-    padding-right: 5px;
-    overflow: hidden;
+#report-buttons {
+  text-align: right;
+  > button {
+    margin-bottom: 0.5em;
+  }
+}
+
+#falco-table {
+  mat-row {
     white-space: nowrap;
+  }
+
+  .mat-column-calendarDate {
+    min-width: 100px;
+    max-width: 125px;
   }
 
   .mat-column-namespace {
-    width: 120px;
-    min-width: 100px;
-    max-width: 120px;;
-    padding-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
+    min-width: 125px;
+    max-width: 150px;
   }
 
   .mat-column-pod {
-    width: 120px;
-    min-width: 100px;
-    max-width:120px;;
-    //max-width: 7%;
-    padding-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
+    min-width: 125px;
+    max-width: 150px;
   }
 
   .mat-column-image {
-    //max-width: 7%;
-    width: 150px;
     min-width: 100px;
-    max-width: 150px;;
-   //white-space: nowrap;
-    overflow: hidden;
-    white-space: nowrap;
+    max-width: 150px;
   }
 
   .mat-column-priority {
-    width: 100px;
     min-width: 50px;
-    max-width:100px;
-    padding-right: 10px;
-    overflow: hidden;
-    white-space: nowrap;
+    max-width: 100px;
   }
 
   .mat-column-message {
-    //max-width: 60%;
-    //width: 200px;
     min-width: 200px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
   }
 }
