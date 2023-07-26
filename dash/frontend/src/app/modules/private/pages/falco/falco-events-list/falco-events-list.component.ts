@@ -115,7 +115,6 @@ export class FalcoEventsListComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         this.dataSource = new MatTableDataSource(response.data.list);
-        this.displayEventDetails(response.data.list[0]);
         this.logCount = response.data.logCount;
       }, (err) => {
         if (err?.error?.message) {
