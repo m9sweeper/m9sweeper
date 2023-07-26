@@ -111,16 +111,9 @@ button {
   --mdc-dialog-supporting-text-color: rgba(0, 0, 0, 1);
 }
 
- .mat-mdc-dialog-container {
-  padding: 20px;
-  margin-left: 20px;
-
+.mat-mdc-dialog-container {
+  padding-block: 20px;
 }
-  // falco dialog height
-  mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat-mdc-dialog-container .mdc-dialog__surface {
-    height: fit-content;
-   // overflow-y: auto;
-  }
 
 
 // organization menu text
@@ -240,6 +233,9 @@ button {
 }
 .mat-mdc-dialog-container .mdc-dialog__surface {
   padding:10px;
+}
+.mat-mdc-dialog-content {
+  max-height: unset !important;
 }
 
 app-private {

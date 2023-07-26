@@ -38,7 +38,7 @@ export class FalcoJsonDataDialogComponent implements OnInit {
   ) {}
 
   dataSource: MatTableDataSource<IFalcoLog>;
-  displayedColumns = ['isCurrent', 'calendarDate', 'namespace', 'pod', 'image', 'message'];
+  displayedColumns = ['is-current', 'calendar-date', 'namespace', 'pod', 'image', 'message'];
 
   eventDetails = new MatTableDataSource( [
     {
@@ -65,9 +65,13 @@ export class FalcoJsonDataDialogComponent implements OnInit {
       title: 'Message',
       value: this.data.message,
     },
+    {
+      title: 'Signature',
+      value: this.data.anomalySignature,
+    },
   ]);
 
-  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
+  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
   logCount: number;
   page: number;
 

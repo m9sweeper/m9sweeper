@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-xs-9" matDialogTitle>
+  <div class="col-xs-12 col-sm-9" matDialogTitle>
     Event Log Details
   </div>
-  <div class="col-xs-3" id="falco-dialog-buttons" style="align-items:end">
+  <div class="col-xs-12 col-sm-3" id="falco-dialog-buttons">
     <a mat-raised-button mat-dialog-close color="primary"
        [routerLink]="['/private', 'clusters', this.data.clusterId, 'falco', 'more', this.data.id, 'signature', this.data.anomalySignature]"
      >More</a>
@@ -11,15 +11,15 @@
 </div>
 <mat-dialog-content>
   <div class="scrollable-table-card">
-    <div class="table-wrapper">
-      <mat-table [dataSource]="eventDetails" id="event-details">
+    <div class="table-wrapper" id="event-details-wrapper">
+      <mat-table [dataSource]="eventDetails" id="event-details-table">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
           <mat-cell *matCellDef="let detail"><b>{{detail.title}}</b></mat-cell>
         </ng-container>
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-          <mat-cell *matCellDef="let detail">{{detail.value}}</mat-cell>
+          <mat-cell *matCellDef="let detail"  [matTooltip]="detail.value">{{detail.value}}</mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="['title', 'value']" ></mat-header-row>
         <mat-row *matRowDef="let row; columns: ['title', 'value']"></mat-row>
@@ -27,22 +27,18 @@
     </div>
   </div>
 
-  <div>
-    <div>Related Events</div>
-    <div>Signature: {{this.data.anomalySignature}}</div>
-  </div>
+  <div matDialogTitle id="related-events-title">Related Events</div>
 
   <div class="scrollable-table-card">
     <div class="table-wrapper">
-      <mat-table [dataSource]="dataSource">
-        <ng-container matColumnDef="isCurrent">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-table [dataSource]="dataSource" id="related-events-table">
+        <ng-container matColumnDef="is-current">
+          <mat-header-cell *matHeaderCellDef>Current Log?</mat-header-cell>
           <mat-cell *matCellDef="let log" class="">
             {{log.isCurrent ? '*' : ''}}
           </mat-cell>
-          <mat-cell *matCellDef="let log" class="">*</mat-cell>
         </ng-container>
-        <ng-container matColumnDef="calendarDate">
+        <ng-container matColumnDef="calendar-date">
           <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
           <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
         </ng-container>
@@ -60,7 +56,7 @@
         </ng-container>
         <ng-container matColumnDef="message">
           <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-          <mat-cell *matCellDef="let log">
+          <mat-cell *matCellDef="let log" [matTooltip]="log.message">
             {{log.message}}
           </mat-cell>
         </ng-container>
@@ -71,15 +67,9 @@
     <mat-paginator
       [length]="logCount"
       [pageSize]="limit"
-      [pageSizeOptions]="[ 20, 50, 100]"
+      [pageSizeOptions]="[10, 20, 50, 100]"
       (page)="pageEvent($event)"
-      style="max-width:750px"
       showFirstLastButtons>
     </mat-paginator>
   </div>
-
-  <div>Event Content:</div>
-  <div class="row" [innerHTML]="data | tablify"></div>
-  <div>Related Events:</div>
-  <div class="row" [innerHTML]="dataSource | tablify"></div>
 </mat-dialog-content>
