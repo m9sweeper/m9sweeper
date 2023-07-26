@@ -173,21 +173,4 @@ export class FalcoEventsListComponent implements OnInit {
         }
       });
   }
-
-  truncateString(rawString) {
-    if (!rawString) {
-      return rawString;
-    }
-    if (rawString.length <= 17) {
-      return rawString;
-    }
-    return `${rawString.substring(0, 17)}...`;
-  }
-
-  stripDomainName(image: string): string {
-    if (!image) { return image; }
-    return this.utilService.getImageName(image);
-    // if we want to return the repository name with the domain stripped out, use this instead:
-    // return this.utilService.getImageNameWithRepository(image);
-  }
 }
