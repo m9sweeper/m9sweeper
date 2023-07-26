@@ -19,6 +19,14 @@ mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat
   }
 }
 
+#full-message-div {
+  margin-top: 1em;
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+#full-message-panel {
+  box-shadow: unset;
+}
+
 #related-events-title {
   margin-block: 1em;
 }
@@ -37,32 +45,6 @@ mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat
   }
 
   .mat-column-value {
-    min-width: 1100px;
-  }
-}
-
-#related-events-table {
-  .mat-column-is-current {
-    min-width: 75px;
-  }
-
-  .mat-column-calendar-date {
-    min-width: 110px;
-  }
-
-  .mat-column-namespace {
-    min-width: 150px;
-  }
-
-  .mat-column-pod {
-    min-width: 250px;
-  }
-
-  .mat-column-image {
-    min-width: 150px;
-  }
-
-  .mat-column-message {
-    min-width: 1100px;
+    min-width: 1500px;
   }
 }

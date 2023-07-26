@@ -121,57 +121,14 @@
             </div>
           </mat-card-header>
           <mat-card-content>
-            <div class="table-wrapper">
-              <mat-table [dataSource]="dataSource" id="falco-table">
-
-                <ng-container matColumnDef="calendarDate">
-                  <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                  <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="namespace">
-                  <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-                  <mat-cell *matCellDef="let log">{{truncateString(log.namespace)}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="pod">
-                  <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-                  <mat-cell *matCellDef="let log">{{truncateString(log.container)}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="image">
-                  <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-                  <mat-cell *matCellDef="let log">{{truncateString(stripDomainName(log.image))}}</mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="message">
-                  <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-                  <mat-cell *matCellDef="let log">
-                    {{log.message}}
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="priority">
-                  <mat-header-cell *matHeaderCellDef>Priority</mat-header-cell>
-                  <mat-cell *matCellDef="let log">{{log.level}}</mat-cell>
-                </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"
-                         (click)="displayEventDetails(row)"
-                         class="pointer">
-                </mat-row>
-              </mat-table>
-            </div>
+            <app-falco-related-events-table-card
+              [clusterId]="clusterId"
+              [filters]="falcoLogFilters"
+              [displayedColumns]="falcoEventLogsColumns"
+              [stylingOptions]="falcoEventLogsStylingOptions"
+              (recentEventClicked)="displayEventDetails($event)"
+            ></app-falco-related-events-table-card>
           </mat-card-content>
-          <mat-card-footer>
-              <mat-paginator
-                [length]="logCount"
-                [pageSize]="limit"
-                [pageSizeOptions]="[ 20, 50, 100]"
-                (page)="pageEvent($event)"
-                showFirstLastButtons>
-              </mat-paginator>
-          </mat-card-footer>
         </mat-card>
       </div>
     </div>

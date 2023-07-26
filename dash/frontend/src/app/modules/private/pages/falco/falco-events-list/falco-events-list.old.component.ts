@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FalcoLogOptions, FalcoService} from '../../../../../core/services/falco.service';
+import {FalcoService} from '../../../../../core/services/falco.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
@@ -28,6 +28,8 @@ import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json
   styleUrls: ['./falco-events-list.component.scss']
 })
 export class FalcoEventsListComponent implements OnInit {
+
+  dataSource: MatTableDataSource<IFalcoLog>;
   displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'priority', 'message'];
   clusterId: number;
   dialogRef: MatDialogRef<FalcoJsonDataDialogComponent>;
@@ -36,14 +38,14 @@ export class FalcoEventsListComponent implements OnInit {
   priorityLevels: string [] = ['Emergency', 'Alert', 'Critical', 'Error', 'Warning', 'Notice', 'Informational', 'Debug'];
   orderByOptions: string [] = ['Priority Desc', 'Priority Asc', 'Date Desc', 'Date Asc'];
 
+  logCount: number; // accumulated log total per forward/backward click
+  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20; // page size
+  page: number; // number of pages
+  startDate: string;
+  endDate: string;
+  signature: string;
   isAllowed: boolean;
   allowedRoles: string [] = ['ADMIN', 'SUPER_ADMIN'];
-
-  falcoLogFilters: Partial<FalcoLogOptions> = {};
-  falcoEventLogsColumns = ['calendar-date', 'namespace', 'pod', 'image', 'message'];
-  falcoEventLogsStylingOptions = {
-    tableBorder: false,
-  };
 
   constructor(
     private falcoService: FalcoService,
@@ -81,24 +83,52 @@ export class FalcoEventsListComponent implements OnInit {
 
   }
 
-  getEvents() {
-    if (this.filterForm.get('startDate').value) {
-      this.falcoLogFilters.startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
-    }
-    if (this.filterForm.get('endDate').value) {
-      this.falcoLogFilters.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
-    }
-    this.falcoLogFilters.selectedPriorityLevels = this.filterForm.get('selectedPriorityLevels').value;
-    this.falcoLogFilters.selectedOrderBy = this.filterForm.get('selectedOrderBy').value;
-    this.falcoLogFilters.namespace = this.filterForm.get('namespaceInput').value;
-    this.falcoLogFilters.pod = this.filterForm.get('podInput').value;
-    this.falcoLogFilters.image = this.filterForm.get('imageInput').value;
+  pageEvent(pageEvent: any) {
+    this.limit = pageEvent.pageSize;
+    this.page = pageEvent.pageIndex;
+    this.setLimitToLocalStorage(this.limit);
 
-    // ngOnChanges uses dirty checking (aka it compares the object reference and not the values)
-    // --> need the object to be different so it triggers the onChange event
-    this.falcoLogFilters = structuredClone(this.falcoLogFilters);
+    this.getEvents(); // load logs when page event changes
   }
 
+  getEvents() {
+    if (this.filterForm.get('startDate').value) {
+      this.startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
+    }
+    if (this.filterForm.get('endDate').value) {
+      this.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
+    }
+
+    this.falcoService.getFalcoLogs(
+      this.clusterId, {
+        limit: this.limit,
+        page: this.page,
+        selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+        selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        namespace: this.filterForm.get('namespaceInput').value,
+        pod: this.filterForm.get('podInput').value,
+        image: this.filterForm.get('imageInput').value,
+        signature: this.signature}
+    )
+      .pipe(take(1))
+      .subscribe(response => {
+        this.dataSource = new MatTableDataSource(response.data.list);
+        this.logCount = response.data.logCount;
+      }, (err) => {
+        if (err?.error?.message) {
+          this.alertService.danger(err.error.message);
+        } else if (err?.error) {
+          this.alertService.danger(err.error);
+        } else if (err?.message) {
+          this.alertService.danger(err.message);
+        } else {
+          this.alertService.danger(err);
+        }
+      });
+
+  }
   getUserAuthority() {
     const currentUserRoles = this.jwtAuthService.currentUserAuthorities as string[];
     this.isAllowed = this.allowedRoles.filter(role => currentUserRoles.includes(role))?.length > 0;
@@ -116,7 +146,20 @@ export class FalcoEventsListComponent implements OnInit {
   downloadReport() {
     this.loaderService.start('csv-download');
     // should only download filtered logs
-    this.falcoService.downloadFalcoExport(this.clusterId, this.falcoLogFilters)
+    this.falcoService.downloadFalcoExport(
+      this.clusterId, {
+        limit: this.limit,
+        page: this.page,
+        selectedPriorityLevels: this.filterForm.get('selectedPriorityLevels').value,
+        selectedOrderBy: this.filterForm.get('selectedOrderBy').value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        namespace: this.filterForm.get('namespaceInput').value,
+        pod: this.filterForm.get('podInput').value,
+        image: this.filterForm.get('imageInput').value,
+        signature: this.signature
+      }
+    )
       .pipe(take(1))
       .subscribe(
         (response) => {
@@ -128,13 +171,13 @@ export class FalcoEventsListComponent implements OnInit {
           this.loaderService.stop('csv-download');
         }
       );
-    }
+  }
 
   rebuildWithFilters(){
     if (!this.filtersValid) {
       this.alertService.danger('Invalid filter settings; please recheck filter values');
     }else {
-        this.getEvents();
+      this.getEvents();
     }
   }
 

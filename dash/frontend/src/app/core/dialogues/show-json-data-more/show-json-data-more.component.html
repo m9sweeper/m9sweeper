@@ -1,7 +1,7 @@
 <div class ="page-container">
   <div class="page-container-content">
     <div class="page-title-button-group-spacing">
-      <div >
+      <div>
         <div class="page-title"> Event Details</div>
       </div>
       <div >
@@ -19,7 +19,7 @@
             </mat-card-header>
             <mat-card-content>
               <div class="event-table">
-                <div >
+                <div>
                   <table>
                     <tr>
                       <th>Namespace</th> <td>{{namespace}}</td>
@@ -73,112 +73,75 @@
       </div>
     </div>
   <br>
-  <div class="page-card">
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div class="page-card-header">
-          <div class=" col-sm-3 no-padding">
-            <div class="page-card-title">
-              Related Events
-            </div>
-          </div>
-          <div class="col-sm-9 page-card-title-button-group-right-align">
-            Signature: {{signature}}
+  <mat-card class="scrollable-table-card">
+    <mat-card-header>
+      <div class="page-card-header">
+        <div class=" col-sm-3 no-padding">
+          <div class="page-card-title">
+            Related Events
           </div>
         </div>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="event-table">
-          <mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="calendarDate">
-              <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-              <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="namespace">
-              <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-              <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="pod">
-              <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-              <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="image">
-              <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-              <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="message">
-              <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-              <mat-cell *matCellDef="let log">
-                {{log.message}}
-              </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
-          </mat-table>
+        <div class="col-sm-9 page-card-title-button-group-right-align">
+          Signature: {{signature}}
         </div>
-        </mat-card-content>
-        <mat-paginator
-          [length]="logCount"
-          [pageSize]="limit"
-          [pageSizeOptions]="[ 20, 50, 100]"
-          (page)="pageEvent($event)"
-          showFirstLastButtons>
-        </mat-paginator>
-
-    </mat-card>
-  </div>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <app-falco-related-events-table-card
+        [clusterId]="clusterId"
+        [currentEventLogId]="eventId"
+        [filters]="{ signature }"
+        [stylingOptions]="falcoEventLogsStylingOptions"
+        (recentEventClicked)="displayEventDetails($event)"
+      ></app-falco-related-events-table-card>
+    </mat-card-content>
+  </mat-card>
   <br>
-  <div class="page-card">
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <div class="page-card-header">
-          <div class="col-sm-3 no-padding">
-            <div class="page-card-title">
-              Raw Data
-            </div>
-          </div>
-          <div class="col-sm-9 page-card-title-button-group-right-align">
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
-              <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
-              <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
-            </mat-button-toggle-group>
+  <mat-card class="scrollable-table-card">
+    <mat-card-header>
+      <div class="page-card-header">
+        <div class="col-sm-3 no-padding">
+          <div class="page-card-title">
+            Raw Data
           </div>
         </div>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="event-table">
-          <b>Raw:</b>
-          <div> {{message}}</div>
-          <br>
-          <b>Formatted:</b>
-          <div>
-            <div *ngIf="format === 'yaml'; then displayInYaml"></div>
-            <ng-template #displayInYaml>
-              <pre [innerHTML]="rawInFormat"></pre>
-            </ng-template>
-          </div>
-          <div>
-            <div *ngIf="format === 'json'; then displayInJson"></div>
-            <ng-template #displayInJson>
-              <pre [innerHTML]="rawInFormat"></pre>
-
-            </ng-template>
-          </div>
-
-          <div>
-            <div *ngIf="format === 'table'; then displayInTable"></div>
-            <ng-template #displayInTable>
-              <div [innerHTML]="raw | tablify" class="table-format"></div>
-            </ng-template>
-          </div>
+        <div class="col-sm-9 page-card-title-button-group-right-align">
+          <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+            <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
+            <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
+            <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
+          </mat-button-toggle-group>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="event-table">
+        <b>Raw:</b>
+        <div> {{message}}</div>
+        <br>
+        <b>Formatted:</b>
+        <div>
+          <div *ngIf="format === 'yaml'; then displayInYaml"></div>
+          <ng-template #displayInYaml>
+            <pre [innerHTML]="rawInFormat"></pre>
+          </ng-template>
+        </div>
+        <div>
+          <div *ngIf="format === 'json'; then displayInJson"></div>
+          <ng-template #displayInJson>
+            <pre [innerHTML]="rawInFormat"></pre>
+
+          </ng-template>
+        </div>
+
+        <div>
+          <div *ngIf="format === 'table'; then displayInTable"></div>
+          <ng-template #displayInTable>
+            <div [innerHTML]="raw | tablify" class="table-format"></div>
+          </ng-template>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 </div>

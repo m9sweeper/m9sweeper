@@ -25,11 +25,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     private alertService: AlertService,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
-    private utilService: UtilService,
   ) {}
-
-  dataSource: MatTableDataSource<IFalcoLog>;
-  displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'message'];
 
   signature: string;
   clusterId: number;
@@ -44,10 +40,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   format = 'table';
   rawInFormat: string;
   extractProperty: {key: string, value: string}[] = [];
-
-  limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 20;
-  logCount: number;
-  page: number;
 
   falcoCountData: IFalcoCount[];
   eventData: IFalcoLog;
@@ -71,27 +63,21 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     xAxisLabel: 'Day of Month',
   };
 
+
+  falcoEventLogsStylingOptions = {
+    tableBorder: false,
+  };
+
   ngOnInit(): void {
     this.clusterId = this.route.parent.parent.snapshot.params.id;
     this.eventId = this.route.snapshot.params.eventId;
     this.signature = this.route.snapshot.params.signature;
-
     this.getEventById();
-
     this.buildBarChartData();
   }
 
   ngAfterViewInit() {
     this.setChartHeightWidth();
-  }
-
-  pageEvent(pageEvent: any) {
-    this.limit = pageEvent.pageSize;
-    this.page = pageEvent.pageIndex;
-    this.setLimitToLocalStorage(this.limit);
-    this.getEventById();
-    this.buildBarChartData();
-
   }
 
   getEventById(){
@@ -106,41 +92,9 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
         this.raw = response.data.raw;
         this.extractProperty = this.extractProperties(this.raw);
         this.eventData = response.data;
-
-        // all calls to related events are moved here to avoid a race condition
-        this.getRelatedEvents();
       }, (err) => {
         this.alertService.danger(err.error.message);
       });
-  }
-
-  getRelatedEvents(){
-    this.falcoService.getFalcoLogs(this.clusterId,  { limit: this.limit, page: this.page, signature: this.signature})
-      .pipe(take(1))
-      .subscribe(response => {
-        const dataList = response.data.list;
-        // one less log count - without the current event log
-        this.logCount = response.data.logCount - 1;
-
-        // create a new data list without the current event log
-        const newDataList = dataList.filter(i => i.id !== this.eventData.id);
-        // use the new data list to display related events
-        this.dataSource = new MatTableDataSource(newDataList);
-      }, (err) => {
-        this.alertService.danger(err.error.message);
-      });
-  }
-
-  stripDomainName(image: string): string {
-    return this.utilService.getImageName(image);
-  }
-
-  getLimitFromLocalStorage(): string | null {
-    return localStorage.getItem('falco_table_limit');
-  }
-
-  setLimitToLocalStorage(limit: number) {
-    localStorage.setItem('falco_table_limit', String(limit));
   }
 
   buildBarChartData() {
@@ -156,10 +110,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
                 value: Number(elem.count)
               };
             });
-          } else{
-            return false;
           }
-
         },
         error => {
           this.alertService.danger(error.error.message);

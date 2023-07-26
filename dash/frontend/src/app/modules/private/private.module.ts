@@ -131,6 +131,7 @@ import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluste
 import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 import {MenuComponent} from './menus/menu.component';
 import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog/falco-json-data-dialog.component';
+import {FalcoRelatedEventsTableCardComponent} from './pages/falco/falco-related-events-table-card/falco-related-events-table-card.component';
 
 
 @NgModule({
@@ -178,6 +179,7 @@ import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog
     FalcoEventsListComponent,
     FalcoDialogComponent,
     FalcoJsonDataDialogComponent,
+    FalcoRelatedEventsTableCardComponent,
     FalcoSettingsComponent,
     AddClusterWizardComponent,
     GateKeeperComponent,

@@ -27,49 +27,25 @@
     </div>
   </div>
 
+  <div id="full-message-div">
+    <mat-accordion>
+      <mat-expansion-panel id="full-message-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title><b>Full Message</b></mat-panel-title>
+        </mat-expansion-panel-header>
+        <div>{{this.data.message}}</div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
   <div matDialogTitle id="related-events-title">Related Events</div>
 
   <div class="scrollable-table-card">
-    <div class="table-wrapper">
-      <mat-table [dataSource]="dataSource" id="related-events-table">
-        <ng-container matColumnDef="is-current">
-          <mat-header-cell *matHeaderCellDef>Current Log?</mat-header-cell>
-          <mat-cell *matCellDef="let log" class="">
-            {{log.isCurrent ? '*' : ''}}
-          </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="calendar-date">
-          <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-          <mat-cell *matCellDef="let log" class="date-link" (click)="displayEventDetails(log)">{{log.calendarDate}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="namespace">
-          <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-          <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="pod">
-          <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-          <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="image">
-          <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-          <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="message">
-          <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-          <mat-cell *matCellDef="let log" [matTooltip]="log.message">
-            {{log.message}}
-          </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;">  </mat-row>
-      </mat-table>
-    </div>
-    <mat-paginator
-      [length]="logCount"
-      [pageSize]="limit"
-      [pageSizeOptions]="[10, 20, 50, 100]"
-      (page)="pageEvent($event)"
-      showFirstLastButtons>
-    </mat-paginator>
+    <app-falco-related-events-table-card
+      [clusterId]="data.clusterId"
+      [currentEventLogId]="data.id"
+      [filters]="{ signature: data.anomalySignature }"
+      (recentEventClicked)="displayEventDetails($event)"
+    ></app-falco-related-events-table-card>
   </div>
 </mat-dialog-content>

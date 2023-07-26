@@ -92,7 +92,7 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Time</th>
               <td mat-cell *matCellDef="let auditLog"> {{auditLog.createdAt}} </td>
             </ng-container>
-            <ng-container matColumnDef="data">
+            <ng-container matColumnDef="eventLog">
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> MetaData</th>
               <td mat-cell *matCellDef="let auditLog">
                 <a style="justify-content: left;" href="javascript:void(0)" (click)="showMetaDataDetails(auditLog)">View</a>

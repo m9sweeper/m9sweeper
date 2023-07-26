@@ -1,0 +1,42 @@
+<div class="table-wrapper" [ngClass]="stylingOptions.tableBorder ? 'include-table-border' : ''">
+  <mat-table [dataSource]="relatedEventsTableData" id="related-events-table">
+    <ng-container matColumnDef="is-current">
+      <mat-header-cell *matHeaderCellDef>Current Log?</mat-header-cell>
+      <mat-cell *matCellDef="let log" class="">
+        {{log.isCurrent ? '*' : ''}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="calendar-date">
+      <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+      <mat-cell *matCellDef="let log" class="date-link">{{log.calendarDate}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="namespace">
+      <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
+      <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="pod">
+      <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
+      <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="image">
+      <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
+      <mat-cell *matCellDef="let log">{{log.image}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="message">
+      <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
+      <mat-cell *matCellDef="let log" [matTooltip]="log.message">
+        {{log.message}}
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             class="pointer" (click)="rowClicked(row)"></mat-row>
+  </mat-table>
+</div>
+<mat-paginator
+  [length]="logCount"
+  [pageSize]="limit"
+  [pageSizeOptions]="[10, 20, 50, 100]"
+  (page)="pageEvent($event)"
+  showFirstLastButtons>
+</mat-paginator>
