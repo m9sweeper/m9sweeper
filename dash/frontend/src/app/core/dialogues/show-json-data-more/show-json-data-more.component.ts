@@ -203,6 +203,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
       { left: 16, right: 16 },
       500,
     );
-    this.barChartAttributes.view = [calculatedWidth, 348];
+    this.barChartAttributes.view = [calculatedWidth, 306];
   }
 }

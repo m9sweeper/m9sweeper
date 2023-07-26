@@ -22,6 +22,10 @@
 }
 
 #incidence-rate-graph-card {
+  mat-card-header {
+    padding: 16px;
+  }
+
   mat-card-content {
     align-self: center;
   }
