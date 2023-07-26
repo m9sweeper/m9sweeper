@@ -1,3 +1,17 @@
+#event-details-table {
+  mat-header-row {
+    display: none;
+  }
+
+  .mat-column-title {
+    max-width: 100px;
+  }
+
+  .mat-column-value {
+    min-width: 400px;
+  }
+}
+
 .event-table {
   overflow-y: auto !important;
   text-align: left;

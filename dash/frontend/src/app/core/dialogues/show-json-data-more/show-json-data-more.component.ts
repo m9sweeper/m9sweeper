@@ -31,10 +31,6 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   clusterId: number;
   eventId: number;
 
-  namespace: string;
-  date: Date;
-  pod: string;
-  image: string;
   message: string;
   raw: object;
   format = 'table';
@@ -43,6 +39,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
 
   falcoCountData: IFalcoCount[];
   eventData: IFalcoLog;
+  eventDetails: MatTableDataSource<{title: string, value: any}>;
   innerScreenWidth: number;
   resizeTimeout;
   barChartAttributes = {
@@ -84,14 +81,36 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
       this.falcoService.getFalcoLogByEventId( this.eventId )
       .pipe(take(1))
       .subscribe(response => {
-        this.namespace = response.data.namespace;
-        this.date = new Date(+(response.data.timestamp));
-        this.pod = response.data.container;
-        this.image = response.data.image;
         this.message = response.data.message;
         this.raw = response.data.raw;
         this.extractProperty = this.extractProperties(this.raw);
         this.eventData = response.data;
+        this.eventDetails = new MatTableDataSource( [
+          {
+            title: 'Namespace',
+            value: this.eventData.namespace,
+          },
+          {
+            title: 'Date',
+            value: new Date(+(this.eventData.timestamp)),
+          },
+          {
+            title: 'Pod',
+            value: this.eventData.container,
+          },
+          {
+            title: 'Image',
+            value: this.eventData.image,
+          },
+          {
+            title: 'Priority',
+            value: this.eventData.raw.priority,
+          },
+          {
+            title: 'Signature',
+            value: this.eventData.anomalySignature,
+          },
+        ]);
       }, (err) => {
         this.alertService.danger(err.error.message);
       });
