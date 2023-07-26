@@ -119,8 +119,8 @@ import {
 } from './pages/reports/vulnerability-difference-by-date/vulnerability-difference-by-date.component';
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
 import {FalcoDialogComponent} from './pages/falco/falco-dialog/falco-dialog.component';
-import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
-import {ShareEventComponent} from '../../core/dialogues/show-json-data-more/share-event.component';
+import {FalcoEventDetailsComponent} from './pages/falco/falco-event-details/falco-event-details.component';
+import {ShareLinkComponent} from '../../core/dialogues/share-link/share-link.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TablifyPipe} from '../../core/pipe/tablify.pipe';
@@ -131,6 +131,7 @@ import { FalcoRulesClusterListComponent } from './pages/falco/falco-rules-cluste
 import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 import {MenuComponent} from './menus/menu.component';
 import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog/falco-json-data-dialog.component';
+import {FalcoRelatedEventsTableComponent} from './pages/falco/falco-related-events-table/falco-related-events-table.component';
 
 
 @NgModule({
@@ -178,6 +179,7 @@ import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog
     FalcoEventsListComponent,
     FalcoDialogComponent,
     FalcoJsonDataDialogComponent,
+    FalcoRelatedEventsTableComponent,
     FalcoSettingsComponent,
     AddClusterWizardComponent,
     GateKeeperComponent,
@@ -213,8 +215,8 @@ import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog
     WorstImagesComponent,
     AuditLogComponent,
     ShowJsonDataComponent,
-    ShowJsonDataMoreComponent,
-    ShareEventComponent,
+    FalcoEventDetailsComponent,
+    ShareLinkComponent,
     DockerRegistryAuthTypePipe,
     VulnerabilityDifferenceOverTimeComponent,
     VulnerabilityDifferenceByDateComponent,

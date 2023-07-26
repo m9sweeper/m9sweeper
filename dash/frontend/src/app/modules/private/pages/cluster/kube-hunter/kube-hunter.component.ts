@@ -24,6 +24,9 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
   scansExist = false;
   mostRecentVulnerabilities = {low: 0, medium: 0, high: 0};
 
+  penetrationTestStatusInvalid: boolean;
+  penetrationTestText: string;
+
   displayedColumns: string[] = ['date', 'time', 'numVulnerabilities'];
   dataSource: MatTableDataSource<any>;
 
@@ -39,8 +42,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private loaderService: NgxUiLoaderService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.parent.params.pipe(take(1)).subscribe(param => this.clusterId = param.id);
@@ -72,10 +74,18 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
           this.allReportsForCluster = res.list;
           if (res.list[0] != null){
             this.daysPassed = Math.floor((Date.now() - res.list[0].createdAt) / (1000 * 60 * 60 * 24));
-            if (this.daysPassed >= 90){
+            if (this.daysPassed >= 90) {
               this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you ran Kube Hunter. You should run it again soon.';
+              this.penetrationTestStatusInvalid = true;
+              this.penetrationTestText = 'Report Outdated';
+            } else if (this.daysPassed >= 10) {
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter.';
+              this.penetrationTestStatusInvalid = true;
+              this.penetrationTestText = 'Report Outdated';
             } else {
               this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter.';
+              this.penetrationTestStatusInvalid = false;
+              this.penetrationTestText = 'Report Valid';
             }
             res.list[0].vulnerabilities?.value?.value?.forEach( vulnerability => {
               if (vulnerability.severity === 'low') {
@@ -93,9 +103,10 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
       }, (e) => {
         if (e.status === 404) {
           this.ourAdvice = 'Run Kube Hunter to find vulnerabilities within your cluster.';
+          this.penetrationTestText = 'Unknown';
         }
-        },
-        () => this.loaderService.stop());
+      },
+      () => this.loaderService.stop());
   }
 
   populateTable() {

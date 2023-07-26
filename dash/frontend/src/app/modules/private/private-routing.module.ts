@@ -53,7 +53,7 @@ import {
   VulnerabilityDifferenceByDateComponent
 } from './pages/reports/vulnerability-difference-by-date/vulnerability-difference-by-date.component';
 import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-events-list.component';
-import {ShowJsonDataMoreComponent} from '../../core/dialogues/show-json-data-more/show-json-data-more.component';
+import {FalcoEventDetailsComponent} from './pages/falco/falco-event-details/falco-event-details.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {FalcoOrgSettingsPageComponent} from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
 
@@ -136,7 +136,7 @@ const routes: Routes = [
               },
               {
                 path: 'more/:eventId/signature/:signature',
-                component: ShowJsonDataMoreComponent,
+                component: FalcoEventDetailsComponent,
                 data: {
                   title: 'Project Falco Detail Logs'
                 }

@@ -1,1 +1,50 @@
+::ng-deep
+.mat-mdc-dialog-surface {
+  overflow-x: hidden;
+}
 
+::ng-deep
+mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat-mdc-dialog-container .mdc-dialog__surface {
+  height: fit-content;
+  // overflow-y: auto;
+}
+
+#falco-dialog-buttons {
+  padding-right: 24px;
+  align-self: center;
+  justify-content: space-evenly;
+  display: flex;
+  a {
+    margin-right: 1em;
+  }
+}
+
+#full-message-div {
+  margin-top: 1em;
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+#full-message-panel {
+  box-shadow: unset;
+}
+
+#related-events-title {
+  margin-block: 1em;
+}
+
+.table-wrapper {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+
+#event-details-table {
+  mat-header-row {
+    display: none;
+  }
+
+  .mat-column-title {
+    max-width: 100px;
+  }
+
+  .mat-column-value {
+    min-width: 500px;
+  }
+}
