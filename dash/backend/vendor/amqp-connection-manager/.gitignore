@@ -1,0 +1,8 @@
+/node_modules
+/lib
+/npm-debug.log
+/coverage
+/package-lock.json
+/.nyc_output
+/.vscode
+/dist
