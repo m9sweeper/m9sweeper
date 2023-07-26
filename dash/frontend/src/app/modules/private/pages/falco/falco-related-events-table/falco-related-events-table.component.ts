@@ -61,7 +61,6 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
       this.alertService.warning('cluster ID is not currently set - could not retrieve event logs');
     }
     const falcoLogFilterOptions = this.buildFalcoLogFilters();
-    console.log(this.clusterId, falcoLogFilterOptions);
     this.falcoService.getFalcoLogs(this.clusterId,  falcoLogFilterOptions)
       .pipe(take(1))
       .subscribe(response => {
@@ -71,7 +70,6 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
         // but if we say "-1", we remove the trigger that indicates there's another page
         this.logCount = response.data.logCount;
 
-        console.log({dataList});
         const newDataList = [];
         dataList.forEach((eventLog) => {
           const modifiedEvent = structuredClone(eventLog);
@@ -113,7 +111,6 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
   }
 
   rowClicked(row) {
-    console.log('row clicked');
     this.recentEventClicked.emit(row);
   }
 }
