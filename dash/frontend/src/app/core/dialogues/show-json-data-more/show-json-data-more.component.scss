@@ -21,9 +21,15 @@
   }
 }
 
-#incidence-rate-graph {
-  overflow-y: auto !important;
-  text-align: left;
+#incidence-rate-graph-card {
+  mat-card-content {
+    align-self: center;
+  }
+
+  #incidence-rate-graph {
+    //overflow-y: auto !important;
+    //text-align: left;
+  }
 }
 
 #raw-data {

@@ -33,14 +33,13 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
 
   message: string;
   raw: object;
-  format = 'table';
+  format = 'table';  // options: yaml, json, table
   rawInFormat: string;
   extractProperty: {key: string, value: string}[] = [];
 
   falcoCountData: IFalcoCount[];
   eventData: IFalcoLog;
   eventDetails: MatTableDataSource<{title: string, value: any}>;
-  innerScreenWidth: number;
   resizeTimeout;
   barChartAttributes = {
     view: [] = [550, 300],
@@ -71,9 +70,15 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     this.signature = this.route.snapshot.params.signature;
     this.getEventById();
     this.buildBarChartData();
+    this.setChartHeightWidthWithoutTimeout();  // starts at a reasonable size
   }
 
   ngAfterViewInit() {
+    this.setChartHeightWidth();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  calculateScreenSize($event?: any) {
     this.setChartHeightWidth();
   }
 
@@ -117,23 +122,22 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   }
 
   buildBarChartData() {
-      this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
-      .pipe(take(1))
-      .subscribe(response => {
-
-          this.falcoCountData = response.data;
-          if (this.falcoCountData && this.falcoCountData.length > 0) {
-            this.barChartAttributes.results =  this.falcoCountData.map(elem => {
-              return {
-                name: (elem.date.toString().split('T')[0]).split('-')[2],
-                value: Number(elem.count)
-              };
-            });
-          }
-        },
-        error => {
-          this.alertService.danger(error.error.message);
+    this.falcoService.getCountOfFalcoLogsBySignature(this.clusterId, this.signature)
+    .pipe(take(1))
+    .subscribe(response => {
+      this.falcoCountData = response.data;
+      if (this.falcoCountData && this.falcoCountData.length > 0) {
+        this.barChartAttributes.results =  this.falcoCountData.map(elem => {
+          return {
+            name: (elem.date.toString().split('T')[0]).split('-')[2],
+            value: Number(elem.count)
+          };
         });
+      }
+    },
+    error => {
+      this.alertService.danger(error.error.message);
+    });
   }
 
   onClickShare(){
@@ -180,26 +184,25 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
     this.getEventById();
   }
 
-  @HostListener('window:resize', ['$event'])
-  calculateScreenSize() {
-    this.setChartHeightWidth();
-  }
-
-  setChartHeightWidth() {
-    // debounce chart resizing
+  setChartHeightWidth(){
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      const innerWindow = document.getElementsByTagName('app-show-json-data-more').item(0) as HTMLElement;
-      this.innerScreenWidth = innerWindow.offsetWidth;
-      this.barChartAttributes.view = this.chartSizeService.getChartSize(
-        innerWindow.offsetWidth,
-        { xs: 1, s: 1, m: 2, l: 2},
-        { left: 10, right: 10 },
-        { left: 20, right: 20 },
-        { left: 16, right: 16 },
-        { left: 16, right: 16 },
-        600,
-      );
-    } , 100);
+      this.setChartHeightWidthWithoutTimeout();
+    }, 1000);
+  }
+
+  setChartHeightWidthWithoutTimeout() {
+    const innerWindow = document.getElementsByTagName('app-show-json-data-more').item(0) as HTMLElement;
+
+    const [calculatedWidth, calculatedHeight] = this.chartSizeService.getChartSize(
+      innerWindow.offsetWidth,
+      { xs: 1, s: 1, m: 2, l: 2},
+      { left: 20, right: 20 },
+      { left: 16, right: 16 },
+      { left: 0, right: 0 },
+      { left: 16, right: 16 },
+      500,
+    );
+    this.barChartAttributes.view = [calculatedWidth, 348];
   }
 }

@@ -36,7 +36,7 @@
         </mat-card>
       </div>
       <div class="col-xs-12 col-md-6 overview-cards">
-        <mat-card>
+        <mat-card id="incidence-rate-graph-card">
           <mat-card-header>
             <div class="page-card-header">
               <div class="page-card-title">  Incidence Rate </div>
@@ -109,10 +109,10 @@
                 Raw Data
               </div>
               <div class="col-xs-7 col-sm-9 page-card-title-button-group-right-align">
-                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                  <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
-                  <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
-                  <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
+                <mat-button-toggle-group [value]="format" name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle value="yaml" (click)="onClickYaml()">Yaml</mat-button-toggle>
+                  <mat-button-toggle value="json" (click)="onClickJson()">Json</mat-button-toggle>
+                  <mat-button-toggle value="table" (click)="onClickTable()">Table</mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
             </div>
