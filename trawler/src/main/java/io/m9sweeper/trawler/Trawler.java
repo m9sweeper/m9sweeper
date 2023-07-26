@@ -9,7 +9,6 @@ import io.m9sweeper.trawler.commands.ScanCommand;
 import io.m9sweeper.trawler.framework.TrawlerRunMode;
 import io.m9sweeper.trawler.framework.client.api.M9SweeperApi;
 import io.m9sweeper.trawler.framework.client.handler.ApiClient;
-import io.m9sweeper.trawler.framework.client.handler.ApiException;
 import io.m9sweeper.trawler.framework.client.handler.Configuration;
 import io.m9sweeper.trawler.framework.client.handler.auth.ApiKeyAuth;
 import io.m9sweeper.trawler.framework.client.model.DockerRegistriesDto;
