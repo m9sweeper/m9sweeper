@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{valuesToUse.title}}</h1>
+<div mat-dialog-content>
+  <div>{{valuesToUse.description}}</div>
+  <mat-form-field>
+    <mat-label></mat-label>
+    <input matInput type="text" [readonly]="true" [value]="valuesToUse.textToCopy" />
+    <button matSuffix mat-icon-button aria-label="Copy" (click)="onClickCopy()">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions style="justify-content: flex-end;">
+  <button class="close" mat-raised-button mat-dialog-close color="primary">Close</button>
+</div>

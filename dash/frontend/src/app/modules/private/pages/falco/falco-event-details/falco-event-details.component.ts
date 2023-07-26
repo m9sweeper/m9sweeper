@@ -1,22 +1,22 @@
 import {AfterViewInit, Component, HostListener, Inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FalcoService} from '../../services/falco.service';
+import {FalcoService} from '../../../../../core/services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
-import {IFalcoLog} from '../../entities/IFalcoLog';
+import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {take, timeout} from 'rxjs/operators';
 import {AlertService} from '@full-fledged/alerts';
-import {IFalcoCount} from '../../entities/IFalcoCount';
-import {ShareEventComponent} from './share-event.component';
+import {IFalcoCount} from '../../../../../core/entities/IFalcoCount';
+import {ShareLinkComponent} from '../../../../../core/dialogues/share-link/share-link.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {ChartSizeService} from '../../services/chart-size.service';
-import {UtilService} from '../../services/util.service';
+import {ChartSizeService} from '../../../../../core/services/chart-size.service';
+import {UtilService} from '../../../../../core/services/util.service';
 
 @Component({
-  selector: 'app-show-json-data-more',
-  templateUrl: './show-json-data-more.component.html',
-  styleUrls: ['./show-json-data-more.component.scss']
+  selector: 'app-falco-event-details',
+  templateUrl: './falco-event-details.component.html',
+  styleUrls: ['./falco-event-details.component.scss']
 })
-export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
+export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
   header: string;
 
   constructor(
@@ -141,11 +141,14 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   }
 
   onClickShare(){
-      this.dialog.open(ShareEventComponent, {
-      // width: '100%'
-      // minHeight: '600px',
-        height: 'fit-content'
-    });
+    this.dialog.open(ShareLinkComponent, {
+      height: 'fit-content',
+      data: {
+        title: 'Share Event',
+        description: 'Send this link to share this event\'s details with someone else.',
+        textToCopy: window.location.href,
+      },
+  });
   }
 
   onClickYaml(){
@@ -192,7 +195,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   }
 
   setChartHeightWidthWithoutTimeout() {
-    const innerWindow = document.getElementsByTagName('app-show-json-data-more').item(0) as HTMLElement;
+    const innerWindow = document.getElementsByTagName('app-falco-event-details').item(0) as HTMLElement;
 
     const [calculatedWidth, calculatedHeight] = this.chartSizeService.getChartSize(
       innerWindow.offsetWidth,
@@ -203,6 +206,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
       { left: 16, right: 16 },
       500,
     );
+    /** the height is set because the card height is set */
     this.barChartAttributes.view = [calculatedWidth, 306];
   }
 }
