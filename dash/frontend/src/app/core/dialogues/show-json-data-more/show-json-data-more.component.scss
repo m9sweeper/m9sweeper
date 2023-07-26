@@ -1,3 +1,12 @@
+.overview-cards {
+  margin-bottom: 1em;
+  mat-card {
+    height: 400px;
+    display: grid;
+    overflow: auto;
+  }
+}
+
 #event-details-table {
   mat-header-row {
     display: none;
@@ -12,13 +21,16 @@
   }
 }
 
-.event-table {
+#incidence-rate-graph {
   overflow-y: auto !important;
   text-align: left;
 }
 
-.date-link{
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
+#raw-data {
+  margin-top: 1em;
+
+  #raw-data-content {
+    overflow-y: auto !important;
+    text-align: left;
+  }
 }

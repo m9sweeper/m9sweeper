@@ -10,8 +10,8 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <mat-card class="scrollable-table-card" style="height:400px; display: grid;!important; overflow: auto">
+      <div class="col-xs-12 col-md-6 overview-cards">
+        <mat-card class="scrollable-table-card">
           <mat-card-header>
             <div class="page-card-header">
               <div class="page-card-title"> Basic Details </div>
@@ -35,15 +35,15 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="col-xs-12 col-md-6">
-        <mat-card appearance="outlined" style="height:400px; display: grid;!important;overflow: auto">
+      <div class="col-xs-12 col-md-6 overview-cards">
+        <mat-card>
           <mat-card-header>
             <div class="page-card-header">
               <div class="page-card-title">  Incidence Rate </div>
             </div>
           </mat-card-header>
           <mat-card-content>
-            <div class="event-table">
+            <div id="incidence-rate-graph">
               <ngx-charts-bar-vertical
                 [view]="barChartAttributes.view"
                 [scheme]="barChartAttributes.colorScheme"
@@ -65,7 +65,7 @@
       </div>
     </div>
 
-    <div id="full-message-div row">
+    <div id="row">
       <mat-accordion class="col-xs-12">
         <mat-expansion-panel id="full-message-panel">
           <mat-expansion-panel-header>
@@ -76,75 +76,78 @@
       </mat-accordion>
     </div>
 
-    <mat-card class="scrollable-table-card">
-      <mat-card-header>
-        <div class="page-card-header">
-          <div class="col-sm-3 no-padding">
-            <div class="page-card-title">
-              Related Events
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card col-xs-12">
+          <mat-card-header>
+            <div class="page-card-header">
+              <div class="page-card-title">
+                Related Events
+              </div>
             </div>
-          </div>
-          <div class="col-sm-9 page-card-title-button-group-right-align">
-            Signature: {{signature}}
-          </div>
-        </div>
-      </mat-card-header>
-      <mat-card-content>
-        <app-falco-related-events-table
-          [clusterId]="clusterId"
-          [currentEventLogId]="eventId"
-          [filters]="{ signature }"
-          [stylingOptions]="falcoEventLogsStylingOptions"
-          (recentEventClicked)="displayEventDetails($event)"
-        ></app-falco-related-events-table>
-      </mat-card-content>
-    </mat-card>
+          </mat-card-header>
+          <mat-card-content>
+            <app-falco-related-events-table
+              [clusterId]="clusterId"
+              [currentEventLogId]="eventId"
+              [filters]="{ signature }"
+              [stylingOptions]="falcoEventLogsStylingOptions"
+              (recentEventClicked)="displayEventDetails($event)"
+            ></app-falco-related-events-table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
 
-    <mat-card class="scrollable-table-card">
-      <mat-card-header>
-        <div class="page-card-header">
-          <div class="col-sm-3 no-padding">
-            <div class="page-card-title">
-              Raw Data
+    <div class="row" id="raw-data">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card">
+          <mat-card-header>
+            <div class="page-card-header row">
+<!--          Please note that col-xs-12 + col-xs-7 puts the buttons at the start of the next row -->
+              <div class="page-card-title col-xs-12 col-sm-3">
+                Raw Data
+              </div>
+              <div class="col-xs-7 col-sm-9 page-card-title-button-group-right-align">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
+                  <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
+                  <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
             </div>
-          </div>
-          <div class="col-sm-9 page-card-title-button-group-right-align">
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-              <mat-button-toggle (click)="onClickYaml()">Yaml</mat-button-toggle>
-              <mat-button-toggle (click)="onClickJson()">Json</mat-button-toggle>
-              <mat-button-toggle (click)="onClickTable()">Table</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-        </div>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="event-table">
-          <b>Raw:</b>
-          <div> {{message}}</div>
-          <br>
-          <b>Formatted:</b>
-          <div>
-            <div *ngIf="format === 'yaml'; then displayInYaml"></div>
-            <ng-template #displayInYaml>
-              <pre [innerHTML]="rawInFormat"></pre>
-            </ng-template>
-          </div>
-          <div>
-            <div *ngIf="format === 'json'; then displayInJson"></div>
-            <ng-template #displayInJson>
-              <pre [innerHTML]="rawInFormat"></pre>
+          </mat-card-header>
+          <mat-card-content>
+            <div id="raw-data-content">
+              <b>Raw:</b>
+              <div> {{message}}</div>
+              <br>
+              <b>Formatted:</b>
+              <div>
+                <div *ngIf="format === 'yaml'; then displayInYaml"></div>
+                <ng-template #displayInYaml>
+                  <pre [innerHTML]="rawInFormat"></pre>
+                </ng-template>
+              </div>
+              <div>
+                <div *ngIf="format === 'json'; then displayInJson"></div>
+                <ng-template #displayInJson>
+                  <pre [innerHTML]="rawInFormat"></pre>
 
-            </ng-template>
-          </div>
+                </ng-template>
+              </div>
 
-          <div>
-            <div *ngIf="format === 'table'; then displayInTable"></div>
-            <ng-template #displayInTable>
-              <div [innerHTML]="raw | tablify" class="table-format"></div>
-            </ng-template>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+              <div>
+                <div *ngIf="format === 'table'; then displayInTable"></div>
+                <ng-template #displayInTable>
+                  <div [innerHTML]="raw | tablify" class="table-format"></div>
+                </ng-template>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
   </div>
 </div>
