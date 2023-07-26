@@ -45,7 +45,7 @@ For basic use, after loading JsonSchemaFormModule as described above, to display
 </json-schema-form>
 ```
 
-Where `schema` is a valid JSON schema object, and `onSubmit` calls a function to process the submitted JSON form eventLog. If you don't already have your own schemas, you can find a bunch of samples to test with in the `demo/assets/example-schemas` folder, as described above.
+Where `schema` is a valid JSON schema object, and `onSubmit` calls a function to process the submitted JSON form data. If you don't already have your own schemas, you can find a bunch of samples to test with in the `demo/assets/example-schemas` folder, as described above.
 
 `framework` is for the template you want to use, the default value is `no-framwork`. The possible values are:
 

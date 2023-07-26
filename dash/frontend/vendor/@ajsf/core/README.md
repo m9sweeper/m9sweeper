@@ -119,7 +119,7 @@ For basic use, after loading JsonSchemaFormModule as described above, to display
 </json-schema-form>
 ```
 
-Where `schema` is a valid JSON schema object, and `onSubmit` calls a function to process the submitted JSON form eventLog. If you don't already have your own schemas, you can find a bunch of samples to test with in the `demo/assets/example-schemas` folder, as described above.
+Where `schema` is a valid JSON schema object, and `onSubmit` calls a function to process the submitted JSON form data. If you don't already have your own schemas, you can find a bunch of samples to test with in the `demo/assets/example-schemas` folder, as described above.
 
 `framework` is for the template you want to use, the default value is `no-framwork`. The possible values are:
 
@@ -155,11 +155,11 @@ exampleJsonObject = {
 };
 ```
 
-In this mode, Angular JSON Schema Form automatically generates a schema from your eventLog. The generated schema is relatively simple, compared to what you could create on your own. However, as the above example shows, it does detect and enforce string, number, and boolean values (nulls are also assumed to be strings), and automatically allows array elements to be added, removed, and reordered.
+In this mode, Angular JSON Schema Form automatically generates a schema from your data. The generated schema is relatively simple, compared to what you could create on your own. However, as the above example shows, it does detect and enforce string, number, and boolean values (nulls are also assumed to be strings), and automatically allows array elements to be added, removed, and reordered.
 
-After displaying a form in this mode, you can also use the `formSchema` and `formLayout` outputs (described in 'Debugging inputs and outputs', below), to return the generated schema and layout, which will give you a head start on writing your own schemas and layouts by showing you examples created from your own eventLog.
+After displaying a form in this mode, you can also use the `formSchema` and `formLayout` outputs (described in 'Debugging inputs and outputs', below), to return the generated schema and layout, which will give you a head start on writing your own schemas and layouts by showing you examples created from your own data.
 
-Also, notice that the 'ngModel' input supports Angular's 2-way eventLog binding, just like other form controls, which is why it is not always necessary to use an onSubmit function.
+Also, notice that the 'ngModel' input supports Angular's 2-way data binding, just like other form controls, which is why it is not always necessary to use an onSubmit function.
 
 ### Advanced use
 
@@ -168,7 +168,7 @@ Also, notice that the 'ngModel' input supports Angular's 2-way eventLog binding,
 For more control over your form, you may provide these additional inputs:
 
 * `layout` array with a custom form layout (see Angular Schema Form's [form definitions](https://github.com/json-schema-form/angular-schema-form/blob/master/docs/index.md#form-definitions) for information about how to construct a form layout)
-* `eventLog` object to populate the form with default or previously submitted values
+* `data` object to populate the form with default or previously submitted values
 * `options` object to set any global options for the form
 * `widgets` object to add custom widgets
 * `language` string to set the error message language (currently supports 'de', 'en', 'es', 'fr', 'it', 'pt', 'zh')
@@ -184,7 +184,7 @@ Here is an example:
 <json-schema-form
   [schema]="yourJsonSchema"
   [layout]="yourJsonFormLayout"
-  [(eventLog)]="yourData"
+  [(data)]="yourData"
   [options]="yourFormOptions"
   [widgets]="yourCustomWidgets"
   language="fr"
@@ -203,7 +203,7 @@ Note: If you prefer brackets around all your attributes, the following is functi
 <json-schema-form
 [schema]="yourJsonSchema"
 [layout]="yourJsonFormLayout"
-[(eventLog)]="yourData"
+[(data)]="yourData"
 [options]="yourFormOptions"
 [widgets]="yourCustomWidgets"
 [language]="'fr'"
@@ -226,7 +226,7 @@ You may also combine all your inputs into one compound object and include it as 
 const yourCompoundInputObject = {
   schema:    { ... },  // REQUIRED
   layout:    [ ... ],  // optional
-  eventLog:      { ... },  // optional
+  data:      { ... },  // optional
   options:   { ... },  // optional
   widgets:   { ... },  // optional
   language:   '...' ,  // optional
@@ -241,9 +241,9 @@ const yourCompoundInputObject = {
 </json-schema-form>
 ```
 
-You can also mix these two styles depending on your needs. In the example playground, all examples use the combined `form` input for `schema`, `layout`, and `eventLog`, which enables each example to control those three inputs, but the playground uses separate inputs for `language` and `framework`, enabling it to change those settings independent of the example.
+You can also mix these two styles depending on your needs. In the example playground, all examples use the combined `form` input for `schema`, `layout`, and `data`, which enables each example to control those three inputs, but the playground uses separate inputs for `language` and `framework`, enabling it to change those settings independent of the example.
 
-Combining inputs is useful if you have many unique forms and store each form's eventLog and schema together. If you have one form (or many identical forms), it will likely be more useful to use separate inputs for your eventLog and schema. Though even in that case, if you use a custom layout, you could store your schema and layout together and use one input for both.
+Combining inputs is useful if you have many unique forms and store each form's data and schema together. If you have one form (or many identical forms), it will likely be more useful to use separate inputs for your data and schema. Though even in that case, if you use a custom layout, you could store your schema and layout together and use one input for both.
 
 #### Compatibility modes
 
@@ -282,7 +282,7 @@ JSON Form (jQuery) compatibility:
 </json-schema-form>
 ```
 
-Note: 2-way eventLog binding will work with any dedicated eventLog input, including 'eventLog', 'model', 'ngModel', or 'formData'. However, 2-way binding will _not_ work with the combined 'form' input.
+Note: 2-way data binding will work with any dedicated data input, including 'data', 'model', 'ngModel', or 'formData'. However, 2-way binding will _not_ work with the combined 'form' input.
 
 #### Debugging inputs and outputs
 
@@ -380,7 +380,7 @@ validationMessages: {
 
 #### Available input validation errors and object values
 
-Here is a list of all the built-in JSON Schema errors, which eventLog type each error is available for, and the values in their returned error objects:
+Here is a list of all the built-in JSON Schema errors, which data type each error is available for, and the values in their returned error objects:
 
 Error name       | Data type | Returned error object values
 -----------------|-----------|-----------------------------------------
