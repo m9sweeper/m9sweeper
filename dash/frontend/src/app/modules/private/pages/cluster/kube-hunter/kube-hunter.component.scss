@@ -1,21 +1,49 @@
-.last-run-data {
-  text-align: center;
+.stats-row {
+
+  > div {
+    margin: 0;
+    height: 150px;
+
+    &#center-card {
+
+      table {
+        width: 100%;
+      }
+    }
+
+    mat-card {
+      height: 90%;
+
+      .last-run-data {
+        text-align: center;
+      }
+
+    }
+  }
 }
 
-.row {
-  margin: 0;
-  display: flex;
-}
+#past-audits-table {
+  mat-card-header {
+    margin-bottom: 1em;
 
-table {
-  width: 100%;
-}
+    .run-audit-button {
+      justify-content: end;
+      display: flex;
+    }
+  }
 
-th, td {
-  width: 33.3%;
-}
+  mat-table {
+    width: 100%;
+    overflow-x: auto;
 
-.report-click:hover{
-  background-color: rgba(0, 0, 0, .05);
-  cursor: pointer;
+    .mat-column-date {
+      min-width: 125px;
+    }
+    .mat-column-time {
+      min-width: 125px;
+    }
+    .mat-column-numVulnerabilities {
+      min-width: 125px;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {ExceptionsService} from "../../../../../backend/dist/modules/exceptions/services/exceptions.service";
+import {ExceptionsService} from './exceptions.service';
 
 describe('ExceptionsService', () => {
   let service: ExceptionsService;

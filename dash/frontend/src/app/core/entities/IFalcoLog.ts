@@ -10,7 +10,7 @@ export interface IFalcoLog {
   image: string;
   container: string;
   level: string;
-  raw: object;
+  raw: any;
   message: string;
   fields: object;
 }

@@ -1,0 +1,29 @@
+.table-wrapper.include-table-border {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+
+#related-events-table {
+  .mat-column-is-current {
+    min-width: 75px;
+  }
+
+  .mat-column-calendar-date {
+    min-width: 125px;
+  }
+
+  .mat-column-namespace {
+    min-width: 150px;
+  }
+
+  .mat-column-pod {
+    min-width: 250px;
+  }
+
+  .mat-column-image {
+    min-width: 150px;
+  }
+
+  .mat-column-message {
+    min-width: 1500px;
+  }
+}
