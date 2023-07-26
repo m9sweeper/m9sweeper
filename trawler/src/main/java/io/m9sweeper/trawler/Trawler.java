@@ -61,11 +61,6 @@ public class Trawler extends AbstractCommand implements Runnable {
      * Update the configuration based on variables that were passed into the application as CLI options
      */
     public void updateConfig() {
-        // Update the number of parallel scanners if the number provided by CLI is different than that of the env var
-        if (trawlerParallelScanners != null) {
-            TrawlerConfiguration.getInstance().setTrawlerParallelScanners(trawlerParallelScanners);
-        }
-
         // If the m9sweeper URL was defined, override what is declared in env vars
         if (m9sweeperUrl != null) {
             TrawlerConfiguration.getInstance().setM9sweeperUrl(m9sweeperUrl);
