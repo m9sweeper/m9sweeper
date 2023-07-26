@@ -6,13 +6,13 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterEditComponent} from '../cluster-edit/cluster-edit.component';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
-import { AlertService } from '@full-fledged/alerts';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
 import {map, take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
   awaitingImageScanningEnforcementResponse = false;
 
   constructor(
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private breakpointObserver: BreakpointObserver,
     private clusterService: ClusterService,
     private dialog: MatDialog,
@@ -140,12 +140,12 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(response => {
         this.awaitingWebhookEnforcementResponse = false;
         if (response.success) {
-          this.alertService.success(`Webhook Enforcement has been ${displayText}.`);
+          this.snackBar.open(`Webhook Enforcement has been ${displayText}.`, 'Close');
         }
       },
       error => {
         this.awaitingWebhookEnforcementResponse = false;
-        this.alertService.danger('Could not update Webhook Enforcement');
+        this.snackBar.open('Could not update Webhook Enforcement', 'Close');
         setTimeout(() => {
           this.matSlideToggle.toggle();
         }, 1000);
@@ -160,12 +160,12 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
         this.awaitingImageScanningEnforcementResponse = false;
         if (clusterUpdateResponse.success) {
-          this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);
+          this.snackBar.open(`Image Scanning Enforcement has been ${displayText}.`,  'Close');
         }
       },
       error => {
         this.awaitingImageScanningEnforcementResponse = false;
-        this.alertService.danger('Something went wrong while saving Image Scanning Enforcement.');
+        this.snackBar.open('Something went wrong while saving Image Scanning Enforcement.', 'Close');
         setTimeout(() => {
           this.matSlideToggle.toggle();
         }, 1000);

@@ -6,13 +6,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {take} from 'rxjs/operators';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {Authority} from '../../../../../core/enum/Authority';
 
 @Component({
   selector: 'app-gate-keeper-details',
@@ -35,7 +33,6 @@ export class GateKeeperDetailsComponent implements OnInit {
   constructor(private readonly gatekeeperService: GateKeeperService,
               private route: ActivatedRoute,
               private dialog: MatDialog,
-              private alertService: AlertService,
               private router: Router,
               private jwtAuthService: JwtAuthService,
               ) {

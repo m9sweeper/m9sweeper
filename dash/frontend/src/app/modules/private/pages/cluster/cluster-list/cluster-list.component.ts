@@ -8,7 +8,6 @@ import { ClusterGroupCreateComponent } from '../../cluster-group/cluster-group-c
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { ImageService } from '../../../../../core/services/image.service';
-import { AlertService } from '@full-fledged/alerts';
 import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dialog/generic-error-dialog.component';
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';
@@ -18,6 +17,7 @@ import { ChartSizeService } from '../../../../../core/services/chart-size.servic
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
 import {environment} from '../../../../../../environments/environment.prod';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cluster-list',
@@ -113,7 +113,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
     private clusterGroupService: ClusterGroupService,
     private podService: PodService,
     private imageService: ImageService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -145,7 +145,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           error: err => {
             if (err?.status === 404) {
-              this.alertService.danger('Cluster Group Does does not exist');
+              this.snackBar.open('Cluster Group Does does not exist', 'Close');
               this.clusterGroupService.setCurrentGroupId(null);
               this.router.navigate(['/private', 'dashboard']);
             }
@@ -341,7 +341,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       ];
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close');
     });
   }
 
@@ -414,7 +414,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       }) : defaultDataToDisplay;
     },
       error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
       });
   }
 

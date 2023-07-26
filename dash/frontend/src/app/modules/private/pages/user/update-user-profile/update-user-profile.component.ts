@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IAuthority, IUser, IUserUpdateRequestPayload} from '../../../../../core/entities/IUser';
 import {UserService} from '../../../../../core/services/user.service';
-import {AlertService} from '@full-fledged/alerts';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-update-user-profile',
@@ -21,7 +21,7 @@ export class UpdateUserProfileComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<UpdateUserProfileComponent>,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private jwtAuthService: JwtAuthService) {
     this.updateUserForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -46,7 +46,7 @@ export class UpdateUserProfileComponent implements OnInit {
       this.updateUserForm.get('lastName').setValue(this.userProfileData.lastName);
       this.updateUserForm.get('phone').setValue(this.userProfileData.phone);
     }, () => {
-      this.alertService.danger('User not found');
+      this.snackBar.open('User not found', 'Close');
     });
   }
 
@@ -66,10 +66,10 @@ export class UpdateUserProfileComponent implements OnInit {
     this.userService.updateUserProfileSetting(
       userProfileUpdatePayload
     ).subscribe((updatedUserResponse: IServerResponse<IUser>) => {
-      this.alertService.success('Account updated successfully.');
+      this.snackBar.open('Account updated successfully.', 'Close');
       this.dialogRef.close();
     }, (event) => {
-      this.alertService.danger('User profile data update failed!');
+      this.snackBar.open('User profile data update failed!', 'Close');
     });
   }
 }

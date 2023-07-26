@@ -11,10 +11,10 @@ import {MatSidenav} from '@angular/material/sidenav';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
-import {AlertService} from '@full-fledged/alerts';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-constraint-dialog',
@@ -32,7 +32,7 @@ export class AddConstraintDialogComponent implements OnInit {
 
   constructor(private gateKeeperService: GateKeeperService,
               private dialogRef: MatDialogRef<AddConstraintDialogComponent>,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private dialog: MatDialog,
               @Inject(MAT_DIALOG_DATA) public data) {  }
 
@@ -68,10 +68,10 @@ export class AddConstraintDialogComponent implements OnInit {
       .subscribe({
         next: response => {
           if (response.data.statusCode === 200) {
-            this.alertService.success(response.data.message);
+            this.snackBar.open(response.data.message,  'Close');
           }
           else {
-            this.alertService.danger(response.data.message);
+            this.snackBar.open(response.data.message,  'Close');
           }
         }
       });

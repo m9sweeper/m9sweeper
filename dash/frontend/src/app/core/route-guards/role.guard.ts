@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivateChild, Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import {JwtAuthService} from '../services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,8 @@ export class RoleGuard implements CanActivate, CanActivateChild {
 
   constructor(private readonly router: Router,
               private readonly jwtAuthService: JwtAuthService,
-              private readonly alertService: AlertService) {
+              private readonly snackBar: MatSnackBar,
+              ) {
 
   }
 
@@ -22,7 +23,7 @@ export class RoleGuard implements CanActivate, CanActivateChild {
     const currentUserRoles = this.jwtAuthService.currentUserAuthorities as string[];
     const isAllowed = allowedRoles.filter(r => currentUserRoles.includes(r))?.length > 0;
     if (!isAllowed) {
-      this.alertService.danger('Permission Denied!');
+      this.snackBar.open('Permission Denied!', 'Close');
       if (!this.router.getCurrentNavigation().previousNavigation) {
         this.router.navigate(['private/dashboard']);
       }

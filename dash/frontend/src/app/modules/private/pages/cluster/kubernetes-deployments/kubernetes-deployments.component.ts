@@ -3,13 +3,13 @@ import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
-import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {DeploymentService} from '../../../../../core/services/deployment.service';
 import {IDeployment} from '../../../../../core/entities/IDeployment';
 import {FormatDate} from '../../../../shared/format-date/format-date';
 import {filter, pairwise} from 'rxjs/operators';
 import {merge} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class KubernetesDeploymentsComponent implements OnInit, AfterViewInit {
     private deploymentService: DeploymentService,
     private route: ActivatedRoute,
     private router: Router,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -106,7 +106,7 @@ export class KubernetesDeploymentsComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.isDatePicker = false;
@@ -116,7 +116,7 @@ export class KubernetesDeploymentsComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
     this.getDeployments();
@@ -142,7 +142,7 @@ export class KubernetesDeploymentsComponent implements OnInit, AfterViewInit {
         error => {
           this.dataSource = new MatTableDataSource(error.data);
           this.dataSource.sort = this.sort;
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.isDatePicker = false;
@@ -154,7 +154,7 @@ export class KubernetesDeploymentsComponent implements OnInit, AfterViewInit {
         error => {
           this.dataSource = new MatTableDataSource(error.data);
           this.dataSource.sort = this.sort;
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
   }

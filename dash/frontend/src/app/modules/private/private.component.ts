@@ -13,7 +13,6 @@ import {UpdateUserProfileComponent} from './pages/user/update-user-profile/updat
 import {UserService} from '../../core/services/user.service';
 import {UserProfileImageDirective} from '../shared/directives/user-profile-image.directive';
 import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-loader';
-import {AlertService} from '@full-fledged/alerts';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
@@ -67,7 +66,6 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     private clusterService: ClusterService,
     private themeService: ThemeService,
     private userService: UserService,
-    private alertService: AlertService,
     private loaderService: NgxUiLoaderService,
   ) {
     this.allThemes.push(...[{name: 'Dark', cssClass: 'dark-theme'}, {name: 'Light', cssClass: 'light-theme'}, {name: 'Default', cssClass: 'default-theme'}]);

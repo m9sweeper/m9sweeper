@@ -5,7 +5,6 @@ import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog} from '@angular/material/dialog';
 import {ImageService} from '../../../../../core/services/image.service';
-import {AlertService} from '@full-fledged/alerts';
 import {IImage} from '../../../../../core/entities/IImage';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {CreateImageComponent} from '../create-image-form/create-image.component';
@@ -23,6 +22,7 @@ import {
 import {AdvancedSearchDialogComponent} from './advanced-search-dialog/advanced-search-dialog.component';
 import {ConfirmScanAllDialogComponent} from './confirm-scan-all-dialog/confirm-scan-all-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-image',
@@ -50,7 +50,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private imageService: ImageService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
@@ -120,7 +120,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openImageCreateDialog() {
     if (!this.userIsAdmin) {
-      this.alertService.danger('Only admins can rescan all images');
+      this.snackBar.open('Only admins can rescan all images', 'Close');
       return;
     }
     const openAddImage = this.dialog.open(CreateImageComponent, {
@@ -169,7 +169,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
         if (result?.continue && result?.selectedImages) {
           this.scanImages(result.selectedImages);
         } else {
-          this.alertService.info('Scanning canceled');
+          this.snackBar.open('Scanning canceled', 'Close');
         }
       });
   }
@@ -181,12 +181,12 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.imageService.scanImageModule(this.clusterId, filterImageIds)
       .pipe(
         catchError((err) => {
-          this.alertService.danger(err.error.message);
+          this.snackBar.open(err.error.message, 'Close');
           return of(null);
         }),
         switchMap((response) => {
           if (response?.success) {
-            this.alertService.success('Image Scan queued');
+            this.snackBar.open('Image Scan queued', 'Close');
           }
           return of(null);
         }),

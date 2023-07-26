@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { MatTableDataSource } from '@angular/material/table';
-import { AlertService } from '@full-fledged/alerts';
 import { DeploymentService } from '../../../../../core/services/deployment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
@@ -18,6 +17,7 @@ import { format, sub } from 'date-fns';
 import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
 import {environment} from '../../../../../../environments/environment.prod';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cluster-summary',
@@ -108,7 +108,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
               private clusterService: ClusterService,
               private podService: PodService,
               private deploymentService: DeploymentService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private chartSizeService: ChartSizeService,
               ) {
@@ -178,7 +178,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<INamespaceTotalVulnerability[]>) => {
       this.dataSource = new MatTableDataSource(response.data);
     }, error => {
-      this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
     });
   }
 
@@ -231,7 +231,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
           }
         ];
       }, error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
       }
     );
   }
@@ -280,7 +280,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         }) : [];
       },
       error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
       });
   }
 
@@ -290,7 +290,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<number>) => {
       this.totalVulnerabilities = response.data;
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close');
     });
   }
 
@@ -306,7 +306,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         }
       }
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close');
     });
   }
 
@@ -316,7 +316,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<number>) => {
       this.countOfPolicyViolations = response.data[0].count;
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close');
     });
   }
 

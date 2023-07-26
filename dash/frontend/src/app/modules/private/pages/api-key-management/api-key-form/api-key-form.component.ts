@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { ApiKeyService } from '../../../../../core/services/api-key.service';
 import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
@@ -9,6 +8,7 @@ import { IApiKey } from '../../../../../core/entities/IApiKey';
 import {IAPIKeyUser} from '../../../../../core/entities/IUser';
 import {Location} from '@angular/common';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-api-key-form',
@@ -28,7 +28,7 @@ export class ApiKeyFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiKeyService: ApiKeyService,
     private userService: UserService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
@@ -72,7 +72,7 @@ export class ApiKeyFormComponent implements OnInit {
           this.apiKeyForm.get('userId').setValue(this.apiKeyData.userId);
         },
         error: error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
           this.router.navigate(['/private/api-key']);
         }
     });
@@ -93,11 +93,11 @@ export class ApiKeyFormComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.alertService.success('Api Key created successfully.');
+            this.snackBar.open('Api Key created successfully.', 'Close');
             this.router.navigate(['/private/api-key']);
           },
           error: error => {
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close');
           }
         });
     } else {
@@ -111,11 +111,11 @@ export class ApiKeyFormComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.alertService.success('Api Key updated successfully.');
+            this.snackBar.open('Api Key updated successfully.', 'Close');
             this.router.navigate(['/private/api-key']);
           },
           error: error => {
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close');
           }
       });
     }

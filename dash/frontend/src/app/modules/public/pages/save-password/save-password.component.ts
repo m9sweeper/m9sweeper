@@ -2,9 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../core/services/user.service';
 import { CustomValidators } from '../../../private/form-validator/custom-validators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
@@ -21,7 +21,7 @@ export class SavePasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -48,11 +48,11 @@ export class SavePasswordComponent implements OnInit {
         .setLocalUserPassword(this.changePasswordForm.value)
         .subscribe(response => {
           if (response.data) {
-            this.alertService.success('Password set successfully');
+            this.snackBar.open('Password set successfully', 'Close');
             this.router.navigate(['/public/login']);
           }
         }, event => {
-          this.alertService.danger(event.error.message);
+          this.snackBar.open(event.error.message, 'Close');
         });
     }
     else {
@@ -60,11 +60,11 @@ export class SavePasswordComponent implements OnInit {
         .resetLocalUserPassword(this.changePasswordForm.value)
         .subscribe(response => {
             if (response.data) {
-              this.alertService.success('Password reset successfully');
+              this.snackBar.open('Password reset successfully', 'Close');
               this.router.navigate(['/public/login']);
             }
         }, event => {
-          this.alertService.danger(event.error.message);
+          this.snackBar.open(event.error.message, 'Close');
         });
     }
   }

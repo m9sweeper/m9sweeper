@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {KubeHunterService} from '../../../../../core/services/kube-hunter.service';
-import {AlertService} from '@full-fledged/alerts';
 import {IKubeHunterReport} from '../../../../../core/entities/IKubeHunterReport';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
@@ -34,7 +33,6 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
 
   constructor(
     private kubeHunterService: KubeHunterService,
-    private alertService: AlertService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,

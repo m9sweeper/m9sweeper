@@ -7,7 +7,6 @@ import {ClusterService} from '../../../../../core/services/cluster.service';
 import {IKubeConfig} from '../../../../../core/entities/IKubeConfig';
 import { URL } from 'url';
 import {CustomValidators} from '../../../form-validator/custom-validators';
-import {AlertService} from '@full-fledged/alerts';
 import {MatStepper} from '@angular/material/stepper';
 import {ClusterGroupService} from '../../../../../core/services/cluster-group.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
@@ -18,6 +17,7 @@ import {MatSelectChange} from '@angular/material/select';
 import {MatRadioChange} from '@angular/material/radio';
 import {environment} from '../../../../../../environments/environment.prod';
 import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-cluster-wizard',
@@ -47,7 +47,7 @@ export class AddClusterWizardComponent implements OnInit {
                private clusterService: ClusterService,
                private clusterGroupService: ClusterGroupService,
                private jwtAuthService: JwtAuthService,
-               private alertService: AlertService,
+               private snackBar: MatSnackBar,
                private commonService: CommonService,
                protected dialog: MatDialog,
                protected clusterListMenuService: ClusterListMenuService,
@@ -143,10 +143,10 @@ export class AddClusterWizardComponent implements OnInit {
         this.isCompleted = false;
         this.dialogRef.disableClose = true;
         stepper.next();
-        this.alertService.success('Cluster added successfully');
+        this.snackBar.open('Cluster added successfully', 'Close');
       }, error => {
         this.submitting = false;
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
       });
   }
 
@@ -168,10 +168,11 @@ export class AddClusterWizardComponent implements OnInit {
         this.isCompleted = false;
         this.dialogRef.disableClose = true;
         stepper.next();
-        this.alertService.success('Cluster updated successfully');
+        this.snackBar.open('Cluster updated successfully', 'Close');
+
       }, error => {
         this.submitting = false;
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close');
       });
   }
 
@@ -198,11 +199,11 @@ export class AddClusterWizardComponent implements OnInit {
           this.config = YmlParse(result) as IKubeConfig;
           // @TODO: Potentially upgrade validation that the yaml file is a valid kubeconfig
           if (!this.config?.contexts) {
-            this.alertService.warning('Selected file was not a valid kubeconfig');
+            this.snackBar.open('Selected file was not a valid kubeconfig', 'Close');
             this.config = undefined;
           }
         } catch (e) {
-          this.alertService.warning('Selected file was not a valid YAML file');
+          this.snackBar.open('Selected file was not a valid YAML file', 'Close');
           this.config = undefined;
         }
       }, error => {

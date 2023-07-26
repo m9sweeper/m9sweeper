@@ -4,11 +4,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { IUser } from '../../../../../core/entities/IUser';
 import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import {merge} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-list',
@@ -36,7 +36,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     public dialog: MatDialog
   ) { }
 
@@ -58,7 +58,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
       // this.dataSource.sort = this.sort;
       // this.dataSource.paginator = this.paginator;
     }, error => {
-      this.alertService.danger('Failed to load user!');
+      this.snackBar.open('Failed to load user!', 'Close');
     });
   }
 

@@ -1,6 +1,6 @@
 import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -12,7 +12,7 @@ export class RbacDirective implements OnInit {
 
   constructor(private readonly el: ElementRef,
               private readonly jwtAuthService: JwtAuthService,
-              private readonly alertService: AlertService,
+              private readonly snackBar: MatSnackBar,
               private readonly renderer: Renderer2) {
   }
 
@@ -23,7 +23,7 @@ export class RbacDirective implements OnInit {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
       this.renderer.listen(this.el.nativeElement, 'click', (event) => {
         event.stopPropagation();
-        this.alertService.danger('Access denied!');
+        this.snackBar.open('Access denied!', 'Close');
         return false;
       });
     }

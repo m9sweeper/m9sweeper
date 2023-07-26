@@ -3,7 +3,6 @@ import {DatePipe, Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertService} from '@full-fledged/alerts';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
@@ -21,6 +20,7 @@ import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKe
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
 import {takeUntil} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'exception-create',
@@ -67,7 +67,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
   constructor(
     private exceptionsService: ExceptionsService,
     private formBuilder: FormBuilder,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -141,7 +141,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       if (!this.exceptionId && this.editMode) {
         this.editMode = false;
         this.subMenuTitle = 'Create Exception';
-        this.alertService.danger('Exception Could not be retrieved. Please try again later.');
+        this.snackBar.open('Exception Could not be retrieved. Please try again later.', 'Close');
       }
     });
 
@@ -168,7 +168,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
           this.disableAllExceptionTypeFields();
         },
         _ => {
-          this.alertService.danger('Exception could not be retrieved. Please try again later');
+          this.snackBar.open('Exception could not be retrieved. Please try again later',  'Close');
           this.exceptionId = null;
         }
       );
@@ -252,7 +252,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
         response => {
           this.disableSpinner();
           this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.alertService.success('Exception updated');
+          this.snackBar.open('Exception updated', 'Close');
         },
         err => this.handleApiError(err)
       );
@@ -261,7 +261,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       this.exceptionsService.createException(data).subscribe(
         response => {
           this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.alertService.success('Exception created');
+          this.snackBar.open('Exception created', 'Close');
         },
         err => this.handleApiError(err)
       );
@@ -277,7 +277,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     } else {
       this.submitButtonText = 'Submit';
     }
-    this.alertService.danger(msg);
+    this.snackBar.open(msg,  'Close');
   }
 
   cancel() {

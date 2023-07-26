@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {AlertService} from '@full-fledged/alerts';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { JwtAuthService } from '../services/jwt-auth.service';
 import { IServerResponse } from '../entities/IServerResponse';
 import {environment} from '../../../environments/environment';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private readonly router: Router,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private httpClient: HttpClient,
     private loaderService: NgxUiLoaderService,
     private jwtAuthService: JwtAuthService,
@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate {
 
   authFailed() {
     this.loaderService.stop('auth-guard-loader');
-    this.alertService.danger('Authentication failed!');
+    this.snackBar.open('Authentication failed!', 'Close');
 
     this.loaderService.start('logout');
     this.jwtAuthService.clearToken();

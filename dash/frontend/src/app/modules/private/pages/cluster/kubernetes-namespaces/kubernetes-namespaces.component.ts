@@ -3,7 +3,6 @@ import {MatSort} from '@angular/material/sort';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
-import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {INamespace} from '../../../../../core/entities/INamespace';
@@ -11,6 +10,7 @@ import {FormatDate} from '../../../../shared/format-date/format-date';
 import {filter, pairwise} from 'rxjs/operators';
 import {merge} from 'rxjs';
 import { ClusterService } from '../../../../../core/services/cluster.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     private namespaceService: NamespaceService,
     private route: ActivatedRoute,
     private router: Router,
-    private alertService: AlertService
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -110,7 +110,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.isDatePicker = false;
@@ -120,7 +120,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
     this.getNamespaces();
@@ -145,7 +145,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
         error => {
           this.dataSource = new MatTableDataSource(error.data);
           this.dataSource.sort = this.sort;
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.isDatePicker = false;
@@ -157,7 +157,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
         error => {
           this.dataSource = new MatTableDataSource(error.data);
           this.dataSource.sort = this.sort;
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
   }

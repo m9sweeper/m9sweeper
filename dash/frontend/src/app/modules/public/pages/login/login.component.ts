@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/api/auth.service';
 import { IAuthenticationMethod } from '../../../../core/entities/IAuthenticationMethod';
-import { AlertService } from '@full-fledged/alerts';
 import { MatSelectChange } from '@angular/material/select';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IServerResponse } from '../../../../core/entities/IServerResponse';
@@ -10,6 +9,7 @@ import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private jwtService: JwtAuthService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute,
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     const errorMessage = this.route.snapshot.queryParamMap.get('error_message');
     if (errorMessage){
-      this.alertService.danger(errorMessage);
+      this.snackBar.open(errorMessage, 'Close');
     }
     this.loginForm  =  this.formBuilder.group({
       username: ['', [Validators.required, Validators.email]],
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
       this.inSiteCredentialAuthenticationMethods = authenticationMethods;
       this.selectedInSiteCredentialAuthenticationMethod = this.inSiteCredentialAuthenticationMethods.find(iscam => iscam.type === 'LOCAL_AUTH');
     }, error => {
-      this.alertService.danger('Failed to load authentication methods!');
+      this.snackBar.open('Failed to load authentication methods!', 'Close');
     }, () => {
     });
   }
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.value.password,
       this.selectedInSiteCredentialAuthenticationMethod
     ).pipe(take(1)).subscribe((response: IServerResponse<IAuth>) => {
-      this.alertService.success('Login successful');
+      this.snackBar.open('Login successful', 'Close');
       const token: string = response.data.accessToken;
       if (token !== null && token.trim() !== '') {
         this.jwtService.saveToken(token);
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
       }
     }, error => {
       this.loaderService.stop('login');
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close');
     });
 
   }

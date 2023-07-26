@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../core/services/user.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { take } from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-reset-password',
@@ -18,7 +18,7 @@ export class SendResetPasswordMailComponent {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private loadingService: NgxUiLoaderService
   ) {
@@ -35,14 +35,14 @@ export class SendResetPasswordMailComponent {
       .subscribe((response) => {
         if (response.data) {
           this.router.navigate(['/public/login']);
-          this.alertService.success('Please check your mailbox');
+          this.snackBar.open('Please check your mailbox', 'Close');
         }
         else {
-          this.alertService.danger('Invalid user account.');
+          this.snackBar.open('Invalid user account.', 'Close');
         }
 
       }, e => {
-        this.alertService.danger(e.error.message);
+        this.snackBar.open(e.error.message, 'Close');
       },
         () => this.loadingService.stop('send-reset-email'));
   }

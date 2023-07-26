@@ -3,10 +3,10 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-constraint-criteria.component';
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {AlertService} from '@full-fledged/alerts';
 import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   constructor(private dialog: MatDialog,
               private formBuilder: FormBuilder,
               private readonly gatekeeperService: GateKeeperService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data,
               private elementRef: ElementRef,
               private dialogRef: MatDialogRef<AddTemplateConstraintComponent>) {
@@ -100,28 +100,28 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (!this.templateConstraintCriteria.length) {
-      this.alertService.danger('Please add at least one match criteria');
+      this.snackBar.open('Please add at least one match criteria', 'Close');
     } else {
       this.addTemplateConstraintForm.value.properties = this.dynamicProperties;
       this.addTemplateConstraintForm.value.criterias = this.templateConstraintCriteria;
       if (this.data && this.data.isEdit) {
         this.gatekeeperService.patchGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
           if (response.data.statusCode === 200 ) {
-            this.alertService.success(response.data.message);
+            this.snackBar.open(response.data.message, 'Close');
             this.dialogRef.close({reload: true});
           } else {
-            this.alertService.danger(response.data.message);
+            this.snackBar.open(response.data.message, 'Close');
           }
         });
       } else {
         this.gatekeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
           if (response.data.statusCode === 200 ) {
-            this.alertService.success(response.data.message);
+            this.snackBar.open(response.data.message, 'Close');
             this.dialogRef.close({reload: true});
           } else if (response.data.statusCode === 409) {
-            this.alertService.warning(response.data.message);
+            this.snackBar.open(response.data.message, 'Close');
           } else {
-            this.alertService.danger(response.data.message);
+            this.snackBar.open(response.data.message, 'Close');
           }
         });
       }

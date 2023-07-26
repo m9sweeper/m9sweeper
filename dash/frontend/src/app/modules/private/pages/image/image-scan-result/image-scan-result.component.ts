@@ -18,6 +18,7 @@ import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dial
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -88,12 +89,12 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   constructor(
     private titleService: Title,
     private route: ActivatedRoute,
-    private alertService: AlertService,
     private imageService: ImageService,
     private imageScanResultIssueService: ImageScanResultIssueService,
     public dialog: MatDialog,
     protected loader: NgxUiLoaderService,
     protected csvService: CsvService,
+    private snackBar: MatSnackBar,
     private router: Router) {
     this.imageId = +this.route.snapshot.paramMap.get('imageId');
   }
@@ -146,7 +147,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
       .subscribe((namespaces) => {
           this.imageNamespaces = namespaces.data.map(namespace => namespace.namespace);
     }, error => {
-      this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.error.message, 'Close');
       // this.router.navigate(['/private']);
     });
   }
@@ -195,7 +196,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
         }
       },
       (error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.error.message, 'Close');
       }));
   }
 
@@ -241,11 +242,11 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     };
     this.imageService.scanImageModule(this.clusterId, filterImageIds).subscribe(response => {
       if (response.success) {
-        this.alertService.success('Image Scan Queued');
+        this.snackBar.open('Image Scan Queued', 'Close');
         this.setImageScanQueueStatus();
       }
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.error.message, 'Close');
     });
   }
 
@@ -332,7 +333,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
           this.csvService.downloadCsvFile(csvDto.data?.csv, csvDto.data?.filename);
         },
         error: () => {
-          this.alertService.danger('Error downloading report');
+          this.snackBar.open('Error downloading report', 'Close');
           this.loader.stopLoader('scan-issue-csv-download');
         },
         complete: () => this.loader.stopLoader('scan-issue-csv-download')

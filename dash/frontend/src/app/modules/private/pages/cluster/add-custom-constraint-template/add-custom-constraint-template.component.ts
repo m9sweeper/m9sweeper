@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-custom-constraint-template',
@@ -27,7 +27,7 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data,
               private gateKeeperService: GateKeeperService,
               private dialogRef: MatDialogRef<AddCustomConstraintTemplateComponent>,
-              private alertService: AlertService) { }
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     if (this.data && this.data.referer && this.data.referer === 'gate-keeper-details') {
@@ -55,11 +55,11 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
   patchTemplate() {
     this.gateKeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
       if (response.data.statusCode === 200) {
-        this.alertService.success(`${response.data.message}`);
+        this.snackBar.open(`${response.data.message}`, 'Close');
       } else if (response.data.statusCode === 409) {
-        this.alertService.info(`${response.data.message}`);
+        this.snackBar.open(`${response.data.message}`, 'Close');
       } else {
-        this.alertService.danger(`${response.data.message}`);
+        this.snackBar.open(`${response.data.message}`, 'Close');
       }
     });
     setTimeout(() => {

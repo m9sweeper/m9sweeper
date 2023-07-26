@@ -3,13 +3,13 @@ import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
-import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {K8sImageService} from '../../../../../core/services/k8s-image.service';
 import {IK8sImage} from '../../../../../core/entities/IK8sImage';
 import {filter, pairwise} from 'rxjs/operators';
 import {merge} from 'rxjs';
 import {FormatDate} from '../../../../shared/format-date/format-date';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-kubernetes-images',
@@ -38,7 +38,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
               private k8sImageService: K8sImageService,
               private route: ActivatedRoute,
               private router: Router,
-              private alertService: AlertService
+              private snackBar: MatSnackBar,
   ) {
   }
 
@@ -110,7 +110,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.isDatePicker = false;
@@ -120,7 +120,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
     this.getK8sImages();
@@ -146,7 +146,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           },
           error => {
             this.dataSource = new MatTableDataSource(error.data);
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close');
           });
     } else {
       this.isDatePicker = false;
@@ -157,7 +157,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           },
           error => {
             this.dataSource = new MatTableDataSource(error.data);
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close');
           });
     }
   }

@@ -20,6 +20,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { SendResetPasswordMailComponent } from './pages/send-reset-password-mail/send-reset-password-mail.component';
 import { SavePasswordComponent } from './pages/save-password/save-password.component';
 import {SharedModule} from '../shared/shared.module';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {SharedModule} from '../shared/shared.module';
     MatIconModule,
     MatDividerModule,
     NgxUiLoaderModule,
-    SharedModule
+    SharedModule,
+    MatSnackBarModule,
   ]
 })
 export class PublicModule { }

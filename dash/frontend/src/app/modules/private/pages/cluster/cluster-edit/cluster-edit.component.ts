@@ -8,7 +8,6 @@ import {
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {AlertService} from '@full-fledged/alerts';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {ITag} from '../../../../../core/entities/ITag';
 import {TagService} from '../../../../../core/services/tag.service';
@@ -17,6 +16,7 @@ import {Observable, Subject} from 'rxjs';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {IKubeConfig} from '../../../../../core/entities/IKubeConfig';
 import {environment} from '../../../../../../environments/environment';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
 
   constructor(private dialogRef: MatDialogRef<ClusterEditComponent>,
               private formBuilder: FormBuilder,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private clusterService: ClusterService,
               private tagService: TagService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -84,18 +84,18 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
         this.data.clusterId)
         .pipe(take(1))
         .subscribe((response) => {
-          this.alertService.success('Cluster updated successfully');
+          this.snackBar.open('Cluster updated successfully', 'Close');
           this.dialogRef.close();
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     } else {
       this.clusterService.createCluster({...this.createClusterForm.value, tags: JSON.stringify(this.displayedTags)})
         .subscribe((response) => {
-          this.alertService.success('Cluster added successfully');
+          this.snackBar.open('Cluster added successfully', 'Close');
           this.dialogRef.close();
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close');
         });
     }
   }
@@ -110,7 +110,7 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
             this.displayedTags.push({name: value.trim(), id: response.data.id, groupId: response.data.groupId});
           }
         }, error => {
-          this.alertService.warning(error?.error?.message);
+          this.snackBar.open(error?.error?.message,  'Close');
         });
     }
     if (input) {

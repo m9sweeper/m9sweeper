@@ -6,8 +6,8 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Subject, timer} from 'rxjs';
 import {IKubeHunterReport} from '../../../../../../core/entities/IKubeHunterReport';
 import {KubeHunterService} from '../../../../../../core/services/kube-hunter.service';
-import {AlertService} from '@full-fledged/alerts';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-kube-hunter-dialog',
@@ -39,7 +39,7 @@ export class KubeHunterDialogComponent implements OnInit {
     private commonService: CommonService,
     private loaderService: NgxUiLoaderService,
     private kubeHunterService: KubeHunterService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router
   ) { }
 
@@ -70,7 +70,7 @@ export class KubeHunterDialogComponent implements OnInit {
     ).subscribe((report) => {
       this.report = report;
       if (this.report) {
-        this.alertService.info('Kube hunter done running');
+        this.snackBar.open('Kube hunter done running', 'Close');
       }
     });
   }

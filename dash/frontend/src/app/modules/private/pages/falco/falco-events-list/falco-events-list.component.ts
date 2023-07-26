@@ -17,9 +17,9 @@ import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
 import {UtilService} from '../../../../../core/services/util.service';
 import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json-data-dialog.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -58,7 +58,7 @@ export class FalcoEventsListComponent implements OnInit {
     private csvService: CsvService,
     private router: Router,
     private jwtAuthService: JwtAuthService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private utilService: UtilService,
   ) {}
 
@@ -118,13 +118,13 @@ export class FalcoEventsListComponent implements OnInit {
         this.logCount = response.data.logCount;
       }, (err) => {
         if (err?.error?.message) {
-          this.alertService.danger(err.error.message);
+          this.snackBar.open(err.error.message, 'Close');
         } else if (err?.error) {
-          this.alertService.danger(err.error);
+          this.snackBar.open(err.error, 'Close');
         } else if (err?.message) {
-          this.alertService.danger(err.message);
+          this.snackBar.open(err.message, 'Close');
         } else {
-          this.alertService.danger(err);
+          this.snackBar.open(err, 'Close');
         }
       });
 
@@ -163,7 +163,7 @@ export class FalcoEventsListComponent implements OnInit {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
-          this.alertService.danger(`Error downloading report: ${error.error.message}`);
+          this.snackBar.open(`Error downloading report: ${error.error.message}`, 'Close');
         }, () => {
           this.loaderService.stop('csv-download');
         });
@@ -171,7 +171,7 @@ export class FalcoEventsListComponent implements OnInit {
 
   rebuildWithFilters(){
     if (!this.filtersValid) {
-      this.alertService.danger('Invalid filter settings; please recheck filter values');
+      this.snackBar.open('Invalid filter settings; please recheck filter values', 'Close');
     }else {
         this.getEvents();
     }

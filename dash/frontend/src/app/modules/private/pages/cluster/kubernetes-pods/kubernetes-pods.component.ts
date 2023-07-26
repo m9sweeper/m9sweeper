@@ -5,10 +5,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IPod} from '../../../../../core/entities/IPod';
 import {MatTableDataSource} from '@angular/material/table';
-import {AlertService} from '@full-fledged/alerts';
 import {PodService} from '../../../../../core/services/pod.service';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class KubernetesPodsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private  podService: PodService,
     private router: Router,
     private dialog: MatDialog,
@@ -123,7 +123,7 @@ export class KubernetesPodsComponent implements OnInit {
     }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.alertService.danger(error.error.message);
+    this.snackBar.open(error.error.message,  'Close');
   }
 
   // @TODO: server side pagination

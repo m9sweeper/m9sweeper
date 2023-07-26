@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-copy-to-clipboard-button',
@@ -21,15 +21,15 @@ export class CopyToClipboardButtonComponent {
 
   constructor(
     private cb: Clipboard,
-    private readonly alertService: AlertService
+    private readonly snackBar: MatSnackBar,
     ) { }
 
   copy() {
     const success = this.cb.copy(this.text);
     if (success) {
-      this.alertService.success(this.successMessage);
+      this.snackBar.open(this.successMessage, 'Close');
     } else {
-      this.alertService.danger(this.errorMessage);
+      this.snackBar.open(this.errorMessage, 'Close');
     }
   }
 }
