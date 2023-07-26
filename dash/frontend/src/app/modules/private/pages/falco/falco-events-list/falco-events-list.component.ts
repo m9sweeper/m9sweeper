@@ -94,6 +94,7 @@ export class FalcoEventsListComponent implements OnInit {
     this.falcoLogFilters.pod = this.filterForm.get('podInput').value;
     this.falcoLogFilters.image = this.filterForm.get('imageInput').value;
 
+    // https://stackoverflow.com/questions/34796901/angular2-change-detection-ngonchanges-not-firing-for-nested-object
     // ngOnChanges uses dirty checking (aka it compares the object reference and not the values)
     // --> need the object to be different so it triggers the onChange event
     this.falcoLogFilters = structuredClone(this.falcoLogFilters);

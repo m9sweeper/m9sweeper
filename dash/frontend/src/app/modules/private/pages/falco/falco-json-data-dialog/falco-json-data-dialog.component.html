@@ -41,11 +41,11 @@
   <div matDialogTitle id="related-events-title">Related Events</div>
 
   <div class="scrollable-table-card">
-    <app-falco-related-events-table-card
+    <app-falco-related-events-table
       [clusterId]="data.clusterId"
       [currentEventLogId]="data.id"
       [filters]="{ signature: data.anomalySignature }"
       (recentEventClicked)="displayEventDetails($event)"
-    ></app-falco-related-events-table-card>
+    ></app-falco-related-events-table>
   </div>
 </mat-dialog-content>

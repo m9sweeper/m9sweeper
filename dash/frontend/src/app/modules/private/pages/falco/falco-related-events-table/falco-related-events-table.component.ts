@@ -7,11 +7,11 @@ import {AlertService} from '@full-fledged/alerts';
 import {UtilService} from '../../../../../core/services/util.service';
 
 @Component({
-  selector: 'app-falco-related-events-table-card',
-  templateUrl: './falco-related-events-table-card.component.html',
-  styleUrls: ['./falco-related-events-table-card.component.scss']
+  selector: 'app-falco-related-events-table',
+  templateUrl: './falco-related-events-table.component.html',
+  styleUrls: ['./falco-related-events-table.component.scss']
 })
-export class FalcoRelatedEventsTableCardComponent implements OnInit, OnChanges {
+export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
   @Input() clusterId: number;
   @Input() currentEventLogId: number | null;
   @Input() filters: Partial<FalcoLogOptions>;

@@ -121,13 +121,13 @@
             </div>
           </mat-card-header>
           <mat-card-content>
-            <app-falco-related-events-table-card
+            <app-falco-related-events-table
               [clusterId]="clusterId"
               [filters]="falcoLogFilters"
               [displayedColumns]="falcoEventLogsColumns"
               [stylingOptions]="falcoEventLogsStylingOptions"
               (recentEventClicked)="displayEventDetails($event)"
-            ></app-falco-related-events-table-card>
+            ></app-falco-related-events-table>
           </mat-card-content>
         </mat-card>
       </div>
