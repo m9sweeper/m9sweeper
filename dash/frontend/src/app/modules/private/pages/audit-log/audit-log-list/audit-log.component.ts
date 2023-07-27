@@ -24,12 +24,14 @@ export class AuditLogComponent implements OnInit {
   totalAuditLogs = 0;
   showAuditLogTable = false;
 
-  constructor(private auditLogService: AuditLogService,
-              private formBuilder: FormBuilder,
-              private dialog: MatDialog,
-              private loaderService: NgxUiLoaderService,
-              private alertService: AlertService,
-              private csvService: CsvService) {
+  constructor(
+    private auditLogService: AuditLogService,
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private loaderService: NgxUiLoaderService,
+    private alertService: AlertService,
+    private csvService: CsvService
+  ) {
     this.filterAuditLogForm = this.formBuilder.group({
       entityId: [],
       entityTypes: [[], Validators.required],
@@ -39,8 +41,8 @@ export class AuditLogComponent implements OnInit {
   ngOnInit(): void {
     this.subNavigationTitle = 'Audit Logs';
     this.dataSource =  null;
-    // this.loadAuditLogs();
     this.getEntityTypes();
+    this.filterAuditLogs();
   }
 
   showMetaDataDetails(auditLog: IAuditLog) {
@@ -55,8 +57,9 @@ export class AuditLogComponent implements OnInit {
   }
 
   filterAuditLogs() {
-    const entityType = this.filterAuditLogForm.value.entityTypes;
+    const entityType = 'Account';  // this.filterAuditLogForm.value.entityTypes;
     const entityId = this.filterAuditLogForm.value.entityId;
+
     this.auditLogService.filterAuditLogs(entityType, entityId).subscribe(response => {
       this.showAuditLogTable = true;
       this.totalAuditLogs = response.data.length;
@@ -67,13 +70,6 @@ export class AuditLogComponent implements OnInit {
   getEntityTypes() {
     this.auditLogService.getEntityTypes().subscribe(response => {
       this.entityTypes = response.data;
-    });
-  }
-
-  loadAuditLogs() {
-    this.auditLogService.getAuditLogs().subscribe(response => {
-      this.totalAuditLogs = response.data.length;
-      this.dataSource = new MatTableDataSource(response.data);
     });
   }
 
