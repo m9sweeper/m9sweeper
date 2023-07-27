@@ -87,10 +87,10 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     },
     Title,
     DatePipe,
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { subscriptSizing: 'dynamic' }
-    },
+    // {
+    //   provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+    //   useValue: { subscriptSizing: 'dynamic' }
+    // },
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

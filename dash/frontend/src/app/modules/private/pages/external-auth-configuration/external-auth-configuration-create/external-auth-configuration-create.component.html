@@ -66,7 +66,7 @@
       </mat-form-field>
     </p>
     <p>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Allowed User Domains (comma separated)</mat-label>
         <input formControlName="oauthAllowedDomains" matInput>
         <mat-hint>Email domains allowed access to this application e.g. "example.com" to allow "user@example.com"</mat-hint>
@@ -96,7 +96,7 @@
       </mat-form-field>
     </p>
     <p>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Admin DN</mat-label>
         <input formControlName="adminDn" matInput>
         <mat-hint>ex: cn=admin,dc=example,dc=org</mat-hint>
@@ -110,7 +110,7 @@
       </mat-form-field>
     </p>
     <p>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Default User Authority</mat-label>
         <mat-select formControlName="defaultUserAuthority">
           <mat-option [value]="0">None</mat-option>
@@ -122,7 +122,7 @@
       </mat-form-field>
     </p>
     <p>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
         <mat-label>Group Search Base</mat-label>
         <input formControlName="groupSearchBase" matInput>
         <mat-hint>ex: ou=groups,dc=example,dc=org</mat-hint>
