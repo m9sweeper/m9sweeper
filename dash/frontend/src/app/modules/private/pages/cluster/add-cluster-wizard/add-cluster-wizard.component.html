@@ -33,11 +33,14 @@
       </p>
       <div>
         <!--Hiding rather than ng-ifing so that logic of whether the context should be reuiqred or not is re-evaluated properly-->
-        <p class="kubeconfig-field" [hidden]="!createClusterForm.controls.automaticClusterInstall.value">
+        <div class="kubeconfig-field row" [hidden]="!createClusterForm.controls.automaticClusterInstall.value">
+          <div class="col-xs-12 col-sm-5 col-md-4 center-xs start-sm">
           <input type="file" style="display: none;" #configFileInput (change)="onConfigFileChoose($event)"/>
-          <button type="button" mat-raised-button color="accent" (click)="configFileInput.click()">
+          <button type="button" mat-raised-button color="accent" class="mb-1" (click)="configFileInput.click()">
             Select Kubeconfig
           </button>
+            </div>
+          <div class="col-xs-12 col-sm-7 col-md-8">
           <mat-form-field appearance="fill">
             <mat-label>Context</mat-label>
             <mat-select placeholder="Context"
@@ -48,7 +51,8 @@
               <mat-option *ngFor="let context of config?.contexts" [value]="context.name">{{context.name}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </p>
+            </div>
+        </div>
         <h3>
           Cluster Details
         </h3>
@@ -70,12 +74,15 @@
         </p>
       </div>
 
-      <div>
-        <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
-        &nbsp;
-        <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" style="float: right"
-                matStepperNext>Next Step
-        </button>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-half-rem">
+          <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+        </div>
+        <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
+          <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" style="float: right"
+                  matStepperNext>Next Step
+          </button>
+        </div>
       </div>
     </form>
     </div>
@@ -107,20 +114,25 @@
           M9sweeper requires having a service account running in the cluster.
           Click the button below, and we'll walk you through the necessary steps.
         </p>
-        <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" (click)="installServiceAccount()">
-          Install Service Account
-        </button>
+        <div class="row">
+          <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" (click)="installServiceAccount()">
+            Install Service Account
+          </button>
+        </div>
       </ng-template>
     </div>
     <br>
-    <div>
-      <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
-      &nbsp;
-      <button mat-raised-button
-              color="primary"
-              style="float: right"
-              [disabled]="serviceAccountForm.invalid"
-              matStepperNext>Next Step</button>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-half-rem">
+        <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+      </div>
+      <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
+        <button mat-raised-button
+                color="primary"
+                style="float: right"
+                [disabled]="serviceAccountForm.invalid"
+                matStepperNext>Next Step</button>
+        </div>
     </div>
   </mat-step>
 
@@ -149,10 +161,13 @@
         </p>
       </ng-template>
     </div>
-    <div>
-      <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
-      &nbsp;
-      <button mat-raised-button color="primary" [disabled]="submitting" style="float: right" (click)="onSubmit(stepper)">Next Step</button>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-half-rem">
+        <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+      </div>
+      <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
+        <button mat-raised-button color="primary" [disabled]="submitting" style="float: right" (click)="onSubmit(stepper)">Next Step</button>
+      </div>
     </div>
   </mat-step>
 
