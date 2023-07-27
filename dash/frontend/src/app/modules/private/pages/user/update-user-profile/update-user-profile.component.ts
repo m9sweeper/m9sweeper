@@ -26,7 +26,7 @@ export class UpdateUserProfileComponent implements OnInit {
     this.updateUserForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
-      phone: ['', Validators.pattern(/^(\+|\d)[0-9]{6,20}$/)],
+      phone: [''],
     });
   }
 

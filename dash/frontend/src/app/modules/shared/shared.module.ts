@@ -17,11 +17,13 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
+import {PhoneMaskDirective} from './directives/phone-mask.directive';
 
 @NgModule({
   declarations: [
     DatepickerComponent,
     GenericErrorDialogComponent,
+    PhoneMaskDirective,
     RbacDirective,
     SiteLogoDirective,
     CopyToClipboardButtonComponent,
@@ -44,6 +46,7 @@ import { HideableTextComponent } from './components/hideable-text/hideable-text.
   ],
   exports: [
     DatepickerComponent,
+    PhoneMaskDirective,
     RbacDirective,
     SiteLogoDirective,
     CopyToClipboardButtonComponent,

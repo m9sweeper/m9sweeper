@@ -15,7 +15,11 @@
     <p>
       <mat-form-field appearance="fill">
         <mat-label>Phone</mat-label>
-        <input matInput placeholder="Enter phone number" type="text" formControlName="phone">
+        <input matInput
+               placeholder="Enter phone number" type="text"
+               formControlName="phone"
+               phoneMask [phoneControl]="updateUserForm.controls['phone']"
+               [currentValue]="updateUserForm.controls['phone'].value">
       </mat-form-field>
     </p>
     <div mat-dialog-actions>

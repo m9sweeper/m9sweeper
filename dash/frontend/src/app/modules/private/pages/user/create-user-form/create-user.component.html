@@ -26,18 +26,15 @@
                   <input matInput placeholder="Enter your email" type="text" formControlName="email">
                 </mat-form-field>
               </p>
-              <p *ngIf="authType !== 'OAUTH2'">
-                <mat-form-field appearance="fill" [allowedRoles]="['SUPER_ADMIN']">
-                  <mat-label>Password</mat-label>
-                  <input matInput placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-                  <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </mat-form-field>
-
-              </p>
               <p>
                 <mat-form-field appearance="fill">
                   <mat-label>Phone</mat-label>
-                  <input matInput placeholder="Enter phone number" type="text" formControlName="phone" [readonly]="activateReadOly">
+                  <input matInput
+                         placeholder="Enter phone number" type="text"
+                         formControlName="phone"
+                         phoneMask [phoneControl]="userForm.controls['phone']"
+                         [currentValue]="userForm.controls['phone'].value"
+                         [readonly]="activateReadOly">
                 </mat-form-field>
               </p>
               <p>
@@ -52,10 +49,9 @@
                 <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
               </p>
             </form>
-            <button [disabled]="!userForm.valid" mat-raised-button type="button" (click)="onSubmit()" >
+            <button [disabled]="!userForm.valid" mat-raised-button type="button" color="primary" id="create-user-button" (click)="onSubmit()">
               {{ isEdit ? 'Save' : 'Create'}}
             </button>
-            &nbsp;
             <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
           </mat-card-content>
         </mat-card>
