@@ -2,52 +2,40 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
     <mat-card class="settings-card">
-      <mat-card-header>
-        <div class="page-card-header">
-          <div class="page-card-title">
-            Audit Logs
-          </div>
-        </div>
-      </mat-card-header>
       <mat-card-content>
-        <div class="row">
-          <div class="col-xs-12 col-lg-6">
-            <form>
-              <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6">
-                  <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
-                    <mat-label>Entity Type</mat-label>
-                    <mat-select formControlName="entityTypes">
-                      <mat-option *ngFor="let entity of entityTypes" [value]="entity.entityType">
-                        {{entity.entityType}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
+        <form id="auditLogFilterForm">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
+                <mat-label>Entity Type</mat-label>
+                <mat-select formControlName="entityTypes">
+                  <mat-option *ngFor="let entity of entityTypes" [value]="entity.entityType">
+                    {{entity.entityType}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-                <div class="col-xs-12 col-sm-6 col-md-6">
-                  <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
-                    <mat-label>Entity Id</mat-label>
-                    <input matInput type="number" formControlName="entityId">
-                  </mat-form-field>
-                </div>
-              </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
+                <mat-label>Entity Id</mat-label>
+                <input matInput type="number" formControlName="entityId">
+              </mat-form-field>
+            </div>
+            <div class="col-xs-12" id="auditFilterButtons">
+              <button [disabled]="!filterAuditLogForm.valid"
+                      mat-raised-button id="submitButton"
+                      color="primary"
+                      type="submit" (click)="filterAuditLogs()">Filter
+              </button>
 
-                  <button [disabled]="!filterAuditLogForm.valid"
-                          mat-raised-button
-                          color="primary"
-                          type="submit" (click)="filterAuditLogs()">Filter
-                  </button>
-
-                  <button mat-raised-button
-                          color="primary"
-                          type="submit" (click)="resetAuditLogs()">Reset
-                  </button>
-
-            </form>
+              <button mat-raised-button id="resetButton"
+                      color="primary"
+                      type="submit" (click)="resetAuditLogs()">Reset
+              </button>
+            </div>
           </div>
-          <div class="col-xs"></div>
-        </div>
+        </form>
       </mat-card-content>
     </mat-card>
 

@@ -1,3 +1,20 @@
+#auditLogFilterForm {
+  .col-xs-12 {
+    padding-block: 1em;
+  }
+}
+
+#auditFilterButtons {
+  display: flex;
+  justify-content: start;
+  #submitButton {
+    margin-right: 1em;
+  }
+  #resetButton {
+    margin-left: 1em;
+  }
+}
+
 #auditLogTableHeader {
   padding-inline: 25px;
 }
