@@ -1,16 +1,27 @@
 <!-- start of the upper part of the menu-->
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing">
-      <div class=" cluster-group-name page-button-spacing">
+    <div class="page-title-button-group-spacing row">
+      <div class="col-md-6 col-xs-12 start-md center-xs cluster-group-name display-flex">
         {{ clusterGroupName }}
         <button  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button  (click)="editClusterGroupNameDialog()">
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
-      <div>
-        <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="warn" [disabled]="!clustersList || clustersList.length || disableOnSearch" (click)="deleteClusterGroup()">Delete Cluster Group</button>
-        <button class="margin-right-10 margin-top-10" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openClusterDialog()">Add Cluster</button>
+      <div class="col-md-6 col-xs-12 end-md center-xs display-flex">
+        <button
+          class="margin-right-10 margin-top-10"
+          [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+          mat-raised-button
+          color="warn"
+          [disabled]="!clustersList || clustersList.length || disableOnSearch"
+          (click)="deleteClusterGroup()">Delete Cluster Group</button>
+        <button
+          class="margin-right-10 margin-top-10"
+          [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+          mat-raised-button
+          color="primary"
+          (click)="openClusterDialog()">Add Cluster</button>
       </div>
     </div>
   <!-- start of the first row of graphs-->

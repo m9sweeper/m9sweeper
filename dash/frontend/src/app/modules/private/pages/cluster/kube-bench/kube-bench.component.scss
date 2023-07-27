@@ -1,23 +1,52 @@
-td, th {
-  width: 33.3%;
-}
-table {
-  width: 100%;
-}
-.last-run-data {
-  text-align: center;
+.stats-row {
+
+  > div {
+    margin: 0;
+    height: 150px;
+
+    &#center-card {
+
+      table {
+        width: 100%;
+      }
+    }
+
+    mat-card {
+      height: 90%;
+
+      .last-run-data {
+        text-align: center;
+      }
+
+    }
+  }
 }
 
-.row {
-  margin: 0;
-  display: flex;
-}
+#past-audits-table {
+  mat-card-header {
+    margin-bottom: 1em;
 
-.error {
-  color: red;
-}
+    .run-audit-button {
+      justify-content: end;
+      display: flex;
+    }
+  }
 
-.okay{
-  color:green;
-}
+  mat-table {
+    width: 100%;
+    overflow-x: auto;
 
+    .mat-column-date {
+      min-width: 125px;
+    }
+    .mat-column-total-pass {
+      min-width: 50px;
+    }
+    .mat-column-total-fail {
+      min-width: 50px;
+    }
+    .mat-column-total-warnings {
+      min-width: 75px;
+    }
+  }
+}

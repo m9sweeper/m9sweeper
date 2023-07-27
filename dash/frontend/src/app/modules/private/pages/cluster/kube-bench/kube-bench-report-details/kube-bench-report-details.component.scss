@@ -1,47 +1,78 @@
-.test-main {
-  max-width: 8%;
+.page-subtitle {
+  font-weight: bold;
+  margin-bottom: 1em;
 }
 
-.test-description-main {
-  min-width: 62%;
-  max-width: 62%;
+.control-accordions {
+
+  > mat-expansion-panel {
+    margin-top: 1em;
+  }
+
+  ::ng-deep
+  .mat-expansion-panel-body {
+    padding: 0 12px 16px;
+  }
+
+  mat-panel-title {
+    font-weight: bolder;
+    font-size: 16px;
+  }
+  mat-panel-description {
+    color: unset;
+    flex-grow: 8;
+  }
+
+  .test-accordions {
+    mat-expansion-panel {
+      box-shadow: unset;
+    }
+
+    // light borders (styled after mat-table borders)
+    mat-expansion-panel {
+      border-bottom: rgba(0, 0, 0, 0.12) solid 1px;
+
+      &.mat-expanded {
+        border: unset;
+        mat-expansion-panel-header {
+          border-bottom: rgba(0, 0, 0, 0.12) solid 1px;
+        }
+      }
+    }
+    .result-accordions mat-expansion-panel.mat-expanded {
+      border-bottom: rgba(0,0,0,0.12) solid 1px;
+      mat-expansion-panel-header {
+        border-bottom: unset;
+      }
+    }
+  }
 }
 
-.pass-fail-main {
-  justify-content: flex-end;
-  max-width: 30%;
-}
+.result-accordions {
+  mat-panel-description {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.mat-mdc-row:not(.expanded-detail-row):hover {
-  background: whitesmoke;
-  cursor: pointer;
-}
+  ::ng-deep
+  .mat-expansion-panel-content {
+    padding: 0 24px;
+  }
 
-.expanded-detail-row:hover {
-  cursor: default;
-}
+  ::ng-deep
+  .mat-expansion-panel-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
 
-.mat-mdc-row:not(.expanded-detail-row):active {
-  background: #efefef;
-}
+    .test-details {
+      line-break: anywhere;
+      margin-block: 0.25em;
 
-.mat-mdc-row td {
-  border-bottom-width: 0;
-  min-height: 0;
-}
-
-.expanded-detail-row {
-  min-height: 0;
-}
-
-.expanded-information-row-div {
-  overflow: hidden;
-  display: flex;
-  width: 100%;
-}
-
-.covered-data{
-  padding: 1%;
-  width: 32%;
-  font-size: 12px;
+      .test-details-title {
+        font-weight: bold;
+      }
+    }
+  }
 }

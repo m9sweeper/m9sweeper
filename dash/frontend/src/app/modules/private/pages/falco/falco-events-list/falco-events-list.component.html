@@ -6,106 +6,106 @@
       </div>
       <div class="page-button-spacing">
         <button mat-raised-button color="primary" (click)="openDialog()">Install</button>&nbsp;
-        <button mat-raised-button color="primary" *ngIf="isAllowed" (click)="onClickSettings()">Settings</button>
+        <button mat-raised-button color="primary"
+                *ngIf="isAllowed"
+                [routerLink]="['/private', 'clusters', this.clusterId, 'falco', 'settings']"
+        >Settings</button>
       </div>
     </div>
-    <div class="page-card">
-      <mat-card appearance="outlined">
-        <mat-card-header>
-          <div class="page-card-header">
-            <div class="page-card-title">
-              Log Filters
-            </div>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="page-card-header" style="margin-top: 20px;">
-            <form (ngSubmit)="rebuildWithFilters()">
-              <div class="row report-header">
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Start Date</mat-label>
-                    <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-                    <mat-datepicker #startPicker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field appearance="fill" [formGroup]="filterForm">
-                    <mat-label>End date</mat-label>
-                    <input matInput [matDatepicker]="endPicker" formControlName="endDate">
-                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                    <mat-datepicker #endPicker></mat-datepicker>
-                  </mat-form-field>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Order By</mat-label>
-                    <mat-select formControlName="selectedOrderBy">
-                      <mat-option *ngFor="let option of orderByOptions"
-                                  [value]="option">
-                        {{option}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Priority Levels</mat-label>
-                    <mat-select formControlName="selectedPriorityLevels"
-                                multiple>
-                      <mat-option *ngFor="let level of priorityLevels"
-                                  [value]="level">
-                        {{level}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Search namespace</mat-label>
-                    <input matInput autocomplete="off" type="text" formControlName="namespaceInput">
-                  </mat-form-field>
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-card>
+          <mat-card-header>
+            <div class="page-card-title">Log Filters</div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="page-card-header" style="margin-top: 20px;">
+              <form (ngSubmit)="rebuildWithFilters()">
+                <div class="row report-header">
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Start Date</mat-label>
+                      <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                      <mat-datepicker #startPicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field appearance="fill" [formGroup]="filterForm">
+                      <mat-label>End date</mat-label>
+                      <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                      <mat-datepicker #endPicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Order By</mat-label>
+                      <mat-select formControlName="selectedOrderBy">
+                        <mat-option *ngFor="let option of orderByOptions"
+                                    [value]="option">
+                          {{option}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Priority Levels</mat-label>
+                      <mat-select formControlName="selectedPriorityLevels"
+                                  multiple>
+                        <mat-option *ngFor="let level of priorityLevels"
+                                    [value]="level">
+                          {{level}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Search namespace</mat-label>
+                      <input matInput autocomplete="off" type="text" formControlName="namespaceInput">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Search pod</mat-label>
+                      <input matInput autocomplete="off" type="text" formControlName="podInput">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xs-12 col-sm-6 col-md-3">
+                    <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
+                      <mat-label>Search image</mat-label>
+                      <input matInput autocomplete="off" type="text" formControlName="imageInput">
+                    </mat-form-field>
+                  </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Search pod</mat-label>
-                    <input matInput autocomplete="off" type="text" formControlName="podInput">
-                  </mat-form-field>
+                <div>
+                  <div class="page-card-left-align">
+                    <button [disabled]="!filtersValid"
+                            mat-raised-button
+                            color="primary"
+                            type="submit">Search
+                    </button>
+                  </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                  <mat-form-field class="mr-10px" appearance="fill" [formGroup]="filterForm">
-                    <mat-label>Search image</mat-label>
-                    <input matInput autocomplete="off" type="text" formControlName="imageInput">
-                  </mat-form-field>
-                </div>
-              </div>
-              <div>
-                <div class="page-card-left-align">
-                  <button [disabled]="!filtersValid"
-                          mat-raised-button
-                          color="primary"
-                          type="submit">Search
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      &nbsp;
-    </div>
-    <div class="page-card">
-      <mat-card appearance="outlined">
-        <mat-card-header>
-          <div class="page-card-header">
-            <div class=" col-sm-3 no-padding">
-              <div class="page-card-title">
-                Recent Events
-              </div>
+              </form>
             </div>
-            <div class="col-sm-9 page-card-title-button-group-right-align">
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card">
+          <mat-card-header class="row">
+            <div class="page-card-title col-xs-3">
+                Recent Events
+            </div>
+            <div id="report-buttons" class="col-xs-9">
               <button (click)="downloadReport()"
                       mat-raised-button
                       color="primary"
@@ -119,59 +119,18 @@
               </button>
 
             </div>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-
-          <div class="falco-table page-table">
-            <mat-table [dataSource]="dataSource">
-
-              <ng-container matColumnDef="calendarDate">
-                <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.calendarDate}}</mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="namespace">
-                <mat-header-cell *matHeaderCellDef>Namespace</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.namespace}}</mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="pod">
-                <mat-header-cell *matHeaderCellDef>Pod</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.container}}</mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="image">
-                <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{stripDomainName(log.image)}}</mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="message">
-                <mat-header-cell *matHeaderCellDef>Message</mat-header-cell>
-                <mat-cell *matCellDef="let log">
-                  {{log.message}}
-                </mat-cell>
-              </ng-container>
-
-              <ng-container matColumnDef="priority">
-                <mat-header-cell *matHeaderCellDef>Priority</mat-header-cell>
-                <mat-cell *matCellDef="let log">{{log.level}}</mat-cell>
-              </ng-container>
-              <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumns;"
-                       (click)="displayEventDetails(row)" >
-              </mat-row>
-            </mat-table>
-          </div>
-            <mat-paginator
-              [length]="logCount"
-              [pageSize]="limit"
-              [pageSizeOptions]="[ 20, 50, 100]"
-              (page)="pageEvent($event)"
-              showFirstLastButtons>
-            </mat-paginator>
-        </mat-card-content>
-      </mat-card>
+          </mat-card-header>
+          <mat-card-content>
+            <app-falco-related-events-table
+              [clusterId]="clusterId"
+              [filters]="falcoLogFilters"
+              [displayedColumns]="falcoEventLogsColumns"
+              [stylingOptions]="falcoEventLogsStylingOptions"
+              (recentEventClicked)="displayEventDetails($event)"
+            ></app-falco-related-events-table>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

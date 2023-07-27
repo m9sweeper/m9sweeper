@@ -1,10 +1,10 @@
 <div class="page-container">
   <div class="page-container-content">
     <div class="col-lg-4 col-xs-12 page-title">
-      <span>Vulnerabilities History</span>
+      <span>Vulnerability History</span>
     </div>
     <div class="vulnerability-filter-card">
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header>
           <div class="row">
             <div class="col-xs-12 page-card-title fix-margin">
@@ -61,17 +61,19 @@
       </mat-card>
     </div>
     <div class="vulnerability-card">
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header>
           <div class="row full-width">
-            <div class="col-xs-9 vulnerability-count">
+            <div class="col-xs-10 vulnerability-count">
               <p class="title-font title-margin">Displaying {{limit}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
-            <div class="col-xs-3 vulnerability-download-button">
+            <div class="col-xs-2 vulnerability-download-button">
               <button (click)="downloadReport()"
-                      mat-raised-button
+                      mat-mini-fab
                       color="primary"
-                      type="button">Download Report
+                      class="mb-half-rem"
+                      matTooltip="Download Report"
+                      type="button"><mat-icon>save_alt</mat-icon>
               </button>
             </div>
           </div>

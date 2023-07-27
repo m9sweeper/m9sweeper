@@ -1,0 +1,153 @@
+<div class ="page-container">
+  <div class="page-container-content">
+    <div class="page-title-button-group-spacing">
+      <div>
+        <div class="page-title"> Event Details</div>
+      </div>
+      <div >
+        <button mat-raised-button color="primary"  (click)="onClickShare()">Share</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6 overview-cards">
+        <mat-card class="scrollable-table-card">
+          <mat-card-header>
+            <div class="page-card-header">
+              <div class="page-card-title"> Basic Details </div>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="table-wrapper" id="event-details-wrapper">
+              <mat-table [dataSource]="eventDetails" id="event-details-table">
+                <ng-container matColumnDef="title">
+                  <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+                  <mat-cell *matCellDef="let detail"><b>{{detail.title}}</b></mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="value">
+                  <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+                  <mat-cell *matCellDef="let detail"  [matTooltip]="detail.value">{{detail.value}}</mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="['title', 'value']" ></mat-header-row>
+                <mat-row *matRowDef="let row; columns: ['title', 'value']"></mat-row>
+              </mat-table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-md-6 overview-cards">
+        <mat-card id="incidence-rate-graph-card">
+          <mat-card-header>
+            <div class="page-card-header">
+              <div class="page-card-title">  Incidence Rate </div>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div id="incidence-rate-graph">
+              <ngx-charts-bar-vertical
+                [view]="barChartAttributes.view"
+                [scheme]="barChartAttributes.colorScheme"
+                [results]="barChartAttributes.results"
+                [legend]="barChartAttributes.showLegend"
+                [legendPosition]="barChartAttributes.legendPosition"
+                [gradient]="barChartAttributes.gradient"
+                [xAxis]="barChartAttributes.showXAxis"
+                [yAxis]="barChartAttributes.showYAxis"
+                [barPadding]="barChartAttributes.barPadding"
+                [showXAxisLabel]="barChartAttributes.showXAxis"
+                [showYAxisLabel]="barChartAttributes.showYAxis"
+                [xAxisLabel]="barChartAttributes.xAxisLabel"
+                [yAxisLabel]="barChartAttributes.yAxisLabel">
+              </ngx-charts-bar-vertical>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div id="row">
+      <mat-accordion class="col-xs-12">
+        <mat-expansion-panel id="full-message-panel">
+          <mat-expansion-panel-header>
+            <mat-panel-title><b>Full Message</b></mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>{{message}}</div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card col-xs-12">
+          <mat-card-header id="related-events-header">
+            <div class="page-card-header">
+              <div class="page-card-title">
+                Related Events
+              </div>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <app-falco-related-events-table
+              [clusterId]="clusterId"
+              [currentEventLogId]="eventId"
+              [filters]="{ signature }"
+              [stylingOptions]="falcoEventLogsStylingOptions"
+              (recentEventClicked)="displayEventDetails($event)"
+            ></app-falco-related-events-table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row" id="raw-data">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card">
+          <mat-card-header>
+            <div class="page-card-header row">
+<!--          Please note that col-xs-12 + col-xs-7 puts the buttons at the start of the next row -->
+              <div class="page-card-title col-xs-12 col-sm-3">
+                Raw Data
+              </div>
+              <div class="col-xs-7 col-sm-9 page-card-title-button-group-right-align">
+                <mat-button-toggle-group [value]="format" name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle value="yaml" (click)="onClickYaml()">Yaml</mat-button-toggle>
+                  <mat-button-toggle value="json" (click)="onClickJson()">Json</mat-button-toggle>
+                  <mat-button-toggle value="table" (click)="onClickTable()">Table</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div id="raw-data-content">
+              <b>Raw:</b>
+              <div> {{message}}</div>
+              <br>
+              <b>Formatted:</b>
+              <div>
+                <div *ngIf="format === 'yaml'; then displayInYaml"></div>
+                <ng-template #displayInYaml>
+                  <pre [innerHTML]="rawInFormat"></pre>
+                </ng-template>
+              </div>
+              <div>
+                <div *ngIf="format === 'json'; then displayInJson"></div>
+                <ng-template #displayInJson>
+                  <pre [innerHTML]="rawInFormat"></pre>
+
+                </ng-template>
+              </div>
+
+              <div>
+                <div *ngIf="format === 'table'; then displayInTable"></div>
+                <ng-template #displayInTable>
+                  <div [innerHTML]="raw | tablify" class="table-format"></div>
+                </ng-template>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+  </div>
+</div>
