@@ -21,4 +21,7 @@ mat-card {
 
 #auditLogTableHeader {
   padding-inline: 25px;
+  .col-xs-12 {
+    padding-block: 0.25em;
+  }
 }
