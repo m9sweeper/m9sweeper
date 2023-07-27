@@ -1,10 +1,11 @@
-<div class="sub-navigation-wrapper">
-  <div class="item-sub-navigation">
-    <div class="item-name">
-      {{ title }}
-    </div>
+<div class="row" id="sub-navigation-wrapper">
+  <div class="col-xs-12 col-sm-6" id="sub-navigation-title">
+    {{ title }}
   </div>
-  <div *ngIf="buttonTitle || buttonUrl">
-    <button mat-raised-button color="primary" [routerLink]="buttonUrl">{{buttonTitle}}</button>
+  <div *ngIf="buttonTitle || buttonUrl" class="col-xs-12 col-sm-6 start-xs end-sm" id="sub-navigation-button">
+    <button mat-raised-button color="primary" [routerLink]="buttonUrl">
+      <mat-icon *ngIf="buttonIcon">{{buttonIcon}}</mat-icon>
+      {{buttonTitle}}
+    </button>
   </div>
 </div>

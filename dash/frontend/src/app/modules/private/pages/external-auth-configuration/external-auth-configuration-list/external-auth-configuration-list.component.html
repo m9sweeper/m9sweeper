@@ -1,7 +1,9 @@
 <div class="page-container">
   <div class="page-container-content">
-    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" (click)="openAddExternalAuthConfigurationDialog(null)">
-      <mat-icon>add</mat-icon>Add Sign On Method
+    <app-sub-navigation
+      [title]="subNavigationDetails.title"
+      [buttonTitle]="subNavigationDetails.buttonTitle" [buttonIcon]="subNavigationDetails.buttonIcon"
+      (click)="openAddExternalAuthConfigurationDialog(null)">
     </app-sub-navigation>
     <mat-card class="settings-card">
       <div class="table-wrapper">

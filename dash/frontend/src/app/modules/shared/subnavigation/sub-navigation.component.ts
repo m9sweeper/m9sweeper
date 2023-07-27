@@ -9,4 +9,5 @@ export class SubNavigationComponent {
   @Input() buttonTitle: string;
   @Input() buttonUrl: any;
   @Input() title: string;
+  @Input() buttonIcon: string;
 }

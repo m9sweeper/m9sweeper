@@ -15,10 +15,13 @@ import {environment} from '../../../../../../environments/environment';
   styleUrls: ['./external-auth-configuration-list.component.scss']
 })
 export class ExternalAuthConfigurationListComponent implements OnInit {
-  subNavigationTitle: string;
-  subNavigationButtonTitle: string;
-  subNavigationButtonUrl: any;
-  subMenuTitle: 'External Configuration List';
+  subNavigationDetails = {
+    title: 'Sign-On Methods',
+    buttonTitle: 'Add External Auth Configuration',
+    buttonUrl: '',
+    buttonIcon: 'add',
+    menuTitle: 'Sign-On Methods',
+  };
   displayedColumns: string[] = ['id', 'authName', 'authType', 'authProvider', 'isActive', 'actions'];
   dataSource: MatTableDataSource<IAuthConfig>;
   externalAuthConfig: IAuthConfig;
@@ -26,13 +29,10 @@ export class ExternalAuthConfigurationListComponent implements OnInit {
   authenticationType: typeof AuthenticationType = AuthenticationType;
 
   constructor(private externalAuthConfigurationService: ExternalAuthConfigurationService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getExternalAuthConfigs();
-    this.subNavigationTitle = 'External Auth Configuration';
-    this.subNavigationButtonTitle = 'Add External Auth Configuration';
-    this.subNavigationButtonUrl = '';
   }
 
   getExternalAuthConfigs(){
@@ -56,7 +56,7 @@ export class ExternalAuthConfigurationListComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: true,
       data: {
-        isEdit: authConfig ? true : false,
+        isEdit: !!authConfig,
         authConfigData: authConfig ? authConfig : null
       }
     });
