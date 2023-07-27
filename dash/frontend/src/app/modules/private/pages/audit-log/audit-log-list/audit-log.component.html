@@ -57,7 +57,7 @@
           <mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
                  matSortDirection="asc">
             <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>IS</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>ID</mat-header-cell>
               <mat-cell *matCellDef="let auditLog"> {{auditLog?.id}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="entity_type">
