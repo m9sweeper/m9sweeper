@@ -33,6 +33,7 @@ export class ExternalAuthConfigurationListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getExternalAuthConfigs();
+    this.openAddExternalAuthConfigurationDialog();
   }
 
   getExternalAuthConfigs(){
