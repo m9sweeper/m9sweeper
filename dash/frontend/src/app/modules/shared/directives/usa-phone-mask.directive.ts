@@ -6,9 +6,9 @@ import { Subject } from 'rxjs';
 
 // adapted from https://stackblitz.com/edit/angular-phone-mask-directive
 @Directive({
-  selector: '[phoneMask]'
+  selector: '[USAPhoneMask]'
 })
-export class PhoneMaskDirective implements OnInit, OnDestroy {
+export class USAPhoneMaskDirective implements OnInit, OnDestroy {
 
   // tslint:disable:variable-name
   private _phoneControl: AbstractControl;
