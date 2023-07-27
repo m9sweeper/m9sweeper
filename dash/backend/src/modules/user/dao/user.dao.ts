@@ -143,8 +143,6 @@ export class UserDao {
         this.on('user_auth.authority_id', '=', 'authority_levels.id');
       }).orderBy(processedSort.field, processedSort.direction);
 
-    const sqlQuery = query.toSQL();
-    const sqlString = query.toQuery();
     return knexnest(query).then(user => plainToInstance(UserProfileDto, user));
   }
 
