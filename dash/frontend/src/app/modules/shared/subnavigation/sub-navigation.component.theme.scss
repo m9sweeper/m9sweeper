@@ -1,7 +1,0 @@
-@use '@angular/material' as mat;
-@include mat.core();
-
-@mixin sub-navigation-dark-theme($theme) {
-  app-sub-navigation {
-  }
-}

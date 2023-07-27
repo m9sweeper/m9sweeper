@@ -2,8 +2,8 @@
   <div class="page-container-content">
     <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                         [title]="subNavigationTitle"
-                        [buttonTitle]="subNavigationButtonTitle"
-                        (click)="openDockerRegistryDialog(false)"></app-sub-navigation>
+                        [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
+                        (buttonClicked)="openDockerRegistryDialog(false)"></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
     <mat-card class="settings-card">

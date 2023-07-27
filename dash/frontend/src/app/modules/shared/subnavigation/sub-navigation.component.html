@@ -3,7 +3,7 @@
     {{ title }}
   </div>
   <div *ngIf="buttonTitle || buttonUrl" class="col-xs-12 col-sm-6 start-xs end-sm" id="sub-navigation-button">
-    <button mat-raised-button color="primary" [routerLink]="buttonUrl">
+    <button mat-raised-button color="primary" [routerLink]="buttonUrl" (click)="emitButtonEvent($event)">
       <mat-icon *ngIf="buttonIcon">{{buttonIcon}}</mat-icon>
       {{buttonTitle}}
     </button>

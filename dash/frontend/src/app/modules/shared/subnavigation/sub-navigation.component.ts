@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-sub-navigation',
@@ -10,4 +10,9 @@ export class SubNavigationComponent {
   @Input() buttonUrl: any;
   @Input() title: string;
   @Input() buttonIcon: string;
+  @Output() buttonClicked = new EventEmitter<any>();
+
+  emitButtonEvent($event) {
+    this.buttonClicked.emit($event);
+  }
 }
