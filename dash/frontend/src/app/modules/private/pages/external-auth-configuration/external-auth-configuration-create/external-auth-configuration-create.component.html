@@ -1,7 +1,5 @@
-<h1 mat-dialog-title>{{data.isEdit ? 'Update' : 'Add'}} Sign On method</h1>
+<h1 mat-dialog-title>{{data.isEdit ? 'Update' : 'Add'}} Sign On Method</h1>
 
-<!--<div mat-dialog-content-->
-<!--     [ngClass]="oauthAuthActivated || ldapAuthActivated ? 'extend-create-external-auth-configuration-form': 'create-external-auth-configuration-form'">-->
 <form mat-dialog-content [formGroup]="authConfigForm"  (ngSubmit)="onSubmit()" id="external-auth-conf-form">
   <p>
     <mat-form-field>
