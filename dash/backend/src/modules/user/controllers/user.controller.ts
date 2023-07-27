@@ -28,10 +28,10 @@ import {Authority} from '../enum/Authority';
 @Controller()
 @UseInterceptors(ResponseTransformerInterceptor)
 export class UserController {
-    constructor(@Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
-                private readonly userProfileService: UserProfileService){
-
-    }
+    constructor(
+      @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+      private readonly userProfileService: UserProfileService
+    ) {}
 
     @Get()
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)

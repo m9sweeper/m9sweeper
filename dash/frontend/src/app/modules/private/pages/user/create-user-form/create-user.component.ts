@@ -25,7 +25,6 @@ export class CreateUserComponent implements OnInit {
   authorities: IAuthority[];
   defaultAuthority: Array<number>;
   activateReadOly = false;
-  hidePassword = true;
   authType: string;
 
   constructor(
@@ -44,7 +43,6 @@ export class CreateUserComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-      password: ['', Validators.nullValidator],
       phone: ['', Validators.pattern(/^(\+|\d)[0-9]{6,20}$/)],
       isActive: [true, Validators.nullValidator],
       authorities: ['', [Validators.required]]
@@ -101,7 +99,6 @@ export class CreateUserComponent implements OnInit {
       const userCreatePayload: IUserRequestPayload = {
           authorities: this.userForm.get('authorities').value,
           email: this.userForm.get('email').value,
-          password: this.userForm.get('password').value,
           firstName: this.userForm.get('firstName').value,
           lastName: this.userForm.get('lastName').value,
           phone: this.userForm.get('phone').value,
@@ -117,16 +114,13 @@ export class CreateUserComponent implements OnInit {
       const userCreatePayload: IUserRequestPayload = {
         authorities: this.userForm.get('authorities').value,
         email: this.userProfileData.email,
-        password: this.userForm.get('password').value,
         firstName: this.userForm.get('firstName').value,
         lastName: this.userForm.get('lastName').value,
         phone: this.userForm.get('phone').value,
         isActive: this.userForm.get('isActive').value,
       };
-      // if user did not add a password, do not send it to the backend
-      if (!userCreatePayload.password || userCreatePayload.password.trim() === '') {
-        delete userCreatePayload.password;
-      }
+      // ensure no password is sent to the backend
+      delete userCreatePayload.password;
       this.userService.updateUserInfo(
         this.userProfileData.id,
         userCreatePayload

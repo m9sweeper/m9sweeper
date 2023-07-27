@@ -38,7 +38,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private alertService: AlertService,
     public dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.subNavigationTitle = 'All Users';

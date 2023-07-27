@@ -3,7 +3,7 @@
     <div class="page-card">
 
     <div >
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-content>
           <div class="page-title-button-group-spacing">
             <span class="page-title">{{subMenuTitle}}</span>
@@ -102,12 +102,12 @@
             </div>
             <div class="col-sm-4 page-card-title-button-group-right-align">
               <button mat-raised-button color="primary"  type="button"
-                      (click)="openAddScannerDialog()"><mat-icon mat-list-item-icon>add</mat-icon>Create Scanner</button>
+                      (click)="openAddScannerDialog()"><mat-icon>add</mat-icon>Create Scanner</button>
             </div>
           </div>
           <br>
             <div class="row page-card-header">
-              <div class="mat-elevation-z8" style="width: 100%;">
+              <div id="policy-requirements-table" *ngIf="dataSource?.data?.length">
                 <table mat-table [dataSource]="dataSource">
                   <ng-container matColumnDef="enabled">
                     <th mat-header-cell *matHeaderCellDef>Active</th>

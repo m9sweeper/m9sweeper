@@ -10,9 +10,9 @@ mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat
 }
 
 #falco-dialog-buttons {
-  padding-right: 24px;
+  padding-inline: 30px;
   align-self: center;
-  justify-content: space-evenly;
+  //justify-content: space-evenly;
   display: flex;
   a {
     margin-right: 1em;

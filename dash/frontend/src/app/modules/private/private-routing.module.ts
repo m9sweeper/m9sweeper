@@ -369,7 +369,7 @@ const routes: Routes = [
         component: OrganizationSettingsComponent,
         canActivate: [RoleGuard],
         data: {
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
         },
         children: [
           {
