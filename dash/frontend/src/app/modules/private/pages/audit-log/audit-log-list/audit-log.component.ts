@@ -42,7 +42,6 @@ export class AuditLogComponent implements OnInit {
     this.subNavigationTitle = 'Audit Logs';
     this.dataSource =  null;
     this.getEntityTypes();
-    this.filterAuditLogs();
   }
 
   showMetaDataDetails(auditLog: IAuditLog) {
@@ -57,7 +56,7 @@ export class AuditLogComponent implements OnInit {
   }
 
   filterAuditLogs() {
-    const entityType = 'Account';  // this.filterAuditLogForm.value.entityTypes;
+    const entityType = this.filterAuditLogForm.value.entityTypes;
     const entityId = this.filterAuditLogForm.value.entityId;
 
     this.auditLogService.filterAuditLogs(entityType, entityId).subscribe(response => {
@@ -74,7 +73,6 @@ export class AuditLogComponent implements OnInit {
   }
 
   resetAuditLogs() {
-    // this.loadAuditLogs();
     this.showAuditLogTable = false;
   }
 
