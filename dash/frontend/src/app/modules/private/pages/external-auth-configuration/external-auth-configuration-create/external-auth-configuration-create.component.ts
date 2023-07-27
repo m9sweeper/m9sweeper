@@ -21,14 +21,16 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   ldapAuthActivated = false;
   ldapPasswordHide = true;
 
-  constructor(private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
-              private externalAuthConfigurationService: ExternalAuthConfigurationService,
-              private formBuilder: FormBuilder,
-              private alertService: AlertService,
-              @Inject(MAT_DIALOG_DATA) public data: {
-                isEdit: boolean;
-                authConfigData: IAuthConfig;
-              }) {
+  constructor(
+    private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
+    private externalAuthConfigurationService: ExternalAuthConfigurationService,
+    private formBuilder: FormBuilder,
+    private alertService: AlertService,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      isEdit: boolean;
+      authConfigData: IAuthConfig;
+    }
+  ) {
     this.authConfigForm = this.formBuilder.group({
       authType: ['', Validators.required],
       authName: ['', Validators.required],

@@ -9,8 +9,21 @@ mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat
   // overflow-y: auto;
 }
 
+.mat-mdc-dialog-content {
+  max-height: unset !important;
+}
+
+.mat-mdc-dialog-title {
+  margin-top: 0.25em;
+  display: flex;
+
+  .col-xs-12 {
+    padding: 0 0 9px;
+  }
+}
+
 #falco-dialog-buttons {
-  padding-inline: 30px;
+  //padding-inline: 30px;
   align-self: center;
   //justify-content: space-evenly;
   display: flex;

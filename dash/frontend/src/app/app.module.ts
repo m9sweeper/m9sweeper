@@ -24,6 +24,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {DatePipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
@@ -86,6 +87,10 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     },
     Title,
     DatePipe,
+    // {
+    //   provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+    //   useValue: { subscriptSizing: 'dynamic' }
+    // },
   ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
