@@ -125,7 +125,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
           }
         }
       } else {
-        this.snackBar.open('Could not get pods in ', 'Close', { duration: 2000});
+        this.snackBar.open('Could not get pods in ' + this.selectedNamespaces, 'Close', { duration: 2000});
       }
     });
   }

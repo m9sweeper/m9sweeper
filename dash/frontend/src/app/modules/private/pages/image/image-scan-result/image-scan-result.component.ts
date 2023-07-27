@@ -245,7 +245,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
         this.setImageScanQueueStatus();
       }
     }, error => {
-      this.snackBar.open(error.error.error.message, 'Close', { duration: 2000 });
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
