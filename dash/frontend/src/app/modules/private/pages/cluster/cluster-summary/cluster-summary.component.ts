@@ -178,7 +178,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<INamespaceTotalVulnerability[]>) => {
       this.dataSource = new MatTableDataSource(response.data);
     }, error => {
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -231,7 +231,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
           }
         ];
       }, error => {
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       }
     );
   }
@@ -280,7 +280,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         }) : [];
       },
       error => {
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -290,7 +290,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<number>) => {
       this.totalVulnerabilities = response.data;
     }, error => {
-      this.snackBar.open(error.error.message, 'Close');
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -306,7 +306,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         }
       }
     }, error => {
-      this.snackBar.open(error.error.message, 'Close');
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -316,7 +316,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
       .subscribe((response: IServerResponse<number>) => {
       this.countOfPolicyViolations = response.data[0].count;
     }, error => {
-      this.snackBar.open(error.error.message, 'Close');
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 

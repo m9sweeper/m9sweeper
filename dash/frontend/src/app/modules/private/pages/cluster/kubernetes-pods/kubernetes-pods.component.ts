@@ -123,7 +123,7 @@ export class KubernetesPodsComponent implements OnInit {
     }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.snackBar.open(error.error.message,  'Close');
+    this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
   }
 
   // @TODO: server side pagination

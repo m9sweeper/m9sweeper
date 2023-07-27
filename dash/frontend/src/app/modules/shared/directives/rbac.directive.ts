@@ -23,7 +23,7 @@ export class RbacDirective implements OnInit {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
       this.renderer.listen(this.el.nativeElement, 'click', (event) => {
         event.stopPropagation();
-        this.snackBar.open('Access denied!', 'Close');
+        this.snackBar.open('Access denied!', 'Close', { duration: 2000 });
         return false;
       });
     }

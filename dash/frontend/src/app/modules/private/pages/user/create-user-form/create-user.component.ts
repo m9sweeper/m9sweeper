@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { UserService } from '../../../../../core/services/user.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IAuthority, IUser, IUserRequestPayload} from '../../../../../core/entities/IUser';
 import { take } from 'rxjs/operators';
 import {Location} from '@angular/common';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-user',
@@ -31,7 +31,7 @@ export class CreateUserComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
     private jwtAuthService: JwtAuthService,
@@ -88,7 +88,7 @@ export class CreateUserComponent implements OnInit {
       this.userForm.get('authorities').setValue(this.userProfileData.authorities.map((authority: IAuthority) => authority.id));
       this.userForm.removeControl('email');
     }, () => {
-      this.alertService.danger('User not found');
+      this.snackBar.open('User not found', 'Close', { duration: 2000 });
       this.router.navigate(['/private/users']);
     });
   }
@@ -108,10 +108,10 @@ export class CreateUserComponent implements OnInit {
           isActive: this.userForm.get('isActive').value,
         };
       this.userService.addUser(userCreatePayload).subscribe((createdUserResponse: IServerResponse<IUser>) => {
-          this.alertService.success('Account created successfully.');
+          this.snackBar.open('Account created successfully.', 'Close', { duration: 2000 });
           this.router.navigate(['/private/users']);
         }, (event) => {
-          this.alertService.danger(event.error.message);
+        this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
         });
     } else {
       const userCreatePayload: IUserRequestPayload = {
@@ -132,10 +132,10 @@ export class CreateUserComponent implements OnInit {
         userCreatePayload
       ).pipe(take(1))
         .subscribe((updatedUserResponse: IServerResponse<IUser>) => {
-        this.alertService.success('Account updated successfully.');
+        this.snackBar.open('Account updated successfully.', 'Close', { duration: 2000 });
         this.router.navigate(['/private/users']);
       }, (event) => {
-        this.alertService.danger(event.error.message);
+        this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
       });
     }
   }

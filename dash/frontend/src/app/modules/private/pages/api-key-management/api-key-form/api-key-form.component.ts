@@ -72,7 +72,7 @@ export class ApiKeyFormComponent implements OnInit {
           this.apiKeyForm.get('userId').setValue(this.apiKeyData.userId);
         },
         error: error => {
-          this.snackBar.open(error.error.message, 'Close');
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           this.router.navigate(['/private/api-key']);
         }
     });
@@ -93,11 +93,11 @@ export class ApiKeyFormComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.snackBar.open('Api Key created successfully.', 'Close');
+            this.snackBar.open('Api Key created successfully.', 'Close', { duration: 2000 });
             this.router.navigate(['/private/api-key']);
           },
           error: error => {
-            this.snackBar.open(error.error.message, 'Close');
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           }
         });
     } else {
@@ -111,11 +111,11 @@ export class ApiKeyFormComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: () => {
-            this.snackBar.open('Api Key updated successfully.', 'Close');
+            this.snackBar.open('Api Key updated successfully.', 'Close', { duration: 2000 });
             this.router.navigate(['/private/api-key']);
           },
           error: error => {
-            this.snackBar.open(error.error.message, 'Close');
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           }
       });
     }

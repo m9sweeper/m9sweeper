@@ -6,13 +6,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPolicy } from '../../../../../core/entities/IPolicy';
 import { PolicyService } from '../../../../../core/services/policy.service';
-import { AlertService } from '@full-fledged/alerts';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
-import { PolicyCreateComponent } from '../policy-create/policy-create.component';
 import {merge} from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-policy-list',
@@ -43,7 +42,7 @@ export class PolicyListComponent implements OnInit, AfterViewInit{
     private policyService: PolicyService,
     private router: Router,
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     public dialog: MatDialog
   ) {
     this.isAdmin = this.jwtAuthService.isAdmin();
@@ -77,7 +76,7 @@ export class PolicyListComponent implements OnInit, AfterViewInit{
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
     }, error => {
-      this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -101,9 +100,9 @@ export class PolicyListComponent implements OnInit, AfterViewInit{
 
   deletePolicyById(id: number){
     this.policyService.deletePolicyById(id).subscribe(() => {
-        this.alertService.success('Policy deleted successfully');
+      this.snackBar.open('Policy deleted successfully', 'Close', { duration: 2000 });
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     }, () => {
       this.getPolicyList();
     });

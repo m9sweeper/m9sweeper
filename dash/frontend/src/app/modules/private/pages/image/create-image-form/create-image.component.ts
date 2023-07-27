@@ -1,13 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AlertService } from '@full-fledged/alerts';
 import { ImageService } from '../../../../../core/services/image.service';
 import { DockerRegistriesService } from '../../../../../core/services/docker-registries.service';
 import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistries';
 import { CustomValidators } from '../../../form-validator/custom-validators';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create-image',
@@ -27,7 +27,7 @@ export class CreateImageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private imageService: ImageService,
     private dockerRegistriesService: DockerRegistriesService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -82,10 +82,10 @@ export class CreateImageComponent implements OnInit {
     }).pipe(take(1))
       .subscribe((response) => {
       if (response.success) {
-        this.alertService.success('Image created successfully');
+        this.snackBar.open('Image created successfully', 'Close', { duration: 2000 });
       }
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     }, () => {
       this.dialogRef.close();
     });

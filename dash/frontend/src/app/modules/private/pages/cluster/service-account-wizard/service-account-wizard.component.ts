@@ -1,10 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {AlertService} from '@full-fledged/alerts';
 import {FormBuilder,  Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-service-account-wizard',
@@ -24,7 +24,7 @@ export class ServiceAccountWizardComponent {
     @Inject(MAT_DIALOG_DATA) public data: { server: string, context: string },
     private dialogRef: MatDialogRef<ServiceAccountWizardComponent>,
     private clipboard: Clipboard,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private readonly clusterService: ClusterService,
               ) { }
@@ -38,13 +38,13 @@ export class ServiceAccountWizardComponent {
           this.config = res.data.config;
           this.context = res.data.context;
         } else {
-          this.alertService.warning(`The token provided could not be used to connect to the cluster at ${this.data.server}`);
+          this.snackBar.open(`The token provided could not be used to connect to the cluster at ${this.data.server}`, 'Close', { duration: 2000 });
           this.badConfig = true;
         }
       },
         () => {
           this.badConfig = true;
-          this.alertService.danger('Something went wrong checking your connection. Please try again later');
+          this.snackBar.open('Something went wrong checking your connection. Please try again later', 'Close', { duration: 2000 });
         },
       () => {
         this.testingConnection = false;

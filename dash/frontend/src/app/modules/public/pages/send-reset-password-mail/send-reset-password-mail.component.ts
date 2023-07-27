@@ -35,14 +35,14 @@ export class SendResetPasswordMailComponent {
       .subscribe((response) => {
         if (response.data) {
           this.router.navigate(['/public/login']);
-          this.snackBar.open('Please check your mailbox', 'Close');
+          this.snackBar.open('Please check your mailbox', 'Close', { duration: 2000 });
         }
         else {
-          this.snackBar.open('Invalid user account.', 'Close');
+          this.snackBar.open('Invalid user account.', 'Close', { duration: 2000 });
         }
 
       }, e => {
-        this.snackBar.open(e.error.message, 'Close');
+        this.snackBar.open(e.error.message, 'Close', { duration: 2000 });
       },
         () => this.loadingService.stop('send-reset-email'));
   }

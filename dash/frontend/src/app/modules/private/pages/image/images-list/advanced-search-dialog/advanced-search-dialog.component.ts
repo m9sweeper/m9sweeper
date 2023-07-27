@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 
 @Component({
@@ -17,7 +16,6 @@ export class AdvancedSearchDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<AdvancedSearchDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: {imageName: string, cve: string, onlyRunning: boolean},
               private formBuilder: FormBuilder,
-              private alertService: AlertService,
               protected dialog: MatDialog,
               ) { }
 

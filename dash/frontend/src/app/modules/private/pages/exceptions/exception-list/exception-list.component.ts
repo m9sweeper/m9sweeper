@@ -4,12 +4,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-policy-list',
@@ -28,7 +28,7 @@ export class ExceptionListComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private exceptionsService: ExceptionsService,
     private jwtAuthService: JwtAuthService,
     public dialog: MatDialog) { }
@@ -51,7 +51,7 @@ export class ExceptionListComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -71,9 +71,9 @@ export class ExceptionListComponent implements OnInit {
               this.exceptionsService.deleteExceptionById(id).subscribe(
                 _ => {
                   this.getExceptionList();
-                  this.alertService.success('Exception deleted');
+                  this.snackBar.open('Exception deleted', 'Close', { duration: 2000 });
                 },
-                _ => this.alertService.danger('Something went wrong. Please try again later')
+                _ => this.snackBar.open('Something went wrong. Please try again later', 'Close', { duration: 2000 })
               );
             }
           }

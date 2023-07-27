@@ -58,7 +58,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
       // this.dataSource.sort = this.sort;
       // this.dataSource.paginator = this.paginator;
     }, error => {
-      this.snackBar.open('Failed to load user!', 'Close');
+      this.snackBar.open('Failed to load user!', 'Close', { duration: 2000 });
     });
   }
 

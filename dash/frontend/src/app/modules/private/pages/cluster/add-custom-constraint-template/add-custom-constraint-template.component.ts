@@ -55,11 +55,11 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
   patchTemplate() {
     this.gateKeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
       if (response.data.statusCode === 200) {
-        this.snackBar.open(`${response.data.message}`, 'Close');
+        this.snackBar.open(`${response.data.message}`, 'Close', { duration: 2000 });
       } else if (response.data.statusCode === 409) {
-        this.snackBar.open(`${response.data.message}`, 'Close');
+        this.snackBar.open(`${response.data.message}`, 'Close', { duration: 2000 });
       } else {
-        this.snackBar.open(`${response.data.message}`, 'Close');
+        this.snackBar.open(`${response.data.message}`, 'Close', { duration: 2000 });
       }
     });
     setTimeout(() => {

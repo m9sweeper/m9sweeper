@@ -110,7 +110,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.snackBar.open(error.error.message, 'Close');
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         });
     } else {
       this.isDatePicker = false;
@@ -120,7 +120,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          this.snackBar.open(error.error.message, 'Close');
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         });
     }
     this.getK8sImages();
@@ -146,7 +146,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           },
           error => {
             this.dataSource = new MatTableDataSource(error.data);
-            this.snackBar.open(error.error.message, 'Close');
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           });
     } else {
       this.isDatePicker = false;
@@ -157,7 +157,7 @@ export class KubernetesImagesComponent implements OnInit, AfterViewInit {
           },
           error => {
             this.dataSource = new MatTableDataSource(error.data);
-            this.snackBar.open(error.error.message, 'Close');
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           });
     }
   }

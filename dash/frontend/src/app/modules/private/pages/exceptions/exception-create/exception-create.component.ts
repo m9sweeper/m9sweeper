@@ -141,7 +141,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       if (!this.exceptionId && this.editMode) {
         this.editMode = false;
         this.subMenuTitle = 'Create Exception';
-        this.snackBar.open('Exception Could not be retrieved. Please try again later.', 'Close');
+        this.snackBar.open('Exception Could not be retrieved. Please try again later.', 'Close', { duration: 2000 });
       }
     });
 
@@ -168,7 +168,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
           this.disableAllExceptionTypeFields();
         },
         _ => {
-          this.snackBar.open('Exception could not be retrieved. Please try again later',  'Close');
+          this.snackBar.open('Exception could not be retrieved. Please try again later', 'Close', { duration: 2000 });
           this.exceptionId = null;
         }
       );
@@ -252,7 +252,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
         response => {
           this.disableSpinner();
           this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.snackBar.open('Exception updated', 'Close');
+          this.snackBar.open('Exception updated', 'Close', { duration: 2000 });
         },
         err => this.handleApiError(err)
       );
@@ -261,7 +261,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       this.exceptionsService.createException(data).subscribe(
         response => {
           this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.snackBar.open('Exception created', 'Close');
+          this.snackBar.open('Exception created', 'Close', { duration: 2000 });
         },
         err => this.handleApiError(err)
       );
@@ -277,7 +277,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     } else {
       this.submitButtonText = 'Submit';
     }
-    this.snackBar.open(msg,  'Close');
+    this.snackBar.open(msg, 'Close', { duration: 2000 });
   }
 
   cancel() {

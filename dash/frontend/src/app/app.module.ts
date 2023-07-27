@@ -15,7 +15,6 @@ import {
   POSITION,
   PB_DIRECTION, NgxUiLoaderHttpModule
 } from 'ngx-ui-loader';
-import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -63,7 +62,6 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     AlertDialogComponent
   ],
   imports: [
-    AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,

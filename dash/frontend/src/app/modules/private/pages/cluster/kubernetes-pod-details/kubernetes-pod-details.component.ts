@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
 import {PodService} from '../../../../../core/services/pod.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -16,6 +15,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {KubesecDialogComponent} from '../kubesec/kubesec-dialog/kubesec-dialog.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {DatePipe} from '@angular/common';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private podService: PodService,
     private imageService: ImageService,
@@ -92,7 +92,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-        this.alertService.danger('There was an error loading the pod details');
+        this.snackBar.open('There was an error loading the pod details', 'Close', { duration: 2000 });
         this.podInfo = error?.data ? error.data : null;
       }
     );
@@ -107,7 +107,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-        this.alertService.danger('There was an error loading the pod details');
+        this.snackBar.open('There was an error loading the pod details', 'Close', { duration: 2000 });
         this.podInfo = error?.data ? error.data : null;
       }
     );
@@ -146,7 +146,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
     }
   }
   handleGetImagesErrorResponse(error) {
-    this.alertService.danger('There was an error loading the image details');
+    this.snackBar.open('There was an error loading the image details', 'Close', { duration: 2000 });
     try {
       this.dataSource = new MatTableDataSource(error.data.listOfImages);
       this.totalNumImages = parseInt(error.data.total.toString(), 10);
@@ -156,7 +156,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
     }
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.alertService.danger(error.error.message);
+    this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
   }
 
   runKubesec() {
@@ -175,13 +175,13 @@ export class KubernetesPodDetailsComponent implements OnInit {
           data: report,
         });
       }, (err) => {
-      this.alertService.danger(err.error.text ? err.error.text : 'Could not get your kubesec report');
+        this.snackBar.open(err.error.text ? err.error.text : 'Could not get your kubesec report', 'Close', { duration: 2000 });
     });
   }
 
   getViolations() {
     if (this.podInfo.violations.length === 0) {
-      this.alertService.warning('No violation yet.');
+      this.snackBar.open('No violation yet.', 'Close', { duration: 2000 });
       return;
     }
     this.dialog.open(GatekeeperViolationDialogComponent, {

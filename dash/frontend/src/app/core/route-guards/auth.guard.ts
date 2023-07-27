@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate {
 
   authFailed() {
     this.loaderService.stop('auth-guard-loader');
-    this.snackBar.open('Authentication failed!', 'Close');
+    this.snackBar.open('Authentication failed!', 'Close', { duration: 2000 });
 
     this.loaderService.start('logout');
     this.jwtAuthService.clearToken();

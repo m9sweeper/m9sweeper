@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ScannerService } from '../../../../../core/services/scanner.service';
-import { AlertService } from '@full-fledged/alerts';
 import { CustomValidators } from '../../../form-validator/custom-validators';
 import {IScanner, VulnerabilitySettings} from '../../../../../core/entities/IScanner';
+import {MatSnackBar} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-scanner-create',
   templateUrl: './scanner-create.component.html',
@@ -19,7 +19,7 @@ export class ScannerCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<ScannerCreateComponent>,
               private scannerService: ScannerService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.scannerTypes = [{name: 'Trivy', value: 'TRIVY' }, {name: 'Mock', value: 'MOCK'}];
     this.createScannerForm = this.formBuilder.group({
@@ -74,17 +74,17 @@ export class ScannerCreateComponent implements OnInit {
     if (this.data.isPolicyEdit) {
       if (this.data.isEdit) {
         this.scannerService.updateScanner(scannerData, this.data.scannerData.id).subscribe(response => {
-          this.alertService.success('Scanned Updated Successfully');
+          this.snackBar.open('Scanned Updated Successfully', 'Close', { duration: 2000 });
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         }, () => {
           this.dialogRef.close({value: scannerData, isClose: false});
         });
       } else {
         this.scannerService.createScanner(scannerData).subscribe(response => {
-          this.alertService.success('Scanned Added Successfully');
+          this.snackBar.open('Scanned Added Successfully', 'Close', { duration: 2000 });
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         }, () => {
           this.dialogRef.close({value: scannerData, isClose: false});
         });

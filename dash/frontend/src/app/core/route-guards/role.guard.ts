@@ -23,7 +23,7 @@ export class RoleGuard implements CanActivate, CanActivateChild {
     const currentUserRoles = this.jwtAuthService.currentUserAuthorities as string[];
     const isAllowed = allowedRoles.filter(r => currentUserRoles.includes(r))?.length > 0;
     if (!isAllowed) {
-      this.snackBar.open('Permission Denied!', 'Close');
+      this.snackBar.open('Permission Denied!', 'Close', { duration: 2000 });
       if (!this.router.getCurrentNavigation().previousNavigation) {
         this.router.navigate(['private/dashboard']);
       }

@@ -7,9 +7,9 @@ import {ActivatedRoute} from '@angular/router';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
 import {take} from 'rxjs/operators';
 import {format} from 'date-fns';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-historical-vulnerabilities',
@@ -36,7 +36,7 @@ export class HistoricalVulnerabilitiesComponent implements OnInit {
     private namespaceService: NamespaceService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
-    private alertService: AlertService
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -77,14 +77,14 @@ export class HistoricalVulnerabilitiesComponent implements OnInit {
         }
         this.loaderService.stop();
       }, (err) => {
-        this.alertService.warning((err));
+        this.snackBar.open((err), 'Close', { duration: 2000 });
         this.loaderService.stop();
       });
   }
 
   rebuildWithFilters() {
     if (!this.filtersValid) {
-      this.alertService.warning('Invalid filter settings; please recheck filter values');
+      this.snackBar.open('Invalid filter settings; please recheck filter values', 'Close', { duration: 2000 });
     }
     else {
       this.limit = this.filterForm.get('limit').value;
@@ -129,8 +129,8 @@ export class HistoricalVulnerabilitiesComponent implements OnInit {
       .subscribe((response) => {
         this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
       }, (error) => {
-        this.loaderService.stop('csv-download');
-        this.alertService.danger(`Error downloading report: ${error?.error?.message}`);
+        this.loaderService.stop();
+        this.snackBar.open(`Error downloading report: ${error?.error?.message}`, 'Close', { duration: 2000 });
       }, () => {
         this.loaderService.stop('csv-download');
       });

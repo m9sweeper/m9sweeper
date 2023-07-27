@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {AlertService} from '@full-fledged/alerts';
 import {PolicyService} from '../../../../../core/services/policy.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
 import {ScannerListComponent} from '../../scanners/scanner-list/scanner-list.component';
@@ -17,6 +16,7 @@ import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-policy-create',
@@ -48,7 +48,7 @@ export class PolicyCreateComponent implements OnInit {
     private policyService: PolicyService,
     private scannerService: ScannerService,
     private clusterService: ClusterService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -119,7 +119,7 @@ export class PolicyCreateComponent implements OnInit {
         return groupByData;
       }, []);
     }, () => {
-      this.alertService.danger('Clusters not found in this cluster group');
+      this.snackBar.open('Clusters not found in this cluster group', 'Close', { duration: 2000 });
     });
   }
 
@@ -135,7 +135,7 @@ export class PolicyCreateComponent implements OnInit {
         this.relevantForAllClusters = false;
         this.relevantForSpecificClusters = true;
       }, () => {
-        this.alertService.danger('Failed to load policy cluster map');
+        this.snackBar.open('Failed to load policy cluster map', 'Close', { duration: 2000 });
       });
     }
   }
@@ -174,17 +174,17 @@ export class PolicyCreateComponent implements OnInit {
 
     if (this.checkIfEdit) {
       this.policyService.updatePolicy(policyCreateData, this.policyId).subscribe(() => {
-        this.alertService.success('Policy updated successfully');
+        this.snackBar.open('Policy updated successfully', 'Close', { duration: 2000 });
       }, error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       }, () => {
         this.router.navigate(['/private', 'policies']);
       });
     } else {
       this.policyService.createPolicy(policyCreateData).subscribe(() => {
-        this.alertService.success('Policy added successfully');
+        this.snackBar.open('Policy added successfully', 'Close', { duration: 2000 });
       }, error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       }, () => {
         this.router.navigate(['/private', 'policies']);
       });
@@ -273,10 +273,10 @@ export class PolicyCreateComponent implements OnInit {
   deleteScannerById(id: number) {
     this.scannerService.deleteScannerById(id).subscribe((result: IServerResponse<number>) => {
       if (result.data) {
-        this.alertService.success('Scanner deleted successfully');
+        this.snackBar.open('Scanner deleted successfully', 'Close', { duration: 2000 });
       }
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     }, () => {
       this.getAllScannersByPolicyId();
     });

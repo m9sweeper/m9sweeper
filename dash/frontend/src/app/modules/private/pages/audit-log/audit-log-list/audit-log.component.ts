@@ -7,7 +7,7 @@ import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-dat
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-audit-log',
@@ -28,7 +28,7 @@ export class AuditLogComponent implements OnInit {
               private formBuilder: FormBuilder,
               private dialog: MatDialog,
               private loaderService: NgxUiLoaderService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private csvService: CsvService) {
     this.filterAuditLogForm = this.formBuilder.group({
       entityId: [],
@@ -90,7 +90,7 @@ export class AuditLogComponent implements OnInit {
       this.csvService.downloadCsvFile(response.data.content, response.data.filename);
     }, (error) => {
       this.loaderService.stop('audit-logs-download');
-      this.alertService.danger(`Error downloading audit logs: ${error.error.message}`);
+      this.snackBar.open(`Error downloading audit logs: ${error.error.message}`, 'Close', { duration: 2000 });
     }, () => {
       this.loaderService.stop('audit-logs-download');
     });

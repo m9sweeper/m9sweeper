@@ -4,12 +4,12 @@ import {FalcoService} from '../../services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../entities/IFalcoLog';
 import {take, timeout} from 'rxjs/operators';
-import {AlertService} from '@full-fledged/alerts';
 import {IFalcoCount} from '../../entities/IFalcoCount';
 import {ShareEventComponent} from './share-event.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ChartSizeService} from '../../services/chart-size.service';
 import {UtilService} from '../../services/util.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-show-json-data-more',
@@ -22,7 +22,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private falcoService: FalcoService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
     private utilService: UtilService,
@@ -110,7 +110,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
         // all calls to related events are moved here to avoid a race condition
         this.getRelatedEvents();
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -127,7 +127,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
         // use the new data list to display related events
         this.dataSource = new MatTableDataSource(newDataList);
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -162,7 +162,7 @@ export class ShowJsonDataMoreComponent implements OnInit, AfterViewInit {
 
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         });
   }
 

@@ -70,7 +70,7 @@ export class KubeHunterDialogComponent implements OnInit {
     ).subscribe((report) => {
       this.report = report;
       if (this.report) {
-        this.snackBar.open('Kube hunter done running', 'Close');
+        this.snackBar.open('Kube hunter done running', 'Close', { duration: 2000 });
       }
     });
   }

@@ -4,10 +4,10 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {AlertService} from '@full-fledged/alerts';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-falco-settings',
@@ -34,7 +34,7 @@ export class FalcoSettingsComponent implements OnInit {
     private route: ActivatedRoute,
     private falcoService: FalcoService,
     private formBuilder: FormBuilder,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
 
   ) { }
 
@@ -84,19 +84,22 @@ export class FalcoSettingsComponent implements OnInit {
       falcoCreatePayload.whoToNotify === null &&
       falcoCreatePayload.emailList.length === 0) {
 
-      this.alertService.warning('No setting is chosen');
+
+      this.snackBar.open('No setting is chosen', 'Close', { duration: 2000 });
 
     } else if (falcoCreatePayload.sendNotificationAnomaly === true &&
       (falcoCreatePayload.anomalyFrequency === null ||
       falcoCreatePayload.severityLevel.length === 0)) {
 
-      this.alertService.warning('To notify about anomalies, must fill out both anomaly frequency and severity level!');
+
+      this.snackBar.open('To notify about anomalies, must fill out both anomaly frequency and severity level!', 'Close', { duration: 2000 });
 
     } else if (falcoCreatePayload.sendNotificationSummary === true &&
       (falcoCreatePayload.summaryNotificationFrequency !== 'daily' &&
         falcoCreatePayload.summaryNotificationFrequency !== 'weekly')) {
 
-      this.alertService.warning('To send summary emails, must chose one of the frequency options! If choose weekly, pick a weekday.');
+
+      this.snackBar.open('To send summary emails, must chose one of the frequency options! If choose weekly, pick a weekday.', 'Close', { duration: 2000 });
 
     } else if ( falcoCreatePayload.sendNotificationAnomaly === true &&
       falcoCreatePayload.anomalyFrequency >= 0 &&
@@ -104,19 +107,20 @@ export class FalcoSettingsComponent implements OnInit {
       (falcoCreatePayload.whoToNotify === null &&
       falcoCreatePayload.emailList.length === 0)) {
 
-      this.alertService.warning('To notify about anomalies, must choose recipient!');
+      this.snackBar.open('To notify about anomalies, must choose recipient!', 'Close', { duration: 2000 });
 
     } else if ( falcoCreatePayload.sendNotificationSummary === true &&
       (falcoCreatePayload.whoToNotify === null &&
       falcoCreatePayload.emailList.length === 0)) {
 
-      this.alertService.warning('To send summary email, must choose recipient!');
+
+      this.snackBar.open('To send summary email, must choose recipient!', 'Close', { duration: 2000 });
 
     } else {
         this.falcoService.addFalcoSetting(this.clusterId, falcoCreatePayload).subscribe((response: IServerResponse<IFalcoSettingPayload>) => {
-        this.alertService.success('Setting saved successfully.');
+          this.snackBar.open('Setting saved successfully.', 'Close', { duration: 2000 });
       }, (event) => {
-        this.alertService.danger(event.error.message);
+          this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
       });
     }
   }
@@ -158,7 +162,7 @@ export class FalcoSettingsComponent implements OnInit {
         this.settingForm.get('emailList').setValue(this.falcoSettingData.emailList);
         this.settingForm.get('selectedPriorityLevels').setValue(JSON.parse(this.falcoSettingData.severityLevel));
       }, (err) => {
-      this.alertService.warning(err);
+      this.snackBar.open(err, 'Close', { duration: 2000 });
         // @TODO: If it is just not found, that is NOT actually an error so don't alert
         // @TODO: For all other errors, it should display using the standard error box thing
 

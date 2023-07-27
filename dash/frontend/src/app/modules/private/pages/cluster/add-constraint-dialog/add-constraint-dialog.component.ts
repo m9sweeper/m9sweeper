@@ -68,10 +68,10 @@ export class AddConstraintDialogComponent implements OnInit {
       .subscribe({
         next: response => {
           if (response.data.statusCode === 200) {
-            this.snackBar.open(response.data.message,  'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
           }
           else {
-            this.snackBar.open(response.data.message,  'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
           }
         }
       });

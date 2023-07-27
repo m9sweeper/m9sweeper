@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
 import {ImageService} from '../../../../../core/services/image.service';
 import {ImageScanResultIssueService} from '../../../../../core/services/image-scan-result-issue.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
@@ -147,7 +146,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
       .subscribe((namespaces) => {
           this.imageNamespaces = namespaces.data.map(namespace => namespace.namespace);
     }, error => {
-        this.snackBar.open(error.error.error.message, 'Close');
+        this.snackBar.open(error.error.error.message, 'Close', { duration: 2000 });
       // this.router.navigate(['/private']);
     });
   }
@@ -196,7 +195,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
         }
       },
       (error => {
-        this.snackBar.open(error.error.error.message, 'Close');
+        this.snackBar.open(error.error.error.message, 'Close', { duration: 2000 });
       }));
   }
 
@@ -242,11 +241,11 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     };
     this.imageService.scanImageModule(this.clusterId, filterImageIds).subscribe(response => {
       if (response.success) {
-        this.snackBar.open('Image Scan Queued', 'Close');
+        this.snackBar.open('Image Scan Queued', 'Close', { duration: 2000 });
         this.setImageScanQueueStatus();
       }
     }, error => {
-      this.snackBar.open(error.error.error.message, 'Close');
+      this.snackBar.open(error.error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -333,7 +332,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
           this.csvService.downloadCsvFile(csvDto.data?.csv, csvDto.data?.filename);
         },
         error: () => {
-          this.snackBar.open('Error downloading report', 'Close');
+          this.snackBar.open('Error downloading report', 'Close', { duration: 2000 });
           this.loader.stopLoader('scan-issue-csv-download');
         },
         complete: () => this.loader.stopLoader('scan-issue-csv-download')

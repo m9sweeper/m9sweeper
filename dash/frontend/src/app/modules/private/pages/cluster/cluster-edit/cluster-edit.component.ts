@@ -84,18 +84,18 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
         this.data.clusterId)
         .pipe(take(1))
         .subscribe((response) => {
-          this.snackBar.open('Cluster updated successfully', 'Close');
+          this.snackBar.open('Cluster updated successfully', 'Close', { duration: 2000 });
           this.dialogRef.close();
         }, error => {
-          this.snackBar.open(error.error.message, 'Close');
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         });
     } else {
       this.clusterService.createCluster({...this.createClusterForm.value, tags: JSON.stringify(this.displayedTags)})
         .subscribe((response) => {
-          this.snackBar.open('Cluster added successfully', 'Close');
+          this.snackBar.open('Cluster added successfully', 'Close', { duration: 2000 });
           this.dialogRef.close();
         }, error => {
-          this.snackBar.open(error.error.message, 'Close');
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         });
     }
   }
@@ -110,7 +110,7 @@ export class ClusterEditComponent implements OnInit, OnDestroy {
             this.displayedTags.push({name: value.trim(), id: response.data.id, groupId: response.data.groupId});
           }
         }, error => {
-          this.snackBar.open(error?.error?.message,  'Close');
+          this.snackBar.open(error?.error?.message, 'Close', { duration: 2000 });
         });
     }
     if (input) {

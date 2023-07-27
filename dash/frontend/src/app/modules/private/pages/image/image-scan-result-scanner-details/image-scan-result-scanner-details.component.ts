@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ImageService} from '../../../../../core/services/image.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
 import {FormatDate} from '../../../../shared/format-date/format-date';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IScanResult} from '../../../../../core/entities/IImage';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-image-scan-result-scanner-details',
@@ -24,7 +24,8 @@ export class ImageScanResultScannerDetailsComponent implements OnInit {
     private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router,
-    private alertService: AlertService) {
+    private snackBar: MatSnackBar,
+  ) {
     this.imageId = +this.route.snapshot.paramMap.get('imageId');
     this.scannerId = +this.route.snapshot.paramMap.get('scannerId');
   }
@@ -36,7 +37,7 @@ export class ImageScanResultScannerDetailsComponent implements OnInit {
     this.imageService.getScanImageScannerDetails(this.clusterId, this.imageId, this.scannerId).subscribe((response: IServerResponse<IScanResult>) => {
       this.scanDetails = response.data;
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000});
       this.router.navigate(['/private']);
     });
   }

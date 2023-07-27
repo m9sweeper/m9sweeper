@@ -5,12 +5,12 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
 import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
-import {AlertService} from '@full-fledged/alerts';
 import { Subject } from 'rxjs';
 import { VulnerabilitySeverity } from '../../../../../core/enum/VulnerabilitySeverity';
 import { ReportsService } from '../../../../../core/services/reports.service';
 import {ChartSizeService} from '../../../../../core/services/chart-size.service';
 import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-worst-images',
@@ -50,7 +50,7 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private namespaceService: NamespaceService,
     private imageService: ImageService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private reportService: ReportsService,
     private chartSizeService: ChartSizeService,
     private customValidatorService: CustomValidatorService,
@@ -124,13 +124,13 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
         }) : [];
         },
         error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000});
         });
   }
 
   rebuildWithFilters() {
     if (differenceInCalendarDays(this.filterForm.get('endDate')?.value, this.filterForm.get('startDate')?.value) > 365) {
-      this.alertService.danger('Please select a date range under 365 days');
+      this.snackBar.open('Please select a date range under 365 days', 'Close', { duration: 2000});
     } else {
       this.startDate = format(this.filterForm.get('startDate').value, 'yyyy-MM-dd');
       this.endDate = format(this.filterForm.get('endDate').value, 'yyyy-MM-dd');

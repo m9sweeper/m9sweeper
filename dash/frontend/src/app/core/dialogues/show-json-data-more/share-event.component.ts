@@ -1,7 +1,8 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-share-event',
@@ -19,7 +20,7 @@ export class ShareEventComponent implements OnInit {
   constructor(
               public dialogRef: MatDialogRef<ShareEventComponent>,
               private cb: Clipboard,
-              private readonly alertService: AlertService
+              private readonly snackBar: MatSnackBar,
   ) {}
 
   currentUrl = window.location.href;
@@ -30,9 +31,9 @@ export class ShareEventComponent implements OnInit {
   onClickCopy(){
     const success = this.cb.copy(this.currentUrl);
     if (success) {
-      this.alertService.success(this.successMessage);
+      this.snackBar.open(this.successMessage, 'Close', { duration: 2000 });
     } else {
-      this.alertService.danger(this.errorMessage);
+      this.snackBar.open(this.errorMessage, 'Close', { duration: 2000 });
     }
   }
   onClickClose(){

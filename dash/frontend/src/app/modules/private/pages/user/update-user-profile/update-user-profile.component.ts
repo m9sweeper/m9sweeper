@@ -46,7 +46,7 @@ export class UpdateUserProfileComponent implements OnInit {
       this.updateUserForm.get('lastName').setValue(this.userProfileData.lastName);
       this.updateUserForm.get('phone').setValue(this.userProfileData.phone);
     }, () => {
-      this.snackBar.open('User not found', 'Close');
+      this.snackBar.open('User not found', 'Close', { duration: 2000 });
     });
   }
 
@@ -66,10 +66,10 @@ export class UpdateUserProfileComponent implements OnInit {
     this.userService.updateUserProfileSetting(
       userProfileUpdatePayload
     ).subscribe((updatedUserResponse: IServerResponse<IUser>) => {
-      this.snackBar.open('Account updated successfully.', 'Close');
+      this.snackBar.open('Account updated successfully.', 'Close', { duration: 2000 });
       this.dialogRef.close();
     }, (event) => {
-      this.snackBar.open('User profile data update failed!', 'Close');
+      this.snackBar.open('User profile data update failed!', 'Close', { duration: 2000 });
     });
   }
 }

@@ -140,12 +140,12 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(response => {
         this.awaitingWebhookEnforcementResponse = false;
         if (response.success) {
-          this.snackBar.open(`Webhook Enforcement has been ${displayText}.`, 'Close');
+          this.snackBar.open(`Webhook Enforcement has been ${displayText}.`, 'Close', { duration: 2000 });
         }
       },
       error => {
         this.awaitingWebhookEnforcementResponse = false;
-        this.snackBar.open('Could not update Webhook Enforcement', 'Close');
+        this.snackBar.open('Could not update Webhook Enforcement', 'Close', { duration: 2000 });
         setTimeout(() => {
           this.matSlideToggle.toggle();
         }, 1000);
@@ -160,12 +160,12 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
         this.awaitingImageScanningEnforcementResponse = false;
         if (clusterUpdateResponse.success) {
-          this.snackBar.open(`Image Scanning Enforcement has been ${displayText}.`,  'Close');
+          this.snackBar.open(`Image Scanning Enforcement has been ${displayText}.`, 'Close', { duration: 2000 });
         }
       },
       error => {
         this.awaitingImageScanningEnforcementResponse = false;
-        this.snackBar.open('Something went wrong while saving Image Scanning Enforcement.', 'Close');
+        this.snackBar.open('Something went wrong while saving Image Scanning Enforcement.', 'Close', { duration: 2000 });
         setTimeout(() => {
           this.matSlideToggle.toggle();
         }, 1000);

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
 import { ExceptionsService } from '../../../../../core/services/exceptions.service';
 import { IException } from '../../../../../core/entities/IException';
 import { CommentService } from '../../../../../core/services/comment.service';
@@ -11,6 +10,7 @@ import { IComment } from '../../../../../core/entities/IComment';
 import { Observable } from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-exception-details',
@@ -27,7 +27,7 @@ export class ExceptionDetailsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private exceptionsService: ExceptionsService,
     private commentService: CommentService,
     private formBuilder: FormBuilder,
@@ -75,9 +75,9 @@ export class ExceptionDetailsComponent implements OnInit {
         this.exceptionsService.deleteExceptionById(this.exceptionId).subscribe(
           _ => {
             this.router.navigate(['/private', 'exceptions']);
-            this.alertService.success('Exception deleted');
+            this.snackBar.open('Exception deleted', 'Close', { duration: 2000 });
           },
-          _ => this.alertService.danger('Something went wrong. Please try again later')
+          _ => this.snackBar.open('Something went wrong. Please try again later', 'Close', { duration: 2000 })
         );
       }
     });
@@ -104,7 +104,7 @@ export class ExceptionDetailsComponent implements OnInit {
       this.reset();
       this.getAllComments();
     }, () => {
-      this.alertService.warning('Something went wrong. Cannot post message');
+      this.snackBar.open('Something went wrong. Cannot post message', 'Close', { duration: 2000 });
     }, () => {
       this.isSubmitting = false;
     });

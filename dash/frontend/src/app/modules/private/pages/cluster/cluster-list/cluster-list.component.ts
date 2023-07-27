@@ -145,7 +145,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           error: err => {
             if (err?.status === 404) {
-              this.snackBar.open('Cluster Group Does does not exist', 'Close');
+              this.snackBar.open('Cluster Group Does does not exist', 'Close', { duration: 2000 });
               this.clusterGroupService.setCurrentGroupId(null);
               this.router.navigate(['/private', 'dashboard']);
             }
@@ -341,7 +341,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       ];
     }, error => {
-      this.snackBar.open(error.error.message, 'Close');
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 
@@ -414,7 +414,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
       }) : defaultDataToDisplay;
     },
       error => {
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
   }
 

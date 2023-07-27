@@ -7,10 +7,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
 import {IRunningVulnerabilities} from '../../../../../core/entities/IRunningVulnerabilitiesPreview';
 import {format} from 'date-fns';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
     private namespaceService: NamespaceService,
     private loaderService: NgxUiLoaderService,
     private csvService: CsvService,
-    private alertService: AlertService
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -106,11 +106,11 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
         this.loaderService.stop();
       }, (err) => {
         if (err?.error && err.error?.message) {
-          this.alertService.warning(err.error.message);
+          this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
         } else if (err?.error) {
-          this.alertService.warning(err.error);
+          this.snackBar.open(err.error, 'Close', { duration: 2000 });
         } else {
-          this.alertService.warning(err);
+          this.snackBar.open(err, 'Close', { duration: 2000 });
         }
         this.loaderService.stop();
       });
@@ -118,7 +118,7 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
 
   rebuildWithFilters() {
     if (!this.filtersValid) {
-      this.alertService.warning('Invalid filter settings; please recheck filter values');
+      this.snackBar.open('Invalid filter settings; please recheck filter values', 'Close', { duration: 2000 });
     }
     else {
       this.paginator.pageIndex = 0;
@@ -155,7 +155,7 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
         this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
       }, (error) => {
         this.loaderService.stop('csv-download');
-        this.alertService.danger(`Error downloading report: ${error?.error?.message}`);
+        this.snackBar.open(`Error downloading report: ${error?.error?.message}`, 'Close', { duration: 2000 });
       }, () => {
         this.loaderService.stop('csv-download');
       });

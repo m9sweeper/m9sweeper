@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {Subject} from 'rxjs';
-import {AlertService} from '@full-fledged/alerts';
 import {PodService} from '../../../../../core/services/pod.service';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {take, takeUntil} from 'rxjs/operators';
@@ -17,6 +16,7 @@ import {KubesecDialogComponent} from './kubesec-dialog/kubesec-dialog.component'
 import {MatOption} from '@angular/material/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-kubesec',
@@ -69,7 +69,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private podService: PodService,
     private namespaceService: NamespaceService,
     private kubesecService: KubesecService,
@@ -99,7 +99,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
       if (list) {
         this.currentNamespaces = list.items;
       } else {
-        this.alertService.danger('Could not get namespaces');
+        this.snackBar.open('Could not get namespaces', 'Close', { duration: 2000});
       }
     });
   }
@@ -125,7 +125,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
           }
         }
       } else {
-        this.alertService.danger('Could not get pods in ' + this.selectedNamespaces);
+        this.snackBar.open('Could not get pods in ', 'Close', { duration: 2000});
       }
     });
   }
@@ -152,7 +152,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
         this.loaderService.stop();
       }, (err) => {
         this.loaderService.stop();
-        this.alertService.danger(err.error.text ? err.error.text : 'Could not get your kubesec report');
+        this.snackBar.open(err.error.text ? err.error.text : 'Could not get your kubesec report', 'Close', { duration: 2000});
       });
     } else if (!this.podForm.controls.podFormControl.value) {
       const formData = new FormData();
@@ -163,7 +163,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
         this.loaderService.stop();
       }, (err) => {
         this.loaderService.stop();
-        this.alertService.danger(err.error.text ? err.error.text : 'Could not get your kubesec report');
+        this.snackBar.open(err.error.text ? err.error.text : 'Could not get your kubesec report', 'Close', { duration: 2000});
       });
     }
   }

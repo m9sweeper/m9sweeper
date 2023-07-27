@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DockerRegistriesService} from '../../../../../core/services/docker-registries.service';
-import {AlertService} from '@full-fledged/alerts';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {IDockerRegistries} from '../../../../../core/entities/IDockerRegistries';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
@@ -10,6 +9,7 @@ import {DockerRegistryAuthTypes} from '../../../../../core/enum/DockerRegistryAu
 import {take} from 'rxjs/operators';
 import {ACRAuthDetails, AzureCRAuthDetails, GCRAuthDetails} from '../../../../../core/types/DockerRegistryAuthDetails';
 import {ENTER, SPACE} from '@angular/cdk/keycodes';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-docker-registries-create',
@@ -33,7 +33,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<DockerRegistriesCreateComponent>,
               private dockerRegistriesService: DockerRegistriesService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private jwtAuthService: JwtAuthService,
               @Inject(MAT_DIALOG_DATA) public data: { isEdit: boolean, dockerRegistry: IDockerRegistries },
   ) {}
@@ -101,7 +101,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
             gcrAuthJson: dockerRegistryData.gcrAuthJson.trim()
           };
         } catch (err) {
-          this.alertService.danger('Error while parsing GCR JSON; please check that the credentials are formatted correctly');
+          this.snackBar.open('Error while parsing GCR JSON; please check that the credentials are formatted correctly', 'Close', { duration: 2000 });
           return;
         }
         break;
@@ -128,7 +128,7 @@ export class DockerRegistriesCreateComponent implements OnInit {
       dockerRegistryData.aliasInput = '';
     }
     if (dockerRegistryData.aliases.has(dockerRegistryData.hostname)) {
-      this.alertService.danger('Registry hostname/aliases must be unique');
+      this.snackBar.open('Registry hostname/aliases must be unique', 'Close', { duration: 2000 });
       return;
     }
     dockerRegistryData.name = dockerRegistryData.name.trim();
@@ -140,9 +140,9 @@ export class DockerRegistriesCreateComponent implements OnInit {
       this.dockerRegistriesService.updateDockerRegistry(dockerRegistryData, this.data.dockerRegistry.id)
         .pipe(take(1))
         .subscribe(response => {
-          this.alertService.success('Docker Registry Updated Successfully');
+          this.snackBar.open('Docker Registry Updated Successfully', 'Close', { duration: 2000 });
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         }, () => {
           this.dialogRef.close();
         });
@@ -150,9 +150,9 @@ export class DockerRegistriesCreateComponent implements OnInit {
       this.dockerRegistriesService.createDockerRegistry(dockerRegistryData)
         .pipe(take(1))
         .subscribe(response => {
-          this.alertService.success('Docker Registry Created Successfully');
+          this.snackBar.open('Docker Registry Created Successfully', 'Close', { duration: 2000 });
         }, error => {
-          this.alertService.danger(error.error.message);
+          this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
         }, () => {
           this.dialogRef.close();
         });

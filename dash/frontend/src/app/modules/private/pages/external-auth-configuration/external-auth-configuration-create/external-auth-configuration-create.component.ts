@@ -2,9 +2,9 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertService} from '@full-fledged/alerts';
 import {IAuthConfig, ILDAPConfigStrategy, IOAUTHConfigStrategy} from '../../../../../core/entities/IAuth';
 import {AuthenticationType} from '../../../../../core/enum/AuthenticationType';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-external-auth-configuration-create',
@@ -24,7 +24,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
               private externalAuthConfigurationService: ExternalAuthConfigurationService,
               private formBuilder: FormBuilder,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: {
                 isEdit: boolean;
                 authConfigData: IAuthConfig;
@@ -151,13 +151,13 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
       this.externalAuthConfigurationService.updateExternalAuth(authConfig, this.data.authConfigData.id).subscribe(data => {
           this.dialogRef.close();
       }, error => {
-          this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
     } else {
       this.externalAuthConfigurationService.createExternalAuth(authConfig).subscribe(data => {
         this.dialogRef.close();
       }, error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
     }
   }

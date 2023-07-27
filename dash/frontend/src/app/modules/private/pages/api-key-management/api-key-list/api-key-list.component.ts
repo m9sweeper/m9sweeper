@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {AlertService} from '@full-fledged/alerts';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {ApiKeyService} from '../../../../../core/services/api-key.service';
 import {IApiKey} from '../../../../../core/entities/IApiKey';
@@ -11,6 +10,7 @@ import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog
 import {merge} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-api-key-list',
@@ -37,7 +37,7 @@ export class ApiKeyListComponent implements OnInit, AfterViewInit {
     private jwtAuthService: JwtAuthService,
     private apiKeyService: ApiKeyService,
     private dialog: MatDialog,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) {
     this.isAdmin = this.jwtAuthService.isAdmin();
@@ -65,7 +65,7 @@ export class ApiKeyListComponent implements OnInit, AfterViewInit {
         this.dataSource = new MatTableDataSource(this.data);
       }
     }, error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 

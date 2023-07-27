@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { AlertService } from '@full-fledged/alerts';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { ClusterGroupService } from '../../../../../core/services/cluster-group.service';
 import { CustomValidators } from '../../../form-validator/custom-validators';
 import {take} from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class ClusterGroupCreateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public dialogRef: MatDialogRef<ClusterGroupCreateComponent>,
               private jwtAuthService: JwtAuthService,
-              private alertService: AlertService,
+              private snackBar: MatSnackBar,
               private clusterGroupService: ClusterGroupService,
               @Inject(MAT_DIALOG_DATA) public data: any
               ) {
@@ -47,14 +47,14 @@ export class ClusterGroupCreateComponent implements OnInit {
           next: response => {
             if (response?.data) {
               this.successMsg = 'Cluster group updated successfully';
-              this.alertService.success('Cluster group updated successfully');
+              this.snackBar.open('Cluster group updated successfully', 'Close', { duration: 2000 });
               this.clusterGroupService.setCurrentGroup({name: formData.name.trim(), groupId: this.data.clusterGroupId });
               this.dialogRef.close(true);
             }
           },
           error: error => {
             this.errorMsg = error?.data?.message;
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           }
         });
     }
@@ -65,13 +65,13 @@ export class ClusterGroupCreateComponent implements OnInit {
           next: isCreated => {
             if (+isCreated?.data?.id > 0 ) {
               this.successMsg = 'Cluster group created successfully';
-              this.alertService.success('Cluster group created successfully');
+              this.snackBar.open('Cluster group created successfully', 'Close', { duration: 2000 });
               this.dialogRef.close(true);
             }
           },
           error: error => {
             this.errorMsg = error?.data?.message;
-            this.alertService.danger(error.error.message);
+            this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
           }
         });
     }

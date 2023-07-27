@@ -100,28 +100,28 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (!this.templateConstraintCriteria.length) {
-      this.snackBar.open('Please add at least one match criteria', 'Close');
+      this.snackBar.open('Please add at least one match criteria', 'Close', { duration: 2000 });
     } else {
       this.addTemplateConstraintForm.value.properties = this.dynamicProperties;
       this.addTemplateConstraintForm.value.criterias = this.templateConstraintCriteria;
       if (this.data && this.data.isEdit) {
         this.gatekeeperService.patchGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
           if (response.data.statusCode === 200 ) {
-            this.snackBar.open(response.data.message, 'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
             this.dialogRef.close({reload: true});
           } else {
-            this.snackBar.open(response.data.message, 'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
           }
         });
       } else {
         this.gatekeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
           if (response.data.statusCode === 200 ) {
-            this.snackBar.open(response.data.message, 'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
             this.dialogRef.close({reload: true});
           } else if (response.data.statusCode === 409) {
-            this.snackBar.open(response.data.message, 'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
           } else {
-            this.snackBar.open(response.data.message, 'Close');
+            this.snackBar.open(response.data.message, 'Close', { duration: 2000 });
           }
         });
       }

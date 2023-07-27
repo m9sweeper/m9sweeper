@@ -118,13 +118,13 @@ export class FalcoEventsListComponent implements OnInit {
         this.logCount = response.data.logCount;
       }, (err) => {
         if (err?.error?.message) {
-          this.snackBar.open(err.error.message, 'Close');
+          this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
         } else if (err?.error) {
-          this.snackBar.open(err.error, 'Close');
+          this.snackBar.open(err.error, 'Close', { duration: 2000 });
         } else if (err?.message) {
-          this.snackBar.open(err.message, 'Close');
+          this.snackBar.open(err.message, 'Close', { duration: 2000 });
         } else {
-          this.snackBar.open(err, 'Close');
+          this.snackBar.open(err, 'Close', { duration: 2000 });
         }
       });
 
@@ -163,7 +163,7 @@ export class FalcoEventsListComponent implements OnInit {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
         }, (error) => {
           this.loaderService.stop('csv-download');
-          this.snackBar.open(`Error downloading report: ${error.error.message}`, 'Close');
+          this.snackBar.open(`Error downloading report: ${error.error.message}`, 'Close', { duration: 2000 });
         }, () => {
           this.loaderService.stop('csv-download');
         });
@@ -171,7 +171,7 @@ export class FalcoEventsListComponent implements OnInit {
 
   rebuildWithFilters(){
     if (!this.filtersValid) {
-      this.snackBar.open('Invalid filter settings; please recheck filter values', 'Close');
+      this.snackBar.open('Invalid filter settings; please recheck filter values', 'Close', { duration: 2000 });
     }else {
         this.getEvents();
     }

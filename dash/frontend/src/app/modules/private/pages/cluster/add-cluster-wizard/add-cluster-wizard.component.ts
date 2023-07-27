@@ -143,10 +143,10 @@ export class AddClusterWizardComponent implements OnInit {
         this.isCompleted = false;
         this.dialogRef.disableClose = true;
         stepper.next();
-        this.snackBar.open('Cluster added successfully', 'Close');
+        this.snackBar.open('Cluster added successfully', 'Close', { duration: 2000 });
       }, error => {
         this.submitting = false;
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -168,11 +168,11 @@ export class AddClusterWizardComponent implements OnInit {
         this.isCompleted = false;
         this.dialogRef.disableClose = true;
         stepper.next();
-        this.snackBar.open('Cluster updated successfully', 'Close');
+        this.snackBar.open('Cluster updated successfully', 'Close', { duration: 2000 });
 
       }, error => {
         this.submitting = false;
-        this.snackBar.open(error.error.message, 'Close');
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -199,11 +199,11 @@ export class AddClusterWizardComponent implements OnInit {
           this.config = YmlParse(result) as IKubeConfig;
           // @TODO: Potentially upgrade validation that the yaml file is a valid kubeconfig
           if (!this.config?.contexts) {
-            this.snackBar.open('Selected file was not a valid kubeconfig', 'Close');
+            this.snackBar.open('Selected file was not a valid kubeconfig', 'Close', { duration: 2000 });
             this.config = undefined;
           }
         } catch (e) {
-          this.snackBar.open('Selected file was not a valid YAML file', 'Close');
+          this.snackBar.open('Selected file was not a valid YAML file', 'Close', { duration: 2000 });
           this.config = undefined;
         }
       }, error => {

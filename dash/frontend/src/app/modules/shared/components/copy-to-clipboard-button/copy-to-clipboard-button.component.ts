@@ -27,9 +27,9 @@ export class CopyToClipboardButtonComponent {
   copy() {
     const success = this.cb.copy(this.text);
     if (success) {
-      this.snackBar.open(this.successMessage, 'Close');
+      this.snackBar.open(this.successMessage, 'Close', { duration: 2000 });
     } else {
-      this.snackBar.open(this.errorMessage, 'Close');
+      this.snackBar.open(this.errorMessage, 'Close', { duration: 2000 });
     }
   }
 }

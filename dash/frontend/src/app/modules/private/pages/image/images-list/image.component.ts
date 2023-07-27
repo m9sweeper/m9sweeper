@@ -120,7 +120,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openImageCreateDialog() {
     if (!this.userIsAdmin) {
-      this.snackBar.open('Only admins can rescan all images', 'Close');
+      this.snackBar.open('Only admins can rescan all images', 'Close', { duration: 2000 });
       return;
     }
     const openAddImage = this.dialog.open(CreateImageComponent, {
@@ -169,7 +169,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
         if (result?.continue && result?.selectedImages) {
           this.scanImages(result.selectedImages);
         } else {
-          this.snackBar.open('Scanning canceled', 'Close');
+          this.snackBar.open('Scanning canceled', 'Close', { duration: 2000 });
         }
       });
   }
@@ -181,12 +181,12 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.imageService.scanImageModule(this.clusterId, filterImageIds)
       .pipe(
         catchError((err) => {
-          this.snackBar.open(err.error.message, 'Close');
+          this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
           return of(null);
         }),
         switchMap((response) => {
           if (response?.success) {
-            this.snackBar.open('Image Scan queued', 'Close');
+            this.snackBar.open('Image Scan queued', 'Close', { duration: 2000 });
           }
           return of(null);
         }),

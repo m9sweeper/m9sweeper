@@ -5,7 +5,6 @@ import { MatPaginator} from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { merge, Subject } from 'rxjs';
-import { AlertService } from '@full-fledged/alerts';
 import { DockerRegistriesCreateComponent } from '../docker-registries-create/docker-registries-create.component';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { DockerRegistriesService } from '../../../../../core/services/docker-registries.service';
@@ -13,6 +12,7 @@ import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { AlertDialogComponent } from '../../../../shared/alert-dialog/alert-dialog.component';
 import { IDockerRegistries } from '../../../../../core/entities/IDockerRegistries';
 import { take, takeUntil } from 'rxjs/operators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-docker-registries-list',
@@ -40,7 +40,7 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit, OnD
   constructor(
     private dockerRegistriesService: DockerRegistriesService,
     private dialog: MatDialog,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private jwtAuthService: JwtAuthService,
     private router: Router,
     private route: ActivatedRoute
@@ -80,7 +80,7 @@ export class DockerRegistriesListComponent implements OnInit, AfterViewInit, OnD
           this.dataSource = new MatTableDataSource(this.data);
         }
       }, error => {
-        this.alertService.danger(error.error.message);
+        this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
       });
   }
 

@@ -48,11 +48,11 @@ export class SavePasswordComponent implements OnInit {
         .setLocalUserPassword(this.changePasswordForm.value)
         .subscribe(response => {
           if (response.data) {
-            this.snackBar.open('Password set successfully', 'Close');
+            this.snackBar.open('Password set successfully', 'Close', { duration: 2000 });
             this.router.navigate(['/public/login']);
           }
         }, event => {
-          this.snackBar.open(event.error.message, 'Close');
+          this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
         });
     }
     else {
@@ -60,11 +60,11 @@ export class SavePasswordComponent implements OnInit {
         .resetLocalUserPassword(this.changePasswordForm.value)
         .subscribe(response => {
             if (response.data) {
-              this.snackBar.open('Password reset successfully', 'Close');
+              this.snackBar.open('Password reset successfully', 'Close', { duration: 2000 });
               this.router.navigate(['/public/login']);
             }
         }, event => {
-          this.snackBar.open(event.error.message, 'Close');
+          this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
         });
     }
   }

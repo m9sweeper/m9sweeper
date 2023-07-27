@@ -1,9 +1,9 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
 import {UserService} from '../../../../core/services/user.service';
 import {CustomValidators} from '../../form-validator/custom-validators';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-change-password',
@@ -19,7 +19,7 @@ export class ChangePasswordComponent implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private router: Router,
   ) {
     this.changePasswordForm = this.formBuilder.group({
@@ -64,11 +64,11 @@ export class ChangePasswordComponent implements OnInit{
       .changeLocalUserPassword(this.changePasswordForm.value)
       .subscribe(response => {
         if (response.data){
-          this.alertService.success('Password changed successfully');
+          this.snackBar.open('Password changed successfully', 'Close', { duration: 2000 });
           this.router.navigate(['/private']);
         }
       }, event => {
-        this.alertService.danger(event.error.message);
+        this.snackBar.open(event.error.message, 'Close', { duration: 2000 });
       });
   }
 

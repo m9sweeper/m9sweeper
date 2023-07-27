@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     const errorMessage = this.route.snapshot.queryParamMap.get('error_message');
     if (errorMessage){
-      this.snackBar.open(errorMessage, 'Close');
+      this.snackBar.open(errorMessage, 'Close', { duration: 2000 });
     }
     this.loginForm  =  this.formBuilder.group({
       username: ['', [Validators.required, Validators.email]],
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
       this.inSiteCredentialAuthenticationMethods = authenticationMethods;
       this.selectedInSiteCredentialAuthenticationMethod = this.inSiteCredentialAuthenticationMethods.find(iscam => iscam.type === 'LOCAL_AUTH');
     }, error => {
-      this.snackBar.open('Failed to load authentication methods!', 'Close');
+      this.snackBar.open('Failed to load authentication methods!', 'Close', { duration: 2000 });
     }, () => {
     });
   }
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.value.password,
       this.selectedInSiteCredentialAuthenticationMethod
     ).pipe(take(1)).subscribe((response: IServerResponse<IAuth>) => {
-      this.snackBar.open('Login successful', 'Close');
+      this.snackBar.open('Login successful', 'Close', { duration: 2000 });
       const token: string = response.data.accessToken;
       if (token !== null && token.trim() !== '') {
         this.jwtService.saveToken(token);
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
       }
     }, error => {
       this.loaderService.stop('login');
-      this.snackBar.open(error.error.message, 'Close');
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
 
   }
