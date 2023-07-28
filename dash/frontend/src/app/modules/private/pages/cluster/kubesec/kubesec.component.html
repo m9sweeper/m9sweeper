@@ -77,7 +77,7 @@
                 <ng-container matColumnDef="podNames">
                   <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
                   <mat-cell *matCellDef="let report; let i = index">
-                    <a (click)="clickEvent(i)">
+                    <a>
                       {{report.object.substring(4)}}
                     </a>
                   </mat-cell>
@@ -87,7 +87,7 @@
                   <mat-cell *matCellDef="let report"> {{report.score}} </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; let i=index; columns: displayedColumns;" (click)="clickEvent(i)"></mat-row>
+                <mat-row class="pointer" *matRowDef="let row; let i=index; columns: displayedColumns;" (click)="clickEvent(i)"></mat-row>
               </mat-table>
             </div>
             <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
