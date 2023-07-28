@@ -1,4 +1,4 @@
-<div class="update-user-form-container">
+<mat-dialog-content class="update-user-form-container">
   <form class="update-user-form" [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
     <p>
       <mat-form-field appearance="fill">
@@ -15,7 +15,9 @@
     <p>
       <mat-form-field appearance="fill">
         <mat-label>Phone</mat-label>
-        <input matInput placeholder="Enter phone number" type="text" formControlName="phone">
+        <input matInput
+               placeholder="Enter phone number" type="text"
+               formControlName="phone">
       </mat-form-field>
     </p>
     <div mat-dialog-actions>
@@ -23,4 +25,4 @@
       <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
     </div>
   </form>
-</div>
+</mat-dialog-content>

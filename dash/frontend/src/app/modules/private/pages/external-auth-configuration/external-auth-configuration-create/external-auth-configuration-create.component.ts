@@ -21,6 +21,7 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   ldapAuthActivated = false;
   ldapPasswordHide = true;
 
+
   constructor(private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
               private externalAuthConfigurationService: ExternalAuthConfigurationService,
               private formBuilder: FormBuilder,

@@ -1,18 +1,14 @@
-.sub-navigation-wrapper {
-  display: flex;
-  height: 60px;
-  justify-content: space-between;
-  flex-direction: row;
+#sub-navigation-wrapper {
+  margin-bottom: 1em;
 }
 
-.item-sub-navigation {
-  display: flex;
-  flex-direction: column;
-}
-
-.item-name {
+#sub-navigation-title {
+  margin-block: 0.5em;
   font-size: 26px;
   vertical-align: bottom;
   line-height: 1;
 }
 
+#sub-navigation-button {
+  margin-block: 0.5em;
+}

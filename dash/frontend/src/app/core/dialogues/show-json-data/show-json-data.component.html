@@ -1,6 +1,5 @@
 <h1 mat-dialog-title>{{ header }}</h1>
-<div mat-dialog-content>
-  <div [innerHTML]="data.content | tablify"></div>
+<div mat-dialog-content [innerHTML]="data.content | tablify">
 </div>
 <div mat-dialog-actions style="justify-content: flex-end;">
   <button mat-button (click)="onClose()">Close</button>

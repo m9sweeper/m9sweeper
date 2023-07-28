@@ -1,8 +1,8 @@
-<div class="row">
-  <div class="col-xs-12 col-sm-9" matDialogTitle>
+<div matDialogTitle class="row">
+  <div class="col-xs-12 col-sm-9">
     Event Log Details
   </div>
-  <div class="col-xs-12 col-sm-3" id="falco-dialog-buttons">
+  <div class="col-xs-12 col-sm-3 start-xs end-sm" id="falco-dialog-buttons">
     <a mat-raised-button mat-dialog-close color="primary"
        [routerLink]="['/private', 'clusters', this.data.clusterId, 'falco', 'more', this.data.id, 'signature', this.data.anomalySignature]"
      >More</a>
@@ -38,7 +38,7 @@
     </mat-accordion>
   </div>
 
-  <div matDialogTitle id="related-events-title">Related Events</div>
+  <h3 id="related-events-title">Related Events</h3>
 
   <div class="scrollable-table-card">
     <app-falco-related-events-table

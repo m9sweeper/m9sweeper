@@ -1,7 +1,7 @@
 <div class=" page-container">
   <div class="page-container-content">
-    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle"
-                        (click)="openAddSettingDialog()"></app-sub-navigation>
+    <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="edit"
+                        (buttonClicked)="openAddSettingDialog()"></app-sub-navigation>
     <mat-card class="settings-card">
       <mat-card-header>
         <div class="page-card-header">

@@ -41,6 +41,7 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         name: 'Users',
         path: ['/private', 'users'],
         icon: 'folder_shared',
+        allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
       },
       {
         name: 'Policies',

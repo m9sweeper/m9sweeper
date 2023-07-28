@@ -3,7 +3,9 @@
     <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                         [title]="subNavigationTitle"
                         [buttonTitle]="subNavigationButtonTitle"
-                        [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
+                        [buttonUrl]="subNavigationButtonUrl"
+                        buttonIcon="add"
+    ></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
     <mat-card class="settings-card">

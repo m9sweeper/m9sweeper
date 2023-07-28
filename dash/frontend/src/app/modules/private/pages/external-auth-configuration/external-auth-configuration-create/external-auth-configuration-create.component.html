@@ -1,199 +1,194 @@
-<div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
-<div class="page-card-title" >
-  {{data.isEdit ? 'Update' : 'Add'}} Sign on method
-</div>
-<div  [ngClass]="oauthAuthActivated || ldapAuthActivated ? 'extend-create-external-auth-configuration-form': 'create-external-auth-configuration-form'">
-  <form [formGroup]="authConfigForm"  (ngSubmit)="onSubmit()" id="external-auth-conf-form">
-      <p>
-        <mat-form-field>
-          <mat-label>Auth Type</mat-label>
-          <mat-select formControlName="authType" (selectionChange)="activateAuthTypeFields()" >
-            <mat-option *ngFor="let authType of staticAuthTypeList" [value]="authType.value" [disabled]="authType.value === authenticationType.LOCAL">{{ authType.label }} </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </p>
-    <p *ngIf="!oauthAuthActivated">
+<h1 mat-dialog-title>{{data.isEdit ? 'Update' : 'Add'}} Sign On Method</h1>
+
+<form mat-dialog-content [formGroup]="authConfigForm"  (ngSubmit)="onSubmit()" id="external-auth-conf-form">
+  <p>
+    <mat-form-field>
+      <mat-label>Auth Type</mat-label>
+      <mat-select formControlName="authType" (selectionChange)="activateAuthTypeFields()" >
+        <mat-option *ngFor="let authType of staticAuthTypeList" [value]="authType.value" [disabled]="authType.value === authenticationType.LOCAL">{{ authType.label }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+  <p *ngIf="!oauthAuthActivated">
+    <mat-form-field>
+      <mat-label>Provider Type</mat-label>
+      <input formControlName="providerType" matInput>
+    </mat-form-field>
+  </p>
+  <p *ngIf="oauthAuthActivated">
+    <mat-form-field>
+      <mat-label>Provider Type</mat-label>
+      <mat-select formControlName="providerType" (selectionChange)="onOAuthProviderTypeChange($event)">
+        <mat-option value="GOOGLE">Google</mat-option>
+        <mat-option value="AZURE">Azure</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field>
+      <mat-label>Auth Name</mat-label>
+      <input formControlName="authName" matInput>
+    </mat-form-field>
+  </p>
+  <ng-container *ngIf="oauthAuthActivated">
+    <p>
       <mat-form-field>
-        <mat-label>Provider Type</mat-label>
-        <input formControlName="providerType" matInput>
+        <mat-label>Client Id</mat-label>
+        <input formControlName="oauthClientId" matInput>
       </mat-form-field>
     </p>
-    <p *ngIf="oauthAuthActivated">
+
+    <ng-container *ngIf="authConfigForm.get('providerType').value === 'GOOGLE'">
+      <p>
+        <mat-form-field>
+          <mat-label>Client Secret</mat-label>
+          <input formControlName="oauthClientSecret" matInput>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field>
+          <mat-label>Access Token Uri</mat-label>
+          <input formControlName="oauthAccessTokenUri" matInput>
+        </mat-form-field>
+      </p>
+    </ng-container>
+
+    <p>
       <mat-form-field>
-        <mat-label>Provider Type</mat-label>
-        <mat-select formControlName="providerType" (selectionChange)="onOAuthProviderTypeChange($event)">
-          <mat-option value="GOOGLE">Google</mat-option>
-          <mat-option value="AZURE">Azure</mat-option>
+        <mat-label>Authorization Uri</mat-label>
+        <input formControlName="oauthAuthorizationUri" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Access Scopes (comma separated)</mat-label>
+        <input formControlName="oauthScopes" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Allowed User Domains (comma separated)</mat-label>
+        <input formControlName="oauthAllowedDomains" matInput>
+        <mat-hint>Email domains allowed access to this application e.g. "example.com" to allow "user@example.com"</mat-hint>
+      </mat-form-field>
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="ldapAuthActivated">
+    <p>
+      <mat-form-field>
+        <mat-label>URL</mat-label>
+        <input formControlName="ldapUrl" matInput>
+        <mat-hint>ex: ldap://example.org</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>User Search Base</mat-label>
+        <input formControlName="ldapUserSearchBase" matInput>
+        <mat-hint>ex: dc=example,dc=org</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Username Attribute</mat-label>
+        <input formControlName="ldapUserNameAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Admin DN</mat-label>
+        <input formControlName="adminDn" matInput>
+        <mat-hint>ex: cn=admin,dc=example,dc=org</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Admin Password</mat-label>
+        <input formControlName="adminPassword" matInput [type]="ldapPasswordHide ? 'password' : 'text'">
+        <mat-icon matSuffix (click)="ldapPasswordHide = !ldapPasswordHide">{{ldapPasswordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Default User Authority</mat-label>
+        <mat-select formControlName="defaultUserAuthority">
+          <mat-option [value]="0">None</mat-option>
+          <mat-option [value]="1">View Only</mat-option>
+          <mat-option [value]="2">Admin</mat-option>
+          <mat-option [value]="3">Super Admin</mat-option>
         </mat-select>
+        <mat-hint>select 'None' to prevent users not part of a valid group from logging on</mat-hint>
       </mat-form-field>
     </p>
-      <p>
-        <mat-form-field>
-          <mat-label>Auth Name</mat-label>
-          <input formControlName="authName" matInput>
-        </mat-form-field>
-      </p>
-        <ng-container *ngIf="oauthAuthActivated">
-          <p>
-          <mat-form-field>
-            <mat-label>Client Id</mat-label>
-            <input formControlName="oauthClientId" matInput>
-          </mat-form-field>
-          </p>
-
-          <ng-container *ngIf="authConfigForm.get('providerType').value === 'GOOGLE'">
-            <p>
-              <mat-form-field>
-                <mat-label>Client Secret</mat-label>
-                <input formControlName="oauthClientSecret" matInput>
-              </mat-form-field>
-            </p>
-            <p>
-              <mat-form-field>
-                <mat-label>Access Token Uri</mat-label>
-                <input formControlName="oauthAccessTokenUri" matInput>
-              </mat-form-field>
-            </p>
-          </ng-container>
-
-          <p>
-            <mat-form-field>
-              <mat-label>Authorization Uri</mat-label>
-              <input formControlName="oauthAuthorizationUri" matInput>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Access Scopes (comma separated)</mat-label>
-              <input formControlName="oauthScopes" matInput>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Allowed User Domains (comma separated)</mat-label>
-              <input formControlName="oauthAllowedDomains" matInput>
-              <mat-hint>Email domains allowed access to this application e.g. "example.com" to allow "user@example.com"</mat-hint>
-            </mat-form-field>
-          </p>
-        </ng-container>
-
-      <ng-container *ngIf="ldapAuthActivated">
-        <p>
-          <mat-form-field>
-            <mat-label>URL</mat-label>
-            <input formControlName="ldapUrl" matInput>
-            <mat-hint>ex: ldap://example.org</mat-hint>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>User Search Base</mat-label>
-            <input formControlName="ldapUserSearchBase" matInput>
-            <mat-hint>ex: dc=example,dc=org</mat-hint>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Username Attribute</mat-label>
-            <input formControlName="ldapUserNameAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Admin DN</mat-label>
-            <input formControlName="adminDn" matInput>
-            <mat-hint>ex: cn=admin,dc=example,dc=org</mat-hint>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Admin Password</mat-label>
-            <input formControlName="adminPassword" matInput [type]="ldapPasswordHide ? 'password' : 'text'">
-            <mat-icon matSuffix (click)="ldapPasswordHide = !ldapPasswordHide">{{ldapPasswordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Default User Authority</mat-label>
-            <mat-select formControlName="defaultUserAuthority">
-              <mat-option [value]="0">None</mat-option>
-              <mat-option [value]="1">View Only</mat-option>
-              <mat-option [value]="2">Admin</mat-option>
-              <mat-option [value]="3">Super Admin</mat-option>
-            </mat-select>
-            <mat-hint>select 'None' to prevent users not part of a valid group from logging on</mat-hint>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Search Base</mat-label>
-            <input formControlName="groupSearchBase" matInput>
-            <mat-hint>ex: ou=groups,dc=example,dc=org</mat-hint>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Class</mat-label>
-            <input formControlName="groupClass" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Member Attribute</mat-label>
-            <input formControlName="groupMemberAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Member User Attribute</mat-label>
-            <input formControlName="groupMemberUserAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Auth Level Attribute</mat-label>
-            <input formControlName="groupAuthLevelAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Auth View Only Value</mat-label>
-            <input formControlName="groupViewOnlyAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Auth Admin Value</mat-label>
-            <input formControlName="groupAdminAttribute" matInput>
-          </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field>
-            <mat-label>Group Auth Super Admin Value</mat-label>
-            <input formControlName="groupSuperAdminAttribute" matInput>
-          </mat-form-field>
-        </p>
-      </ng-container>
-      <p>
-<!--        <mat-checkbox formControlName="isRedirectable" class="checkbox-margin">Redirectable</mat-checkbox>-->
-<!--        <mat-checkbox formControlName="inSiteCredential" class="checkbox-margin">In Site Credential</mat-checkbox>-->
-        <mat-checkbox formControlName="isActive" class="checkbox-margin">Active</mat-checkbox>
-      </p>
-<!--      <p>-->
-<!--        <mat-checkbox formControlName="inSiteCredential" class="checkbox-margin">In Site Credential</mat-checkbox>-->
-<!--      </p>-->
-<!--      <p>-->
-<!--        <mat-checkbox formControlName="isActive" class="checkbox-margin">Active</mat-checkbox>-->
-<!--      </p>-->
-  </form>
-</div>
+    <p>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Group Search Base</mat-label>
+        <input formControlName="groupSearchBase" matInput>
+        <mat-hint>ex: ou=groups,dc=example,dc=org</mat-hint>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Class</mat-label>
+        <input formControlName="groupClass" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Member Attribute</mat-label>
+        <input formControlName="groupMemberAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Member User Attribute</mat-label>
+        <input formControlName="groupMemberUserAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Auth Level Attribute</mat-label>
+        <input formControlName="groupAuthLevelAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Auth View Only Value</mat-label>
+        <input formControlName="groupViewOnlyAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Auth Admin Value</mat-label>
+        <input formControlName="groupAdminAttribute" matInput>
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Group Auth Super Admin Value</mat-label>
+        <input formControlName="groupSuperAdminAttribute" matInput>
+      </mat-form-field>
+    </p>
+  </ng-container>
+  <p>
+    <!--        <mat-checkbox formControlName="isRedirectable" class="checkbox-margin">Redirectable</mat-checkbox>-->
+    <!--        <mat-checkbox formControlName="inSiteCredential" class="checkbox-margin">In Site Credential</mat-checkbox>-->
+    <mat-checkbox formControlName="isActive" class="checkbox-margin">Active</mat-checkbox>
+  </p>
+  <!--      <p>-->
+  <!--        <mat-checkbox formControlName="inSiteCredential" class="checkbox-margin">In Site Credential</mat-checkbox>-->
+  <!--      </p>-->
+  <!--      <p>-->
+  <!--        <mat-checkbox formControlName="isActive" class="checkbox-margin">Active</mat-checkbox>-->
+  <!--      </p>-->
+</form>
 
 <div mat-dialog-actions>
-  <button type="submit" form="external-auth-conf-form" mat-raised-button color="primary"
-    [disabled]="!authConfigForm.valid" *ngIf="oauthAuthActivated || ldapAuthActivated" >{{data.isEdit ? 'Update' : 'Submit'}}</button>
-  <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-</div>
-
-</div>
+  <button mat-raised-button color="primary"
+          type="submit" form="external-auth-conf-form"
+          [disabled]="!authConfigForm.valid"
+          *ngIf="oauthAuthActivated || ldapAuthActivated"
+  >{{data.isEdit ? 'Update' : 'Submit'}}</button>
+  <button mat-raised-button type="button" color="warn" mat-dialog-close>Cancel</button>
 </div>

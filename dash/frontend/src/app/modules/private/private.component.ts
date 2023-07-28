@@ -7,8 +7,8 @@ import { ClusterService } from '../../core/services/cluster.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ITheme } from '../../core/entities/ITheme';
 import { ThemeService } from '../../core/services/theme.service';
-import {fromEvent, Observable, Subject, Subscription} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map, shareReplay, startWith, take, takeUntil, tap} from 'rxjs/operators';
+import {fromEvent, Observable, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, shareReplay, take, takeUntil} from 'rxjs/operators';
 import {UpdateUserProfileComponent} from './pages/user/update-user-profile/update-user-profile.component';
 import {UserService} from '../../core/services/user.service';
 import {UserProfileImageDirective} from '../shared/directives/user-profile-image.directive';
@@ -80,8 +80,12 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.getScreenSize(this.width);
     this.getUserProfile();
     this.defaultLink();
-    this.themeService.theme.pipe(takeUntil(this.unsubscribe$)).subscribe( theme => {
-      this.isDarkMode = theme.name === 'Dark';
+    this.themeService.theme
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe( {
+        next: theme => {
+          this.isDarkMode = theme.name === 'Dark';
+        }
     });
 
     // 1 check outside the subscription is necessary in case the user refreshes the page since that won't fire a router event
@@ -128,21 +132,17 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    const terms$ = fromEvent<any>(this.searchInput.nativeElement, 'keyup')
+    fromEvent<any>(this.searchInput.nativeElement, 'keyup')
       .pipe(
         debounceTime(1000),
-        distinctUntilChanged()
-      );
-    terms$.subscribe(res => {
-      this.searchClusters(res, this.currentGroupId);
+        distinctUntilChanged(),
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+      next: res => {
+        this.searchClusters(res, this.currentGroupId);
+      }
     });
   }
-
-  // getAllClusterByGroupId(){
-  //   this.clusterGroupService.getClusterGroups().subscribe(groups => {
-  //     this.userClusterGroupItems = groups.data;
-  //   });
-  // }
 
   changeTheme(event: MatSlideToggleChange) {
     this.themeService.changeTheme(this.themeService.getTheme(event.checked ? DefaultThemes.Dark : DefaultThemes.Default));
@@ -182,8 +182,12 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       if (input === '' && event.key !== 'Backspace') {
         this.clusterService.sendData({result: null});
       } else {
-        this.clusterService.searchClusters(input, groupId).subscribe(data => {
-          this.clusterService.sendData({result: data});
+        this.clusterService.searchClusters(input, groupId)
+          .pipe(take(1))
+          .subscribe({
+            next: data => {
+              this.clusterService.sendData({result: data});
+          }
         });
       }
     }
@@ -196,8 +200,12 @@ export class PrivateComponent implements OnInit, AfterViewInit, OnDestroy {
       disableClose: true,
       data: {}
     });
-    confirmDialog.afterClosed().subscribe(result => {
-      this.getUserProfile();
-    });
+    confirmDialog.afterClosed()
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.getUserProfile();
+        }
+      });
   }
 }
