@@ -1,10 +1,10 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing" [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'gatekeeper-details-sub-navigation'">
-      <div class="page-title">
+    <div class="row page-title-button-group-spacing" [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'gatekeeper-details-sub-navigation'">
+      <div class="col-xs-12 col-sm-6 center-xs start-sm page-title">
         {{templateName}}
       </div>
-      <div class="page-button-spacing">
+      <div class="col-xs-12 col-sm-6 center-xs end-sm page-button-spacing">
           <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click)="editRawTemplate()">
             <mat-icon>create</mat-icon>
             Edit
