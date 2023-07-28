@@ -4,12 +4,12 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {take, timeout} from 'rxjs/operators';
-import {AlertService} from '@full-fledged/alerts';
 import {IFalcoCount} from '../../../../../core/entities/IFalcoCount';
 import {ShareLinkComponent} from '../../../../../core/dialogues/share-link/share-link.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ChartSizeService} from '../../../../../core/services/chart-size.service';
 import {UtilService} from '../../../../../core/services/util.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-falco-event-details',
@@ -22,7 +22,7 @@ export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private falcoService: FalcoService,
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private chartSizeService: ChartSizeService,
   ) {}
@@ -117,7 +117,7 @@ export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
           },
         ]);
       }, (err) => {
-        this.alertService.danger(err.error.message);
+        this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
       });
   }
 
@@ -136,7 +136,7 @@ export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
       }
     },
     error => {
-      this.alertService.danger(error.error.message);
+      this.snackBar.open(error.error.message, 'Close', { duration: 2000 });
     });
   }
 

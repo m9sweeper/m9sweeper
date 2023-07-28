@@ -3,8 +3,8 @@ import {take} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {FalcoLogOptions, FalcoService} from '../../../../../core/services/falco.service';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
-import {AlertService} from '@full-fledged/alerts';
 import {UtilService} from '../../../../../core/services/util.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-falco-related-events-table',
@@ -28,7 +28,7 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
   page: number;
 
   constructor(
-    private alertService: AlertService,
+    private snackBar: MatSnackBar,
     private falcoService: FalcoService,
     private utilService: UtilService,
   ) {}
@@ -58,7 +58,7 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
 
   getRelatedEvents() {
     if (!this.clusterId) {
-      this.alertService.warning('cluster ID is not currently set - could not retrieve event logs');
+      this.snackBar.open('cluster ID is not currently set - could not retrieve event logs', 'Close', { duration: 2000 });
     }
     const falcoLogFilterOptions = this.buildFalcoLogFilters();
     this.falcoService.getFalcoLogs(this.clusterId,  falcoLogFilterOptions)
@@ -84,13 +84,13 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
 
       }, (err) => {
         if (err?.error?.message) {
-          this.alertService.danger(err.error.message);
+          this.snackBar.open(err.error.message, 'Close', { duration: 2000 });
         } else if (err?.error) {
-          this.alertService.danger(err.error);
+          this.snackBar.open(err.error, 'Close', { duration: 2000 });
         } else if (err?.message) {
-          this.alertService.danger(err.message);
+          this.snackBar.open(err.message, 'Close', { duration: 2000 });
         } else {
-          this.alertService.danger(err);
+          this.snackBar.open(err, 'Close', { duration: 2000 });
         }
       });
   }

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {AlertService} from '@full-fledged/alerts';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface ShareLinkData {
   title: string;
@@ -32,7 +32,7 @@ export class ShareLinkComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Partial<ShareLinkData>,
     private cb: Clipboard,
-    private readonly alertService: AlertService
+    private readonly snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -42,9 +42,9 @@ export class ShareLinkComponent implements OnInit {
   onClickCopy(){
     const success = this.cb.copy(this.valuesToUse.textToCopy);
     if (success) {
-      this.alertService.success(this.valuesToUse.successMessage);
+      this.snackBar.open(this.valuesToUse.successMessage, 'Close', { duration: 2000 });
     } else {
-      this.alertService.danger(this.valuesToUse.errorMessage);
+      this.snackBar.open(this.valuesToUse.errorMessage, 'Close', { duration: 2000 });
     }
   }
 
