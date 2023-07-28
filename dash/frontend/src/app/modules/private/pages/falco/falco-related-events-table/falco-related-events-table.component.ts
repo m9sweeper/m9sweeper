@@ -72,7 +72,7 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
 
         const newDataList = [];
         dataList.forEach((eventLog) => {
-          const modifiedEvent = structuredClone(eventLog);
+          const modifiedEvent = eventLog as any;
           if (this.currentEventLogId) {
             modifiedEvent.isCurrent = eventLog.id === this.currentEventLogId;
           }
