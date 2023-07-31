@@ -14,7 +14,6 @@ COPY ./dash/backend/package-lock.json /usr/src/app/backend
 RUN mkdir /usr/src/app/backend/vendor
 COPY ./dash/backend/vendor /usr/src/app/backend/vendor
 RUN node --version && npm --version
-RUN npm install -g npm@9.6.7
 RUN npm ci && \
     chown -R root:root node_modules
 
