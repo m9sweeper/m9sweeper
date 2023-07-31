@@ -14,7 +14,7 @@ COPY ./dash/backend/package-lock.json /usr/src/app/backend
 RUN mkdir /usr/src/app/backend/vendor
 COPY ./dash/backend/vendor /usr/src/app/backend/vendor
 RUN node --version && npm --version
-RUN npm install -g npm@9.5.0
+RUN npm install -g npm@9.8.1
 RUN npm ci && \
     chown -R root:root node_modules
 
@@ -62,7 +62,7 @@ RUN hugo --config config-local.toml
 ######################
 ## Stage 3: DELIVER ##
 ######################
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Make the app directory
 RUN mkdir -p /usr/src/app
