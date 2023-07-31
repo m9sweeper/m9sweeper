@@ -80,7 +80,7 @@ export class GateKeeperComponent implements OnInit {
   openAddConstraintDialog() {
     const openAddConstraint = this.dialog.open(AddConstraintDialogComponent, {
       width: '1000px',
-      height: '800px',
+      height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
       data: {clusterId: this.clusterId}

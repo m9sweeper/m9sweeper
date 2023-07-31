@@ -1,13 +1,3 @@
-.header-left {
-  border-right: solid 1px rgba(0, 0, 0, 0.12);
-  padding: 17px 157px 16px 29px;
-  box-shadow: 5px 0 5px -5px #333;;
-}
-
-.header-right {
-  padding-left: 20px;
-}
-
 .example-container {
   height: 91%;
 }
@@ -19,40 +9,17 @@
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
-
-  .right-content {
-    padding-left: 0;
-    padding-bottom: 10px;
-  }
-
-  #category-text {
-    padding-bottom: 10px;
-  }
-
-  #btn {
-    padding-top: 10px;
-  }
-
-  .action-btn {
-    align-self: flex-end;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 0 50px 20px 0;
-  }
 }
 
 .action-btn {
   display: flex;
   justify-content: flex-end;
-  //margin-right: 10px;
   z-index: 999;
-  //position: relative;
   height: 10%;
+  box-shadow: 0 0 5px -3px #333;
 }
 
 .check-item-list {
-  height: 90%;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -62,10 +29,11 @@
   user-select: none;
   box-shadow: 3px 0 5px -3px #333;
   overflow-x: auto;
-  .submenu-color {
-    background-color: #d1d9de;
-    padding-left: 10px;
-  }
+}
+
+.submenu-color {
+  background-color: #d1d9de;
+  padding-left: 10px;
 }
 
 .constraints-header {
