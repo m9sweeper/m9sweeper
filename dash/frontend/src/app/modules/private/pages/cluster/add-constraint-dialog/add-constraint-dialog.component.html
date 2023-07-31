@@ -30,7 +30,7 @@
                [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
                *ngIf="currentlySelectedTemplates.length">
             <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates">
-              <div class="col-md-1 checkbox-style">
+              <div class="col-md-1">
                 <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
               </div>
               <div class="col-md-11 ps-0">
