@@ -3,51 +3,51 @@
 </mat-toolbar>
 <mat-dialog-content class="modal-container-margin no-padding">
   <mat-sidenav-container class="example-container" autosize>
-      <mat-sidenav #sidenav class="sidenav" mode="side" opened="true">
-        <div *ngFor="let dir of topDirs">
-          <mat-expansion-panel class="no-padding no-box-shadow">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <mat-icon>home</mat-icon>
-                <span class="margin-left-7">
-                  {{dir}}
-                </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+    <mat-sidenav #sidenav class="sidenav" mode="side" opened="true">
+      <div *ngFor="let dir of topDirs">
+        <mat-expansion-panel class="no-padding no-box-shadow">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>home</mat-icon>
+              <span class="margin-left-7">
+                {{dir}}
+              </span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-              <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
-                <mat-checkbox class="no-padding"
-                              id="{{subDir}}"
-                              (change)="loadTemplate(dir, subDir, $event)">{{subDir}}</mat-checkbox>
-              </div>
-          </mat-expansion-panel>
-        </div>
-      </mat-sidenav>
+            <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
+              <mat-checkbox class="no-padding"
+                            id="{{subDir}}"
+                            (change)="loadTemplate(dir, subDir, $event)">{{subDir}}</mat-checkbox>
+            </div>
+        </mat-expansion-panel>
+      </div>
+    </mat-sidenav>
 
-      <mat-sidenav-content>
-        <div class="mat-row check-item-list height-30">
-          <div class="sidenav-content"
-               [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
-               *ngIf="currentlySelectedTemplates.length">
-            <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates">
-              <div class="col-md-1">
-                <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
-              </div>
-              <div class="col-md-11 ps-0">
-                <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
-                <div id="category-text" class="mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
-                <strong>Description: </strong>
-                <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
-                <div id="btn" class="mt-half-rem">
-                  <button mat-raised-button color="primary"
-                          (click)="openK8sManifest(template)">Review or Edit Kubernetes Manifest</button>
-                </div>
+    <mat-sidenav-content>
+      <div class="mat-row check-item-list height-30">
+        <div class="sidenav-content"
+             [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
+             *ngIf="currentlySelectedTemplates.length">
+          <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates">
+            <div class="col-md-1">
+              <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
+            </div>
+            <div class="col-md-11 ps-0">
+              <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
+              <div id="category-text" class="mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
+              <strong>Description: </strong>
+              <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
+              <div id="btn" class="mt-half-rem">
+                <button mat-raised-button color="primary"
+                        (click)="openK8sManifest(template)">Review or Edit Kubernetes Manifest</button>
               </div>
             </div>
           </div>
         </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </mat-dialog-content>
 <mat-dialog-actions class="mat-row action-btn">
   <div class="margin-right-10">
