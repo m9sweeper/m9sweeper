@@ -750,6 +750,10 @@ div.cluster-dashboard.responsive {
   margin-right: 5px;
 }
 
+.light-border {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+
 .padding-10 {
   padding: 10px!important;
 }
@@ -772,6 +776,9 @@ div.cluster-dashboard.responsive {
 
 .align-items-center {
   align-items: center!important;
+}
+.align-self-center {
+  align-self: center !important;
 }
 
 .align-items-stretch {

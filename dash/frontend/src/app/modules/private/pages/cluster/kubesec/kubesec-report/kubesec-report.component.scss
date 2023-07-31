@@ -1,0 +1,16 @@
+.pod-name {
+  font: 400 24px/32px Roboto, Helvetica Neue, sans-serif;
+}
+
+.tables {
+  .critical-table, .advise-table, .passed-table {}
+
+  .mat-column-criticalId, .mat-column-adviseId, .mat-column-passedId {
+    max-width: 25%;
+  }
+
+  .mat-column-criticalPoints, .mat-column-advisePoints, .mat-column-passedPoints {
+    max-width: 5%;
+    justify-content: center;
+  }
+}

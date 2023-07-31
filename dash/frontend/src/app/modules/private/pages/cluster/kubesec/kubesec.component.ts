@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {
   FormBuilder,
   FormControl,
@@ -13,10 +12,10 @@ import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {take, takeUntil} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute} from '@angular/router';
-import {KubesecDialogComponent} from './kubesec-dialog/kubesec-dialog.component';
 import {MatOption} from '@angular/material/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
+import {IKubeSecReport} from '../../../../../core/entities/IKubeSecReport';
 
 @Component({
   selector: 'app-kubesec',
@@ -36,7 +35,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   currentNamespaces: any[];
   podFile: File;
 
-  kubesecReport: any;
+  kubesecReports: IKubeSecReport[] = [];
   isCompleted = true;
   displayedColumns: string[] = ['podNames', 'score'];
 
@@ -49,10 +48,10 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   displayName: string;
   message: string;
-  score: string;
-  passed: [];
-  advise: [];
-  critical: [];
+  score: string | number;
+  passed: any[];
+  advise: any[];
+  critical: any[];
   criticalDisplayedColumns: string[] = ['criticalId', 'criticalPoints', 'criticalReason'];
   adviseDisplayColumns: string[] = ['adviseId', 'advisePoints', 'adviseReason'];
   passedDisplayColumns: string[] = ['passedId', 'passedPoints', 'passedReason'];
@@ -67,7 +66,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private alertService: AlertService,
     private podService: PodService,
@@ -132,6 +130,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   getKubesecReport() {
     this.loaderService.start();
+    this.kubesecReports = [];
     if (!this.podFile) {
       const info = [];
       for (const pod of this.podForm.controls.podFormControl.value) {
@@ -144,22 +143,19 @@ export class KubesecComponent implements OnInit, OnDestroy {
         this.selectedPodNames.push(pod.name);
       }
       this.kubesecService.getKubesecReport(info, this.clusterId)
-        .pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
-        this.kubesecReport = res;
-        if (this.kubesecReport.length === 1) {
-          this.populateTable();
-        }
-        this.loaderService.stop();
-      }, (err) => {
-        this.loaderService.stop();
-        this.alertService.danger(err.error.text ? err.error.text : 'Could not get your kubesec report');
-      });
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(res => {
+          this.kubesecReports = res;
+          this.loaderService.stop();
+        }, (err) => {
+          this.loaderService.stop();
+          this.alertService.danger(err.error.text ? err.error.text : 'Could not get your kubesec report');
+        });
     } else if (!this.podForm.controls.podFormControl.value) {
       const formData = new FormData();
       formData.append('podFile', this.podFile, 'podFile');
       this.kubesecService.getPodFileKubesecReport(formData).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
-        this.kubesecReport = [res];
-        this.populateTable();
+        this.kubesecReports = [res];
         this.loaderService.stop();
       }, (err) => {
         this.loaderService.stop();
@@ -168,68 +164,18 @@ export class KubesecComponent implements OnInit, OnDestroy {
     }
   }
 
-  populateTable() {
-    this.displayName = 'KubeSec ' + this.kubesecReport[0].object.substring(4);
-    this.message = this.kubesecReport[0].message;
-    this.score = this.kubesecReport[0].score;
-    this.kubesecReport[0].scoring.passed ? this.passed = this.kubesecReport[0].scoring.passed : this.passed = [];
-    this.kubesecReport[0].scoring.advise ? this.advise = this.kubesecReport[0].scoring.advise : this.advise = [];
-    this.kubesecReport[0].scoring.critical ? this.critical = this.kubesecReport[0].scoring.critical : this.critical = [];
-    this.passedDataSource = new MatTableDataSource(this.passed);
-    this.adviseDataSource = new MatTableDataSource(this.advise);
-    this.criticalDataSource = new MatTableDataSource(this.critical);
-    this.kubesecReportDownloadHref = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.kubesecReport[0]));
-
-    if ( this.advise.length > 0) {
-      this.advise.forEach(e => this.adviseSubtotal = this.adviseSubtotal + e['points']);
-    }
-    if ( this.critical.length > 0) {
-      this.critical.forEach(e => this.criticalSubtotal = this.criticalSubtotal + e['points']);
-    }
-    if ( this.passed.length > 0) {
-      this.passed.forEach(e => this.passedSubtotal = this.passedSubtotal + e['points']);
-    }
-  }
-
-  // Color for total score: passed or failed
-  passedOrFailedColor(score: string): string {
+  // Color for passed/ advise/ critical sections
+  decideScoreColor(score: string | number): string {
     const scoreNum = +score;
     if (scoreNum <= 0) {
-      return this.scoreColors.red; // critical issues
-    }else {
-      return this.scoreColors.green; // passed
+      return this.scoreColors.red;
+    } else if (0 < scoreNum && scoreNum <= 3) {
+      return this.scoreColors.yellow;
+    } else if (3 < scoreNum && scoreNum <= 6) {
+      return this.scoreColors.orange;
+    } else {
+      return this.scoreColors.green;
     }
-  }
-  getScore(section: []): number{
-    let subtotal = 0;
-    if ( section.length > 0) {
-      section.forEach(e => subtotal = subtotal + e['points']);
-    }
-    return subtotal;
-  }
-  // Color for passed/ advise/ critical sections
-  decideScoreColor(section: string): string {
-    if (section === 'critical' ) {
-      return this.scoreColors.red; // critical issues
-    } else if (section === 'advise') {
-      return this.scoreColors.yellow; // advice
-    } else if (section === 'passed') {
-      return this.scoreColors.green; // passed
-    }
-  }
-
-  sanitize(url: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
-  }
-
-  clickEvent(id: any) {
-    this.dialog.open(KubesecDialogComponent, {
-      width: '1000px',
-      height: '80%',
-      closeOnNavigation: true,
-      disableClose: false,
-      data: this.kubesecReport[id],
-    });
   }
 
   toggleAllSelection(matOption: MatOption, namespace: boolean) {

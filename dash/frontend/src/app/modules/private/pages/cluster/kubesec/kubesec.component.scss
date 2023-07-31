@@ -2,6 +2,11 @@
   padding-bottom: 20px;
 }
 
+.heading {
+  font-size: 19px;
+  font-weight: 500;
+}
+
 mat-horizontal-stepper {
   height: 100%;
   max-height: 80%;
@@ -23,82 +28,17 @@ div.pod-selection-container {
   }
 }
 
-div.kubesec-popup {
-  & .kubesec-popup-contents {
-    & .pod-score {
-      width: 100%;
-      margin: 0;
-      .pod-name {
-        padding: 0;
-      }
-      .score {
-        margin-right: 0;
-        padding: 0;
-      }
-    }
-    .message-download {
-      width: 100%;
-      margin: 0;
-      .download-report {
-        margin: 15px;
-      }
-      h3 {
-        margin-right: 10px;
-      }
-    }
-    & .tables {
-      .critical-table {
-        .mat-column-criticalId {
-          max-width: 25%;
-        }
-        .mat-column-criticalPoints {
-          max-width: 5%;
-        }
-      }
-      .advise-table {
-        .mat-column-adviseId {
-          max-width: 25%;
-        }
-        .mat-column-advisePoints {
-          max-width: 5%;
-        }
-      }
-      .passed-table {
-        .mat-column-passedId {
-          max-width: 25%;
-        }
-        .mat-column-passedPoints {
-          max-width: 5%;
-        }
-      }
-    }
+mat-expansion-panel {
+  border-bottom: none;
+}
+
+#multipleKubeSecReports {
+  ::ng-deep .mat-expansion-panel-header-description,
+  ::ng-deep .mat-expansion-panel-header-title {
+    flex: 1;
   }
-}
-
-.critical-table {
-  margin-bottom: 5px;
-}
-.advise-table {
-  margin-bottom: 5px;
-}
-
-a {
-  cursor: pointer;
-  text-decoration: underline;
 }
 
 .margin-top {
   margin-top: 10px;
-}
-a {
-  color: blue;
-}
-
-.heading {
-  font-size: 19px;
-  font-weight: 500;
-}
-
-.pod-score-heading {
-  font-size: 23px;
 }
