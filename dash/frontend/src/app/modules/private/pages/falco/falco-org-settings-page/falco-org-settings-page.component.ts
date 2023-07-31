@@ -65,7 +65,7 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
       disableClose: false,
       data: {},
     });
-    openAddCluster.afterClosed().subscribe(shouldDelete => {
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(shouldDelete => {
       if (shouldDelete) {
         this.falcoService.deleteRule(ruleId)
           .pipe(take(1))
