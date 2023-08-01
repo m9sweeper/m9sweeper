@@ -19,6 +19,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
   public showOrgSettingsButton = true;
+  public showClusterListButton = true;
 
   private routerEvent$: Subscription;
   clusterId;
@@ -82,7 +83,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubesec'],
         image: {
           src: '/assets/images/kubesec-logo.png',
-          alt: 'KubeSec Logo',
+          alt: 'Kubesec Logo',
         },
       },
       {

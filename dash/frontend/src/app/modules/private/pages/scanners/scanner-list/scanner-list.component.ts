@@ -6,6 +6,7 @@ import { IScanner, ScannerData } from '../../../../../core/entities/IScanner';
 import { MatSort } from '@angular/material/sort';
 import { ScannerCreateComponent } from '../scanner-create/scanner-create.component';
 import { MatDialog } from '@angular/material/dialog';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scanner-list',
@@ -45,7 +46,7 @@ export class ScannerListComponent implements OnInit {
       disableClose: true,
       data: {userId: this.userId}
     });
-    confirmDialog.afterClosed().subscribe(result => {
+    confirmDialog.afterClosed().pipe(take(1)).subscribe(result => {
       // this.getAllClusterByGroupId();
       // this.scannerService.getAllScannersByUserId(this.userId).subscribe(response => {
       //   this.dataSource = new MatTableDataSource(response.data);

@@ -11,6 +11,7 @@ import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog
 import {merge} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-api-key-list',
@@ -87,7 +88,7 @@ export class ApiKeyListComponent implements OnInit, AfterViewInit {
       }
     });
 
-    openDeleteApiKey.afterClosed().subscribe(result => {
+    openDeleteApiKey.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.pageEvent({pageSize: this.limit, pageIndex: (this.data.length > 1) ? this.page : 0});
       }

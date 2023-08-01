@@ -7,7 +7,7 @@
     <div class="page-card-left-align">
       <div class="row align-items-stretch">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-5 margin-y-5">
-          <mat-card appearance="outlined" class="h-100">
+          <mat-card class="h-100">
             <mat-card-header>
               <div class="page-card-title">Status:</div>
             </mat-card-header>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 margin-y-5">
-          <mat-card appearance="outlined" class="h-100">
+          <mat-card class="h-100">
             <mat-card-header>
               <div class="page-card-title">Recommendation:</div>
             </mat-card-header>
@@ -61,7 +61,7 @@
     </div>
     <br>
     <div class="page-card">
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header >
           <div class=" col-sm-3 no-padding">
             <div class="page-card-title">
@@ -103,7 +103,7 @@
              </td>
            </ng-container>
            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-           <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="constraint-click"></tr>
+           <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="constraint-click pointer"></tr>
          </table>
        </mat-card-content>
       </mat-card>

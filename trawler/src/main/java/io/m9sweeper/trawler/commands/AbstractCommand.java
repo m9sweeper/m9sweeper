@@ -10,16 +10,13 @@ import picocli.CommandLine;
         optionListHeading = "%nOptions:%n", commandListHeading = "%nCommands:%n", sortOptions = false)
 public abstract class AbstractCommand {
 
-    @CommandLine.Option(names = {"-P", "--parallel-scans"}, description = "number of scanners that Trawler can run at once", order = 0)
-    protected Integer trawlerParallelScanners;
-
-    @CommandLine.Option(names = {"-U", "--url"}, description = "URL of the m9sweeper instance", order = 1)
+    @CommandLine.Option(names = {"-U", "--url"}, description = "URL of the m9sweeper instance", order = 0)
     protected String m9sweeperUrl;
 
-    @CommandLine.Option(names = {"-A", "--api-key"}, description = "API Key of the m9sweeper instance", order = 2)
+    @CommandLine.Option(names = {"-A", "--api-key"}, description = "API Key of the m9sweeper instance", order = 1)
     protected String m9sweeperApiKey;
 
-    @CommandLine.Option(names = {"-D", "--debug"}, description = "whether to enable debug logs", order = 3)
+    @CommandLine.Option(names = {"-D", "--debug"}, description = "whether to enable debug logs", order = 2)
     protected Boolean debug;
 
     @SuppressWarnings("unused")
@@ -36,10 +33,6 @@ public abstract class AbstractCommand {
 
         if (m9sweeperApiKey != null) {
             TrawlerConfiguration.getInstance().setM9sweeperApiKey(m9sweeperApiKey);
-        }
-
-        if (trawlerParallelScanners != null) {
-            TrawlerConfiguration.getInstance().setTrawlerParallelScanners(trawlerParallelScanners);
         }
 
         if (debug != null) {

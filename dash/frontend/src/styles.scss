@@ -64,7 +64,7 @@ mat-card {
 .graph-card {
   padding-bottom: 20px;
   mat-card {
-    overflow: scroll;
+    overflow: auto;
   }
 }
 
@@ -267,7 +267,7 @@ app-private {
   // width:fit-content;
 }
 
-.settings-card, .scrollable-table-card {
+.settings-card, .scrollable-table-card, .component-with-scrollable-table {
   div.table-wrapper {
     overflow-x: auto;
     display: flex;
@@ -750,6 +750,10 @@ div.cluster-dashboard.responsive {
   margin-right: 5px;
 }
 
+.light-border {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}
+
 .padding-10 {
   padding: 10px!important;
 }
@@ -772,6 +776,9 @@ div.cluster-dashboard.responsive {
 
 .align-items-center {
   align-items: center!important;
+}
+.align-self-center {
+  align-self: center !important;
 }
 
 .align-items-stretch {
@@ -802,9 +809,26 @@ app-datepicker-component {
   margin-bottom: 0.5rem;
 }
 
+.mb-1-rem {
+  margin-bottom: 1rem;
+}
+
+.my-0 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .my-half-rem {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.ms-half-rem {
+  margin-left: 0.5rem;
+}
+
+.ps-0 {
+  padding-left: 0;
 }
 
 .ps-one-rem {
@@ -821,6 +845,10 @@ app-datepicker-component {
 
 .min-width-3 {
   min-width: 3rem;
+}
+
+.height-30 {
+  height: 30rem;
 }
 
 .ngx-charts .bar,
