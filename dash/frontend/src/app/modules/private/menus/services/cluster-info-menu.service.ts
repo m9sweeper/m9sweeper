@@ -71,7 +71,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         icon: 'network_check',
       },
       {
-        name: 'gatekeeper',
+        name: 'Gatekeeper',
         path: ['/private', 'clusters', `${this.clusterId}`, 'gatekeeper'],
         image: {
           src: '/assets/images/opa-icon-black.png',
@@ -79,7 +79,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         },
       },
       {
-        name: 'kubesec',
+        name: 'Kubesec',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubesec'],
         image: {
           src: '/assets/images/kubesec-logo.png',

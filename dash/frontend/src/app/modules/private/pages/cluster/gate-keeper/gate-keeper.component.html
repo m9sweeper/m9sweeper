@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-container-content">
     <div class="page-title-button-group-spacing">
-      <div class="page-title">gatekeeper</div>
+      <div class="page-title">Gatekeeper</div>
     </div>
 
     <div class="page-card-left-align">
@@ -29,14 +29,14 @@
 
               <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
                   <p *ngIf="gatekeeperConstraintTemplates === null; else recommendationText">
-                    We recommend installing gatekeeper to manage policies in your Kubernetes cluster.
+                    We recommend installing Gatekeeper to manage policies in your Kubernetes cluster.
                   </p>
                   <ng-template #recommendationText>
                     <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
-                      gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
+                      Gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
                     </p>
                     <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
-                      gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
+                      Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
                     </p>
                   </ng-template>
               </div>

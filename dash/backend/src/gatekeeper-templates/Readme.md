@@ -1,4 +1,4 @@
-# gatekeeper Libraries
+# Gatekeeper Libraries
 
 These are based upon the OPA Project's examples: https://github.com/open-policy-agent/gatekeeper-library/tree/master/library
 

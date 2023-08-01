@@ -11,10 +11,10 @@ m9sweeper is an app for securing your kubernetes cluster. It does so by orchestr
 kubernetes security capabilities: 
 
 - CVE Scanning with Trivy
-- Compliance with gatekeeper
+- Compliance with Gatekeeper
 - CIS Benchmarking with kube-bench
 - Pen Testing with kube-hunter
-- Secure Deployments with kubesec
+- Secure Deployments with Kubesec
 - Intrusion Detection with Project Falco (Coming Soon)
 
 If you are a beginner or experienced administrator, m9sweeper is a one-stop-shop to secure a 

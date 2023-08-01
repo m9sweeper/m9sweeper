@@ -267,7 +267,7 @@ const routes: Routes = [
             path: 'gatekeeper',
             component: GateKeeperComponent,
             data: {
-              title: 'gatekeeper Constraints'
+              title: 'Gatekeeper Constraints'
             }
           },
           {
@@ -281,7 +281,7 @@ const routes: Routes = [
             path: 'kubesec',
             component: KubesecComponent,
             data: {
-              title: 'kubesec'
+              title: 'Kubesec'
             }
           },
           {
