@@ -169,7 +169,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   }
 
   populateTable() {
-    this.displayName = 'KubeSec ' + this.kubesecReport[0].object.substring(4);
+    this.displayName = 'kubesec ' + this.kubesecReport[0].object.substring(4);
     this.message = this.kubesecReport[0].message;
     this.score = this.kubesecReport[0].score;
     this.kubesecReport[0].scoring.passed ? this.passed = this.kubesecReport[0].scoring.passed : this.passed = [];
