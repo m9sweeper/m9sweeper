@@ -95,7 +95,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       disableClose: true,
       data: {}
     });
-    confirmDialog.afterClosed().subscribe(result => {
+    confirmDialog.afterClosed().pipe(take(1)).subscribe(result => {
       if (result === true) {
         parent.buildClusterMenu();
       }

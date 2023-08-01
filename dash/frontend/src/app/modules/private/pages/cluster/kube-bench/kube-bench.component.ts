@@ -134,7 +134,7 @@ export class KubeBenchComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: false,
     });
-    deleteDialog.afterClosed().subscribe(result => {
+    deleteDialog.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.kubeBenchService.deleteKubeBenchReportById(id).pipe(take(1)).subscribe( () => {
           this.getAllBenchReportsByCluster(this.clusterId);
