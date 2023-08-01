@@ -90,7 +90,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   getPodsFromSelectedNamespace() {
     this.podFile = null;
     this.kubesecService.listPods(this.clusterId, this.namespaceForm.controls.namespaceFormControl.value)
-      .pipe(takeUntil(this.unsubscribe$)).subscribe(list => {
+      .pipe(take(1)).subscribe(list => {
       if (list) {
         list = list.filter(data => data !== null);
         this.currentPods = [];
@@ -122,7 +122,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
         this.selectedPodNames.push(pod.name);
       }
       this.kubesecService.getKubesecReport(info, this.clusterId)
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(take(1))
         .subscribe(res => {
           this.kubesecReports = res;
           this.loaderService.stop();
@@ -133,7 +133,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
     } else if (!this.podForm.controls.podFormControl.value) {
       const formData = new FormData();
       formData.append('podFile', this.podFile, 'podFile');
-      this.kubesecService.getPodFileKubesecReport(formData).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      this.kubesecService.getPodFileKubesecReport(formData).pipe(take(1)).subscribe(res => {
         this.kubesecReports = [res];
         this.loaderService.stop();
       }, (err) => {
