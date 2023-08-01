@@ -88,7 +88,7 @@
     "uuidv4": "^6.2.13",
     "winston": "^3.10.0",
     "ws": "^7.5.9",
-    "yaml": "^1.10.2"
+    "yaml": "^2.3.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.5.0",
