@@ -24,6 +24,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
   public showOrgSettingsButton = true;
+  public showClusterListButton = false;
 
   constructor(
     private clusterGroupService: ClusterGroupService,
