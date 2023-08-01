@@ -8,7 +8,6 @@ import io.m9sweeper.trawler.framework.exception.NoncompliantException;
 import io.m9sweeper.trawler.framework.policies.Policy;
 import io.m9sweeper.trawler.framework.queue.Message;
 import io.m9sweeper.trawler.framework.scans.*;
-import io.m9sweeper.trawler.framework.scans.ScannerType;
 import io.m9sweeper.trawler.scanners.Trivy;
 
 import java.math.BigDecimal;

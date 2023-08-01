@@ -18,7 +18,6 @@ public class TrawlerConfiguration {
     // The variables representing configuration options
     private Boolean debug = false; // whether debugging is turned on (will result in more log details)
     private String trawlerRunMode;
-    private Integer trawlerParallelScanners = 1;
     private String m9sweeperUrl;
     private String m9sweeperApiKey;
     private String rabbitmqUsername;
@@ -48,15 +47,6 @@ public class TrawlerConfiguration {
 
         // Try loading the trawler run mode
         trawlerRunMode = dotenv.get("TRAWLER_RUN_MODE", "rabbitmq");
-
-        // Load the number of parallel scanners that can be run at once
-        try {
-            trawlerParallelScanners = Integer.parseInt(dotenv.get("TRAWLER_PARALLEL_SCANNERS", "1"));
-        } catch (NumberFormatException e) {
-            System.out.println("TRAWLER_PARALLEL_SCANNERS: " + dotenv.get("TRAWLER_PARALLEL_SCANNERS") + " is not a number. Please enter a valid integer or " +
-                    "comment out/unset the configuration option to use the default option (1).");
-            System.exit(1);
-        }
 
         // load debug flag
         debug = dotenv.get("DEBUG", "0").equals("1");
@@ -147,19 +137,6 @@ public class TrawlerConfiguration {
         } else if (runMode == TrawlerRunMode.STANDALONE) {
             trawlerRunMode = "standalone";
         } else trawlerRunMode = "unknown";
-    }
-
-    /**
-     * Return the number of scanners that Trawler should be allowed to run at one time.
-     * This defaults to 1
-     * @return number of parallel scanners
-     */
-    public int trawlerParallelScanners() {
-        return trawlerParallelScanners;
-    }
-
-    public void setTrawlerParallelScanners(int parallelScanners) {
-        this.trawlerParallelScanners = parallelScanners;
     }
 
     /**
