@@ -23,7 +23,7 @@
         <div class="left-column">
           <p><b>Status:</b> {{exception?.status}}</p>
           <p><b>Reason: </b> <br/>{{exception?.reason}}</p>
-          <p><b>Issue:</b> {{exception?.issueIdentifier}}</p>
+          <p><b>Issue:</b> {{exception?.issueIdentifier || 'All'}}</p>
           <p><b>Date:</b> {{exception?.startDate | date: 'MMM dd, y'}} - {{exception?.endDate | date: 'MMM dd, y'}}</p>
           <p><b>Scanner:</b> {{exception?.scanner?.name || 'N/A'}}</p>
         </div>

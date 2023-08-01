@@ -108,6 +108,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       updateOn: 'blur'
     }
     );
+
+    this.exceptionForm.controls.type.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: val => this.changeTypeSelection(val)
+      });
     if (this.editMode) {
       this.exceptionForm.controls.startDate.setValidators(null);
       this.subMenuTitle = 'Edit Exception';
@@ -317,14 +323,13 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     return this.exceptionForm.controls.startDate;
   }
 
-  displayExceptionFields(event) {
+  changeTypeSelection(newType: string) {
     this.exceptionForm.controls.policies.disable();
-    switch (event.value){
+    switch (newType){
       case 'policy':
         this.exceptionForm.controls.policies.enable();
         this.changeCVELabel('Issue (CVE Code)');
-        // this.issueIdentifier.setErrors({gatekeeperAndClusterSelected: false });
-        this.issueIdentifier.markAsUntouched();
+        this.setIssueIdentifierRequired(false);
         this.gatekeeperConstraintList = of([]);
         break;
       case 'gatekeeper':
@@ -334,12 +339,14 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
         if (getSelectedClusters instanceof Array && getSelectedClusters.length > 0) {
           this.loadGatekeeperConstraints(getSelectedClusters);
         }
+        this.setIssueIdentifierRequired(true);
         break;
       case 'override':
         this.exceptionForm.controls.policies.enable();
         this.changeCVELabel('Issue (CVE Type Code)');
         this.issueIdentifier.markAsUntouched();
         this.gatekeeperConstraintList = of([]);
+        this.setIssueIdentifierRequired(false);
         break;
     }
   }
@@ -357,6 +364,15 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
 
   get issueIdentifier(){
     return this.exceptionForm.controls.issueIdentifier;
+  }
+
+  setIssueIdentifierRequired(required: boolean): void {
+    this.issueIdentifier.clearValidators();
+    this.issueIdentifier.addValidators([Validators.maxLength(255)]);
+    if (required) {
+      this.issueIdentifier.addValidators([Validators.required]);
+    }
+    this.issueIdentifier.updateValueAndValidity();
   }
 
   onClusterChange($event){
