@@ -6,7 +6,7 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 })
 export class AlertService {
   defaultConfig: Partial<MatSnackBarConfig> = {
-    // duration: 3000,
+    duration: 3000,
     horizontalPosition: 'center',
     verticalPosition: 'bottom',
   };
@@ -47,9 +47,8 @@ export class AlertService {
     this.snackBarService.open(message, label, {
       announcementMessage: message,  // for the text reader
       politeness: 'assertive',  // for the text reader
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
       panelClass: ['danger-alert'],
+      ...this.defaultConfig,
       ...config,
     });
   }
