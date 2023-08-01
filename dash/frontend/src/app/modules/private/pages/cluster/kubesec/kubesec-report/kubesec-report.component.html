@@ -27,12 +27,12 @@
 </div>
 <div class="component-with-scrollable-table">
   <div class="light-border critical-table mb-half-rem" *ngIf="critical.length > 0">
-    <mat-toolbar>
-      <div style="float: left; width: 95%">
+    <mat-toolbar class="row">
+      <div class="col-xs-9">
         <span class="subnav-title">Critical Issues</span>
       </div>
-      <div style="float: right; width: 5%; text-align: center" [ngStyle] = "{'background': scoreColors.red}">
-        <span> {{critical.length}} </span>
+      <div class="col-xs-3 table-score end-xs"  [ngStyle] = "{'background': scoreColors.green}">
+        <span>{{critical.length}}</span>
       </div>
     </mat-toolbar>
     <div class="table-wrapper">
