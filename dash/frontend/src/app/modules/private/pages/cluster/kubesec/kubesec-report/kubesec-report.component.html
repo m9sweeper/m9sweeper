@@ -1,18 +1,18 @@
 <div class="pod-score row">
   <div class="col-xs-9 pod-name">
-    {{'KubeSec ' + kubeSecReport.object.substring(4)}}
+    {{'Kubesec ' + kubesecReport.object.substring(4)}}
   </div>
   <div class="col-xs-3 kubesec-score" [ngStyle]="{'background': decideScoreColor()}">
-    <span> {{kubeSecReport.score}} </span>
+    <span> {{kubesecReport.score}} </span>
   </div>
 </div>
 <div class="message-download row mb-half-rem">
-  <p class="col-xs-12 col-sm-8"> {{kubeSecReport.message}}. </p>
+  <p class="col-xs-12 col-sm-8"> {{kubesecReport.message}}. </p>
   <div class="col-xs-12 col-sm-4 start-xs end-sm align-self-center">
     <a mat-raised-button color="primary"
        class="download-report"
        download="kubesec-report.json"
-       [href]="sanitize(kubeSecReportDownloadHref)">
+       [href]="sanitize(kubesecReportDownloadHref)">
       Download Report
     </a>
   </div>

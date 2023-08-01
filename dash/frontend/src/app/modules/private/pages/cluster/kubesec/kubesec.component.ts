@@ -13,8 +13,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute} from '@angular/router';
 import {MatOption} from '@angular/material/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {IKubeSecReport} from '../../../../../core/entities/IKubeSecReport';
+import {IKubesecReport} from '../../../../../core/entities/IKubesecReport';
 
 @Component({
   selector: 'app-kubesec',
@@ -33,7 +32,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   currentNamespaces: any[];
   podFile: File;
 
-  kubesecReports: IKubeSecReport[] = [];
+  kubesecReports: IKubesecReport[] = [];
   isCompleted = true;
   displayedColumns: string[] = ['podNames', 'score'];
 

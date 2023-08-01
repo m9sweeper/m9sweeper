@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
-import {IKubeSecReport} from '../../../../../../core/entities/IkubeSecReport';
+import {IKubesecReport} from '../../../../../../core/entities/IKubesecReport';
 import {MatTableDataSource} from '@angular/material/table';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
@@ -10,8 +10,8 @@ import {DomSanitizer} from '@angular/platform-browser';
   templateUrl: './kubesec-report.component.html',
   styleUrls: ['./kubesec-report.component.scss']
 })
-export class KubeSecReportComponent implements OnInit {
-  @Input() kubeSecReport: IKubeSecReport;
+export class KubesecReportComponent implements OnInit {
+  @Input() kubesecReport: IKubesecReport;
   displayName: string;
 
   passed: any[];
@@ -31,7 +31,7 @@ export class KubeSecReportComponent implements OnInit {
     green: `rgb(0, 255, 0, ${this.backgroundOpacity})`,
   };
 
-  kubeSecReportDownloadHref: string;
+  kubesecReportDownloadHref: string;
 
   constructor(
     private loaderService: NgxUiLoaderService,
@@ -41,14 +41,14 @@ export class KubeSecReportComponent implements OnInit {
   ngOnInit(): void {
     this.loaderService.start();
     this.populateTable();
-    this.kubeSecReportDownloadHref = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.kubeSecReport));
+    this.kubesecReportDownloadHref = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.kubesecReport));
   }
 
   populateTable() {
-    this.displayName = 'KubeSec ' + this.kubeSecReport.object.substring(4);
-    this.kubeSecReport.scoring.passed ? this.passed = this.kubeSecReport.scoring.passed : this.passed = [];
-    this.kubeSecReport.scoring.advise ? this.advise = this.kubeSecReport.scoring.advise : this.advise = [];
-    this.kubeSecReport.scoring.critical ? this.critical = this.kubeSecReport.scoring.critical : this.critical = [];
+    this.displayName = 'Kubesec ' + this.kubesecReport.object.substring(4);
+    this.kubesecReport.scoring.passed ? this.passed = this.kubesecReport.scoring.passed : this.passed = [];
+    this.kubesecReport.scoring.advise ? this.advise = this.kubesecReport.scoring.advise : this.advise = [];
+    this.kubesecReport.scoring.critical ? this.critical = this.kubesecReport.scoring.critical : this.critical = [];
     this.passedDataSource = new MatTableDataSource(this.passed);
     this.adviseDataSource = new MatTableDataSource(this.advise);
     this.criticalDataSource = new MatTableDataSource(this.critical);
@@ -56,7 +56,7 @@ export class KubeSecReportComponent implements OnInit {
   }
 
   decideScoreColor(): string {
-    const scoreNum = +this.kubeSecReport.score;
+    const scoreNum = +this.kubesecReport.score;
     if (scoreNum <= 0) {
       return this.scoreColors.red;
     } else if (0 < scoreNum && scoreNum <= 3) {

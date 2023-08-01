@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title title">KubeSec</div>
+    <div class="page-title title">Kubesec</div>
     <mat-card>
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
@@ -66,10 +66,10 @@
 
         <mat-step>
           <ng-template matStepLabel>Kubesec Report</ng-template>
-          <div id="singleKubeSecReport" *ngIf="kubesecReports.length == 1">
-            <app-kubesec-report [kubeSecReport]="(kubesecReports[0])"></app-kubesec-report>
+          <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
+            <app-kubesec-report [kubesecReport]="(kubesecReports[0])"></app-kubesec-report>
           </div>
-          <div id="multipleKubeSecReports" *ngIf="kubesecReports.length > 1">
+          <div id="multipleKubesecReports" *ngIf="kubesecReports.length > 1">
             <mat-toolbar>
               <div>
                 <span class="subnav-title">Reports</span>
@@ -85,7 +85,7 @@
                     </span>
                   </mat-panel-description>
                 </mat-expansion-panel-header>
-                <app-kubesec-report [kubeSecReport]="report"></app-kubesec-report>
+                <app-kubesec-report [kubesecReport]="report"></app-kubesec-report>
               </mat-expansion-panel>
             </mat-accordion>
           </div>

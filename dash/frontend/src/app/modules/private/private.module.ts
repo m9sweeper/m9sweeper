@@ -132,7 +132,7 @@ import {ArrayTextPipe} from '../../core/pipe/array-text.pipe';
 import {MenuComponent} from './menus/menu.component';
 import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog/falco-json-data-dialog.component';
 import {FalcoRelatedEventsTableComponent} from './pages/falco/falco-related-events-table/falco-related-events-table.component';
-import {KubeSecReportComponent} from './pages/cluster/kubesec/kubesec-report/kubesec-report.component';
+import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kubesec-report.component';
 
 
 @NgModule({
@@ -192,7 +192,7 @@ import {KubeSecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     AddConstraintCriteriaComponent,
     TemplateConstraintManifestComponent,
     KubesecComponent,
-    KubeSecReportComponent,
+    KubesecReportComponent,
     ServiceAccountWizardComponent,
     KubeHunterComponent,
     KubeHunterDialogComponent,

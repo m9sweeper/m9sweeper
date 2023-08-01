@@ -1,4 +1,4 @@
-export interface IKubeSecReport {
+export interface IKubesecReport {
   object: string;
   valid: boolean;
   fileName?: string;
