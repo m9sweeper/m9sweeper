@@ -13,7 +13,6 @@ import {take, takeUntil} from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute} from '@angular/router';
 import {MatOption} from '@angular/material/core';
-import {MatTableDataSource} from '@angular/material/table';
 import {DomSanitizer} from '@angular/platform-browser';
 import {IKubeSecReport} from '../../../../../core/entities/IKubeSecReport';
 
@@ -28,7 +27,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   podSelectionOpt: number;
   selectedPodNames = [];
-  selectedPods: any[];
   currentPods = [];
   selectedNamespaces: string[];
   clusterId: number;
@@ -45,24 +43,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
     this.thing = e;
   }
   thing: MatOption;
-
-  displayName: string;
-  message: string;
-  score: string | number;
-  passed: any[];
-  advise: any[];
-  critical: any[];
-  criticalDisplayedColumns: string[] = ['criticalId', 'criticalPoints', 'criticalReason'];
-  adviseDisplayColumns: string[] = ['adviseId', 'advisePoints', 'adviseReason'];
-  passedDisplayColumns: string[] = ['passedId', 'passedPoints', 'passedReason'];
-  passedDataSource: MatTableDataSource<any>;
-  adviseDataSource: MatTableDataSource<any>;
-  criticalDataSource: MatTableDataSource<any>;
-  kubesecReportDownloadHref: string;
   scoreColors = { red: '#ff0000', yellow: '#eeee00', orange: '#ffa500', green: '#00ff00'};
-  adviseSubtotal = 0;
-  criticalSubtotal = 0;
-  passedSubtotal = 0;
 
 
   constructor(
@@ -73,7 +54,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
     private kubesecService: KubesecService,
     private loaderService: NgxUiLoaderService,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
