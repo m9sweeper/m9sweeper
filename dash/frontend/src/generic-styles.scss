@@ -1,0 +1,117 @@
+/**
+This is where you can add generic styles that will be applied by screen size.
+We DO NOT want classes that will be specific for pages - only global classes.
+If you add the class to one section, please add a value to all.
+ex:
+.pt-xs-1 {
+  padding-top: 1em;
+}
+@media only screen and (min-width: 48em) {
+  .pt-sm-1 {
+    padding-top: 1em;
+  }
+}
+and so on for each media query size.
+
+Media query sizes are based on the sizes defined in npm flexboxgrid
+https://www.npmjs.com/package/flexboxgrid
+
+naming and spacing defaults are based on Bootstrap spacing
+exception: explicitly name sizes xs-lg; omit sizes xl & xxl
+https://getbootstrap.com/docs/5.2/utilities/spacing/
+0 - for classes that eliminate the margin or padding by setting it to 0
+1 - for classes that set the margin or padding to $spacer * .25
+2 - for classes that set the margin or padding to $spacer * .5
+3 - for classes that set the margin or padding to $spacer
+4 - for classes that set the margin or padding to $spacer * 1.5
+5 - for classes that set the margin or padding to $spacer * 3
+auto - for classes that set the margin to auto
+ */
+
+$spacer: 1em;  // aka 1 em
+
+// xs screen sizes
+.pt-xs-0 {
+  padding-top: 0;
+}
+.pt-xs-1 {
+  padding-top: ($spacer * 0.25);
+}
+.pt-xs-2 {
+  padding-top: ($spacer * 0.5);
+}
+.pt-xs-3 {
+  padding-top: ($spacer);
+}
+.pt-xs-4 {
+  padding-top: ($spacer * 1.5);
+}
+.pt-xs-5 {
+  padding-top: ($spacer * 3);
+}
+
+// sm screen sizes
+@media only screen and (min-width: 48em) {
+  .pt-sm-0 {
+    padding-top: 0;
+  }
+  .pt-sm-1 {
+    padding-top: ($spacer * 0.25);
+  }
+  .pt-sm-2 {
+    padding-top: ($spacer * 0.5);
+  }
+  .pt-sm-3 {
+    padding-top: ($spacer);
+  }
+  .pt-sm-4 {
+    padding-top: ($spacer * 1.5);
+  }
+  .pt-sm-5 {
+    padding-top: ($spacer * 3);
+  }
+}
+
+// md screen sizes
+@media only screen and (min-width: 62em) {
+  .pt-md-0 {
+    padding-top: 0;
+  }
+  .pt-md-1 {
+    padding-top: ($spacer * 0.25);
+  }
+  .pt-md-2 {
+    padding-top: ($spacer * 0.5);
+  }
+  .pt-md-3 {
+    padding-top: ($spacer);
+  }
+  .pt-md-4 {
+    padding-top: ($spacer * 1.5);
+  }
+  .pt-md-5 {
+    padding-top: ($spacer * 3);
+  }
+}
+
+// lg screen sizes
+@media only screen and (min-width: 75em) {
+  .pt-lg-0 {
+    padding-top: 0;
+  }
+  .pt-lg-1 {
+    padding-top: ($spacer * 0.25);
+  }
+  .pt-lg-2 {
+    padding-top: ($spacer * 0.5);
+  }
+  .pt-lg-3 {
+    padding-top: ($spacer);
+  }
+  .pt-lg-4 {
+    padding-top: ($spacer * 1.5);
+  }
+  .pt-lg-5 {
+    padding-top: ($spacer * 3);
+  }
+}

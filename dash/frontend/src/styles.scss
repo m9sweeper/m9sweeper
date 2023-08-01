@@ -10,6 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import 'flexboxgrid/css/flexboxgrid.min.css';
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/material';
+@import 'generic-styles';
 
 //Default theme
 $ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
