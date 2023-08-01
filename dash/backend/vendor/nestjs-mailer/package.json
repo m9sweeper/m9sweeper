@@ -27,7 +27,7 @@
     "Yanarp"
   ],
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.json",
     "deploy": "sh ./publish.sh",
     "format": "prettier **/**/*.ts --ignore-path ../../.prettierignore --write",
