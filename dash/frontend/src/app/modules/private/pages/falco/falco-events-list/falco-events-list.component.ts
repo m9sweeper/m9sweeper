@@ -17,7 +17,7 @@ import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {UtilService} from '../../../../../core/services/util.service';
 import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json-data-dialog.component';
 

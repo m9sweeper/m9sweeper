@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';

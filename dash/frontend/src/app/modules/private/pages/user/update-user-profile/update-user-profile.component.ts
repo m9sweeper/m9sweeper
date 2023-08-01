@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IAuthority, IUser, IUserUpdateRequestPayload} from '../../../../../core/entities/IUser';
 import {UserService} from '../../../../../core/services/user.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

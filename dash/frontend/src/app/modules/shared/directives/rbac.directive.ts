@@ -1,6 +1,6 @@
 import {Directive, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 
 @Directive({
   // tslint:disable-next-line:directive-selector

@@ -13,7 +13,7 @@ import {UpdateUserProfileComponent} from './pages/user/update-user-profile/updat
 import {UserService} from '../../core/services/user.service';
 import {UserProfileImageDirective} from '../shared/directives/user-profile-image.directive';
 import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-loader';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {DefaultThemes} from '../../core/enum/DefaultThemes';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
