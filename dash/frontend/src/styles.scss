@@ -64,7 +64,7 @@ mat-card {
 .graph-card {
   padding-bottom: 20px;
   mat-card {
-    overflow: scroll;
+    overflow: auto;
   }
 }
 
@@ -814,6 +814,10 @@ app-datepicker-component {
 .my-half-rem {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.ms-half-rem {
+  margin-left: 0.5rem;
 }
 
 .ps-0 {
