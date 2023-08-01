@@ -267,7 +267,7 @@ const routes: Routes = [
             path: 'gatekeeper',
             component: GateKeeperComponent,
             data: {
-              title: 'GateKeeper Constraints'
+              title: 'gatekeeper Constraints'
             }
           },
           {
@@ -281,35 +281,35 @@ const routes: Routes = [
             path: 'kubesec',
             component: KubesecComponent,
             data: {
-              title: 'KubeSec'
+              title: 'kubesec'
             }
           },
           {
             path: 'kubehunter',
             component: KubeHunterComponent,
             data: {
-              title: 'KubeHunter'
+              title: 'kube-hunter'
             }
           },
           {
             path: 'kubehunter/:id',
             component: KubeHunterReportDetailsComponent,
             data: {
-              title: 'Kube-Hunter Report Details'
+              title: 'kube-hunter Report Details'
             }
           },
           {
             path: 'kubebench',
             component: KubeBenchComponent,
             data: {
-              title: 'KubeBench'
+              title: 'kube-bench'
             }
           },
           {
             path: 'kubebench/:id',
             component: KubeBenchReportDetailsComponent,
             data: {
-              title: 'Kube Bench Report Details'
+              title: 'kube-bench Report Details'
             }
           },
         ]

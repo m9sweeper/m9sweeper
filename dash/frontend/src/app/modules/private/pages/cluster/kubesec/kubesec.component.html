@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title title">KubeSec</div>
+    <div class="page-title title">kubesec</div>
     <mat-card appearance="outlined">
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
@@ -65,7 +65,7 @@
         </mat-step>
 
         <mat-step>
-          <ng-template matStepLabel>Kubesec Report</ng-template>
+          <ng-template matStepLabel>kubesec Report</ng-template>
           <div class="kubesec-popup" *ngIf="kubesecReport">
             <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReport.length > 1">
               <mat-toolbar>

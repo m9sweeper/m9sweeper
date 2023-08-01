@@ -27,7 +27,7 @@ export class KubeHunterDao {
             .then(reports => plainToInstance(KubeHunterDto, reports[0]));
     }
 
-    /** Retrieves the most recent kubehunter report for the cluster (after the minDate if specified) */
+    /** Retrieves the most recent kube-hunter report for the cluster (after the minDate if specified) */
     async getRecentKubeHunterReportForCluster(clusterId: number, minDate?: number): Promise<KubeHunterDto> {
         const knex = await this.databaseService.getConnection();
         const query =  knex

@@ -25,7 +25,7 @@ export class GatekeeperExceptionCommand {
       return this.exceptionBlockService.syncGatekeeperExceptionBlocks()
         .then(() => true)
         .catch(e => {
-          console.log('Error syncing GateKeeper exception blocks: ' + e);
+          console.log('Error syncing gatekeeper exception blocks: ' + e);
           return false;
         });
     }

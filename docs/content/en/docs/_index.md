@@ -54,13 +54,13 @@ m9sweeper makes it easy to orchestrate the implementation of a number of free se
 
 [Trivy](https://github.com/aquasecurity/trivy): CVE Scanner
 
-[Kubesec](https://github.com/controlplaneio/kubesec): Deployment Best Practices
+[kubesec](https://github.com/controlplaneio/kubesec): Deployment Best Practices
 
-[Kube Bench](https://github.com/aquasecurity/kube-bench): CIS Benchmarks
+[kube-bench](https://github.com/aquasecurity/kube-bench): CIS Benchmarks
 
-[OPA Gatekeeper](https://github.com/open-policy-agent/gatekeeper): Compliance and Security Policies
+[OPA gatekeeper](https://github.com/open-policy-agent/gatekeeper): Compliance and Security Policies
 
-[Kube Hunter](https://github.com/aquasecurity/kube-hunter): Cluster Penetration Testing
+[kube-hunter](https://github.com/aquasecurity/kube-hunter): Cluster Penetration Testing
 
 [Project Falco](https://falco.org/): Intrusion Detection (Coming Soon)
 
