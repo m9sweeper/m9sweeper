@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivateChild, Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import {JwtAuthService} from '../services/jwt-auth.service';
-import {AlertService} from 'src/app/core/services/alert.service';
+import {AlertService} from '../services/alert.service';
 
 @Injectable({
   providedIn: 'root'
