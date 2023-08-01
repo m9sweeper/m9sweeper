@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { filter } from 'rxjs/operators';
 import { JwtAuthService } from './core/services/jwt-auth.service';
-import {AlertService} from './core/services/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -29,8 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private jwtAuthService: JwtAuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private alertService: AlertService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
