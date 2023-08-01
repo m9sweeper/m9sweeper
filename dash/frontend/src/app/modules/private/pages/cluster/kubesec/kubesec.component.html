@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title title">kubesec</div>
+    <div class="page-title title">Kubesec</div>
     <mat-card>
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
@@ -65,46 +65,6 @@
         </mat-step>
 
         <mat-step>
-          <ng-template matStepLabel>kubesec Report</ng-template>
-          <div class="kubesec-popup" *ngIf="kubesecReport">
-            <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReport.length > 1">
-              <mat-toolbar>
-                <div>
-                  <span class="subnav-title">Reports</span>
-                </div>
-              </mat-toolbar>
-              <mat-table [dataSource]="kubesecReport">
-                <ng-container matColumnDef="podNames">
-                  <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
-                  <mat-cell *matCellDef="let report; let i = index">
-                    <a (click)="clickEvent(i)">
-                      {{report.object.substring(4)}}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="score">
-                  <mat-header-cell *matHeaderCellDef disableClear> Score </mat-header-cell>
-                  <mat-cell *matCellDef="let report"> {{report.score}} </mat-cell>
-                </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; let i=index; columns: displayedColumns;" (click)="clickEvent(i)"></mat-row>
-              </mat-table>
-            </div>
-            <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
-              <div class="pod-score row">
-                <div class="col-lg-9 col-xs-9 pod-name">
-                  <p class="pod-score-heading"> {{displayName}} </p>
-                </div>
-                <div class="col-lg-3 col-xs-3 kubesec-score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
-                  <span> {{score}} </span>
-                </div>
-              </div>
-              <div class="message-download row">
-                <p> {{message}}. </p>
-                <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)" class="download-report">
-                  Download Report
-                </a>
-              </div>
           <ng-template matStepLabel>Kubesec Report</ng-template>
           <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
             <app-kubesec-report [kubesecReport]="(kubesecReports[0])"></app-kubesec-report>
