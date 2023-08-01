@@ -91,7 +91,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       data: {clusterId: this.data.clusterId}
     });
 
-    openConstraintCriteriaDialog.afterClosed().subscribe(response => {
+    openConstraintCriteriaDialog.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response.constraintCriteria) {
         this.templateConstraintCriteria.push(response.constraintCriteria);
       }

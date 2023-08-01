@@ -70,7 +70,7 @@ export class ExceptionDetailsComponent implements OnInit {
       disableClose: true
     });
 
-    confirmModal.afterClosed().subscribe(result => {
+    confirmModal.afterClosed().pipe(take(1)).subscribe(result => {
       if (result === true) {
         this.exceptionsService.deleteExceptionById(this.exceptionId).subscribe(
           _ => {

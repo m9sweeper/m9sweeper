@@ -199,7 +199,7 @@ export class PolicyCreateComponent implements OnInit {
       disableClose: true,
       data: {policyId: +this.policyId, isPolicyEdit: this.checkIfEdit}
     });
-    confirmDialog.afterClosed().subscribe((result: IScannerDialogData) => {
+    confirmDialog.afterClosed().pipe(take(1)).subscribe((result: IScannerDialogData) => {
       if (!result.isClose) {
         if (this.policyId) {
           this.getAllScannersByPolicyId();

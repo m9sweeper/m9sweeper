@@ -164,7 +164,7 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
       disableClose: false,
       data: {images: this.dataSource.data},
     });
-    confirmScanAllDialog.afterClosed()
+    confirmScanAllDialog.afterClosed().pipe(take(1))
       .subscribe((result) => {
         if (result?.continue && result?.selectedImages) {
           this.scanImages(result.selectedImages);

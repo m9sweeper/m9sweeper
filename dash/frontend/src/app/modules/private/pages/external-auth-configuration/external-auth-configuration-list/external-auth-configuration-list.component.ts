@@ -60,7 +60,7 @@ export class ExternalAuthConfigurationListComponent implements OnInit {
         authConfigData: authConfig ? authConfig : null
       }
     });
-    confirmDialog.afterClosed().subscribe(result => {
+    confirmDialog.afterClosed().pipe(take(1)).subscribe(result => {
       if (result === undefined) {
         this.getExternalAuthConfigs();
       }
