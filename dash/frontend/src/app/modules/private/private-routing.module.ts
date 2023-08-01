@@ -281,7 +281,7 @@ const routes: Routes = [
             path: 'kubesec',
             component: KubesecComponent,
             data: {
-              title: 'KubeSec'
+              title: 'Kubesec'
             }
           },
           {

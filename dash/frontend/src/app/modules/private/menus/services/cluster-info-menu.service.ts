@@ -79,11 +79,11 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         },
       },
       {
-        name: 'KubeSec',
+        name: 'Kubesec',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubesec'],
         image: {
           src: '/assets/images/kubesec-logo.png',
-          alt: 'KubeSec Logo',
+          alt: 'Kubesec Logo',
         },
       },
       {
