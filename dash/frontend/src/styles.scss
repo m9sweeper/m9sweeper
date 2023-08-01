@@ -267,7 +267,7 @@ app-private {
   // width:fit-content;
 }
 
-.settings-card, .scrollable-table-card {
+.settings-card, .scrollable-table-card, .component-with-scrollable-table {
   div.table-wrapper {
     overflow-x: auto;
     display: flex;

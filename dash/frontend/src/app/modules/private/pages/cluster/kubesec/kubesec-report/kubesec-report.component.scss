@@ -2,15 +2,29 @@
   font: 400 24px/32px Roboto, Helvetica Neue, sans-serif;
 }
 
-.tables {
-  .critical-table, .advise-table, .passed-table {}
-
-  .mat-column-criticalId, .mat-column-adviseId, .mat-column-passedId {
-    max-width: 25%;
+mat-toolbar {
+  div {
+    padding-inline: 0;
   }
 
-  .mat-column-criticalPoints, .mat-column-advisePoints, .mat-column-passedPoints {
-    max-width: 5%;
-    justify-content: center;
+  .table-score {
+    text-align: center;
   }
+}
+
+.critical-table, .advise-table, .passed-table {}
+
+.mat-column-criticalId, .mat-column-adviseId, .mat-column-passedId {
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.mat-column-criticalPoints, .mat-column-advisePoints, .mat-column-passedPoints {
+  min-width: 45px;
+  max-width: 50px;
+  justify-content: center;
+}
+
+.mat-column-criticalReason, .mat-column-adviseReason, .mat-column-passedReason {
+  min-width: 500px
 }

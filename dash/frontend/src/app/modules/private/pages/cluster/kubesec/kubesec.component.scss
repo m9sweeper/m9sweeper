@@ -23,8 +23,8 @@ div.pod-selection-container {
     margin-bottom: 10px;
   }
   & .select-pod-content {
-    padding-left: 15px;
-    width: 24%;
+    //padding-left: 15px;
+    //width: 24%;
   }
 }
 
@@ -36,6 +36,7 @@ mat-expansion-panel {
   ::ng-deep .mat-expansion-panel-header-description,
   ::ng-deep .mat-expansion-panel-header-title {
     flex: 1;
+    text-wrap: nowrap;
   }
 }
 

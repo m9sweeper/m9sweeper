@@ -10,6 +10,7 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./kubesec-dialog.component.scss']
 })
 export class KubesecDialogComponent implements OnInit {
+  //@todo: make this use the kubesec-report component
   displayName: string;
 
   message: string;

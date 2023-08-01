@@ -25,7 +25,7 @@
             </div>
             <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
               <div class="row">
-                <mat-form-field appearance="fill" class="margin-right-10" *ngIf="currentNamespaces">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6" *ngIf="currentNamespaces">
                   <mat-label>Select namespaces</mat-label>
                   <form [formGroup]="namespaceForm">
                     <mat-select formControlName="namespaceFormControl" multiple>
@@ -38,7 +38,7 @@
                 </mat-form-field>
               </div>
               <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
                   <mat-label>Select a pod</mat-label>
                   <form [formGroup]="podForm">
                     <mat-select formControlName="podFormControl" multiple>
