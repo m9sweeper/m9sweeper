@@ -5,7 +5,7 @@ import { MatPaginator} from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { merge, Subject } from 'rxjs';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { DockerRegistriesCreateComponent } from '../docker-registries-create/docker-registries-create.component';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { DockerRegistriesService } from '../../../../../core/services/docker-registries.service';

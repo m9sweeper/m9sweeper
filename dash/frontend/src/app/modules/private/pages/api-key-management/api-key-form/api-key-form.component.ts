@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { ApiKeyService } from '../../../../../core/services/api-key.service';
 import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';

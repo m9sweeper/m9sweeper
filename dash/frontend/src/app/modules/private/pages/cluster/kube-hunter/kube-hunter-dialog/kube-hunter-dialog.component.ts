@@ -6,7 +6,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {Subject, timer} from 'rxjs';
 import {IKubeHunterReport} from '../../../../../../core/entities/IKubeHunterReport';
 import {KubeHunterService} from '../../../../../../core/services/kube-hunter.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {Router} from '@angular/router';
 
 @Component({

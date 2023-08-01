@@ -5,7 +5,7 @@ import {CustomValidatorService} from '../../../../../core/services/custom-valida
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {switchMap, take} from 'rxjs/operators';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {NamespaceService} from '../../../../../core/services/namespace.service';

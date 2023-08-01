@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {take} from 'rxjs/operators';
 import {
   FalcoRuleAddEditDialogComponent

@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {Subject} from 'rxjs';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {PodService} from '../../../../../core/services/pod.service';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {take, takeUntil} from 'rxjs/operators';

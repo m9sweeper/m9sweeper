@@ -6,7 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterEditComponent} from '../cluster-edit/cluster-edit.component';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
 import {map, take, takeUntil} from 'rxjs/operators';

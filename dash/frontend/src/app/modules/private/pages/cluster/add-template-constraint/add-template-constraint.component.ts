@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-constraint-criteria.component';
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';

@@ -7,7 +7,7 @@ import {ClusterService} from '../../../../../core/services/cluster.service';
 import {IKubeConfig} from '../../../../../core/entities/IKubeConfig';
 import { URL } from 'url';
 import {CustomValidators} from '../../../form-validator/custom-validators';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {MatStepper} from '@angular/material/stepper';
 import {ClusterGroupService} from '../../../../../core/services/cluster-group.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';

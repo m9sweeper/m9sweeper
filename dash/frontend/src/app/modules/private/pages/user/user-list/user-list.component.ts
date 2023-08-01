@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { IUser } from '../../../../../core/entities/IUser';
 import { UserService } from '../../../../../core/services/user.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';

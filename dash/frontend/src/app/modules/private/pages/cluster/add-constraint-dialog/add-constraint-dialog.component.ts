@@ -11,7 +11,7 @@ import {MatSidenav} from '@angular/material/sidenav';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 import {take} from 'rxjs/operators';

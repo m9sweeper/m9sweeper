@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {KubeHunterService} from '../../../../../core/services/kube-hunter.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IKubeHunterReport} from '../../../../../core/entities/IKubeHunterReport';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
