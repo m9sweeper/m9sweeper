@@ -82,7 +82,6 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.5",
     "swagger-ui-express": "^4.1.4",
-    "tableify": "^1.1.0",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.4",
     "uuidv4": "^6.2.13",

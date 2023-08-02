@@ -22,6 +22,7 @@ import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {AuditLogDto} from '../../audit-log/dto/audit-log.dto';
 import common from "../../../config/common";
 import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
+import {tablify} from '../../../util/tablify';
 
 @ApiTags('Authentication')
 @Controller('non-redirectable-login')
@@ -103,6 +104,14 @@ export class NonRedirectableLoginController {
     async localAuthLoginAction(@Body() loginDto: LoginDto): Promise<any> {
         this.prometheusV1Service.loginCounter.inc(1);
         const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(loginDto.userName);
+        // array
+        const sampleJson = ['banana', 'apple', 'peach'];
+        // message object const sampleJson = {label: 'Error creating webhook for cluster', data: { clusterId: 5 }};
+        // null const sampleJson = null;
+        // text with symbols const sampleJson = '09:36:29.597260967: Notice Unexpected connection to K8s API Server from container (command=python -u /app/sidecar.py pid=46515 k8s.ns=monitoring-system k8s.pod=prometheus-stack-grafana-7594dc6d95-cjfjj container=87d81d268f9c image=quay.io/kiwigrid/k8s-sidecar:1.22.0 connection=10.244.2.25:35680->10.0.0.1:443)';
+        console.log(sampleJson);
+        // console.log(Array.isArray(sampleJson));
+        console.log(tablify(sampleJson));
         if (users && users.length > 0) {
             const user: UserProfileDto = users.pop();
             const auditLog = new AuditLogDto();
