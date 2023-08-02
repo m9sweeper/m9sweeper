@@ -3,7 +3,7 @@
     <ng-template matStepLabel>Create Job</ng-template>
 
     <div class="modal-content-left-align-no-margin">
-      <h3>Choose whether to run Kube Hunter periodically or manually</h3>
+      <h3>Choose whether to run kube-hunter periodically or manually</h3>
       <mat-radio-group aria-labelledby="cronjob-options-group-label"  [(ngModel)]="cronjobOpt">
         <mat-radio-button [value]="true">
           Run on a schedule
@@ -18,7 +18,7 @@
 
       <div *ngIf="cronjobOpt === false">
         <div class="page-title-button-group-spacing">
-          <div > Run Kube Hunter using the following CLI command:</div>
+          <div > Run kube-hunter using the following CLI command:</div>
           <div >
             <app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
@@ -41,7 +41,7 @@
 
       <div *ngIf="cronjobOpt === true">
         <div >
-          <h3>Choose whether to run Kube Hunter daily, weekly, or monthly</h3>
+          <h3>Choose whether to run kube-hunter daily, weekly, or monthly</h3>
           <mat-form-field appearance="fill">
             <mat-label>Choose</mat-label>
             <mat-select [(ngModel)]="cronjobTime">
@@ -50,14 +50,14 @@
               <mat-option [value]="'monthly'">Monthly</mat-option>
             </mat-select>
           </mat-form-field>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'daily'">Choosing daily means Kube Hunter will run at 12 am every day</span>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means Kube Hunter will run at 12 am every Sunday</span>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means Kube Hunter will run at 12 am every first day of the month</span>
+          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'daily'">Choosing daily means kube-hunter will run at 12 am every day</span>
+          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means kube-hunter will run at 12 am every Sunday</span>
+          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means kube-hunter will run at 12 am every first day of the month</span>
         </div>
         <br>
         <div *ngIf="cronjobTime">
           <div class="page-title-button-group-spacing">
-            <div > Run Kube Hunter using the following CLI command.</div>
+            <div > Run kube-hunter using the following CLI command.</div>
             <div ><app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
               errorMessage="Command could not be copied."

@@ -70,7 +70,7 @@ export class KubeHunterDialogComponent implements OnInit {
     ).subscribe((report) => {
       this.report = report;
       if (this.report) {
-        this.alertService.info('Kube hunter done running');
+        this.alertService.info('kube-hunter done running');
       }
     });
   }
