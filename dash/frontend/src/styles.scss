@@ -77,7 +77,6 @@ mat-card {
 
   .mat-mdc-snack-bar-container {
     .mdc-snackbar__label, .mdc-button__label {
-      text-transform: capitalize;
       font-weight: normal;
     }
 
@@ -104,7 +103,7 @@ mat-card {
         background-color: map-get($warning-palette, "default") !important;
         .mdc-snackbar__label, .mdc-button__label {
           color: map-get($warning-palette, "default-contrast") !important;
-          text-transform: uppercase;
+          //text-transform: uppercase;
         }
       }
     }
@@ -114,7 +113,7 @@ mat-card {
         background-color: map-get($danger-palette, "default") !important;
         .mdc-snackbar__label, .mdc-button__label {
           color: map-get($danger-palette, "default-contrast") !important;
-          text-transform: uppercase;
+          //text-transform: uppercase;
         }
       }
     }
@@ -864,23 +863,6 @@ app-datepicker-component {
 .my-0 {
   margin-top: 0;
   margin-bottom: 0;
-}
-
-.my-half-rem {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.ms-half-rem {
-  margin-left: 0.5rem;
-}
-
-.ps-0 {
-  padding-left: 0;
-}
-
-.ps-one-rem {
-  padding-left: 1rem;
 }
 
 .min-width-8 {

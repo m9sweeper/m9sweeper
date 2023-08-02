@@ -30,30 +30,30 @@ auto - for classes that set the margin to auto
 
 $spacer: 1em;
 
-$properties: (
-  p: "padding",
-  m: "margin",
-);
-$sides: (
-  t: ['top'],
-  b: ['bottom'],
-  s: ['inline-start'],
-  e: ['inline-end'],
-  x: ['inline'],
-  y: ['top', 'bottom'],
-  all: ['inline-start', 'top', 'inline-end', 'bottom'],
-);
-$sizes: (
-  auto: 'auto',
-  0: 0,
-  1: ($spacer * 0.25),
-  2: ($spacer * 0.5),
-  3: ($spacer),
-  4: ($spacer * 1.5),
-  5: ($spacer * 3),
-);
-
 @mixin build-spacing-classes($breakpointShorthand: xs) {
+  $properties: (
+    p: "padding",
+    m: "margin",
+  );
+  $sides: (
+    t: ['top'],
+    b: ['bottom'],
+    s: ['inline-start'],
+    e: ['inline-end'],
+    x: ['inline'],
+    y: ['top', 'bottom'],
+    all: ['inline-start', 'top', 'inline-end', 'bottom'],
+  );
+  $sizes: (
+    auto: 'auto',
+    0: 0,
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
+    3: ($spacer),
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+  );
+
   @each $propertyShorthand, $property in $properties {
     @each $sideShorthand, $sideList in $sides {
       $sideShorthandToUse: $sideShorthand;
@@ -61,32 +61,51 @@ $sizes: (
         $sideShorthandToUse: '';
       }
       @each $sizeShorthand, $size in $sizes {
-        @debug "#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {";
         #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
           @each $side in $sideList {
-            @debug "#{$property}-#{$side}: #{$size}";
             #{$property}-#{$side}: #{$size};
           }
         }
-        @debug "}";
       }
     }
   }
 }
 
+@mixin build-height-classes($breakpointShorthand: xs) {
+  $sizes: (
+    auto: 'auto',
+    unset: 'unset',
+    0: 0,
+    25: 25%,
+    50: 50%,
+    75: 75%,
+    100: 100%,
+  );
+  @each $sizeShorthand, $size in $sizes {
+    #{".h"}-#{$breakpointShorthand}-#{$sizeShorthand} {
+      height: #{$size};
+    }
+  }
+}
+
 @include build-spacing-classes();
+@include build-height-classes();
+
 
 // sm screen sizes
 @media only screen and (min-width: 48em) {
   @include build-spacing-classes(sm);
+  @include build-height-classes(sm);
 }
 
 // md screen sizes
 @media only screen and (min-width: 62em) {
   @include build-spacing-classes(md);
+  @include build-height-classes(md);
 }
 
 // lg screen sizes
 @media only screen and (min-width: 75em) {
   @include build-spacing-classes(lg);
+  @include build-height-classes(lg);
 }
