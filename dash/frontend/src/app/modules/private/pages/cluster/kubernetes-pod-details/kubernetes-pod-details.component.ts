@@ -21,10 +21,7 @@ import {DatePipe} from '@angular/common';
 @Component({
   selector: 'app-kubernetes-pod-details',
   templateUrl: './kubernetes-pod-details.component.html',
-  styleUrls: [
-    './kubernetes-pod-details.component.scss',
-    '../../../../../app.component.scss',
-  ]
+  styleUrls: ['./kubernetes-pod-details.component.scss']
 })
 export class KubernetesPodDetailsComponent implements OnInit {
   displayedColumns: string[] = ['name', 'summary', 'lastScanned', 'compliant'];
@@ -76,6 +73,9 @@ export class KubernetesPodDetailsComponent implements OnInit {
 
   loadImages() {
     this.page = 0;
+    if (!this.currentDateData || !this.clusterId || !this.namespace || !this.podName) {
+      return;
+    }
     if (!this.currentDateData || this.currentDateData.isToday) {
       this.getPodInfo();
       this.loadCurrentImages();
@@ -86,7 +86,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
   }
 
   getPodInfo() {
-    this.podService.getPodByName(this.clusterId, this.namespace, this.podName).subscribe(
+    this.podService.getPodByName(this.clusterId, this.namespace, this.podName).pipe(take(1)).subscribe(
       (response: IServerResponse<IPod>) => {
         this.podInfo = response?.data;
       },
@@ -101,20 +101,23 @@ export class KubernetesPodDetailsComponent implements OnInit {
   getHistoricalPodInfo(startTime: number, endTime: number) {
     const transformedStartTime = this.datepipe.transform(startTime, 'yyyy-MM-dd');
     const transformedEndTime = this.datepipe.transform(endTime, 'yyyy-MM-dd');
-    this.podService.getPodByNameAndDate(this.clusterId, this.namespace, this.podName, transformedStartTime, transformedEndTime).subscribe(
-      (response: IServerResponse<IPod>) => {
-        this.podInfo = response?.data;
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.danger('There was an error loading the pod details');
-        this.podInfo = error?.data ? error.data : null;
-      }
-    );
+    this.podService.getPodByNameAndDate(this.clusterId, this.namespace, this.podName, transformedStartTime, transformedEndTime)
+      .pipe(take(1))
+      .subscribe(
+        (response: IServerResponse<IPod>) => {
+          this.podInfo = response?.data;
+        },
+        (error) => {
+          console.log(error);
+          this.alertService.danger('There was an error loading the pod details');
+          this.podInfo = error?.data ? error.data : null;
+        }
+      );
   }
 
   loadCurrentImages() {
     this.imageService.getAllCurrentImagesByPodName(this.podName, this.clusterId, this.namespace, this.limit, this.page)
+      .pipe(take(1))
       .subscribe(
         (response: IServerResponse<ImagesAndCount>) => this.handleGetImagesSuccessResponse(response),
         error => this.handleGetImagesErrorResponse(error),
@@ -126,7 +129,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
       this.podName, this.clusterId, this.namespace,
       startTime, endTime, this.sort,
       this.limit, this.page,
-    ).subscribe(
+    ).pipe(take(1)).subscribe(
       (response: IServerResponse<ImagesAndCount>) => this.handleGetImagesSuccessResponse(response),
       error => this.handleGetImagesErrorResponse(error),
     );
