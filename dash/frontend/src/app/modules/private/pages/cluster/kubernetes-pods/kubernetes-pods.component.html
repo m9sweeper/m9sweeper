@@ -64,7 +64,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Violations </mat-header-cell>
             <mat-cell *matCellDef="let element">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
-                {{element.violations.length}}
+                {{element?.violations?.length}}
               </a>
 <!--              <a *ngIf="element.violations.length"  (mouseover)="showViolations(element)">{{element.violations.length}}</a>-->
             </mat-cell>
