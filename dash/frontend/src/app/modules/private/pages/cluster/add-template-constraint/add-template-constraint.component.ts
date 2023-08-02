@@ -69,6 +69,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.gatekeeperService.getNamespacesByCluster(this.data.clusterId)
+      .pipe(take(1))
       .subscribe(response => {
         this.k8sNamespaces = response.data;
       }, error => {

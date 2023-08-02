@@ -56,13 +56,6 @@ export class TemplateConstraintManifestComponent implements OnInit {
     this.dialogRef.close({manifestData: JSON.parse(this.rawTemplate)});
   }
 
-  onCopyClick() {
-    const success = this.clipboard.copy(this.rawTemplate);
-    if (success) {
-      this.alertService.success('Manifest copied to clipboard');
-    }
-  }
-
   onNoClick() {
     this.dialogRef.close({cancel: true});
   }
