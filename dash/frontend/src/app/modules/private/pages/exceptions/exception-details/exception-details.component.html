@@ -66,7 +66,7 @@
         </form>
         <mat-card-actions class="col-xs-12">
           <button mat-raised-button color="primary" type="submit"
-                  class="mr-xs-2"
+                  class="me-xs-2"
                   [disabled]="!commentForm.valid || isSubmitting"
                   (click)="onSubmit()">Post
           </button>
@@ -81,8 +81,8 @@
           <div class="col-xs-12">
             <div class="row">
               <div class="col-xs-12 exception-comment-header">
-                <span class="exception-comment-username mr-xs-2">{{comment.user}}</span>
-                <span class="exception-comment-timestamp mr-xs-2">{{comment.createdAt}}</span>
+                <span class="exception-comment-username me-xs-2">{{comment.user}}</span>
+                <span class="exception-comment-timestamp me-xs-2">{{comment.createdAt}}</span>
                 <mat-icon *ngIf="comment.canDeleteThisComment"
                           (click)="deleteComment(comment)"
                           class="exception-comment-icon"
