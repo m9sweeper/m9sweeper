@@ -6,7 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertService} from 'src/app/core/services/alert.service';
+import {AlertService} from '../../../../../core/services/alert.service';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
@@ -22,7 +22,7 @@ import {Authority} from '../../../../../core/enum/Authority';
 export class GateKeeperDetailsComponent implements OnInit {
 
   gatekeeperTemplate: IGatekeeperTemplate;
-  constraintCount = 0;
+  constraintCount: number;
   isMobileDevice = false;
   clusterId: number;
   templateName: string;
