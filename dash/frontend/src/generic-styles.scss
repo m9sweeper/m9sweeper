@@ -61,14 +61,11 @@ $sizes: (
         $sideShorthandToUse: '';
       }
       @each $sizeShorthand, $size in $sizes {
-        @debug "#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {";
         #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
           @each $side in $sideList {
-            @debug "#{$property}-#{$side}: #{$size}";
             #{$property}-#{$side}: #{$size};
           }
         }
-        @debug "}";
       }
     }
   }
