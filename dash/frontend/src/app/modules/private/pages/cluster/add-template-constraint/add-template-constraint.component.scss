@@ -10,19 +10,13 @@ h3 {
 }
 
 #edit-k8s-manifest-btn {
-  margin-top: 37px;
+  line-height: 20px;
 }
 
 .right-content {
   display:flex;
   flex-direction:column;
   max-height: 100%;
-}
-
-.close-button{
-  //float: left ;
-  top: -16px;
-  right: -31px;
 }
 
 .close-icon {

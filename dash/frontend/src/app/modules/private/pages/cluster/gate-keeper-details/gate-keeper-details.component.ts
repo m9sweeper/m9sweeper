@@ -20,7 +20,6 @@ import {Authority} from '../../../../../core/enum/Authority';
   styleUrls: ['./gate-keeper-details.component.scss']
 })
 export class GateKeeperDetailsComponent implements OnInit {
-
   gatekeeperTemplate: IGatekeeperTemplate;
   constraintCount: number;
   isMobileDevice = false;
@@ -74,10 +73,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       this.constraintCount = data.length ?? 0;
       this.constraintsList = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
     });
-  }
-
-  screenSizeCollapse(width: number) {
-    this.isMobileDevice = width < 500;
   }
 
   destroyConstraintTemplate() {
@@ -160,10 +155,12 @@ export class GateKeeperDetailsComponent implements OnInit {
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {isEdit: true, constraint, clusterId: this.clusterId, templateName: this.templateName,
-              templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-              openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations
-            }
+      data: {
+        isEdit: true, constraint,
+        clusterId: this.clusterId, templateName: this.templateName,
+        templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
+        openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations,
+      },
     });
 
     openAddConstraintTemplate.afterClosed()

@@ -654,8 +654,8 @@ export class ClusterService {
 
       return {message: `${constraint.name} has been patched successfully`, statusCode: 200};
     } catch (e) {
-      this.logger.error({label: 'Error patching GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, e, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
-      return {message: e.body.message, statusCode: e.statusCode};
+      this.logger.error({label: 'Error patching Gatekeeper Template Constraint', data: { templateName, clusterId, constraint }}, e, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
+      return {message: 'Error patching Gatekeeper Template Constraint', statusCode: e.statusCode};
     }
   }
 
