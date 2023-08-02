@@ -22,8 +22,8 @@ import { take, takeUntil } from 'rxjs/operators';
 export class DockerRegistriesListComponent implements OnInit, AfterViewInit, OnDestroy {
   unsubscribe$ = new Subject<void>();
   subMenuTitle = 'All Docker Registries';
-  displayedColumns: string[] = ['name', 'hostname', 'authType', 'username', 'edit', 'delete'];
-  displayedColumnsNonAdmin: string[] = ['name', 'hostname', 'authType', 'username'];
+  displayedColumns: string[] = ['name', 'hostname', 'authType', 'edit', 'delete'];
+  displayedColumnsNonAdmin: string[] = ['name', 'hostname', 'authType'];
   dataSource: MatTableDataSource<IDockerRegistries>;
   userId: number;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
