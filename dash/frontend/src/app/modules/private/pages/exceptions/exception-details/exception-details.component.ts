@@ -21,7 +21,7 @@ export class ExceptionDetailsComponent implements OnInit {
   exceptionId: number;
   exception: IException;
   commentForm: FormGroup;
-  comments$: Observable<IComment[]>;
+  comments: IComment[];
   isSubmitting = false;
 
   constructor(
@@ -60,7 +60,7 @@ export class ExceptionDetailsComponent implements OnInit {
   }
 
   getAllComments() {
-    this.comments$ = this.commentService.getAllComments(this.exceptionId);
+    this.commentService.getAllComments(this.exceptionId).pipe(take(1)).subscribe(comments => {this.comments = comments;});
   }
 
   deleteException() {
