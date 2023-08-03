@@ -3,15 +3,15 @@
     <div class="row">
       <div class="col-xs-12 col-md-8 page-title">
         Images
-        <button *ngIf="userIsAdmin" mat-icon-button (click)="openImageCreateDialog()">
-          <mat-icon class="plus-button">add</mat-icon>
+        <button mat-icon-button *ngIf="userIsAdmin" (click)="openImageCreateDialog()">
+          <mat-icon>add</mat-icon>
         </button>
       </div>
       <div class="col-xs-12 col-md-4 display-flex
                   start-xs end-md
                   flex-direction-xs-col flex-direction-md-row
                   align-items-xs-start align-items-md-center">
-        <mat-form-field class="mr-10px search-image">
+        <mat-form-field class="me-xs-0 me-md-2 search-image">
           <mat-label>Search image</mat-label>
           <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
         </mat-form-field>
@@ -35,10 +35,10 @@
 
     <mat-card class="scrollable-table-card">
       <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
+        <mat-table [dataSource]="dataSource" id="imagesTable" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
+            <mat-cell *matCellDef="let image" [matTooltip]="image.url + '/' + image.name + ':' + image.tag"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="date">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Date Scanned</mat-header-cell>
