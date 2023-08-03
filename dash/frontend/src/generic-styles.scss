@@ -92,6 +92,20 @@ $classesToGenerate: (
       unset: unset,
     ),
   ),
+  justify-content: (
+    abbreviation: 'justify-content',
+    values: (
+      center: center, start: start, end: end,
+      flex-start: flex-start, flex-end: flex-end,
+      left: left, right: right, normal: normal,
+      space-between: space-between, space-around: space-around,
+      space-evenly: space-evenly, stretch: stretch,
+      safe-center: "safe center", unsafe-center: "unsafe center",
+      inherit: inherit, initial: initial,
+      revert: revert, revert-layer: "revert-layer",
+      unset: unset,
+    ),
+  ),
 );
 
 $spacer: 1em;
