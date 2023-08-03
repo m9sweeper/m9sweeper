@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {DatePipe, Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
