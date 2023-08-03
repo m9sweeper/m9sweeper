@@ -21,7 +21,7 @@
     <ng-template matStepLabel>Create Job</ng-template>
 
     <div class="modal-content-left-align-no-margin">
-      <h3>Choose whether to run Kube Bench periodically or manually</h3>
+      <h3>Choose whether to run kube-bench periodically or manually</h3>
       <mat-radio-group aria-labelledby="cronjob-options-group-label" [(ngModel)]="cronjobOpt">
         <mat-radio-button  [value]="true">
           Run on a schedule
@@ -42,14 +42,14 @@
             <mat-option [value]="'monthly'">Monthly</mat-option>
           </mat-select>
         </mat-form-field>
-        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'daily'">Choosing daily means Kube Bench will run at 12 am every day</span>
-        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means Kube Bench will run at 12 am every Sunday</span>
-        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means Kube Bench will run at 12 am every first day of the month</span>
+        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'daily'">Choosing daily means kube-bench will run at 12 am every day</span>
+        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means kube-bench will run at 12 am every Sunday</span>
+        <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means kube-bench will run at 12 am every first day of the month</span>
       </div>
       <br>
       <div *ngIf="cronjobTime">
         <div class="page-title-button-group-spacing" >
-            <div>Run Kube Bench using the following CLI command:</div>
+            <div>Run kube-bench using the following CLI command:</div>
             <div>
             <app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
@@ -80,7 +80,7 @@
     <div *ngIf="cronjobOpt === false">
       <ng-template matStepLabel>Create Job</ng-template>
       <div class="page-title-button-group-spacing">
-        <div>Run Kube Bench using the following CLI command:</div>
+        <div>Run kube-bench using the following CLI command:</div>
         <div >
           <app-copy-to-clipboard-button
             successMessage="Command copied to clipboard!"

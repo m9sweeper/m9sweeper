@@ -92,7 +92,6 @@ export class UserDao {
     sort: {field: string; direction: string; } = {field: 'id', direction: 'asc'}
   ): Promise<UserProfileDto[]> {
     const knex = await this.databaseService.getConnection();
-    const processedSort = structuredClone(sort);
 
     // note that this field map may be different from sortFieldMapOuterQuery
     const sortFieldMapInnerQuery = {
@@ -102,8 +101,8 @@ export class UserDao {
       'email': 'u.email',
       'phone': 'COALESCE(u.phone, \'\')',  // this makes it so null entries in u.phone return empty string instead
     };
-    processedSort.field = sortFieldMapInnerQuery[sort.field] !== undefined ? sortFieldMapInnerQuery[sort.field] : sortFieldMapInnerQuery['id'];
-    processedSort.direction = sort.direction === 'desc' ? 'desc' : 'asc';
+    const sortField = sortFieldMapInnerQuery[sort.field] !== undefined ? sortFieldMapInnerQuery[sort.field] : sortFieldMapInnerQuery['id'];
+    const sortDirection = sort.direction === 'desc' ? 'desc' : 'asc';
 
     // Inner query with limiting & sorting to get the users that should be included
     const userQuery = knex.select('*')
@@ -112,7 +111,7 @@ export class UserDao {
       ])
       .from('users as u')
       .where(searchClause)
-      .orderByRaw(`${processedSort.field} ${processedSort.direction}`)
+      .orderByRaw(`${sortField} ${sortDirection}`)
       .limit(limit)
       .offset(page * limit);
 
@@ -124,7 +123,7 @@ export class UserDao {
       'email': 'u.email',
       'phone': 'u.phone'
     };
-    processedSort.field = sortFieldMapOuterQuery[sort.field] !== undefined ? sortFieldMapOuterQuery[sort.field] : sortFieldMapOuterQuery['id'];
+    const outerSortField = sortFieldMapOuterQuery[sort.field] !== undefined ? sortFieldMapOuterQuery[sort.field] : sortFieldMapOuterQuery['id'];
 
     // Outer query joins the pre-sorted & limited user query to the authorities.
     // Doing the limit one the sub query ensures we always have the right number of users per page, and users only appear once
@@ -141,7 +140,7 @@ export class UserDao {
         this.on('u.id', '=', 'user_auth.user_id').andOn('user_auth.active', '=', knex.raw('?', [true]));
       }).leftJoin('authority_levels', function () {
         this.on('user_auth.authority_id', '=', 'authority_levels.id');
-      }).orderBy(processedSort.field, processedSort.direction);
+      }).orderBy(outerSortField, sortDirection);
 
     return knexnest(query).then(user => plainToInstance(UserProfileDto, user));
   }

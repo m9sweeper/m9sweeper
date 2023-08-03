@@ -36,7 +36,7 @@ describe('Login and Logout::', () => {
 
     // Now we make sure that we cannot login with invalid credentials
     it('3 No login with invalid credentials', async () => {
-        await login(config.USERNAME, 'WRONGPASSWORD');
+        await login(config.USERNAME, 'WRONGPASSWORD', true);
         expect(browser).toHaveUrl(
             buildUrl('public/login'),
             {message: "m9sweeper should be showing the login page"}

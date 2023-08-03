@@ -1,13 +1,13 @@
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {Observable, throwError} from 'rxjs';
-import {parse as YmlParse} from 'yaml';
+import {parse as yamlParse} from 'yaml';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {IKubeConfig} from '../../../../../core/entities/IKubeConfig';
 import { URL } from 'url';
 import {CustomValidators} from '../../../form-validator/custom-validators';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {MatStepper} from '@angular/material/stepper';
 import {ClusterGroupService} from '../../../../../core/services/cluster-group.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
@@ -195,7 +195,7 @@ export class AddClusterWizardComponent implements OnInit {
       const fileName = configFile.name;
       this.readConfigFile(configFile).subscribe(result => {
         try {
-          this.config = YmlParse(result) as IKubeConfig;
+          this.config = yamlParse(result) as IKubeConfig;
           // @TODO: Potentially upgrade validation that the yaml file is a valid kubeconfig
           if (!this.config?.contexts) {
             this.alertService.warning('Selected file was not a valid kubeconfig');

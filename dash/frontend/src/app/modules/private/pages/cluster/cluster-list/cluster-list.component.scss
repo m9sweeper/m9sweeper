@@ -1,10 +1,14 @@
+mat-card-title {
+  font-size: 18px !important;
+}
+
 .row {
   padding-left: 20px;
   padding-right: 20px;
 }
 
 mat-card.overview-graph-card {
-  margin: 10px 5px 0 5px;  // set to match legacy margins
+  margin: 0 5px 0 5px;  // set to match legacy margins
 
   mat-card-content {
     margin: 6px 16px 16px 6px !important;

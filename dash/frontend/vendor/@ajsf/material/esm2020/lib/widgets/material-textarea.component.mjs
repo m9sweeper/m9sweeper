@@ -26,7 +26,7 @@ export class MaterialTextareaComponent {
 }
 MaterialTextareaComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: MaterialTextareaComponent, deps: [{ token: MAT_FORM_FIELD_DEFAULT_OPTIONS, optional: true }, { token: i1.JsonSchemaFormService }], target: i0.ɵɵFactoryTarget.Component });
 MaterialTextareaComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.2.9", type: MaterialTextareaComponent, selector: "material-textarea-widget", inputs: { layoutNode: "layoutNode", layoutIndex: "layoutIndex", dataIndex: "dataIndex" }, ngImport: i0, template: `
-    <mat-form-field [appearance]="options?.appearance || matFormFieldDefaultOptions?.appearance || 'standard'"
+    <mat-form-field [appearance]="options?.appearance || matFormFieldDefaultOptions?.appearance || 'fill'"
       [class]="options?.htmlClass || ''"
       [floatLabel]="options?.floatLabel || matFormFieldDefaultOptions?.floatLabel || (options?.notitle ? 'never' : 'auto')"
       [hideRequiredMarker]="options?.hideRequired ? 'true' : 'false'"
@@ -74,7 +74,7 @@ MaterialTextareaComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.2.9", ngImport: i0, type: MaterialTextareaComponent, decorators: [{
             type: Component,
             args: [{ selector: 'material-textarea-widget', template: `
-    <mat-form-field [appearance]="options?.appearance || matFormFieldDefaultOptions?.appearance || 'standard'"
+    <mat-form-field [appearance]="options?.appearance || matFormFieldDefaultOptions?.appearance || 'fill'"
       [class]="options?.htmlClass || ''"
       [floatLabel]="options?.floatLabel || matFormFieldDefaultOptions?.floatLabel || (options?.notitle ? 'never' : 'auto')"
       [hideRequiredMarker]="options?.hideRequired ? 'true' : 'false'"

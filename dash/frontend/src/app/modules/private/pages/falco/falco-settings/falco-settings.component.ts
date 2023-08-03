@@ -4,7 +4,7 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import {take} from 'rxjs/operators';
 import {IFalcoSettingPayload} from '../../../../../core/entities/IFalcoSettingPayload';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatRadioChange} from '@angular/material/radio';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';

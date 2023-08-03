@@ -1,0 +1,111 @@
+/**
+This is where you can add generic styles that will be applied by screen size.
+We DO NOT want classes that will be specific for pages - only global classes.
+If you add the class to one section, please add a value to all.
+ex:
+.pt-xs-1 {
+  padding-top: 1em;
+}
+@media only screen and (min-width: 48em) {
+  .pt-sm-1 {
+    padding-top: 1em;
+  }
+}
+and so on for each media query size.
+
+Media query sizes are based on the sizes defined in npm flexboxgrid
+https://www.npmjs.com/package/flexboxgrid
+
+naming and spacing defaults are based on Bootstrap spacing
+exception: explicitly name sizes xs-lg; omit sizes xl & xxl
+https://getbootstrap.com/docs/5.2/utilities/spacing/
+0 - for classes that eliminate the margin or padding by setting it to 0
+1 - for classes that set the margin or padding to $spacer * .25
+2 - for classes that set the margin or padding to $spacer * .5
+3 - for classes that set the margin or padding to $spacer
+4 - for classes that set the margin or padding to $spacer * 1.5
+5 - for classes that set the margin or padding to $spacer * 3
+auto - for classes that set the margin to auto
+ */
+
+$spacer: 1em;
+
+@mixin build-spacing-classes($breakpointShorthand: xs) {
+  $properties: (
+    p: "padding",
+    m: "margin",
+  );
+  $sides: (
+    t: ['top'],
+    b: ['bottom'],
+    s: ['inline-start'],
+    e: ['inline-end'],
+    x: ['inline'],
+    y: ['top', 'bottom'],
+    all: ['inline-start', 'top', 'inline-end', 'bottom'],
+  );
+  $sizes: (
+    auto: 'auto',
+    0: 0,
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
+    3: ($spacer),
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+  );
+
+  @each $propertyShorthand, $property in $properties {
+    @each $sideShorthand, $sideList in $sides {
+      $sideShorthandToUse: $sideShorthand;
+      @if $sideShorthand == 'all' {
+        $sideShorthandToUse: '';
+      }
+      @each $sizeShorthand, $size in $sizes {
+        #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
+          @each $side in $sideList {
+            #{$property}-#{$side}: #{$size};
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin build-height-classes($breakpointShorthand: xs) {
+  $sizes: (
+    auto: 'auto',
+    unset: 'unset',
+    0: 0,
+    25: 25%,
+    50: 50%,
+    75: 75%,
+    100: 100%,
+  );
+  @each $sizeShorthand, $size in $sizes {
+    #{".h"}-#{$breakpointShorthand}-#{$sizeShorthand} {
+      height: #{$size};
+    }
+  }
+}
+
+@include build-spacing-classes();
+@include build-height-classes();
+
+
+// sm screen sizes
+@media only screen and (min-width: 48em) {
+  @include build-spacing-classes(sm);
+  @include build-height-classes(sm);
+}
+
+// md screen sizes
+@media only screen and (min-width: 62em) {
+  @include build-spacing-classes(md);
+  @include build-height-classes(md);
+}
+
+// lg screen sizes
+@media only screen and (min-width: 75em) {
+  @include build-spacing-classes(lg);
+  @include build-height-classes(lg);
+}

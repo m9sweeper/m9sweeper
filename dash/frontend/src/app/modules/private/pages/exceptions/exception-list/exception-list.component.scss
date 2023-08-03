@@ -1,1 +1,28 @@
-@import 'src/styles';
+#listOfExceptions {
+  .mat-column-title {
+    min-width: 200px;
+    padding-right: 20px;
+  }
+  mat-cell.mat-column-title {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .mat-column-status {
+    min-width: 65px;
+    max-width: 100px;
+  }
+
+  .mat-column-start_date, .mat-column-end_date {
+    min-width: 115px;
+    max-width: 120px;
+  }
+
+  .mat-column-edit, .mat-column-delete {
+    min-width: 65px;
+    max-width: 75px;
+  }
+  mat-cell.mat-column-edit, mat-cell.mat-column-delete {
+    padding-inline: 8px;
+  }
+}

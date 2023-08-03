@@ -3,7 +3,7 @@ import {take} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {FalcoLogOptions, FalcoService} from '../../../../../core/services/falco.service';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {UtilService} from '../../../../../core/services/util.service';
 
 @Component({
@@ -72,7 +72,7 @@ export class FalcoRelatedEventsTableComponent implements OnInit, OnChanges {
 
         const newDataList = [];
         dataList.forEach((eventLog) => {
-          const modifiedEvent = structuredClone(eventLog);
+          const modifiedEvent = eventLog as any;
           if (this.currentEventLogId) {
             modifiedEvent.isCurrent = eventLog.id === this.currentEventLogId;
           }

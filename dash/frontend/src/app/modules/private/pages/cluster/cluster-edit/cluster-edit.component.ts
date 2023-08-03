@@ -8,7 +8,7 @@ import {
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {ClusterService} from '../../../../../core/services/cluster.service';
 import {ITag} from '../../../../../core/entities/ITag';
 import {TagService} from '../../../../../core/services/tag.service';

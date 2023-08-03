@@ -18,4 +18,9 @@ public class NoncompliantException extends Exception {
     public List<ImageTrawlerResultDto> getScanResults() {
         return scanResults;
     }
+
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this; // Return the current exception instance without filling the stack trace
+    }
 }

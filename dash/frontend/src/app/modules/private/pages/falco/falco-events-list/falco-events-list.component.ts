@@ -17,7 +17,7 @@ import {CsvService} from '../../../../../core/services/csv.service';
 
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {UtilService} from '../../../../../core/services/util.service';
 import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json-data-dialog.component';
 
@@ -82,22 +82,20 @@ export class FalcoEventsListComponent implements OnInit {
   }
 
   getEvents() {
+    const updatedFilters: Partial<FalcoLogOptions> = {};
     if (this.filterForm.get('startDate').value) {
-      this.falcoLogFilters.startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
+      updatedFilters.startDate = format(new Date(this.filterForm.get('startDate').value), 'yyyy-MM-dd');
     }
     if (this.filterForm.get('endDate').value) {
-      this.falcoLogFilters.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
+      updatedFilters.endDate = format(new Date(this.filterForm.get('endDate').value), 'yyyy-MM-dd');
     }
-    this.falcoLogFilters.selectedPriorityLevels = this.filterForm.get('selectedPriorityLevels').value;
-    this.falcoLogFilters.selectedOrderBy = this.filterForm.get('selectedOrderBy').value;
-    this.falcoLogFilters.namespace = this.filterForm.get('namespaceInput').value;
-    this.falcoLogFilters.pod = this.filterForm.get('podInput').value;
-    this.falcoLogFilters.image = this.filterForm.get('imageInput').value;
+    updatedFilters.selectedPriorityLevels = this.filterForm.get('selectedPriorityLevels').value;
+    updatedFilters.selectedOrderBy = this.filterForm.get('selectedOrderBy').value;
+    updatedFilters.namespace = this.filterForm.get('namespaceInput').value;
+    updatedFilters.pod = this.filterForm.get('podInput').value;
+    updatedFilters.image = this.filterForm.get('imageInput').value;
 
-    // https://stackoverflow.com/questions/34796901/angular2-change-detection-ngonchanges-not-firing-for-nested-object
-    // ngOnChanges uses dirty checking (aka it compares the object reference and not the values)
-    // --> need the object to be different so it triggers the onChange event
-    this.falcoLogFilters = structuredClone(this.falcoLogFilters);
+    this.falcoLogFilters = updatedFilters;
   }
 
   getUserAuthority() {

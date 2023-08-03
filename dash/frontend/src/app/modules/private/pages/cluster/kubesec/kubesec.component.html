@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title title">KubeSec</div>
-    <mat-card appearance="outlined">
+    <div class="page-title title">Kubesec</div>
+    <mat-card>
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
           <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
@@ -25,7 +25,7 @@
             </div>
             <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
               <div class="row">
-                <mat-form-field appearance="fill" class="margin-right-10" *ngIf="currentNamespaces">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6" *ngIf="currentNamespaces">
                   <mat-label>Select namespaces</mat-label>
                   <form [formGroup]="namespaceForm">
                     <mat-select formControlName="namespaceFormControl" multiple>
@@ -38,7 +38,7 @@
                 </mat-form-field>
               </div>
               <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
                   <mat-label>Select a pod</mat-label>
                   <form [formGroup]="podForm">
                     <mat-select formControlName="podFormControl" multiple>
@@ -66,133 +66,33 @@
 
         <mat-step>
           <ng-template matStepLabel>Kubesec Report</ng-template>
-          <div class="kubesec-popup" *ngIf="kubesecReport">
-            <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReport.length > 1">
-              <mat-toolbar>
-                <div>
-                  <span class="subnav-title">Reports</span>
-                </div>
-              </mat-toolbar>
-              <mat-table [dataSource]="kubesecReport">
-                <ng-container matColumnDef="podNames">
-                  <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
-                  <mat-cell *matCellDef="let report; let i = index">
-                    <a (click)="clickEvent(i)">
-                      {{report.object.substring(4)}}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="score">
-                  <mat-header-cell *matHeaderCellDef disableClear> Score </mat-header-cell>
-                  <mat-cell *matCellDef="let report"> {{report.score}} </mat-cell>
-                </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; let i=index; columns: displayedColumns;" (click)="clickEvent(i)"></mat-row>
-              </mat-table>
-            </div>
-            <div class="kubesec-popup-contents" *ngIf="kubesecReport.length === 1">
-              <div class="pod-score row">
-                <div class="col-lg-9 col-xs-9 pod-name">
-                  <p class="pod-score-heading"> {{displayName}} </p>
-                </div>
-                <div class="col-lg-3 col-xs-3 kubesec-score" [ngStyle] = "{'background': passedOrFailedColor(score)}">
-                  <span> {{score}} </span>
-                </div>
-              </div>
-              <div class="message-download row">
-                <p> {{message}}. </p>
-                <a download="kubesec-report.json" [href]="sanitize(kubesecReportDownloadHref)" class="download-report">
-                  Download Report
-                </a>
-              </div>
+          <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
+            <app-kubesec-report [kubesecReport]="(kubesecReports[0])"></app-kubesec-report>
+          </div>
+          <div id="multipleKubesecReports" *ngIf="kubesecReports.length > 1">
+            <mat-toolbar>
               <div>
-                <p>Passed rules are given a positive score. Rules with critical issue are given a negative score.</p>
-                <p>After fixing a critical issue or improving with an advice, the previous suggestion will move to the passed section and the score will be improved. </p>
+                <span class="subnav-title">Reports</span>
               </div>
-              <div class="tables">
-                <div class="mat-elevation-z8 critical-table" *ngIf="critical.length > 0">
-                  <mat-toolbar>
+            </mat-toolbar>
+            <mat-accordion *ngFor="let report of kubesecReports" multi>
+              <mat-expansion-panel class="light-border">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{report.object.substring(4)}}</mat-panel-title>
+                  <mat-panel-description> Score:
+                    <span [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
+                      {{ report.score }}
+                    </span>
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <app-kubesec-report [kubesecReport]="report"></app-kubesec-report>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
 
-                      <div style="float: left; width: 95%">
-                        <span class="subnav-title">Critical Issues</span>
-                      </div>
-                      <div style="float: right; width: 5%; text-align: center" [ngStyle] = "{'background': decideScoreColor('critical')}">
-                        <span> {{criticalSubtotal}} </span>
-                      </div>
+          <div class="kubesec-popup" *ngIf="kubesecReports">
+            <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReports.length > 1">
 
-                  </mat-toolbar>
-                  <mat-table [dataSource]="criticalDataSource">
-                    <ng-container matColumnDef="criticalId">
-                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
-                      <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.id}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="criticalPoints">
-                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let criticalIssues" [ngStyle] = "{'background': decideScoreColor('critical'), 'justify-content': 'center'}"> {{criticalIssues?.points}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="criticalReason">
-                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
-                      <mat-cell *matCellDef="let criticalIssues"> {{criticalIssues?.reason}} </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="criticalDisplayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: criticalDisplayedColumns;"></mat-row>
-                  </mat-table>
-                </div>
-                <div class="mat-elevation-z8 advise-table" *ngIf="advise.length > 0">
-                  <mat-toolbar>
-
-                    <div style="float: left; width: 95%">
-                      <span class="subnav-title"> Advice </span>
-                    </div>
-
-                  </mat-toolbar>
-                  <mat-table [dataSource]="adviseDataSource">
-                    <ng-container matColumnDef="adviseId">
-                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
-                      <mat-cell *matCellDef="let advice"> {{advice?.id}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="advisePoints">
-                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': decideScoreColor('advise'), 'justify-content': 'center'}"> {{advice?.points}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="adviseReason">
-                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
-                      <mat-cell *matCellDef="let advice"> {{advice?.reason}} </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="adviseDisplayColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: adviseDisplayColumns;"></mat-row>
-                  </mat-table>
-                </div>
-                <div class="mat-elevation-z8 passed-table" *ngIf="passed.length > 0">
-                  <mat-toolbar>
-
-                        <div style="float: left; width: 95%">
-                          <span>Passed</span>
-                        </div>
-                        <div style="float: right; width: 5%; text-align: center"  [ngStyle] = "{'background': decideScoreColor('passed')}">
-                          <span>{{passedSubtotal}}</span>
-                        </div>
-
-                  </mat-toolbar>
-                  <mat-table [dataSource]="passedDataSource">
-                    <ng-container matColumnDef="passedId">
-                      <mat-header-cell *matHeaderCellDef disableClear> ID </mat-header-cell>
-                      <mat-cell *matCellDef="let pass"> {{pass?.id}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="passedPoints">
-                      <mat-header-cell *matHeaderCellDef disableClear class="mat-cell-points"> Points </mat-header-cell>
-                      <mat-cell *matCellDef="let pass" [ngStyle] = "{'background': decideScoreColor('passed'), 'justify-content': 'center'}"> {{pass?.points}} </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="passedReason">
-                      <mat-header-cell *matHeaderCellDef disableClear> Reason </mat-header-cell>
-                      <mat-cell *matCellDef="let pass"> {{pass?.reason}} </mat-cell>
-                    </ng-container>
-                    <mat-header-row></mat-header-row>
-                    <mat-header-row *matHeaderRowDef="passedDisplayColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: passedDisplayColumns;"></mat-row>
-                  </mat-table>
-                </div>
-              </div>
             </div>
           </div>
           <button class="margin-top" mat-raised-button matStepperPrevious color="primary">Back</button>

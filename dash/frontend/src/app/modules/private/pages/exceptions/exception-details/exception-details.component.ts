@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { ExceptionsService } from '../../../../../core/services/exceptions.service';
 import { IException } from '../../../../../core/entities/IException';
 import { CommentService } from '../../../../../core/services/comment.service';
@@ -21,7 +21,7 @@ export class ExceptionDetailsComponent implements OnInit {
   exceptionId: number;
   exception: IException;
   commentForm: FormGroup;
-  comments$: Observable<IComment[]>;
+  comments: IComment[];
   isSubmitting = false;
 
   constructor(
@@ -60,7 +60,7 @@ export class ExceptionDetailsComponent implements OnInit {
   }
 
   getAllComments() {
-    this.comments$ = this.commentService.getAllComments(this.exceptionId);
+    this.commentService.getAllComments(this.exceptionId).pipe(take(1)).subscribe(comments => {this.comments = comments;});
   }
 
   deleteException() {
@@ -70,7 +70,7 @@ export class ExceptionDetailsComponent implements OnInit {
       disableClose: true
     });
 
-    confirmModal.afterClosed().subscribe(result => {
+    confirmModal.afterClosed().pipe(take(1)).subscribe(result => {
       if (result === true) {
         this.exceptionsService.deleteExceptionById(this.exceptionId).subscribe(
           _ => {

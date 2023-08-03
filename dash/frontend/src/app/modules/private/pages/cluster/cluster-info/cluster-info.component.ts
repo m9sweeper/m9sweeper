@@ -6,7 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ClusterEditComponent} from '../cluster-edit/cluster-edit.component';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import {AddClusterWizardComponent} from '../add-cluster-wizard/add-cluster-wizard.component';
 import {InfoService} from '../../../../../core/services/info.service';
 import {map, take, takeUntil} from 'rxjs/operators';
@@ -103,7 +103,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
         isEdit: true
       }
     });
-    openAddCluster.afterClosed().subscribe(result => {
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(result => {
       if (result === undefined) {
         this.getClusterById(cluster.id);
       }
@@ -120,7 +120,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
         afterRoute: ['/private/dashboard/group', groupId]
       }
     });
-    openAddCluster.afterClosed().subscribe(result => {
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(result => {
       // this.router.navigate(['/private/dashboard/group', groupId]);
     });
   }
@@ -181,7 +181,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
       disableClose: true,
       data: { cluster: this.cluster, clusterId: this.cluster.id, isEdit: true }
     });
-    openAddCluster.afterClosed().subscribe(response => {
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response?.result === true) {
         this.router.navigate(['/private/clusters', this.cluster.id, 'summary']);
       }

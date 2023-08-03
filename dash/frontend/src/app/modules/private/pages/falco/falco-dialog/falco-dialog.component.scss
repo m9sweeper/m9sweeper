@@ -2,3 +2,16 @@
 .mat-mdc-dialog-content {
   max-height: unset !important;
 }
+
+#modalContentWrapper {
+  overflow: hidden;
+}
+
+#textareaWrapper {
+  overflow: auto;
+}
+
+#falcoInstallCommand {
+  min-width: 400px;
+  width: 100%;
+}
