@@ -1,7 +1,7 @@
 import { Injectable, ConsoleLogger, Scope } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
-import * as Tableify from 'tableify';
+import {tablify} from '../../../util/tablify';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class MineLoggerService extends ConsoleLogger {
@@ -50,7 +50,7 @@ export class MineLoggerService extends ConsoleLogger {
             root: context,
             time: now,
             message: typeof message === 'object' ? message?.label : message,
-            data: Tableify(message?.data),
+            data: tablify(message?.data),
             stackTrace: errorTrace
           }
         }).then(errorEmailResponse => {

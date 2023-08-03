@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { MatTableDataSource } from '@angular/material/table';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { DeploymentService } from '../../../../../core/services/deployment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';

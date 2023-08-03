@@ -10,6 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import 'flexboxgrid/css/flexboxgrid.min.css';
 @import 'codemirror/lib/codemirror';
 @import 'codemirror/theme/material';
+@import 'generic-styles';
 
 //Default theme
 $ms-default-primary: mat.define-palette(mat.$indigo-palette, 800, 300, 900);
@@ -39,7 +40,6 @@ $ms-default-theme: mat.define-light-theme((
     $body-1: mat.define-typography-level(14px, 20px, 400),
     $body-2: mat.define-typography-level(14px, 20px, 400),
     $subtitle-2: mat.define-typography-level(14px, 20px, 400),
-
   ),
 ));
 
@@ -64,7 +64,59 @@ mat-card {
 .graph-card {
   padding-bottom: 20px;
   mat-card {
-    overflow: scroll;
+    overflow: auto;
+  }
+}
+
+@mixin snackbar-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map-get($color-config, primary);
+  $success-palette: map-get($color-config, accent);
+  $warning-palette: map-get($color-config, warn);
+  $danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
+
+  .mat-mdc-snack-bar-container {
+    .mdc-snackbar__label, .mdc-button__label {
+      font-weight: normal;
+    }
+
+    &.info-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($primary-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($primary-palette, "default-contrast") !important;
+        }
+      }
+    }
+
+    &.success-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($success-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($success-palette, "default-contrast") !important;
+        }
+      }
+    }
+
+    &.warning-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($warning-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($warning-palette, "default-contrast") !important;
+          //text-transform: uppercase;
+        }
+      }
+    }
+
+    &.danger-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($danger-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($danger-palette, "default-contrast") !important;
+          //text-transform: uppercase;
+        }
+      }
+    }
   }
 }
 
@@ -101,6 +153,7 @@ mat-card {
   @include custom-toolbar-light-theme($ms-default-theme);
   @include custom-organization-settings-light-theme($ms-default-theme);
   @include custom-audit-log-light-theme($ms-default-theme);
+  @include snackbar-theme($ms-default-theme);
 }
 
 button {
@@ -114,7 +167,6 @@ button {
 .mat-mdc-dialog-container {
   padding-block: 20px;
 }
-
 
 // organization menu text
 .organization-settings-text {
@@ -139,11 +191,6 @@ button {
 
 .margin-top-10{
   margin-top: 10px;
-}
-
-.margin-y-5 {
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 
 .padding-top-10{
@@ -267,7 +314,7 @@ app-private {
   // width:fit-content;
 }
 
-.settings-card, .scrollable-table-card {
+.settings-card, .scrollable-table-card, .component-with-scrollable-table {
   div.table-wrapper {
     overflow-x: auto;
     display: flex;
@@ -736,7 +783,7 @@ div.cluster-dashboard.responsive {
 }
 
 .display-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .flex-column {
@@ -748,6 +795,10 @@ div.cluster-dashboard.responsive {
   justify-content: end;
   align-content: center;
   margin-right: 5px;
+}
+
+.light-border {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
 }
 
 .padding-10 {
@@ -772,6 +823,9 @@ div.cluster-dashboard.responsive {
 
 .align-items-center {
   align-items: center!important;
+}
+.align-self-center {
+  align-self: center !important;
 }
 
 .align-items-stretch {
@@ -809,19 +863,6 @@ app-datepicker-component {
 .my-0 {
   margin-top: 0;
   margin-bottom: 0;
-}
-
-.my-half-rem {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.ps-0 {
-  padding-left: 0;
-}
-
-.ps-one-rem {
-  padding-left: 1rem;
 }
 
 .min-width-8 {

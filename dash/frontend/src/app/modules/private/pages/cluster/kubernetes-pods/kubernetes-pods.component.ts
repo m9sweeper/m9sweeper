@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {IPod} from '../../../../../core/entities/IPod';
 import {MatTableDataSource} from '@angular/material/table';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {PodService} from '../../../../../core/services/pod.service';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';

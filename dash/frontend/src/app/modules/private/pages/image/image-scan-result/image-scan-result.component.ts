@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {ImageService} from '../../../../../core/services/image.service';
 import {ImageScanResultIssueService} from '../../../../../core/services/image-scan-result-issue.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

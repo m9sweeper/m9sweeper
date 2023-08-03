@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { UserService } from '../../../../core/services/user.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { take } from 'rxjs/operators';

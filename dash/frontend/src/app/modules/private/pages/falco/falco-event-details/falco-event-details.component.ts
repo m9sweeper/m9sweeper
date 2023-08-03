@@ -4,7 +4,7 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {take, timeout} from 'rxjs/operators';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IFalcoCount} from '../../../../../core/entities/IFalcoCount';
 import {ShareLinkComponent} from '../../../../../core/dialogues/share-link/share-link.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';

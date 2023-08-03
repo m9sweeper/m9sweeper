@@ -8,6 +8,7 @@ import { JwtAuthService } from '../../../../core/services/jwt-auth.service';
 import { Subscription } from 'rxjs';
 import {SharedSubscriptionService} from '../../../../core/services/shared.subscription.service';
 import {AddClusterWizardComponent} from '../cluster/add-cluster-wizard/add-cluster-wizard.component';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -84,7 +85,7 @@ export class DashboardComponent implements OnInit {
       disableClose: true,
       data: { groupId:  null}
     });
-    openAddCluster.afterClosed().subscribe(response => {
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response?.result === true) {
         this.getAllClusterByGroupId();
       }

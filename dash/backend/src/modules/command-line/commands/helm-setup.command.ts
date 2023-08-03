@@ -118,14 +118,14 @@ export class HelmSetupCommand {
                 })
                     .then(kubehunterUser => this.apiKeyDao.createApiKey({
                         user_id: kubehunterUser[0],
-                        name: 'Kubehunter API key',
+                        name: 'kube-hunter API key',
                         api: randomKHApiKey,
                         is_active: true,
                     }))
                     .catch());
         } else {
             // @TODO: clean up this message when making cli commands silent
-            console.log('KubeHUNTER user exists.... skipping');
+            console.log('kube-hunter user exists.... skipping');
         }
 
         const falcoUserExists = !!(await this.userDao.loadUser({email: 'Falco'}));

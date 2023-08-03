@@ -65,8 +65,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
         icon: 'history',
       },
       {
-        title: 'Worst CVE by Image',
-        description: 'Display a visualization of all images running on the cluster organized by the worst vulnerability present on each',
+        title: 'Images by Worst Vulnerability',
+        description: 'Display a visualization of all images running on the cluster grouped by the highest severity vulnerability present on each',
         path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'worst-images'],
         icon: 'stacked_bar_chart',
       },

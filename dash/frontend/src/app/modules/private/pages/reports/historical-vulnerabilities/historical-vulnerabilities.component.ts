@@ -7,7 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {take} from 'rxjs/operators';
 import {format} from 'date-fns';
 

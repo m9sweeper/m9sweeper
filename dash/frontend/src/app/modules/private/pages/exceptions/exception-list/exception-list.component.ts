@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
@@ -41,7 +41,7 @@ export class ExceptionListComponent implements OnInit {
   }
 
   getExceptionList() {
-    this.exceptionsService.getAllExceptions().subscribe((response: IServerResponse<any[]>) => {
+    this.exceptionsService.getAllExceptions().pipe(take(1)).subscribe((response: IServerResponse<any[]>) => {
       this.dataSource = new MatTableDataSource(response.data.map(row => {
         row.start_date = row.start_date ??  null;
         row.end_date = row.end_date ?? null;
@@ -68,7 +68,7 @@ export class ExceptionListComponent implements OnInit {
         .subscribe({
           next: result => {
             if (result === true) {
-              this.exceptionsService.deleteExceptionById(id).subscribe(
+              this.exceptionsService.deleteExceptionById(id).pipe(take(1)).subscribe(
                 _ => {
                   this.getExceptionList();
                   this.alertService.success('Exception deleted');
@@ -83,7 +83,6 @@ export class ExceptionListComponent implements OnInit {
   viewExceptionDetails(id: number) {
     this.router.navigate(['private', 'exceptions', id]);
   }
-  // @TODO: server side pagination
 
   setLimitToLocalStorage(limit: number) {
     localStorage.setItem('exception_table_limit', String(limit));

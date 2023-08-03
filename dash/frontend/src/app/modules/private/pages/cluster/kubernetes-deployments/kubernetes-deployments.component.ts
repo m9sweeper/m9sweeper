@@ -3,7 +3,7 @@ import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router, NavigationEnd} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {DeploymentService} from '../../../../../core/services/deployment.service';
 import {IDeployment} from '../../../../../core/entities/IDeployment';

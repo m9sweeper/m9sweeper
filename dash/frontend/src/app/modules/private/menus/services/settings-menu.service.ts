@@ -19,6 +19,7 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
   public showOrgSettingsButton = false;
+  public showClusterListButton = true;
 
   constructor() {
     this.buildMenu();
