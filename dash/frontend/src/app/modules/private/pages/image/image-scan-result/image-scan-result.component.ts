@@ -140,9 +140,9 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
             this.displayImageScanSpinner$ = of(false);
           }
           if (!this.dataSource.dockerImageId) {
-            return [];
+            return of([]);
           }
-          return this.imageService.getNamespaceByImageHash(this.dataSource.dockerImageId).pipe(take(1));
+          return this.imageService.getNamespaceByImageHash(this.dataSource.dockerImageId);
         }),
         take(1),
       )
