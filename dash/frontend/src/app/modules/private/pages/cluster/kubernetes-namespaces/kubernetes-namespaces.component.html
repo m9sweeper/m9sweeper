@@ -1,5 +1,5 @@
 <div class="page-container">
-  <div class="page-container-content">
+  <div class="h-xs-fit page-container-content">
     <div class="page-title-button-group-spacing adjust-height">
       <div class="content-breadcrumbs">
         <ol class="breadcrumb">
@@ -13,14 +13,22 @@
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
-    <mat-card>
-      <div class="page-table">
+    <mat-card class="mb-xs-3 scrollable-table-card">
+      <div class="table-wrapper">
         <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
                 {{namespace?.name}}
+              </a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="pod">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
+            <mat-cell *matCellDef="let namespace" >
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+                {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
               </a>
             </mat-cell>
           </ng-container>
@@ -33,29 +41,12 @@
               </a>
             </mat-cell>
           </ng-container>
-          <!-- this field has been disabled -->
-          <ng-container matColumnDef="imagesScanned">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Number of Images Scanned</mat-header-cell>
-            <mat-cell *matCellDef="let namespace">
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                {{namespace?.kubernetesImages? namespace.kubernetesImages : 0}}
-              </a>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="pod">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
-            <mat-cell *matCellDef="let namespace" >
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
-              </a>
-            </mat-cell>
-          </ng-container>
           <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']" class="table-row"></mat-row>
         </mat-table>
       </div>
-      <div>
+      <div class="pb-xs-3">
         <mat-paginator
           [length]="totalData"
           [pageSize]="limit"

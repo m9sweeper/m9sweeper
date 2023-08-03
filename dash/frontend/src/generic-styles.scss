@@ -64,6 +64,7 @@ $classesToGenerate: (
     abbreviation: 'h',
     values: (
       auto: auto, unset: unset,
+      fit: 'fit-content',
       0: 0, 50: 50%, 75: 75%, 100: 100%,
     ),
   ),
@@ -157,9 +158,9 @@ $sides: (
     $usesSides: map-get($definition, usesSides);
     $values: map-get($definition, values);
     @each $valueShorthand, $value in $values {
-      #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} { #{$propertyName}: #{$value}; }
+      #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} { #{$propertyName}: #{$value} #{'!important'}; }
 
-      @debug #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} #{"{"} #{$propertyName}#{":"} #{$value}#{"; }"};
+      @debug #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} #{"{"} #{$propertyName}#{":"} #{$value} #{'!important'}#{"; }"};
     }
   }
 }
