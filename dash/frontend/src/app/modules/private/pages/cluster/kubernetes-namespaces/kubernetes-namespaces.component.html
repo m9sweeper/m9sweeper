@@ -19,7 +19,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
             <mat-cell *matCellDef="let namespace">
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+              <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
                 {{namespace?.name}}
               </a>
             </mat-cell>

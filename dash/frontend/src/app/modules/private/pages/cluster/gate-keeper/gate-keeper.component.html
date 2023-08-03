@@ -79,32 +79,50 @@
           </div>
         </mat-card-header>
        <mat-card-content>
-         <table mat-table [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc" >
+         <mat-table [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc" >
            <ng-container matColumnDef="name">
-             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</th>
-             <td mat-cell *matCellDef="let gatekeeperTemplate">{{ gatekeeperTemplate.metadata.name }}</td>
+             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
+             <mat-cell *matCellDef="let gatekeeperTemplate">
+               <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]" >
+                 {{ gatekeeperTemplate.metadata.name }}
+               </a>
+             </mat-cell>
            </ng-container>
            <ng-container matColumnDef="category">
-             <th mat-header-cell *matHeaderCellDef > Category</th>
-             <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.kind}} </td>
+             <mat-header-cell *matHeaderCellDef > Category</mat-header-cell>
+             <mat-cell *matCellDef="let gatekeeperTemplate">
+               <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]" >
+                  {{gatekeeperTemplate.kind}}
+               </a>
+             </mat-cell>
            </ng-container>
            <ng-container matColumnDef="description">
-             <th mat-header-cell *matHeaderCellDef > Description</th>
-             <td mat-cell *matCellDef="let gatekeeperTemplate"> {{gatekeeperTemplate.metadata.annotations.description}} </td>
+             <mat-header-cell *matHeaderCellDef > Description</mat-header-cell>
+             <mat-cell *matCellDef="let gatekeeperTemplate">
+               <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]" >
+                 {{gatekeeperTemplate.metadata.annotations.description}}
+               </a>
+             </mat-cell>
            </ng-container>
            <ng-container matColumnDef="constraints">
-             <th mat-header-cell *matHeaderCellDef style="width: 10%"> Constraints</th>
-             <td mat-cell *matCellDef="let gatekeeperTemplate" style="width: 10%"> {{gatekeeperTemplate.constraintsCount}} </td>
+             <mat-header-cell *matHeaderCellDef style="width: 10%"> Constraints</mat-header-cell>
+             <mat-cell *matCellDef="let gatekeeperTemplate" style="width: 10%">
+               <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]" >
+                  {{gatekeeperTemplate.constraintsCount}}
+               </a>
+             </mat-cell>
            </ng-container>
            <ng-container matColumnDef="enforced">
-             <th mat-header-cell *matHeaderCellDef style="width: 10%"> Enforced</th>
-             <td mat-cell *matCellDef="let gatekeeperTemplate">
-               <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="gatekeeperTemplate.enforced"></mat-checkbox>
-             </td>
+             <mat-header-cell *matHeaderCellDef style="width: 10%"> Enforced</mat-header-cell>
+             <mat-cell *matCellDef="let gatekeeperTemplate">
+               <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]" >
+                  <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="gatekeeperTemplate.enforced"></mat-checkbox>
+               </a>
+             </mat-cell>
            </ng-container>
-           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-           <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="constraint-click"></tr>
-         </table>
+           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewTemplateDetails(row)" class="table-row"></mat-row>
+         </mat-table>
        </mat-card-content>
       </mat-card>
     </div>
