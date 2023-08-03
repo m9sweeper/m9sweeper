@@ -8,4 +8,6 @@ export interface NavServiceInterface {
   associatedRegexPaths: RegExp[];
   currentMenuItems: BehaviorSubject<IMenuItem[]>;
   currentMenuContentTriggers: BehaviorSubject<IMenuContentTrigger[]>;
+  showOrgSettingsButton: boolean;
+  showClusterListButton: boolean;
 }

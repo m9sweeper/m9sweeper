@@ -5,7 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort} from '@angular/material/sort';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {PolicyService} from '../../../../../core/services/policy.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
 import {ScannerListComponent} from '../../scanners/scanner-list/scanner-list.component';
@@ -199,7 +199,7 @@ export class PolicyCreateComponent implements OnInit {
       disableClose: true,
       data: {policyId: +this.policyId, isPolicyEdit: this.checkIfEdit}
     });
-    confirmDialog.afterClosed().subscribe((result: IScannerDialogData) => {
+    confirmDialog.afterClosed().pipe(take(1)).subscribe((result: IScannerDialogData) => {
       if (!result.isClose) {
         if (this.policyId) {
           this.getAllScannersByPolicyId();

@@ -15,7 +15,6 @@ import {
   POSITION,
   PB_DIRECTION, NgxUiLoaderHttpModule
 } from 'ngx-ui-loader';
-import { AlertModule } from '@full-fledged/alerts';
 import { HttpJwtInterceptor } from './core/interceptors/http-jwt-interceptor';
 import { AlertDialogComponent } from './modules/shared/alert-dialog/alert-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -25,6 +24,7 @@ import {DatePipe} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
@@ -63,7 +63,6 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     AlertDialogComponent
   ],
   imports: [
-    AlertModule.forRoot({maxMessages: 1, timeout: 1000 * 3, positionX: 'left'}),
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -75,6 +74,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     MatIconModule,
     MatSelectModule,  // can't be lazy-loaded (needed in modules that may not be active at call-time)
     MatSlideToggleModule,
+    MatSnackBarModule,
     NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     OverlayModule,

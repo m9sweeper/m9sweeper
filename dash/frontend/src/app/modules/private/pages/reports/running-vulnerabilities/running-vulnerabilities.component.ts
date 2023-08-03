@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IRunningVulnerabilities} from '../../../../../core/entities/IRunningVulnerabilitiesPreview';
 import {format} from 'date-fns';
 import {MatPaginator} from '@angular/material/paginator';

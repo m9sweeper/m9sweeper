@@ -3,7 +3,7 @@ import {DatePipe, Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';

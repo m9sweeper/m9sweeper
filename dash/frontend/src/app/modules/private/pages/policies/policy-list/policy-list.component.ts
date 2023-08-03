@@ -6,7 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPolicy } from '../../../../../core/entities/IPolicy';
 import { PolicyService } from '../../../../../core/services/policy.service';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { PolicyCreateComponent } from '../policy-create/policy-create.component';
 import {merge} from 'rxjs';

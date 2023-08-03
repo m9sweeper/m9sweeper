@@ -6,7 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from '../../../../../core/services/alert.service';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
@@ -20,9 +20,8 @@ import {Authority} from '../../../../../core/enum/Authority';
   styleUrls: ['./gate-keeper-details.component.scss']
 })
 export class GateKeeperDetailsComponent implements OnInit {
-
   gatekeeperTemplate: IGatekeeperTemplate;
-  constraintCount = 0;
+  constraintCount: number;
   isMobileDevice = false;
   clusterId: number;
   templateName: string;
@@ -74,10 +73,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       this.constraintCount = data.length ?? 0;
       this.constraintsList = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
     });
-  }
-
-  screenSizeCollapse(width: number) {
-    this.isMobileDevice = width < 500;
   }
 
   destroyConstraintTemplate() {
@@ -160,10 +155,12 @@ export class GateKeeperDetailsComponent implements OnInit {
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {isEdit: true, constraint, clusterId: this.clusterId, templateName: this.templateName,
-              templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-              openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations
-            }
+      data: {
+        isEdit: true, constraint,
+        clusterId: this.clusterId, templateName: this.templateName,
+        templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
+        openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations,
+      },
     });
 
     openAddConstraintTemplate.afterClosed()

@@ -1,5 +1,5 @@
 <div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
+  <div class="modal-content-left-align-no-margin" id="modalContentWrapper">
     <mat-form-field appearance="fill">
       <mat-label>Minimum Priority</mat-label>
       <mat-select [(value)]="level">
@@ -14,16 +14,9 @@
     </mat-form-field>
     <div class="page-title-button-group-spacing">
       <div class="padding-top-15">Run Falco using the following CLI command:</div>
-      <div>
-        <app-copy-to-clipboard-button
-          successMessage="Command copied to clipboard!"
-          errorMessage="Command could not be copied"
-          [text]="run.value">
-        </app-copy-to-clipboard-button>
-      </div>
     </div>
-    <div>
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
+    <div id="textareaWrapper">
+          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" id="falcoInstallCommand" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
 helm upgrade --install falco falcosecurity/falco \
   --wait --version 2.5.5 \
@@ -41,7 +34,12 @@ helm upgrade --install falco falcosecurity/falco \
           </textarea>
     </div>
     <div class="modal-content-left-align-no-margin">
-      <button mat-raised-button matDialogClose color="primary">Done</button>
+      <button mat-raised-button matDialogClose color="primary" class="me-xs-2 mb-xs-2 mb-md-0">Done</button>
+      <app-copy-to-clipboard-button
+        successMessage="Command copied to clipboard!"
+        errorMessage="Command could not be copied"
+        [text]="run.value"
+        ></app-copy-to-clipboard-button>
     </div>
   </div>
 </div>

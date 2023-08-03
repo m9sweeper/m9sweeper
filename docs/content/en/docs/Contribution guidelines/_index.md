@@ -22,9 +22,9 @@ Dash Repo: This repo contains the dash application and all the jobs/scripting to
 
 Trawler Repo: This repo is where the scanning functionality of the platform is developed. 
 
-Kube Hunter Repo: Our helm wrapper for the kube-hunter image that is integrated in the m9sweeper platform
+kube-hunter Repo: Our helm wrapper for the kube-hunter image that is integrated in the m9sweeper platform
 
-Kube Bench Repo: Our helm wrapper for the kube-bench image that is integrated in the m9sweeper platform
+kube-bench Repo: Our helm wrapper for the kube-bench image that is integrated in the m9sweeper platform
 
 
 BUGS

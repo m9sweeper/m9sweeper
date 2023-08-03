@@ -45,7 +45,7 @@ export class KubeBenchComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.parent.params.pipe(take(1)).subscribe(param => this.clusterId = param.id);
-    this.subMenuTitle = 'Kube Bench';
+    this.subMenuTitle = 'kube-bench';
     this.getAllBenchReportsByCluster(this.clusterId);
   }
 
@@ -119,11 +119,11 @@ export class KubeBenchComponent implements OnInit {
     }
     const dateNow = new Date().getTime();
     if (lastRunTime < dateNow - 30 * (86400000)){
-      this.ourAdvice = 'It has been more than 30 days since your last security check. We recommend you run Kube Bench again.';
+      this.ourAdvice = 'It has been more than 30 days since your last security check. We recommend you run kube-bench again.';
       this.benchmarkStatus = 'Report Outdated';
       this.statusInvalid = true;
     } else {
-      this.ourAdvice = 'You do not need to run Kube Bench again.';
+      this.ourAdvice = 'You do not need to run kube-bench again.';
       this.benchmarkStatus = 'Report Valid';
       this.statusInvalid = false;
     }
@@ -134,7 +134,7 @@ export class KubeBenchComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: false,
     });
-    deleteDialog.afterClosed().subscribe(result => {
+    deleteDialog.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.kubeBenchService.deleteKubeBenchReportById(id).pipe(take(1)).subscribe( () => {
           this.getAllBenchReportsByCluster(this.clusterId);

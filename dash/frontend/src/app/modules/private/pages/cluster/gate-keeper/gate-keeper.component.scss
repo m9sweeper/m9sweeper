@@ -1,0 +1,30 @@
+#gatekeeperExceptionsTable {
+  .mat-column-name {
+    min-width: 150px;
+    max-width: 300px;
+  }
+
+  .mat-column-category {
+    min-width: 150px;
+    max-width: 200px;
+  }
+
+  .mat-column-description {
+    min-width: 200px;
+    white-space: nowrap;
+  }
+
+  .mat-column-constraints {
+    min-width: 90px;
+    max-width: 100px;
+  }
+
+  .mat-column-enforced {
+    min-width: 50px;
+    max-width: 100px;
+  }
+
+  mat-cell.mat-column-constraints, mat-cell.mat-column-enforced {
+    justify-content: center;
+  }
+}

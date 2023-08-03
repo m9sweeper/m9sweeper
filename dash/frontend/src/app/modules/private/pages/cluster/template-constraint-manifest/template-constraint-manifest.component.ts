@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
+import {AlertService} from '../../../../../core/services/alert.service';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-template-constraint-manifest',
@@ -23,9 +25,12 @@ export class TemplateConstraintManifestComponent implements OnInit {
   rawTemplate: any;
   rawTemplateObject: IGateKeeperConstraintDetails = {};
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data,
-              private dialogRef: MatDialogRef<TemplateConstraintManifestComponent>) {
-
+  constructor(
+    private alertService: AlertService,
+    private clipboard: Clipboard,
+    @Inject(MAT_DIALOG_DATA) public data,
+    private dialogRef: MatDialogRef<TemplateConstraintManifestComponent>
+  ) {
     this.rawTemplateObject.apiVersion = 'constraints.gatekeeper.sh/v1beta1';
     this.rawTemplateObject.kind = this.data.templateData.kind;
     this.rawTemplateObject.metadata = {};
@@ -45,8 +50,7 @@ export class TemplateConstraintManifestComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  setEditorContent($event: any) {
-  }
+  setEditorContent($event: any) {}
 
   saveManifest() {
     this.dialogRef.close({manifestData: JSON.parse(this.rawTemplate)});

@@ -8,7 +8,7 @@ import { ClusterGroupCreateComponent } from '../../cluster-group/cluster-group-c
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { ImageService } from '../../../../../core/services/image.service';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import {GenericErrorDialogComponent} from '../../../../shared/generic-error-dialog/generic-error-dialog.component';
 import { AddClusterWizardComponent } from '../add-cluster-wizard/add-cluster-wizard.component';
 import { PodService } from 'src/app/core/services/pod.service';

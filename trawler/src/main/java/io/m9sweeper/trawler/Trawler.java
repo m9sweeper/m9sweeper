@@ -9,7 +9,6 @@ import io.m9sweeper.trawler.commands.ScanCommand;
 import io.m9sweeper.trawler.framework.TrawlerRunMode;
 import io.m9sweeper.trawler.framework.client.api.M9SweeperApi;
 import io.m9sweeper.trawler.framework.client.handler.ApiClient;
-import io.m9sweeper.trawler.framework.client.handler.ApiException;
 import io.m9sweeper.trawler.framework.client.handler.Configuration;
 import io.m9sweeper.trawler.framework.client.handler.auth.ApiKeyAuth;
 import io.m9sweeper.trawler.framework.client.model.DockerRegistriesDto;
@@ -61,11 +60,6 @@ public class Trawler extends AbstractCommand implements Runnable {
      * Update the configuration based on variables that were passed into the application as CLI options
      */
     public void updateConfig() {
-        // Update the number of parallel scanners if the number provided by CLI is different than that of the env var
-        if (trawlerParallelScanners != null) {
-            TrawlerConfiguration.getInstance().setTrawlerParallelScanners(trawlerParallelScanners);
-        }
-
         // If the m9sweeper URL was defined, override what is declared in env vars
         if (m9sweeperUrl != null) {
             TrawlerConfiguration.getInstance().setM9sweeperUrl(m9sweeperUrl);
