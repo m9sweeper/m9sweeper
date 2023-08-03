@@ -8,16 +8,14 @@
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
-      <div class="col-md-4 col-xs-12 start-xs end-md display-flex middle-xs">
+      <div class="col-md-6 col-xs-12 start-xs end-md display-flex flex-direction-xs-col flex-direction-md-row align-items-center">
         <button
-          class="margin-right-10"
+          class="margin-right-10 mb-xs-2 mb-md-0"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="warn"
           [disabled]="!clustersList || clustersList.length || disableOnSearch"
           (click)="deleteClusterGroup()">Delete Cluster Group</button>
-      </div>
-      <div class="col-md-2 col-xs-12 start-xs end-md display-flex middle-xs pt-xs-2 pt-md-0">
         <button
           class="margin-right-10"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
