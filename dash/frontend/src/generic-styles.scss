@@ -4,6 +4,7 @@ We DO NOT want classes that will be specific for pages - only global classes.
 
 To auto-generate a new property, add it to the $classesToGenerate map.
 See the comment directly above its definition for details on how to define the property.
+This method is inspired by the Bootstrap Sass Utility API (https://getbootstrap.com/docs/5.3/utilities/api/#using-the-api)
 
 Media query sizes are based on the sizes defined in npm flexboxgrid
 https://www.npmjs.com/package/flexboxgrid
@@ -56,7 +57,14 @@ $classesToGenerate: (
       block: block, inline: inline, inline-block: inline-block,
       flex: flex, inline-flex: inline-flex,
       grid: grid, inline-grid: inline-grid,
-      flow-root: flow-root, table: table
+      flow-root: flow-root, table: table, none: none,
+    ),
+  ),
+  height: (
+    abbreviation: 'h',
+    values: (
+      auto: auto, unset: unset,
+      0: 0, 50: 50%, 75: 75%, 100: 100%,
     ),
   ),
   flex-direction: (
@@ -69,11 +77,19 @@ $classesToGenerate: (
       unset: unset,
     ),
   ),
-  height: (
-    abbreviation: 'h',
+  align-items: (
+    abbreviation: 'align-items',
     values: (
-      auto: auto, unset: unset,
-      0: 0, 50: 50%, 75: 75%, 100: 100%,
+      normal: normal, stretch: stretch,
+      center: center, start: start, end: end,
+      flex-start: flex-start, flex-end: flex-end,
+      self-start: self-start, self-end: self-end,
+      baseline: baseline,
+      first-baseline: "first baseline", last-baseline: "last baseline",
+      safe-center: "safe center", unsafe-center: "unsafe center",
+      inherit: inherit, initial: initial,
+      revert: revert, revert-layer: "revert-layer",
+      unset: unset,
     ),
   ),
 );

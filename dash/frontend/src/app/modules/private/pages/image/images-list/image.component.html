@@ -1,23 +1,28 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing">
-      <div class="page-title-div">
-        <div class="page-title">Images
-          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="openImageCreateDialog()">
-            <mat-icon class="plus-button">add</mat-icon>
-          </button>
-        </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-8 page-title">
+        Images
+        <button *ngIf="userIsAdmin" mat-icon-button (click)="openImageCreateDialog()">
+          <mat-icon class="plus-button">add</mat-icon>
+        </button>
       </div>
-      <div class="page-button-spacing flex-display" id="images-buttons">
+      <div class="col-xs-12 col-md-4 display-flex
+                  start-xs end-md
+                  flex-direction-xs-col flex-direction-md-row
+                  align-items-xs-start align-items-md-center">
         <mat-form-field class="mr-10px search-image">
           <mat-label>Search image</mat-label>
           <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
-        </mat-form-field>&nbsp;
-        <button class="scan-images-button" (click)="openAdvancedSearchDialog()" mat-raised-button color="primary">
-          Advanced
-        </button> &nbsp;
+        </mat-form-field>
+        <button mat-raised-button color="primary"
+          [ngClass]="userIsAdmin ? 'mb-xs-2 mb-md-0 me-xs-0 me-md-2' : 'mb-xs-3 mb-md-0'"
+          id="advancedSearchButton"
+          (click)="openAdvancedSearchDialog()">
+          Advanced Search
+        </button>
         <button
-          class="scan-displayed-images-button"
+          class="mb-xs-3 mb-md-0" id="scanDisplayedButton"
           *ngIf="userIsAdmin"
           [disabled]="!(dataSource && dataSource.data)"
           (click)="openConfirmScanDialog()"
@@ -27,6 +32,7 @@
         </button>
       </div>
     </div>
+
     <mat-card class="scrollable-table-card">
       <div class="table-wrapper">
         <mat-table [dataSource]="dataSource" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">

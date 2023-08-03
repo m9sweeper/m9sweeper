@@ -1,3 +1,12 @@
+#advancedSearchButton {
+  height: 40px;
+  width: 80%;
+}
+#scanDisplayedButton {
+  height: 40px;
+  width: 100%;
+}
+
 .page-table {
   height: unset;
 }
@@ -28,6 +37,7 @@
   //margin-top: -18px;
 }
 
+/**
 @media all and (max-width: 765px) {
   .flex-display {
     display: flex;
@@ -50,6 +60,7 @@
     }
   }
 }
+*/
 
 ::ng-deep
 .default-theme
