@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {ApiKeyService} from '../../../../../core/services/api-key.service';
 import {IApiKey} from '../../../../../core/entities/IApiKey';

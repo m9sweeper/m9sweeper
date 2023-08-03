@@ -5,7 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatDialog} from '@angular/material/dialog';
 import {ImageService} from '../../../../../core/services/image.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IImage} from '../../../../../core/entities/IImage';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
 import {CreateImageComponent} from '../create-image-form/create-image.component';

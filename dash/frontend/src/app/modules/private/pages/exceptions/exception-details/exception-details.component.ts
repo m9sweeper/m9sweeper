@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { ExceptionsService } from '../../../../../core/services/exceptions.service';
 import { IException } from '../../../../../core/entities/IException';
 import { CommentService } from '../../../../../core/services/comment.service';

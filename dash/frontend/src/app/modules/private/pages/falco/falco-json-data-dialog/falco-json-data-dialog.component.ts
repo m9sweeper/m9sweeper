@@ -5,7 +5,7 @@ import {FalcoService} from '../../../../../core/services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {take} from 'rxjs/operators';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {UtilService} from '../../../../../core/services/util.service';
 import {MatTab} from '@angular/material/tabs';
 

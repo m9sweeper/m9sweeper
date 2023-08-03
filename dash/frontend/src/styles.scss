@@ -40,7 +40,6 @@ $ms-default-theme: mat.define-light-theme((
     $body-1: mat.define-typography-level(14px, 20px, 400),
     $body-2: mat.define-typography-level(14px, 20px, 400),
     $subtitle-2: mat.define-typography-level(14px, 20px, 400),
-
   ),
 ));
 
@@ -66,6 +65,59 @@ mat-card {
   padding-bottom: 20px;
   mat-card {
     overflow: auto;
+  }
+}
+
+@mixin snackbar-theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  $primary-palette: map-get($color-config, primary);
+  $success-palette: map-get($color-config, accent);
+  $warning-palette: map-get($color-config, warn);
+  $danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
+
+  .mat-mdc-snack-bar-container {
+    .mdc-snackbar__label, .mdc-button__label {
+      text-transform: capitalize;
+      font-weight: normal;
+    }
+
+    &.info-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($primary-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($primary-palette, "default-contrast") !important;
+        }
+      }
+    }
+
+    &.success-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($success-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($success-palette, "default-contrast") !important;
+        }
+      }
+    }
+
+    &.warning-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($warning-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($warning-palette, "default-contrast") !important;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    &.danger-alert {
+      .mdc-snackbar__surface {
+        background-color: map-get($danger-palette, "default") !important;
+        .mdc-snackbar__label, .mdc-button__label {
+          color: map-get($danger-palette, "default-contrast") !important;
+          text-transform: uppercase;
+        }
+      }
+    }
   }
 }
 
@@ -102,6 +154,7 @@ mat-card {
   @include custom-toolbar-light-theme($ms-default-theme);
   @include custom-organization-settings-light-theme($ms-default-theme);
   @include custom-audit-log-light-theme($ms-default-theme);
+  @include snackbar-theme($ms-default-theme);
 }
 
 button {
@@ -115,7 +168,6 @@ button {
 .mat-mdc-dialog-container {
   padding-block: 20px;
 }
-
 
 // organization menu text
 .organization-settings-text {

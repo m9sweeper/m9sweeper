@@ -7,7 +7,7 @@ import {ShowJsonDataComponent} from '../../../../../core/dialogues/show-json-dat
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 
 @Component({
   selector: 'app-audit-log',

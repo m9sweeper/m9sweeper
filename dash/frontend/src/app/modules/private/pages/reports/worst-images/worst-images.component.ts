@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
 import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import { Subject } from 'rxjs';
 import { VulnerabilitySeverity } from '../../../../../core/enum/VulnerabilitySeverity';
 import { ReportsService } from '../../../../../core/services/reports.service';
