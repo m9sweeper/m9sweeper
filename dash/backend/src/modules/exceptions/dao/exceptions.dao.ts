@@ -138,6 +138,7 @@ export class ExceptionsDao {
             'ex.is_temp_exception as _isTempException',
             'exceptions_policies.policy_id AS _policyId',
             'ex.alternate_severity AS _altSeverity',
+            'ex.scanner_id as _scannerId',
             'ex.created_at AS _createdAt')
             .from('exceptions AS ex')
             .leftOuterJoin('exceptions_clusters', 'ex.id', 'exceptions_clusters.exception_id')
