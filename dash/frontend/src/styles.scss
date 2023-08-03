@@ -828,3 +828,17 @@ app-datepicker-component {
 .ngx-charts .circle {
   cursor: default !important; // disable ngx-chart's default behavior of changing the cursor to a pointer on hover
 }
+
+// custom mat-cell with redirect
+mat-cell {
+  padding: 0;
+  a {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    text-decoration: unset;
+    color: unset;
+  }
+}
