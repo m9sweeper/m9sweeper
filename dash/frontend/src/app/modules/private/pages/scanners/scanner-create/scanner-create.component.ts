@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ScannerService } from '../../../../../core/services/scanner.service';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { CustomValidators } from '../../../form-validator/custom-validators';
 import {IScanner, VulnerabilitySettings} from '../../../../../core/entities/IScanner';
 @Component({

@@ -16,7 +16,7 @@
         </mat-list-item>
       </div>
 
-      <mat-divider *ngIf="contentTriggerButtons.length" style="margin-top: 0.5em; margin-bottom: 0.5em;"></mat-divider>
+      <mat-divider *ngIf="contentTriggerButtons.length"></mat-divider>
 
       <div *ngFor="let menuItem of menuItems">
         <a mat-list-item
@@ -47,10 +47,16 @@
 
     <mat-nav-list style="flex:1"></mat-nav-list>
 
-    <mat-nav-list id="settings-link" *ngIf="showOrgSettingsButton">
+    <mat-nav-list id="settings-link" *ngIf="showOrgSettingsButton || showClusterListButton">
       <mat-divider></mat-divider>
+      <a mat-list-item *ngIf="showClusterListButton"
+         [routerLink]="['/private', 'dashboard']"
+      >
+        <mat-icon title="Cluster List">list</mat-icon>
+        <span class="menu-item-name">List of Clusters</span>
+      </a>
       <a mat-list-item
-         *ngIf="isAdmin"
+         *ngIf="showOrgSettingsButton && isAdmin"
          [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
          [routerLink]="['/private', 'users']"
          style="align-self: flex-end"
@@ -60,7 +66,7 @@
         <span class="menu-item-name">Organization Settings</span>
       </a>
       <a mat-list-item
-         *ngIf="!isAdmin"
+         *ngIf="showOrgSettingsButton && !isAdmin"
          [allowedRoles]="['ADMIN', 'SUPER_ADMIN', 'READ_ONLY']"
          [routerLink]="['/private', 'policies']"
       >

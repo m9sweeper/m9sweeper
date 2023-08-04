@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { UserService } from '../../../../../core/services/user.service';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';

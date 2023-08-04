@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/api/auth.service';
 import { IAuthenticationMethod } from '../../../../core/entities/IAuthenticationMethod';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { MatSelectChange } from '@angular/material/select';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { IServerResponse } from '../../../../core/entities/IServerResponse';

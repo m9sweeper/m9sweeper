@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {KubesecService} from '../../../../../core/services/kubesec.service';
 import {FalcoService} from '../../../../../core/services/falco.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {take} from 'rxjs/operators';
 import {
   FalcoRuleAddEditDialogComponent
 } from '../falco-rule-add-edit-dialog/falco-rule-add-edit-dialog.component';
 import {IFalcoRule} from '../../../../../core/entities/IFalcoRule';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-falco-org-settings-page',
@@ -58,18 +59,28 @@ export class FalcoOrgSettingsPageComponent implements OnInit {
   }
 
   removeRule(ruleId: number, idx: number) {
-    this.falcoService.deleteRule(ruleId)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this.alert.success('Rule deleted');
-          // Splice will remove the element and move other elements up.
-          // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
-          this.rules.splice(idx, 1);
-        },
-        error: (err) => {
-          this.alert.danger(err?.error?.metadata || 'Something went wrong.');
-        }
-      });
+    const openAddCluster = this.dialog.open(AlertDialogComponent, {
+      width: '400px',
+      closeOnNavigation: true,
+      disableClose: false,
+      data: {},
+    });
+    openAddCluster.afterClosed().pipe(take(1)).subscribe(shouldDelete => {
+      if (shouldDelete) {
+        this.falcoService.deleteRule(ruleId)
+          .pipe(take(1))
+          .subscribe({
+            next: () => {
+              this.alert.success('Rule deleted');
+              // Splice will remove the element and move other elements up.
+              // It is slow for large arrays, but these arrays will likely not be large enough for that to be a concern
+              this.rules.splice(idx, 1);
+            },
+            error: (err) => {
+              this.alert.danger(err?.error?.metadata || 'Something went wrong.');
+            }
+          });
+      }
+    });
   }
 }

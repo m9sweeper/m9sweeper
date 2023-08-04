@@ -1,13 +1,9 @@
-import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FalcoService} from '../../../../../core/services/falco.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
-import {take} from 'rxjs/operators';
-import {AlertService} from '@full-fledged/alerts';
-import {UtilService} from '../../../../../core/services/util.service';
-import {MatTab} from '@angular/material/tabs';
 
 
 @Component({
@@ -47,10 +43,6 @@ export class FalcoJsonDataDialogComponent {
       value: this.data.raw.priority,
     },
     {
-      title: 'Message',
-      value: this.data.message,
-    },
-    {
       title: 'Signature',
       value: this.data.anomalySignature,
     },
@@ -65,5 +57,4 @@ export class FalcoJsonDataDialogComponent {
       data: event
     });
   }
-
 }

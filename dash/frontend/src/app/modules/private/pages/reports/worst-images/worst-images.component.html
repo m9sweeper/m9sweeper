@@ -1,7 +1,12 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="col-lg-4 col-xs-12 page-title">
-      <span>Worst CVE by Image</span>
+    <div class="col-lg-4 col-xs-12 page-title display-flex align-items-center">
+      <span>Images by Worst Vulnerability</span>
+      <mat-icon class="ms-xs-2"
+                matTooltipShowDelay="200"
+                matTooltipHideDelay="2000"
+                matTooltip="Displays a bar graph of images grouped by the highest severity CVE on each, or 'None' if no CVE is present on the image"
+      >info</mat-icon>
     </div>
     <div class="vulnerability-filter-card">
       <mat-card>

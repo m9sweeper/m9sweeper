@@ -1,11 +1,11 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {AfterViewInit, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
 import { ImageService } from '../../../../../core/services/image.service';
 import { differenceInCalendarDays, format, isAfter, sub, startOfToday } from 'date-fns';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import { Subject } from 'rxjs';
 import { VulnerabilitySeverity } from '../../../../../core/enum/VulnerabilitySeverity';
 import { ReportsService } from '../../../../../core/services/reports.service';
@@ -17,7 +17,7 @@ import {CustomValidatorService} from '../../../../../core/services/custom-valida
   templateUrl: './worst-images.component.html',
   styleUrls: ['./worst-images.component.scss']
 })
-export class WorstImagesComponent implements OnInit, OnDestroy {
+export class WorstImagesComponent implements OnInit, AfterViewInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   clusterId: number;
   filterForm: FormGroup;
@@ -83,8 +83,10 @@ export class WorstImagesComponent implements OnInit, OnDestroy {
     this.namespaces = new Array<string>();
 
     this.buildBarChartData();
+  }
 
-    this.setChartSize(true);
+  ngAfterViewInit() {
+    this.setChartSize();
   }
 
   buildBarChartData() {

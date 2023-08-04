@@ -19,6 +19,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
   public currentMenuItems = new BehaviorSubject<IMenuItem[]>([]);
   public currentMenuContentTriggers = new BehaviorSubject<IMenuContentTrigger[]>([]);
   public showOrgSettingsButton = true;
+  public showClusterListButton = true;
 
   private routerEvent$: Subscription;
   clusterId;
@@ -70,7 +71,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         icon: 'network_check',
       },
       {
-        name: 'GateKeeper',
+        name: 'Gatekeeper',
         path: ['/private', 'clusters', `${this.clusterId}`, 'gatekeeper'],
         image: {
           src: '/assets/images/opa-icon-black.png',
@@ -78,15 +79,15 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         },
       },
       {
-        name: 'KubeSec',
+        name: 'Kubesec',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubesec'],
         image: {
           src: '/assets/images/kubesec-logo.png',
-          alt: 'KubeSec Logo',
+          alt: 'Kubesec Logo',
         },
       },
       {
-        name: 'Kube Hunter',
+        name: 'kube-hunter',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubehunter'],
         image: {
           src: '/assets/images/kube-hunter-logo.png',
@@ -94,7 +95,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         },
       },
       {
-        name: 'Kube Bench',
+        name: 'kube-bench',
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubebench'],
         image: {
           src: '/assets/images/kube-bench-logo.png',

@@ -1,27 +1,27 @@
 {
-  "name": "m9sweeper-wdio-testing",
-  "type": "module",
-  "devDependencies": {
-    "@badisi/wdio-harness": "^2.0.3",
-    "@types/jasmine": "^4.3.1",
-    "@wdio/cli": "^8.10.2",
-    "@wdio/jasmine-framework": "^8.10.4",
-    "@wdio/junit-reporter": "^8.10.2",
-    "@wdio/local-runner": "^8.10.2",
-    "@wdio/spec-reporter": "^8.10.2",
-    "chromedriver": "^113.0.0",
-    "dotenv": "^16.0.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "wdio-chromedriver-service": "^8.1.1",
-    "wdio-wait-for": "^3.0.4"
-  },
-  "scripts": {
-    "test:all": "wdio run wdio.local.conf.ts --suite all",
-    "test:cluster": "wdio run wdio.local.conf.ts --suite cluster",
-    "test:organization": "wdio run wdio.local.conf.ts --suit organization",
-    "test:smoke": "wdio run wdio.local.conf.ts --suit smoke",
-    "test:user": "wdio run wdio.local.conf.ts --suite user",
-    "test:pipeline": "wdio run wdio.pipeline.conf.ts --suite all"
-  }
+	"name": "m9sweeper-wdio-testing",
+	"type": "module",
+	"devDependencies": {
+		"@badisi/wdio-harness": "^3.0.2",
+		"@types/jasmine": "^4.3.5",
+		"@wdio/cli": "^8.13.14",
+		"@wdio/jasmine-framework": "^8.13.13",
+		"@wdio/junit-reporter": "^8.12.2",
+		"@wdio/local-runner": "^8.13.13",
+		"@wdio/spec-reporter": "^8.12.2",
+		"chromedriver": "^114.0.0",
+		"dotenv": "^16.3.1",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.1.6",
+		"wdio-chromedriver-service": "^8.1.1",
+		"wdio-wait-for": "^3.0.6"
+	},
+	"scripts": {
+		"test:all": "wdio run wdio.local.conf.ts --suite all",
+		"test:cluster": "wdio run wdio.local.conf.ts --suite cluster",
+		"test:organization": "wdio run wdio.local.conf.ts --suite organization",
+		"test:smoke": "wdio run wdio.local.conf.ts --suite smoke",
+		"test:user": "wdio run wdio.local.conf.ts --suite user",
+		"test:pipeline": "wdio run wdio.pipeline.conf.ts --suite all"
+	}
 }

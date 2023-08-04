@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 
 @Component({
   selector: 'app-copy-to-clipboard-button',

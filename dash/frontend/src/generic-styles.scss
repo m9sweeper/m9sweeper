@@ -1,0 +1,189 @@
+/**
+This is where you can add generic styles that will be applied by screen size.
+We DO NOT want classes that will be specific for pages - only global classes.
+
+To auto-generate a new property, add it to the $classesToGenerate map.
+See the comment directly above its definition for details on how to define the property.
+This method is inspired by the Bootstrap Sass Utility API (https://getbootstrap.com/docs/5.3/utilities/api/#using-the-api)
+
+Media query sizes are based on the sizes defined in npm flexboxgrid
+https://www.npmjs.com/package/flexboxgrid
+
+naming and spacing defaults are based on Bootstrap spacing
+exception: explicitly name sizes xs-lg; omit sizes xl & xxl
+https://getbootstrap.com/docs/5.3/utilities/spacing/
+0 - for classes that eliminate the margin or padding by setting it to 0
+1 - for classes that set the margin or padding to $spacer * .25
+2 - for classes that set the margin or padding to $spacer * .5
+3 - for classes that set the margin or padding to $spacer
+4 - for classes that set the margin or padding to $spacer * 1.5
+5 - for classes that set the margin or padding to $spacer * 3
+auto - for classes that set the margin to auto
+ */
+
+
+/**
+Object format:
+-----
+propertyName: (
+  abbreviation: propertyAbbreviation,
+  values: (
+    valueShorthand: value,
+  ),
+)
+-----
+Generates:
+-----
+.propertyAbbreviation-breakpointShorthand-valueShorthand {
+  propertyName: value;
+}
+-----
+Ex:
+height: (
+  abbreviation: h,
+  values: (
+    100: 100%,
+  ),
+)
+
+.h-xs-100 {
+  height: 100%
+}
+ */
+$classesToGenerate: (
+  display: (
+    abbreviation: 'display',
+    values: (
+      block: block, inline: inline, inline-block: inline-block,
+      flex: flex, inline-flex: inline-flex,
+      grid: grid, inline-grid: inline-grid,
+      flow-root: flow-root, table: table, none: none,
+    ),
+  ),
+  height: (
+    abbreviation: 'h',
+    values: (
+      auto: auto, unset: unset,
+      fit: 'fit-content',
+      0: 0, 50: 50%, 75: 75%, 100: 100%,
+    ),
+  ),
+  flex-direction: (
+    abbreviation: 'flex-direction',
+    values: (
+      row: row, row-reverse: row-reverse,
+      col: column, col-reverse: column-reverse,
+      inherit: inherit, initial: initial,
+      revert: revert, revert-layer: revert-layer,
+      unset: unset,
+    ),
+  ),
+  align-items: (
+    abbreviation: 'align-items',
+    values: (
+      normal: normal, stretch: stretch,
+      center: center, start: start, end: end,
+      flex-start: flex-start, flex-end: flex-end,
+      self-start: self-start, self-end: self-end,
+      baseline: baseline,
+      first-baseline: "first baseline", last-baseline: "last baseline",
+      safe-center: "safe center", unsafe-center: "unsafe center",
+      inherit: inherit, initial: initial,
+      revert: revert, revert-layer: "revert-layer",
+      unset: unset,
+    ),
+  ),
+  justify-content: (
+    abbreviation: 'justify-content',
+    values: (
+      center: center, start: start, end: end,
+      flex-start: flex-start, flex-end: flex-end,
+      left: left, right: right, normal: normal,
+      space-between: space-between, space-around: space-around,
+      space-evenly: space-evenly, stretch: stretch,
+      safe-center: "safe center", unsafe-center: "unsafe center",
+      inherit: inherit, initial: initial,
+      revert: revert, revert-layer: "revert-layer",
+      unset: unset,
+    ),
+  ),
+);
+
+$spacer: 1em;
+$sides: (
+  t: ['top'],
+  b: ['bottom'],
+  s: ['inline-start'],
+  e: ['inline-end'],
+  x: ['inline'],
+  y: ['top', 'bottom'],
+  all: ['inline-start', 'top', 'inline-end', 'bottom'],
+);
+
+@mixin build-spacing-classes($breakpointShorthand: xs) {
+  $properties: (
+    p: "padding",
+    m: "margin",
+  );
+  $sizes: (
+    auto: 'auto',
+    0: 0,
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
+    3: ($spacer),
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+  );
+
+  @each $propertyShorthand, $property in $properties {
+    @each $sideShorthand, $sideList in $sides {
+      $sideShorthandToUse: $sideShorthand;
+      @if $sideShorthand == 'all' {
+        $sideShorthandToUse: '';
+      }
+      @each $sizeShorthand, $size in $sizes {
+        #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
+          @each $side in $sideList {
+            #{$property}-#{$side}: #{$size};
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-basic-classes($breakpointShorthand: xs) {
+  @each $propertyName, $definition in $classesToGenerate {
+    $propertyAbbreviation: map-get($definition, abbreviation);
+    $usesSides: map-get($definition, usesSides);
+    $values: map-get($definition, values);
+    @each $valueShorthand, $value in $values {
+      #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} { #{$propertyName}: #{$value} #{'!important'}; }
+
+      @debug #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} #{"{"} #{$propertyName}#{":"} #{$value} #{'!important'}#{"; }"};
+    }
+  }
+}
+
+
+@include build-spacing-classes();
+@include generate-basic-classes();
+
+
+// sm screen sizes
+@media only screen and (min-width: 48em) {
+  @include build-spacing-classes(sm);
+  @include generate-basic-classes(sm);
+}
+
+// md screen sizes
+@media only screen and (min-width: 62em) {
+  @include build-spacing-classes(md);
+  @include generate-basic-classes(md);
+}
+
+// lg screen sizes
+@media only screen and (min-width: 75em) {
+  @include build-spacing-classes(lg);
+  @include generate-basic-classes(lg);
+}

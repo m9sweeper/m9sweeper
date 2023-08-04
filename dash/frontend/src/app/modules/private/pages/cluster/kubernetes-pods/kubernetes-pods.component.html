@@ -22,11 +22,11 @@
       </div>
     </div>
     <mat-card>
-      <div class="page-table kubernetes-object-list-table">
+      <div class="m-xs-3" *ngIf="!pageLoading && !totalNumPods">
+        No pods found
+      </div>
+      <div class="page-table kubernetes-object-list-table" *ngIf="pageLoading || totalNumPods">
         <mat-table [dataSource]="dataSource" matSort>
-          <div *matNoDataRow class="text-align-center">
-            No pods found
-          </div>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -64,7 +64,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Violations </mat-header-cell>
             <mat-cell *matCellDef="let element">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
-                {{element.violations.length}}
+                {{element?.violations?.length}}
               </a>
 <!--              <a *ngIf="element.violations.length"  (mouseover)="showViolations(element)">{{element.violations.length}}</a>-->
             </mat-cell>
@@ -74,7 +74,7 @@
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="click-event"></mat-row>
         </mat-table>
       </div>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+      <mat-paginator class="pb-xs-3" [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="pageLoading || totalNumPods"></mat-paginator>
     </mat-card>
   </div>
 </div>

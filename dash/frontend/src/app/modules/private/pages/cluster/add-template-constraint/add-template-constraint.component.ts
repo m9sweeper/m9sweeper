@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog
 import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-constraint-criteria.component';
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';
@@ -15,10 +15,10 @@ import {take} from 'rxjs/operators';
   styleUrls: ['./add-template-constraint.component.scss', '../../../../../../styles.scss']
 })
 export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
-
   templateName: string;
   addTemplateConstraintForm: FormGroup;
   // templateConstraintCriteria: IConstraintCriteria[] = [{kinds: ['Pod'], apiGroups: []}];
+  initialTemplateConstraintCriteria: IConstraintCriteria[] = [];
   templateConstraintCriteria: IConstraintCriteria[] = [];
   k8sNamespaces: string[];
   dynamicProperties = {};
@@ -28,6 +28,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       properties: {}
     }
   };
+  isEdit = false;
   generateFormFromJsonData = {};
   generateFormFromSchema = true;
 
@@ -44,30 +45,38 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
 
     this.templateName = this.data.templateName;
     this.prepareTemplateConstraintCriteria();
+
+    if (this.data.isEdit) {
+      this.isEdit = true;
+      this.generateFormFromSchema = false;
+      this.generateFormFromJsonData = this.data.constraint.spec.parameters;
+    } else {
+      this.formSchema.schema.properties = this.data.openApiSchema;
+    }
+
     this.addTemplateConstraintForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)]],
+      name: [
+        {value: '', disabled: this.isEdit},
+        [Validators.required, Validators.pattern(/^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/)],
+      ],
       kind: [this.data.templateSpecKind, [Validators.required]],
       description: ['', [Validators.required]],
       mode: ['dryrun', [Validators.required]],
       excludedNamespaces: [[], Validators.nullValidator],
       // labels: ['', Validators.nullValidator]
     });
-
-    if (this.data.isEdit) {
-      this.generateFormFromSchema = false;
-      this.generateFormFromJsonData = this.data.constraint.spec.parameters;
-    } else {
-      this.formSchema.schema.properties = this.data.openApiSchema;
-    }
   }
 
   ngOnInit(): void {
-    this.gatekeeperService.getNamespacesByCluster(this.data.clusterId).subscribe(response => {
-      this.k8sNamespaces = response.data;
-    });
-    if (this.data.isEdit && this.data.constraint) {
-      this.setConstraintForm();
-    }
+    this.gatekeeperService.getNamespacesByCluster(this.data.clusterId)
+      .pipe(take(1))
+      .subscribe(response => {
+        this.k8sNamespaces = response.data;
+      }, error => {
+        console.log(error);
+        this.alertService.warning('Unable to load namespaces');
+      });
+    this.setConstraintForm();
   }
 
   ngAfterViewInit() {
@@ -75,11 +84,15 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   }
 
   setConstraintForm() {
-    this.addTemplateConstraintForm.controls.name.setValue(this.data.constraint.metadata.name);
-    this.addTemplateConstraintForm.controls.description.setValue(this.data.constraint.metadata.annotations.description);
-    this.addTemplateConstraintForm.controls.excludedNamespaces.setValue(this.data.constraint.spec.match.excludedNamespaces);
-    this.addTemplateConstraintForm.controls.mode.setValue(this.data.constraint.spec.enforcementAction);
-    this.templateConstraintCriteria = this.data.constraint.spec.match.kinds;
+    if (this.data.isEdit && this.data.constraint) {
+      this.addTemplateConstraintForm.controls.name.setValue(this.data.constraint.metadata.name);
+      this.addTemplateConstraintForm.controls.description.setValue(this.data.constraint.metadata.annotations.description);
+      this.addTemplateConstraintForm.controls.excludedNamespaces.setValue(this.data.constraint.spec.match.excludedNamespaces);
+      this.addTemplateConstraintForm.controls.mode.setValue(this.data.constraint.spec.enforcementAction);
+      this.initialTemplateConstraintCriteria = this.data.constraint.spec.match.kinds;
+      // object reference needs to be different so that it resets when the form is closed and reopened
+      this.templateConstraintCriteria = structuredClone(this.initialTemplateConstraintCriteria);
+    }
   }
 
   AddConstraintCriteriaDialog() {
@@ -91,7 +104,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       data: {clusterId: this.data.clusterId}
     });
 
-    openConstraintCriteriaDialog.afterClosed().subscribe(response => {
+    openConstraintCriteriaDialog.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response.constraintCriteria) {
         this.templateConstraintCriteria.push(response.constraintCriteria);
       }
@@ -105,14 +118,22 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       this.addTemplateConstraintForm.value.properties = this.dynamicProperties;
       this.addTemplateConstraintForm.value.criterias = this.templateConstraintCriteria;
       if (this.data && this.data.isEdit) {
-        this.gatekeeperService.patchGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
-          if (response.data.statusCode === 200 ) {
-            this.alertService.success(response.data.message);
-            this.dialogRef.close({reload: true});
-          } else {
-            this.alertService.danger(response.data.message);
-          }
-        });
+        // need to add the name to it (since it's disabled when it's an edit)
+        this.gatekeeperService.patchGateKeeperTemplateConstraint({
+          name: this.data.constraint.metadata.name,
+          ...this.addTemplateConstraintForm.value
+        }, this.templateName, this.data.clusterId)
+          .subscribe(response => {
+            if (response.data.statusCode === 200 ) {
+              this.alertService.success(response.data.message);
+              this.dialogRef.close({reload: true});
+            } else {
+              this.alertService.danger(response.data.message);
+            }
+          }, error => {
+            console.log(error);
+            this.alertService.danger(error.statusText);
+          });
       } else {
         this.gatekeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
           if (response.data.statusCode === 200 ) {
@@ -129,6 +150,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   }
 
   onNoClick() {
+    this.setConstraintForm();
     this.dialogRef.close({cancel: true});
   }
 
@@ -183,7 +205,9 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
     button.remove();
     // schema text
     const schemaText = this.elementRef.nativeElement.querySelector('legend');
-    schemaText.remove();
+    if (schemaText) {
+      schemaText.remove();
+    }
   }
 
   modelChange($event: any) {

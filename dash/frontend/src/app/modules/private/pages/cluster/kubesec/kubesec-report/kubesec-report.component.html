@@ -1,0 +1,111 @@
+<div class="pod-score row">
+  <div class="col-xs-9 pod-name">
+    {{'Kubesec ' + kubesecReport.object.substring(4)}}
+  </div>
+  <div class="col-xs-3 kubesec-score" [ngStyle]="{'background': decideScoreColor()}">
+    <span> {{kubesecReport.score}} </span>
+  </div>
+</div>
+<div class="message-download row mb-half-rem">
+  <p class="col-xs-12 col-sm-8"> {{kubesecReport.message}}. </p>
+  <div class="col-xs-12 col-sm-4 start-xs end-sm align-self-center">
+    <a mat-raised-button color="primary"
+       class="download-report"
+       download="kubesec-report.json"
+       [href]="sanitize(kubesecReportDownloadHref)">
+      Download Report
+    </a>
+  </div>
+</div>
+<div class="row mb-half-rem">
+  <div class="col-xs-12 mb-half-rem">
+    Passed rules are given a positive score. Rules with critical issue are given a negative score.
+  </div>
+  <div class="col-xs-12">
+    After fixing a critical issue or improving with an advice, the previous suggestion will move to the passed section and the score will be improved.
+  </div>
+</div>
+<div class="component-with-scrollable-table">
+  <div class="light-border critical-table mb-half-rem" *ngIf="critical.length > 0">
+    <mat-toolbar class="row">
+      <div class="col-xs-9">
+        <span class="subnav-title">Critical Issues</span>
+      </div>
+      <div class="col-xs-3 table-score end-xs"  [ngStyle] = "{'background': scoreColors.green}">
+        <span>{{critical.length}}</span>
+      </div>
+    </mat-toolbar>
+    <div class="table-wrapper">
+      <mat-table [dataSource]="criticalDataSource">
+        <ng-container matColumnDef="criticalId">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let criticalIssues" [matTooltip]="criticalIssues?.id"> {{criticalIssues?.id}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="criticalPoints">
+          <mat-header-cell *matHeaderCellDef class="mat-cell-points"> Points </mat-header-cell>
+          <mat-cell *matCellDef="let criticalIssues" [ngStyle] = "{'background': scoreColors.red}" [matTooltip]="criticalIssues?.points"> {{criticalIssues?.points}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="criticalReason">
+          <mat-header-cell *matHeaderCellDef> Reason </mat-header-cell>
+          <mat-cell *matCellDef="let criticalIssues" [matTooltip]="criticalIssues?.reason"> {{criticalIssues?.reason}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="criticalDisplayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: criticalDisplayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div class="light-border advise-table mb-half-rem" *ngIf="advise.length > 0">
+    <mat-toolbar class="row">
+      <div class="col-xs-12">
+        <span class="subnav-title"> Advice </span>
+      </div>
+    </mat-toolbar>
+    <div class="table-wrapper">
+      <mat-table [dataSource]="adviseDataSource">
+        <ng-container matColumnDef="adviseId">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let advice" [matTooltip]="advice?.id"> {{advice?.id}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="advisePoints">
+          <mat-header-cell *matHeaderCellDef class="mat-cell-points"> Points </mat-header-cell>
+          <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': scoreColors.yellow}" [matTooltip]="advice?.points"> {{advice?.points}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="adviseReason">
+          <mat-header-cell *matHeaderCellDef> Reason </mat-header-cell>
+          <mat-cell *matCellDef="let advice" [matTooltip]="advice?.reason"> {{advice?.reason}} </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="adviseDisplayColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: adviseDisplayColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div class="light-border passed-table mb-half-rem" *ngIf="passed.length > 0">
+    <mat-toolbar class="row">
+      <div class="col-xs-9">
+        <span class="subnav-title">Passed</span>
+      </div>
+      <div class="col-xs-3 table-score end-xs"  [ngStyle] = "{'background': scoreColors.green}">
+        <span>{{passed.length}}</span>
+      </div>
+    </mat-toolbar>
+    <div class="table-wrapper">
+      <mat-table [dataSource]="passedDataSource">
+        <ng-container matColumnDef="passedId">
+          <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+          <mat-cell *matCellDef="let pass" [matTooltip]="pass?.id"> {{pass?.id}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="passedPoints">
+          <mat-header-cell *matHeaderCellDef class="mat-cell-points"> Points </mat-header-cell>
+          <mat-cell *matCellDef="let pass" [ngStyle] = "{'background': scoreColors.green}" [matTooltip]="pass?.points"> {{pass?.points}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="passedReason">
+          <mat-header-cell *matHeaderCellDef> Reason </mat-header-cell>
+          <mat-cell *matCellDef="let pass" [matTooltip]="pass?.reason"> {{pass?.reason}} </mat-cell>
+        </ng-container>
+        <mat-header-row></mat-header-row>
+        <mat-header-row *matHeaderRowDef="passedDisplayColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: passedDisplayColumns;"></mat-row>
+      </mat-table>
+    </div>
+  </div>
+</div>
