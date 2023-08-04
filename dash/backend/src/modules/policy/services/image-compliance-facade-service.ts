@@ -100,42 +100,6 @@ export class ImageComplianceFacadeService {
         return { compliant: complianceMap.isCompliant, complianceMap };
     }
 
-    private filterExceptionsByImageName(imageName: string, exceptions: ExceptionQueryDto[]) : ExceptionQueryDto[] {
-        if (!!exceptions === false) {
-            return [];
-        }
-
-        return exceptions.filter(exception => {
-            if (!!exception.imageMatch === false) {
-                exception.imageMatch = '%';
-            }
-            
-            let imageMatch = exception.imageMatch.toLowerCase();
-
-            if (imageMatch.trim() === "%") {
-                return true;
-            }
-
-            imageName = imageName.toLowerCase();
-
-            if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-                imageMatch = imageMatch.substring(1, imageMatch.length - 1);
-
-                return imageName.indexOf(imageMatch) !== -1;
-            }
-
-            if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-                return imageName.endsWith(imageMatch);
-            }
-
-            if (imageMatch.startsWith("%") === false && imageMatch.endsWith("%") === true) {
-                return imageName.startsWith(imageMatch);
-            }
-
-            return true;
-        })
-    }
-
 
     /**
      * Calculates image compliance accounting only for current information (Does not create temporary exceptions)
@@ -160,7 +124,7 @@ export class ImageComplianceFacadeService {
             return false;
         }
 
-        exceptions = this.filterExceptionsByImageName(imageName, exceptions);
+        exceptions = this.exceptionService.filterExceptionsByImageName(imageName, exceptions);
 
         const scanResults = await Promise.all(results.map(async result => {
             const scanResult = new ImageScanResultPerPolicyDto();

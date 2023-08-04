@@ -6,10 +6,8 @@ import {EmailService} from '../../shared/services/email.service';
 import {ConfigService} from '@nestjs/config';
 import {ExceptionType} from '../enum/ExceptionType';
 import {ExceptionDto, ExceptionQueryDto} from '../dto/exception-dto';
-import {PodService} from '../../pod/services/pod.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterService} from '../../cluster/services/cluster.service';
-import {NamespaceService} from '../../namespace/services/namespace.service';
 import {ExceptionBlockService} from '../../command-line/services/exception-block.service';
 import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {ExceptionK8sInfoDto} from '../dto/exception-k8s-info-dto';
@@ -26,9 +24,7 @@ export class ExceptionsService {
     private readonly exceptionBlockService: ExceptionBlockService,
     private readonly email: EmailService,
     private readonly configService: ConfigService,
-    private readonly podService: PodService,
     private readonly clusterEventService: ClusterEventService,
-    private readonly kubernetesNamespaceService: NamespaceService,
     private readonly auditLogService: AuditLogService,
     private logger: MineLoggerService,
   ) {}
@@ -278,5 +274,41 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
   async syncGatekeeperBlocks(): Promise<void> {
     this.exceptionBlockService.syncGatekeeperExceptionBlocks()
         .catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
+  }
+
+  filterExceptionsByImageName(imageName: string, exceptions: ExceptionQueryDto[]) : ExceptionQueryDto[] {
+    if (!!exceptions === false) {
+      return [];
+    }
+
+    return exceptions.filter(exception => {
+      if (!!exception.imageMatch === false) {
+        exception.imageMatch = '%';
+      }
+
+      let imageMatch = exception.imageMatch.toLowerCase();
+
+      if (imageMatch.trim() === "%") {
+        return true;
+      }
+
+      imageName = imageName.toLowerCase();
+
+      if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
+        imageMatch = imageMatch.substring(1, imageMatch.length - 1);
+
+        return imageName.indexOf(imageMatch) !== -1;
+      }
+
+      if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
+        return imageName.endsWith(imageMatch);
+      }
+
+      if (imageMatch.startsWith("%") === false && imageMatch.endsWith("%") === true) {
+        return imageName.startsWith(imageMatch);
+      }
+
+      return true;
+    })
   }
 }
