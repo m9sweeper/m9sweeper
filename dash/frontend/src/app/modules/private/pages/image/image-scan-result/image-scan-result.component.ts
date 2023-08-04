@@ -139,6 +139,9 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
           } else {
             this.displayImageScanSpinner$ = of(false);
           }
+          if (!this.dataSource.dockerImageId) {
+            return of({data: []});
+          }
           return this.imageService.getNamespaceByImageHash(this.dataSource.dockerImageId);
         }),
         take(1),
@@ -146,8 +149,10 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
       .subscribe((namespaces) => {
           this.imageNamespaces = namespaces.data.map(namespace => namespace.namespace);
     }, error => {
-      this.alertService.danger(error.error.message);
-      // this.router.navigate(['/private']);
+        console.error(error);
+        if (error?.error) {
+          this.alertService.danger(error.error.message || error.error);
+        }
     });
   }
 
@@ -195,6 +200,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
         }
       },
       (error => {
+        console.log(error);
         this.alertService.danger(error.error.message);
       }));
   }
