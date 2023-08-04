@@ -79,7 +79,7 @@
           <button [disabled]="true" mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
         </div>
         <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
-          <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" style="float: right"
+          <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary"
                   matStepperNext>Next Step
           </button>
         </div>
@@ -129,7 +129,6 @@
       <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
         <button mat-raised-button
                 color="primary"
-                style="float: right"
                 [disabled]="serviceAccountForm.invalid"
                 matStepperNext>Next Step</button>
         </div>
@@ -166,7 +165,7 @@
         <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
       </div>
       <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
-        <button mat-raised-button color="primary" [disabled]="submitting" style="float: right" (click)="onSubmit(stepper)">Next Step</button>
+        <button mat-raised-button color="primary" [disabled]="submitting" (click)="onSubmit(stepper)">Next Step</button>
       </div>
     </div>
   </mat-step>
@@ -197,7 +196,7 @@
         </form>
       </div>
     </div>
-    <mat-card-actions style="margin-top: 40px">
+    <mat-card-actions class="mt-xs-2">
       <button mat-raised-button color="primary" (click)="viewResults()">View Results</button>
     </mat-card-actions>
   </mat-step>
