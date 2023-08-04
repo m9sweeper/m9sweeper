@@ -12,7 +12,6 @@ import {OrganizationSettingsComponent} from './pages/organization-settings/organ
 import {PolicyListComponent} from './pages/policies/policy-list/policy-list.component';
 import {ScannerListComponent} from './pages/scanners/scanner-list/scanner-list.component';
 import {PolicyCreateComponent} from './pages/policies/policy-create/policy-create.component';
-import {AppSettingsComponent} from './pages/app-settings/app-settings.component';
 import {ChangePasswordComponent} from './pages/change-password/change-password.component';
 import {ExternalAuthConfigurationListComponent} from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
 import {Authority} from '../../core/enum/Authority';
@@ -360,23 +359,6 @@ const routes: Routes = [
             component: ExternalAuthConfigurationListComponent,
             data: {
               title: 'External Auth'
-            }
-          },
-        ]
-      },
-      {
-        path: 'settings',
-        component: OrganizationSettingsComponent,
-        canActivate: [RoleGuard],
-        data: {
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-        },
-        children: [
-          {
-            path: '',
-            component: AppSettingsComponent,
-            data: {
-              title: 'Settings'
             }
           },
         ]
