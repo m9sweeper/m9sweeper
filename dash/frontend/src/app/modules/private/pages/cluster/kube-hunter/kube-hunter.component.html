@@ -81,15 +81,27 @@
               <mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="date">
                   <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-                  <mat-cell *matCellDef="let report"> {{report.date | date: 'M/dd/yyyy' }} </mat-cell>
+                  <mat-cell *matCellDef="let report">
+                    <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'kubehunter', report.id]" >
+                      {{report.date | date: 'M/dd/yyyy' }}
+                    </a>
+                  </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="time">
                   <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>\
-                  <mat-cell *matCellDef="let report"> {{report.date | date: 'mediumTime'}} </mat-cell>
+                  <mat-cell *matCellDef="let report">
+                    <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'kubehunter', report.id]" >
+                      {{report.date | date: 'mediumTime'}}
+                    </a>
+                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="numVulnerabilities">
                   <mat-header-cell *matHeaderCellDef> Number of Vulnerabilities </mat-header-cell>
-                  <mat-cell *matCellDef="let report"> {{report.vulnerabilities.value.value?.length}} </mat-cell>
+                  <mat-cell *matCellDef="let report">
+                    <a class="redirectATag" [routerLink]="['/private', 'clusters', this.clusterId, 'kubehunter', report.id]" >
+                      {{report.vulnerabilities.value.value?.length}}
+                    </a>
+                  </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toReportDetails(row)"  [ngStyle]="{'cursor': 'pointer'}"
