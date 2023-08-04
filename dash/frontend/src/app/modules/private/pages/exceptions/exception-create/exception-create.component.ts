@@ -225,7 +225,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
             this.exceptionForm.controls.policies.setValue(params.policyIds);
             this.exceptionForm.controls.namespaces.setValue(namespacesMappedWithClusterId);
             this.exceptionForm.controls.status.setValue('review');
-            this.exceptionForm.controls.imageMatch.setValue(`params.imageName`);
+            this.exceptionForm.controls.imageMatch.setValue(params.imageName);
             this.exceptionForm.controls.title.setValue(`Requesting Exception for ${params.cve} in ${params.imageName} of ${namespaces.join(',')}`);
           }
         }
