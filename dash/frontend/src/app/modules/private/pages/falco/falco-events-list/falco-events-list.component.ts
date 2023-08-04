@@ -1,24 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {FalcoLogOptions, FalcoService} from '../../../../../core/services/falco.service';
-import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 import {IFalcoLog} from '../../../../../core/entities/IFalcoLog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-
 import {FormBuilder, FormGroup, } from '@angular/forms';
-
 import {EnumService} from '../../../../../core/services/enum.service';
 import {format} from 'date-fns';
 import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-
 import {CsvService} from '../../../../../core/services/csv.service';
-
 import {FalcoDialogComponent} from '../falco-dialog/falco-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {UtilService} from '../../../../../core/services/util.service';
 import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json-data-dialog.component';
 
 
@@ -28,7 +22,6 @@ import {FalcoJsonDataDialogComponent} from '../falco-json-data-dialog/falco-json
   styleUrls: ['./falco-events-list.component.scss']
 })
 export class FalcoEventsListComponent implements OnInit {
-  displayedColumns = ['calendarDate', 'namespace', 'pod', 'image', 'priority', 'message'];
   clusterId: number;
   dialogRef: MatDialogRef<FalcoJsonDataDialogComponent>;
 
@@ -57,7 +50,6 @@ export class FalcoEventsListComponent implements OnInit {
     private router: Router,
     private jwtAuthService: JwtAuthService,
     private alertService: AlertService,
-    private utilService: UtilService,
   ) {}
 
   ngOnInit() {
@@ -73,12 +65,12 @@ export class FalcoEventsListComponent implements OnInit {
 
     this.route.parent.parent.params
       .pipe(take(1))
-      .subscribe(param => {
-        this.clusterId = param.id;
-        this.getEvents(); // load logs
-      });
+      .subscribe({
+        next: param => {
+          this.clusterId = param.id;
+          this.getEvents(); // load logs
+        }});
     this.getUserAuthority();
-
   }
 
   getEvents() {
@@ -117,16 +109,18 @@ export class FalcoEventsListComponent implements OnInit {
     // should only download filtered logs
     this.falcoService.downloadFalcoExport(this.clusterId, this.falcoLogFilters)
       .pipe(take(1))
-      .subscribe(
-        (response) => {
+      .subscribe({
+        next: (response) => {
           this.csvService.downloadCsvFile(response.data.csv, response.data.filename);
-        }, (error) => {
+        },
+        error: (error) => {
           this.loaderService.stop('csv-download');
           this.alertService.danger(`Error downloading report: ${error.error.message}`);
-        }, () => {
+        },
+        complete: () => {
           this.loaderService.stop('csv-download');
         }
-      );
+      });
     }
 
   rebuildWithFilters(){
@@ -163,12 +157,13 @@ export class FalcoEventsListComponent implements OnInit {
 
     dialog.afterClosed()
       .pipe(take(1))
-      .subscribe((data?: { dontRefresh?: boolean }) => {
-        // If closed after navigating away, dontRefresh should be true.
-        // If closing by clicking off the modal data will be undefined
-        if (!data?.dontRefresh) {
-          this.getEvents();
-        }
-      });
+      .subscribe({
+        next: (data?: { dontRefresh?: boolean }) => {
+          // If closed after navigating away, dontRefresh should be true.
+          // If closing by clicking off the modal data will be undefined
+          if (!data?.dontRefresh) {
+            this.getEvents();
+          }
+        }});
   }
 }

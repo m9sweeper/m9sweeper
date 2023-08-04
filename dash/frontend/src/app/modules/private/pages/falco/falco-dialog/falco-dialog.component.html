@@ -16,7 +16,14 @@
       <div class="padding-top-15">Run Falco using the following CLI command:</div>
     </div>
     <div id="textareaWrapper">
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet" id="falcoInstallCommand" readonly>helm repo add falcosecurity https://falcosecurity.github.io/charts && \
+          <textarea
+            matInput
+            [cdkTextareaAutosize]="true"
+            #run
+            class="code-snippet my-0"
+            id="falcoInstallCommand"
+            readonly
+          >helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
 helm upgrade --install falco falcosecurity/falco \
   --wait --version 2.5.5 \
@@ -33,7 +40,7 @@ helm upgrade --install falco falcosecurity/falco \
   --set-string falcosidekick.config.webhook.minimumpriority='{{level.toLowerCase()}}'
           </textarea>
     </div>
-    <div class="modal-content-left-align-no-margin">
+    <div class="modal-content-left-align-no-margin row start-sm between-xs pt-xs-2">
       <button mat-raised-button matDialogClose color="primary" class="me-xs-2 mb-xs-2 mb-md-0">Done</button>
       <app-copy-to-clipboard-button
         successMessage="Command copied to clipboard!"

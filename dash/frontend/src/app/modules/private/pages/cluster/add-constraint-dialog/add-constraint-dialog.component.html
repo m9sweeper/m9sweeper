@@ -1,9 +1,18 @@
 <mat-toolbar color="primary">
-  <h3>Add Constraint Templates</h3>
+  <button mat-icon-button *ngIf="isHandsetOrXS" (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h3>Constraint Templates</h3>
 </mat-toolbar>
 <mat-dialog-content class="modal-container-margin no-padding">
-  <mat-sidenav-container class="example-container" autosize>
-    <mat-sidenav #sidenav class="sidenav" mode="side" opened="true">
+  <mat-drawer-container class="example-container" autosize>
+    <mat-drawer
+      #sidenav
+      class="sidenav"
+      [attr.role]="isHandsetOrXS ? 'dialog' : 'navigation'"
+      [mode]="isHandsetOrXS ? 'over' : 'side'"
+      [opened]="(isHandsetOrXS === false) || sidenavExpanded"
+    >
       <div *ngFor="let dir of topDirs">
         <mat-expansion-panel class="no-padding no-box-shadow">
           <mat-expansion-panel-header>
@@ -22,19 +31,21 @@
             </div>
         </mat-expansion-panel>
       </div>
-    </mat-sidenav>
+    </mat-drawer>
 
-    <mat-sidenav-content>
+    <mat-drawer-content>
       <div class="mat-row check-item-list height-30">
         <div class="sidenav-content"
              [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
              *ngIf="currentlySelectedTemplates.length">
           <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates">
-            <div class="col-md-1">
+            <div class="col-xs-2 col-md-1">
               <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
             </div>
-            <div class="col-md-11 ps-xs-0">
+            <div class="col-xs-10 col-md-11 ps-xs-0">
               <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
+            </div>
+            <div class="col-xs-12 col-md-11 col-md-offset-1 ps-md-0">
               <div id="category-text" class="mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
               <strong>Description: </strong>
               <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
@@ -46,8 +57,8 @@
           </div>
         </div>
       </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    </mat-drawer-content>
+  </mat-drawer-container>
 </mat-dialog-content>
 <mat-dialog-actions class="mat-row action-btn">
   <div class="margin-right-10">

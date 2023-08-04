@@ -1,54 +1,10 @@
-.page-table {
-  height: unset;
-}
-
-#images-buttons {
-  align-items: center;
-}
-
-.scan-images-button {
+#advancedSearchButton {
   height: 40px;
   width: 80%;
 }
-.scan-displayed-images-button {
+#scanDisplayedButton {
   height: 40px;
-  width: 105%;
-}
-.mr-10px {
-  margin-right: 10px;
-}
-.plus-button {
-  padding-bottom: 0;
-}
-.search-scan-col {
-  justify-content: flex-end;
-}
-
-.search-image {
-  //margin-top: -18px;
-}
-
-@media all and (max-width: 765px) {
-  .flex-display {
-    display: flex;
-    flex-direction: column;
-    button {
-      display: inline-block;
-      white-space: nowrap;
-      text-decoration: none;
-      vertical-align: baseline;
-      text-align: center;
-      margin: 0;
-      min-width: 64px;
-      line-height: 36px;
-    }
-    .scan-images-button {
-      margin-top: -32px;
-    }
-    .scan-displayed-images-button {
-      margin-top: -12px;
-    }
-  }
+  width: 100%;
 }
 
 ::ng-deep
@@ -58,35 +14,29 @@
   background-color: transparent !important;
 }
 
-// table column specifics
-.mat-column-name {
-  min-width: 400px;
-}
+#imagesTable {
+  .mat-column-name {
+    min-width: 400px;
+  }
 
-.mat-column-date {
-  //width: 150px;
-  min-width: 140px;
-  max-width: 200px;
-}
+  .mat-column-date {
+    min-width: 140px;
+    max-width: 200px;
+  }
 
-.mat-column-runningCluster {
-  //width: 120px;
-  min-width: 120px;
-  max-width: 120px;
-  //justify-content: center;
-}
+  .mat-column-runningCluster {
+    min-width: 120px;
+    max-width: 120px;
+  }
 
-.mat-column-scanResult {
-  //width: 100px;
-  min-width: 110px;
-  max-width: 135px;
-  //justify-content: center;
-}
+  .mat-column-scanResult {
+    min-width: 110px;
+    max-width: 135px;
+  }
 
-.mat-column-Crt,  .mat-column-Maj,  .mat-column-Med,  .mat-column-Min,  .mat-column-Neg {
-  min-width: 50px;
-  max-width: 100px;
-  //width: 50px;
-  //max-width: 50px;
-  justify-content: center;
+  .mat-column-Crt, .mat-column-Maj, .mat-column-Med, .mat-column-Min, .mat-column-Neg {
+    min-width: 50px;
+    max-width: 100px;
+    justify-content: center;
+  }
 }

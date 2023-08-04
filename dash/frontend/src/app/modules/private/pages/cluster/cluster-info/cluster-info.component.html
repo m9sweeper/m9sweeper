@@ -1,6 +1,8 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'cluster-info-sub-navigation page-title-button-group-spacing'">
+    <div [ngClass]="isMobileDevice ?
+     'sub-navigation-in-small-device' :
+      'cluster-info-sub-navigation page-title-button-group-spacing align-items-center'">
       <div class="page-title-div">
         <div class="page-title">
           Cluster Info
@@ -8,21 +10,33 @@
       </div>
       <div class="cluster-info-button-item" *ngIf="isAdmin">
 
-        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterWizard()">
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                mat-raised-button
+                mat-button
+                class="me-xs-2 mb-xs-2"
+                color="primary"
+                (click) = "openClusterWizard()">
           <mat-icon>build</mat-icon>
           Update Kubeconfig
         </button>
-        &nbsp;
-        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click) = "openClusterDialog(cluster)">
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                mat-raised-button
+                mat-button
+                class="me-xs-2 mb-xs-2"
+                color="primary"
+                (click) = "openClusterDialog(cluster)">
           <mat-icon>create</mat-icon>
           Edit
         </button>
-        &nbsp;
-        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="warn" (click)="alertDeleteCluster(cluster.id, cluster.groupId)">
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                mat-raised-button
+                mat-button
+                class="mb-xs-2"
+                color="warn"
+                (click)="alertDeleteCluster(cluster.id, cluster.groupId)">
           <mat-icon>delete</mat-icon>
           Delete
         </button>
-
       </div>
     </div>
     <div class="page-card">
@@ -42,8 +56,8 @@
             <p>Tags: </p><mat-chip-row *ngFor="let tag of cluster['tags']; index as i " [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{tag.name}}</mat-chip-row>
           </mat-chip-listbox>
 
-          <h3 style="margin-top:20px;">Webhook Enforcement: </h3>
-          <p style=""><i>Block noncompliant applications from deploying</i></p>
+          <h3 class="mt-xs-3">Webhook Enforcement: </h3>
+          <p><i>Block noncompliant applications from deploying</i></p>
           <div class="row toggle-row">
             <mat-slide-toggle #matSlideToggle
                               [checked]="isEnforcementEnabled"
@@ -58,8 +72,8 @@
             ></mat-spinner>
           </div>
 
-          <h3 style="margin-top:20px;">Image Scanning Enforcement: </h3>
-          <p style="line-height:0.2"><i>Fail build pipelines if image is non-compliant</i></p>
+          <h3 class="mt-xs-3">Image Scanning Enforcement: </h3>
+          <p><i>Fail build pipelines if image is non-compliant</i></p>
           <div class="row toggle-row">
             <mat-slide-toggle #matSlideToggleForImageScanning
                               [checked]="isImageScanningEnforcementEnabled"
@@ -77,6 +91,5 @@
         </mat-card-content>
       </mat-card>
     </div>
-
   </div>
 </div>
