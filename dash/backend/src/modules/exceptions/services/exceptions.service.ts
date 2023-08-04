@@ -183,12 +183,11 @@ async getAllActiveExceptions(): Promise<ExceptionDto[]> {
 }
 
 async getAllFilteredPolicyExceptions(clusterId: number, policyIds: number[],
-    namespace: string, imageName: string): Promise<ExceptionQueryDto[]> {
-    return await this.exceptionsDao.getAllFilteredPolicyExceptions(clusterId, policyIds, namespace, imageName);
+    namespace: string): Promise<ExceptionQueryDto[]> {
+    return await this.exceptionsDao.getAllFilteredPolicyExceptions(clusterId, policyIds, namespace);
 }
-async getAllFilteredOverrideExceptions(clusterId: number, policyIds: number[],
-                                      imageName: string): Promise<ExceptionQueryDto[]> {
-    return await this.exceptionsDao.getAllFilteredOverrideExceptions(clusterId, policyIds, imageName);
+async getAllFilteredOverrideExceptions(clusterId: number, policyIds: number[]): Promise<ExceptionQueryDto[]> {
+    return await this.exceptionsDao.getAllFilteredOverrideExceptions(clusterId, policyIds);
 }
 async getAllCommonExceptions(): Promise<ExceptionDto[]> {
     return await this.exceptionsDao.getAllCommonExceptions();
@@ -277,38 +276,28 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
   }
 
   filterExceptionsByImageName(imageName: string, exceptions: ExceptionQueryDto[]) : ExceptionQueryDto[] {
-    if (!!exceptions === false) {
+    if (!exceptions?.length) {
       return [];
     }
 
     return exceptions.filter(exception => {
-      if (!!exception.imageMatch === false) {
-        exception.imageMatch = '%';
-      }
-
-      let imageMatch = exception.imageMatch.toLowerCase();
-
-      if (imageMatch.trim() === "%") {
+      if (!exception.imageMatch) {
         return true;
       }
 
-      imageName = imageName.toLowerCase();
-
-      if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-        imageMatch = imageMatch.substring(1, imageMatch.length - 1);
-
-        return imageName.indexOf(imageMatch) !== -1;
+      // Backwards compatibility from one this was postgres regexp
+      // Postgres % matches anything, .* matches anything in js regex
+      const backCompat = exception.imageMatch.replace(/%/g, '(.*)');
+      let regex: RegExp;
+      try {
+        regex = new RegExp(backCompat);
+      } catch(e) {
+        // Assuming that invalid regular expressions are legacy exceptions, and treating them as
+        // having global image match
+        return true;
       }
 
-      if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-        return imageName.endsWith(imageMatch);
-      }
-
-      if (imageMatch.startsWith("%") === false && imageMatch.endsWith("%") === true) {
-        return imageName.startsWith(imageMatch);
-      }
-
-      return true;
+      return regex.test(imageName);
     })
   }
 }

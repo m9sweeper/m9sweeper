@@ -77,7 +77,7 @@ export class ClusterValidationService {
 
             if (image.isNew) {
                 // Gets the exceptions for the cluster & namespace that are not policy specific
-                const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId, undefined, namespace, undefined);
+                const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId, undefined, namespace);
                 // Filter exceptions to only include ones that have a matching image name match, and are not for a specific scanner or CVE
                 const relevantExceptions = this.exceptionService.filterExceptionsByImageName(imageName, exceptions)
                   .filter(ex => !ex.issueIdentifier && !ex.scannerId);

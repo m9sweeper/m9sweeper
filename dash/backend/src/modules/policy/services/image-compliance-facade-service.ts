@@ -32,9 +32,9 @@ export class ImageComplianceFacadeService {
 
         const policyIdSet = new Set(results.map(result => result.policyId));
         const policyIds = Array.from(policyIdSet.keys());
-        await this.applyOverrideSeverity(clusterId, policyIds, imageData.name,results);
+        await this.applyOverrideSeverity(clusterId, policyIds, results);
         const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
-         policyIds, undefined, imageData.name);
+         policyIds, undefined);
 
         // The compliance map will get mutated by
         const complianceMap = new ComplianceResultMap();
@@ -54,10 +54,9 @@ export class ImageComplianceFacadeService {
     public async applyOverrideSeverity(
         clusterId: number,
         policyId: number [],
-        imageName: string,
         results: ImageScanResultPerPolicyFacadeDto[]
     ){
-        const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId, imageName);
+        const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId);
         for(const result of results){
             for(const issue of result.issues){
                 const override = exceptionsOverride?.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
@@ -86,7 +85,7 @@ export class ImageComplianceFacadeService {
 
         const policyIdSet = new Set(results.map(result => result.policyId));
         const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
-            Array.from(policyIdSet.keys()), namespaceName, imageData.name);
+            Array.from(policyIdSet.keys()), namespaceName);
 
         const complianceMap = new ComplianceResultMap();
 
