@@ -1,44 +1,40 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing">
-      <div class="page-title">GateKeeper</div>
-    </div>
+    <app-sub-navigation title="Gatekeeper"></app-sub-navigation>
 
-    <div class="page-card-left-align">
-      <div class="row align-items-stretch">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-5 margin-y-5">
-          <mat-card appearance="outlined" class="h-100">
-            <mat-card-header>
-              <div class="page-card-title">Status:</div>
-            </mat-card-header>
-            <mat-card-content>
-              <h2 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h2>
-              <h2 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h2>
-              <h2 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h2>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 margin-y-5">
-          <mat-card appearance="outlined" class="h-100">
-            <mat-card-header>
-              <div class="page-card-title">Recommendation:</div>
-            </mat-card-header>
-            <mat-card-content>
+    <div class="row mb-xs-2">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-xs-1">
+        <mat-card class="h-100">
+          <mat-card-header>
+            <div class="page-card-title">Status:</div>
+          </mat-card-header>
+          <mat-card-content>
+            <h2 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h2>
+            <h2 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h2>
+            <h2 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h2>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 my-xs-1">
+        <mat-card class="h-100">
+          <mat-card-header>
+            <div class="page-card-title">Recommendation:</div>
+          </mat-card-header>
+          <mat-card-content>
             <div class="row">
 
               <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-                  <p *ngIf="gatekeeperConstraintTemplates === null; else recommendationText">
-                    We recommend installing Gatekeeper to manage policies in your Kubernetes cluster.
+                <p *ngIf="gatekeeperConstraintTemplates === null; else recommendationText">
+                  We recommend installing Gatekeeper to manage policies in your Kubernetes cluster.
+                </p>
+                <ng-template #recommendationText>
+                  <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
+                    Gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
                   </p>
-                  <ng-template #recommendationText>
-                    <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
-                      Gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
-                    </p>
-                    <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
-                      Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
-                    </p>
-                  </ng-template>
+                  <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
+                    Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
+                  </p>
+                </ng-template>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
@@ -54,18 +50,27 @@
                 </div>
               </div>
             </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     </div>
-    <br>
-    <div class="page-card">
-      <mat-card appearance="outlined">
-        <mat-card-header >
-          <div class=" col-sm-3 no-padding">
-            <div class="page-card-title">
-              Constraint Templates
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-card class="scrollable-table-card">
+          <mat-card-header class="row">
+            <div class="col-xs-12 col-sm-3">
+              <div class="page-card-title">
+                Constraint Templates
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-9 start-xs end-sm">
+              <button mat-raised-button color="primary"
+                      [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                      [disabled]="!gatekeeperStatusLoaded || !gatekeeperInstallationStatus.status"
+                      (click)="openAddConstraintDialog()">
+                <mat-icon>add</mat-icon>
+                Add More
+              </button>
             </div>
           </div>
           <div class="col-sm-9 page-card-title-button-group-right-align">
@@ -125,6 +130,7 @@
          </mat-table>
        </mat-card-content>
       </mat-card>
+
     </div>
   </div>
 </div>

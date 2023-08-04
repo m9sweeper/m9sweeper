@@ -1,20 +1,29 @@
 <div class="page-container">
   <div class="page-container-content">
-    <mat-card class="image-scan-list" *ngIf="dataSource">
-      <div class="row header-row">
+    <mat-card id="scanInformation" class="mb-xs-3 pt-xs-3" *ngIf="dataSource">
+      <div class="row header-row m-xs-0">
         <div class="col-lg-9 col-xs-12">
           <span id="image-name" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
         </div>
-        <div class="col-lg-2 col-lg-offset-1 col-xs-12">
-          <div class="mr-15px">
+        <div class="col-lg-2 col-lg-offset-1 justify-content-lg-end col-xs-12 justify-content-xs-start">
+          <div class="me-lg-3 me-xs-0">
             <mat-spinner *ngIf="displayImageScanSpinner$ | async" [diameter]="30"></mat-spinner>
           </div>
-          <a color="primary" *ngIf="dataSource || !dataSource" mat-raised-button [disabled]="displayImageScanSpinner$ | async" (click)="scanImage()">{{ scanButtonText }}</a>
+          <button type="button" color="primary" mat-raised-button
+             class=""
+             *ngIf="dataSource || !dataSource"
+             [disabled]="displayImageScanSpinner$ | async"
+             (click)="scanImage()">{{ scanButtonText }}</button>
         </div>
       </div>
-      <div class="row header-row image-id-row">
+      <div class="row header-row m-xs-0">
         <div class="col-xs-12">
           <span [matTooltip]="dataSource.dockerImageId"
+                matTooltipClass="image-id-tooltip"
+                style="overflow:hidden; text-overflow:ellipsis"
+          >Image ID: {{dataSource.dockerImageId}}</span>
+
+          <span style="display: none" [matTooltip]="dataSource.dockerImageId"
                 matTooltipClass="image-id-tooltip"
           >Image ID: {{dataSource.dockerImageId.length > 15 ?
             dataSource.dockerImageId.substring(0, 15) + '...' : dataSource.dockerImageId}}</span>
@@ -64,12 +73,12 @@
         </div>
       </div>
     </mat-card>
-    <mat-card class="scanner-error" *ngIf="lastScanReport?.encounterError">
+    <mat-card id="scannerError" class="mb-xs-3 pt-xs-3" *ngIf="lastScanReport?.encounterError">
       <h3 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h3>
       <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
     </mat-card>
-    <mat-card class="image-scan-result-list scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
-      <div class="row header-row">
+    <mat-card id="scannerComplianceList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+      <div class="row header-row m-xs-0">
         <div class="col-xs-12 col-sm-9 col-lg-10" id="compliance-report-title">
           <span matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         </div>
@@ -128,29 +137,29 @@
         (page)="scannerPageEvent($event)"
         showFirstLastButtons #compliancePaginator></mat-paginator>
     </mat-card>
-    <mat-card class="issues-list scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
-      <div class="row header-row">
-        <div class="col-xs-9 col-sm-3" id="issues-title">
-          <span matTooltip="Scanner Compliance Report">Issues</span>
+    <mat-card id="issuesList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+      <div class="row header-row m-xs-0">
+        <div class="col-xs-9 col-sm-3" id="issuesTitle">
+          Issues
         </div>
-        <div class="col-xs-3 col-sm-9" id="issues-buttons">
+        <div class="col-xs-3 col-sm-9" id="issuesButtons">
           <button mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
         </div>
       </div>
       <div class="table-wrapper">
-        <mat-table [dataSource]="imageScanResultIssueData" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
+        <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
-            <mat-cell *matCellDef="let issue"> {{issue.scannerName}} </mat-cell>
+            <mat-cell *matCellDef="let issue" [matTooltip]="issue.scannerName"> {{issue.scannerName}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
-            <mat-header-cell *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</mat-header-cell>
+            <mat-header-cell class="ps-xs-0" *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</mat-header-cell>
             <mat-cell *matCellDef="let issue">
               <div class="row">
                 <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="issue.isCompliant" class="pad-right-5">
                 </mat-checkbox>
-                <div >
-                  <mat-icon style="margin-top: 8px" *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
+                <div>
+                  <mat-icon *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
                 </div>
               </div>
             </mat-cell>

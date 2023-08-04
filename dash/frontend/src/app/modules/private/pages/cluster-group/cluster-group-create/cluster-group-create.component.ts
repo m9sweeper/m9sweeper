@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { AlertService } from '@full-fledged/alerts';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { ClusterGroupService } from '../../../../../core/services/cluster-group.service';
 import { CustomValidators } from '../../../form-validator/custom-validators';

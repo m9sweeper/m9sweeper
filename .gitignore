@@ -4,3 +4,4 @@
 dash/backend/.env*
 !backend/.env.sample
 docker-compose/.env
+docker-compose.*.yml

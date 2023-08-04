@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, of} from 'rxjs';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from '../services/alert.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import { IServerResponse } from '../entities/IServerResponse';

@@ -20,6 +20,7 @@ export class SideNavComponent implements AfterViewInit {
   @Input() contentTriggerButtons: IMenuContentTrigger[] = [];
   @Input() toggleSidenavObservable: Observable<void>;
   @Input() showOrgSettingsButton = true;
+  @Input() showClusterListButton = true;
   @Output() contentTriggerButtonClicked = new EventEmitter<string>();
 
   @ViewChild(MatSidenav) sidenav: MatSidenav;

@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {KubeHunterService} from '../../../../../core/services/kube-hunter.service';
-import {AlertService} from '@full-fledged/alerts';
+import {AlertService} from 'src/app/core/services/alert.service';
 import {IKubeHunterReport} from '../../../../../core/entities/IKubeHunterReport';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
@@ -75,15 +75,15 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
           if (res.list[0] != null){
             this.daysPassed = Math.floor((Date.now() - res.list[0].createdAt) / (1000 * 60 * 60 * 24));
             if (this.daysPassed >= 90) {
-              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you ran Kube Hunter. You should run it again soon.';
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you ran kube-hunter. You should run it again soon.';
               this.penetrationTestStatusInvalid = true;
               this.penetrationTestText = 'Report Outdated';
             } else if (this.daysPassed >= 10) {
-              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter.';
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran kube-hunter.';
               this.penetrationTestStatusInvalid = true;
               this.penetrationTestText = 'Report Outdated';
             } else {
-              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran Kube Hunter.';
+              this.ourAdvice = 'It has been ' + this.daysPassed + ' days since you last ran kube-hunter.';
               this.penetrationTestStatusInvalid = false;
               this.penetrationTestText = 'Report Valid';
             }
@@ -102,7 +102,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
         }
       }, (e) => {
         if (e.status === 404) {
-          this.ourAdvice = 'Run Kube Hunter to find vulnerabilities within your cluster.';
+          this.ourAdvice = 'Run kube-hunter to find vulnerabilities within your cluster.';
           this.penetrationTestText = 'Unknown';
         }
       },
