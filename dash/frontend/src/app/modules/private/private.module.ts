@@ -41,8 +41,6 @@ import { PolicyListComponent } from './pages/policies/policy-list/policy-list.co
 import { PolicyCreateComponent } from './pages/policies/policy-create/policy-create.component';
 import { ScannerCreateComponent } from './pages/scanners/scanner-create/scanner-create.component';
 import { ScannerListComponent } from './pages/scanners/scanner-list/scanner-list.component';
-import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
-import { CreateAppSettingsComponent } from './pages/app-settings/create-app-settings/create-app-settings.component';
 import { SubNavigationComponent } from '../shared/subnavigation/sub-navigation.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { ExternalAuthConfigurationListComponent } from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
@@ -153,8 +151,6 @@ import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     PolicyCreateComponent,
     ScannerCreateComponent,
     ScannerListComponent,
-    AppSettingsComponent,
-    CreateAppSettingsComponent,
     SubNavigationComponent,
     ChangePasswordComponent,
     ExternalAuthConfigurationListComponent,

@@ -33,12 +33,6 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
   buildMenu() {
     this.menuItems = [
       {
-        name: 'Organization',
-        path: ['/private', 'settings'],
-        icon: 'settings',
-        allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
-      },
-      {
         name: 'Users',
         path: ['/private', 'users'],
         icon: 'folder_shared',
