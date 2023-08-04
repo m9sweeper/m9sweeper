@@ -76,7 +76,7 @@
 
       <div class="row">
         <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-half-rem">
-          <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
+          <button [disabled]="true" mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
         </div>
         <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
           <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" style="float: right"
@@ -114,7 +114,7 @@
           M9sweeper requires having a service account running in the cluster.
           Click the button below, and we'll walk you through the necessary steps.
         </p>
-        <div class="row">
+        <div class="row ms-xs-0">
           <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" (click)="installServiceAccount()">
             Install Service Account
           </button>
@@ -176,10 +176,10 @@
     <div class="modal-content-left-align-no-margin">
       <h3>Done!</h3>
       <div class="row">
-        <span class="col-xs-12 col-md-8">
+        <span class="col-xs-12 col-md-8 mb-xs-2">
           Your cluster is set up and being scanned now!
         </span>
-        <span [style]="displayWebhookText()" class="col-xs-12 col-md-4 text-align-right">
+        <span [style]="displayWebhookText()" class="col-xs-12 col-md-4 text-align-right mb-xs-3">
           <app-copy-to-clipboard-button
             [text]="defaultWebhookTextArea.value"
             successMessage="Command copied to clipboard!"
