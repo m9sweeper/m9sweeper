@@ -19,6 +19,7 @@ import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKe
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
 import {take, takeUntil} from 'rxjs/operators';
+import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
 
 @Component({
   selector: 'exception-create',
@@ -74,6 +75,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     private clusterService: ClusterService,
     private namespaceService: NamespaceService,
     private datePipe: DatePipe,
+    protected customValidatorService: CustomValidatorService,
     private gateKeeperService: GateKeeperService) {
 
     const getCurrentUrl = this.router.url;
@@ -100,7 +102,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       clusters: [''],
       namespaces: [''],
       type: [''],
-      imageMatch: ['%', Validators.nullValidator],
+      imageMatch: ['', [this.customValidatorService.regex]],
       altSeverity: ['', [Validators.required]]
     },
       {
@@ -223,7 +225,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
             this.exceptionForm.controls.policies.setValue(params.policyIds);
             this.exceptionForm.controls.namespaces.setValue(namespacesMappedWithClusterId);
             this.exceptionForm.controls.status.setValue('review');
-            this.exceptionForm.controls.imageMatch.setValue(`%${params.imageName}%`);
+            this.exceptionForm.controls.imageMatch.setValue(`params.imageName`);
             this.exceptionForm.controls.title.setValue(`Requesting Exception for ${params.cve} in ${params.imageName} of ${namespaces.join(',')}`);
           }
         }
@@ -243,7 +245,9 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     this.exceptionForm.controls.startDate.setValidators(CustomValidators.checkForCurrentDate(true, this.origException.startDate));
     this.exceptionForm.controls.endDate.reset(this.origException.endDate);
     this.exceptionForm.controls.type.setValue(this.origException.type);
-    this.exceptionForm.controls.imageMatch.setValue(this.origException.imageMatch);
+    // Will help passively clean up legacy exceptions as exceptions are edited
+    const matchValue = this.origException.imageMatch === '%' ? '' : this.origException.imageMatch;
+    this.exceptionForm.controls.imageMatch.setValue(matchValue);
 
     this.origSelectedPolicies = this.origException.policies.map(p => p.id.toString());
     this.exceptionForm.controls.policies.setValue(this.origSelectedPolicies);
