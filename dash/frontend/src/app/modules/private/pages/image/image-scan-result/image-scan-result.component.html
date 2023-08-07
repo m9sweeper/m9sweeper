@@ -107,23 +107,23 @@
             <mat-cell *matCellDef="let result"> {{result.policyRequirement ? 'Yes' : 'No' }} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="critical_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.CRITICAL |titlecase">{{CVETypeAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.CRITICAL">{{VulnerabilitySeverityAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.criticalIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="major_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.MAJOR |titlecase">{{CVETypeAbbreviations.MAJOR |titlecase }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.MAJOR">{{VulnerabilitySeverityAbbreviations.MAJOR |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.majorIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="medium_issues" >
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.MEDIUM |titlecase">{{CVETypeAbbreviations.MEDIUM |titlecase }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.MEDIUM">{{VulnerabilitySeverityAbbreviations.MEDIUM |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.mediumIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="low_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.LOW |titlecase">{{CVETypeAbbreviations.LOW |titlecase }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.LOW">{{VulnerabilitySeverityAbbreviations.LOW |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result" > {{result.lowIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="negligible_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.NEGLIGIBLE |titlecase">{{CVETypeAbbreviations.NEGLIGIBLE |titlecase }}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.NEGLIGIBLE">{{VulnerabilitySeverityAbbreviations.NEGLIGIBLE |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -18,7 +18,7 @@ import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dial
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
-import {CVETypeAbbreviations, CVETypes} from '../../../../../core/enum/CVETypes';
+import {VulnerabilitySeverity, VulnerabilitySeverityAbbreviations} from '../../../../../core/enum/VulnerabilitySeverity';
 
 
 @Component({
@@ -85,6 +85,9 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
 
   lastScanReport: IImageScanData;
   private unsubscribe$ = new Subject<void>();
+
+  protected readonly VulnerabilitySeverityAbbreviations = VulnerabilitySeverityAbbreviations;
+  protected readonly VulnerabilitySeverity = VulnerabilitySeverity;
 
   constructor(
     private titleService: Title,
@@ -350,7 +353,4 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
-
-  protected readonly CVETypeAbbreviations = CVETypeAbbreviations;
-  protected readonly CVETypes = CVETypes;
 }

@@ -11,7 +11,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {IRunningVulnerabilities} from '../../../../../core/entities/IRunningVulnerabilitiesPreview';
 import {format} from 'date-fns';
 import {MatPaginator} from '@angular/material/paginator';
-import {CVETypeAbbreviations} from '../../../../../core/enum/CVETypes';
+import {VulnerabilitySeverityAbbreviations} from '../../../../../core/enum/VulnerabilitySeverity';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class RunningVulnerabilitiesComponent implements OnInit, AfterViewInit {
   filterForm: FormGroup;
   clusterNamespaces: Array<string>;
   previousRequest: {namespaces, isCompliant};
-  CVETypeAbbreviations = CVETypeAbbreviations;
+  protected readonly VulnerabilitySeverityAbbreviations = VulnerabilitySeverityAbbreviations;
 
   constructor(
     private reportsService: ReportsService,

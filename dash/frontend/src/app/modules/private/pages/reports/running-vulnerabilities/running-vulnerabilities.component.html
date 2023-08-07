@@ -104,43 +104,43 @@
                 <mat-cell class="min-width-4" *matCellDef="let vulnerability">{{vulnerability.lastScanned | date: 'M/d/yyyy'}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalCritical" class="column-word-break">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalCritical}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalMajor">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.MAJOR |titlecase }}</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.MAJOR |titlecase }}</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalMajor}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalMedium">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.MEDIUM |titlecase }}</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.MEDIUM |titlecase }}</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalMedium}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalLow">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.LOW |titlecase }}</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.LOW |titlecase }}</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalLow}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalNegligible">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.NEGLIGIBLE |titlecase }}</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.NEGLIGIBLE |titlecase }}</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalNegligible}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableCritical" class="column-word-break">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.CRITICAL |titlecase }} Fixable</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.CRITICAL |titlecase }} Fixable</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableCritical}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableMajor">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.MAJOR |titlecase }} Fixable</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.MAJOR |titlecase }} Fixable</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableMajor}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableMedium">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.MEDIUM |titlecase }} Fixable</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.MEDIUM |titlecase }} Fixable</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableMedium}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableLow">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.LOW |titlecase }} Fixable</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.LOW |titlecase }} Fixable</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableLow}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="totalFixableNegligible">
-                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ CVETypeAbbreviations.NEGLIGIBLE |titlecase }} Fixable</mat-header-cell>
+                <mat-header-cell class="min-width-3" *matHeaderCellDef>{{ VulnerabilitySeverityAbbreviations.NEGLIGIBLE |titlecase }} Fixable</mat-header-cell>
                 <mat-cell class="min-width-3" *matCellDef="let vulnerability">{{vulnerability.totalFixableNegligible}}</mat-cell>
               </ng-container>
 
