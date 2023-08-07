@@ -9,7 +9,7 @@
     </div>
     <mat-card class="mb-xs-3 scrollable-table-card">
       <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
             <mat-cell *matCellDef="let namespace">

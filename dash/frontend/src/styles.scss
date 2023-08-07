@@ -331,6 +331,26 @@ app-private {
   }
 }
 
+.table-with-link-rows {
+  mat-cell {
+    padding: 0 !important;
+
+    &:first-of-type {
+      padding-left: 8px !important;
+    }
+
+    a {
+      padding: 0 16px;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      display: flex;
+      text-decoration: unset;
+      color: unset;
+    }
+  }
+}
+
 .page-card {
   margin: 0;
   overflow-x: auto;

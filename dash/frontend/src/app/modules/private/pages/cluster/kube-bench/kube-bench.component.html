@@ -78,46 +78,56 @@
             </div>
 
             <div class="table-wrapper">
-              <mat-table [dataSource]="datasource">
+              <mat-table class="table-with-link-rows" [dataSource]="datasource">
                 <ng-container matColumnDef="date">
                   <mat-header-cell *matHeaderCellDef>Date Audit Ran</mat-header-cell>
                   <mat-cell *matCellDef="let index">
-                    {{unixToDate(index.createdAt)}}
+                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
+                      {{unixToDate(index.createdAt)}}
+                    </a>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="total pass">
                   <mat-header-cell *matHeaderCellDef>Total Pass</mat-header-cell>
                   <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_pass}}
+                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
+                      {{index.resultsSummary.total_pass}}
+                    </a>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="total fail">
                   <mat-header-cell *matHeaderCellDef>Total Fail</mat-header-cell>
                   <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_fail}}
+                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
+                      {{index.resultsSummary.total_fail}}
+                    </a>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="total warnings">
                   <mat-header-cell *matHeaderCellDef>Total Warnings</mat-header-cell>
                   <mat-cell *matCellDef="let index">
-                    {{index.resultsSummary.total_warn}}
+                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
+                      {{index.resultsSummary.total_warn}}
+                    </a>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="delete">
                   <mat-header-cell [hidden]="!isSuperAdmin" *matHeaderCellDef></mat-header-cell>
                   <mat-cell [hidden]="!isSuperAdmin" *matCellDef="let index" (click)="$event.stopPropagation()">
-                    <div id="deleteButton">
-                      <button mat-raised-button style="background-color: maroon; color: white" (click)="deleteReport(index.id)">Delete Report</button>
-                    </div>
+                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
+                      <div id="deleteButton">
+                        <button mat-raised-button style="background-color: maroon; color: white" (click)="deleteReport(index.id)">Delete Report</button>
+                      </div>
+                    </a>
                   </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row class="bench-audit-row pointer" *matRowDef="let row; columns: displayedColumns" (click)="toReportDetails(row.id)"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
               </mat-table>
             </div>
 

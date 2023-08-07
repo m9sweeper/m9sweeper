@@ -73,10 +73,6 @@ export class GateKeeperComponent implements OnInit {
     });
   }
 
-  viewTemplateDetails(template: IGatekeeperTemplate) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'gatekeeper', template.metadata.name]);
-  }
-
   openAddConstraintDialog() {
     const openAddConstraint = this.dialog.open(AddConstraintDialogComponent, {
       width: '1000px',
