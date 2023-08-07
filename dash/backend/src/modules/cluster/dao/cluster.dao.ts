@@ -241,7 +241,7 @@ export class ClusterDao {
      */
     async seedInitialCluster(cluster, clusterGroupName: string, policy: PolicyDto, scanner: ScannerDto, userId: number) {
         const knex = await this.databaseService.getConnection();
-        return knex.transaction(async function(trx: Knex.Transaction) {
+        return knex.transaction(async (trx: Knex.Transaction) => {
                 this.logger.log({label: 'Saving initial cluster & cluster group', data: { cluster, clusterGroupName, userId }}, 'ClusterDao.seedInitialCluster');
 
                 const cgId = await trx('cluster_group')
