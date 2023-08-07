@@ -71,7 +71,11 @@ mat-card div div {
       font-weight: normal;
     }
   }
-  #compliance-report-buttons {}
+  #compliance-report-buttons {
+    mat-select {
+      border: rgba(0, 0, 0, 0.12) solid 1px;
+    }
+  }
 
   .mat-column-policy {
     min-width: 150px;
@@ -149,6 +153,8 @@ mat-card div div {
 
     .mat-column-name {
       min-width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     .mat-column-installedVersion {
