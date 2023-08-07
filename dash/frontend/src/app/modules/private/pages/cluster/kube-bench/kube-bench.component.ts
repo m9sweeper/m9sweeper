@@ -143,10 +143,6 @@ export class KubeBenchComponent implements OnInit {
     });
   }
 
-  toReportDetails(id: string){
-      this.router.navigate(['/private', 'clusters', this.clusterId, 'kubebench', id]);
-  }
-
   setLimitToLocalStorage(limit: number) {
     localStorage.setItem('image_table_limit', String(limit));
   }

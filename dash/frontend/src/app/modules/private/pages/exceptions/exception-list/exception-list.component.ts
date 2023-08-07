@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AlertService } from 'src/app/core/services/alert.service';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
@@ -26,7 +26,6 @@ export class ExceptionListComponent implements OnInit {
   subNavigationButtonUrl: any;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private alertService: AlertService,
     private exceptionsService: ExceptionsService,
@@ -78,10 +77,6 @@ export class ExceptionListComponent implements OnInit {
             }
           }
         });
-  }
-
-  viewExceptionDetails(id: number) {
-    this.router.navigate(['private', 'exceptions', id]);
   }
 
   setLimitToLocalStorage(limit: number) {

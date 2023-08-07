@@ -2,35 +2,51 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card class="settings-card">
+    <mat-card class="component-with-scrollable-table">
       <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort id="listOfExceptions">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort id="listOfExceptions">
           <ng-container matColumnDef="title">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-            <mat-cell *matCellDef="let exception" [matTooltip]="exception?.title"> {{exception?.title}} </mat-cell>
+            <mat-cell *matCellDef="let exception" [matTooltip]="exception?.title">
+              <a [routerLink]="['/private', 'exceptions', exception.id]">
+                {{exception?.title}}
+              </a>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-            <mat-cell *matCellDef="let exception"> {{exception?.status}} </mat-cell>
+            <mat-cell *matCellDef="let exception">
+              <a [routerLink]="['/private', 'exceptions', exception.id]">
+                {{exception?.status}}
+              </a>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="start_date">
             <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
-            <mat-cell *matCellDef="let exception"> {{exception?.start_date | date: 'MMM dd, y'}}</mat-cell>
+            <mat-cell *matCellDef="let exception">
+              <a [routerLink]="['/private', 'exceptions', exception.id]">
+                {{exception?.start_date | date: 'MMM dd, y'}}
+              </a>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="end_date">
             <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
-            <mat-cell *matCellDef="let exception"> {{exception?.end_date | date: 'MMM dd, y'}}</mat-cell>
+            <mat-cell *matCellDef="let exception">
+              <a [routerLink]="['/private', 'exceptions', exception.id]">
+                {{exception?.end_date | date: 'MMM dd, y'}}
+              </a>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="edit" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
             <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
             <mat-cell *matCellDef="let exception">
-              <button mat-icon-button [routerLink]="['/private', 'exceptions', exception?.id, 'edit']">
+              <a mat-icon-button [routerLink]="['/private', 'exceptions', exception?.id, 'edit']">
                 <mat-icon>create</mat-icon>
-              </button>
+              </a>
             </mat-cell>
           </ng-container>
 
@@ -45,7 +61,7 @@
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewExceptionDetails(row.id)"></mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
       </div>
       <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
