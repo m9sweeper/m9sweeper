@@ -55,8 +55,6 @@ import { ImageScanResultComponent } from './pages/image/image-scan-result/image-
 import { KubernetesNamespacesComponent } from './pages/cluster/kubernetes-namespaces/kubernetes-namespaces.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { KubernetesPodsComponent } from './pages/cluster/kubernetes-pods/kubernetes-pods.component';
-import { KubernetesDeploymentsComponent } from './pages/cluster/kubernetes-deployments/kubernetes-deployments.component';
-import { KubernetesImagesComponent } from './pages/cluster/kubernetes-images/kubernetes-images.component';
 import { ImageScanResultScannerDetailsComponent } from './pages/image/image-scan-result-scanner-details/image-scan-result-scanner-details.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -164,8 +162,6 @@ import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     KubernetesNamespacesComponent,
     KubernetesPodsComponent,
     KubernetesPodDetailsComponent,
-    KubernetesDeploymentsComponent,
-    KubernetesImagesComponent,
     ImageScanResultScannerDetailsComponent,
     ApiKeyListComponent,
     ApiKeyFormComponent,

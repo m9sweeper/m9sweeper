@@ -11,6 +11,7 @@ import {FormatDate} from '../../../../shared/format-date/format-date';
 import {filter, pairwise} from 'rxjs/operators';
 import {merge} from 'rxjs';
 import { ClusterService } from '../../../../../core/services/cluster.service';
+import {BreadcrumbInfo} from '../../../../../core/breadcrumbInfo.interface';
 
 
 @Component({
@@ -37,6 +38,10 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
   formatData = FormatDate.formatLastScannedDate;
   formatDate = FormatDate;
 
+  breadcrumbs: BreadcrumbInfo[] = [{
+    place: 1,
+    text: 'namespaces',
+  }];
 
   constructor(
     private titleService: Title,

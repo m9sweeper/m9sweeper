@@ -18,9 +18,11 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
+import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   declarations: [
+    BreadcrumbsComponent,
     DatepickerComponent,
     GenericErrorDialogComponent,
     USAPhoneMaskDirective,
@@ -45,6 +47,7 @@ import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
     MatListModule,
   ],
   exports: [
+    BreadcrumbsComponent,
     DatepickerComponent,
     USAPhoneMaskDirective,
     RbacDirective,

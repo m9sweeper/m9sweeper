@@ -9,6 +9,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {PodService} from '../../../../../core/services/pod.service';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {BreadcrumbInfo} from '../../../../../core/breadcrumbInfo.interface';
 
 
 @Component({
@@ -32,6 +33,22 @@ export class KubernetesPodsComponent implements OnInit {
   page = 0;
   pageLoading = true;
 
+  breadcrumbs: BreadcrumbInfo[] = [
+    {
+      place: 1,
+      link: [],
+      text: 'namespaces',
+    },
+    {
+      place: 2,
+      text: '',
+    },
+    {
+      place: 3,
+      text: 'pods',
+    },
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private alertService: AlertService,
@@ -43,9 +60,11 @@ export class KubernetesPodsComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent.parent.parent.params.subscribe(param => {
       this.clusterId = param.id;
+      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 1).link = ['/private', 'clusters', this.clusterId.toString(), 'kubernetes-namespaces'];
     });
     this.route.params.subscribe(routeParams => {
       this.namespace = routeParams.namespace;
+      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 2).text = this.namespace;
     });
     this.loadCurrentPods();
   }

@@ -1,14 +1,8 @@
 <div class="page-container">
   <div class="h-xs-fit page-container-content">
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
     <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            namespaces
-          </li>
-        </ol>
-        <p class="page-title">Namespaces</p>
-      </div>
+      <div class="page-title">Namespaces</div>
       <div class="calendar-date-picker">
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
