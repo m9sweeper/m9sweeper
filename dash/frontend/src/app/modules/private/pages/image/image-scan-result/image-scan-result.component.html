@@ -83,7 +83,7 @@
           <span matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
         </div>
         <div class="col-xs-10 col-sm-3 col-lg-2 advanced-search" id="compliance-report-buttons" *ngIf="imageScanDates">
-          <mat-select [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)" class="title-font ">
+          <mat-select class="p-xs-2 title=font" [formControl]="scanDateDefault" (selectionChange)="onChangeScanDate($event)">
             <mat-option *ngFor="let scanDate of imageScanDates" [value]="scanDate.created_at"> {{scanDate.created_at | date: 'MM/dd/yyyy hh:mma'}}</mat-option>
           </mat-select>
         </div>
@@ -91,39 +91,39 @@
       <div class="table-wrapper">
         <mat-table [dataSource]="scannerComplianceReport" #complianceSort="matSort" matSort  matSortActive="policy" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="policy">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Policy</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear matTooltip="Policy">Policy</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.policyName}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Passed/Failed</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear matTooltip="Passed/Failed">Passed/Failed</mat-header-cell>
             <mat-cell *matCellDef="let result">  {{result.policyStatus ? 'Passed' : 'Failed' }} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="compliant">
-            <mat-header-cell *matHeaderCellDef > Compliant</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef matTooltip="Compliant">Compliant</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.policyStatus ? 'Yes' : 'No'}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="required">
-            <mat-header-cell *matHeaderCellDef> Required</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef matTooltip="Required">Required</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.policyRequirement ? 'Yes' : 'No' }} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="critical_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Critical</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.CRITICAL |titlecase">{{CVETypeAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.criticalIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="major_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Major</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.MAJOR |titlecase">{{CVETypeAbbreviations.MAJOR |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.majorIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="medium_issues" >
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Medium</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.MEDIUM |titlecase">{{CVETypeAbbreviations.MEDIUM |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.mediumIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="low_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Low</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.LOW |titlecase">{{CVETypeAbbreviations.LOW |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result" > {{result.lowIssues}} </mat-cell>
           </ng-container>
           <ng-container matColumnDef="negligible_issues">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Negl</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="CVETypes.NEGLIGIBLE |titlecase">{{CVETypeAbbreviations.NEGLIGIBLE |titlecase }}</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.negligibleIssues}} </mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

@@ -18,6 +18,7 @@ import { ImageIssueMoreDataDialogComponent } from '../image-issue-more-data-dial
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {CsvService} from '../../../../../core/services/csv.service';
+import {CVETypeAbbreviations, CVETypes} from '../../../../../core/enum/CVETypes';
 
 
 @Component({
@@ -349,4 +350,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+
+  protected readonly CVETypeAbbreviations = CVETypeAbbreviations;
+  protected readonly CVETypes = CVETypes;
 }
