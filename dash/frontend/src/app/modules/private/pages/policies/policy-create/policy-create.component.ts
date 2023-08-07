@@ -31,7 +31,7 @@ export class PolicyCreateComponent implements OnInit {
   checkboxDefault = true;
   policyId: number;
   dataSource: MatTableDataSource<IScanner>;
-  displayedColumns: string[] = ['enabled', 'required', 'name', 'description', 'type', 'actions'];
+  displayedColumns: string[] = ['enabled', 'required', 'name', 'description', 'type', 'actions', 'delete'];
   @ViewChild(ScannerListComponent) scannerList;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   currentScannerData: any;

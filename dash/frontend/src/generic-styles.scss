@@ -160,7 +160,7 @@ $sides: (
     @each $valueShorthand, $value in $values {
       #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} { #{$propertyName}: #{$value} #{'!important'}; }
 
-      @debug #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} #{"{"} #{$propertyName}#{":"} #{$value} #{'!important'}#{"; }"};
+      //@debug #{"."}#{$propertyAbbreviation}-#{$breakpointShorthand}-#{$valueShorthand} #{"{"} #{$propertyName}#{":"} #{$value} #{'!important'}#{"; }"};
     }
   }
 }

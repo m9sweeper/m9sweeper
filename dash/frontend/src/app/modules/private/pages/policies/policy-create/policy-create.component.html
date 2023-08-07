@@ -96,65 +96,71 @@
           </form>
           <!--<app-scanner-list></app-scanner-list>-->
           <!-- Scanner List Table -->
-          <div class="page-card-header">
-            <div class="col-sm-8 no-padding">
+          <div class="page-card-header row mb-xs-3">
+            <div class="col-sm-8 col-xs-12 p-xs-0">
               <span class="page-card-title">{{scannerSubmenuTitle}}</span>
             </div>
-            <div class="col-sm-4 page-card-title-button-group-right-align">
+            <div class="col-sm-4 col-xs-12 p-xs-0 justify-content-sm-end display-xs-flex">
               <button mat-raised-button color="primary"  type="button"
                       (click)="openAddScannerDialog()"><mat-icon>add</mat-icon>Create Scanner</button>
             </div>
           </div>
-          <br>
-            <div class="row page-card-header">
-              <div id="policy-requirements-table" *ngIf="dataSource?.data?.length">
-                <table mat-table [dataSource]="dataSource">
-                  <ng-container matColumnDef="enabled">
-                    <th mat-header-cell *matHeaderCellDef>Active</th>
-                    <td mat-cell *matCellDef="let scanner">
-                      <mat-checkbox [checked]="scanner.enabled"  disableRipple
-                                    (click)="$event.preventDefault()">
-                      </mat-checkbox>
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="required">
-                    <th mat-header-cell *matHeaderCellDef>Required</th>
-                    <td mat-cell *matCellDef="let scanner">
-                      <mat-checkbox [checked]="scanner.required" disableRipple
-                                    (click)="$event.preventDefault()">
-                      </mat-checkbox>
-                    </td>
-                  </ng-container>
-                  <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                    <td mat-cell *matCellDef="let scanner"> {{scanner?.name}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef>Description</th>
-                    <td mat-cell *matCellDef="let scanner"> {{scanner?.description}} </td>
-                  </ng-container>
-                  <ng-container matColumnDef="type">
-                    <th mat-header-cell *matHeaderCellDef>Type</th>
-                    <td mat-cell *matCellDef="let scanner">{{scanner?.type}}</td>
-                  </ng-container>
-                  <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef>
-                      Actions
-                    </th>
-                    <td mat-cell *matCellDef="let scanner; let i =index" >
-                      <button mat-icon-button (click)="editScanner(scanner, i)">
-                        <mat-icon>create</mat-icon>
-                      </button>
-                      <button mat-icon-button (click)="alertDeleteScanner(scanner.id, i)">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </ng-container>
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-              </div>
+          <div class="row page-card-header component-with-scrollable-table">
+            <div id="policyRequirementsTable" class="table-wrapper" *ngIf="dataSource?.data?.length">
+              <mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="enabled">
+                  <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
+                  <mat-cell *matCellDef="let scanner">
+                    <mat-checkbox [checked]="scanner.enabled"  disableRipple
+                                  (click)="$event.preventDefault()">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="required">
+                  <mat-header-cell *matHeaderCellDef>Required</mat-header-cell>
+                  <mat-cell *matCellDef="let scanner">
+                    <mat-checkbox [checked]="scanner.required" disableRipple
+                                  (click)="$event.preventDefault()">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+                  <mat-cell *matCellDef="let scanner" [matTooltip]="scanner.name"> {{scanner?.name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                  <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                  <mat-cell *matCellDef="let scanner" [matTooltip]="scanner.description">
+                    {{scanner?.description}} - awhjefoiuhw m98wjeag;efkcpunrmqpwxr1[02-m5c409 rfollj.nsdlsohflajF
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                  <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+                  <mat-cell *matCellDef="let scanner">{{scanner?.type}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef>
+                    Actions
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let scanner; let i=index">
+                    <button mat-icon-button (click)="editScanner(scanner, i)">
+                      <mat-icon>create</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="delete">
+                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                  <mat-cell *matCellDef="let scanner; let i=index">
+                    <button mat-icon-button (click)="alertDeleteScanner(scanner.id, i)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
             </div>
+          </div>
 
           <!-- Scanner List Table End -->
           <p></p>
