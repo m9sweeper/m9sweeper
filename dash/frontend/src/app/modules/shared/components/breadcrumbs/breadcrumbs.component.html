@@ -1,0 +1,7 @@
+<span *ngFor="let breadcrumb of breadcrumbs; let last = last;">
+  <span *ngIf="breadcrumb.link">
+    <a [routerLink]="breadcrumb.link">{{breadcrumb.text}}</a>
+  </span>
+  <span *ngIf="!breadcrumb.link">{{breadcrumb.text}}</span>
+  <mat-icon *ngIf="!last">chevron_right</mat-icon>
+</span>
