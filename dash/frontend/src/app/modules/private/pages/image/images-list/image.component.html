@@ -35,7 +35,7 @@
 
     <mat-card class="scrollable-table-card">
       <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" id="imagesTable" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" id="imagesTable" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
             <mat-cell *matCellDef="let image" [matTooltip]="image.url + '/' + image.name + ':' + image.tag"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>

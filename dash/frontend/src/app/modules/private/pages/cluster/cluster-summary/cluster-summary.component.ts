@@ -342,10 +342,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     });
   }
 
-  getK8sPods(row: INamespaceTotalVulnerability) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.namespace, 'pods']);
-  }
-
   onScroll() {
     this.page = this.page + 1;
     this.getClusterEvents(this.limit, this.page);
