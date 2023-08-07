@@ -7,6 +7,7 @@ mat-row {
   flex: 20%;
   //align-items: initial;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .mat-column-description {
@@ -14,6 +15,7 @@ mat-row {
   flex: 30%;
   //align-items: initial;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .mat-column-new_scan_grace_period {
