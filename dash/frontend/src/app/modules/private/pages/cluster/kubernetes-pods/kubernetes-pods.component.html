@@ -1,22 +1,8 @@
 <div class="page-container">
   <div class="page-container-content">
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
     <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a [routerLink]="['/private', 'clusters', clusterId, 'kubernetes-namespaces']" id="breadcrumbs-url">
-              namespaces
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{namespace}}
-          </li>
-          <li class="breadcrumb-item">
-            pods
-          </li>
-        </ol>
-        <p class="page-title">Pods in {{namespace}}</p>
-      </div>
+      <div class="page-title">Pods in {{namespace}}</div>
       <div class="calendar-date-picker">
         <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>

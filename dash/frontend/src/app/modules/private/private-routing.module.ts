@@ -23,8 +23,6 @@ import {ImageComponent} from './pages/image/images-list/image.component';
 import {ImageScanResultScannerDetailsComponent} from './pages/image/image-scan-result-scanner-details/image-scan-result-scanner-details.component';
 import {KubernetesNamespacesComponent} from './pages/cluster/kubernetes-namespaces/kubernetes-namespaces.component';
 import {KubernetesPodsComponent} from './pages/cluster/kubernetes-pods/kubernetes-pods.component';
-import {KubernetesDeploymentsComponent} from './pages/cluster/kubernetes-deployments/kubernetes-deployments.component';
-import {KubernetesImagesComponent} from './pages/cluster/kubernetes-images/kubernetes-images.component';
 import {ApiKeyListComponent} from './pages/api-key-management/api-key-list/api-key-list.component';
 import {ApiKeyFormComponent} from './pages/api-key-management/api-key-form/api-key-form.component';
 import {ExceptionListComponent} from './pages/exceptions/exception-list/exception-list.component';
@@ -247,20 +245,6 @@ const routes: Routes = [
                 ],
               },
             ],
-          },
-          {
-            path: 'kubernetes-namespaces/:namespace/deployments',
-            component: KubernetesDeploymentsComponent,
-            data: {
-              title: 'Deployments Info'
-            }
-          },
-          {
-            path: 'kubernetes-namespaces/:namespace/deployments/:deployment/k8s-images',
-            component: KubernetesImagesComponent,
-            data: {
-              title: 'Kubernetes Images Info'
-            }
           },
           {
             path: 'gatekeeper',

@@ -1,30 +1,10 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces">
-              namespaces
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{namespace}}
-          </li>
-          <li class="breadcrumb-item">
-            <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces/{{namespace}}/pods">
-              pods
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{podName}}
-          </li>
-        </ol>
-        <p class="page-title">Images in Pod {{podName}}</p>
-      </div>
-
-      <div class="pod-page-buttons row">
-        <div class="col-xs-12 col-md-6">
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 page-title">Images in Pod {{podName}}</div>
+      <div class="col-xs-12 col-sm-6 display-xs-flex justify-content-sm-end flex-direction-xs-col flex-direction-sm-row" id="podImagesButtons">
+        <span>
           <button
             mat-fab
             class="action-button" type="button"
@@ -37,9 +17,9 @@
             (click)="runKubesec()">
             <img src="assets/images/kubesec-logo.png" alt="kubesec"/>
           </button>
-        </div>
-        <div class="calendar-date-picker col-xs-12 col-md-6">
-          <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
+        </span>
+        <div class="calendar-date-picker">
+          <app-datepicker-component class="ms-xs-0 ms-sm-3" (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
         </div>
       </div>
     </div>
