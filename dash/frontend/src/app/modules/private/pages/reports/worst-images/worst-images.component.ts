@@ -183,6 +183,7 @@ export class WorstImagesComponent implements OnInit, AfterViewInit, OnDestroy {
       { left: 0, right: 0 },
       { left: 0, right: 0 },
       { left: 16, right: 16 },
+      { height: 3, width: 8 },
       600,
     );
   }

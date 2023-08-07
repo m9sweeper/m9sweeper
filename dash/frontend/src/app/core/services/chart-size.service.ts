@@ -1,7 +1,4 @@
-import {HostListener, Injectable, OnDestroy, OnInit} from '@angular/core';
-import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
-import {Observable, Subject, Subscription} from 'rxjs';
-import {distinctUntilChanged, map, shareReplay, tap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 
 
 @Injectable({
@@ -67,6 +64,9 @@ export class ChartSizeService {
     chartMarginPlusPaddingInPx = {
       left: 10, right: 10
     },
+    aspectRatio = {
+      height: 8, width: 16
+    },
     minWidth?: number,
   ): [number, number] {
 
@@ -85,7 +85,7 @@ export class ChartSizeService {
     }
 
     // Keep the chart at a consistent aspect ratio through window size changes
-    const chartHeight = Math.floor((chartWidth * 8) / 16);
+    const chartHeight = Math.floor((chartWidth * aspectRatio.height) / aspectRatio.width);
     return [chartWidth, chartHeight];
   }
 }
