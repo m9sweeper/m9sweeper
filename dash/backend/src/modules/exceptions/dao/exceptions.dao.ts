@@ -112,14 +112,13 @@ export class ExceptionsDao {
 
     async getAllFilteredPolicyExceptions(
         clusterId: number, policyIds: number[],
-        namespace: string, imageName: string
+        namespace: string
       ): Promise<ExceptionQueryDto[]> {
-       return this.getAllFilteredExceptionsByTypes('policy', clusterId, policyIds, imageName, namespace);
+       return this.getAllFilteredExceptionsByTypes('policy', clusterId, policyIds, namespace);
       }
 
     async getAllFilteredExceptionsByTypes( type: string,
-        clusterId: number, policyIds: number[],
-        imageName: string,  namespace?: string
+        clusterId: number, policyIds: number[],  namespace?: string
     ): Promise<ExceptionQueryDto[]> {
         const knex = await this.databaseService.getConnection();
         const today = new Date().toISOString().slice(0, 10); // @TODO: Eventually make this a utility function, perhaps with timezone/locality considered
@@ -138,6 +137,7 @@ export class ExceptionsDao {
             'ex.is_temp_exception as _isTempException',
             'exceptions_policies.policy_id AS _policyId',
             'ex.alternate_severity AS _altSeverity',
+            'ex.scanner_id as _scannerId',
             'ex.created_at AS _createdAt')
             .from('exceptions AS ex')
             .leftOuterJoin('exceptions_clusters', 'ex.id', 'exceptions_clusters.exception_id')
@@ -187,19 +187,15 @@ export class ExceptionsDao {
             })
             .orderBy('ex.created_at', "asc");
 
-        // if (imageName) {
-        //     sql.andWhere('ex.image_match', 'like', `%${imageName}%`);
-        // }
-
         const result = await knexnest(sql).then(data => data);
         return result ? result : [];
     }
 
     async getAllFilteredOverrideExceptions(
-        clusterId: number, policyIds: number[], imageName: string
+        clusterId: number, policyIds: number[]
     ): Promise<ExceptionQueryDto[]> {
 
-        return this.getAllFilteredExceptionsByTypes('override', clusterId, policyIds, imageName);
+        return this.getAllFilteredExceptionsByTypes('override', clusterId, policyIds);
     }
 
     async getAllCommonExceptions(): Promise<ExceptionDto[]> {

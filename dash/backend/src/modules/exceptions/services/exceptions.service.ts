@@ -6,10 +6,8 @@ import {EmailService} from '../../shared/services/email.service';
 import {ConfigService} from '@nestjs/config';
 import {ExceptionType} from '../enum/ExceptionType';
 import {ExceptionDto, ExceptionQueryDto} from '../dto/exception-dto';
-import {PodService} from '../../pod/services/pod.service';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
 import {ClusterService} from '../../cluster/services/cluster.service';
-import {NamespaceService} from '../../namespace/services/namespace.service';
 import {ExceptionBlockService} from '../../command-line/services/exception-block.service';
 import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {ExceptionK8sInfoDto} from '../dto/exception-k8s-info-dto';
@@ -26,9 +24,7 @@ export class ExceptionsService {
     private readonly exceptionBlockService: ExceptionBlockService,
     private readonly email: EmailService,
     private readonly configService: ConfigService,
-    private readonly podService: PodService,
     private readonly clusterEventService: ClusterEventService,
-    private readonly kubernetesNamespaceService: NamespaceService,
     private readonly auditLogService: AuditLogService,
     private logger: MineLoggerService,
   ) {}
@@ -187,12 +183,11 @@ async getAllActiveExceptions(): Promise<ExceptionDto[]> {
 }
 
 async getAllFilteredPolicyExceptions(clusterId: number, policyIds: number[],
-    namespace: string, imageName: string): Promise<ExceptionQueryDto[]> {
-    return await this.exceptionsDao.getAllFilteredPolicyExceptions(clusterId, policyIds, namespace, imageName);
+    namespace: string): Promise<ExceptionQueryDto[]> {
+    return await this.exceptionsDao.getAllFilteredPolicyExceptions(clusterId, policyIds, namespace);
 }
-async getAllFilteredOverrideExceptions(clusterId: number, policyIds: number[],
-                                      imageName: string): Promise<ExceptionQueryDto[]> {
-    return await this.exceptionsDao.getAllFilteredOverrideExceptions(clusterId, policyIds, imageName);
+async getAllFilteredOverrideExceptions(clusterId: number, policyIds: number[]): Promise<ExceptionQueryDto[]> {
+    return await this.exceptionsDao.getAllFilteredOverrideExceptions(clusterId, policyIds);
 }
 async getAllCommonExceptions(): Promise<ExceptionDto[]> {
     return await this.exceptionsDao.getAllCommonExceptions();
@@ -278,5 +273,31 @@ async getExceptionsForIssueIdentifier(issueIdentifier: string, clusterId: number
   async syncGatekeeperBlocks(): Promise<void> {
     this.exceptionBlockService.syncGatekeeperExceptionBlocks()
         .catch(e => this.logger.error({label: 'Error syncing GateKeeper exception blocks'}, e, 'ExceptionsService.syncGatekeeperBlocks'));
+  }
+
+  filterExceptionsByImageName(imageName: string, exceptions: ExceptionQueryDto[]) : ExceptionQueryDto[] {
+    if (!exceptions?.length) {
+      return [];
+    }
+
+    return exceptions.filter(exception => {
+      if (!exception.imageMatch) {
+        return true;
+      }
+
+      // Backwards compatibility from one this was postgres regexp
+      // Postgres % matches anything, .* matches anything in js regex
+      const backCompat = exception.imageMatch.replace(/%/g, '(.*)');
+      let regex: RegExp;
+      try {
+        regex = new RegExp(backCompat);
+      } catch(e) {
+        // Assuming that invalid regular expressions are legacy exceptions, and treating them as
+        // having global image match
+        return true;
+      }
+
+      return regex.test(imageName);
+    })
   }
 }

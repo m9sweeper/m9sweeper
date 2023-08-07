@@ -17,7 +17,7 @@
               <p>
                 <mat-form-field appearance="fill">
                   <mat-label>Type</mat-label>
-                  <mat-select formControlName="type" (selectionChange)="displayExceptionFields($event)" required>
+                  <mat-select formControlName="type" required>
                     <mat-option value="policy">Policy</mat-option>
                     <mat-option value="gatekeeper">GateKeeper</mat-option>
                     <mat-option value="override">Override</mat-option>
@@ -129,8 +129,9 @@
               </p>
               <p>
                 <mat-form-field appearance="fill">
-                  <mat-label>Image URL Pattern</mat-label>
-                  <input matInput placeholder="%" type="text" formControlName="imageMatch">
+                  <mat-label>Image Pattern</mat-label>
+                  <input matInput type="text" formControlName="imageMatch">
+                  <mat-hint>JavaScript regular expression body</mat-hint>
                 </mat-form-field>
               </p>
             </form>

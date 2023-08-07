@@ -32,9 +32,9 @@ export class ImageComplianceFacadeService {
 
         const policyIdSet = new Set(results.map(result => result.policyId));
         const policyIds = Array.from(policyIdSet.keys());
-        await this.applyOverrideSeverity(clusterId, policyIds, imageData.name,results);
+        await this.applyOverrideSeverity(clusterId, policyIds, results);
         const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
-         policyIds, undefined, imageData.name);
+         policyIds, undefined);
 
         // The compliance map will get mutated by
         const complianceMap = new ComplianceResultMap();
@@ -54,10 +54,9 @@ export class ImageComplianceFacadeService {
     public async applyOverrideSeverity(
         clusterId: number,
         policyId: number [],
-        imageName: string,
         results: ImageScanResultPerPolicyFacadeDto[]
     ){
-        const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId, imageName);
+        const exceptionsOverride = await this.exceptionService.getAllFilteredOverrideExceptions(clusterId, policyId);
         for(const result of results){
             for(const issue of result.issues){
                 const override = exceptionsOverride?.find(exception => exception.issueIdentifier.toUpperCase() === issue.type.toUpperCase());
@@ -86,7 +85,7 @@ export class ImageComplianceFacadeService {
 
         const policyIdSet = new Set(results.map(result => result.policyId));
         const exceptions = await this.exceptionService.getAllFilteredPolicyExceptions(clusterId,
-            Array.from(policyIdSet.keys()), namespaceName, imageData.name);
+            Array.from(policyIdSet.keys()), namespaceName);
 
         const complianceMap = new ComplianceResultMap();
 
@@ -98,42 +97,6 @@ export class ImageComplianceFacadeService {
         await this.applyTemporaryExceptions(clusterId, nonCompliantIssues, complianceMap, imageData.name, namespaceName);
 
         return { compliant: complianceMap.isCompliant, complianceMap };
-    }
-
-    private filterExceptionsByImageName(imageName: string, exceptions: ExceptionQueryDto[]) : ExceptionQueryDto[] {
-        if (!!exceptions === false) {
-            return [];
-        }
-
-        return exceptions.filter(exception => {
-            if (!!exception.imageMatch === false) {
-                exception.imageMatch = '%';
-            }
-            
-            let imageMatch = exception.imageMatch.toLowerCase();
-
-            if (imageMatch.trim() === "%") {
-                return true;
-            }
-
-            imageName = imageName.toLowerCase();
-
-            if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-                imageMatch = imageMatch.substring(1, imageMatch.length - 1);
-
-                return imageName.indexOf(imageMatch) !== -1;
-            }
-
-            if (imageMatch.startsWith("%") === true && imageMatch.endsWith("%") === false) {
-                return imageName.endsWith(imageMatch);
-            }
-
-            if (imageMatch.startsWith("%") === false && imageMatch.endsWith("%") === true) {
-                return imageName.startsWith(imageMatch);
-            }
-
-            return true;
-        })
     }
 
 
@@ -160,7 +123,7 @@ export class ImageComplianceFacadeService {
             return false;
         }
 
-        exceptions = this.filterExceptionsByImageName(imageName, exceptions);
+        exceptions = this.exceptionService.filterExceptionsByImageName(imageName, exceptions);
 
         const scanResults = await Promise.all(results.map(async result => {
             const scanResult = new ImageScanResultPerPolicyDto();

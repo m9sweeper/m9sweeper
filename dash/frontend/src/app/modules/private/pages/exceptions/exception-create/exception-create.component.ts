@@ -2,9 +2,7 @@ import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/c
 import {DatePipe, Location} from '@angular/common';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CustomValidators} from '../../../form-validator/custom-validators';
 import {ExceptionsService} from '../../../../../core/services/exceptions.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
@@ -20,7 +18,8 @@ import {forkJoin, Observable, of, Subject} from 'rxjs';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
+import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
 
 @Component({
   selector: 'exception-create',
@@ -70,14 +69,13 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     private alertService: AlertService,
     private router: Router,
     private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private jwtAuthService: JwtAuthService,
     private location: Location,
     private scannerService: ScannerService,
     private policyService: PolicyService,
     private clusterService: ClusterService,
     private namespaceService: NamespaceService,
     private datePipe: DatePipe,
+    protected customValidatorService: CustomValidatorService,
     private gateKeeperService: GateKeeperService) {
 
     const getCurrentUrl = this.router.url;
@@ -104,7 +102,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       clusters: [''],
       namespaces: [''],
       type: [''],
-      imageMatch: ['%', Validators.nullValidator],
+      imageMatch: ['', [this.customValidatorService.regex]],
       altSeverity: ['', [Validators.required]]
     },
       {
@@ -112,6 +110,12 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
       updateOn: 'blur'
     }
     );
+
+    this.exceptionForm.controls.type.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: val => this.changeTypeSelection(val)
+      });
     if (this.editMode) {
       this.exceptionForm.controls.startDate.setValidators(null);
       this.subMenuTitle = 'Edit Exception';
@@ -136,67 +140,96 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.exceptionId = params.id;
-      if (!this.exceptionId && this.editMode) {
-        this.editMode = false;
-        this.subMenuTitle = 'Create Exception';
-        this.alertService.danger('Exception Could not be retrieved. Please try again later.');
-      }
-    });
+    this.route.params.pipe(take(1))
+      .subscribe({
+        next: params => {
+          this.exceptionId = params.id;
+          if (!this.exceptionId && this.editMode) {
+            this.editMode = false;
+            this.subMenuTitle = 'Create Exception';
+            this.alertService.danger('Exception Could not be retrieved. Please try again later.');
+          }
+        }
+      });
 
-    this.scannerService.getAllScanners().subscribe(val => {this.scanners = val.data; this.scannersLoaded = true; });
-    this.policyService.getAllPolicies().subscribe(val => {
-      this.policies = val.data.list;
-      this.policiesLoaded = true;
-    });
-    this.clusterService.getAllClusters().subscribe(val => {
-      this.clusters = val.data;
-      this.clustersLoaded = true;
-    });
-    this.namespaceService.getCurrentK8sNamespaces().subscribe(val => {
-      this.namespaces = val.data;
-      this.namespacesToBeDisplayed = val.data;
-      this.namespacesLoaded = true;
-    });
+    this.scannerService.getAllScanners()
+      .pipe(take(1))
+      .subscribe({
+        next: val => {this.scanners = val.data; this.scannersLoaded = true; }
+      });
+    this.policyService.getAllPolicies()
+      .pipe(take(1))
+      .subscribe({
+        next: val => {
+          this.policies = val.data.list;
+          this.policiesLoaded = true;
+        }
+      });
+    this.clusterService.getAllClusters()
+      .pipe(take(1))
+      .subscribe({
+        next: val => {
+          this.clusters = val.data;
+          this.clustersLoaded = true;
+        }
+      });
+    this.namespaceService.getCurrentK8sNamespaces()
+      .pipe(take(1))
+      .subscribe({
+        next: val => {
+          this.namespaces = val.data;
+          this.namespacesToBeDisplayed = val.data;
+          this.namespacesLoaded = true;
+        }
+      });
 
     if (this.editMode) {
-      this.exceptionsService.getExceptionById(this.exceptionId).subscribe(
-        response => {
-          this.origException = response.data[0];
-          this.populateData();
-          this.disableAllExceptionTypeFields();
-        },
-        _ => {
-          this.alertService.danger('Exception could not be retrieved. Please try again later');
-          this.exceptionId = null;
-        }
-      );
+      this.exceptionsService.getExceptionById(this.exceptionId)
+        .pipe(take(1))
+        .subscribe({
+          next:  response => {
+            this.origException = response.data[0];
+            this.populateData();
+            this.disableAllExceptionTypeFields();
+            },
+          error: _ => {
+            this.alertService.danger('Exception could not be retrieved. Please try again later');
+            this.exceptionId = null;
+          }
+        });
     }
-    this.issueIdentifier.valueChanges.subscribe(changedValue => {
-      this._filter(changedValue);
-    });
+    this.issueIdentifier.valueChanges
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: changedValue => {
+          this._filter(changedValue);
+        }
+      });
   }
 
   ngAfterViewInit(){
-    this.route.queryParams.subscribe(params => {
-      const namespaceSet = new Set(params.namespaces);
-      const namespaces = Array.from(namespaceSet);
-      const namespacesMappedWithClusterId = namespaces.map(n => `${n}:${params.clusterId}`);
-      if (Object.keys(params).length > 0) {
-        this.issueIdentifier.setValue(params.cve);
-        this.exceptionForm.controls.type.setValue('policy');
-        this.exceptionForm.controls.policies.enable();
-        this.exceptionForm.controls.clusters.setValue([params.clusterId]);
-        this.loadNamespacesForSelectedClusters([params.clusterId], true);
-        this.exceptionForm.controls.scannerId.setValue(params.scannerId);
-        this.exceptionForm.controls.policies.setValue(params.policyIds);
-        this.exceptionForm.controls.namespaces.setValue(namespacesMappedWithClusterId);
-        this.exceptionForm.controls.status.setValue('review');
-        this.exceptionForm.controls.imageMatch.setValue(`%${params.imageName}%`);
-        this.exceptionForm.controls.title.setValue(`Requesting Exception for ${params.cve} in ${params.imageName} of ${namespaces.join(',')}`);
-      }
-    });
+    this.route.queryParams
+      .pipe(take(1))
+      .subscribe({
+        next: params => {
+          const namespaceSet = new Set(params.namespaces);
+          const namespaces = Array.from(namespaceSet);
+          const namespacesMappedWithClusterId = namespaces.map(n => `${n}:${params.clusterId}`);
+          if (Object.keys(params).length > 0) {
+            this.issueIdentifier.setValue(params.cve);
+            this.exceptionForm.controls.type.setValue('policy');
+            this.exceptionForm.controls.policies.enable();
+            this.exceptionForm.controls.clusters.setValue([params.clusterId]);
+            this.loadNamespacesForSelectedClusters([params.clusterId], true);
+            this.exceptionForm.controls.scannerId.setValue(params.scannerId);
+            this.exceptionForm.controls.policies.setValue(params.policyIds);
+            this.exceptionForm.controls.namespaces.setValue(namespacesMappedWithClusterId);
+            this.exceptionForm.controls.status.setValue('review');
+            this.exceptionForm.controls.imageMatch.setValue(params.imageName);
+            this.exceptionForm.controls.title.setValue(`Requesting Exception for ${params.cve} in ${params.imageName} of ${namespaces.join(',')}`);
+          }
+        }
+      });
   }
 
   populateData() {
@@ -212,7 +245,9 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     this.exceptionForm.controls.startDate.setValidators(CustomValidators.checkForCurrentDate(true, this.origException.startDate));
     this.exceptionForm.controls.endDate.reset(this.origException.endDate);
     this.exceptionForm.controls.type.setValue(this.origException.type);
-    this.exceptionForm.controls.imageMatch.setValue(this.origException.imageMatch);
+    // Will help passively clean up legacy exceptions as exceptions are edited
+    const matchValue = this.origException.imageMatch === '%' ? '' : this.origException.imageMatch;
+    this.exceptionForm.controls.imageMatch.setValue(matchValue);
 
     this.origSelectedPolicies = this.origException.policies.map(p => p.id.toString());
     this.exceptionForm.controls.policies.setValue(this.origSelectedPolicies);
@@ -248,23 +283,27 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     if (this.editMode) {
       data.isTempException = this.origException.isTempException;
       this.submitButtonText = 'Updating...';
-      this.exceptionsService.updateExceptionById(data, this.exceptionId).subscribe(
-        response => {
-          this.disableSpinner();
-          this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.alertService.success('Exception updated');
-        },
-        err => this.handleApiError(err)
-      );
+      this.exceptionsService.updateExceptionById(data, this.exceptionId)
+        .pipe(take(1))
+        .subscribe({
+          next: response => {
+            this.disableSpinner();
+            this.router.navigate(['private', 'exceptions', response.data.id]);
+            this.alertService.success('Exception updated');
+            },
+          error: err => this.handleApiError(err)
+        });
     } else {
       this.submitButtonText = 'Submitting...';
-      this.exceptionsService.createException(data).subscribe(
-        response => {
-          this.router.navigate(['private', 'exceptions', response.data.id]);
-          this.alertService.success('Exception created');
-        },
-        err => this.handleApiError(err)
-      );
+      this.exceptionsService.createException(data)
+        .pipe(take(1))
+        .subscribe({
+          next: response => {
+            this.router.navigate(['private', 'exceptions', response.data.id]);
+            this.alertService.success('Exception created');
+            },
+          error: err => this.handleApiError(err)
+        });
     }
   }
 
@@ -288,14 +327,13 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     return this.exceptionForm.controls.startDate;
   }
 
-  displayExceptionFields(event) {
+  changeTypeSelection(newType: string) {
     this.exceptionForm.controls.policies.disable();
-    switch (event.value){
+    switch (newType){
       case 'policy':
         this.exceptionForm.controls.policies.enable();
         this.changeCVELabel('Issue (CVE Code)');
-        // this.issueIdentifier.setErrors({gatekeeperAndClusterSelected: false });
-        this.issueIdentifier.markAsUntouched();
+        this.setIssueIdentifierRequired(false);
         this.gatekeeperConstraintList = of([]);
         break;
       case 'gatekeeper':
@@ -305,12 +343,14 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
         if (getSelectedClusters instanceof Array && getSelectedClusters.length > 0) {
           this.loadGatekeeperConstraints(getSelectedClusters);
         }
+        this.setIssueIdentifierRequired(true);
         break;
       case 'override':
         this.exceptionForm.controls.policies.enable();
         this.changeCVELabel('Issue (CVE Type Code)');
         this.issueIdentifier.markAsUntouched();
         this.gatekeeperConstraintList = of([]);
+        this.setIssueIdentifierRequired(false);
         break;
     }
   }
@@ -330,6 +370,15 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     return this.exceptionForm.controls.issueIdentifier;
   }
 
+  setIssueIdentifierRequired(required: boolean): void {
+    this.issueIdentifier.clearValidators();
+    this.issueIdentifier.addValidators([Validators.maxLength(255)]);
+    if (required) {
+      this.issueIdentifier.addValidators([Validators.required]);
+    }
+    this.issueIdentifier.updateValueAndValidity();
+  }
+
   onClusterChange($event){
     this.loadNamespacesForSelectedClusters($event.value);
     if (this.exceptionForm.controls.type.value === 'policy') {
@@ -344,20 +393,26 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
      const constraints$: Observable<any> = forkJoin(
         clusters.map(clusterId => this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(+clusterId))
       );
-     constraints$.subscribe(data => {
-        const filteredData = data.filter(d => d.length > 0);
-        const flattenData = filteredData.flat();
-        const constraints: IGateKeeperConstraintDetails[] = flattenData;
-        this.gatekeeperConstraintList = of(constraints);
-        this.filteredGatekeeperConstraints = this.gatekeeperConstraintList;
-      });
+     constraints$.pipe(take(1)).subscribe({
+       next: data => {
+         const filteredData = data.filter(d => d.length > 0);
+         const flattenData = filteredData.flat();
+         const constraints: IGateKeeperConstraintDetails[] = flattenData;
+         this.gatekeeperConstraintList = of(constraints);
+         this.filteredGatekeeperConstraints = this.gatekeeperConstraintList;
+       }
+     });
     }
 
   private _filter(params: string) {
-    this.gatekeeperConstraintList.subscribe(data => {
-      const filteredData = data.filter(d => d.metadata.name.toLowerCase().match(params.toLowerCase()) !== null);
-      this.filteredGatekeeperConstraints = of(filteredData);
-    });
+    this.gatekeeperConstraintList
+      .pipe(take(1))
+      .subscribe({
+        next: data => {
+          const filteredData = data.filter(d => d.metadata.name.toLowerCase().match(params.toLowerCase()) !== null);
+          this.filteredGatekeeperConstraints = of(filteredData);
+        }
+      });
   }
 
   private enableSpinner() {
@@ -370,12 +425,16 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
 
   private loadNamespacesForSelectedClusters(selectedClusters: string[], requestException = false) {
     if (requestException) {
-      this.namespaceService.getCurrentK8sNamespaces().subscribe(val => {
-        this.namespaces = val.data;
-        this.namespacesLoaded = true;
-        const selectedClustersToNumber = selectedClusters.map(v => Number(v));
-        this.namespacesToBeDisplayed = this.namespaces.filter(n => selectedClustersToNumber.includes(n.clusterId));
-      });
+      this.namespaceService.getCurrentK8sNamespaces()
+        .pipe(take(1))
+        .subscribe({
+          next: val => {
+            this.namespaces = val.data;
+            this.namespacesLoaded = true;
+            const selectedClustersToNumber = selectedClusters.map(v => Number(v));
+            this.namespacesToBeDisplayed = this.namespaces.filter(n => selectedClustersToNumber.includes(n.clusterId));
+          }
+        });
 
     } else {
       if (selectedClusters.length) {
