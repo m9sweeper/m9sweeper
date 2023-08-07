@@ -204,6 +204,7 @@ export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
       { left: 16, right: 16 },
       { left: 0, right: 0 },
       { left: 16, right: 16 },
+      { height: 8, width: 16 },
       500,
     );
     /** the height is set because the card height is set */
