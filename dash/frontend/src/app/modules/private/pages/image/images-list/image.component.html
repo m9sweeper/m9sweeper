@@ -38,50 +38,79 @@
         <mat-table class="table-with-link-rows" [dataSource]="dataSource" id="imagesTable" matSort  matSortActive="date" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name and Tag</mat-header-cell>
-            <mat-cell *matCellDef="let image" [matTooltip]="image.url + '/' + image.name + ':' + image.tag"> {{image.url + '/' + image.name + ':' + image.tag}} </mat-cell>
+            <mat-cell *matCellDef="let image" [matTooltip]="image.url + '/' + image.name + ':' + image.tag">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.url + '/' + image.name + ':' + image.tag}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="date">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Date Scanned</mat-header-cell>
             <mat-cell *matCellDef="let image">
-              <ng-container *ngIf="image.lastScanned; else elseBlock">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
                 {{image.lastScanned | date: 'MM/dd/yyyy hh:mma'}}
-              </ng-container>
-              <ng-template #elseBlock></ng-template>
+              </a>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="runningCluster">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Running on Cluster</mat-header-cell>
-            <mat-cell *matCellDef="let image">{{image.runningInCluster}}</mat-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.runningInCluster}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="scanResult">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Scan Result</mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.scanResults}} </mat-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.scanResults}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="Crt">
-            <mat-header-cell *matHeaderCellDef  disableClear> Crt </mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.criticalIssues}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef  disableClear>{{VulnerabilitySeverityAbbreviations.CRITICAL | titlecase}}</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.criticalIssues}}
+            </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="Maj">
-            <mat-header-cell *matHeaderCellDef  disableClear> Maj </mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.majorIssues}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef  disableClear>{{VulnerabilitySeverityAbbreviations.MAJOR | titlecase}}</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.majorIssues}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="Med">
-            <mat-header-cell *matHeaderCellDef  disableClear> Med </mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.mediumIssues}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef  disableClear>{{VulnerabilitySeverityAbbreviations.MEDIUM | titlecase}}</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.mediumIssues}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="Min">
-            <mat-header-cell *matHeaderCellDef  disableClear> Min </mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.lowIssues}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef  disableClear>{{VulnerabilitySeverityAbbreviations.LOW | titlecase}}</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.lowIssues}}
+              </a>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="Neg">
-            <mat-header-cell *matHeaderCellDef  disableClear> Neg</mat-header-cell>
-            <mat-cell *matCellDef="let image"> {{image.negligibleIssues}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef  disableClear>{{VulnerabilitySeverityAbbreviations.NEGLIGIBLE | titlecase}}</mat-header-cell>
+            <mat-cell *matCellDef="let image">
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
+                {{image.negligibleIssues}}
+              </a>
+            </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"
-                   (click)="getImageScannerDetails(row)" class="table-row">
-          </mat-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></mat-row>
         </mat-table>
       </div>
       <div class="paginator">

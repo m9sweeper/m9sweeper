@@ -62,8 +62,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   imageScanResultIssueData: MatTableDataSource<IImageScanResultIssue>;
   clusterId: number;
   policyIds: string[];
-  /** Initialized when filtering vulnerabilities by a specific policy ID, otherwise passed
-   * as undefined to get all vulnerabilities */
+  /** Initialized when filtering vulnerabilities by a specific policy ID, otherwise passed as undefined to get all vulnerabilities */
   policyIdFilter: number;
   scanButtonText: string;
   displayComplianceAndIssueTable = true;
@@ -260,6 +259,9 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   handleImageScanResultsIssues(response: IServerResponse<{totalCount: number, list: IImageScanResultIssue[]}>) {
+    if (!response.data?.totalCount) {
+      this.alertService.warning('There are no issues for the current image and/or scanner');
+    }
     const modifiedData = response.data.list ? response.data.list.map(d => {
       d.packageName = d.packageName ?? d.extraData.PkgName;
       d.installedVersion = d.installedVersion ?? d.extraData.InstalledVersion;

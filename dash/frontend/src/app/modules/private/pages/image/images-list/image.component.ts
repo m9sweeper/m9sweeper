@@ -23,6 +23,7 @@ import {
 import {AdvancedSearchDialogComponent} from './advanced-search-dialog/advanced-search-dialog.component';
 import {ConfirmScanAllDialogComponent} from './confirm-scan-all-dialog/confirm-scan-all-dialog.component';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
+import {VulnerabilitySeverityAbbreviations} from '../../../../../core/enum/VulnerabilitySeverity';
 
 @Component({
   selector: 'app-image',
@@ -194,10 +195,6 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
       ).subscribe(resp => this.onSearchSuccess(resp), () => {});
   }
 
-  getImageScannerDetails(row: IImage) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'images', 'image-scan', row.id]);
-  }
-
   setLimitToLocalStorage(limit: number) {
     localStorage.setItem('image_table_limit', String(limit));
   }
@@ -212,4 +209,6 @@ export class ImageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.unsubscribe$.complete();
     this.updateImageSearch();
   }
+
+  protected readonly VulnerabilitySeverityAbbreviations = VulnerabilitySeverityAbbreviations;
 }
