@@ -4,3 +4,44 @@
 .vulnerability-filter-card mat-row {
   height: unset;
 }
+
+#vulnerabilitiesTable {
+  width: 100%;
+  mat-cell {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .mat-column-image {
+    min-width: 150px;
+  }
+
+  .mat-column-namespaces {
+    min-width: 100px;
+    max-width: 150px;
+  }
+
+  .mat-column-scanResults {
+    min-width: 110px;
+    max-width: 115px;
+  }
+
+  .mat-column-lastScanned {
+    min-width: 85px;
+    max-width: 110px;
+  }
+
+  .mat-column-totalCritical, .mat-column-totalMajor,
+  .mat-column-totalMedium, .mat-column-totalLow,
+  .mat-column-totalNegligible {
+    min-width: 60px;
+    max-width: 70px;
+  }
+
+  .mat-column-totalFixableCritical, .mat-column-totalFixableMajor,
+  .mat-column-totalFixableMedium, .mat-column-totalFixableLow,
+  .mat-column-totalFixableNegligible {
+    min-width: 70px;
+    max-width: 100px;
+  }
+}
