@@ -1,0 +1,8 @@
+repositoryID: 2cee8e1e-cfd8-427e-ad9d-b0d282262117
+owners:
+  - name: m9sweeper
+    email: m9sweeperadmins@m9sweeper.io
+ignore:
+  - name: dash
+  - name: postgresql
+  - name: rabbitmq
