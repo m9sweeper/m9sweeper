@@ -9,7 +9,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {PodService} from '../../../../../core/services/pod.service';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {BreadcrumbInfo} from '../../../../../core/breadcrumbInfo.interface';
+import {Breadcrumb} from '../../../../shared/components/breadcrumbs/breadcrumb.interface';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class KubernetesPodsComponent implements OnInit {
   page = 0;
   pageLoading = true;
 
-  breadcrumbs: BreadcrumbInfo[] = [
+  breadcrumbs: Breadcrumb[] = [
     {
       place: 1,
       link: [],

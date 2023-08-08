@@ -12,3 +12,9 @@
   height: 40px;
   width: 40px;
 }
+
+div.cluster-dashboard {
+  //width: calc(100% - 300px);
+  flex-direction: column;
+  background-color: #e0e0e0;
+}

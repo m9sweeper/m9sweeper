@@ -7,3 +7,11 @@
 .material-icons{
   line-height:2.5;
 }
+div.cluster-dashboard {
+  //width: calc(100% - 300px);
+  flex-direction: column;
+  background-color: #e0e0e0;
+  max-width: -webkit-fill-available;
+  width: -webkit-fill-available;
+  overflow: auto;
+}
