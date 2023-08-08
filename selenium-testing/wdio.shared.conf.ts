@@ -52,7 +52,6 @@ export const config: Options.Testrunner = {
             './test/specs/smoke/navigation.spec.ts',
 
             // Run the tests for managing the organization
-            // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
@@ -67,7 +66,7 @@ export const config: Options.Testrunner = {
             // './test/specs/cluster/cluster-info.spec.ts',
             './test/specs/cluster/images.spec.ts',
             // './test/specs/cluster/workloads.spec.ts',
-            './test/specs/cluster/kube-sec.spec.ts',
+            './test/specs/cluster/kubesec.spec.ts',
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
@@ -88,7 +87,7 @@ export const config: Options.Testrunner = {
             // './test/specs/cluster/cluster-info.spec.ts',
             './test/specs/cluster/images.spec.ts',
             // './test/specs/cluster/workloads.spec.ts',
-            './test/specs/cluster/kube-sec.spec.ts',
+            './test/specs/cluster/kubesec.spec.ts',
             './test/specs/cluster/kube-hunter.spec.ts',
             './test/specs/cluster/kube-bench.spec.ts',
             // './test/specs/cluster/falco.spec.ts',
@@ -97,7 +96,6 @@ export const config: Options.Testrunner = {
 
         // organization tests
         organization: [
-            // './test/specs/organization/organization.spec.ts',
             // './test/specs/organization/users.spec.ts',
             // './test/specs/organization/policies.spec.ts',
             // './test/specs/organization/exceptions.spec.ts',
