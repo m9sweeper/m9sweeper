@@ -1,6 +1,6 @@
 image:
-  registry: m9sweeper
-  repository: dash
+  registry: ghcr.io
+  repository: m9sweeper/dash
   tag: latest
   pullPolicy: Always
   credentials:
