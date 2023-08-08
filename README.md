@@ -160,6 +160,24 @@ with helm.
       --set-string global.jwtSecret="changeme" \
       --set-string global.apiKey="YOUR-API-KEY"
 
+
+Installation using External Postgres.
+
+helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait \
+  --create-namespace --namespace m9sweeper-system \
+  --set-string dash.init.superAdminEmail="super.admin@m9sweeper.io" \
+  --set-string dash.init.superAdminPassword="password" \
+  --set-string global.jwtSecret="changeme" \
+  --set-string global.apiKey="YOUR-API-KEY" \
+  --set global.postgres.enabled=false \
+  --set-string global.rabbitmq.enabled=false \
+  --set-string global.postgres.host="postgres" \
+  --set-string global.postgres.username="admin" \
+  --set-string global.postgres.password="test123" \
+  --set-string global.postgres.database="postgresdb" \
+  --set-string global.postgres.port=5432
+
+
 <!-- Contributing -->
 
 ## :wave: Contributing
