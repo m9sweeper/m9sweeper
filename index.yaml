@@ -392,6 +392,44 @@ entries:
     version: 1.2.0
   m9sweeper:
   - apiVersion: v2
+    appVersion: 1.4.0
+    created: "2023-08-08T15:29:41.985641-05:00"
+    dependencies:
+    - name: dash
+      repository: https://m9sweeper.github.io/m9sweeper
+      version: 1.4.0
+    - name: trawler
+      repository: https://m9sweeper.github.io/m9sweeper
+      version: 1.4.0
+    - condition: global.rabbitmq.enabled
+      name: rabbitmq
+      repository: https://m9sweeper.github.io/m9sweeper
+      version: 1.4.0
+    - condition: global.postgres.enabled
+      name: postgresql
+      repository: https://m9sweeper.github.io/m9sweeper
+      version: 1.4.0
+    description: 'm9sweeper: a tool to secure your kubernetes cluster and images'
+    digest: c7b013f5207ec3ef71d790abbb86a3661fb11070f5d1256d47fd91da7c952578
+    home: https://m9sweeper.io
+    keywords:
+    - m9sweeper
+    - analysis
+    - docker
+    - image
+    - security
+    - vulnerability
+    - scanner
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: m9sweeper
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/m9sweeper-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
     appVersion: 1.3.5
     created: "2023-06-28T01:27:07.096334-05:00"
     dependencies:
@@ -1112,4 +1150,4 @@ entries:
     urls:
     - https://m9sweeper.github.io/m9sweeper/trawler-1.2.0.tgz
     version: 1.2.0
-generated: "2023-08-08T14:44:22.56246-05:00"
+generated: "2023-08-08T15:29:41.95217-05:00"
