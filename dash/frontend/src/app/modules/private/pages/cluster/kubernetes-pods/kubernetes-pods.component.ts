@@ -115,7 +115,6 @@ export class KubernetesPodsComponent implements OnInit {
   }
 
   handleGetCountSuccessResponse(response: IServerResponse<string>) {
-    console.log(response);
     this.pageLoading = false;
     if (response.data) {
       this.totalNumPods = parseInt(response.data, 10);
