@@ -16,7 +16,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {KubesecDialogComponent} from '../kubesec/kubesec-dialog/kubesec-dialog.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {DatePipe} from '@angular/common';
-import {BreadcrumbInfo} from '../../../../../core/breadcrumbInfo.interface';
+import {Breadcrumb} from '../../../../shared/components/breadcrumbs/breadcrumb.interface';
 
 
 @Component({
@@ -40,7 +40,7 @@ export class KubernetesPodDetailsComponent implements OnInit {
   kubesecReport: string;
   currentDateData: { isToday: boolean, desiredDate: Date, startTime: number, endTime: number };
 
-  breadcrumbs: BreadcrumbInfo[] = [
+  breadcrumbs: Breadcrumb[] = [
     {
       place: 1,
       link: [],
