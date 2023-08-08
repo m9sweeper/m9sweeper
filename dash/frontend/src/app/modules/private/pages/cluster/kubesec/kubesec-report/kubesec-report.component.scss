@@ -1,5 +1,12 @@
-.pod-name {
-  font: 400 24px/32px Roboto, Helvetica Neue, sans-serif;
+.pod-score.row  div{
+  font: 400 27px Roboto, Helvetica Neue, sans-serif;
+  height: 44px;
+  display: flex;
+  align-items: center;
+
+  &.kubesec-score {
+    justify-content: center;
+  }
 }
 
 mat-toolbar {
