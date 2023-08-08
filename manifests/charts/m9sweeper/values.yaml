@@ -40,8 +40,8 @@ global:
 ###############
 dash:
   image:
-    registry: m9sweeper
-    repository: dash
+    registry: ghcr.io
+    repository: m9sweeper/dash
     tag: 0.0.0
 
   #kubesec:
@@ -119,8 +119,8 @@ dash:
 ##################
 trawler:
   image:
-    registry: m9sweeper
-    repository: trawler
+    registry: ghcr.io
+    repository: m9sweeper/trawler
     tag: 0.0.0
   enableDebugLogs: false
 
