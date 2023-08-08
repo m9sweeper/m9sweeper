@@ -164,6 +164,8 @@ with helm.
 Installation using External Postgres.
 
 ```
+helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+helm repo update && \
 helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait \
   --create-namespace --namespace m9sweeper-system \
   --set-string dash.init.superAdminEmail="super.admin@m9sweeper.io" \
