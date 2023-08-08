@@ -2,6 +2,19 @@ apiVersion: v1
 entries:
   dash:
   - apiVersion: v2
+    appVersion: 1.4.0
+    created: "2023-08-08T14:44:22.573318-05:00"
+    description: A Helm chart for the m9sweeper Dashboard and API
+    digest: a2df77e054af4dffb71d75af9e5ac57fe77be96c78104a7777b973a2c7037639
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: dash
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/dash-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
     appVersion: 1.3.5
     created: "2023-06-28T01:27:07.07184-05:00"
     description: A Helm chart for the m9sweeper Dashboard and API
@@ -106,6 +119,21 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/dash-1.2.0.tgz
     version: 1.2.0
   kube-bench:
+  - apiVersion: v2
+    appVersion: 0.6.17
+    created: "2023-08-08T14:44:22.581725-05:00"
+    description: A Helm chart for kube-bench in m9sweeper
+    digest: 8a219e1cc782b812eef013e09575a58b8b0415950bf9c7a64b228964c3ea1b37
+    home: https://m9sweeper.io/
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: kube-bench
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/kube-bench-1.4.0.tgz
+    version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
     created: "2023-06-28T01:27:07.075605-05:00"
@@ -227,6 +255,21 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/kube-bench-1.2.0.tgz
     version: 1.2.0
   kube-hunter:
+  - apiVersion: v2
+    appVersion: 0.6.8
+    created: "2023-08-08T14:44:22.585615-05:00"
+    description: A Helm chart for kube-hunter in m9sweeper
+    digest: 7dfead11c19b94b4ccb908c9766a1f663a926afff2b44b3ea346094f42b4b40f
+    home: https://m9sweeper.io/
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: kube-hunter
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/kube-hunter-1.4.0.tgz
+    version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
     created: "2023-06-28T01:27:07.079894-05:00"
@@ -655,6 +698,25 @@ entries:
   postgresql:
   - apiVersion: v2
     appVersion: "11.10"
+    created: "2023-08-08T14:44:22.611736-05:00"
+    description: PostgreSQL is an open-source object-relational database management
+      system (ORDBMS) emphasizing extensibility and technical standards compliance.
+    digest: 56ea915045ac633c5404fc19c999758361e88a932d794606290557e738b43167
+    home: https://www.postgresql.org/
+    icon: https://en.wikipedia.org/wiki/PostgreSQL#/media/File:Postgresql_elephant.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: support@m9sweeper.io
+      name: m9sweeper Support
+    name: postgresql
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/postgresql-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
+    appVersion: "11.10"
     created: "2023-06-28T01:27:07.101693-05:00"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
@@ -807,10 +869,23 @@ entries:
     version: 1.2.0
   rabbitmq:
   - apiVersion: v2
-    appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.10386-05:00"
+    appVersion: 3.8.34
+    created: "2023-08-08T14:44:22.61539-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: b21981d3aec46fcafa74f59a1b41387b48683597401951fda71932ff8bb2bc31
+    digest: b72952b789925865916044acb43515aeb5a2266f36518b70b595f2f484aeb8d8
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: rabbitmq
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v2
+    appVersion: 3.8.34
+    created: "2023-06-28T01:27:07.103601-05:00"
+    description: A Helm chart for the RabbitMQ
+    digest: dcd46ce708afe0b9dc1481af242f5c7be87d03fb460c2528ab8eba0278e8372a
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -820,10 +895,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.3.5.tgz
     version: 1.3.5
   - apiVersion: v2
-    appVersion: 1.3.4
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.103601-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: 8d8848d09299bf39e9597e195aabe44c05ff65a7df56163acfb0468faf17b75d
+    digest: b394e6a0b9dd4b355b2b6a78637215b1c5f2d0387b02ea3617dc5b5143269f83
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -833,10 +908,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.3.4.tgz
     version: 1.3.4
   - apiVersion: v2
-    appVersion: 1.3.2
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.10326-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: 7c457fbadd092ae58fd13952b3b52c7bdd6938c43c1147cd3cc01803fbdc90a0
+    digest: c1e42e3eead7b2953189b9d3207e98d51a4ee7fd81e54142f0012e1e34bed87f
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -846,10 +921,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.3.2.tgz
     version: 1.3.2
   - apiVersion: v2
-    appVersion: 1.3.1
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.103004-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: 4dcceaac4f3234e70b04040a6548532a7c55ca3e5ddacc75bd84c25206f972f1
+    digest: ff8aaa836ad63550063eff36e4151ca91e44ee7beb2ef2a059b146e1566b7a34
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -859,10 +934,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.3.1.tgz
     version: 1.3.1
   - apiVersion: v2
-    appVersion: 1.3.0
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.10275-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: f56d43c550cd5544a98c58cdfa7a85f9692d20e7ae07cd3f7a0c51da537e7b2a
+    digest: 06eadfe0f2782cc6c17e5a416f5c2831c4aa48938b0718121d21dc576d0b6a02
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -872,10 +947,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.3.0.tgz
     version: 1.3.0
   - apiVersion: v2
-    appVersion: 1.2.2
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.102494-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: 6d49750be8190c6078fcfb8a18c7527e9cfdaf5b0487f0f25e8674f176990b57
+    digest: 29dd1aba67ee4bd8958597a265cefa0248c0983d6715cff562f24166adb7dac5
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -885,10 +960,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.2.2.tgz
     version: 1.2.2
   - apiVersion: v2
-    appVersion: 1.2.1
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.102236-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: 727b40ab3e109f6207761f1fe045872b5f5616147e6dd8884e0f60f006e18e97
+    digest: b1c5189bf9898ef431d1aef2a509d100b065a425e5e3a3eecd067bf28aa0afd6
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -898,10 +973,10 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.2.1.tgz
     version: 1.2.1
   - apiVersion: v2
-    appVersion: 1.2.0
+    appVersion: 3.8.34
     created: "2023-06-28T01:27:07.101969-05:00"
     description: A Helm chart for the RabbitMQ
-    digest: e52341aa89725d653f1b1b0691a7458eb3574c31d07086a184e159492e73d09c
+    digest: 71d05932b650e61f30ec0757634d54d95b5703bcac96b1ddecdf455edf0da23d
     maintainers:
     - email: info@m9sweeper.io
       name: m9sweeper Support Team
@@ -911,6 +986,20 @@ entries:
     - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.2.0.tgz
     version: 1.2.0
   trawler:
+  - apiVersion: v2
+    appVersion: 1.4.0
+    created: "2023-08-08T14:44:22.618866-05:00"
+    description: A Helm chart for the M9sweeper Trawler
+    digest: 1e3dc3e5e95e2e204df357dfd451e4e3fa5fed3a6d931112973d781db74a2517
+    home: https://m9sweeper.io
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: trawler
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/trawler-1.4.0.tgz
+    version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
     created: "2023-06-28T01:27:07.106039-05:00"
@@ -1023,4 +1112,4 @@ entries:
     urls:
     - https://m9sweeper.github.io/m9sweeper/trawler-1.2.0.tgz
     version: 1.2.0
-generated: "2023-06-28T01:27:07.060242-05:00"
+generated: "2023-08-08T14:44:22.56246-05:00"
