@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {BreadcrumbInfo} from '../../../../core/breadcrumbInfo.interface';
+import {Breadcrumb} from './breadcrumb.interface';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -7,7 +7,7 @@ import {BreadcrumbInfo} from '../../../../core/breadcrumbInfo.interface';
   styleUrls: ['./breadcrumbs.component.scss'],
 })
 export class BreadcrumbsComponent implements OnChanges {
-  @Input() breadcrumbs: BreadcrumbInfo[];
+  @Input() breadcrumbs: Breadcrumb[];
 
   constructor() {}
 

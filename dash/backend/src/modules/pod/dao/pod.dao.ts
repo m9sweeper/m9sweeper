@@ -108,7 +108,7 @@ export class PodDao {
         .andWhere('p.namespace', namespace)
         .andWhere('p.saved_date', '>=', startTime)
         .andWhere('p.saved_date', '<=', endTime)
-        .then( totalPods => totalPods);
+        .then( totalPods => totalPods[0].count);
     }
 
     async getPodById(id: number): Promise<PodDto> {

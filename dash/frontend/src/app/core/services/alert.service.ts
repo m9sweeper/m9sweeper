@@ -52,4 +52,28 @@ export class AlertService {
       ...config,
     });
   }
+
+  dangerAlertForHTTPError(error, caller, label = 'close', config?: Partial<MatSnackBarConfig>) {
+    let message = '';
+    if (error?.error?.message) {
+      message = error.error.message;
+    } else if (error?.error) {
+      message = error.error;
+    } else if (error?.message) {
+      message = error.message;
+    } else if (typeof error === 'string') {
+      message = error;
+    } else {
+      message = 'There was an error';
+      console.log(`There was an error from ${caller}`, error);
+    }
+
+    this.snackBarService.open(message, label, {
+      announcementMessage: message,  // for the text reader
+      politeness: 'assertive',  // for the text reader
+      panelClass: ['danger-alert'],
+      ...this.defaultConfig,
+      ...config,
+    });
+  }
 }
