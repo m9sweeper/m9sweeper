@@ -64,7 +64,10 @@ dash:
           aliases:
             - index.docker.io
           login_required: false
-        - name: gcr.io
+        - name: "GitHub Container Registry"
+          hostname: ghcr.io
+          login_required: false
+        - name: "Kubernetes Container Registry"
           hostname: registry.k8s.io
           login_required: false
   # Kubernetes native ingress and Istio are supported, only enable one or neither of them.
