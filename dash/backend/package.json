@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "cli": "node ${CLI_PATH:=./dist/src/cli.js}",
-    "prebuild": "rimraf dist",
+    "prebuild": "rm -rf dist",
     "build:api": "nest build",
     "build:local": "npm run build:api",
     "build:prod": "npm run build:api && cp package*.json ./dist/ && cp info.json ./dist/",
@@ -79,7 +79,6 @@
     "qs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "response-time": "^2.3.2",
-    "rimraf": "^3.0.2",
     "rxjs": "^7.8.1",
     "swagger-ui-express": "^4.6.3",
     "ts-loader": "^9.4.4",
