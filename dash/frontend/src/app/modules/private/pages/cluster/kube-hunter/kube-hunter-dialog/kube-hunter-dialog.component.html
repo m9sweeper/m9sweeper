@@ -17,13 +17,14 @@
     <div class="modal-content-left-align-no-margin">
 
       <div *ngIf="cronjobOpt === false">
-        <div class="page-title-button-group-spacing">
-          <div > Run kube-hunter using the following CLI command:</div>
-          <div >
+        <div class="page-title-button-group-spacing align-items-center mb-xs-3">
+          <div> Run kube-hunter using the following CLI command:</div>
+          <div class="text-align-right">
             <app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
               errorMessage="Command could not be copied."
               [text]="run.value"
+              [responsive]="true"
             ></app-copy-to-clipboard-button>
           </div>
         </div>
@@ -56,11 +57,12 @@
         </div>
         <br>
         <div *ngIf="cronjobTime">
-          <div class="page-title-button-group-spacing">
-            <div > Run kube-hunter using the following CLI command.</div>
-            <div ><app-copy-to-clipboard-button
+          <div class="page-title-button-group-spacing align-items-center mb-xs-3">
+            <div> Run kube-hunter using the following CLI command.</div>
+            <div class="text-align-right"><app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
               errorMessage="Command could not be copied."
+              [responsive]="true"
               [text]="run.value"
             ></app-copy-to-clipboard-button>
             </div>
