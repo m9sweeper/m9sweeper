@@ -1,26 +1,18 @@
 .adjust-height {
   height: fit-content !important;
+}
 
-  .pod-page-buttons {
-    margin: 20px -10px 0 0;
-    display: flex;
-    justify-content: right;
+.pod-page-buttons {
+  margin: 20px -10px 0 0;
+}
 
-    div {
-      display: flex;
-      justify-content: end;
-    }
+.action-button {
+  background-color: white;
+}
 
-    .action-button {
-      background-color: white;
-      margin: 0 0.25em 1em 0.25em;
-
-      img {
-        max-width: 50px;
-        max-height: 30px;
-      }
-    }
-  }
+img {
+  max-width: 50px;
+  max-height: 30px;
 }
 
 .page-table {

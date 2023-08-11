@@ -1,45 +1,50 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces">
-              namespaces
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{namespace}}
-          </li>
-          <li class="breadcrumb-item">
-            <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces/{{namespace}}/pods">
-              pods
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{podName}}
-          </li>
-        </ol>
-        <p class="page-title">Images in Pod {{podName}}</p>
-      </div>
-
-      <div class="pod-page-buttons row">
-        <div class="col-xs-12 col-md-6">
-          <button
-            mat-fab
-            class="action-button" type="button"
-            (click)="getViolations()">
-            <img src="assets/images/opa-icon.png" alt="OPA"/>
-          </button>
-          <button
-            mat-fab
-            class="action-button" type="button"
-            (click)="runKubesec()">
-            <img src="assets/images/kubesec-logo.png" alt="kubesec"/>
-          </button>
+    <div class="page-title-button-group-spacing adjust-height row">
+      <div class="col-xs-12 col-md-6">
+        <div class="content-breadcrumbs">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces">
+                namespaces
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              {{namespace}}
+            </li>
+            <li class="breadcrumb-item">
+              <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces/{{namespace}}/pods">
+                pods
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              {{podName}}
+            </li>
+          </ol>
+          <p class="page-title">Images in Pod {{podName}}</p>
         </div>
-        <div class="calendar-date-picker col-xs-12 col-md-6">
-          <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="pod-page-buttons row">
+          <div class="col-xs-12 display-flex end-md start-xs">
+            <button
+              mat-fab
+              class="action-button mx-xs-1 mb-xs-3"
+              type="button"
+              (click)="getViolations()">
+              <img src="assets/images/opa-icon.png" alt="OPA"/>
+            </button>
+            <button
+              mat-fab
+              class="action-button mx-xs-1 mb-xs-3"
+              type="button"
+              (click)="runKubesec()">
+              <img src="assets/images/kubesec-logo.png" alt="kubesec"/>
+            </button>
+            <div class="calendar-date-picker">
+              <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
+            </div>
+          </div>
         </div>
       </div>
     </div>
