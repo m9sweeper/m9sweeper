@@ -13,6 +13,9 @@
       [mode]="isHandsetOrXS ? 'over' : 'side'"
       [opened]="(isHandsetOrXS === false) || sidenavExpanded"
     >
+      <div class="no-templates-text m-xs-3" *ngIf="topDirs.length === 0">
+        No templates available
+      </div>
       <div *ngFor="let dir of topDirs">
         <mat-expansion-panel class="no-padding no-box-shadow">
           <mat-expansion-panel-header>
@@ -35,10 +38,13 @@
 
     <mat-drawer-content>
       <div class="mat-row check-item-list height-30">
+        <div class="no-templates-text m-xs-3" *ngIf="topDirs.length === 0 && !sidenav.opened">
+          No templates available
+        </div>
         <div class="sidenav-content"
              [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
              *ngIf="currentlySelectedTemplates.length">
-          <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates">
+          <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates; let i = index">
             <div class="col-xs-2 col-md-1">
               <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
             </div>
@@ -51,7 +57,7 @@
               <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
               <div id="btn" class="mt-half-rem">
                 <button mat-raised-button color="primary"
-                        (click)="openK8sManifest(template)">Review or Edit Kubernetes Manifest</button>
+                        (click)="openK8sManifest(i)">Review or Edit Kubernetes Manifest</button>
               </div>
             </div>
           </div>
@@ -63,13 +69,12 @@
 <mat-dialog-actions class="mat-row action-btn">
   <div class="margin-right-10">
     <button [disabled]="currentlySelectedTemplates.length === 0"
-            mat-raised-button
+            mat-raised-button mat-dialog-close
             color="primary"
             type="submit"
             (click)="deployMultipleGateKeeperTemplates()">Save Changes</button>
     <button mat-raised-button
             color="warn"
-            type="button"
-            (click)="onNoClick()">Cancel</button>
+            type="button">Cancel</button>
   </div>
 </mat-dialog-actions>

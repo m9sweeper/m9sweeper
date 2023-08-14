@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from 'src/app/core/services/alert.service';
+import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 
 @Component({
   selector: 'app-add-custom-constraint-template',
@@ -24,36 +25,42 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
   initialHeight = 300; // this is the initial height of codemirror
   rawTemplate: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data,
-              private gateKeeperService: GateKeeperService,
-              private dialogRef: MatDialogRef<AddCustomConstraintTemplateComponent>,
-              private alertService: AlertService) { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: {
+      templateContent?: IGatekeeperTemplate;
+      rawTemplateContent?: string;
+      clusterId?: number;
+      dir?: string;
+      subDir?: string;
+    },
+    private gatekeeperService: GateKeeperService,
+    private dialogRef: MatDialogRef<AddCustomConstraintTemplateComponent>,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
-    if (this.data && this.data.referer && this.data.referer === 'gate-keeper-details') {
-      const parsedTemplate = JSON.parse(this.data.templateContent);
+    if (this.data?.rawTemplateContent) {
+      const parsedTemplate = JSON.parse(this.data.rawTemplateContent);
       delete parsedTemplate.metadata.resourceVersion;
       this.rawTemplate = JSON.stringify(parsedTemplate, null, ' ');
+    } else if (this.data?.templateContent) {
+      this.rawTemplate = JSON.stringify(this.data.templateContent, null, ' ');
     } else {
-      this.gateKeeperService.loadRawGateKeeperTemplate(this.data.clusterId, this.data.dir, this.data.subDir).subscribe(response => {
+      this.gatekeeperService.loadRawGateKeeperTemplate(this.data.clusterId, this.data.dir, this.data.subDir).subscribe(response => {
         this.rawTemplate = JSON.stringify(response, null, ' ');
       });
     }
-
-  }
-  setEditorContent(event) {
-  }
-
-  onNoClick() {
-    this.dialogRef.close({cancel: true});
   }
 
   deployCustomTemplate() {
-    this.patchTemplate();
+    this.dialogRef.close({
+      editedTemplate: this.rawTemplate,
+    });
+    // this.patchTemplate();
   }
 
   patchTemplate() {
-    this.gateKeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
+    this.gatekeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
       if (response.data.statusCode === 200) {
         this.alertService.success(`${response.data.message}`);
       } else if (response.data.statusCode === 409) {
