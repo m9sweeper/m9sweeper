@@ -57,13 +57,13 @@ export class KubeHunterDao {
             .then(report => plainToInstance(KubeHunterDto, report));
     }
 
-    async countReport(clusterId:number): Promise<Number> {
+    async countReport(clusterId:number): Promise<number> {
         const knex = await this.databaseService.getConnection();
-        const result = await knex('kube_hunter as kh')
+        return knex('kube_hunter as kh')
+            .where('kh.cluster_id', clusterId)
             .count('kh.id', {as: 'count'})
-            .returning('count');
-
-        return (result && result[0] && result[0].count) ? result[0].count : 0;
+            .returning('count')
+            .then(res => res?.[0]?.count ? +res[0].count : 0);
     }
 
 }
