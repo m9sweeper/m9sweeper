@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {take, tap} from 'rxjs/operators';
 import {KubeHunterService} from '../../../../../core/services/kube-hunter.service';
-import {AlertService} from 'src/app/core/services/alert.service';
 import {IKubeHunterReport} from '../../../../../core/entities/IKubeHunterReport';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
@@ -22,6 +21,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
   allReportsForCluster: IKubeHunterReport[];
   scansExist = false;
   mostRecentVulnerabilities = {low: 0, medium: 0, high: 0};
+  receivedResponse = false;
 
   penetrationTestStatusInvalid: boolean;
   penetrationTestText: string;
@@ -36,7 +36,6 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
 
   constructor(
     private kubeHunterService: KubeHunterService,
-    private alertService: AlertService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,
@@ -63,6 +62,7 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
         take(1),
       )
       .subscribe(res => {
+        this.receivedResponse = true;
         this.scansExist = !!res?.list?.length;
         this.allReportsForCluster = res?.list || [];
         this.reportCount = res?.reportCount || 0;

@@ -36,7 +36,6 @@ export class CopyToClipboardButtonComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
-    console.log('responsicv,', this.responsive);
     if (this.responsive) {
       this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
         .pipe(

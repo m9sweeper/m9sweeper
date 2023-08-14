@@ -28,7 +28,7 @@
                 <th>Medium</th>
                 <th>High</th>
               </tr>
-              <tr>
+              <tr *ngIf="receivedResponse">
                 <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : 'N/A'}}</td>
                 <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : 'N/A'}}</td>
                 <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : 'N/A'}}</td>
