@@ -8,16 +8,20 @@ import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
 import {DEFAULT_SCHEMA} from "js-yaml";
+import { GatekeeperService } from '../../cluster/services/gatekeeper.service';
 
 
 @Injectable()
 export class ExceptionBlockService {
     defaultTemplateDir: string;
-    constructor(private readonly configService: ConfigService,
-                private readonly exceptionsService: ExceptionsService,
-                private readonly kubernetesNamespaceService: NamespaceService,
-                @Inject(forwardRef(() => ClusterService))
-                private readonly clusterService: ClusterService) {
+    constructor(
+      private readonly configService: ConfigService,
+      private readonly exceptionsService: ExceptionsService,
+      private readonly gatekeeperService: GatekeeperService,
+      private readonly kubernetesNamespaceService: NamespaceService,
+      @Inject(forwardRef(() => ClusterService))
+      private readonly clusterService: ClusterService
+    ) {
         this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     }
 
@@ -55,8 +59,8 @@ export class ExceptionBlockService {
         }
         console.log(`.....................................Exception Block Syncing Ended at ${new Date().toUTCString()}.....................................`);
     }
-    
-    
+
+
     async calculateCommonExceptionBlocks(clusterId: number): Promise<{commonExceptionBlock: string, commonExceptionBlockWithImagePattern: string}> {
         // Calculating Exception Block That will be applied to every template of every cluster.
         const commonExceptions = await this.exceptionsService.getAllCommonExceptions();
@@ -179,6 +183,7 @@ export class ExceptionBlockService {
         return templateObj;
     }
 
+    // we should deprecate this and manage templates differently
     async copyGatekeeperTemplatesForCluster(clusterId: number): Promise<boolean> {
         const folderName = `${this.defaultTemplateDir}/../cluster-${clusterId}-gatekeeper-templates`;
         if (! await fse.pathExists(folderName)) {

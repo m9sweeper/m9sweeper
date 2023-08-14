@@ -59,14 +59,6 @@ export class GatekeeperConstraintSpecMatch {
     namespaces: string[];
 }
 
-// @Exclude()
-// export class GatekeeperConstraintSpecLabel {
-//     @IsOptional()
-//     @Expose()
-//     labels: string[];
-//
-// }
-
 @Exclude()
 export class GatekeeperConstraintSpec {
     @IsOptional()

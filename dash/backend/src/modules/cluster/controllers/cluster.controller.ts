@@ -238,9 +238,9 @@ export class ClusterController {
         status: 201,
         schema: DELETE_CLUSTER_RESPONSE_SCHEMA
     })
-    async deployMultipleOPAGateKeeperConstraintTemplates( @Body() templateNames: {templateNames: string[]}, @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
+    async deployMultipleOPAGateKeeperConstraintTemplates( @Body() templateNames: {templates: {name: string, template: string}[]}, @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
         this.logger.log({label: 'About to deploy multiple Gatekeeper constraints', data: { templateNames }}, 'ClusterController.deployMultipleOPAGateKeeperConstraintTemplates');
-        return this.clusterService.deployMultipleOPAGateKeeperConstraintTemplates(clusterId, templateNames.templateNames);
+        return this.clusterService.deployMultipleOPAGateKeeperConstraintTemplates(clusterId, templateNames.templates);
     }
 
 

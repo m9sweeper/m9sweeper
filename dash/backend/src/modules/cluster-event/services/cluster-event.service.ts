@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import {ClusterEventDto} from '../dto/cluster-event-dto';
 import {ClusterEventDao} from '../dao/cluster-event.dao';
 import {instanceToPlain} from 'class-transformer';
@@ -15,10 +15,13 @@ import {ClusterDto} from '../../cluster/dto/cluster-dto';
 import {ClusterDao} from "../../cluster/dao/cluster.dao";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
+import { ClusterService } from '../../cluster/services/cluster.service';
 
 @Injectable()
 export class ClusterEventService {
     constructor(
+      @Inject(forwardRef(() => ClusterService))
+      private readonly clusterService: ClusterService,
       private readonly clusterEventDao: ClusterEventDao,
       private readonly clusterDao: ClusterDao,
       private logger: MineLoggerService,
@@ -66,7 +69,7 @@ export class ClusterEventService {
                                 clusterId: number,
                                 namespace: string): Promise<any> {
         try {
-            const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
+            const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
             const eventsApi = kubeConfig.makeApiClient(CoreV1Api);
 
             const eventBody = new CoreV1Event();
@@ -104,14 +107,4 @@ export class ClusterEventService {
             this.logger.error({label: 'Error creating cluster event'}, e, 'ClusterEventService.createK8sClusterEvent');
         }
     }
-
-    private async getKubeConfig(clusterId: number): Promise<KubeConfig> {
-        const kubeConfig: KubeConfig = new KubeConfig();
-        const cluster: ClusterDto = await this.clusterDao.getClusterById(+clusterId);
-        const kubeConfigString = Buffer.from(cluster.kubeConfig, 'base64').toString();
-        kubeConfig.loadFromString(kubeConfigString);
-        kubeConfig.setCurrentContext(cluster.context);
-        return kubeConfig;
-    }
-
 }
