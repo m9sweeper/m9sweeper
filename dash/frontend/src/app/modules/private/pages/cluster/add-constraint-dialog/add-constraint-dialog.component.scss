@@ -2,7 +2,7 @@
   padding-inline: 0;
 }
 
-.example-container {
+.constraint-template-container {
   height: 91%;
 }
 
@@ -50,4 +50,8 @@
 
 .mat-expansion-panel {
   box-shadow: none !important;
+}
+
+mat-dialog-actions {
+  border-top: rgba(0, 0, 0, 0.12) solid 1px;
 }

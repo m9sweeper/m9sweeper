@@ -38,4 +38,5 @@ export interface IGSelectedTemplate {
   selectedTemplateName: string;
   selectedTopDir?: string;
   displayTemplateContent?: boolean;
+  error?: string;
 }

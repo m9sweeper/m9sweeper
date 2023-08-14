@@ -2,10 +2,10 @@
   <button mat-icon-button *ngIf="isHandsetOrXS" (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h3>Constraint Templates</h3>
+  <h3 [ngClass]="isHandsetOrXS ? 'px-xs-0' : 'px-xs-2'">Constraint Templates</h3>
 </mat-toolbar>
 <mat-dialog-content class="modal-container-margin no-padding">
-  <mat-drawer-container class="example-container" autosize>
+  <mat-drawer-container class="constraint-template-container" autosize>
     <mat-drawer
       #sidenav
       class="sidenav"
@@ -29,7 +29,7 @@
 
             <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
               <mat-checkbox class="no-padding"
-                            id="{{subDir}}"
+                            id="checkbox-{{dir}}-{{subDir}}"
                             (change)="loadTemplate(dir, subDir, $event)">{{subDir}}</mat-checkbox>
             </div>
         </mat-expansion-panel>
@@ -44,20 +44,29 @@
         <div class="sidenav-content"
              [style]="{'display': currentlySelectedTemplates.length ? '' : 'none'}"
              *ngIf="currentlySelectedTemplates.length">
-          <div class="row mb-1-rem" *ngFor="let template of currentlySelectedTemplates; let i = index">
-            <div class="col-xs-2 col-md-1">
-              <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
-            </div>
-            <div class="col-xs-10 col-md-11 ps-xs-0">
-              <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
-            </div>
-            <div class="col-xs-12 col-md-11 col-md-offset-1 ps-md-0">
-              <div id="category-text" class="mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
-              <strong>Description: </strong>
-              <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
-              <div id="btn" class="mt-half-rem">
-                <button mat-raised-button color="primary"
-                        (click)="openK8sManifest(i)">Review or Edit Kubernetes Manifest</button>
+          <div class="row mb-xs-3 mx-xs-1" *ngIf="saveAttemptResults.successfullyDeployed.length">
+            <div class="col-xs-12" *ngFor="let successMessage of saveAttemptResults.successfullyDeployed">{{successMessage}}</div>
+          </div>
+          <div class="row mb-xs-3 mx-xs-1 error-text" *ngIf="saveAttemptResults.unsuccessfullyDeployed.length">
+            <div class="col-xs-12" *ngFor="let failedMessage of saveAttemptResults.unsuccessfullyDeployed">{{failedMessage}}</div>
+          </div>
+          <div *ngFor="let template of currentlySelectedTemplates; let i = index">
+            <div class="row mb-1-rem" [id]="template.selectedTopDir + '/' + template.selectedTemplateName">
+              <div class="col-xs-2 col-md-1">
+                <mat-checkbox [checked]="true" (change)="unselectTemplate(template, $event)"></mat-checkbox>
+              </div>
+              <div class="col-xs-10 col-md-11 ps-xs-0">
+                <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
+              </div>
+              <div class="col-xs-12 col-md-11 col-md-offset-1 ps-md-0">
+                <div class="category-text mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
+                <strong>Description: </strong>
+                <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
+                <div id="btn" class="mt-half-rem">
+                  <button mat-raised-button color="primary"
+                          (click)="openK8sManifest(i)">Review or Edit Kubernetes Manifest</button>
+                </div>
+                <div class="my-xs-1 error-text" *ngIf="template.error">{{template.error}}</div>
               </div>
             </div>
           </div>
@@ -69,11 +78,11 @@
 <mat-dialog-actions class="mat-row action-btn">
   <div class="margin-right-10">
     <button [disabled]="currentlySelectedTemplates.length === 0"
-            mat-raised-button mat-dialog-close
+            mat-raised-button
             color="primary"
             type="submit"
             (click)="deployMultipleGateKeeperTemplates()">Save Changes</button>
-    <button mat-raised-button
+    <button mat-raised-button mat-dialog-close
             color="warn"
             type="button">Cancel</button>
   </div>
