@@ -40,8 +40,8 @@ global:
 ###############
 dash:
   image:
-    registry: m9sweeper
-    repository: dash
+    registry: ghcr.io
+    repository: m9sweeper/dash
     tag: 0.0.0
 
   #kubesec:
@@ -64,7 +64,10 @@ dash:
           aliases:
             - index.docker.io
           login_required: false
-        - name: gcr.io
+        - name: "GitHub Container Registry"
+          hostname: ghcr.io
+          login_required: false
+        - name: "Kubernetes Container Registry"
           hostname: registry.k8s.io
           login_required: false
   # Kubernetes native ingress and Istio are supported, only enable one or neither of them.
@@ -119,8 +122,8 @@ dash:
 ##################
 trawler:
   image:
-    registry: m9sweeper
-    repository: trawler
+    registry: ghcr.io
+    repository: m9sweeper/trawler
     tag: 0.0.0
   enableDebugLogs: false
 

@@ -9,7 +9,7 @@ import config from '../../config.js';
  */
 describe('Gatekeeper Page::', () => {
 
-    // Skip running these tests if the SKTIP_GATEKEEPER_TESTS setting was set to true
+    // Skip running these tests if the SKIP_GATEKEEPER_TESTS setting was set to true
     if (config.SKIP_GATEKEEPER_TESTS) {
         pending("Skipping Gatekeeper tests due to configured SKIP_GATEKEEPER_TESTS");
     }
@@ -24,6 +24,7 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Open the default cluster
+        // @ts-ignore
         await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
@@ -31,20 +32,22 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Move to the Gatekeeper page
-        await $("//span[@class='menu-item-name'][contains(text(), 'GateKeeper')]").customClick("gatekeeper-page");
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'Gatekeeper')]").customClick("gatekeeper-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/gatekeeper'),
             {message: "m9sweeper should be displaying the GateKeeper page"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 
 
     // Use helm to install GateKeeper
     it('2 Install GateKeeper with Helm', async () => {
-        // Get the gatekeeper status field so we can tell if its is installed or not. We do not need to run
+        // Get the gatekeeper status field so that we can tell if its is installed or not. We do not need to run
         // this test if it is already installed. This likely can happen if running tests locally.
         const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
@@ -58,19 +61,22 @@ describe('Gatekeeper Page::', () => {
             {message: "m9sweeper should be showing Gatekeeper as Not Installed"}
         );
 
-        // Locate the install button and click it
+        // Locate the "Install" button and click it
+        // @ts-ignore
         await $("//button/span[contains(normalize-space(), 'Install')]").customClick('install');
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-gate-keeper-install-wizard-dialog")).toBePresent(
-            {message: "The GateKeeper installation instructions window should be visable"}
+            {message: "The GateKeeper installation instructions window should be visible"}
         );
 
         // Locate the Done button and click it
+        // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(normalize-space(), 'Done')]").customClick('done');
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-gate-keeper-install-wizard-dialog")).not.toBePresent(
-            {message: "The GateKeeper installation instructions window should no longer be visable"}
+            {message: "The GateKeeper installation instructions window should no longer be visible"}
         );
 
         // Take a screenshot for records
+        // @ts-ignore
         await browser.customScreenshot("pre-installation");
 
         // Wait for 5 seconds to ensure log output is clear for the commands
@@ -103,10 +109,10 @@ describe('Gatekeeper Page::', () => {
         expect(exitCode).toEqual(0);
 
         // Wait 30 seconds to give time for gatekeeper to be registered in m9sweeper
-        console.log("Sleeping for 30 seconds to allow m9seeper to detect gatekeeper");
+        console.log("Sleeping for 30 seconds to allow m9sweeper to detect gatekeeper");
         await sleep(30000);
 
-        // Reload the page we are currently on so we can get an updated gatekeeper status
+        // Reload the page we are currently on so that we can get an updated gatekeeper status
         await browser.refresh();
 
         // Wait 5 seconds to let the page finish loading after the refresh
@@ -117,14 +123,15 @@ describe('Gatekeeper Page::', () => {
             {message: "m9sweeper should be showing GateKeeper as installed, but in the Not Setup status"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 
 
     // Setup Gatekeeper in m9sweeper
     it('3 Setup Gatekeeper', async () => {
-        // Get the gatekeeper status field so we can tell if its is setup or not. We do not need to run
+        // Get the gatekeeper status field so that we can tell if it is set up. We do not need to run
         // this test if it is already setup. This likely can happen if running tests locally.
         const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
@@ -134,62 +141,66 @@ describe('Gatekeeper Page::', () => {
         }
 
         // Locate the setup button and click it
+        // @ts-ignore
         await $("//span[contains(text(), 'Setup')]").customClick("setup");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-constraint-dialog")).toBePresent(
-            {message: "The dialog for adding a constraint template should be visable"}
+            {message: "The dialog for adding a constraint template should be visible"}
         );
 
-        // Expand the general dropdown menu in the contraint library
-        await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(text(), 'general')]").customClick("expand-general");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(text(), 'general')]/following-sibling::mat-icon[contains(normalize-space(), 'expand_more')]"))
-            .toHaveElementClassContaining(
-                "rotated",
-                {message: "The general section should be expanded to view the constriant templates within"}
-            );
+        // Expand the general dropdown menu in the constraint library
+        // @ts-ignore
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-expansion-panel//span[contains(text(), 'general')]").customClick("expand-general");
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-expansion-panel/div[contains(@class, 'mat-expansion-panel-content') and contains(@style, 'visibility: visible;')]")).toBePresent(
+            {message: "The general section should be expanded to view the constraint templates within"}
+        );
 
-        // Enable the containerlimits contraint template
+        // Enable the container limits constraint template
+        // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']").customClick("enable-containerlimits");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']")).toHaveElementClassContaining(
-            "mat-checkbox-checked",
-            {message: "The containerlimits contraint template should be selected"}
+            "mat-mdc-checkbox-checked",
+            {message: "The container limits constraint template should be selected"}
         );
 
         // Click the Save Changes button to stave the gatekeeper setting to m9sweeper
+        // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(text(), 'Save Changes')]").customClick("save-changes");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-constraint-dialog")).not.toBePresent(
-            {message: "The dialog for adding a constraint template should no longer be visable"}
+            {message: "The dialog for adding a constraint template should no longer be visible"}
         );
 
         // Wait for the alert stating the template was deployed successfully
-        await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Templates were deployed successfully')]")
-            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Templates were deployed successfully alert did not appear, this suggests the constraint template was not created sucessfully."});
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Templates were deployed successfully')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Templates were deployed successfully alert did not appear, this suggests the constraint template was not created successfully."});
 
         // Verify the status text is now showing Gatekeeper as setup
         expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "m9sweeper should be reporting gatekeeper as Setup"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 
 
-    // Setup the constraint template
+    // Set up the constraint template
     it('4 Setup Constraint Template', async () => {
         // Verify that the constraint template exists
-        const templateListItem = await $("//table//td[contains(normalize-space(), 'k8scontainerlimits')]");
-        expect(await templateListItem).toBePresent(
+        const templateListItem = await $("//mat-table//mat-row[contains(normalize-space(), 'k8scontainerlimits')]");
+        expect(templateListItem).toBePresent(
             {message: "The k8scontainerlimits constraint should be present"}
         );
 
         // Click on the constraint template to open the constraint template editing page
+        // @ts-ignore
         await templateListItem.customClick("open-edit-page");
         expect(browser).toHaveUrl(
-            buildUrl('private/clusters/1/gatekeeper/k8scontainerlimites'),
+            buildUrl('private/clusters/1/gatekeeper/k8scontainerlimits'),
             {message: "m9sweeper should be displaying the k8scontainerlimits gatekeeper constraint page"}
         );
 
-        // Get the constraint status field so we can tell if its is setup or not. We do not need to run
+        // Get the constraint status field so that we can tell if its is set up or not. We do not need to run
         // this test if it is already setup. This likely can happen if running tests locally.
         const statusText = await (await $("//mat-card/mat-card-content/h2")).getText();
 
@@ -204,59 +215,62 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Locate and click on the Add More button
+        // @ts-ignore
         await $("//span[contains(text(), 'Add More')]").customClick("add-more");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-template-constraint")).toBePresent(
-            {message: "The dialog for adding a constraint template should be visable"}
+            {message: "The dialog for adding a constraint template should be visible"}
         );
 
         // Locate and fill out the Name input
         const nameInputField = await $("//div[contains(@class, 'cdk-overlay-container')]//input[@formcontrolname='name']");
-        expect(await nameInputField).toBePresent(
+        expect(nameInputField).toBePresent(
             {message: "The Name input field should exist"}
         );
-        nameInputField.clearValue();
-        nameInputField.setValue("testing-limit");
+        await nameInputField.clearValue();
+        await nameInputField.setValue("testing-limit");
 
         // Locate and fill out the description input
         const descriptionInputField = await $("//div[contains(@class, 'cdk-overlay-container')]//input[@formcontrolname='description']");
-        expect(await descriptionInputField).toBePresent(
+        expect(descriptionInputField).toBePresent(
             {message: "The Description input field should exist"}
         );
-        descriptionInputField.clearValue();
-        descriptionInputField.setValue("Limit created by automated testing");
+        await descriptionInputField.clearValue();
+        await descriptionInputField.setValue("Limit created by automated testing");
 
         // Locate and fill out the cpu properties input
         const cpuInputField = await $("//div[contains(@class, 'cdk-overlay-container')]//input[@name='cpu']");
         expect(await cpuInputField).toBePresent(
             {message: "The CPU input field should exist"}
         );
-        cpuInputField.clearValue();
-        cpuInputField.setValue("2000m");
+        await cpuInputField.clearValue();
+        await cpuInputField.setValue("2000m");
 
         // Locate and fill out the memory properties input
         const memoryInputField = await $("//div[contains(@class, 'cdk-overlay-container')]//input[@name='memory']");
         expect(await memoryInputField).toBePresent(
             {message: "The Memory input field should exist"}
         );
-        memoryInputField.clearValue();
-        memoryInputField.setValue("2Gi");
+        await memoryInputField.clearValue();
+        await memoryInputField.setValue("2Gi");
 
         // Locate and click the Save Changes button
+        // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//span[contains(text(), 'Save Changes')]").customClick("save-changes");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-template-constraint")).not.toBePresent(
-            {message: "The dialog for adding a constraint template should no longer be visable"}
+            {message: "The dialog for adding a constraint template should no longer be visible"}
         );
 
         // Wait for the alert stating the constraint was created successfully
-        await $("//ff-alerts//div[contains(@class, 'content') and contains(normalize-space(), 'Constraint created successfully')]")
-            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created sucessfully."});
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Constraint created successfully')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created successfully."});
 
         // Verify the status text is now showing Gatekeeper as setup
         expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "The k8scontainerlimits constraint should be showing as setup."}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 });

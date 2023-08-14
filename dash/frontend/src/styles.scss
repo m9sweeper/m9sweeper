@@ -21,7 +21,7 @@ $ms-button-styling: mat.define-typography-level(
   $font-family: "Roboto, 'Helvetica Neue', sans-serif",
   $font-weight: 600,
   $font-size: 14px,
-  $line-height: 48px,
+  //$line-height: 48px,
   $letter-spacing: normal,
 );
 
@@ -459,7 +459,8 @@ app-private {
   width: -webkit-fill-available;
   max-height: 400px;
   resize: none;
-  margin: 0 0 16px  0;
+  margin: 0 0 16px 0;
+  box-sizing: border-box;
   // Styles below replicate StackOverflow
   background-color: #f6f6f6;
   padding: 12px;

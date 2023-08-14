@@ -1,0 +1,6 @@
+.readonly-cb {
+  // Combined, these 2 prevent the mouse from changing to a pointer and the
+  // 'ripple' from appearing around it when hovered over
+  cursor: unset;
+  pointer-events: none;
+}

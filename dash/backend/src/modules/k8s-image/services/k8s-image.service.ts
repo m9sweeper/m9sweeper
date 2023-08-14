@@ -151,7 +151,7 @@ export class K8sImageService {
                         // new! create it!
                         const savedImage = await this.imageService.createImage(image, clusterId, false);
                         if (savedImage && savedImage.id) {
-                            imageIdMapRunningInCluster.setIdRunning(name, k8sImageDto.imageHash, existingImageDto.id);
+                            imageIdMapRunningInCluster.setIdRunning(name, k8sImageDto.imageHash, savedImage.id);
                             k8sImageDto.imageId = savedImage.id;
                             this.logger.log({label: 'New image added to index and scan queued', data: { name }}, 'K8sImageService.saveK8sImages');
                         }

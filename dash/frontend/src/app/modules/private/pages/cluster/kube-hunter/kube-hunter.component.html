@@ -28,10 +28,10 @@
                 <th>Medium</th>
                 <th>High</th>
               </tr>
-              <tr>
-                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : ''}}</td>
-                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : ''}}</td>
-                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : ''}}</td>
+              <tr *ngIf="receivedResponse">
+                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.low : 'N/A'}}</td>
+                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.medium : 'N/A'}}</td>
+                <td class="last-run-data">{{ scansExist ? mostRecentVulnerabilities.high : 'N/A'}}</td>
               </tr>
             </table>
           </mat-card-content>
@@ -83,7 +83,7 @@
                   <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
                   <mat-cell *matCellDef="let report">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubehunter', report.id]">
-                      {{report.date | date: 'M/dd/yyyy' }}
+                      {{report.createdAt | date: 'M/dd/yyyy' }}
                     </a>
                   </mat-cell>
                 </ng-container>
@@ -91,7 +91,7 @@
                   <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>\
                   <mat-cell *matCellDef="let report">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubehunter', report.id]">
-                      {{report.date | date: 'mediumTime'}}
+                      {{report.createdAt | date: 'mediumTime'}}
                     </a>
                   </mat-cell>
                 </ng-container>

@@ -33,7 +33,7 @@ export class KubeHunterService {
         const reportCount =await this.kubeHunterDao.countReport(clusterId);
         return{
             list: list,
-            reportCount:+reportCount
+            reportCount: reportCount
         }
         //return await this.kubeHunterDao.getAllReportsForCluster(clusterId, page, limit);
     }

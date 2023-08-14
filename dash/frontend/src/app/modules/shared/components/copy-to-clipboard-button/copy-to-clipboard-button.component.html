@@ -1,4 +1,4 @@
-<button *ngIf="iconButton else textButton"
+<button *ngIf="iconButton || isSmallScreen else textButton"
         mat-icon-button
         (click)="copy()"
 >

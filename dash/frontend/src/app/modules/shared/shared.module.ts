@@ -19,6 +19,8 @@ import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
 import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
+import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.compone
     CopyToClipboardButtonComponent,
     SideNavComponent,
     HideableTextComponent,
+    ReadonlyCheckboxComponent,
   ],
   imports: [
     MatDialogModule,
@@ -45,6 +48,7 @@ import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.compone
     RouterOutlet,
     RouterModule,
     MatListModule,
+    MatCheckboxModule,
   ],
   exports: [
     BreadcrumbsComponent,
@@ -55,6 +59,7 @@ import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.compone
     CopyToClipboardButtonComponent,
     SideNavComponent,
     HideableTextComponent,
+    ReadonlyCheckboxComponent,
   ]
 })
 export class SharedModule {

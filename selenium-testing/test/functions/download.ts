@@ -1,146 +1,59 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
 
-export interface downloadTestOptions {
+/**
+ * Configures the download and verify function for downloading a file and verifying it is present on the file system
+ */
+export interface downloadOptions {
     /**
-     * Maximum amount of time (in ms) to wait for the file to exist.
-     * Defaults to 10000ms (10 seconds)
-     * */
-    timeout?: number;
-
-    /**
-     * Add a custom message to the click handler.
-     * Defaults to: 'Downloading [filename]'
-     * */
-    customClickMessage?: string;
-
-    /**
-     * Callback function to call on the contents of the file for validating the contents
-     * @param created Whether or not the file was created
-     * @param filename the name of the file that was originally created (its raw value, not what it was renamed to)
-     * @param buf A buffer containing the file contents
-     * */
-    callback?: (created: boolean, filename: string, buf: Buffer) => any;
-
-    /**
-     * If set, will rename the file after it is downloaded.
-     * Allows you to keep multiple downloads from the same source.
-     * Will overwrite any pre-existing file with this name.
+     * The element to click on to trigger the download
      */
-    renameTo?: string;
+    element: WebdriverIO.Element,
 
     /**
-     * Regular expression for the filename if it has a generated name.
+     * The name of the file or a valid regex expression to locate the file
      */
-    filenameRegex?: RegExp;
+    filenameOrRegex: string | RegExp,
+
+    /**
+     * The time in seconds to wait for the file to be present. Defaults to 30 seconds.
+     */
+    timeout?: 30
 }
 
 /**
- * Clicks an element to trigger a download and ensure the file is created
+ * Provides a common function for clicking on an element and verifying the file that click downloads is present on the filesystem
  *
- * @param filename The name the file should have after being downloaded
- * @param element The element that should be clicked to trigger the download. Ensure it exists before calling this function
- * @param options Optional extra settings
+ * @param options The options for downloading the file and verifying it
  */
-export async function download(filename: string, element: WebdriverIO.Element, options?: downloadTestOptions ): Promise<boolean> {
-    try {
-        let filePath = path.join(__downloadDir, filename);
+export async function downloadAndVerify(options: downloadOptions): Promise<boolean> {
+    // Click on the element to trigger the file download
+    await options.element.click();
 
-        // If the file already exists, delete it
-        // Otherwise it will download something like 'file (1).csv'.
-        if (fs.existsSync(filePath)) {
-            fs.rmSync(filePath);
+    // Load the time the download was started
+    const startTime = Date.now();
+
+    // Loop until the file has been found or the timeout has been reached
+    while (Date.now() - startTime < (options.timeout * 1000)) {
+        // List files in the download directory
+        // @ts-ignore
+        const files = fs.readdirSync(__downloadDir);
+
+        // Search for the file based on filename or regex
+        const foundFile = files.find((file) =>
+            typeof options.filenameOrRegex === 'string'
+                ? file.includes(options.filenameOrRegex)
+                : options.filenameOrRegex.test(file)
+        );
+
+        // Return that the file was found if it was
+        if (foundFile) {
+            return true;
         }
 
-        // Trigger the download
-        const dlStart = Date.now();
-
-        await element.customClick(options?.customClickMessage || `Downloading ${filename}`);
-        const createdFilename = await waitForFileToExist(options?.filenameRegex || filename, options?.timeout || 10000, dlStart);
-
-        if (createdFilename && !!options?.renameTo) {
-            fs.renameSync(path.join(__downloadDir, createdFilename), path.join(__downloadDir, options.renameTo));
-            filePath = path.join(__downloadDir, options.renameTo);
-        }
-
-        if (options?.callback) {
-            const fileBuffer = createdFilename ? fs.readFileSync(filePath) : undefined;
-            await options.callback(!!createdFilename, createdFilename, fileBuffer);
-        }
-
-        return !!createdFilename;
-    } catch (err) {
-        console.error('Error downloading file', err);
-        throw err;
+        // Wait for 1 second before checking again
+        await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-}
 
-async function waitForFileToExist(filename: RegExp | string, timeout: number, downloadStart: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-        let timer;
-        let watcher;
-        try {
-            // Start watching for file changes in the download directory
-            const watcher = fs.watch(__downloadDir, (eventType, eventFilename) => {
-                // If a file in the download directory is renamed to our desired filename, it exists.
-                // We wait for a rename event because downloads work by creating a temporary file and then renaming it
-                // once the download is completed.
-                if (eventType !== 'rename') {
-                    return;
-                }
-                const fileMatch = typeof filename === 'string'
-                    ? filename === eventFilename
-                    : filename.test(eventFilename);
-                if (fileMatch) {
-                    console.info('File was downloaded');
-                    watcher.close();
-                    clearTimeout(timer);
-                    resolve(eventFilename);
-                }
-            });
-
-            // Check if the file exists in case it finished downloading before we started watching the directory
-            if (typeof filename === 'string') {
-                // If we are looking for a specific file, check that path
-                const filePath = path.join(__downloadDir, filename);
-                fs.stat(filePath, (err) => {
-                    // If there was no error, that means the file already exists
-                    if (!err) {
-                        console.info('File was downloaded');
-                        watcher?.close();
-                        clearTimeout(timer);
-                        resolve(filename);
-                    }
-                });
-            } else {
-                // If we were given a regex for files, iterate over the files in the directory to find if any match
-                fs.readdir(__downloadDir, (err, files: string[]) => {
-                    files.forEach((fname) => {
-                        if (filename.test(files[0])) {
-                            const stat = fs.statSync(path.join(__downloadDir, fname));
-                            // If the file matches the regex & was created after we started downloading,
-                            // it should be the downloaded file
-                            if (stat.birthtimeMs >= downloadStart) {
-                                clearTimeout(timer);
-                                watcher?.close();
-                                return resolve(fname);
-                            }
-                        }
-                    });
-                });
-            }
-
-            // Start the timeout
-            timer = setTimeout(() => {
-                console.info('File did not exist in time');
-                watcher.close();
-                resolve(null);
-            }, timeout);
-        } catch (err) {
-            console.error('Error waiting for file download', err);
-            watcher?.close();
-            clearTimeout(timer);
-            reject(err);
-        }
-    })
+    // File not found within the timeout
+    return false;
 }

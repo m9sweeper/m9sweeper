@@ -14,14 +14,16 @@ describe('Check Navigation::', () => {
             {message: "m9sweeper should have logged in and loaded the default dashboard"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 
 
     // Verify the navigation is correct for the cluster pages using the default cluster
     it('2 Verify Cluster Navigation', async () => {
-        // Load the default cluster so we can test the cluster navigatione menu
+        // Load the default cluster so that we can test the cluster navigation menu
+        // @ts-ignore
         await $("//mat-card-title[contains(text(),'default-cluster')]").customClick("load-default-cluster");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
@@ -29,6 +31,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Summary page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Summary')]").customClick("summary-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/summary'),
@@ -36,6 +39,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Cluster Info page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Cluster Info')]").customClick("info-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/info'),
@@ -43,6 +47,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Images page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Images')]").customClick("images-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/images'),
@@ -50,6 +55,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Workloads page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Workloads')]").customClick("workloads-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubernetes-namespaces'),
@@ -57,34 +63,39 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the GateKeeper page
-        await $("//span[@class='menu-item-name'][contains(text(), 'GateKeeper')]").customClick("gatekeeper-page");
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'Gatekeeper')]").customClick("gatekeeper-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/gatekeeper'),
             {message: "m9sweeper should be displaying the gatekeeper page"}
         );
 
         // Navigate to the KubeSec page
-        await $("//span[@class='menu-item-name'][contains(text(), 'KubeSec')]").customClick("kubesec-page");
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'Kubesec')]").customClick("kubesec-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubesec'),
             {message: "m9sweeper should be displaying the kubesec page"}
         );
 
         // Navigate to the Kube Hunter page
-        await $("//span[@class='menu-item-name'][contains(text(), 'Kube Hunter')]").customClick("kube-hunter-page");
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'kube-hunter')]").customClick("kube-hunter-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubehunter'),
             {message: "m9sweeper should be displaying the kube hunter page"}
         );
 
         // Navigate to the Kube Bench page
-        await $("//span[@class='menu-item-name'][contains(text(), 'Kube Bench')]").customClick("kube-bench-page");
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'kube-bench')]").customClick("kube-bench-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubebench'),
             {message: "m9sweeper should be displaying the kube bench page"}
         );
 
         // Navigate to the Falco page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Falco')]").customClick("falco-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/falco'),
@@ -92,34 +103,31 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Reports page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Reports')]").customClick("reports-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/reports'),
             {message: "m9sweeper should be displaying the reports page"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 
 
-    // Verify the navigation is correct for the orginization pages
-    it('3 Verify Orginization Settings Navigation', async () => {
-        // Navigate to the orginization settings. By default it goes to the users page.
+    // Verify the navigation is correct for the organization pages
+    it('3 Verify Organization Settings Navigation', async () => {
+        // Navigate to the organization settings. By default, it goes to the users page.
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Organization Settings')]").customClick("load-organization-settings");
         expect(browser).toHaveUrl(
             buildUrl('private/users'),
             {message: "m9sweeper should be displaying the users page"}
         );
 
-        // Navigate to the Orginization page
-        await $("//span[@class='menu-item-name'][contains(text(), 'Organization')]").customClick("organization-page");
-        expect(browser).toHaveUrl(
-            buildUrl('private/settings'),
-            {message: "m9sweeper should be displaying the organization settings page"}
-        );
-
         // Navigate to the Users page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Users')]").customClick("users-page");
         expect(browser).toHaveUrl(
             buildUrl('private/users'),
@@ -127,6 +135,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Policies page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Policies')]").customClick("policies-page");
         expect(browser).toHaveUrl(
             buildUrl('private/policies'),
@@ -134,6 +143,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Exceptions page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Exceptions')]").customClick("exceptions-page");
         expect(browser).toHaveUrl(
             buildUrl('private/exceptions'),
@@ -141,6 +151,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Sign on Methods page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Sign on Methods')]").customClick("sign-on-methods-page");
         expect(browser).toHaveUrl(
             buildUrl('private/single-sign-on'),
@@ -148,6 +159,7 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Docker Registries page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Docker Registries')]").customClick("docker-registries-page");
         expect(browser).toHaveUrl(
             buildUrl('private/docker-registries'),
@@ -155,13 +167,15 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the API Key Management page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'API Key Management')]").customClick("api-key-management-page");
         expect(browser).toHaveUrl(
-            buildUrl('private/apii-key'),
+            buildUrl('private/api-key'),
             {message: "m9sweeper should be displaying the api key management page"}
         );
 
         // Navigate to the Audit Logs page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Audit Logs')]").customClick("audit-logs-page");
         expect(browser).toHaveUrl(
             buildUrl('private/audit-logs'),
@@ -169,13 +183,15 @@ describe('Check Navigation::', () => {
         );
 
         // Navigate to the Falco Settings page
+        // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Falco Settings')]").customClick("falco-settings-page");
         expect(browser).toHaveUrl(
             buildUrl('private/falco'),
             {message: "m9sweeper should be displaying the falco settings page"}
         );
 
-        // Take a screenshot at the end so we can see the results
+        // Take a screenshot at the end so that we can see the results
+        // @ts-ignore
         await browser.customScreenshot("test-end");
     });
 });

@@ -18,12 +18,12 @@ export class KubeHunterDialogComponent implements OnInit {
 
   cronjobOpt = true;
   cronjobTime = 'daily';
-  isCompleted = true;
   backendUrl: string;
   clusterId: number;
   report: IKubeHunterReport;
   modalOpened = Date.now();
 
+  // IDE may suggest this is unused, but it is used in the HTML
   cronjobScheduleOpts = {
     weekly: '0 0 * * 0',
     daily: '0 0 * * *',
