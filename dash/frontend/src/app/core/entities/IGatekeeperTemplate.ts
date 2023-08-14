@@ -1,3 +1,5 @@
+import {IGateKeeperConstraintDetails} from './IGateKeeperConstraint';
+
 export interface MetaDataAnnotation {
     description?: string;
     'minesweeper.io/apiGroup'?: string;
@@ -32,7 +34,7 @@ export interface IGatekeeperTemplate {
 }
 
 export interface IGSelectedTemplate {
-  selectedTemplate: IGatekeeperTemplate;
+  selectedTemplate: IGateKeeperConstraintDetails;
   selectedTemplateName: string;
   selectedTopDir?: string;
   displayTemplateContent?: boolean;

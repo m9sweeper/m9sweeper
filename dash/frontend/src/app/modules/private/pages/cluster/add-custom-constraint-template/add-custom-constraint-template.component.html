@@ -4,8 +4,7 @@
 <mat-dialog-content>
   <ngx-codemirror #codemirror
                   [options]="codeMirrorOptions"
-                  [(ngModel)]="rawTemplate"
-                  (ngModelChange)="setEditorContent($event)">
+                  [(ngModel)]="rawTemplate">
   </ngx-codemirror>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -14,8 +13,8 @@
       <button [disabled]="true" mat-raised-button color="primary" type="submit" style="display: none;">REgo IDE</button>
     </div>
     <div>
-      <button [disabled]="false" mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
-      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
+      <button mat-raised-button mat-dialog-close color="warn" type="button">Cancel</button>
     </div>
   </div>
 </mat-dialog-actions>
