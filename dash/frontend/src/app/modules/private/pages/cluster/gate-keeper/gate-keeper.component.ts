@@ -22,7 +22,7 @@ export class GateKeeperComponent implements OnInit {
   gatekeeperTemplates: MatTableDataSource<IGateKeeperConstraintDetails>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  displayedColumns: string[] = ['name', 'category', 'description', 'constraints', 'enforced'];
+  displayedColumns: string[] = ['name', 'description', 'constraints', 'enforced'];
   gatekeeperInstallationStatus: {status: boolean, message: string};
   gatekeeperStatusLoaded = false;
 

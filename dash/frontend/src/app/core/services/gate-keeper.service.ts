@@ -124,7 +124,7 @@ export class GateKeeperService {
   }
 
   deployMultipleGateKeeperTemplates(clusterId: number, templates: {name: string, template: string}[]): Observable<IServerResponse<{message: string, statusCode: number}>> {
-    return this.httpClient.post(`/api/clusters/${clusterId}/gatekeeper/constraint-templates`, {...templates});
+    return this.httpClient.post(`/api/clusters/${clusterId}/gatekeeper/constraint-templates`, templates);
   }
 
   patchRawGateKeeperTemplate(clusterId: number, template: any): Observable<IServerResponse<{message: string, statusCode: number}>> {

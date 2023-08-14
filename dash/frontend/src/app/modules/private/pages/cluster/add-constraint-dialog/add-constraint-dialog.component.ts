@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Inject, OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewChildren,
-} from '@angular/core';
-import {MatSidenav} from '@angular/material/sidenav';
+import {Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
@@ -25,8 +16,7 @@ import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKe
   styleUrls: ['./add-constraint-dialog.component.scss']
 })
 export class AddConstraintDialogComponent implements OnInit, OnDestroy {
-  @ViewChild('sidenav') sidenav: MatSidenav;
-  @ViewChildren('checkboxes') checkboxes: QueryList<ElementRef<MatCheckbox>>;
+  @ViewChildren(MatCheckbox) checkboxes: QueryList<MatCheckbox>;
 
   clusterId: number;
   topDirs: string[] = [];
@@ -39,6 +29,10 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
     }[]
   }[];
   currentlySelectedTemplates: IGSelectedTemplate[] = [];
+  saveAttemptResults = {
+    successfullyDeployed: [],
+    unsuccessfullyDeployed: [],
+  };
   isHandsetOrXS: boolean;
   sidenavExpanded = true;
   unsubscribe$ = new Subject<void>();
@@ -95,8 +89,8 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
 
   loadTemplate(dir: string, subDir: string, $event) {
     if ($event.checked) {
-      const templatesInCategory = this.constraintTemplateTemplates.find(item => item.category = dir).templates;
-      const templateInQuestion = templatesInCategory.find(item => item.name = subDir).template;
+      const templatesInCategory = this.constraintTemplateTemplates.find(item => item.category === dir).templates;
+      const templateInQuestion = templatesInCategory.find(item => item.name === subDir).template;
       this.currentlySelectedTemplates.push({
         selectedTemplate: templateInQuestion,
         selectedTemplateName: subDir,
@@ -115,7 +109,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
         template: JSON.stringify(t.selectedTemplate),
       };
     });
-    console.log(templates);
+    this.saveAttemptResults.successfullyDeployed = this.saveAttemptResults.unsuccessfullyDeployed = [];
     this.gatekeeperService.deployMultipleGateKeeperTemplates(this.clusterId, templates)
       .pipe(take(1))
       .subscribe({
@@ -129,12 +123,30 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
           }
         },
         error: response => {
-          this.alertService.danger('There was an error saving your constraint templates');
+          if (!response?.error) {
+            response = 'There was an error saving your constraint templates';
+          }
+          this.alertService.dangerAlertForHTTPError(response, 'AddConstraintDialogComponent.deployMultipleGateKeeperTemplates');
+
+          if (response?.error?.data && Array.isArray(response.error.data)) {
+            this.currentlySelectedTemplates.forEach((currentTemplate, i) => {
+              const templateError = response.error.data.find(error => error.templateName === `${currentTemplate.selectedTopDir}/${currentTemplate.selectedTemplateName}`);
+              if (templateError?.reason) {
+                this.currentlySelectedTemplates[i].error = templateError.reason;
+              } else {
+                delete this.currentlySelectedTemplates[i].error;
+              }
+            });
+          } else if (response?.error?.data?.successfullyDeployed || response?.error?.data?.unsuccessfullyDeployed ) {
+            this.saveAttemptResults.successfullyDeployed = response?.error?.data?.successfullyDeployed ? response?.error?.data?.successfullyDeployed : [];
+            this.saveAttemptResults.unsuccessfullyDeployed = response?.error?.data?.unsuccessfullyDeployed ? response?.error?.data?.unsuccessfullyDeployed : [];
+          }
         }
       });
   }
 
   openK8sManifest(index: number) {
+    const currentTemplate = this.currentlySelectedTemplates[index];
     const openAddConstraint = this.dialog.open(AddCustomConstraintTemplateComponent, {
       width: '1000px',
       height: 'auto',
@@ -142,7 +154,9 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
       disableClose: false,
       data: {
         clusterId: this.clusterId,
-        templateContent: this.currentlySelectedTemplates[index].selectedTemplate,
+        dir: currentTemplate.selectedTopDir,
+        subDir: currentTemplate.selectedTemplateName,
+        templateContent: currentTemplate.selectedTemplate,
       },
     });
     openAddConstraint.afterClosed()
@@ -157,10 +171,12 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
   }
 
   unselectTemplate(template: IGSelectedTemplate, $event: MatCheckboxChange) {
-    this.checkboxes.forEach((checkboxElement: any) => {
-      if (checkboxElement.id === template.selectedTemplateName){
-        checkboxElement.checked = false;
-        this.currentlySelectedTemplates = this.currentlySelectedTemplates.filter(t => t.selectedTemplateName !== template.selectedTemplateName);
+    this.currentlySelectedTemplates = this.currentlySelectedTemplates.filter(t => !(t.selectedTopDir === t.selectedTopDir && t.selectedTemplateName === template.selectedTemplateName));
+    // t.selectedTopDir !== t.selectedTopDir && t.selectedTemplateName !== template.selectedTemplateName
+    const desiredCheckboxId = `checkbox-${template.selectedTopDir}-${template.selectedTemplateName}`;
+    this.checkboxes.forEach(checkbox => {
+      if (checkbox.id === desiredCheckboxId) {
+        checkbox.checked = false;
       }
     });
   }
