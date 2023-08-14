@@ -9,6 +9,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {PodService} from '../../../../../core/services/pod.service';
 import {ImageIssueMoreDataDialogComponent} from '../../image/image-issue-more-data-dialog/image-issue-more-data-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Breadcrumb} from '../../../../shared/components/breadcrumbs/breadcrumb.interface';
 
 
 @Component({
@@ -28,9 +29,26 @@ export class KubernetesPodsComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   totalNumPods: number;
+  pods: IPod[];
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
   page = 0;
   pageLoading = true;
+
+  breadcrumbs: Breadcrumb[] = [
+    {
+      place: 1,
+      link: [],
+      text: 'namespaces',
+    },
+    {
+      place: 2,
+      text: '',
+    },
+    {
+      place: 3,
+      text: 'pods',
+    },
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,9 +61,11 @@ export class KubernetesPodsComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent.parent.parent.params.subscribe(param => {
       this.clusterId = param.id;
+      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 1).link = ['/private', 'clusters', this.clusterId.toString(), 'kubernetes-namespaces'];
     });
     this.route.params.subscribe(routeParams => {
       this.namespace = routeParams.namespace;
+      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 2).text = this.namespace;
     });
     this.loadCurrentPods();
   }
@@ -79,7 +99,9 @@ export class KubernetesPodsComponent implements OnInit {
       this.clusterId, this.namespace,
       startTime, endTime,
     ).subscribe(
-      (response: IServerResponse<string>) => this.handleGetCountSuccessResponse(response),
+      (response: IServerResponse<string>) => {
+        this.handleGetCountSuccessResponse(response);
+      },
       error => this.handleGetCountErrorResponse(error),
     );
     this.podService.getPodsBySelectedDate(
@@ -107,30 +129,23 @@ export class KubernetesPodsComponent implements OnInit {
     } catch (e) {
       this.totalNumPods = 0;
     }
+    this.alertService.dangerAlertForHTTPError(error, 'kubernetes-pods.component: handleGetCountErrorResponse');
   }
 
   handleGetPodsSuccessResponse(response: IServerResponse<IPod[]>) {
     this.pageLoading = false;
-    if (response.data) {
-      this.dataSource = new MatTableDataSource(response.data);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    } else {
-      this.dataSource = new MatTableDataSource([]);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
+    this.pods = response?.data ? response.data : [];
+    this.dataSource = new MatTableDataSource(this.pods);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
   handleGetPodsErrorResponse(error) {
     this.pageLoading = false;
-    try {
-      this.dataSource = new MatTableDataSource(error.data);
-    } catch (e) {
-      this.dataSource = new MatTableDataSource([]);
-    }
+    this.pods = error?.data ? error.data : [];
+    this.dataSource = new MatTableDataSource(this.pods);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.alertService.danger(error.error.message);
+    this.alertService.dangerAlertForHTTPError(error, 'kubernetes-pods.component: handleGetPodsErrorResponse');
   }
 
   // @TODO: server side pagination

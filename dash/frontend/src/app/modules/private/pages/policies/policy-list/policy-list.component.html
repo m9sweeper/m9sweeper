@@ -31,9 +31,9 @@
           <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
             <mat-cell *matCellDef="let policy">
-              <button mat-icon-button [routerLink]="['/private', 'policies', policy?.id, 'edit']">
+              <a mat-icon-button [routerLink]="['/private', 'policies', policy?.id, 'edit']">
                 <mat-icon>create</mat-icon>
-              </button>
+              </a>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="delete" *ngIf="isAdmin">

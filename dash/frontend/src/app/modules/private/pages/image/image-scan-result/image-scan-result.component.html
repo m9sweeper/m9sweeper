@@ -51,23 +51,23 @@
         </div>
         <div class="right-elements" >
           <div class="elements">
-            <p>Critical</p>
+            <p>{{VulnerabilitySeverity.CRITICAL | titlecase}}</p>
             <p>{{dataSource.criticalIssues}}</p>
           </div>
           <div class="elements">
-            <p>Major</p>
+            <p>{{VulnerabilitySeverity.MAJOR | titlecase}}</p>
             <p >{{dataSource.majorIssues}}</p>
           </div>
           <div class="elements">
-            <p>Medium</p>
+            <p>{{VulnerabilitySeverity.MEDIUM | titlecase}}</p>
             <p >{{dataSource.mediumIssues}}</p>
           </div>
           <div class="elements">
-            <p>Low</p>
+            <p>{{VulnerabilitySeverity.LOW | titlecase}}</p>
             <p >{{dataSource.lowIssues}}</p>
           </div>
           <div class="elements">
-            <p>Negligible</p>
+            <p>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</p>
             <p >{{dataSource.negligibleIssues}}</p>
           </div>
         </div>

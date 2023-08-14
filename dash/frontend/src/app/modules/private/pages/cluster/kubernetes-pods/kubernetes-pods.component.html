@@ -1,32 +1,18 @@
 <div class="page-container">
   <div class="page-container-content">
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
     <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a [routerLink]="['/private', 'clusters', clusterId, 'kubernetes-namespaces']" id="breadcrumbs-url">
-              namespaces
-            </a>
-          </li>
-          <li class="breadcrumb-item">
-            {{namespace}}
-          </li>
-          <li class="breadcrumb-item">
-            pods
-          </li>
-        </ol>
-        <p class="page-title">Pods in {{namespace}}</p>
-      </div>
+      <div class="page-title">Pods in {{namespace}}</div>
       <div class="calendar-date-picker">
         <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
-    <mat-card class="mb-xs-2">
+    <mat-card class="mb-xs-2 scrollable-table-card">
       <div class="m-xs-3" *ngIf="!pageLoading && !totalNumPods">
         No pods found
       </div>
-      <div class="page-table kubernetes-object-list-table" *ngIf="pageLoading || totalNumPods">
-        <mat-table [dataSource]="dataSource" matSort>
+      <div class="table-wrapper" *ngIf="pageLoading || totalNumPods">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -69,7 +55,6 @@
 <!--              <a *ngIf="element.violations.length"  (mouseover)="showViolations(element)">{{element.violations.length}}</a>-->
             </mat-cell>
           </ng-container>
-          <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="click-event"></mat-row>
         </mat-table>

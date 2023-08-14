@@ -198,7 +198,7 @@ export class FalcoEventDetailsComponent implements OnInit, AfterViewInit {
     const innerWindow = document.getElementsByTagName('app-falco-event-details').item(0) as HTMLElement;
 
     const [calculatedWidth, calculatedHeight] = this.chartSizeService.getChartSize(
-      innerWindow.offsetWidth,
+      innerWindow.getBoundingClientRect().width,
       { xs: 1, s: 1, m: 2, l: 2},
       { left: 20, right: 20 },
       { left: 16, right: 16 },

@@ -1,56 +1,31 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing adjust-height row">
-      <div class="col-xs-12 col-md-6">
-        <div class="content-breadcrumbs">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces">
-                namespaces
-              </a>
-            </li>
-            <li class="breadcrumb-item">
-              {{namespace}}
-            </li>
-            <li class="breadcrumb-item">
-              <a class="link" href="/private/clusters/{{clusterId}}/kubernetes-namespaces/{{namespace}}/pods">
-                pods
-              </a>
-            </li>
-            <li class="breadcrumb-item">
-              {{podName}}
-            </li>
-          </ol>
-          <p class="page-title">Images in Pod {{podName}}</p>
-        </div>
-      </div>
-      <div class="col-xs-12 col-md-6">
-        <div class="pod-page-buttons row">
-          <div class="col-xs-12 display-flex end-md start-xs">
-            <button
-              mat-fab
-              class="action-button mx-xs-1 mb-xs-3"
-              type="button"
-              (click)="getViolations()">
-              <img src="assets/images/opa-icon.png" alt="OPA"/>
-            </button>
-            <button
-              mat-fab
-              class="action-button mx-xs-1 mb-xs-3"
-              type="button"
-              (click)="runKubesec()">
-              <img src="assets/images/kubesec-logo.png" alt="kubesec"/>
-            </button>
-            <div class="calendar-date-picker">
-              <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
-            </div>
-          </div>
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 page-title">Images in Pod {{podName}}</div>
+      <div class="col-xs-12 col-sm-6 display-xs-flex justify-content-sm-end flex-direction-xs-col flex-direction-sm-row" id="podImagesButtons">
+        <span>
+          <button
+            mat-fab
+            class="action-button" type="button"
+            (click)="getViolations()">
+            <img src="assets/images/opa-icon.png" alt="OPA"/>
+          </button>
+          <button
+            mat-fab
+            class="action-button" type="button"
+            (click)="runKubesec()">
+            <img src="assets/images/kubesec-logo.png" alt="kubesec"/>
+          </button>
+        </span>
+        <div class="calendar-date-picker">
+          <app-datepicker-component class="ms-xs-0 ms-sm-3" (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
         </div>
       </div>
     </div>
-    <mat-card>
-      <div class="page-table k8-adjust-height">
-        <mat-table [dataSource]="dataSource" matSort>
+    <mat-card class="scrollable-table-card">
+      <div class="table-wrapper">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -81,10 +56,11 @@
           <ng-container matColumnDef="compliant">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Compliance </mat-header-cell>
             <mat-cell *matCellDef="let element">
-              {{element?.scanResults ? element.scanResults : 'Not Yet Scanned'}}
+              <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', element?.id]">
+                {{element?.scanResults ? element.scanResults : 'Not Yet Scanned'}}
+              </a>
             </mat-cell>
           </ng-container>
-          <mat-header-row ></mat-header-row>
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></mat-row>
         </mat-table>

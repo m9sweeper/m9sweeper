@@ -1,31 +1,12 @@
-.adjust-height {
-  height: fit-content !important;
-}
 
-.pod-page-buttons {
-  margin: 20px -10px 0 0;
-}
+#podImagesButtons {
+  .action-button {
+    background-color: white;
+    margin: 0 0.25em 1em 0.25em;
 
-.action-button {
-  background-color: white;
-}
-
-img {
-  max-width: 50px;
-  max-height: 30px;
-}
-
-.page-table {
-  mat-cell {
-    padding: 0;
-    a {
-      padding: 0 10px;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      display: flex;
-      text-decoration: unset;
-      color: unset;
+    img {
+      max-width: 50px;
+      max-height: 30px;
     }
   }
 }

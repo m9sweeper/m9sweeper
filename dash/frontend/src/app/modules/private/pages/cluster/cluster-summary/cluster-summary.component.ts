@@ -161,7 +161,7 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
     const innerWindow = document.getElementsByTagName('app-cluster-summary').item(0) as HTMLElement;
 
     this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-      innerWindow.offsetWidth,
+      innerWindow.getBoundingClientRect().width,
       { xs: 1, s: 1, m: 2, l: 3},
       { left: 20, right: 20 },
       { left: 20, right: 20 },
@@ -340,10 +340,6 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
         description: event.description,
       }
     });
-  }
-
-  getK8sPods(row: INamespaceTotalVulnerability) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.namespace, 'pods']);
   }
 
   onScroll() {

@@ -1,0 +1,7 @@
+<span *ngFor="let breadcrumb of breadcrumbs; let first = first;">
+  <mat-icon *ngIf="!first" class="breadcrumb-icon">chevron_right</mat-icon>
+  <span *ngIf="breadcrumb.link" class="breadcrumb-link-span">
+    <a [routerLink]="breadcrumb.link" class="breadcrumb-link">{{breadcrumb.text}}</a>
+  </span>
+  <span *ngIf="!breadcrumb.link" class="breadcrumb-text">{{breadcrumb.text}}</span>
+</span>

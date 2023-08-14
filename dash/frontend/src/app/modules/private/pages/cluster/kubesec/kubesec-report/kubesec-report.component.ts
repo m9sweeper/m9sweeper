@@ -14,15 +14,20 @@ export class KubesecReportComponent implements OnInit {
   @Input() kubesecReport: IKubesecReport;
   displayName: string;
 
-  passed: any[];
-  advise: any[];
-  critical: any[];
-  criticalDisplayedColumns: string[] = ['criticalId', 'criticalPoints', 'criticalReason'];
-  adviseDisplayColumns: string[] = ['adviseId', 'advisePoints', 'adviseReason'];
-  passedDisplayColumns: string[] = ['passedId', 'passedPoints', 'passedReason'];
   passedDataSource: MatTableDataSource<any>;
   adviseDataSource: MatTableDataSource<any>;
   criticalDataSource: MatTableDataSource<any>;
+  criticalDisplayedColumns: string[] = ['criticalId', 'criticalPoints', 'criticalReason'];
+  adviseDisplayColumns: string[] = ['adviseId', 'advisePoints', 'adviseReason'];
+  passedDisplayColumns: string[] = ['passedId', 'passedPoints', 'passedReason'];
+
+  passed: any[];
+  advise: any[];
+  critical: any[];
+
+  passedTotal = 0;
+  criticalTotal = 0;
+
   backgroundOpacity = 0.75;
   scoreColors = {
     red: `rgb(255, 0, 0, ${this.backgroundOpacity})`,
@@ -45,18 +50,31 @@ export class KubesecReportComponent implements OnInit {
   }
 
   populateTable() {
+    console.log(this.kubesecReport);
     this.displayName = 'Kubesec ' + this.kubesecReport.object.substring(4);
-    this.kubesecReport.scoring.passed ? this.passed = this.kubesecReport.scoring.passed : this.passed = [];
-    this.kubesecReport.scoring.advise ? this.advise = this.kubesecReport.scoring.advise : this.advise = [];
-    this.kubesecReport.scoring.critical ? this.critical = this.kubesecReport.scoring.critical : this.critical = [];
+
+    this.passed = this.kubesecReport.scoring.passed ? this.kubesecReport.scoring.passed : [];
+    this.advise = this.kubesecReport.scoring.advise ? this.kubesecReport.scoring.advise : [];
+    this.critical = this.kubesecReport.scoring.critical ? this.kubesecReport.scoring.critical : [];
+
+    this.passedTotal = 0;
+    this.passed.forEach((item) => {
+      this.passedTotal += item.points;
+    });
+
+    this.criticalTotal = 0;
+    this.critical.forEach((item) => {
+      this.criticalTotal += item.points;
+    });
+
     this.passedDataSource = new MatTableDataSource(this.passed);
     this.adviseDataSource = new MatTableDataSource(this.advise);
     this.criticalDataSource = new MatTableDataSource(this.critical);
     this.loaderService.stop();
   }
 
-  decideScoreColor(): string {
-    const scoreNum = +this.kubesecReport.score;
+  decideScoreColor(scoreNum): string | number {
+    scoreNum = +scoreNum;  // cast to number just in case
     if (scoreNum <= 0) {
       return this.scoreColors.red;
     } else if (0 < scoreNum && scoreNum <= 3) {
@@ -65,6 +83,18 @@ export class KubesecReportComponent implements OnInit {
       return this.scoreColors.orange;
     } else {
       return this.scoreColors.green;
+    }
+  }
+  decideCriticalScoreColor(scoreNum): string | number {
+    scoreNum = +scoreNum;  // cast to number just in case
+    if (scoreNum <= 0) {
+      return this.scoreColors.green;
+    } else if (0 < scoreNum && scoreNum <= 3) {
+      return this.scoreColors.orange;
+    } else if (3 < scoreNum && scoreNum <= 6) {
+      return this.scoreColors.yellow;
+    } else {
+      return this.scoreColors.red;
     }
   }
 

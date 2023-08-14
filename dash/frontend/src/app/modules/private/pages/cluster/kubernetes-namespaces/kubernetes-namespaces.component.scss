@@ -1,24 +1,8 @@
 .adjust-height {
   height: fit-content !important;
-  .calendar-date-picker {
-    margin: 20px -10px 0 0;
-  }
 }
 
 .table-wrapper {
-  mat-cell {
-    padding: 0;
-    a {
-      padding: 0 16px 0 24px;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      display: flex;
-      text-decoration: unset;
-      color: unset;
-    }
-  }
-
   .mat-column-name {
     min-width: 150px;
   }

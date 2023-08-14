@@ -145,9 +145,6 @@ export class KubeHunterComponent implements OnInit, OnDestroy {
         }
       });
   }
-  toReportDetails(row: IKubeHunterReport) {
-    this.router.navigate(['/private', 'clusters', this.clusterId, 'kubehunter', row.id]);
-  }
 
   setLimitToLocalStorage(limit: number) {
     localStorage.setItem('KH_table_limit', String(limit));

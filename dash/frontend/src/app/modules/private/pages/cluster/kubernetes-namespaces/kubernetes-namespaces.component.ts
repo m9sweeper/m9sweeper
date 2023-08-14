@@ -11,6 +11,7 @@ import {FormatDate} from '../../../../shared/format-date/format-date';
 import {filter, pairwise} from 'rxjs/operators';
 import {merge} from 'rxjs';
 import { ClusterService } from '../../../../../core/services/cluster.service';
+import {Breadcrumb} from '../../../../shared/components/breadcrumbs/breadcrumb.interface';
 
 
 @Component({
@@ -25,7 +26,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'pod', 'compliant'];
   dataSource: MatTableDataSource<INamespace>;
   clusterId: number;
-  isDatePicker = true;
   dateEvent: any;
   limit = this.getLimitFromLocalStorage() ? Number(this.getLimitFromLocalStorage()) : 10;
   page = 0;
@@ -37,6 +37,10 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
   formatData = FormatDate.formatLastScannedDate;
   formatDate = FormatDate;
 
+  breadcrumbs: Breadcrumb[] = [{
+    place: 1,
+    text: 'namespaces',
+  }];
 
   constructor(
     private titleService: Title,
@@ -97,13 +101,12 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     if (time.desiredDate) { // from our time selector component
       time = time.desiredDate;
     }
-    localStorage.setItem('dateSearchTerm', time.getTime());
     this.startTime = time.setHours(0, 0, 0, 0).valueOf();
     this.endTime = time.setHours(23, 59, 59, 999).valueOf();
     const startOfToday = new Date().setHours(0, 0, 0, 0).valueOf();
     const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
     if (this.startTime === startOfToday && this.endTime === endOfToday) {
-      this.isDatePicker = true;
+      localStorage.removeItem('dateSearchTerm');
       this.namespaceService.getCountOfCurrentNamespaces(this.clusterId).subscribe((response: IServerResponse<number>) => {
           if (response.data) {
             this.totalData = response.data;
@@ -113,7 +116,7 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
           this.alertService.danger(error.error.message);
         });
     } else {
-      this.isDatePicker = false;
+      localStorage.setItem('dateSearchTerm', time.getTime());
       this.namespaceService.getCountOfNamespaces(this.clusterId, this.formatData(this.startTime).split(' ')[0], this.formatData(this.endTime).split(' ')[0]).subscribe((response: IServerResponse<number>) => {
           if (response.data) {
             this.totalData = response.data;
@@ -137,7 +140,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
     const startOfToday = new Date().setHours(0, 0, 0, 0).valueOf();
     const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
     if (this.startTime === startOfToday && this.endTime === endOfToday) {
-      this.isDatePicker = true;
       this.namespaceService.getAllK8sNamespaces(this.clusterId, this.limit, this.page, this.sort).subscribe((response: IServerResponse<INamespace[]>) => {
             this.dataSource = new MatTableDataSource(response.data);
             this.dataSource.sort = this.sort;
@@ -148,7 +150,6 @@ export class KubernetesNamespacesComponent implements OnInit, AfterViewInit {
           this.alertService.danger(error.error.message);
         });
     } else {
-      this.isDatePicker = false;
       this.namespaceService.getAllNamespacesBySelectedDate(this.clusterId,
         this.formatData(this.startTime).split(' ')[0], this.formatData(this.endTime).split(' ')[0], this.limit, this.page, this.sort).subscribe((response: IServerResponse<INamespace[]>) => {
           this.dataSource = new MatTableDataSource(response.data || []);

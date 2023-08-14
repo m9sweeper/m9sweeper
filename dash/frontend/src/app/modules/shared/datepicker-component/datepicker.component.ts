@@ -47,7 +47,7 @@ export class DatepickerComponent implements OnInit {
   clearDatepicker() {
     this.currentlySelectedDate = null;
     this.datePickerFilled = false;
-    localStorage.setItem('dateSearchTerm', this.today.valueOf().toString());
+    localStorage.removeItem('dateSearchTerm');
     const mutableDate = new Date(this.today.getTime());
     const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();
     const endTime = mutableDate.setHours(23, 59, 59, 999).valueOf();
@@ -65,12 +65,16 @@ export class DatepickerComponent implements OnInit {
   }
 
   emitEvent() {
-    localStorage.setItem('dateSearchTerm', this.currentlySelectedDate.valueOf().toString());
     const isToday = (
       this.today.getFullYear() === this.currentlySelectedDate.getFullYear() &&
       this.today.getMonth() === this.currentlySelectedDate.getMonth() &&
       this.today.getDate() === this.currentlySelectedDate.getDate()
     );
+    if (isToday) {
+      localStorage.removeItem('dateSearchTerm');
+    } else {
+      localStorage.setItem('dateSearchTerm', this.currentlySelectedDate.valueOf().toString());
+    }
     this.datePickerFilled = true;
     const mutableDate = new Date(this.currentlySelectedDate.getTime());
     const startTime = mutableDate.setHours(0, 0, 0, 0).valueOf();

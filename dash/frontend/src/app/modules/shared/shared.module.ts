@@ -18,11 +18,13 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
+import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
 import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
+    BreadcrumbsComponent,
     DatepickerComponent,
     GenericErrorDialogComponent,
     USAPhoneMaskDirective,
@@ -49,6 +51,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatCheckboxModule,
   ],
   exports: [
+    BreadcrumbsComponent,
     DatepickerComponent,
     USAPhoneMaskDirective,
     RbacDirective,

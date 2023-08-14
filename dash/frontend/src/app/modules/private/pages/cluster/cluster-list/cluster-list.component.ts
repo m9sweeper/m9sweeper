@@ -185,9 +185,10 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setChartHeightWidthWithoutTimeout(){
     const innerWindow = document.getElementsByTagName('app-cluster-list').item(0) as HTMLElement;
+    const width = innerWindow.getBoundingClientRect().width;
 
     this.lineChartAttributes.view = this.chartSizeService.getChartSize(
-      innerWindow?.offsetWidth,
+      width,
       { xs: 1, s: 1, m: 2, l: 3 },
       { left: 20, right: 20 },
       { left: 20, right: 20 },

@@ -1,21 +1,15 @@
 <div class="page-container">
   <div class="h-xs-fit page-container-content">
+    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
     <div class="page-title-button-group-spacing adjust-height">
-      <div class="content-breadcrumbs">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            namespaces
-          </li>
-        </ol>
-        <p class="page-title">Namespaces</p>
-      </div>
+      <div class="page-title">Namespaces</div>
       <div class="calendar-date-picker">
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
     <mat-card class="mb-xs-3 scrollable-table-card">
       <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
+        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
             <mat-cell *matCellDef="let namespace">

@@ -167,7 +167,7 @@ export class WorstImagesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   executeResize(isInitial = false) {
     const innerWindow = document.getElementsByTagName('app-worst-images').item(0) as HTMLElement;
-    let innerScreenWidth = innerWindow.offsetWidth;
+    let innerScreenWidth = innerWindow.getBoundingClientRect().width;
     if (isInitial) {
       const sideNav = document.getElementById('primary-side-nav');
       if (sideNav.style.visibility !== 'hidden') {
