@@ -22,7 +22,6 @@ import {AuditLogService} from '../../audit-log/services/audit-log.service';
 import {AuditLogDto} from '../../audit-log/dto/audit-log.dto';
 import common from "../../../config/common";
 import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
-import {tablify} from '../../../util/tablify';
 
 @ApiTags('Authentication')
 @Controller('non-redirectable-login')

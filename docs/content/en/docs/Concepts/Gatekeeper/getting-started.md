@@ -3,7 +3,7 @@ title: "Getting Started"
 linkTitle: "Getting Started"
 weight: 2
 description: >
-  M9sweeper makes managing gatekeeper constraints and constraint templates easy!
+  M9sweeper makes managing Gatekeeper constraints and constraint templates easy!
 ---
 
 Gatekeeper is a great tool for creating rules for your Kubernetes cluster. You configure

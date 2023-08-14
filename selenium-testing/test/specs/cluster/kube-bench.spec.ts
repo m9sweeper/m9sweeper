@@ -6,7 +6,7 @@ import config from '../../config.js';
 import { cleanCommand } from '../../functions/clean-command.js';
 
 /**
- * Ensure that the Kube Bench page is functional and that KubeHunter audits work properly
+ * Ensure that the kube-bench page is functional and that KubeHunter audits work properly
  */
 describe('KubeBench Page::', () => {
     // Login to m9sweeper and navigate to the KubeHunter page
@@ -82,7 +82,7 @@ describe('KubeBench Page::', () => {
         // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Done')]").customClick('done');
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Done')]")).not.toBePresent(
-            {message: "Kube Hunter Run configuration window should not be visible"}
+            {message: "kube-bench Run configuration window should not be visible"}
         );
 
         // Wait for 3 seconds to ensure log output is clear for the commands

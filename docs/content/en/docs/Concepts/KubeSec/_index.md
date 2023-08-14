@@ -3,7 +3,7 @@ title: "KubeSec"
 linkTitle: "KubeSec"
 weight: 4
 description: >
-  How to use kubesec with M9sweeper to coach you towards secure pod configuration. 
+  How to use Kubesec with M9sweeper to coach you towards secure pod configuration. 
 ---
 
 KubeSec coaches you about how to make your deployments more secure. You can find it in the left navigation after

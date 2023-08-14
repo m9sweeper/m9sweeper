@@ -91,7 +91,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubehunter'],
         image: {
           src: '/assets/images/kube-hunter-logo.png',
-          alt: 'Kube Hunter Logo',
+          alt: 'kube-hunter Logo',
         },
       },
       {
@@ -99,7 +99,7 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         path: ['/private', 'clusters', `${this.clusterId}`, 'kubebench'],
         image: {
           src: '/assets/images/kube-bench-logo.png',
-          alt: 'Kube Bench Logo',
+          alt: 'kube-bench Logo',
         },
       },
       {

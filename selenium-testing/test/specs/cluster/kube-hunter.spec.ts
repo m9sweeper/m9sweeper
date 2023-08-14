@@ -7,7 +7,7 @@ import { Key } from 'webdriverio';
 import { cleanCommand } from '../../functions/clean-command.js';
 
 /**
- * Ensure that the Kube Hunter page is functional and that KubeHunter audits work properly
+ * Ensure that the kube-hunter page is functional and that KubeHunter audits work properly
  */
 describe('KubeHunter Page::', () => {
     // Login to m9sweeper and navigate to the KubeHunter page
@@ -47,7 +47,7 @@ describe('KubeHunter Page::', () => {
         // @ts-ignore
         await $("//mat-card-content//button[contains(normalize-space(), 'Run Audit')]").customClick('run-audit');
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-kube-hunter-dialog")).toBePresent(
-            {message: "Kube Hunter Run configuration window should be visible"}
+            {message: "kube-hunter Run configuration window should be visible"}
         );
 
         // Locate and select the Run one time option
@@ -75,7 +75,7 @@ describe('KubeHunter Page::', () => {
         // Close the popup dialog by pressing the escape key
         await browser.keys(Key.Escape);
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-kube-hunter-dialog")).not.toBePresent(
-            {message: "Kube Hunter Run configuration window should not be visible"}
+            {message: "kube-hunter Run configuration window should not be visible"}
         );
 
         // Wait for 3 seconds to ensure log output is clear for the commands
@@ -104,7 +104,7 @@ describe('KubeHunter Page::', () => {
 
         // Verify that we have a result in the table
         expect(await $(`//table//tr[contains(normalize-space(), '${(new Date()).getFullYear()}')]`)).toBePresent(
-            {message: "A Kube Hunter result should be present"}
+            {message: "A kube-hunter result should be present"}
         );
 
         // Take a screenshot at the end so that we can see the results

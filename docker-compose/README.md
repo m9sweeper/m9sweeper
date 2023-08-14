@@ -8,13 +8,13 @@ You will need to install Docker & Docker Compose. Dockers Docs has instructions 
 It is recommended to install Docker Desktop as a simple way to install both Docker and Docker Compose in addition to having a UI that will make certain tasks easier.
 
 ### Running With Apple Silicon chip 
-The docker images for rabbitmq and kubesec do not support being run on Apple Silicon. If you try to run them, they will either fail to boot up, or crash fairly quickly after booting up.
+The docker images for rabbitmq and Kubesec do not support being run on Apple Silicon. If you try to run them, they will either fail to boot up, or crash fairly quickly after booting up.
 To resolve this:
 1. Open Docker Desktop
 2. Click the cog in the top right to access the settings.
 3. Under 'Features in Development', enable the 'Use Rosetta for x86/amd64 emulation on Apple Silicon'
    - You will need to install Rosetta if you haven't already. You should be prompted to install it the first time your OS determines it to be needed
-   - If you had previoulsy disabled it, The setting 'General' > 'Use Virtualization Network' must also be enabled.
+   - If you had previously disabled it, The setting 'General' > 'Use Virtualization Network' must also be enabled.
 4. Use the 'Apply & restart' button to apply these settings. You should be good to go
 
 Note: on rare occasions, one of those containers will still fail to boot up when running this way.

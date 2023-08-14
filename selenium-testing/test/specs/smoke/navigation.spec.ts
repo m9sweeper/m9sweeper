@@ -78,20 +78,20 @@ describe('Check Navigation::', () => {
             {message: "m9sweeper should be displaying the kubesec page"}
         );
 
-        // Navigate to the Kube Hunter page
+        // Navigate to the kube-hunter page
         // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'kube-hunter')]").customClick("kube-hunter-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubehunter'),
-            {message: "m9sweeper should be displaying the kube hunter page"}
+            {message: "m9sweeper should be displaying the kube-hunter page"}
         );
 
-        // Navigate to the Kube Bench page
+        // Navigate to the kube-bench page
         // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'kube-bench')]").customClick("kube-bench-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/kubebench'),
-            {message: "m9sweeper should be displaying the kube bench page"}
+            {message: "m9sweeper should be displaying the kube-bench page"}
         );
 
         // Navigate to the Falco page
