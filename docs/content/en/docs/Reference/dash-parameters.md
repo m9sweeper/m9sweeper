@@ -106,5 +106,5 @@ For details about configuring environment variables for the dash app, see the [a
 |-------------------|-------------------|------|
 | ADMISSION_CONTROLLER_DEFAULT_ACTION | The default behavior when we fail to validate whether or not an image is compliant for some reason. | deny |
 | GATEKEEPER_TEMPLATE_DIR | Where Gatekeeper templates should be loaded from | dist/gatekeeper-templates |
-| KUBEBENCH_CONFIG_DIR | Where to load the kubebench configuration templates | kube-bench-templates |
+| KUBEBENCH_CONFIG_DIR | Where to load the kube-bench configuration templates | kube-bench-templates |
 | RELEASE_NAMESPACE | Where it should install things when using install wizards | default |

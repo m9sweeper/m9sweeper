@@ -82,7 +82,7 @@ describe('KubeBench Page::', () => {
         // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Done')]").customClick('done');
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//button/span[contains(text(),'Done')]")).not.toBePresent(
-            {message: "kube-hunter Run configuration window should not be visible"}
+            {message: "kube-bench Run configuration window should not be visible"}
         );
 
         // Wait for 3 seconds to ensure log output is clear for the commands
