@@ -1,9 +1,16 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  HttpException,
+  Inject,
+  Injectable,
+  InternalServerErrorException
+} from '@nestjs/common';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { GatekeeperTemplateDto } from '../dto/gatekeeper-template-dto';
 import { KubeConfig } from '@kubernetes/client-node/dist/config';
-import { CustomObjectsApi } from '@kubernetes/client-node';
+import { CustomObjectsApi, HttpError } from '@kubernetes/client-node';
 import { ClusterService } from './cluster.service';
 import { plainToInstance } from 'class-transformer';
 import * as jsYaml from 'js-yaml';
@@ -56,12 +63,9 @@ export class GatekeeperService {
   async createConstraintTemplates(
     clusterId: number,
     templates: { name: string, template: string }[]
-  ): Promise<{message: string, statusCode: number, errors?: { templateName: string, reason: string }[]}> {
+  ): Promise<{ successfullyDeployed: any[], unsuccessfullyDeployed: any[] }> {
     if (!templates.length) {
-      return {
-        message: 'Please include constraint templates to create in the body of the request',
-        statusCode: 400,
-      }
+      throw new BadRequestException('Please include constraint templates to create in the body of the request');
     }
 
     const validationErrors = [];
@@ -70,13 +74,10 @@ export class GatekeeperService {
       if (!validationResult.isValid) {
         validationErrors.push({ templateName: template.name, reason: validationResult.reason });
       }
-    })
+    });
     if (validationErrors.length) {
-      return {
-        message: 'Template(s) failed validation',
-        statusCode: 400,
-        errors: validationErrors,
-      }
+      this.logger.log({label: 'New Gatekeeper constraint template(s) failed validation', data: validationErrors}, 'GatekeeperService.createConstraintTemplates');
+      throw new BadRequestException({ data: validationErrors, message: 'Template(s) failed validation' });
     }
 
     const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
@@ -89,15 +90,33 @@ export class GatekeeperService {
       createTemplatePromises.push(templateDeployPromise);
     });
 
-    try {
-      await Promise.all(createTemplatePromises);
-      return { message: 'Templates were deployed successfully', statusCode: 200 };
-    } catch (e) {
-      this.logger.log({
-        label: 'Failed to deploy the templates',
-        data: { clusterId, numTemplates: templates.length }
-      }, 'GatekeeperService.createConstraintTemplates');
-      return { message: 'Failed to deploy the templates', statusCode: e.statusCode };
+    const results = await Promise.allSettled(createTemplatePromises);
+
+    const successfullyDeployed = [];
+    const unsuccessfullyDeployed = [];
+    results.forEach((templateDeployedResult) => {
+      if (templateDeployedResult.status === "fulfilled") {
+        successfullyDeployed.push(templateDeployedResult.value.response.body.metadata.name);
+        return;
+      }
+      // rejected
+      unsuccessfullyDeployed.push(templateDeployedResult.reason.body.message);
+      return;
+    });
+
+    this.logger.log({
+      label: 'Attempted to deploy new Gatekeeper constraint templates',
+      data: {
+        clusterId, numTemplates: templates.length,
+        successfullyDeployed, unsuccessfullyDeployed,
+      },
+    }, 'GatekeeperService.createConstraintTemplates');
+    if (successfullyDeployed.length && unsuccessfullyDeployed.length) {
+      throw new HttpException({ data: {successfullyDeployed, unsuccessfullyDeployed}, message: 'Some templates deployed; others did not' }, 400);
+    } else if (unsuccessfullyDeployed.length) {
+      throw new HttpException({ data: {successfullyDeployed, unsuccessfullyDeployed}, message: 'Failed to deploy the templates' }, 400);
+    } else {
+      return {successfullyDeployed, unsuccessfullyDeployed};
     }
   }
 
@@ -148,14 +167,21 @@ export class GatekeeperService {
 
 
   private validateConstraintTemplate(template: string): { isValid: boolean, reason?: string } {
-    let templateAsObject;
+    let templateAsObject: GatekeeperTemplateDto;
     try {
       templateAsObject = jsYaml.load(template) as GatekeeperTemplateDto;
     } catch (e) {
       this.logger.log('New Gatekeeper constraint template failed validation: not a valid yaml object', 'GatekeeperService.validateConstraintTemplate');
       return { isValid: false, reason: 'Template is not a valid yaml object' };
     }
-    // validate templateAsObject here
+
+    if (templateAsObject.metadata.name !== templateAsObject.spec.crd.spec.names.kind.toLowerCase()) {
+      return {
+        isValid: false,
+        reason: `Template's name must match the lowercase of the CRD's kind: ${templateAsObject.spec.crd.spec.names.kind.toLowerCase()}`,
+      }
+    }
+
     return { isValid: true };
   }
   private async readFolderNames(pathName: string): Promise<string[]> {
