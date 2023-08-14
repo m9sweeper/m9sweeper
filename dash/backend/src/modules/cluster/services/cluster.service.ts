@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {ClusterDto} from '../dto/cluster-dto';
 import {ClusterDao} from '../dao/cluster.dao';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
@@ -25,7 +25,8 @@ import {
   GatekeeperConstraintMetadataAnnotations,
   GatekeeperConstraintSpec,
   GatekeeperConstraintSpecMatch,
-  GatekeeperConstraintSpecMatchKind, GateKeeperConstraintViolation
+  GatekeeperConstraintSpecMatchKind,
+  GateKeeperConstraintViolation
 } from "../dto/gatekeeper-constraint-dto";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
@@ -64,7 +65,7 @@ export class ClusterService {
     }
     const clusterObj = Object.assign(new ClusterDto(), cluster);
     const clusterId = await this.clusterDao.createCluster(instanceToPlain(clusterObj));
-    if(clusterId){
+    if (clusterId){
       this.prometheusService.clusterCreated.inc();
       await this.exceptionBlockService.copyGatekeeperTemplatesForCluster(clusterId);
       delete cluster.kubeConfig;
@@ -299,7 +300,7 @@ export class ClusterService {
 
   }
 
-  private async getKubeConfig(clusterId: number): Promise<KubeConfig> {
+  async getKubeConfig(clusterId: number): Promise<KubeConfig> {
     const kubeConfig: KubeConfig = new KubeConfig();
     const cluster: ClusterDto = await this.clusterDao.getClusterById(+clusterId);
     const kubeConfigString = Buffer.from(cluster.kubeConfig, 'base64').toString();
@@ -401,14 +402,19 @@ export class ClusterService {
     }
   }
 
-  async deployMultipleOPAGateKeeperConstraintTemplates(clusterId: number, templateNames: string[]): Promise<{message: string, statusCode: number}> {
+  async deployMultipleOPAGateKeeperConstraintTemplates(clusterId: number, templates: {name: string, template: string}[]): Promise<{message: string, statusCode: number}> {
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     const createTemplatePromises = []
-    for (const templateName of templateNames) {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
-      const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
+    for (const template of templates) {
+      let gatekeeperTemplate;
+      if (template.template) {
+        gatekeeperTemplate = template.template;
+      } else {
+        gatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${template.name}/template.yaml`, 'utf-8')) as any;
+      }
+      const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', gatekeeperTemplate);
       createTemplatePromises.push(templateDeployPromise);
     }
     if (createTemplatePromises.length){
