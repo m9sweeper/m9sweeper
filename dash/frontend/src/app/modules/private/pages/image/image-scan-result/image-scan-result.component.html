@@ -156,8 +156,7 @@
             <mat-header-cell class="ps-xs-0" *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</mat-header-cell>
             <mat-cell *matCellDef="let issue">
               <div class="row">
-                <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="issue.isCompliant" class="pad-right-5">
-                </mat-checkbox>
+                <app-readonly-checkbox class="mr-3" [checked]="issue.isCompliant"></app-readonly-checkbox>
                 <div>
                   <mat-icon *ngIf="issue.complianceReason" [matTooltip]="issue.complianceReason">info</mat-icon>
                 </div>
@@ -209,7 +208,7 @@
           <ng-container matColumnDef="isFixable" >
             <mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <mat-checkbox  disableRipple (click)="$event.preventDefault()"  [checked]="issue.isFixable"></mat-checkbox>
+              <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
               <span *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
             </mat-cell>
           </ng-container>

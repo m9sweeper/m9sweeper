@@ -111,17 +111,13 @@
                 <ng-container matColumnDef="enabled">
                   <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
                   <mat-cell *matCellDef="let scanner">
-                    <mat-checkbox [checked]="scanner.enabled"  disableRipple
-                                  (click)="$event.preventDefault()">
-                    </mat-checkbox>
+                    <app-readonly-checkbox [checked]="scanner.enabled"></app-readonly-checkbox>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="required">
                   <mat-header-cell *matHeaderCellDef>Required</mat-header-cell>
                   <mat-cell *matCellDef="let scanner">
-                    <mat-checkbox [checked]="scanner.required" disableRipple
-                                  (click)="$event.preventDefault()">
-                    </mat-checkbox>
+                    <app-readonly-checkbox [checked]="scanner.required"></app-readonly-checkbox>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="name">

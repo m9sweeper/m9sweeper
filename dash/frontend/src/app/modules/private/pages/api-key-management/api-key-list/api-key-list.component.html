@@ -25,11 +25,7 @@
             <ng-container matColumnDef="isActive">
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Active</th>
               <td mat-cell *matCellDef="let apikey">
-                <mat-checkbox
-                  disableRipple (click)="$event.preventDefault()"
-                  [checked]="apikey.isActive"
-                >
-                </mat-checkbox>
+                <app-readonly-checkbox [checked]="apikey.isActive"></app-readonly-checkbox>
               </td>
             </ng-container>
             <ng-container *ngIf="isAdmin" matColumnDef="edit">

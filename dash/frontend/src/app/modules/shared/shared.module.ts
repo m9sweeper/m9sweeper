@@ -18,6 +18,8 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
+import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
     CopyToClipboardButtonComponent,
     SideNavComponent,
     HideableTextComponent,
+    ReadonlyCheckboxComponent,
   ],
   imports: [
     MatDialogModule,
@@ -43,6 +46,7 @@ import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
     RouterOutlet,
     RouterModule,
     MatListModule,
+    MatCheckboxModule,
   ],
   exports: [
     DatepickerComponent,
@@ -52,6 +56,7 @@ import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
     CopyToClipboardButtonComponent,
     SideNavComponent,
     HideableTextComponent,
+    ReadonlyCheckboxComponent,
   ]
 })
 export class SharedModule {

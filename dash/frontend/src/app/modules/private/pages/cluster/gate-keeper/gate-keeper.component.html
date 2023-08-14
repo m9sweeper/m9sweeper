@@ -95,7 +95,7 @@
                 <ng-container matColumnDef="enforced">
                   <mat-header-cell *matHeaderCellDef>Enforced</mat-header-cell>
                   <mat-cell *matCellDef="let gatekeeperTemplate">
-                    <mat-checkbox disableRipple (click)="$event.preventDefault()" [checked]="gatekeeperTemplate.enforced"></mat-checkbox>
+                    <app-readonly-checkbox [checked]="gatekeeperTemplate.enforced"></app-readonly-checkbox>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
