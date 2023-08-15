@@ -10,6 +10,7 @@ import { AuthorityGuard } from '../../../guards/authority.guard';
 import { DELETE_CLUSTER_RESPONSE_SCHEMA } from '../open-api-schema/cluster-schema';
 import { GatekeeperTemplateDto } from '../dto/gatekeeper-template-dto';
 import { GatekeeperService } from '../services/gatekeeper.service';
+import { GatekeeperConstraintDetailsDto } from '../dto/gatekeeper-constraint-dto';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
@@ -33,6 +34,7 @@ export class GatekeeperController {
     return this.gatekeeperService.getInstallationInfo(clusterId);
   }
 
+  /* Constraint Template endpoints */
   @Get('constraint-templates')
   @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
   @UseGuards(AuthGuard, AuthorityGuard)
@@ -67,6 +69,38 @@ export class GatekeeperController {
     return this.gatekeeperService.getConstraintTemplateTemplates(clusterId);
   }
 
+  @Get('constraint-templates/:templateName')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @ApiResponse({
+    status: 200,
+    schema: {},
+  })
+  async getConstraintTemplateByName(
+    @Param('clusterId') clusterId: number,
+    @Param('templateName') templateName: string,
+  ): Promise<{
+    associatedConstraints: GatekeeperConstraintDetailsDto[],
+    constraintTemplate: GatekeeperTemplateDto,
+    rawConstraintTemplate: string,
+  }> {
+    return this.gatekeeperService.getConstraintTemplateByName(clusterId, templateName);
+  }
+
+  @Get('constraint-templates/:templateName/raw')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @ApiResponse({
+    status: 200,
+    schema: {},
+  })
+  async getConstraintTemplateByNameAsString(
+    @Param('clusterId') clusterId: number,
+    @Param('templateName') templateName: string,
+  ): Promise<string> {
+    return this.gatekeeperService.getConstraintTemplateAsString(clusterId, templateName);
+  }
+
   @Get('constraint-templates/templates/titles')
   @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
   @UseGuards(AuthGuard, AuthorityGuard)
@@ -78,4 +112,18 @@ export class GatekeeperController {
     return this.gatekeeperService.getConstraintTemplateTemplateTitles(clusterId);
   }
 
+  /* Constraint endpoints */
+  @Get('constraints/:templateName')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @ApiResponse({
+    status: 200,
+    schema: {},
+  })
+  async getConstraintsForTemplate(
+    @Param('clusterId') clusterId: number,
+    @Param('templateName') templateName: string
+  ): Promise<GatekeeperConstraintDetailsDto[]> {
+    return this.gatekeeperService.getConstraintsForTemplate(clusterId, templateName);
+  }
 }

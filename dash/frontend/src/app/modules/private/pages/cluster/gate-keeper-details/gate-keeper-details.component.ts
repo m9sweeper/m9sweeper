@@ -13,6 +13,8 @@ import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog
 import {take} from 'rxjs/operators';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {Authority} from '../../../../../core/enum/Authority';
+import { IGatekeeper } from 'src/app/core/entities/IGatekeeper';
+import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
 
 @Component({
   selector: 'app-gate-keeper-details',
@@ -20,12 +22,12 @@ import {Authority} from '../../../../../core/enum/Authority';
   styleUrls: ['./gate-keeper-details.component.scss']
 })
 export class GateKeeperDetailsComponent implements OnInit {
-  gatekeeperTemplate: IGatekeeperTemplate;
+  gatekeeperTemplate: IGatekeeperConstraintTemplate;
   constraintCount: number;
   isMobileDevice = false;
   clusterId: number;
   templateName: string;
-  constraintsList: MatTableDataSource<IGateKeeperConstraintDetails>;
+  constraintsList: MatTableDataSource<IGatekeeperConstraintTemplate>;
   displayedColumns: string[];
   rawTemplate: any;
   openapiProperties = [];
@@ -43,9 +45,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.gatekeeperService.gateKeeperTemplateByName(this.clusterId, this.templateName).subscribe(data => {
-      this.gatekeeperTemplate = data;
-    });
+    this.getConstraintTemplateDetails();
     this.gatekeeperConstraintsByTemplate(this.templateName);
     this.gateKeeperTemplateByNameRaw();
     if (this.jwtAuthService.isAdmin()) {
@@ -55,23 +55,40 @@ export class GateKeeperDetailsComponent implements OnInit {
     }
   }
 
+  getConstraintTemplateDetails() {
+    console.log('getConstraintTemplateDetails', this.clusterId, this.templateName);
+    this.gatekeeperService.getConstraintTemplateByName(this.clusterId, this.templateName).subscribe(data => {
+      this.gatekeeperTemplate = data.constraintTemplate;
+
+      this.constraintCount = data.associatedConstraints.length ?? 0;
+      this.constraintsList = new MatTableDataSource<IGatekeeperConstraintTemplate>(data.associatedConstraints);
+
+      this.rawTemplate = data.rawConstraintTemplate;
+      this.updateRawConstraintTemplateProperties();
+    });
+  }
+
+  updateRawConstraintTemplateProperties() {
+    const tempData = JSON.parse(this.rawTemplate);
+    const tempProperties = tempData.spec.crd.spec.validation.openAPIV3Schema ? tempData.spec.crd.spec.validation.openAPIV3Schema.properties : {};
+    this.openApiSchema = tempProperties;
+    const propertyKeys = Object.keys(tempProperties);
+    for (const key of propertyKeys) {
+      this.openapiProperties.push([key, tempProperties[key].type]);
+    }
+  }
+
   gateKeeperTemplateByNameRaw() {
-    this.gatekeeperService.gateKeeperTemplateByNameRaw(this.clusterId, this.templateName).subscribe(data => {
+    this.gatekeeperService.gatekeeperTemplateByNameAsString(this.clusterId, this.templateName).subscribe(data => {
       this.rawTemplate = data;
-      const tempData = JSON.parse(data);
-      const tempProperties = tempData.spec.crd.spec.validation.openAPIV3Schema ? tempData.spec.crd.spec.validation.openAPIV3Schema.properties : {};
-      this.openApiSchema = tempProperties;
-      const propertyKeys = Object.keys(tempProperties);
-      for (const key of propertyKeys) {
-        this.openapiProperties.push([key, tempProperties[key].type]);
-      }
+      this.updateRawConstraintTemplateProperties();
     });
   }
 
   gatekeeperConstraintsByTemplate(templateName: string) {
     this.gatekeeperService.gateKeeperConstraintsByTemplate(this.clusterId, templateName).subscribe(data => {
       this.constraintCount = data.length ?? 0;
-      this.constraintsList = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
+      this.constraintsList = new MatTableDataSource<IGatekeeperConstraintTemplate>(data);
     });
   }
 
