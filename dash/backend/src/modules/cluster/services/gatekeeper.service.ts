@@ -10,12 +10,13 @@ import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ConfigService } from '@nestjs/config';
 import { GatekeeperTemplateDto } from '../dto/gatekeeper-template-dto';
 import { KubeConfig } from '@kubernetes/client-node/dist/config';
-import { CustomObjectsApi, HttpError } from '@kubernetes/client-node';
+import { CustomObjectsApi, HttpError, V1APIService } from '@kubernetes/client-node';
 import { ClusterService } from './cluster.service';
 import { plainToInstance } from 'class-transformer';
 import * as jsYaml from 'js-yaml';
 import * as fs from "fs";
 import { GatekeeperConstraintDetailsDto } from '../dto/gatekeeper-constraint-dto';
+import { ApiregistrationV1Api } from '@kubernetes/client-node/dist/gen/api/apiregistrationV1Api';
 
 @Injectable()
 export class GatekeeperService {
@@ -27,6 +28,39 @@ export class GatekeeperService {
     private logger: MineLoggerService,
     ) {
     this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
+  }
+
+  private validateConstraintTemplate(template: string): { isValid: boolean, reason?: string } {
+    let templateAsObject: GatekeeperTemplateDto;
+    try {
+      templateAsObject = jsYaml.load(template) as GatekeeperTemplateDto;
+    } catch (e) {
+      this.logger.log('New Gatekeeper constraint template failed validation: not a valid yaml object', 'GatekeeperService.validateConstraintTemplate');
+      return { isValid: false, reason: 'Template is not a valid yaml object' };
+    }
+
+    if (templateAsObject.metadata.name !== templateAsObject.spec.crd.spec.names.kind.toLowerCase()) {
+      return {
+        isValid: false,
+        reason: `Template's name must match the lowercase of the CRD's kind: ${templateAsObject.spec.crd.spec.names.kind.toLowerCase()}`,
+      }
+    }
+
+    return { isValid: true };
+  }
+  private async readFolderNames(pathName: string): Promise<string[]> {
+    try {
+      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
+      return readDirNamesFromFile.resources;
+    } catch (e) {
+      this.logger.error({label: 'Could not read file at path', data: { pathName }}, e, 'ClusterService.readFolderNames');
+      return [];
+    }
+  }
+
+  private sanitizeGatekeeperAPIService(rawAPIService: V1APIService): Partial<V1APIService> {
+    delete rawAPIService.metadata.uid;
+    return rawAPIService;
   }
 
   async gatekeeperTemplateConstraintsCount(kubeConfig: KubeConfig, clusterId, templateName: string): Promise<number> {
@@ -47,13 +81,13 @@ export class GatekeeperService {
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '');
       const templates: any[] = templateListResponse.body['items'];
-      const templatesDto: GatekeeperTemplateDto[] = plainToInstance(GatekeeperTemplateDto, templates);
-      for(const template of templatesDto) {
+      const templateDTOs: GatekeeperTemplateDto[] = plainToInstance(GatekeeperTemplateDto, templates);
+      for(const template of templateDTOs) {
         const constraintCount = await this.gatekeeperTemplateConstraintsCount(kubeConfig, clusterId, template.metadata.name);
         template.constraintsCount = constraintCount;
         template.enforced = !!constraintCount;
       }
-      return templatesDto;
+      return templateDTOs;
     } catch (e) {
       this.logger.error({label: 'Error getting Gatekeeper constraint templates', data: { clusterId }}, e, 'GatekeeperService.getConstraintTemplates');
       throw({message: 'Error getting Gatekeeper constraint templates'});
@@ -165,32 +199,53 @@ export class GatekeeperService {
     return templates;
   }
 
-
-  private validateConstraintTemplate(template: string): { isValid: boolean, reason?: string } {
-    let templateAsObject: GatekeeperTemplateDto;
+  async getInstallationInfo(clusterId: number): Promise<{
+    status: boolean,
+    message: string,
+    error?: any,
+    data?: {
+      constraints: GatekeeperTemplateDto[],
+      gatekeeperResource: Partial<V1APIService>,
+    },
+  }> {
+    const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    const apiRegistration = kubeConfig.makeApiClient(ApiregistrationV1Api);
+    let gatekeeperIsInstalled = false;
     try {
-      templateAsObject = jsYaml.load(template) as GatekeeperTemplateDto;
-    } catch (e) {
-      this.logger.log('New Gatekeeper constraint template failed validation: not a valid yaml object', 'GatekeeperService.validateConstraintTemplate');
-      return { isValid: false, reason: 'Template is not a valid yaml object' };
-    }
-
-    if (templateAsObject.metadata.name !== templateAsObject.spec.crd.spec.names.kind.toLowerCase()) {
-      return {
-        isValid: false,
-        reason: `Template's name must match the lowercase of the CRD's kind: ${templateAsObject.spec.crd.spec.names.kind.toLowerCase()}`,
+      const resource = await apiRegistration.readAPIService('v1beta1.templates.gatekeeper.sh');
+      this.logger.log({label: 'Gatekeeper installation retrieved', data: { clusterId, statusCode: resource.response.statusCode, status: resource.body.status }}, 'GatekeeperService.getInstallationInfo');
+      // check that the latest condition's status is "True"
+      if (resource?.body?.status?.conditions?.length) {
+        gatekeeperIsInstalled = resource.body.status.conditions[0].type === "Available" && resource.body.status.conditions[0].status === "True";
       }
-    }
-
-    return { isValid: true };
-  }
-  private async readFolderNames(pathName: string): Promise<string[]> {
-    try {
-      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
-      return readDirNamesFromFile.resources;
+      if (!gatekeeperIsInstalled) {
+        return {status: gatekeeperIsInstalled, message: 'Not Installed'};
+      }
+      let gatekeeperTemplates: GatekeeperTemplateDto[] = [];
+      try {
+        gatekeeperTemplates = await this.getConstraintTemplates(clusterId);
+        return {
+          status: gatekeeperIsInstalled,
+          message: gatekeeperTemplates.length ? 'Setup' : 'Not Setup',
+          data: {
+            constraints: gatekeeperTemplates,
+            gatekeeperResource: this.sanitizeGatekeeperAPIService(resource.body),
+          },
+        };
+      } catch (e) {
+        return {
+          status: gatekeeperIsInstalled,
+          message: 'Not Setup',
+          error: e,
+          data: {
+            constraints: gatekeeperTemplates,
+            gatekeeperResource: this.sanitizeGatekeeperAPIService(resource.body),
+          },
+        };
+      }
     } catch (e) {
-      this.logger.error({label: 'Could not read file at path', data: { pathName }}, e, 'ClusterService.readFolderNames');
-      return [];
+      this.logger.error({label: 'Error getting Gatekeeper installation information', data: { clusterId }}, e, 'GatekeeperService.getInstallationInfo');
+      return {status: gatekeeperIsInstalled, message: 'Not Installed', error: e};
     }
   }
 }
