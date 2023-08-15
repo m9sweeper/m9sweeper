@@ -344,7 +344,7 @@ export class ClusterService {
     try {
       const resource = await apiRegistration.readAPIService('v1beta1.templates.gatekeeper.sh');
       this.logger.log({label: 'GateKeeper installation status', data: { clusterId, status: resource.body.status }}, 'ClusterService.checkGatekeeperInstallationStatus');
-      installationStatus = resource.body.status.conditions.length ? true : false;
+      installationStatus = !!resource.body.status.conditions.length;
       if (installationStatus) {
         const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
         const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
@@ -401,33 +401,6 @@ export class ClusterService {
       return {message: 'Failed to deploy the template', statusCode: e.statusCode};
     }
   }
-
-  async deployMultipleOPAGateKeeperConstraintTemplates(clusterId: number, templates: {name: string, template: string}[]): Promise<{message: string, statusCode: number}> {
-    const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    const createTemplatePromises = []
-    for (const template of templates) {
-      let gatekeeperTemplate;
-      if (template.template) {
-        gatekeeperTemplate = template.template;
-      } else {
-        gatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${template.name}/template.yaml`, 'utf-8')) as any;
-      }
-      const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', gatekeeperTemplate);
-      createTemplatePromises.push(templateDeployPromise);
-    }
-    if (createTemplatePromises.length){
-      try {
-        await Promise.all(createTemplatePromises);
-        return {message: 'Templates were deployed successfully', statusCode: 200};
-      } catch(e) {
-        return {message: 'Failed to deploy the templates', statusCode: e.statusCode};
-      }
-    }
-
-  }
-
 
   async getOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<GatekeeperTemplateDto> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);

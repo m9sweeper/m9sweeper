@@ -10,6 +10,7 @@ import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constra
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 import {take} from 'rxjs/operators';
+import {IKubernetesObject} from '../../../../../core/entities/IKubernetesObjects';
 
 @Component({
   selector: 'app-gate-keeper',
@@ -25,37 +26,64 @@ export class GateKeeperComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description', 'constraints', 'enforced'];
   gatekeeperInstallationStatus: {status: boolean, message: string};
   gatekeeperStatusLoaded = false;
+  gatekeeperInstallation: Partial<IKubernetesObject>;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private gateKeeperService: GateKeeperService) {
+    private gatekeeperService: GateKeeperService) {
     this.clusterId = +this.route.parent.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
-    this.checkGatekeeperStatus();
-    this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
+    this.loadGatekeeperInformation();
+    this.loadGateKeeperConstraintTemplates();
+  }
+
+  loadGatekeeperInformation() {
+    this.gatekeeperService.getGatekeeperInstallation(this.clusterId)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          this.gatekeeperConstraintTemplates = response;
+          console.log('loadGatekeeperInformation', response);
+          this.gatekeeperStatusLoaded = true;
+          this.gatekeeperInstallationStatus = {
+            message: response.message, status: response.status,
+          };
+          this.gatekeeperInstallation = response.data?.gatekeeperResource;
+          this.setConstraintTemplates(response.data?.constraints);
+        },
+        error: err => {
+          if (this.gatekeeperStatusLoaded) {
+            this.setConstraintTemplates();
+          }
+        },
+      });
+  }
+
+  setConstraintTemplates(constraintTemplates?: IGateKeeperConstraintDetails[]) {
+    if (constraintTemplates) {
+      this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(constraintTemplates);
+      this.gatekeeperTemplates.paginator = this.paginator;
+    } else {
+      this.loadGateKeeperConstraintTemplates();
+    }
+  }
+
+  loadGateKeeperConstraintTemplates() {
+    this.gatekeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
+      .pipe(take(1))
+      .subscribe({
+        next: data => {
+          this.gatekeeperConstraintTemplates = data;
+          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
+          this.gatekeeperTemplates.paginator = this.paginator;
         },
         error: err => {
           console.error(err);
           this.gatekeeperConstraintTemplates = null;
-        }
-      });
-    this.loadGateKeeperConstraintTemplates();
-  }
-
-  loadGateKeeperConstraintTemplates() {
-    this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
-      .pipe(take(1))
-      .subscribe({
-        next: data => {
-          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
+          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>([]);
           this.gatekeeperTemplates.paginator = this.paginator;
         }
       });
@@ -87,20 +115,8 @@ export class GateKeeperComponent implements OnInit {
       .subscribe({
         next: response => {
           if (response && !response.cancel) {
-            this.loadGateKeeperConstraintTemplates();
-            this.checkGatekeeperStatus();
+            this.loadGatekeeperInformation();
           }
-        }
-      });
-  }
-
-  checkGatekeeperStatus(){
-    this.gateKeeperService.checkGatekeeperInstallationStatus(this.clusterId)
-      .pipe(take(1))
-      .subscribe({
-        next: data => {
-          this.gatekeeperStatusLoaded = true;
-          this.gatekeeperInstallationStatus = data;
         }
       });
   }

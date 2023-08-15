@@ -22,6 +22,17 @@ export class GatekeeperController {
     private logger: MineLoggerService,
   ) {}
 
+  @Get('')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @ApiResponse({
+    status: 201,
+    schema: {}
+  })
+  async getInstallationInfo(@Param('clusterId') clusterId) {
+    return this.gatekeeperService.getInstallationInfo(clusterId);
+  }
+
   @Get('constraint-templates')
   @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
   @UseGuards(AuthGuard, AuthorityGuard)
@@ -66,4 +77,5 @@ export class GatekeeperController {
   async getConstraintTemplateTemplateTitles(@Param('clusterId') clusterId: number) {
     return this.gatekeeperService.getConstraintTemplateTemplateTitles(clusterId);
   }
+
 }

@@ -29,7 +29,7 @@
                 </p>
                 <ng-template #recommendationText>
                   <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
-                    Gatekeeper is installed, but no policies are created yet. Use the setup wizard to create initial policies.
+                    Gatekeeper is installed, but no policies are created yet. Set up your initial policies by adding constraint templates.
                   </p>
                   <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
                     Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.

@@ -231,19 +231,6 @@ export class ClusterController {
         return this.clusterService.deployOPAGateKeeperConstraintTemplates(clusterId, templateName.templateName);
     }
 
-    @Post('/opa/:clusterId/gatekeeper-constraint-multiple-templates')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async deployMultipleOPAGateKeeperConstraintTemplates( @Body() templateNames: {templates: {name: string, template: string}[]}, @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
-        this.logger.log({label: 'About to deploy multiple Gatekeeper constraints', data: { templateNames }}, 'ClusterController.deployMultipleOPAGateKeeperConstraintTemplates');
-        return this.clusterService.deployMultipleOPAGateKeeperConstraintTemplates(clusterId, templateNames.templates);
-    }
-
-
     @Get('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -391,17 +378,6 @@ export class ClusterController {
     })
     async getNamespacesByCluster(@Param('clusterId') clusterId: number): Promise<string[]> {
         return this.clusterService.getNamespacesByCluster(clusterId);
-    }
-
-    @Get('/opa/:clusterId/gatekeeper/installation-status')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async checkGatekeeperInstallationStatus(@Param('clusterId') clusterId: number): Promise<{status: boolean, message: string}> {
-        return this.clusterService.checkGatekeeperInstallationStatus(clusterId);
     }
 
 }

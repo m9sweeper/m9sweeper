@@ -5,13 +5,43 @@ import { IServerResponse } from '../entities/IServerResponse';
 import {IGateKeeperConstraint, IGateKeeperConstraintDetails} from '../entities/IGateKeeperConstraint';
 import { map, shareReplay } from 'rxjs/operators';
 import {IGatekeeperTemplate} from '../entities/IGatekeeperTemplate';
+import {IKubernetesObject} from '../entities/IKubernetesObjects';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class GateKeeperService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
+
+  /* routes that use the new Gatekeeper service in the backend */
+
+  // base endpoint
+  getGatekeeperInstallation(clusterId: number): Observable<{
+    status: boolean,
+    message: string,
+    error?: any,
+    data?: {
+      constraints: IGateKeeperConstraintDetails[],
+      gatekeeperResource: Partial<IKubernetesObject>,
+    },
+  }> {
+    return this.httpClient.get<IServerResponse<{
+      status: boolean,
+      message: string,
+      error?: any,
+      data?: {
+        constraints: IGateKeeperConstraintDetails[],
+        gatekeeperResource: Partial<IKubernetesObject>,
+      },
+    }>>(`/api/clusters/${clusterId}/gatekeeper`)
+      .pipe(
+        map(response => response?.data),
+        shareReplay()
+      );
+  }
+
+  // constraint-templates endpoint
   getGateKeeperConstraintTemplatesByCluster(clusterId: number): Observable<IGateKeeperConstraintDetails[]> {
     return this.httpClient.get<IServerResponse<IGateKeeperConstraintDetails[]>>(`/api/clusters/${clusterId}/gatekeeper/constraint-templates`)
       .pipe(
@@ -20,14 +50,32 @@ export class GateKeeperService {
       );
   }
 
-  checkGatekeeperInstallationStatus(clusterId: number): Observable<{status: boolean, message: string}> {
-    return this.httpClient.get<IServerResponse<{status: boolean, message: string}>>(`/api/clusters/opa/${clusterId}/gatekeeper/installation-status`)
+  getConstraintTemplateTemplates(clusterId: number): Observable<{
+    category: string;
+    templates: {
+      name: string,
+      template: IGateKeeperConstraintDetails,
+    }[]
+  }[]> {
+    return this.httpClient.get<IServerResponse<{
+      category: string;
+      templates: {
+        name: string,
+        template: IGateKeeperConstraintDetails,
+      }[]
+    }[]>>(`/api/clusters/${clusterId}/gatekeeper/constraint-templates/templates`)
       .pipe(
         map(response => response?.data),
         shareReplay()
       );
   }
 
+  deployMultipleGateKeeperTemplates(clusterId: number, templates: {name: string, template: string}[]): Observable<IServerResponse<{message: string, statusCode: number}>> {
+    return this.httpClient.post(`/api/clusters/${clusterId}/gatekeeper/constraint-templates`, templates);
+  }
+
+
+  /* routes that use the old cluster service in the backend */
   gateKeeperTemplateByName(clusterId: number, templateName: string): Observable<IGatekeeperTemplate> {
     return this.httpClient.get<IServerResponse<IGatekeeperTemplate>>(`/api/clusters/opa/${clusterId}/gatekeeper-constraint-templates/${templateName}`)
       .pipe(
@@ -52,79 +100,12 @@ export class GateKeeperService {
       );
   }
 
-  getConstraintTemplateTemplates(clusterId: number): Observable<{
-    category: string;
-    templates: {
-      name: string,
-      template: IGateKeeperConstraintDetails,
-    }[]
-  }[]> {
-    return this.httpClient.get<IServerResponse<{
-      category: string;
-      templates: {
-        name: string,
-        template: IGateKeeperConstraintDetails,
-      }[]
-    }[]>>(`/api/clusters/${clusterId}/gatekeeper/constraint-templates/templates`)
-      .pipe(
-        map(response => response?.data),
-        // map(categories => {
-        //   // map templates to be constraint details
-        //   const newCategories: {
-        //     category: string;
-        //     templates: {
-        //       name: string,
-        //       template: IGateKeeperConstraintDetails,
-        //     }[]
-        //   }[] = [];
-        //   categories.forEach(category => {
-        //     const templates: {
-        //       name: string,
-        //       template: IGateKeeperConstraintDetails,
-        //     }[] = [];
-        //     category.templates.forEach(template => {
-        //       console.log(template.template);
-        //       const stringified = JSON.stringify(template.template);
-        //       const parsed = JSON.parse(stringified);
-        //       console.log(stringified, parsed);
-        //       templates.push({
-        //         name: template.name,
-        //         template: JSON.parse(`{${template.template}}`) as IGateKeeperConstraintDetails
-        //       });
-        //     });
-        //     newCategories.push({
-        //       category: category.category,
-        //       templates,
-        //     });
-        //   });
-        //   return newCategories;
-        // }),
-        shareReplay()
-      );
-  }
-
-  loadGateKeeperTemplate(clusterId: number, dir: string, subDir: string): Observable<IGatekeeperTemplate> {
-    return this.httpClient.get<IServerResponse<IGatekeeperTemplate>>(`/api/clusters/opa/${clusterId}/gatekeeper-templates/${dir}/${subDir}`)
-      .pipe(
-        map(response => response?.data),
-        shareReplay()
-      );
-  }
-
   loadRawGateKeeperTemplate(clusterId: number, dir: string, subDir: string): Observable<IGatekeeperTemplate> {
     return this.httpClient.get<IServerResponse<IGatekeeperTemplate>>(`/api/clusters/opa/${clusterId}/gatekeeper-templates/raw/${dir}/${subDir}`)
       .pipe(
         map(response => response?.data),
         shareReplay()
       );
-  }
-
-  deployGateKeeperTemplate(clusterId: number, templateName: string): Observable<IServerResponse<{message: string, statusCode: number}>> {
-    return this.httpClient.post(`/api/clusters/opa/${clusterId}/gatekeeper-constraint-templates`, {templateName});
-  }
-
-  deployMultipleGateKeeperTemplates(clusterId: number, templates: {name: string, template: string}[]): Observable<IServerResponse<{message: string, statusCode: number}>> {
-    return this.httpClient.post(`/api/clusters/${clusterId}/gatekeeper/constraint-templates`, templates);
   }
 
   patchRawGateKeeperTemplate(clusterId: number, template: any): Observable<IServerResponse<{message: string, statusCode: number}>> {
