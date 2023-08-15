@@ -63,6 +63,19 @@ export class GatekeeperService {
     return rawAPIService;
   }
 
+  private async getRawConstraintTemplateByName(clusterId: number, templateName: string): Promise<object> {
+    const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+    try {
+      const templateResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
+      return templateResponse.body;
+    }
+    catch(e) {
+      this.logger.error({label: 'Error getting Gatekeeper constraint template by name', data: { clusterId, templateName }}, e, 'GatekeeperService.getRawConstraintTemplateByName');
+      return;
+    }
+  }
+
   async gatekeeperTemplateConstraintsCount(kubeConfig: KubeConfig, clusterId, templateName: string): Promise<number> {
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     try {
@@ -152,6 +165,34 @@ export class GatekeeperService {
     } else {
       return {successfullyDeployed, unsuccessfullyDeployed};
     }
+  }
+
+  async getConstraintTemplateByName(clusterId: number, templateName: string): Promise<{
+    associatedConstraints: GatekeeperConstraintDetailsDto[],
+    constraintTemplate: GatekeeperTemplateDto,
+    rawConstraintTemplate: string,
+  }> {
+    try {
+      const template= await this.getRawConstraintTemplateByName(clusterId, templateName);
+      if (!template) {
+        throw new Error('Could not retrieve the raw constraint template by name');
+      }
+      const templateDto = plainToInstance(GatekeeperTemplateDto, template)
+      const associatedConstraints = await this.getConstraintsForTemplate(clusterId, templateName);
+      return {
+        associatedConstraints,
+        constraintTemplate: templateDto,
+        rawConstraintTemplate: JSON.stringify(template),
+      };
+    }
+    catch(e) {
+      this.logger.error({label: 'Error getting Gatekeeper constraint template by name', data: { clusterId, templateName }}, e, 'GatekeeperService.getConstraintTemplateByName');
+    }
+  }
+
+  async getConstraintTemplateAsString(clusterId: number, templateName: string): Promise<string> {
+    const template= await this.getRawConstraintTemplateByName(clusterId, templateName);
+    return JSON.stringify(template);
   }
 
   async getConstraintTemplateTemplateTitles(clusterId: number): Promise<{ [dirName: string]: string []}> {
@@ -246,6 +287,20 @@ export class GatekeeperService {
     } catch (e) {
       this.logger.error({label: 'Error getting Gatekeeper installation information', data: { clusterId }}, e, 'GatekeeperService.getInstallationInfo');
       return {status: gatekeeperIsInstalled, message: 'Not Installed', error: e};
+    }
+  }
+
+  async getConstraintsForTemplate(clusterId: number, templateName: string): Promise<GatekeeperConstraintDetailsDto[]> {
+    const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+    try {
+      const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
+      const constraintsDetails: any[] = response.body['items'];
+      return plainToInstance(GatekeeperConstraintDetailsDto, constraintsDetails);
+    }
+    catch(e) {
+      this.logger.error({label: 'Error retrieving GateKeeper template constraint details - assuming none exist', data: { clusterId, templateName }}, e, 'ClusterService.gateKeeperTemplateConstraintsDetails');
+      return [];
     }
   }
 }

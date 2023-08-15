@@ -1,14 +1,22 @@
 import {Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {IGSelectedTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {AlertService} from 'src/app/core/services/alert.service';
 import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
 import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 import {map, take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
+import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
+
+
+interface IGSelectedTemplate {
+  selectedTemplate: IGatekeeperConstraintTemplate;
+  selectedTemplateName: string;
+  selectedTopDir?: string;
+  displayTemplateContent?: boolean;
+  error?: string;
+}
 
 @Component({
   selector: 'app-add-constraint-dialog',
@@ -25,7 +33,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
     category: string;
     templates: {
       name: string,
-      template: IGateKeeperConstraintDetails,
+      template: IGatekeeperConstraintTemplate,
     }[]
   }[];
   currentlySelectedTemplates: IGSelectedTemplate[] = [];

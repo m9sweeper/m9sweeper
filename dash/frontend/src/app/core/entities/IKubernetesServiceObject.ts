@@ -2,7 +2,7 @@
  * Generic classes for K8s objects. Built around the types declared by
  * @kubernetes/client-node (used in the backend)
  */
-export interface IKubernetesObject {
+export interface IKubernetesServiceObject {
   apiVersion: string;
   kind?: string;
   metadata?: IV1ObjectMeta;

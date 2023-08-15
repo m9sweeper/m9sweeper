@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
-import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
@@ -10,7 +9,8 @@ import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constra
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 import {take} from 'rxjs/operators';
-import {IKubernetesObject} from '../../../../../core/entities/IKubernetesObjects';
+import {IKubernetesServiceObject} from '../../../../../core/entities/IKubernetesServiceObject';
+import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
 
 @Component({
   selector: 'app-gate-keeper',
@@ -19,14 +19,14 @@ import {IKubernetesObject} from '../../../../../core/entities/IKubernetesObjects
 })
 export class GateKeeperComponent implements OnInit {
   clusterId: number;
-  gatekeeperConstraintTemplates: IGateKeeperConstraintDetails[];
-  gatekeeperTemplates: MatTableDataSource<IGateKeeperConstraintDetails>;
+  gatekeeperConstraintTemplates: IGatekeeperConstraintTemplate[];
+  gatekeeperTemplates: MatTableDataSource<IGatekeeperConstraintTemplate>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   displayedColumns: string[] = ['name', 'description', 'constraints', 'enforced'];
   gatekeeperInstallationStatus: {status: boolean, message: string};
   gatekeeperStatusLoaded = false;
-  gatekeeperInstallation: Partial<IKubernetesObject>;
+  gatekeeperInstallation: Partial<IKubernetesServiceObject>;
 
   constructor(
     private router: Router,
@@ -62,9 +62,9 @@ export class GateKeeperComponent implements OnInit {
       });
   }
 
-  setConstraintTemplates(constraintTemplates?: IGateKeeperConstraintDetails[]) {
+  setConstraintTemplates(constraintTemplates?: IGatekeeperConstraintTemplate[]) {
     if (constraintTemplates) {
-      this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(constraintTemplates);
+      this.gatekeeperTemplates = new MatTableDataSource<IGatekeeperConstraintTemplate>(constraintTemplates);
       this.gatekeeperTemplates.paginator = this.paginator;
     } else {
       this.loadGateKeeperConstraintTemplates();
@@ -76,14 +76,14 @@ export class GateKeeperComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: data => {
-          this.gatekeeperConstraintTemplates = data;
-          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
+          // this.gatekeeperConstraintTemplates = data;
+          // this.gatekeeperTemplates = new MatTableDataSource<IGatekeeperConstraintTemplate>(data);
           this.gatekeeperTemplates.paginator = this.paginator;
         },
         error: err => {
           console.error(err);
           this.gatekeeperConstraintTemplates = null;
-          this.gatekeeperTemplates = new MatTableDataSource<IGateKeeperConstraintDetails>([]);
+          this.gatekeeperTemplates = new MatTableDataSource<IGatekeeperConstraintTemplate>([]);
           this.gatekeeperTemplates.paginator = this.paginator;
         }
       });
