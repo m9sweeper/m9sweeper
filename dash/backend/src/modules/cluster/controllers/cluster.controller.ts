@@ -212,52 +212,6 @@ export class ClusterController {
     ///////////////////////////////////////////////
     // GATEKEEPER //
     ///////////////////////////////////////////////
-    @Get('/opa/:clusterId/gatekeeper-constraint-templates')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperConstraintTemplates(@Param('clusterId') clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
-        return this.clusterService.getOPAGateKeeperConstraintTemplates(clusterId);
-    }
-
-    @Post('/opa/:clusterId/gatekeeper-constraint-templates')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async deployOPAGateKeeperConstraintTemplates( @Body() templateName: {templateName: string}, @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
-        return this.clusterService.deployOPAGateKeeperConstraintTemplates(clusterId, templateName.templateName);
-    }
-
-    @Get('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperConstraintTemplateByName(@Param('clusterId') clusterId: number,
-                                                   @Param('templateName') templateName: string): Promise<DeprecatedGatekeeperTemplateDto> {
-        return this.clusterService.getOPAGateKeeperConstraintTemplateByName(clusterId, templateName);
-    }
-
-    @Get('/opa/:clusterId/gatekeeper-constraint-templates/:templateName/raw')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperConstraintTemplateByNameRaw(@Param('clusterId') clusterId: number,
-                                                   @Param('templateName') templateName: string): Promise<any> {
-        return this.clusterService.getOPAGateKeeperConstraintTemplateByNameRaw(clusterId, templateName);
-    }
-
     @Delete('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -268,32 +222,6 @@ export class ClusterController {
     async destroyOPAGateKeeperConstraintTemplateByName(@Param('clusterId') clusterId: number,
                                                    @Param('templateName') templateName: string): Promise<{message: string; status: number}> {
         return this.clusterService.destroyOPAGateKeeperConstraintTemplateByName(clusterId, templateName);
-    }
-
-
-    // loading the template dir names for the "Add Constraint Templates" Dialog
-    @Get('/opa/:clusterId/gatekeeper-templates/dirs')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperTemplateDirList(@Param('clusterId') clusterId: number): Promise<{ [dirName: string]: string[] }> {
-        return this.clusterService.getDirectoryStructure();
-    }
-
-    @Get('/opa/:clusterId/gatekeeper-templates/:dir/:subDir')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperTemplate(@Param('clusterId') clusterId: number,
-                                   @Param('dir') dir: string,
-                                   @Param('subDir') subDir: string): Promise<DeprecatedGatekeeperTemplateDto> {
-        return this.clusterService.loadGatekeeperTemplate(dir, subDir, clusterId);
     }
 
     @Get('/opa/:clusterId/gatekeeper-templates/raw/:dir/:subDir')
@@ -319,18 +247,6 @@ export class ClusterController {
     async deployRawOPAGateKeeperConstraintTemplates( @Body() rawTemplate: {template: any},
                                                      @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
         return this.clusterService.deployRawOPAGateKeeperConstraintTemplates(clusterId, rawTemplate.template);
-    }
-
-    @Get('/opa/:clusterId/:templateName/constraints')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getOPAGateKeeperTemplateConstraints(@Param('clusterId') clusterId: number,
-                                              @Param('templateName') templateName: string): Promise<GatekeeperConstraintDetailsDto[]> {
-        return this.clusterService.gateKeeperTemplateConstraintsDetails(clusterId, templateName);
     }
 
     @Post('/opa/:clusterId/:templateName/constraints')
@@ -370,17 +286,6 @@ export class ClusterController {
                                                        @Param('templateName') templateName: string,
                                                        @Param('constraintName') constraintName: string): Promise<{message: string; statusCode: number}> {
         return this.clusterService.destroyOPAGateKeeperTemplateConstraintByName(clusterId, templateName, constraintName);
-    }
-
-    @Get('/opa/:clusterId/namespaces')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getNamespacesByCluster(@Param('clusterId') clusterId: number): Promise<string[]> {
-        return this.clusterService.getNamespacesByCluster(clusterId);
     }
 
 }

@@ -309,21 +309,6 @@ export class ClusterService {
 
   }
 
-  async getNamespacesByCluster(clusterId: number): Promise<string[]> {
-    try {
-      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-      const k8sCoreApi = kubeConfig.makeApiClient(CoreV1Api);
-      const namespaces = await k8sCoreApi.listNamespace();
-      const namespaceNames =  namespaces.body.items.map(namespace => namespace.metadata.name);
-      // const kubeSystemIndex = namespaceNames.indexOf('kube-system');
-      // namespaceNames.splice(kubeSystemIndex, 1);
-      return namespaceNames;
-    } catch (e) {
-      this.logger.error({label: 'Error getting namespaces by cluster', data: { clusterId }}, e, 'ClusterService.getNamespacesByCluster');
-      return [];
-    }
-  }
-
   async calculateClusterMetaData(previous: ClusterDto, updated: ClusterDto): Promise<any> {
     return await this.auditLogService.calculateMetaData(previous, updated, 'Cluster');
   }
@@ -331,80 +316,6 @@ export class ClusterService {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                                                   Gatekeeper
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @deprecated
-   */
-  async readFolderNames(pathName: string): Promise<string[]> {
-    try {
-      const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
-      return readDirNamesFromFile.resources;
-    } catch (e) {
-      this.logger.error({label: 'Could not read file at path', data: { pathName }}, e, 'ClusterService.readFolderNames');
-      return [];
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  async getDirectoryStructure(): Promise<{ [dirName: string]: string[] }> {
-    const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
-    const dirStructure = {};
-    const topDirs = await this.readFolderNames(`${templateDir}/kustomization.yaml`);
-    if (topDirs && topDirs.length) {
-      for(const dir of topDirs) {
-        const fileName = `${templateDir}/${dir}/kustomization.yaml`;
-        dirStructure[dir] = await this.readFolderNames(fileName);
-      }
-    }
-    return dirStructure;
-  }
-
-  /**
-   * @deprecated
-   */
-  async getOPAGateKeeperConstraintTemplates(clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
-    await this.exceptionBlockService.copyGatekeeperTemplatesForCluster(clusterId);
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    try {
-      const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
-      const templates: any[] = templateListResponse.body['items'];
-      const templatesDto: DeprecatedGatekeeperTemplateDto[] = plainToInstance(DeprecatedGatekeeperTemplateDto, templates);
-      for(const template of templatesDto) {
-        const constraintCount = await this.gateKeeperTemplateConstraintsCount(clusterId, template.metadata.name);
-        template.constraintsCount = constraintCount;
-        template.enforced = constraintCount ? true : false;
-      }
-      return templatesDto;
-    }
-    catch(e) {
-      this.logger.error({label: 'Error getting GateKeeper constraint templates', data: { clusterId }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplates');
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  async deployOPAGateKeeperConstraintTemplates(clusterId: number, templateName: string): Promise<{message: string, statusCode: number}> {
-    this.logger.log({label: 'Going to deploy GateKeeper constraint template', data: { clusterId, templateName }}, 'ClusterService.deployOPAGateKeeperConstraintTemplates');
-    const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
-    try {
-      const readGatekeeperTemplate = jsYaml.load(fs.readFileSync(`${templateDir}/${templateName}/template.yaml`, 'utf-8')) as any;
-      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-      await customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', readGatekeeperTemplate);
-      return {message: 'Template was deployed successfully', statusCode: 200};
-    } catch (e) {
-      this.logger.error({label: 'Error deploying GateKeeper constraint template', data: { clusterId, templateName }}, e, 'ClusterService.deployOPAGateKeeperConstraintTemplates');
-      if (e.statusCode === 409) {
-        return {message: 'Template already exists', statusCode: e.statusCode};
-      }
-      return {message: 'Failed to deploy the template', statusCode: e.statusCode};
-    }
-  }
-
   /**
    * @deprecated
    */
