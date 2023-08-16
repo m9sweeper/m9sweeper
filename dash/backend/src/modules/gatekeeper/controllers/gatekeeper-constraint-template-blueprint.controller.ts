@@ -9,6 +9,9 @@ import {
   GatekeeperConstraintTemplateBlueprintService
 } from '../services/gatekeeper-constraint-template-blueprint.service';
 import { GatekeeperConstraintTemplateBlueprintDto } from '../dto/gatekeeper-constraint-template-blueprint.dto';
+import {
+  GATEKEEPER_CONSTRAINT_TEMPLATE_BLUEPRINT_ARRAY_SCHEMA
+} from '../open-api-schema/gatekeeper-constraint-template-blueprint.schema';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
@@ -24,7 +27,7 @@ export class GatekeeperConstraintTemplateBlueprintController {
   @UseGuards(AuthGuard, AuthorityGuard)
   @ApiResponse({
     status: 201,
-    schema: {}
+    schema: GATEKEEPER_CONSTRAINT_TEMPLATE_BLUEPRINT_ARRAY_SCHEMA,
   })
   async getConstraintTemplateBlueprints(@Param('clusterId') clusterId: number): Promise<{
     category: string,
