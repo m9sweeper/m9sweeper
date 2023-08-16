@@ -11,6 +11,7 @@ import { plainToInstance } from 'class-transformer';
 import { GatekeeperConstraintService } from './gatekeeper-constraint.service';
 import { GatekeeperConstraintTemplateService } from './gatekeeper-constraint-template.service';
 import { GatekeeperConstraintTemplateBlueprintService } from './gatekeeper-constraint-template-blueprint.service';
+import { GatekeeperDto } from '../dto/gatekeeper.dto';
 
 @Injectable()
 export class GatekeeperService {
@@ -29,7 +30,7 @@ export class GatekeeperService {
 
   async getInstallationInfo(clusterId: number): Promise<GatekeeperResponseStructure<{
     constraints: GatekeeperConstraintTemplateDto[],
-    gatekeeperResource: Partial<V1APIService>,
+    gatekeeperResource: Partial<GatekeeperDto>,
   }>> {
     this.logger.log({ label: 'Retrieving Gatekeeper installation info for cluster', clusterId }, 'GatekeeperService.getInstallationInfo');
     const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
