@@ -8,6 +8,7 @@ import { AuthorityGuard } from '../../../guards/authority.guard';
 import {
   GatekeeperConstraintTemplateBlueprintService
 } from '../services/gatekeeper-constraint-template-blueprint.service';
+import { GatekeeperConstraintTemplateBlueprintDto } from '../dto/gatekeeper-constraint-template-blueprint.dto';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
@@ -27,10 +28,7 @@ export class GatekeeperConstraintTemplateBlueprintController {
   })
   async getConstraintTemplateBlueprints(@Param('clusterId') clusterId: number): Promise<{
     category: string,
-    templates: {
-      name: string,
-      template: any | string,
-    }[],
+    templates: GatekeeperConstraintTemplateBlueprintDto[],
   }[]> {
     return this.gatekeeperBlueprintService.getBlueprints(clusterId);
   }
