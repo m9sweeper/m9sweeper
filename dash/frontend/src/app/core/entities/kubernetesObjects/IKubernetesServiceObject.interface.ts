@@ -47,11 +47,11 @@ export interface IV1APIServiceSpec {
 }
 
 export interface IV1APIServiceStatus {
-  'conditions'?: Array<{
-    'lastTransitionTime'?: Date;
-    'message'?: string;
-    'reason'?: string;
-    'status': string;
-    'type': string;
+  conditions?: Array<{
+    lastTransitionTime?: Date;
+    message?: string;
+    reason?: string;
+    status?: string;
+    type?: string;
   }>;
 }

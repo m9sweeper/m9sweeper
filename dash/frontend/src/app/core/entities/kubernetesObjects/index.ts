@@ -1,1 +1,1 @@
-export { IKubernetesServiceObject } from './IKubernetesServiceObject.interface';
+export { IKubernetesServiceObject, IV1ObjectMeta } from './IKubernetesServiceObject.interface';
