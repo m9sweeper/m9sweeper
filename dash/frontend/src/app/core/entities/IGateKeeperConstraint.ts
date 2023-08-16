@@ -1,5 +1,5 @@
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintMetadataAnnotations {
   mode?: string;
@@ -7,7 +7,7 @@ export interface IGatekeeperConstraintMetadataAnnotations {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintMetadata {
   name?: string;
@@ -17,7 +17,7 @@ export interface IGatekeeperConstraintMetadata {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintViolation {
   enforcementAction?: string;
@@ -28,7 +28,7 @@ export interface IGatekeeperConstraintViolation {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintStatus {
   auditTimestamp?: string;
@@ -37,7 +37,7 @@ export interface IGatekeeperConstraintStatus {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintSpecKind {
   apiGroups?: string[];
@@ -45,7 +45,7 @@ export interface IGatekeeperConstraintSpecKind {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGatekeeperConstraintSpec {
   enforcementAction?: string;
@@ -57,7 +57,7 @@ export interface IGatekeeperConstraintSpec {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IGateKeeperConstraintDetails {
   apiVersion?: string;
@@ -68,7 +68,7 @@ export interface IGateKeeperConstraintDetails {
 }
 
 /**
- * @deprecated - use IGatekeeperConstraintTemplate instead
+ * @deprecated
  */
 export interface IConstraintCriteria {
   kinds?: string[];

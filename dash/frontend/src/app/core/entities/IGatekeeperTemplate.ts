@@ -1,8 +1,5 @@
-import {IGateKeeperConstraintDetails} from './IGateKeeperConstraint';
-import {IGatekeeper} from './IGatekeeper';
-
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface MetaDataAnnotation {
     description?: string;
@@ -11,7 +8,7 @@ export interface MetaDataAnnotation {
 }
 
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface TemplateMetaData {
   name?: string;
@@ -19,14 +16,14 @@ export interface TemplateMetaData {
 }
 
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface TemplateCrd {
   spec: { names: { kind: string }}; // @TODO: refactor properly
 }
 
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface TemplateTarget {
   target?: string;
@@ -34,7 +31,7 @@ export interface TemplateTarget {
 }
 
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface TemplateSpec {
   crd?: TemplateCrd;
@@ -42,7 +39,7 @@ export interface TemplateSpec {
 }
 
 /**
- * @deprecated - use IGatekeeper instead
+ * @deprecated
  */
 export interface IGatekeeperTemplate {
   apiVersion?: string;
