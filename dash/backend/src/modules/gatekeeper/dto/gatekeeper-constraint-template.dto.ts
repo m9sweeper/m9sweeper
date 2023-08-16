@@ -1,5 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
+import { GatekeeperConstraintDto } from './gatekeeper-constraint.dto';
 
 @Exclude()
 class GatekeeperConstraintTemplateMetadataAnnotations {
@@ -89,4 +90,8 @@ export class GatekeeperConstraintTemplateDto {
   @IsOptional()
   @Expose()
   enforced: boolean;
+
+  @IsOptional()
+  @Expose()
+  constraints: GatekeeperConstraintDto[];
 }
