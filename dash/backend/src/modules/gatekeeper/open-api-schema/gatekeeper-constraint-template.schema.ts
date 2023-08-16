@@ -84,8 +84,55 @@ export const GATEKEEPER_CONSTRAINT_TEMPLATE_SCHEMA = {
     "constraints": {
       "type": "array",
       "items": {
-        "$ref": "gatekeeper-constraing.schema.ts/#GATEKEEPER_CONSTRAINT_SCHEMA"
+        "$ref": "gatekeeper-constraint.schema.ts/#GATEKEEPER_CONSTRAINT_SCHEMA"
       }
     },
+  }
+}
+
+export const GATEKEEPER_CONSTRAINT_TEMPLATE_ARRAY_SCHEMA = {
+  "type": "array",
+  "items": {
+    "$ref": "#GATEKEEPER_CONSTRAINT_TEMPLATE_SCHEMA",
+  }
+}
+
+export const GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_SCHEMA = {
+  "type": "object",
+  "required": ["successfullyDeployed", "unsuccessfullyDeployed"],
+  "properties": {
+    "successfullyDeployed": {
+      "type": "array",
+      "description": "An array containing the names of the successfully-deployed constraint templates",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unsuccessfullyDeployed": {
+      "type": "array",
+      "description": "An array containing the names of the failed constraint templates",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
+
+export const GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA = {
+  "type": "object",
+  "required": ["template", "rawConstraintTemplate"],
+  "properties": {
+    "associatedConstraints": {
+      "type": "array",
+      "items": {
+        "$ref": "gatekeeper-constraint.schema.ts/#GATEKEEPER_CONSTRAINT_SCHEMA"
+      }
+    },
+    "template": {
+      "$ref": "#GATEKEEPER_CONSTRAINT_TEMPLATE_SCHEMA"
+    },
+    "rawConstraintTemplate": {
+      "type": "string"
+    }
   }
 }
