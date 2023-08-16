@@ -5,8 +5,6 @@ import { IServerResponse } from '../entities/IServerResponse';
 import {IGateKeeperConstraintDetails} from '../entities/IGateKeeperConstraint';
 import { map, shareReplay } from 'rxjs/operators';
 import {IGatekeeperTemplate} from '../entities/IGatekeeperTemplate';
-import { IGatekeeperConstraintTemplate } from '../entities/IGatekeeperConstraintTemplate';
-import {IGatekeeper} from '../entities/IGatekeeper';
 
 /**
  * @deprecated
