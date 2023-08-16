@@ -3,6 +3,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from 'src/app/core/services/alert.service';
 import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
+import {IGatekeeperConstraint, IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-custom-constraint-template',
@@ -27,41 +31,38 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
-      templateContent?: IGatekeeperTemplate;
-      rawTemplateContent?: string;
+      templateContent: IGatekeeperConstraintTemplate;
+      saveTemplate?: boolean;
       clusterId?: number;
-      dir?: string;
       subDir?: string;
     },
-    private gatekeeperService: GateKeeperService,
+    private gateKeeperService: GateKeeperService,
+    private gatekeeperService: GatekeeperService,
     private dialogRef: MatDialogRef<AddCustomConstraintTemplateComponent>,
     private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
-    if (this.data?.rawTemplateContent) {
-      const parsedTemplate = JSON.parse(this.data.rawTemplateContent);
-      delete parsedTemplate.metadata.resourceVersion;
-      this.rawTemplate = JSON.stringify(parsedTemplate, null, ' ');
-    } else if (this.data?.templateContent) {
-      this.rawTemplate = JSON.stringify(this.data.templateContent, null, ' ');
+    this.rawTemplate = JSON.stringify(this.data.templateContent, null, ' ');
+  }
+
+  deployCustomTemplate() {
+    if (this.data.saveTemplate) {
+      this.patchTemplate();
     } else {
-      this.gatekeeperService.loadRawGateKeeperTemplate(this.data.clusterId, this.data.dir, this.data.subDir).subscribe(response => {
-        this.rawTemplate = JSON.stringify(response, null, ' ');
+      this.dialogRef.close({
+        editedTemplate: this.rawTemplate,
       });
     }
   }
 
-  deployCustomTemplate() {
-    this.dialogRef.close({
-      editedTemplate: this.rawTemplate,
-    });
-    // this.patchTemplate();
-  }
-
   patchTemplate() {
-    this.gatekeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
+    this.gateKeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
       if (response.data.statusCode === 200) {
+        this.dialogRef.close({
+          closeParentDialog: true,
+          editedTemplate: this.rawTemplate,
+        });
         this.alertService.success(`${response.data.message}`);
       } else if (response.data.statusCode === 409) {
         this.alertService.info(`${response.data.message}`);
@@ -69,9 +70,6 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
         this.alertService.danger(`${response.data.message}`);
       }
     });
-    setTimeout(() => {
-      this.dialogRef.close({closeParentDialog: true});
-    }, 1000);
   }
 }
 
