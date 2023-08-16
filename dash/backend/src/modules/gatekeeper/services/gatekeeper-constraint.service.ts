@@ -34,9 +34,7 @@ export class GatekeeperConstraintService {
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     try {
       const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return plainToInstance(GatekeeperConstraintDto, response.body['items']);
+      return plainToInstance(GatekeeperConstraintDto, response.body['items']) as unknown as GatekeeperConstraintDto[];
     }
     catch(e) {
       this.logger.error({label: 'Error counting Gatekeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gatekeeperTemplateConstraintsCount');
