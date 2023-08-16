@@ -27,7 +27,6 @@ export class GateKeeperDetailsComponent implements OnInit {
   templateName: string;
   constraintsList: MatTableDataSource<IGatekeeperConstraint>;
   displayedColumns: string[];
-  rawTemplate: any;
   openapiProperties = [];
   openApiSchema: any;
 
@@ -59,14 +58,12 @@ export class GateKeeperDetailsComponent implements OnInit {
 
       this.constraintCount = data.associatedConstraints.length ?? 0;
       this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(data.associatedConstraints);
-
-      this.rawTemplate = data.rawConstraintTemplate;
-      this.updateRawConstraintTemplateProperties();
+      this.updateConstraintTemplateProperties();
     });
   }
 
-  updateRawConstraintTemplateProperties() {
-    const tempData = JSON.parse(this.rawTemplate);
+  updateConstraintTemplateProperties() {
+    const tempData = this.gatekeeperTemplate;
     const tempProperties = tempData.spec.crd.spec.validation.openAPIV3Schema ? tempData.spec.crd.spec.validation.openAPIV3Schema.properties : {};
     this.openApiSchema = tempProperties;
     const propertyKeys = Object.keys(tempProperties);
@@ -96,19 +93,26 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
   }
 
-  editRawTemplate() {
-    const rawTemplate = this.dialog.open(AddCustomConstraintTemplateComponent, {
+  editTemplate() {
+    const editTemplateDialog = this.dialog.open(AddCustomConstraintTemplateComponent, {
       width: '1000px',
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {clusterId: this.clusterId, subDir: this.templateName, templateContent: this.rawTemplate, referer: 'gate-keeper-details'}
+      data: {
+        subDir: this.templateName,
+        templateContent: this.gatekeeperTemplate,
+        saveTemplate: true,
+        referer: 'gate-keeper-details'
+      }
     });
 
-    rawTemplate.afterClosed()
+    editTemplateDialog.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-        this.getConstraintTemplateDetails(true);
+        if (response && response.editedTemplate) {
+          this.getConstraintTemplateDetails(true);
+        }
     });
   }
 
