@@ -209,9 +209,9 @@ export class ClusterController {
         return cluster;
     }
 
-    ///////////////////////////////////////////////
-    // GATEKEEPER //
-    ///////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                   Gatekeeper
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Delete('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -224,6 +224,9 @@ export class ClusterController {
         return this.clusterService.destroyOPAGateKeeperConstraintTemplateByName(clusterId, templateName);
     }
 
+    /**
+     * @deprecated
+     */
     @Get('/opa/:clusterId/gatekeeper-templates/raw/:dir/:subDir')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -237,6 +240,9 @@ export class ClusterController {
         return this.clusterService.loadRawGatekeeperTemplate(dir, subDir, clusterId);
     }
 
+    /**
+     * @deprecated
+     */
     @Post('/opa/:clusterId/gatekeeper-constraint-templates/raw')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -249,6 +255,9 @@ export class ClusterController {
         return this.clusterService.deployRawOPAGateKeeperConstraintTemplates(clusterId, rawTemplate.template);
     }
 
+    /**
+     * @deprecated
+     */
     @Post('/opa/:clusterId/:templateName/constraints')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -262,6 +271,9 @@ export class ClusterController {
         return this.clusterService.createOPAGateKeeperTemplateConstraint(constraint, templateName, clusterId );
     }
 
+    /**
+     * @deprecated
+     */
     @Put('/opa/:clusterId/:templateName/constraints')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
@@ -275,6 +287,9 @@ export class ClusterController {
         return this.clusterService.patchOPAGateKeeperTemplateConstraint(constraint, templateName, clusterId );
     }
 
+    /**
+     * @deprecated
+     */
     @Delete('/opa/:clusterId/gatekeeper-template-constraints/:templateName/:constraintName')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
