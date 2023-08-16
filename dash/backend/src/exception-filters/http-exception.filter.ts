@@ -23,7 +23,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     let errorMessage = exception.message;
 
-    // const data = null;
     const respFromException = exception.getResponse();
     let data = null;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -46,10 +45,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         {
           label: errorMessage,
           data: {
-              host: request.protocol + '://' + request.get('Host'),
-              path: url.parse(request.originalUrl).pathname,
-              params: request.params,
-              responseStatus: status
+            host: request.protocol + '://' + request.get('Host'),
+            path: url.parse(request.originalUrl).pathname,
+            params: request.params,
+            responseStatus: status,
           }
         },
         exception,

@@ -20,11 +20,10 @@ import { ClusterService } from '../../cluster/services/cluster.service';
 @Injectable()
 export class ClusterEventService {
     constructor(
-      @Inject(forwardRef(() => ClusterService))
-      private readonly clusterService: ClusterService,
       private readonly clusterEventDao: ClusterEventDao,
       private readonly clusterDao: ClusterDao,
       private logger: MineLoggerService,
+      @Inject(forwardRef(() => ClusterService)) private readonly clusterService: ClusterService,
     ) {}
 
     async createClusterEvent(clusterEvent: ClusterEventCreateDto, clusterId: number): Promise<{id: number}[]> {

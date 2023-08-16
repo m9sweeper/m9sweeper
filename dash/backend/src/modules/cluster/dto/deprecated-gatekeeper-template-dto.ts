@@ -60,7 +60,7 @@ export class TemplateMetaData{
 }
 
 @Exclude()
-export class GatekeeperTemplateDto {
+export class DeprecatedGatekeeperTemplateDto {
     @IsOptional()
     @Expose()
     apiVersion: string;
