@@ -1,5 +1,5 @@
 import { ResponseTransformerInterceptor } from '../../../interceptors/response-transformer.interceptor';
-import { Body, Controller, Get, Param, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
@@ -10,7 +10,7 @@ import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-te
 import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
 import {
   GATEKEEPER_CONSTRAINT_TEMPLATE_ARRAY_SCHEMA,
-  GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA,
+  GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA, GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_FAILED_SCHEMA,
   GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_SCHEMA,
 } from '../open-api-schema/gatekeeper-constraint-template.schema';
 
@@ -34,12 +34,16 @@ export class GatekeeperConstraintTemplateController {
     return this.gatekeeperConstraintTemplateService.getConstraintTemplates(clusterId);
   }
 
-  @Get()
+  @Post()
   @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
   @UseGuards(AuthGuard, AuthorityGuard)
   @ApiResponse({
     status: 200,
     schema: GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_SCHEMA,
+  })
+  @ApiResponse({
+    status: 400,
+    schema: GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_FAILED_SCHEMA,
   })
   async deployConstraintTemplates(
     @Param('clusterId') clusterId: number,
