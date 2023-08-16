@@ -118,6 +118,22 @@ export const GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_SCHEMA = {
   }
 }
 
+export const GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_FAILED_SCHEMA = {
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["reason", "templateName"],
+    "properties": {
+      "reason": {
+        "type": "string"
+      },
+      "templateName": {
+        "type": "string"
+      }
+    }
+  }
+}
+
 export const GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA = {
   "type": "object",
   "required": ["template", "rawConstraintTemplate"],
