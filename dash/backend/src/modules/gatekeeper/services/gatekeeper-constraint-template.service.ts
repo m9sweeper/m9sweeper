@@ -50,7 +50,7 @@ export class GatekeeperConstraintTemplateService {
       const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '');
       const templates: any[] = templateListResponse.body['items'];
       const templateDTOs: GatekeeperConstraintTemplateDto[] = plainToInstance(GatekeeperConstraintTemplateDto, templates);
-      for(const template of templateDTOs) {
+      for (const template of templateDTOs) {
         const constraintCount = await this.gatekeeperConstraintService.getNumConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
         template.constraintsCount = constraintCount;
         template.enforced = !!constraintCount;
@@ -62,8 +62,8 @@ export class GatekeeperConstraintTemplateService {
     }
   }
 
-  async getConstraintTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<{
-    associatedConstraints: GatekeeperConstraintDto[],
+  async getConstraintTemplate(clusterId: number, templateName: string, excludeConstraints: boolean, kubeConfig?: KubeConfig): Promise<{
+    associatedConstraints?: GatekeeperConstraintDto[],
     template: GatekeeperConstraintTemplateDto,
     rawConstraintTemplate: string,
   }> {
@@ -76,12 +76,17 @@ export class GatekeeperConstraintTemplateService {
       const template = plainToInstance(GatekeeperConstraintTemplateDto, templateResponse.body);
 
       let constraints;
-      try {
-        constraints = await this.gatekeeperConstraintService.getConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
-        template.constraintsCount = constraints.length;
-        template.enforced = !!constraints.length;
-      } catch (e) {
-        this.logger.log({ label: `Failed to retrieve constraints for constraint template ${templateName}`, data: {error: e}}, 'GatekeeperConstraintTemplateService.getConstraintTemplates');
+      if (!excludeConstraints) {
+        try {
+          constraints = await this.gatekeeperConstraintService.getConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
+          template.constraintsCount = constraints.length;
+          template.enforced = !!constraints.length;
+        } catch (e) {
+          this.logger.log({
+            label: `Failed to retrieve constraints for constraint template ${templateName}`,
+            data: { error: e }
+          }, 'GatekeeperConstraintTemplateService.getConstraintTemplates');
+        }
       }
       return {
         associatedConstraints: constraints,
