@@ -1,4 +1,4 @@
-import {IV1ObjectMeta} from './IKubernetesServiceObject';
+import {IV1ObjectMeta} from './kubernetesObjects/IKubernetesServiceObject.interface';
 
 export interface IGatekeeperConstraintTemplate {
   apiVersion: string;

@@ -1,6 +1,8 @@
-import {IKubernetesServiceObject} from './IKubernetesServiceObject';
+import {IKubernetesServiceObject} from './kubernetesObjects';
 
-// tslint:disable-next-line:no-empty-interface
+/**
+ * @deprecated - use IGatekeeperConstraintTemplate in the gatekeeper folder
+ */
 export interface IGatekeeper extends IKubernetesServiceObject {
   constraintsCount?: number;
   enforced?: number;
