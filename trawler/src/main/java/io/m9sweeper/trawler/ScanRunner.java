@@ -176,13 +176,13 @@ public class ScanRunner {
         // Return an error response under the original hash
         if (hashHasChanged || errorEncountered) {
             String errorSummary = "";
-            if (hashHasChanged && !errorEncountered) {
+            if (errorEncountered) {
+                errorSummary = imageTrawlerResultDtos.get(0).getSummary();
+            } else {
                 errorSummary = "Image ID does not match most recent image pulled from Trawler";
                 if (scanConfig.getImage().getTag().contains("latest")) {
                     errorSummary = errorSummary.concat(". Note, using the latest tag for images is not recommended and can cause undesirable behavior");
                 }
-            } else {
-                errorSummary = imageTrawlerResultDtos.get(0).getSummary();
             }
             ImageTrawlerResultDto outdatedImageIdResult = new ImageTrawlerResultDto()
                     .summary(errorSummary)
