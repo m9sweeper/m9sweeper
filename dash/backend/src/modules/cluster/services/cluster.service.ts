@@ -309,11 +309,32 @@ export class ClusterService {
 
   }
 
+  async getNamespacesByCluster(clusterId: number): Promise<string[]> {
+    try {
+      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
+      const k8sCoreApi = kubeConfig.makeApiClient(CoreV1Api);
+      const namespaces = await k8sCoreApi.listNamespace();
+      const namespaceNames =  namespaces.body.items.map(namespace => namespace.metadata.name);
+      // const kubeSystemIndex = namespaceNames.indexOf('kube-system');
+      // namespaceNames.splice(kubeSystemIndex, 1);
+      return namespaceNames;
+    } catch (e) {
+      this.logger.error({label: 'Error getting namespaces by cluster', data: { clusterId }}, e, 'ClusterService.getNamespacesByCluster');
+      return [];
+    }
+  }
+
+  async calculateClusterMetaData(previous: ClusterDto, updated: ClusterDto): Promise<any> {
+    return await this.auditLogService.calculateMetaData(previous, updated, 'Cluster');
+  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                                                   Gatekeeper
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  /**
+   * @deprecated
+   */
   async readFolderNames(pathName: string): Promise<string[]> {
     try {
       const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
@@ -324,6 +345,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async getDirectoryStructure(): Promise<{ [dirName: string]: string[] }> {
     const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     const dirStructure = {};
@@ -337,33 +361,9 @@ export class ClusterService {
     return dirStructure;
   }
 
-  async checkGatekeeperInstallationStatus(clusterId: number): Promise<{status: boolean, message: string, error: any}> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const apiRegistration = kubeConfig.makeApiClient(ApiregistrationV1Api);
-    let installationStatus = false;
-    try {
-      const resource = await apiRegistration.readAPIService('v1beta1.templates.gatekeeper.sh');
-      this.logger.log({label: 'GateKeeper installation status', data: { clusterId, status: resource.body.status }}, 'ClusterService.checkGatekeeperInstallationStatus');
-      installationStatus = !!resource.body.status.conditions.length;
-      if (installationStatus) {
-        const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-        const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
-        const templates: any[] = templateListResponse.body['items'];
-        if (templates.length) {
-          return {status: installationStatus, message: 'Setup', error: null};
-        } else {
-          return {status: installationStatus, message: 'Not Setup', error: null};
-        }
-      } else {
-        return {status: installationStatus, message: 'Not Installed', error: null};
-      }
-    }
-    catch(e) {
-      this.logger.error({label: 'Error checking GateKeeper installation status', data: { clusterId }}, e, 'ClusterService.checkGatekeeperInstallationStatus');
-      return {status: installationStatus, message: 'Not Installed', error: e.message};
-    }
-  }
-
+  /**
+   * @deprecated
+   */
   async getOPAGateKeeperConstraintTemplates(clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
     await this.exceptionBlockService.copyGatekeeperTemplatesForCluster(clusterId);
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
@@ -384,6 +384,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async deployOPAGateKeeperConstraintTemplates(clusterId: number, templateName: string): Promise<{message: string, statusCode: number}> {
     this.logger.log({label: 'Going to deploy GateKeeper constraint template', data: { clusterId, templateName }}, 'ClusterService.deployOPAGateKeeperConstraintTemplates');
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
@@ -402,6 +405,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async getOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<DeprecatedGatekeeperTemplateDto> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -416,6 +422,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async getOPAGateKeeperConstraintTemplateByNameRaw(clusterId: number, templateName: string): Promise<any> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -429,6 +438,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async destroyOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<{message: string; status: number}> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -447,6 +459,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async loadGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<DeprecatedGatekeeperTemplateDto> {
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
     const templatePath = `${templateDir}/${dir}/${subDir}/template.yaml`;
@@ -461,6 +476,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async loadRawGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<any> {
     const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     const templatePath = `${templateDir}/../cluster-${clusterId}-gatekeeper-templates/${dir}/${subDir}/template.yaml`;
@@ -473,6 +491,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async deployRawOPAGateKeeperConstraintTemplates(clusterId: number, template: any): Promise<{message: string, statusCode: number}> {
     const rawTemplate = JSON.parse(template);
     try {
@@ -490,6 +511,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async patchGateKeeperTemplate(clusterId: number, template: any): Promise<{message: string, statusCode: number}> {
     try {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
@@ -512,6 +536,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async gateKeeperTemplateConstraintsCount(clusterId: number, templateName: string): Promise<number> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -525,6 +552,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async gateKeeperTemplateConstraintsDetails(clusterId: number, templateName: string): Promise<GatekeeperConstraintDetailsDto[]> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -540,6 +570,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async listGateKeeperTemplateConstraints(clusterId: number): Promise<GateKeeperConstraintViolation[]> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -566,6 +599,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async createOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
     this.logger.log({label: 'Going to create GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.createOPAGateKeeperTemplateConstraint');
     const gatekeeperConstraintDto = new GatekeeperConstraintDetailsDto();
@@ -615,6 +651,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async patchOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
     this.logger.log({label: 'Going to patch GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
     try {
@@ -638,6 +677,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async destroyOPAGateKeeperTemplateConstraintByName(clusterId: number, templateName: string, constraintName: string): Promise<{message: string, statusCode: number}> {
     try {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
@@ -650,6 +692,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async syncDeployedGatekeeperTemplatesWithExceptionBlock(exceptionBlock: string, clusterId: number): Promise<void> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -677,6 +722,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async getDeployedTemplateList(clusterId: number): Promise<string[]> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -690,6 +738,9 @@ export class ClusterService {
     }
   }
 
+  /**
+   * @deprecated
+   */
   async patchTemplateWithModifiedRego(templateName: string, templateWithModifiedRego: any,  clusterId: number): Promise<void> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
@@ -707,25 +758,5 @@ export class ClusterService {
 
 
   }
-
-  async getNamespacesByCluster(clusterId: number): Promise<string[]> {
-    try {
-      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-      const k8sCoreApi = kubeConfig.makeApiClient(CoreV1Api);
-      const namespaces = await k8sCoreApi.listNamespace();
-      const namespaceNames =  namespaces.body.items.map(namespace => namespace.metadata.name);
-      // const kubeSystemIndex = namespaceNames.indexOf('kube-system');
-      // namespaceNames.splice(kubeSystemIndex, 1);
-      return namespaceNames;
-    } catch (e) {
-      this.logger.error({label: 'Error getting namespaces by cluster', data: { clusterId }}, e, 'ClusterService.getNamespacesByCluster');
-      return [];
-    }
-  }
-
-  async calculateClusterMetaData(previous: ClusterDto, updated: ClusterDto): Promise<any> {
-    return await this.auditLogService.calculateMetaData(previous, updated, 'Cluster');
-  }
-
 
 }
