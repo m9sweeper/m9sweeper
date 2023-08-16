@@ -29,8 +29,8 @@ import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-le
 import { AuthorityGuard } from '../../../guards/authority.guard';
 import {Authority} from '../../user/enum/Authority';
 import {KubernetesClusterService} from '../../command-line/services/kubernetes-cluster.service';
-import {GatekeeperTemplateDto} from "../dto/gatekeeper-template-dto";
-import {GatekeeperConstraintDetailsDto} from "../dto/gatekeeper-constraint-dto";
+import {DeprecatedGatekeeperTemplateDto} from "../dto/deprecated-gatekeeper-template-dto";
+import {GatekeeperConstraintDetailsDto} from "../dto/deprecated-gatekeeper-constraint-dto";
 import {KubernetesApiService} from "../../command-line/services/kubernetes-api.service";
 import {AuditLogInterceptor} from "../../../interceptors/audit-log.interceptor";
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
@@ -216,7 +216,7 @@ export class ClusterController {
         status: 201,
         schema: DELETE_CLUSTER_RESPONSE_SCHEMA
     })
-    async getOPAGateKeeperConstraintTemplates(@Param('clusterId') clusterId: number): Promise<GatekeeperTemplateDto[]> {
+    async getOPAGateKeeperConstraintTemplates(@Param('clusterId') clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
         return this.clusterService.getOPAGateKeeperConstraintTemplates(clusterId);
     }
 
@@ -239,7 +239,7 @@ export class ClusterController {
         schema: DELETE_CLUSTER_RESPONSE_SCHEMA
     })
     async getOPAGateKeeperConstraintTemplateByName(@Param('clusterId') clusterId: number,
-                                                   @Param('templateName') templateName: string): Promise<GatekeeperTemplateDto> {
+                                                   @Param('templateName') templateName: string): Promise<DeprecatedGatekeeperTemplateDto> {
         return this.clusterService.getOPAGateKeeperConstraintTemplateByName(clusterId, templateName);
     }
 
@@ -289,7 +289,7 @@ export class ClusterController {
     })
     async getOPAGateKeeperTemplate(@Param('clusterId') clusterId: number,
                                    @Param('dir') dir: string,
-                                   @Param('subDir') subDir: string): Promise<GatekeeperTemplateDto> {
+                                   @Param('subDir') subDir: string): Promise<DeprecatedGatekeeperTemplateDto> {
         return this.clusterService.loadGatekeeperTemplate(dir, subDir, clusterId);
     }
 

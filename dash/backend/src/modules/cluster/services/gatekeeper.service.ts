@@ -8,14 +8,14 @@ import {
 } from '@nestjs/common';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { ConfigService } from '@nestjs/config';
-import { GatekeeperTemplateDto } from '../dto/gatekeeper-template-dto';
+import { DeprecatedGatekeeperTemplateDto } from '../dto/deprecated-gatekeeper-template-dto';
 import { KubeConfig } from '@kubernetes/client-node/dist/config';
 import { CustomObjectsApi, HttpError, V1APIService } from '@kubernetes/client-node';
 import { ClusterService } from './cluster.service';
 import { plainToInstance } from 'class-transformer';
 import * as jsYaml from 'js-yaml';
 import * as fs from "fs";
-import { GatekeeperConstraintDetailsDto } from '../dto/gatekeeper-constraint-dto';
+import { GatekeeperConstraintDetailsDto } from '../dto/deprecated-gatekeeper-constraint-dto';
 import { ApiregistrationV1Api } from '@kubernetes/client-node/dist/gen/api/apiregistrationV1Api';
 
 @Injectable()
@@ -31,9 +31,9 @@ export class GatekeeperService {
   }
 
   private validateConstraintTemplate(template: string): { isValid: boolean, reason?: string } {
-    let templateAsObject: GatekeeperTemplateDto;
+    let templateAsObject: DeprecatedGatekeeperTemplateDto;
     try {
-      templateAsObject = jsYaml.load(template) as GatekeeperTemplateDto;
+      templateAsObject = jsYaml.load(template) as DeprecatedGatekeeperTemplateDto;
     } catch (e) {
       this.logger.log('New Gatekeeper constraint template failed validation: not a valid yaml object', 'GatekeeperService.validateConstraintTemplate');
       return { isValid: false, reason: 'Template is not a valid yaml object' };
@@ -88,13 +88,13 @@ export class GatekeeperService {
     }
   }
 
-  async getConstraintTemplates(clusterId: number): Promise<GatekeeperTemplateDto[]> {
+  async getConstraintTemplates(clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
     try {
       const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
       const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
       const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '');
       const templates: any[] = templateListResponse.body['items'];
-      const templateDTOs: GatekeeperTemplateDto[] = plainToInstance(GatekeeperTemplateDto, templates);
+      const templateDTOs: DeprecatedGatekeeperTemplateDto[] = plainToInstance(DeprecatedGatekeeperTemplateDto, templates);
       for(const template of templateDTOs) {
         const constraintCount = await this.gatekeeperTemplateConstraintsCount(kubeConfig, clusterId, template.metadata.name);
         template.constraintsCount = constraintCount;
@@ -132,7 +132,7 @@ export class GatekeeperService {
 
     const createTemplatePromises = [];
     templates.forEach((template) => {
-      const gatekeeperTemplate = jsYaml.load(template.template) as GatekeeperTemplateDto;
+      const gatekeeperTemplate = jsYaml.load(template.template) as DeprecatedGatekeeperTemplateDto;
       const templateDeployPromise = customObjectApi.createClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', gatekeeperTemplate);
       createTemplatePromises.push(templateDeployPromise);
     });
@@ -169,7 +169,7 @@ export class GatekeeperService {
 
   async getConstraintTemplateByName(clusterId: number, templateName: string): Promise<{
     associatedConstraints: GatekeeperConstraintDetailsDto[],
-    constraintTemplate: GatekeeperTemplateDto,
+    constraintTemplate: DeprecatedGatekeeperTemplateDto,
     rawConstraintTemplate: string,
   }> {
     try {
@@ -177,7 +177,7 @@ export class GatekeeperService {
       if (!template) {
         throw new Error('Could not retrieve the raw constraint template by name');
       }
-      const templateDto = plainToInstance(GatekeeperTemplateDto, template)
+      const templateDto = plainToInstance(DeprecatedGatekeeperTemplateDto, template)
       const associatedConstraints = await this.getConstraintsForTemplate(clusterId, templateName);
       return {
         associatedConstraints,
@@ -245,7 +245,7 @@ export class GatekeeperService {
     message: string,
     error?: any,
     data?: {
-      constraints: GatekeeperTemplateDto[],
+      constraints: DeprecatedGatekeeperTemplateDto[],
       gatekeeperResource: Partial<V1APIService>,
     },
   }> {
@@ -262,7 +262,7 @@ export class GatekeeperService {
       if (!gatekeeperIsInstalled) {
         return {status: gatekeeperIsInstalled, message: 'Not Installed'};
       }
-      let gatekeeperTemplates: GatekeeperTemplateDto[] = [];
+      let gatekeeperTemplates: DeprecatedGatekeeperTemplateDto[] = [];
       try {
         gatekeeperTemplates = await this.getConstraintTemplates(clusterId);
         return {

@@ -18,7 +18,7 @@ import {V1ValidatingWebhook} from "@kubernetes/client-node/dist/gen/model/v1Vali
 import {ConfigService} from "@nestjs/config";
 import * as jsYaml from 'js-yaml';
 import * as fs from "fs";
-import {GatekeeperTemplateDto} from "../dto/gatekeeper-template-dto";
+import {DeprecatedGatekeeperTemplateDto} from "../dto/deprecated-gatekeeper-template-dto";
 import {
   GatekeeperConstraintDetailsDto,
   GatekeeperConstraintMetadata,
@@ -27,7 +27,7 @@ import {
   GatekeeperConstraintSpecMatch,
   GatekeeperConstraintSpecMatchKind,
   GateKeeperConstraintViolation
-} from "../dto/gatekeeper-constraint-dto";
+} from "../dto/deprecated-gatekeeper-constraint-dto";
 import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
 import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
@@ -364,14 +364,14 @@ export class ClusterService {
     }
   }
 
-  async getOPAGateKeeperConstraintTemplates(clusterId: number): Promise<GatekeeperTemplateDto[]> {
+  async getOPAGateKeeperConstraintTemplates(clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
     await this.exceptionBlockService.copyGatekeeperTemplatesForCluster(clusterId);
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     try {
       const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
       const templates: any[] = templateListResponse.body['items'];
-      const templatesDto: GatekeeperTemplateDto[] = plainToInstance(GatekeeperTemplateDto, templates);
+      const templatesDto: DeprecatedGatekeeperTemplateDto[] = plainToInstance(DeprecatedGatekeeperTemplateDto, templates);
       for(const template of templatesDto) {
         const constraintCount = await this.gateKeeperTemplateConstraintsCount(clusterId, template.metadata.name);
         template.constraintsCount = constraintCount;
@@ -402,13 +402,13 @@ export class ClusterService {
     }
   }
 
-  async getOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<GatekeeperTemplateDto> {
+  async getOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<DeprecatedGatekeeperTemplateDto> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     try {
       const templateResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
       const template= templateResponse.body;
-      const templateDto = plainToInstance(GatekeeperTemplateDto, template)
+      const templateDto = plainToInstance(DeprecatedGatekeeperTemplateDto, template)
       return templateDto;
     }
     catch(e) {
@@ -447,12 +447,12 @@ export class ClusterService {
     }
   }
 
-  async loadGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<GatekeeperTemplateDto> {
+  async loadGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<DeprecatedGatekeeperTemplateDto> {
     const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
     const templatePath = `${templateDir}/${dir}/${subDir}/template.yaml`;
     try {
       const template = jsYaml.load(fs.readFileSync(templatePath, 'utf-8'));
-      const templateToDto = plainToInstance(GatekeeperTemplateDto, template);
+      const templateToDto = plainToInstance(DeprecatedGatekeeperTemplateDto, template);
       this.logger.log({label: 'Retrieved GateKeeper template', data: { clusterId, templateToDto }}, 'ClusterService.loadGatekeeperTemplate');
       return templateToDto;
     } catch (e) {

@@ -8,9 +8,9 @@ import { Authority } from '../../user/enum/Authority';
 import { AuthGuard } from '../../../guards/auth.guard';
 import { AuthorityGuard } from '../../../guards/authority.guard';
 import { DELETE_CLUSTER_RESPONSE_SCHEMA } from '../open-api-schema/cluster-schema';
-import { GatekeeperTemplateDto } from '../dto/gatekeeper-template-dto';
+import { DeprecatedGatekeeperTemplateDto } from '../dto/deprecated-gatekeeper-template-dto';
 import { GatekeeperService } from '../services/gatekeeper.service';
-import { GatekeeperConstraintDetailsDto } from '../dto/gatekeeper-constraint-dto';
+import { GatekeeperConstraintDetailsDto } from '../dto/deprecated-gatekeeper-constraint-dto';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
@@ -41,7 +41,7 @@ export class GatekeeperController {
   @ApiResponse({
     status: 200,
   })
-  async getConstraintTemplates(@Param('clusterId') clusterId: number): Promise<GatekeeperTemplateDto[]> {
+  async getConstraintTemplates(@Param('clusterId') clusterId: number): Promise<DeprecatedGatekeeperTemplateDto[]> {
     return this.gatekeeperService.getConstraintTemplates(clusterId);
   }
 
@@ -81,7 +81,7 @@ export class GatekeeperController {
     @Param('templateName') templateName: string,
   ): Promise<{
     associatedConstraints: GatekeeperConstraintDetailsDto[],
-    constraintTemplate: GatekeeperTemplateDto,
+    constraintTemplate: DeprecatedGatekeeperTemplateDto,
     rawConstraintTemplate: string,
   }> {
     return this.gatekeeperService.getConstraintTemplateByName(clusterId, templateName);
