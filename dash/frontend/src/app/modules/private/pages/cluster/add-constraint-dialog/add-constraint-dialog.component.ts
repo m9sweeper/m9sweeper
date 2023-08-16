@@ -7,12 +7,12 @@ import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 import {map, take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {IGatekeeperConstraintTemplate, IGatekeeperConstraintTemplateBlueprint} from '../../../../../core/entities/gatekeeper';
 
 
 interface IGSelectedTemplate {
-  selectedTemplate: IGatekeeperConstraintTemplate;
+  selectedTemplate: IGatekeeperConstraintTemplate | string;
   selectedTemplateName: string;
   selectedTopDir?: string;
   displayTemplateContent?: boolean;
@@ -30,12 +30,9 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
   clusterId: number;
   topDirs: string[] = [];
   dirStructure: { [dirName: string]: string[] };
-  constraintTemplateTemplates: {
+  constraintTemplateBlueprints: {
     category: string;
-    templates: {
-      name: string,
-      template: IGatekeeperConstraintTemplate,
-    }[]
+    templates: IGatekeeperConstraintTemplateBlueprint[]
   }[];
   currentlySelectedTemplates: IGSelectedTemplate[] = [];
   saveAttemptResults = {
@@ -62,7 +59,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: (constraintTemplateTemplates) => {
-          this.constraintTemplateTemplates = constraintTemplateTemplates;
+          this.constraintTemplateBlueprints = constraintTemplateTemplates;
           const dirStructure: { [dirName: string]: string []} = {};
           const topDirs = [];
           constraintTemplateTemplates.forEach((item) => {
@@ -99,7 +96,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
 
   loadTemplate(dir: string, subDir: string, $event) {
     if ($event.checked) {
-      const templatesInCategory = this.constraintTemplateTemplates.find(item => item.category === dir).templates;
+      const templatesInCategory = this.constraintTemplateBlueprints.find(item => item.category === dir).templates;
       const templateInQuestion = templatesInCategory.find(item => item.name === subDir).template;
       this.currentlySelectedTemplates.push({
         selectedTemplate: templateInQuestion,

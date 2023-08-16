@@ -7,6 +7,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';
+import {NamespaceService} from '../../../../../core/services/namespace.service';
 
 
 @Component({
@@ -35,13 +36,16 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   @ViewChild('propertyFields') propertyFields: ElementRef;
   @ViewChild('propertyFieldsJsonData') propertyFieldsJsonData: ElementRef;
 
-  constructor(private dialog: MatDialog,
-              private formBuilder: FormBuilder,
-              private readonly gatekeeperService: GateKeeperService,
-              private alertService: AlertService,
-              @Inject(MAT_DIALOG_DATA) public data,
-              private elementRef: ElementRef,
-              private dialogRef: MatDialogRef<AddTemplateConstraintComponent>) {
+  constructor(
+    private dialog: MatDialog,
+    private formBuilder: FormBuilder,
+    private readonly gatekeeperService: GateKeeperService,
+    private alertService: AlertService,
+    @Inject(MAT_DIALOG_DATA) public data,
+    private elementRef: ElementRef,
+    private dialogRef: MatDialogRef<AddTemplateConstraintComponent>,
+    private readonly namespaceService: NamespaceService,
+  ) {
 
     this.templateName = this.data.templateName;
     this.prepareTemplateConstraintCriteria();
@@ -68,14 +72,17 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.gatekeeperService.getNamespacesByCluster(this.data.clusterId)
+    this.namespaceService.getAllK8sNamespaces(this.data.clusterId)
       .pipe(take(1))
-      .subscribe(response => {
-        this.k8sNamespaces = response.data;
-      }, error => {
-        console.log(error);
-        this.alertService.warning('Unable to load namespaces');
-      });
+      .subscribe(
+        response => {
+          this.k8sNamespaces = response.data.map(namespaceObject => namespaceObject.name);
+        },
+        error => {
+          console.log(error);
+          this.alertService.warning('Unable to load namespaces');
+        },
+      );
     this.setConstraintForm();
   }
 

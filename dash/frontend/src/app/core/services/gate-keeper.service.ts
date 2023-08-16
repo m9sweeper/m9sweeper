@@ -46,8 +46,4 @@ export class GateKeeperService {
     return this.httpClient.delete(`/api/clusters/opa/${clusterId}/gatekeeper-template-constraints/${templateName}/${constraintName}`);
   }
 
-  getNamespacesByCluster(clusterId: number, ): Observable<IServerResponse<string[]>> {
-    return this.httpClient.get(`/api/clusters/opa/${clusterId}/namespaces`);
-  }
-
 }

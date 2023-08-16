@@ -1,5 +1,8 @@
-import {IV1ObjectMeta} from './kubernetesObjects/IKubernetesServiceObject.interface';
+import {IV1ObjectMeta} from './kubernetesObjects';
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintTemplate {
   apiVersion: string;
   kind?: string;
@@ -8,6 +11,9 @@ export interface IGatekeeperConstraintTemplate {
   status?: IConstraintTemplateStatus;
 }
 
+/**
+ * @deprecated
+ */
 export interface IConstraintTemplateSpec {
   crd?: {
     spec?: {
@@ -23,6 +29,9 @@ export interface IConstraintTemplateSpec {
   }[];
 }
 
+/**
+ * @deprecated
+ */
 export interface IConstraintTemplateStatus {
   byPod?: {
     id?: string,
