@@ -209,6 +209,9 @@ export class ClusterController {
         return cluster;
     }
 
+    ///////////////////////////////////////////////
+    // GATEKEEPER //
+    ///////////////////////////////////////////////
     @Get('/opa/:clusterId/gatekeeper-constraint-templates')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
