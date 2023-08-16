@@ -1,5 +1,5 @@
 import { ResponseTransformerInterceptor } from '../../../interceptors/response-transformer.interceptor';
-import { Body, Controller, Get, Param, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
@@ -54,12 +54,14 @@ export class GatekeeperConstraintTemplateController {
   async getConstraintTemplateByName(
     @Param('clusterId') clusterId: number,
     @Param('templateName') templateName: string,
+    @Query('excludeConstraints') rawExcludeConstraints: string = "false",
   ): Promise<{
-    associatedConstraints: GatekeeperConstraintDto[],
+    associatedConstraints?: GatekeeperConstraintDto[],
     template: GatekeeperConstraintTemplateDto,
     rawConstraintTemplate: string,
   }> {
-    return this.gatekeeperConstraintTemplateService.getConstraintTemplate(clusterId, templateName);
+    const excludeConstraints = rawExcludeConstraints && rawExcludeConstraints === "true";
+    return this.gatekeeperConstraintTemplateService.getConstraintTemplate(clusterId, templateName, excludeConstraints);
   }
 
 }

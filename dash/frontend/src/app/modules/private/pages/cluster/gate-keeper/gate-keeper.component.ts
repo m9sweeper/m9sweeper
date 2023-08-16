@@ -11,6 +11,7 @@ import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wiz
 import {take} from 'rxjs/operators';
 import {IKubernetesServiceObject} from '../../../../../core/entities/IKubernetesServiceObject';
 import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 
 @Component({
   selector: 'app-gate-keeper',
@@ -32,7 +33,8 @@ export class GateKeeperComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private gatekeeperService: GateKeeperService) {
+    private gatekeeperService: GatekeeperService
+  ) {
     this.clusterId = +this.route.parent.snapshot.paramMap.get('id');
   }
 
@@ -42,7 +44,7 @@ export class GateKeeperComponent implements OnInit {
   }
 
   loadGatekeeperInformation() {
-    this.gatekeeperService.getGatekeeperInstallation(this.clusterId)
+    this.gatekeeperService.getGatekeeperInstallationInfo(this.clusterId)
       .pipe(take(1))
       .subscribe({
         next: response => {
@@ -72,7 +74,7 @@ export class GateKeeperComponent implements OnInit {
   }
 
   loadGateKeeperConstraintTemplates() {
-    this.gatekeeperService.getGateKeeperConstraintTemplatesByCluster(this.clusterId)
+    this.gatekeeperService.getGatekeeperConstraintTemplates(this.clusterId)
       .pipe(take(1))
       .subscribe({
         next: data => {

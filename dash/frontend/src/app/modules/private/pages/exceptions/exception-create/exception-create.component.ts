@@ -20,6 +20,7 @@ import {GateKeeperService} from '../../../../../core/services/gate-keeper.servic
 import {VulnerabilitySeverity} from '../../../../../core/enum/VulnerabilitySeverity';
 import {take, takeUntil} from 'rxjs/operators';
 import {CustomValidatorService} from '../../../../../core/services/custom-validator.service';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 
 @Component({
   selector: 'exception-create',
@@ -76,8 +77,9 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
     private namespaceService: NamespaceService,
     private datePipe: DatePipe,
     protected customValidatorService: CustomValidatorService,
-    private gateKeeperService: GateKeeperService) {
-
+    private gateKeeperService: GateKeeperService,
+    private gatekeeperService: GatekeeperService,
+  ) {
     const getCurrentUrl = this.router.url;
     this.editMode = getCurrentUrl.split('/').reverse()[0] === 'edit';
     if (this.editMode){
@@ -391,7 +393,7 @@ export class ExceptionCreateComponent implements OnInit, AfterViewInit, OnDestro
 
   private loadGatekeeperConstraints(clusters: string[]) {
      const constraints$: Observable<any> = forkJoin(
-        clusters.map(clusterId => this.gateKeeperService.getGateKeeperConstraintTemplatesByCluster(+clusterId))
+        clusters.map(clusterId => this.gatekeeperService.getGatekeeperConstraintTemplates(+clusterId))
       );
      constraints$.pipe(take(1)).subscribe({
        next: data => {

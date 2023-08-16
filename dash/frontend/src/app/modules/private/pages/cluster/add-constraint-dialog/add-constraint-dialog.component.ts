@@ -8,6 +8,7 @@ import {map, take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 
 
 interface IGSelectedTemplate {
@@ -46,7 +47,8 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject<void>();
 
   constructor(
-    private gatekeeperService: GateKeeperService,
+    private gateKeeperService: GateKeeperService,
+    private gatekeeperService: GatekeeperService,
     private dialogRef: MatDialogRef<AddConstraintDialogComponent>,
     private alertService: AlertService,
     private dialog: MatDialog,
@@ -56,7 +58,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.clusterId = this.data.clusterId;
-    this.gatekeeperService.getConstraintTemplateTemplates(this.clusterId)
+    this.gatekeeperService.getGatekeeperConstraintTemplateBlueprints(this.clusterId)
       .pipe(take(1))
       .subscribe({
         next: (constraintTemplateTemplates) => {
@@ -118,17 +120,13 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
       };
     });
     this.saveAttemptResults.successfullyDeployed = this.saveAttemptResults.unsuccessfullyDeployed = [];
-    this.gatekeeperService.deployMultipleGateKeeperTemplates(this.clusterId, templates)
+    this.gatekeeperService.deployGatekeeperConstraintTemplates(this.clusterId, templates)
       .pipe(take(1))
       .subscribe({
         next: response => {
-          if (response.data.statusCode === 200) {
-            this.alertService.success(response.data.message);
-            this.dialogRef.close({reloadData: true});
-          }
-          else {
-            this.alertService.danger(response.data.message);
-          }
+          console.log(response);
+          this.alertService.success('Templates successfully deployed');
+          this.dialogRef.close({reloadData: true});
         },
         error: response => {
           if (!response?.error) {
