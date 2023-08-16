@@ -6,6 +6,7 @@ import { GatekeeperConstraintTemplateService } from './gatekeeper-constraint-tem
 import { GatekeeperConstraintService } from './gatekeeper-constraint.service';
 import * as jsYaml from 'js-yaml';
 import * as fs from "fs";
+import { GatekeeperConstraintTemplateBlueprintDto } from '../dto/gatekeeper-constraint-template-blueprint.dto';
 
 @Injectable()
 export class GatekeeperConstraintTemplateBlueprintService {
@@ -20,6 +21,7 @@ export class GatekeeperConstraintTemplateBlueprintService {
   ) {
     this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
   }
+
   private async readFolderNames(pathName: string): Promise<string[]> {
     try {
       const readDirNamesFromFile = jsYaml.load(fs.readFileSync(pathName, 'utf-8')) as any;
@@ -45,18 +47,12 @@ export class GatekeeperConstraintTemplateBlueprintService {
 
   async getBlueprints(clusterId: number): Promise<{
     category: string;
-    templates: {
-      name: string,
-      template: any | string,
-    }[]
+    templates: GatekeeperConstraintTemplateBlueprintDto[]
   }[]> {
     const directories = await this.getBlueprintTitles(clusterId);
     const templates: {
       category: string;
-      templates: {
-        name: string,
-        template: any | string,
-      }[]
+      templates: GatekeeperConstraintTemplateBlueprintDto[]
     }[] = [];
     const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     for (const directoryName of Object.keys(directories)) {

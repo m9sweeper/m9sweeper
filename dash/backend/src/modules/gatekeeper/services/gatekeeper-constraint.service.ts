@@ -8,6 +8,7 @@ import { KubeConfig } from '@kubernetes/client-node/dist/config';
 import { ApiregistrationV1Api } from '@kubernetes/client-node/dist/gen/api/apiregistrationV1Api';
 import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-template.dto';
 import { plainToInstance } from 'class-transformer';
+import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
 
 @Injectable()
 export class GatekeeperConstraintService {
@@ -26,14 +27,16 @@ export class GatekeeperConstraintService {
     return constraints.length;
   }
 
-  async getConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<any[]> {
+  async getConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<GatekeeperConstraintDto[]> {
     if (!kubeConfig) {
       kubeConfig = await this.clusterService.getKubeConfig(clusterId);
     }
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
     try {
       const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
-      return response.body['items'];
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return plainToInstance(GatekeeperConstraintDto, response.body['items']);
     }
     catch(e) {
       this.logger.error({label: 'Error counting Gatekeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gatekeeperTemplateConstraintsCount');

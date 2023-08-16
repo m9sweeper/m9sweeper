@@ -8,6 +8,7 @@ import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-te
 import { plainToInstance } from 'class-transformer';
 import { GatekeeperConstraintService } from './gatekeeper-constraint.service';
 import * as jsYaml from 'js-yaml';
+import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
 
 @Injectable()
 export class GatekeeperConstraintTemplateService {
@@ -61,10 +62,45 @@ export class GatekeeperConstraintTemplateService {
     }
   }
 
+  async getConstraintTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<{
+    associatedConstraints: GatekeeperConstraintDto[],
+    template: GatekeeperConstraintTemplateDto,
+    rawConstraintTemplate: string,
+  }> {
+    try {
+      if (!kubeConfig) {
+        kubeConfig = await this.clusterService.getKubeConfig(clusterId);
+      }
+      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+      const templateResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
+      const template = plainToInstance(GatekeeperConstraintTemplateDto, templateResponse.body);
+
+      let constraints;
+      try {
+        constraints = await this.gatekeeperConstraintService.getConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
+        template.constraintsCount = constraints.length;
+        template.enforced = !!constraints.length;
+      } catch (e) {
+        this.logger.log({ label: `Failed to retrieve constraints for constraint template ${templateName}`, data: {error: e}}, 'GatekeeperConstraintTemplateService.getConstraintTemplates');
+      }
+      return {
+        associatedConstraints: constraints,
+        template,
+        rawConstraintTemplate: JSON.stringify(template),
+      };
+    } catch (e) {
+      this.logger.error({label: 'Error getting Gatekeeper constraint template', data: { clusterId, templateName }}, e, 'GatekeeperConstraintTemplateService.getConstraintTemplates');
+      throw({message: 'Error getting Gatekeeper constraint templates'});
+    }
+  }
+
   async createConstraintTemplates(
     clusterId: number,
     templates: { name: string, template: string }[]
-  ): Promise<{ successfullyDeployed: string[], unsuccessfullyDeployed: string[] }> {
+  ): Promise<{
+    successfullyDeployed: string[],
+    unsuccessfullyDeployed: string[],
+  }> {
     if (!templates.length) {
       throw new BadRequestException('Please include constraint templates to create in the body of the request');
     }

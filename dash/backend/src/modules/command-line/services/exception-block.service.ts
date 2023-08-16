@@ -8,7 +8,6 @@ import {ExceptionsService} from "../../exceptions/services/exceptions.service";
 import {NamespaceService} from "../../namespace/services/namespace.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
 import {DEFAULT_SCHEMA} from "js-yaml";
-import { GatekeeperService } from '../../cluster/services/gatekeeper.service';
 
 
 @Injectable()
@@ -17,7 +16,6 @@ export class ExceptionBlockService {
     constructor(
       private readonly configService: ConfigService,
       private readonly exceptionsService: ExceptionsService,
-      private readonly gatekeeperService: GatekeeperService,
       private readonly kubernetesNamespaceService: NamespaceService,
       @Inject(forwardRef(() => ClusterService))
       private readonly clusterService: ClusterService
