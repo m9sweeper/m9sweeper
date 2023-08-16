@@ -9,7 +9,7 @@ import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constra
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 import {take} from 'rxjs/operators';
-import {IKubernetesServiceObject} from '../../../../../core/entities/IKubernetesServiceObject';
+import {IKubernetesServiceObject} from '../../../../../core/entities/kubernetesObjects/IKubernetesServiceObject.interface';
 import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 
