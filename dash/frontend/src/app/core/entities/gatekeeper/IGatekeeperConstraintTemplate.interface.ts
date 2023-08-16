@@ -1,3 +1,4 @@
+import {IGatekeeperConstraint} from './IGatekeeperConstraint.interface';
 
 export class IGatekeeperConstraintTemplate {
   apiVersion?: string;
@@ -28,5 +29,6 @@ export class IGatekeeperConstraintTemplate {
 
   constraintsCount?: number;
   enforced?: boolean;
+  constraints?: IGatekeeperConstraint[];
 }
 
