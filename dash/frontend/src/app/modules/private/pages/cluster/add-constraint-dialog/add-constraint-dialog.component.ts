@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@an
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
+import {AddEditConstraintTemplateManifestComponent} from '../add-edit-constraint-template-manifest/add-edit-constraint-template-manifest.component';
 import {MatCheckbox, MatCheckboxChange} from '@angular/material/checkbox';
 import {map, take, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -150,7 +150,7 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
 
   openK8sManifest(index: number) {
     const currentTemplate = this.currentlySelectedTemplates[index];
-    const openAddConstraint = this.dialog.open(AddCustomConstraintTemplateComponent, {
+    const openAddConstraint = this.dialog.open(AddEditConstraintTemplateManifestComponent, {
       width: '1000px',
       height: 'auto',
       closeOnNavigation: true,

@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
-import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '../../../../../core/services/alert.service';
-import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
+import {AddEditConstraintTemplateManifestComponent} from '../add-edit-constraint-template-manifest/add-edit-constraint-template-manifest.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {take} from 'rxjs/operators';
@@ -94,7 +93,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   }
 
   editTemplate() {
-    const editTemplateDialog = this.dialog.open(AddCustomConstraintTemplateComponent, {
+    const editTemplateDialog = this.dialog.open(AddEditConstraintTemplateManifestComponent, {
       width: '1000px',
       height: 'auto',
       closeOnNavigation: true,
@@ -135,7 +134,7 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
   }
 
-  destroyTemplateConstraint(constraint: IGateKeeperConstraintDetails) {
+  destroyTemplateConstraint(constraint: IGatekeeperConstraint) {
     const openDestroyConstraintTemplate = this.dialog.open(AlertDialogComponent, {
       width: '850px',
       height: 'auto',
@@ -154,7 +153,7 @@ export class GateKeeperDetailsComponent implements OnInit {
     });
   }
 
-  editTemplateConstraint(constraint) {
+  editTemplateConstraint(constraint: IGatekeeperConstraint) {
     const openAddConstraintTemplate = this.dialog.open(AddTemplateConstraintComponent, {
       width: '1000px',
       height: 'auto',
@@ -179,7 +178,7 @@ export class GateKeeperDetailsComponent implements OnInit {
 
 
   // @TODO: if needed we will replace ImageIssueMoreDataDialogComponent with a new gatekeeper specific component. For now it works.
-  showViolations(constraint: IGateKeeperConstraintDetails) {
+  showViolations(constraint: IGatekeeperConstraint) {
     this.dialog.open(GatekeeperViolationDialogComponent, {
       width: 'auto',
       data: {violations: constraint.status.violations}
