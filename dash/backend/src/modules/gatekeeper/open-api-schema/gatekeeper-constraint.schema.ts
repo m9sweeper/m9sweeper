@@ -1,0 +1,1 @@
+export const GATEKEEPER_CONSTRAINT_SCHEMA = {}
