@@ -9,11 +9,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-add-custom-constraint-template',
-  templateUrl: './add-custom-constraint-template.component.html',
-  styleUrls: ['./add-custom-constraint-template.component.scss']
+  selector: 'app-add-edit-constraint-template-manifest',
+  templateUrl: './add-edit-constraint-template-manifest.component.html',
+  styleUrls: ['./add-edit-constraint-template-manifest.component.scss']
 })
-export class AddCustomConstraintTemplateComponent implements OnInit {
+export class AddEditConstraintTemplateManifestComponent implements OnInit {
   codeMirrorOptions: any = {
     theme: 'material',
     mode: {name: 'javascript', json: true},
@@ -38,7 +38,7 @@ export class AddCustomConstraintTemplateComponent implements OnInit {
     },
     private gateKeeperService: GateKeeperService,
     private gatekeeperService: GatekeeperService,
-    private dialogRef: MatDialogRef<AddCustomConstraintTemplateComponent>,
+    private dialogRef: MatDialogRef<AddEditConstraintTemplateManifestComponent>,
     private alertService: AlertService
   ) {}
 
