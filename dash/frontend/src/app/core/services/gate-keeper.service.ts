@@ -15,7 +15,9 @@ import {IGatekeeperTemplate} from '../entities/IGatekeeperTemplate';
 export class GateKeeperService {
   constructor(private httpClient: HttpClient) {}
 
-  /* routes that use the old cluster service in the backend */
+  /**
+   * @deprecated
+   */
   loadRawGateKeeperTemplate(clusterId: number, dir: string, subDir: string): Observable<IGatekeeperTemplate> {
     return this.httpClient.get<IServerResponse<IGatekeeperTemplate>>(`/api/clusters/opa/${clusterId}/gatekeeper-templates/raw/${dir}/${subDir}`)
       .pipe(
@@ -24,22 +26,37 @@ export class GateKeeperService {
       );
   }
 
+  /**
+   * @deprecated
+   */
   patchRawGateKeeperTemplate(clusterId: number, template: any): Observable<IServerResponse<{message: string, statusCode: number}>> {
     return this.httpClient.post(`/api/clusters/opa/${clusterId}/gatekeeper-constraint-templates/raw`, {template});
   }
 
+  /**
+   * @deprecated
+   */
   destroyConstraintTemplate(clusterId: number, templateName: string): Observable<IServerResponse<{message: string; status: number}>> {
     return this.httpClient.delete(`/api/clusters/opa/${clusterId}/gatekeeper-constraint-templates/${templateName}`);
   }
 
+  /**
+   * @deprecated
+   */
   createGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number, ): Observable<IServerResponse<{message: string, statusCode: number}>> {
     return this.httpClient.post(`/api/clusters/opa/${clusterId}/${templateName}/constraints`, constraint);
   }
 
+  /**
+   * @deprecated
+   */
   patchGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number, ): Observable<IServerResponse<{message: string, statusCode: number}>> {
     return this.httpClient.put(`/api/clusters/opa/${clusterId}/${templateName}/constraints`, constraint);
   }
 
+  /**
+   * @deprecated
+   */
   destroyGateKeeperTemplateConstraint(clusterId: number, templateName: string, constraintName: string): Observable<IServerResponse<{message: string; status: number}>> {
     return this.httpClient.delete(`/api/clusters/opa/${clusterId}/gatekeeper-template-constraints/${templateName}/${constraintName}`);
   }
