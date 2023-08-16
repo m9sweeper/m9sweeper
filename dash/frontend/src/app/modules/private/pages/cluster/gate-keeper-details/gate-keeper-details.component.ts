@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {MatTableDataSource} from '@angular/material/table';
 import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
@@ -12,10 +11,8 @@ import {AddTemplateConstraintComponent} from '../add-template-constraint/add-tem
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {take} from 'rxjs/operators';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {Authority} from '../../../../../core/enum/Authority';
-import { IGatekeeper } from 'src/app/core/entities/IGatekeeper';
-import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {IGatekeeperConstraint, IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
 
 @Component({
   selector: 'app-gate-keeper-details',
@@ -28,7 +25,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   isMobileDevice = false;
   clusterId: number;
   templateName: string;
-  constraintsList: MatTableDataSource<IGatekeeperConstraintTemplate>;
+  constraintsList: MatTableDataSource<IGatekeeperConstraint>;
   displayedColumns: string[];
   rawTemplate: any;
   openapiProperties = [];
@@ -61,7 +58,7 @@ export class GateKeeperDetailsComponent implements OnInit {
       this.gatekeeperTemplate = data.template;
 
       this.constraintCount = data.associatedConstraints.length ?? 0;
-      this.constraintsList = new MatTableDataSource<IGatekeeperConstraintTemplate>(data.associatedConstraints);
+      this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(data.associatedConstraints);
 
       this.rawTemplate = data.rawConstraintTemplate;
       this.updateRawConstraintTemplateProperties();

@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {IGatekeeperConstraintTemplate} from '../entities/IGatekeeperConstraintTemplate';
-import {IGatekeeper} from '../entities/IGatekeeper';
 import {IServerResponse} from '../entities/IServerResponse';
 import {map, shareReplay} from 'rxjs/operators';
+import {IGatekeeper, IGatekeeperConstraint, IGatekeeperConstraintTemplate} from '../entities/gatekeeper';
 
 @Injectable({
   providedIn: 'root'
@@ -74,13 +73,13 @@ export class GatekeeperService {
   }
 
   getConstraintTemplateByName(clusterId: number, templateName: string, excludeConstraints = false): Observable<{
-    associatedConstraints: IGatekeeperConstraintTemplate[] | null,
+    associatedConstraints: IGatekeeperConstraint[] | null,
     template: IGatekeeperConstraintTemplate,
     rawConstraintTemplate: string,
   }> {
     const params = new HttpParams().set('excludeConstraints', excludeConstraints);
     return this.httpClient.get<IServerResponse<{
-      associatedConstraints: IGatekeeperConstraintTemplate[],
+      associatedConstraints: IGatekeeperConstraint[],
       template: IGatekeeperConstraintTemplate,
       rawConstraintTemplate: string,
     }>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}`, { params })

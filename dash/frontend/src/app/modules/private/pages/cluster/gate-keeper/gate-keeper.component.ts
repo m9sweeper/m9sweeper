@@ -1,17 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {MatDialog} from '@angular/material/dialog';
 import {AddConstraintDialogComponent} from '../add-constraint-dialog/add-constraint-dialog.component';
 import {MatPaginator} from '@angular/material/paginator';
 import {GateKeeperInstallWizardDialogComponent} from '../gate-keeper-install-wizard-dialog/gate-keeper-install-wizard-dialog.component';
 import {take} from 'rxjs/operators';
-import {IKubernetesServiceObject} from '../../../../../core/entities/kubernetesObjects/IKubernetesServiceObject.interface';
-import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/IGatekeeperConstraintTemplate';
+import {IKubernetesServiceObject} from '../../../../../core/entities/kubernetesObjects';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
 
 @Component({
   selector: 'app-gate-keeper',
