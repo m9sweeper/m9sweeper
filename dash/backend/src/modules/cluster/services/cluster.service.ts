@@ -314,41 +314,56 @@ export class ClusterService {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //                                                   Gatekeeper
+  // PATCH GATEKEEPER FUNCTIONS
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /**
    * @deprecated
    */
-  async getOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<DeprecatedGatekeeperTemplateDto> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+  async patchOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
+    this.logger.log({label: 'Going to patch GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
     try {
-      const templateResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
-      const template= templateResponse.body;
-      const templateDto = plainToInstance(DeprecatedGatekeeperTemplateDto, template)
-      return templateDto;
-    }
-    catch(e) {
-      this.logger.error({label: 'Error getting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplateByName');
+      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
+      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+      const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
+
+      const patchEnforcementAction = {op: 'replace', path: '/spec/enforcementAction', value: constraint.mode };
+      const patchDescription = {op: 'replace', path: '/metadata/annotations/description', value: constraint.description };
+      const patchLabels = {op: 'replace', path: '/spec/parameters', value: constraint.properties };
+      const patchExcludedNamespaces = {op: 'replace', path: '/spec/match/excludedNamespaces', value: constraint.excludedNamespaces };
+      const patchKinds = {op: 'replace', path: '/spec/match/kinds', value: constraint.criterias };
+
+      const patchedConstraint = await customObjectApi.patchClusterCustomObject('constraints.gatekeeper.sh',
+        'v1beta1', templateName, constraint.name, [patchDescription, patchEnforcementAction, patchLabels, patchExcludedNamespaces, patchKinds], undefined, undefined, undefined, options);
+
+      return {message: `${constraint.name} has been patched successfully`, statusCode: 200};
+    } catch (e) {
+      this.logger.error({label: 'Error patching Gatekeeper Template Constraint', data: { templateName, clusterId, constraint }}, e, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
+      return {message: 'Error patching Gatekeeper Template Constraint', statusCode: e.statusCode};
     }
   }
 
   /**
    * @deprecated
    */
-  async getOPAGateKeeperConstraintTemplateByNameRaw(clusterId: number, templateName: string): Promise<any> {
+  async patchTemplateWithModifiedRego(templateName: string, templateWithModifiedRego: any,  clusterId: number): Promise<void> {
     const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
     const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+    const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
+    const patchSpecTargets = {op: 'replace', path: '/spec/targets', value: templateWithModifiedRego.spec.targets };
+
     try {
-      const templateResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
-      const template= templateResponse.body;
-      return JSON.stringify(template);
-    }
-    catch(e) {
-      this.logger.error({label: 'Error getting raw GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.getOPAGateKeeperConstraintTemplateByNameRaw');
+      const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
+        'v1beta1', 'constrainttemplates', templateName,
+        [patchSpecTargets], undefined, undefined, undefined, options);
+      this.logger.log({label: 'Patched Gatekeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego, statusCode: patchTemplate.response.statusCode }}, 'ClusterService.patchTemplateWithModifiedRego');
+    } catch (e) {
+      this.logger.error({label: 'Error patching GateKeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego }}, e, 'ClusterService.patchTemplateWithModifiedRego');
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //                                                   Gatekeeper
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /**
    * @deprecated
    */
@@ -373,23 +388,6 @@ export class ClusterService {
   /**
    * @deprecated
    */
-  async loadGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<DeprecatedGatekeeperTemplateDto> {
-    const templateDir = `${this.configService.get('gatekeeper.gatekeeperTemplateDir')}/../cluster-${clusterId}-gatekeeper-templates`;
-    const templatePath = `${templateDir}/${dir}/${subDir}/template.yaml`;
-    try {
-      const template = jsYaml.load(fs.readFileSync(templatePath, 'utf-8'));
-      const templateToDto = plainToInstance(DeprecatedGatekeeperTemplateDto, template);
-      this.logger.log({label: 'Retrieved GateKeeper template', data: { clusterId, templateToDto }}, 'ClusterService.loadGatekeeperTemplate');
-      return templateToDto;
-    } catch (e) {
-      this.logger.error({label: 'Error retrieving GateKeeper template', data: { clusterId, dir, subDir }}, e, 'ClusterService.loadGatekeeperTemplate');
-      return null;
-    }
-  }
-
-  /**
-   * @deprecated
-   */
   async loadRawGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<any> {
     const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     const templatePath = `${templateDir}/../cluster-${clusterId}-gatekeeper-templates/${dir}/${subDir}/template.yaml`;
@@ -404,6 +402,8 @@ export class ClusterService {
 
   /**
    * @deprecated
+   * Apparently this is the one called by "patchRawGateKeeperTemplate" in the frontend
+   * [facepalm]
    */
   async deployRawOPAGateKeeperConstraintTemplates(clusterId: number, template: any): Promise<{message: string, statusCode: number}> {
     const rawTemplate = JSON.parse(template);
@@ -416,50 +416,9 @@ export class ClusterService {
     } catch (e) {
       this.logger.error({label: 'Error deploying GateKeeper constraint template', data: { clusterId, template }}, e, 'ClusterService.deployRawOPAGateKeeperConstraintTemplates');
       if (e.statusCode === 409) {
-        return await this.patchGateKeeperTemplate(clusterId, rawTemplate);
+        return {message: 'Template already exists', statusCode: e.statusCode};
       }
       return {message: 'Failed to deploy the template', statusCode: e.statusCode};
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  async patchGateKeeperTemplate(clusterId: number, template: any): Promise<{message: string, statusCode: number}> {
-    try {
-      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-      const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
-
-      const patchMetadataName = {op: 'replace', path: '/metadata/name', value: template.metadata.name };
-      const patchMetadataAnnotations = {op: 'replace', path: '/metadata/annotations', value: template.metadata.annotations };
-      const patchSpecKind = {op: 'replace', path: '/spec/crd/spec/names/kind', value: template.spec.crd.spec.names.kind };
-      // const patchSpecTargets = {op: 'replace', path: '/spec/targets', value: template.spec.targets };
-
-      const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
-          'v1beta1', 'constrainttemplates', template.metadata.name,
-          [patchMetadataName, patchMetadataAnnotations, patchSpecKind], undefined, undefined, undefined, options);
-      this.logger.log({label: 'Patched GateKeeper template successfully', data: { clusterId, template }}, 'ClusterService.patchGateKeeperTemplate');
-      return {message: 'Patched the template successfully', statusCode: patchTemplate.response.statusCode};
-    } catch (e) {
-      this.logger.error({label: 'Error patching GateKeeper template', data: { clusterId, template }}, e, 'ClusterService.patchGateKeeperTemplate');
-      return {message: 'Could not Path the template', statusCode: e.statusCode};
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  async gateKeeperTemplateConstraintsCount(clusterId: number, templateName: string): Promise<number> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    try {
-      const response = await customObjectApi.getClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, '');
-      return response.body['items'].length;
-    }
-    catch(e) {
-      this.logger.error({label: 'Error counting GateKeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gateKeeperTemplateConstraintsCount');
-      return 0;
     }
   }
 
@@ -565,32 +524,6 @@ export class ClusterService {
   /**
    * @deprecated
    */
-  async patchOPAGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number): Promise<{message: string, statusCode: number}> {
-    this.logger.log({label: 'Going to patch GateKeeper Template Constraint', data: { templateName, clusterId, constraint }}, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
-    try {
-      const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-      const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
-
-      const patchEnforcementAction = {op: 'replace', path: '/spec/enforcementAction', value: constraint.mode };
-      const patchDescription = {op: 'replace', path: '/metadata/annotations/description', value: constraint.description };
-      const patchLabels = {op: 'replace', path: '/spec/parameters', value: constraint.properties };
-      const patchExcludedNamespaces = {op: 'replace', path: '/spec/match/excludedNamespaces', value: constraint.excludedNamespaces };
-      const patchKinds = {op: 'replace', path: '/spec/match/kinds', value: constraint.criterias };
-
-      const patchedConstraint = await customObjectApi.patchClusterCustomObject('constraints.gatekeeper.sh',
-          'v1beta1', templateName, constraint.name, [patchDescription, patchEnforcementAction, patchLabels, patchExcludedNamespaces, patchKinds], undefined, undefined, undefined, options);
-
-      return {message: `${constraint.name} has been patched successfully`, statusCode: 200};
-    } catch (e) {
-      this.logger.error({label: 'Error patching Gatekeeper Template Constraint', data: { templateName, clusterId, constraint }}, e, 'ClusterService.patchOPAGateKeeperTemplateConstraint');
-      return {message: 'Error patching Gatekeeper Template Constraint', statusCode: e.statusCode};
-    }
-  }
-
-  /**
-   * @deprecated
-   */
   async destroyOPAGateKeeperTemplateConstraintByName(clusterId: number, templateName: string, constraintName: string): Promise<{message: string, statusCode: number}> {
     try {
       const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
@@ -600,36 +533,6 @@ export class ClusterService {
     } catch (e) {
       this.logger.error({label: 'Error destroying GateKeeper Template Constraint by name', data: { templateName, clusterId, constraintName }}, e, 'ClusterService.destroyOPAGateKeeperTemplateConstraintByName');
       return {message: e.body.message, statusCode: e.statusCode};
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  async syncDeployedGatekeeperTemplatesWithExceptionBlock(exceptionBlock: string, clusterId: number): Promise<void> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
-    try {
-      const templateListResponse = await customObjectApi.getClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', '')
-      const templates: any[] = templateListResponse.body['items'];
-      for (const template of templates) {
-        if (Object.keys(template.metadata.annotations).includes('minesweeper.io/exceptions')){
-          if(template.spec.targets) {
-            for(const target of template.spec.targets) {
-              target.rego = exceptionBlock;
-            }
-          }
-        }
-        const patchSpecTargets = {op: 'replace', path: '/spec/targets', value: template.spec.targets };
-
-        const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
-            'v1beta1', 'constrainttemplates', template.metadata.name,
-            [patchSpecTargets], undefined, undefined, undefined, options);
-      }
-    }
-    catch(e) {
-      this.logger.error({label: 'Error syncing GateKeeper Template with exception block', data: { exceptionBlock, clusterId }}, e, 'ClusterService.syncDeployedGatekeeperTemplatesWithExceptionBlock');
     }
   }
 
@@ -648,26 +551,4 @@ export class ClusterService {
       return [];
     }
   }
-
-  /**
-   * @deprecated
-   */
-  async patchTemplateWithModifiedRego(templateName: string, templateWithModifiedRego: any,  clusterId: number): Promise<void> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    const options = { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }};
-    const patchSpecTargets = {op: 'replace', path: '/spec/targets', value: templateWithModifiedRego.spec.targets };
-
-    try {
-      const patchTemplate = await customObjectApi.patchClusterCustomObject('templates.gatekeeper.sh',
-          'v1beta1', 'constrainttemplates', templateName,
-          [patchSpecTargets], undefined, undefined, undefined, options);
-      this.logger.log({label: 'Patched Gatekeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego, statusCode: patchTemplate.response.statusCode }}, 'ClusterService.patchTemplateWithModifiedRego');
-    } catch (e) {
-      this.logger.error({label: 'Error patching GateKeeper Template with modified Rego', data: { clusterId, templateName, templateWithModifiedRego }}, e, 'ClusterService.patchTemplateWithModifiedRego');
-    }
-
-
-  }
-
 }

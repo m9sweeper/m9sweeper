@@ -88,4 +88,12 @@ export class GatekeeperService {
         shareReplay()
       );
   }
+
+  updateConstraintTemplate(clusterId: number, templateName: string, template: string) {
+    return this.httpClient.put<IServerResponse<any>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}`, { template })
+      .pipe(
+        map(response => response?.data),
+        shareReplay()
+      );
+  }
 }

@@ -53,7 +53,8 @@ export class AlertService {
     });
   }
 
-  dangerAlertForHTTPError(error, caller, label = 'x', config?: Partial<MatSnackBarConfig>) {
+  dangerAlertForHTTPError(error, caller: string, label = 'x', config?: Partial<MatSnackBarConfig>) {
+    console.log(`error from ${caller}:`, error);
     let message = '';
     if (error?.error?.message) {
       message = error.error.message;

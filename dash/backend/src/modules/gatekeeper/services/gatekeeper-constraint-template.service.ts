@@ -2,7 +2,7 @@ import { BadRequestException, forwardRef, HttpException, Inject, Injectable } fr
 import { ClusterService } from '../../cluster/services/cluster.service';
 import { ConfigService } from '@nestjs/config';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
-import { CustomObjectsApi } from '@kubernetes/client-node';
+import { CustomObjectsApi, HttpError, PatchUtils } from '@kubernetes/client-node';
 import { KubeConfig } from '@kubernetes/client-node/dist/config';
 import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-template.dto';
 import { plainToInstance } from 'class-transformer';
@@ -22,15 +22,24 @@ export class GatekeeperConstraintTemplateService {
   ) {
     this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
   }
-  private validateConstraintTemplate(template: string): { isValid: boolean, reason?: string } {
+  private validateConstraintTemplate(template: string, existingTemplateName?: string): { isValid: boolean, reason?: string } {
     let templateAsObject: GatekeeperConstraintTemplateDto;
     try {
       templateAsObject = jsYaml.load(template) as GatekeeperConstraintTemplateDto;
     } catch (e) {
-      this.logger.log('New Gatekeeper constraint template failed validation: not a valid yaml object', 'GatekeeperService.validateConstraintTemplate');
       return { isValid: false, reason: 'Template is not a valid yaml object' };
     }
 
+    if (Array.isArray(templateAsObject) || !Object.keys(templateAsObject).length) {
+      return { isValid: false, reason: 'Template is empty' };
+    }
+
+    if (existingTemplateName && templateAsObject.metadata.name !== existingTemplateName) {
+      return {
+        isValid: false,
+        reason: `Cannot update the Constraint Template's name. It must remain ${existingTemplateName}.`,
+      }
+    }
     if (templateAsObject.metadata.name !== templateAsObject.spec.crd.spec.names.kind.toLowerCase()) {
       return {
         isValid: false,
@@ -118,7 +127,7 @@ export class GatekeeperConstraintTemplateService {
       }
     });
     if (validationErrors.length) {
-      this.logger.log({label: 'New Gatekeeper constraint template(s) failed validation', data: validationErrors}, 'GatekeeperService.createConstraintTemplates');
+      this.logger.log({label: 'New Gatekeeper constraint template(s) failed validation', data: validationErrors}, 'GatekeeperConstraintTemplateService.createConstraintTemplates');
       throw new BadRequestException({ data: validationErrors, message: 'Template(s) failed validation' });
     }
 
@@ -152,13 +161,47 @@ export class GatekeeperConstraintTemplateService {
         clusterId, numTemplates: templates.length,
         successfullyDeployed, unsuccessfullyDeployed,
       },
-    }, 'GatekeeperService.createConstraintTemplates');
+    }, 'GatekeeperConstraintTemplateService.createConstraintTemplates');
     if (successfullyDeployed.length && unsuccessfullyDeployed.length) {
       throw new HttpException({ data: {successfullyDeployed, unsuccessfullyDeployed}, message: 'Some templates deployed; others did not' }, 400);
     } else if (unsuccessfullyDeployed.length) {
       throw new HttpException({ data: {successfullyDeployed, unsuccessfullyDeployed}, message: 'Failed to deploy the templates' }, 400);
     } else {
       return {successfullyDeployed, unsuccessfullyDeployed};
+    }
+  }
+
+  async updateConstraintTemplate(clusterId: number, templateName: string, templateContents: string) {
+    const validationResult = this.validateConstraintTemplate(templateContents, templateName);
+    if (!validationResult.isValid) {
+      this.logger.log(`New Gatekeeper constraint template failed validation: ${validationResult.reason}`, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
+      throw new BadRequestException({ data: validationResult.reason, message: `Template failed validation: ${validationResult.reason}` });
+    }
+    const template = jsYaml.load(templateContents) as GatekeeperConstraintTemplateDto;
+    try {
+      const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
+      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+
+      const patchMetadataName = {op: 'replace', path: '/metadata/name', value: template.metadata.name };
+      const patchMetadataAnnotations = {op: 'replace', path: '/metadata/annotations', value: template.metadata.annotations };
+      const patchSpecKind = {op: 'replace', path: '/spec/crd/spec/names/kind', value: template.spec.crd.spec.names.kind };
+      const patchSpecTargets = {op: 'replace', path: '/spec/targets', value: template.spec.targets };
+
+      const patchTemplate = await customObjectApi.patchClusterCustomObject(
+        'templates.gatekeeper.sh',
+        'v1beta1', 'constrainttemplates', templateName,
+        [patchMetadataName, patchMetadataAnnotations, patchSpecKind, patchSpecTargets],
+        undefined, undefined, undefined,
+        { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }},
+      );
+      this.logger.log({label: 'Patched Gatekeeper template successfully', data: { clusterId, template }}, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
+      return {message: 'Successfully patched the template', statusCode: patchTemplate.response.statusCode};
+    } catch (e) {
+      this.logger.error({label: 'Error patching Gatekeeper template', data: { clusterId, templateName }}, e, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
+      if (e instanceof HttpError) {
+        throw new HttpException({message: e.body.message}, e.statusCode);
+      }
+      throw new HttpException({message: 'Error updating the template'}, 500);
     }
   }
 }

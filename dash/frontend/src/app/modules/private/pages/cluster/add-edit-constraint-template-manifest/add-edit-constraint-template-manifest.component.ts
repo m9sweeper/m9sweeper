@@ -1,11 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
-import {IGatekeeperConstraint, IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
+import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
-import {MatTableDataSource} from '@angular/material/table';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -31,12 +28,12 @@ export class AddEditConstraintTemplateManifestComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
+      clusterId: number;
       templateContent: IGatekeeperConstraintTemplate;
+      templateName: string;
       saveTemplate?: boolean;
-      clusterId?: number;
       subDir?: string;
     },
-    private gateKeeperService: GateKeeperService,
     private gatekeeperService: GatekeeperService,
     private dialogRef: MatDialogRef<AddEditConstraintTemplateManifestComponent>,
     private alertService: AlertService
@@ -57,19 +54,18 @@ export class AddEditConstraintTemplateManifestComponent implements OnInit {
   }
 
   patchTemplate() {
-    this.gateKeeperService.patchRawGateKeeperTemplate(this.data.clusterId, this.rawTemplate).subscribe(response => {
-      if (response.data.statusCode === 200) {
+    this.gatekeeperService.updateConstraintTemplate(this.data.clusterId, this.data.templateName, this.rawTemplate)
+      .pipe(take(1))
+      .subscribe(response => {
         this.dialogRef.close({
           closeParentDialog: true,
           editedTemplate: this.rawTemplate,
         });
-        this.alertService.success(`${response.data.message}`);
-      } else if (response.data.statusCode === 409) {
-        this.alertService.info(`${response.data.message}`);
-      } else {
-        this.alertService.danger(`${response.data.message}`);
+        this.alertService.success(`${response.message}`);
+      }, error => {
+        this.alertService.dangerAlertForHTTPError(error, 'AddEditConstraintTemplateManifestComponent.patchTemplate');
       }
-    });
+    );
   }
 }
 

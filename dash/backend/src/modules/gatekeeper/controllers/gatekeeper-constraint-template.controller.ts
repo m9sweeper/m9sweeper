@@ -1,5 +1,5 @@
-import { ResponseTransformerInterceptor } from '../../../interceptors/response-transformer.interceptor';
-import { Body, Controller, Get, Param, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { InvalidClusterIdInterceptor, ResponseTransformerInterceptor } from '../../../interceptors';
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
@@ -10,14 +10,15 @@ import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-te
 import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
 import {
   GATEKEEPER_CONSTRAINT_TEMPLATE_ARRAY_SCHEMA,
-  GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA, GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_FAILED_SCHEMA,
+  GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA,
+  GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_FAILED_SCHEMA,
   GATEKEEPER_CONSTRAINT_TEMPLATE_DEPLOY_SCHEMA,
 } from '../open-api-schema/gatekeeper-constraint-template.schema';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
 @Controller('constraint-templates')
-@UseInterceptors(ResponseTransformerInterceptor)
+@UseInterceptors(InvalidClusterIdInterceptor, ResponseTransformerInterceptor)
 export class GatekeeperConstraintTemplateController {
   constructor(
     private readonly gatekeeperConstraintTemplateService: GatekeeperConstraintTemplateService,
@@ -70,6 +71,21 @@ export class GatekeeperConstraintTemplateController {
   }> {
     const excludeConstraints = rawExcludeConstraints && rawExcludeConstraints === "true";
     return this.gatekeeperConstraintTemplateService.getConstraintTemplate(clusterId, templateName, excludeConstraints);
+  }
+
+  @Put(':templateName')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @ApiResponse({
+    status: 200,
+    schema: GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA,
+  })
+  async updateConstraintTemplateByName(
+    @Param('clusterId') clusterId: number,
+    @Param('templateName') templateName: string,
+    @Body() templateContents: { template: string },
+  ) {
+    return this.gatekeeperConstraintTemplateService.updateConstraintTemplate(clusterId, templateName, templateContents.template);
   }
 
 }
