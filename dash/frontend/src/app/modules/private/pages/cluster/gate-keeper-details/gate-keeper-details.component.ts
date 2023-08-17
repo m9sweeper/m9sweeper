@@ -55,8 +55,9 @@ export class GateKeeperDetailsComponent implements OnInit {
     this.gatekeeperService.getConstraintTemplateByName(this.clusterId, this.templateName, excludeConstraints).subscribe(data => {
       this.gatekeeperTemplate = data.template;
 
-      this.constraintCount = data.associatedConstraints.length ?? 0;
-      this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(data.associatedConstraints);
+      const associatedConstraints = data.associatedConstraints ?? [];
+      this.constraintCount = associatedConstraints.length ?? 0;
+      this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(associatedConstraints);
       this.updateConstraintTemplateProperties();
     });
   }
@@ -99,8 +100,10 @@ export class GateKeeperDetailsComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: false,
       data: {
-        subDir: this.templateName,
+        clusterId: `${this.clusterId}`,
+        templateName: this.templateName,
         templateContent: this.gatekeeperTemplate,
+        subDir: this.templateName,
         saveTemplate: true,
         referer: 'gate-keeper-details'
       }

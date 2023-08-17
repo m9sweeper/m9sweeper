@@ -14,25 +14,6 @@ import {IGatekeeperTemplate} from '../entities/IGatekeeperTemplate';
 })
 export class GateKeeperService {
   constructor(private httpClient: HttpClient) {}
-
-  /**
-   * @deprecated
-   */
-  loadRawGateKeeperTemplate(clusterId: number, dir: string, subDir: string): Observable<IGatekeeperTemplate> {
-    return this.httpClient.get<IServerResponse<IGatekeeperTemplate>>(`/api/clusters/opa/${clusterId}/gatekeeper-templates/raw/${dir}/${subDir}`)
-      .pipe(
-        map(response => response?.data),
-        shareReplay()
-      );
-  }
-
-  /**
-   * @deprecated
-   */
-  patchRawGateKeeperTemplate(clusterId: number, template: any): Observable<IServerResponse<{message: string, statusCode: number}>> {
-    return this.httpClient.post(`/api/clusters/opa/${clusterId}/gatekeeper-constraint-templates/raw`, {template});
-  }
-
   /**
    * @deprecated
    */

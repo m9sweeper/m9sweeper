@@ -157,9 +157,10 @@ export class AddConstraintDialogComponent implements OnInit, OnDestroy {
       disableClose: false,
       data: {
         clusterId: this.clusterId,
+        templateName: currentTemplate.selectedTemplateName,
+        templateContent: currentTemplate.selectedTemplate,
         dir: currentTemplate.selectedTopDir,
         subDir: currentTemplate.selectedTemplateName,
-        templateContent: currentTemplate.selectedTemplate,
       },
     });
     openAddConstraint.afterClosed()
