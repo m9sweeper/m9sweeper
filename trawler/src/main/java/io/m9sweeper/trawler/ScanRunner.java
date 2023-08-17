@@ -46,7 +46,6 @@ public class ScanRunner {
         ArrayList<ScanResult> scanResults = new ArrayList<>(0);
 
         String newImageHash = "";
-        boolean errorEncountered = false;
 
         if (policies != null && policies.size() > 0) {
             for (PolicyWithScannerDto policyWithScannerDto: policies) {
@@ -87,13 +86,11 @@ public class ScanRunner {
                             scanResultBuilder.withSummary("");
                         } catch (Exception e) {
                             scanResultBuilder.withEncounteredError(true);
-                            errorEncountered = true;
                             scanResultBuilder.withSummary(e.getMessage());
                         }
                     }
                 } else {
                     scanResultBuilder.withEncounteredError(true);
-                    errorEncountered = true;
                     scanResultBuilder.withSummary("No Scanner found");
                     if (TrawlerConfiguration.getInstance().getDebug()) System.out.println("policyWithScannerDto.getScanners().size(): " + policyWithScannerDto.getScanners().size());
                 }
@@ -168,23 +165,7 @@ public class ScanRunner {
                                 .data(o.getExtraData())
                 ).collect(Collectors.toList()))).collect(Collectors.toList());
 
-        // If we have an error, save a "blank" scan with the error, otherwise just save the actual results
-        if (errorEncountered) {
-            ImageTrawlerResultDto outdatedImageIdResult = new ImageTrawlerResultDto()
-                    .summary(imageTrawlerResultDtos.get(0).getSummary())
-                    .encounterError(true)
-                    .criticalIssues(new BigDecimal(0))
-                    .majorIssues(new BigDecimal(0))
-                    .mediumIssues(new BigDecimal(0))
-                    .lowIssues(new BigDecimal(0))
-                    .negligibleIssues(new BigDecimal(0))
-                    .policyId(imageTrawlerResultDtos.get(0).getPolicyId());
-            List<ImageTrawlerResultDto> outdatedImageIdArray = new ArrayList<ImageTrawlerResultDto>();
-            outdatedImageIdArray.add(outdatedImageIdResult);
-            saveScanResults(outdatedImageIdArray);
-        } else {
-            saveScanResults(imageTrawlerResultDtos);
-        }
+        saveScanResults(imageTrawlerResultDtos);
     }
 
     /** Throws an error if the image is not compliant  */
