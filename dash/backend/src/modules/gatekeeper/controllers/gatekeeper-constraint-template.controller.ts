@@ -1,5 +1,17 @@
 import { InvalidClusterIdInterceptor, ResponseTransformerInterceptor } from '../../../interceptors';
-import { Body, Controller, Get, HttpCode, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  UseInterceptors
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
@@ -80,15 +92,33 @@ export class GatekeeperConstraintTemplateController {
   @ApiResponse({
     status: 204,
     schema: {
-      "description": "The resource was updated successfully"
+      "description": "The resource was successfully updated"
     },
   })
   async updateConstraintTemplateByName(
     @Param('clusterId') clusterId: number,
     @Param('templateName') templateName: string,
     @Body() templateContents: { template: string },
-  ) {
+  ): Promise<void> {
     return this.gatekeeperConstraintTemplateService.updateConstraintTemplate(clusterId, templateName, templateContents.template);
   }
+
+  @Delete(':templateName')
+  @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+  @UseGuards(AuthGuard, AuthorityGuard)
+  @HttpCode(204)
+  @ApiResponse({
+    status: 204,
+    schema: {
+      "description": "The resource was successfully deleted"
+    },
+  })
+  async deleteConstraintTemplateByName(
+    @Param('clusterId') clusterId: number,
+    @Param('templateName') templateName: string,
+  ) {
+    return this.gatekeeperConstraintTemplateService.deleteConstraintTemplate(clusterId, templateName);
+  }
+
 
 }

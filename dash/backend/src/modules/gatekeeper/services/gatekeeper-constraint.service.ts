@@ -9,6 +9,7 @@ import { ApiregistrationV1Api } from '@kubernetes/client-node/dist/gen/api/apire
 import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-template.dto';
 import { plainToInstance } from 'class-transformer';
 import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
+import * as jsYaml from 'js-yaml';
 
 @Injectable()
 export class GatekeeperConstraintService {
@@ -40,5 +41,49 @@ export class GatekeeperConstraintService {
       this.logger.error({label: 'Error counting Gatekeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gatekeeperTemplateConstraintsCount');
       return [];
     }
+  }
+
+  async deleteConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<{
+    constraintsExisted: boolean;
+    successfullyDeleted?: string[];
+    notDeleted?: string[];
+  }> {
+    if (!kubeConfig) {
+      kubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    }
+
+    const constraints = await this.getConstraintsForTemplate(clusterId, templateName, kubeConfig);
+    if (!constraints.length) {
+      return { constraintsExisted: false };
+    }
+
+    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+    const constraintDeletePromises = [];
+    constraints.forEach(constraint => {
+      constraintDeletePromises.push(
+        customObjectApi.deleteClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, constraint.metadata.name)
+      );
+    })
+
+    const results = await Promise.allSettled(constraintDeletePromises);
+    const successfullyDeleted = [];
+    const notDeleted = [];
+
+    results.forEach((constraintDeletedResult) => {
+      if (constraintDeletedResult.status === "fulfilled") {
+        successfullyDeleted.push(constraintDeletedResult.value.response.body.metadata.name);
+        return;
+      }
+      // rejected
+      notDeleted.push(constraintDeletedResult.reason.body.message);
+      return;
+    });
+
+    return {
+      constraintsExisted: true,
+      successfullyDeleted,
+      notDeleted
+    }
+
   }
 }

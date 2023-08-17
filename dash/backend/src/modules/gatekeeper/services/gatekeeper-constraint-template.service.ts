@@ -1,4 +1,11 @@
-import { BadRequestException, forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  HttpException,
+  Inject,
+  Injectable,
+  InternalServerErrorException
+} from '@nestjs/common';
 import { ClusterService } from '../../cluster/services/cluster.service';
 import { ConfigService } from '@nestjs/config';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
@@ -9,6 +16,7 @@ import { plainToInstance } from 'class-transformer';
 import { GatekeeperConstraintService } from './gatekeeper-constraint.service';
 import * as jsYaml from 'js-yaml';
 import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
+import { GatekeeperConstraintDetailsDto } from '../../cluster/dto/deprecated-gatekeeper-constraint-dto';
 
 @Injectable()
 export class GatekeeperConstraintTemplateService {
@@ -195,13 +203,38 @@ export class GatekeeperConstraintTemplateService {
         { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }},
       );
       this.logger.log({label: 'Patched Gatekeeper template successfully', data: { clusterId, template }}, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
-      return 'Successfully patched the template';
+      return;
     } catch (e) {
       this.logger.error({label: 'Error patching Gatekeeper template', data: { clusterId, templateName }}, e, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
       if (e instanceof HttpError) {
         throw new HttpException({message: e.body.message}, e.statusCode);
       }
       throw new HttpException({message: 'Error updating the template'}, 500);
+    }
+  }
+
+  async deleteConstraintTemplate(clusterId: number, templateName: string) {
+    const kubeConfig: KubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+    try {
+      const constraintsDeleted = await this.gatekeeperConstraintService.deleteConstraintsForTemplate(clusterId, templateName, kubeConfig);
+
+      if (constraintsDeleted.constraintsExisted && constraintsDeleted.notDeleted?.length) {
+        throw new InternalServerErrorException({
+          data: {notDeleted: constraintsDeleted.notDeleted},
+          message: 'Constraint Template not deleted: failed to delete all Constraints'
+        });
+        // throw new InternalServerErrorException({
+        //   data: { notDeleted: constraintsDeleted.notDeleted }
+        // }, 'Could not delete all Constraints: Constraint Template not deleted');
+      }
+
+      const destroyTemplate = await customObjectApi.deleteClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
+      return {message: `${templateName} and related constraints were deleted successfully`, status: 200};
+    }
+    catch(e) {
+      this.logger.error({label: 'Error deleting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.destroyOPAGateKeeperConstraintTemplateByName');
+      throw new InternalServerErrorException(e);
     }
   }
 }

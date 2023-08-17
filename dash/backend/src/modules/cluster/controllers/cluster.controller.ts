@@ -212,18 +212,6 @@ export class ClusterController {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                   Gatekeeper
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Delete('/opa/:clusterId/gatekeeper-constraint-templates/:templateName')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async destroyOPAGateKeeperConstraintTemplateByName(@Param('clusterId') clusterId: number,
-                                                   @Param('templateName') templateName: string): Promise<{message: string; status: number}> {
-        return this.clusterService.destroyOPAGateKeeperConstraintTemplateByName(clusterId, templateName);
-    }
-
     /**
      * @deprecated
      */

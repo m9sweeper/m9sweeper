@@ -90,10 +90,18 @@ export class GatekeeperService {
   }
 
   updateConstraintTemplate(clusterId: number, templateName: string, template: string) {
-    return this.httpClient.put<IServerResponse<any>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}`, { template })
+    return this.httpClient.put<IServerResponse<void>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}`, { template })
       .pipe(
         map(response => response?.data),
         shareReplay()
       );
+  }
+
+  deleteConstraintTemplate(clusterId: number, templateName: string) {
+    return this.httpClient.delete<IServerResponse<any>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}`)
+        .pipe(
+            map(response => response?.data),
+            shareReplay()
+        );
   }
 }

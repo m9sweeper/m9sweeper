@@ -367,27 +367,6 @@ export class ClusterService {
   /**
    * @deprecated
    */
-  async destroyOPAGateKeeperConstraintTemplateByName(clusterId: number, templateName: string): Promise<{message: string; status: number}> {
-    const kubeConfig: KubeConfig = await this.getKubeConfig(clusterId);
-    const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
-    try {
-      const getConstraints: GatekeeperConstraintDetailsDto[] = await this.gateKeeperTemplateConstraintsDetails(clusterId, templateName);
-      if(getConstraints.length) {
-        await Promise.all(getConstraints.map(constraint => {
-          customObjectApi.deleteClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, constraint.metadata.name);
-        }));
-      }
-      const destroyTemplate = await customObjectApi.deleteClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
-      return {message: `${templateName} and related constraints were deleted successfully`, status: 200};
-    }
-    catch(e) {
-      this.logger.error({label: 'Error deleting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.destroyOPAGateKeeperConstraintTemplateByName');
-    }
-  }
-
-  /**
-   * @deprecated
-   */
   async loadRawGatekeeperTemplate(dir: string, subDir: string, clusterId: number): Promise<any> {
     const templateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
     const templatePath = `${templateDir}/../cluster-${clusterId}-gatekeeper-templates/${dir}/${subDir}/template.yaml`;
