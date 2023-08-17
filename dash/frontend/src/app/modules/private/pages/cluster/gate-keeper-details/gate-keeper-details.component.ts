@@ -78,7 +78,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: true,
       data: {
-        functionToRun: this.gateKeeperService.destroyConstraintTemplate(this.clusterId, this.templateName),
         afterRoute: [],
         returnResult: true
       }
@@ -87,10 +86,16 @@ export class GateKeeperDetailsComponent implements OnInit {
     openDestroyTemplateDialog.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-        if (response === true) {
-          this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
-        }
-    });
+        this.gatekeeperService.deleteConstraintTemplate(this.clusterId, this.templateName)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.alertService.success('Constraint Template successfully deleted');
+            this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
+          }, error => {
+            this.alertService.dangerAlertForHTTPError(error, 'GateKeeperDetailsComponent.destroyConstraintTemplate');
+            this.getConstraintTemplateDetails();
+          });
+      });
   }
 
   editTemplate() {

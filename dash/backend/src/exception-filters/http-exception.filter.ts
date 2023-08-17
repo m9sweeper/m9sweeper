@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     let errorMessage = exception.message;
 
-    const respFromException = exception.getResponse();
+    const respFromException: any = exception.getResponse();
     let data = null;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -31,6 +31,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       data = respFromException?.data;
+    } else if (typeof respFromException !== 'string' && respFromException?.response?.data) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      data = respFromException.response.data;
     }
 
     if (exception instanceof BadRequestException && typeof exception.getResponse === 'function' &&
