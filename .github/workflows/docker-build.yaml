@@ -1,0 +1,66 @@
+name: Docker Build
+
+on:
+  workflow_call:
+    inputs:
+      dash-image-tags:
+        required: true
+        type: string
+      trawler-image-tags:
+        required: true
+        type: string
+
+jobs:
+  docker_dash:
+    name: Build Dash Image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Dash
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ inputs.dash-image-tags }}
+          cache-from: type=gha,scope=build-dash
+          cache-to: type=gha,mode=max,scope=build-dash
+
+  docker_trawler:
+    name: Build Trawler Image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Trawler
+        uses: docker/build-push-action@v4
+        with:
+          context: trawler/
+          push: true
+          tags: ${{ inputs.trawler-image-tags }}
+          cache-from: type=gha,scope=build-trawler
+          cache-to: type=gha,mode=max,scope=build-trawler
