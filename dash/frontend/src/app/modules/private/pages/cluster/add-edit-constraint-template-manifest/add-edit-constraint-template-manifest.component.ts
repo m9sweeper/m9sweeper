@@ -61,7 +61,7 @@ export class AddEditConstraintTemplateManifestComponent implements OnInit {
           closeParentDialog: true,
           editedTemplate: this.rawTemplate,
         });
-        this.alertService.success(`${response.message}`);
+        this.alertService.success(`${response.message ?? 'Successfully updated the template' }`);
       }, error => {
         this.alertService.dangerAlertForHTTPError(error, 'AddEditConstraintTemplateManifestComponent.patchTemplate');
       }
