@@ -64,7 +64,7 @@ public class ScanRunner {
                         if (!scannerDto.isEnabled()) {
                             continue;
                         }
-                        
+
                         try {
                             if (scannerDto.getType().toUpperCase().equals(ScannerType.TRIVY.name())) {
                                 scanConfig.setScanId(scannerDto.getId().intValue());
@@ -165,30 +165,10 @@ public class ScanRunner {
                                 .data(o.getExtraData())
                 ).collect(Collectors.toList()))).collect(Collectors.toList());
 
-        // If the image hash is different than the one stored in the DB, and it is not a temporary ID, give the scan an error result
-        // Otherwise save the scan results normally
-        if (!scanConfig.getImage().getHash().equals(newImageHash) && (scanConfig.getImage().getHash() != null && !scanConfig.getImage().getHash().startsWith("TMP_"))) {
-            String errorSummary = "Image ID does not match most recent image pulled from Trawler";
-            if (scanConfig.getImage().getTag().contains("latest")) {
-                errorSummary = errorSummary.concat(". Note, using the latest tag for images is not recommended and can cause undesirable behavior");
-            }
-            ImageTrawlerResultDto outdatedImageIdResult = new ImageTrawlerResultDto()
-                    .summary(errorSummary)
-                    .encounterError(true)
-                    .criticalIssues(new BigDecimal(0))
-                    .majorIssues(new BigDecimal(0))
-                    .mediumIssues(new BigDecimal(0))
-                    .lowIssues(new BigDecimal(0))
-                    .negligibleIssues(new BigDecimal(0))
-                    .policyId(imageTrawlerResultDtos.get(0).getPolicyId());
-            List<ImageTrawlerResultDto> outdatedImageIdArray = new ArrayList<ImageTrawlerResultDto>();
-            outdatedImageIdArray.add(outdatedImageIdResult);
-            saveScanResults(outdatedImageIdArray);
-        } else {
-            saveScanResults(imageTrawlerResultDtos);
-        }
+        saveScanResults(imageTrawlerResultDtos);
     }
 
+    /** Throws an error if the image is not compliant  */
     private void saveScanResults(List<ImageTrawlerResultDto> imageTrawlerResultDtos) throws Exception {
         TrawlerScanResults body = new TrawlerScanResults();
         body.setData(imageTrawlerResultDtos);

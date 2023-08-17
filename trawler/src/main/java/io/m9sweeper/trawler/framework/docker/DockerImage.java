@@ -58,6 +58,38 @@ public class DockerImage {
     }
 
     /**
+     * Builds the full path that can be used in a Docker pull command
+     * @param includeRegistry Whether it should include the registry prefix
+     * @param includeHash Whether it should include the sha. Will not include the sha if it is null or starts with TMP_ regardless of the value
+     * @return the full path of the docker image
+     */
+    public String buildFullPath(boolean includeRegistry, boolean includeHash) {
+        StringBuilder builder = new StringBuilder(32);
+        if (includeRegistry) {
+            builder.append(this.registry.getHostname())
+                    .append('/');
+        }
+
+        builder.append(this.name)
+                .append(":")
+                .append(this.tag);
+
+        if (includeHash && !this.hasTempHash()) {
+            builder.append("@sha256:")
+                    .append(this.hash);
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * Checks if the hash is temporary (starts with 'TMP_') or null.
+     */
+    public boolean hasTempHash() {
+        return this.hash == null || this.hash.startsWith("TMP_");
+    }
+
+    /**
      * Get the tag of the docker image
      *
      * @return the tag of the image
