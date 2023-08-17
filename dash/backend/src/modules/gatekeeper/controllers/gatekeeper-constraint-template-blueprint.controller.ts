@@ -12,11 +12,12 @@ import { GatekeeperConstraintTemplateBlueprintDto } from '../dto/gatekeeper-cons
 import {
   GATEKEEPER_CONSTRAINT_TEMPLATE_BLUEPRINT_ARRAY_SCHEMA
 } from '../open-api-schema/gatekeeper-constraint-template-blueprint.schema';
+import { InvalidClusterIdInterceptor } from '../../../interceptors';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
 @Controller('constraint-template-blueprints')
-@UseInterceptors(ResponseTransformerInterceptor)
+@UseInterceptors(InvalidClusterIdInterceptor, ResponseTransformerInterceptor)
 export class GatekeeperConstraintTemplateBlueprintController {
   constructor(
     private readonly gatekeeperBlueprintService: GatekeeperConstraintTemplateBlueprintService,

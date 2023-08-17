@@ -168,3 +168,10 @@ export const GATEKEEPER_CONSTRAINT_SCHEMA = {
     },
   }
 }
+
+export const GATEKEEPER_CONSTRAINT_ARRAY_SCHEMA = {
+  "type": "array",
+  "items": {
+    "$ref": "#GATEKEEPER_CONSTRAINT_SCHEMA",
+  }
+}

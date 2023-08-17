@@ -183,9 +183,8 @@ class GatekeeperConstraintStatus {
 
 @Exclude()
 export class GatekeeperConstraintDto {
-  @IsOptional()
   @Expose()
-  apiVersion: string;
+  apiVersion = "constraints.gatekeeper.sh/v1beta1";
 
   @IsOptional()
   @Expose()

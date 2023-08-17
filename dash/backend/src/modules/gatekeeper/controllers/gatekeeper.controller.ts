@@ -12,11 +12,12 @@ import { GatekeeperResponseStructure } from '../dto/gatekeeper-generic.dto';
 import { GatekeeperConstraintTemplateDto } from '../dto/gatekeeper-constraint-template.dto';
 import { V1APIService } from '@kubernetes/client-node';
 import { GATEKEEPER_SCHEMA } from '../open-api-schema/gatekeeper.schema';
+import { InvalidClusterIdInterceptor } from '../../../interceptors';
 
 @ApiTags('Gatekeeper')
 @ApiBearerAuth('jwt-auth')
 @Controller()
-@UseInterceptors(ResponseTransformerInterceptor)
+@UseInterceptors(InvalidClusterIdInterceptor, ResponseTransformerInterceptor)
 export class GatekeeperController {
   constructor(
     @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
