@@ -104,4 +104,12 @@ export class GatekeeperService {
             shareReplay()
         );
   }
+
+  createConstraint(clusterId: number, templateName: string, constraint: string) {
+    return this.httpClient.post<IServerResponse<IGatekeeperConstraint>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}/constraints`, { constraint })
+        .pipe(
+            map(response => response?.data),
+            shareReplay(),
+        );
+  }
 }
