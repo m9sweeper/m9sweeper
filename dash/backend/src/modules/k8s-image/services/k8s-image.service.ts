@@ -226,14 +226,25 @@ export class K8sImageService {
      * Prefix with default image registry if required
      * @param image
      */
-    formatDockerImageUrl(image: string) {
-        const k8Image = image.split('/');
-        if (k8Image.length > 0) {
-            const url = k8Image[0];
-            const urlMatch = url.match(/^([a-z0-9|-]+\.)*[a-z0-9|-]+\.[a-z]+/i);
-            return urlMatch === null ? this.DEFAULT_DOCKER_REGISTRY + '/' + image : image;
+    formatDockerImageUrl(image: string): string {
+        const splitOnColon = image.split(':');
+        let imageTag = '';
+        if (splitOnColon.length > 1) {
+            imageTag = splitOnColon[splitOnColon.length - 1];
         }
-        return this.DEFAULT_DOCKER_REGISTRY + '/' + image;
+        if (!imageTag) { imageTag = 'latest'; }
+        const splitOnSlash = splitOnColon[0].split('/');
+        let containerRegistry = this.DEFAULT_DOCKER_REGISTRY;
+        if (splitOnSlash[0].split('.').length > 1) {
+            containerRegistry = splitOnSlash.shift();
+        }
+        let containerPath = '';
+        while (splitOnSlash.length > 1) {
+            containerPath += `${splitOnSlash.shift()}/`;
+        }
+        containerPath += splitOnSlash.shift();
+
+        return `${containerRegistry}/${containerPath}:${imageTag}`
     }
 
     async enqueueScan(imageHash: string, clusterId: number): Promise<void> {
