@@ -215,37 +215,6 @@ export class ClusterController {
     /**
      * @deprecated
      */
-    @Get('/opa/:clusterId/gatekeeper-templates/raw/:dir/:subDir')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async getRawOPAGateKeeperTemplate(@Param('clusterId') clusterId: number,
-                                      @Param('dir') dir: string,
-                                      @Param('subDir') subDir: string): Promise<any> {
-        return this.clusterService.loadRawGatekeeperTemplate(dir, subDir, clusterId);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Post('/opa/:clusterId/gatekeeper-constraint-templates/raw')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async deployRawOPAGateKeeperConstraintTemplates( @Body() rawTemplate: {template: any},
-                                                     @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
-        return this.clusterService.deployRawOPAGateKeeperConstraintTemplates(clusterId, rawTemplate.template);
-    }
-
-    /**
-     * @deprecated
-     */
     @Post('/opa/:clusterId/:templateName/constraints')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
