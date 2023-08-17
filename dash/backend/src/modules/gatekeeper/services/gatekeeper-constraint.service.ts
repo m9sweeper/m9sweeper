@@ -23,11 +23,6 @@ export class GatekeeperConstraintService {
     this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
   }
 
-  async getNumConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<number> {
-    const constraints = await this.getConstraintsForTemplate(clusterId, templateName, kubeConfig);
-    return constraints.length;
-  }
-
   async getConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<GatekeeperConstraintDto[]> {
     if (!kubeConfig) {
       kubeConfig = await this.clusterService.getKubeConfig(clusterId);
@@ -84,6 +79,5 @@ export class GatekeeperConstraintService {
       successfullyDeleted,
       notDeleted
     }
-
   }
 }

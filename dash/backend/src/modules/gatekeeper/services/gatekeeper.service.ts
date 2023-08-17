@@ -74,4 +74,15 @@ export class GatekeeperService {
       return {status: gatekeeperIsInstalled, message: 'Not Installed', error: e};
     }
   }
+
+  async getTotalViolations(clusterId: number): Promise<any[]> {
+    const violations = [];
+    const constraintTemplates = await this.gatekeeperConstraintTemplateService.getConstraintTemplates(clusterId);
+    constraintTemplates.forEach(template => {
+      template.constraints.forEach(constraint => {
+        constraint.status.violations.length ? violations.push(...constraint.status.violations) : [];
+      });
+    });
+    return violations;
+  }
 }

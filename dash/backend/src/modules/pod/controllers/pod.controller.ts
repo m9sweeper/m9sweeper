@@ -10,7 +10,7 @@ import {Authority} from "../../user/enum/Authority";
 import {AuthGuard} from "../../../guards/auth.guard";
 import {AuthorityGuard} from "../../../guards/authority.guard";
 import { PodComplianceSummaryDto } from '../dto/pod-compliance-summary-dto';
-import { ClusterService } from "../../cluster/services/cluster.service";
+import { GatekeeperService } from '../../gatekeeper/services/gatekeeper.service';
 
 @ApiTags('Pods')
 @Controller()
@@ -18,10 +18,9 @@ import { ClusterService } from "../../cluster/services/cluster.service";
 @UseInterceptors(ResponseTransformerInterceptor)
 export class PodController {
     constructor(
-        @Inject('LOGGED_IN_USER')
-        private readonly _loggedInUser: UserProfileDto,
-        private readonly podService: PodService,
-        private readonly clusterService: ClusterService,
+      @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+      private readonly podService: PodService,
+      private readonly gatekeeperService: GatekeeperService,
     ) {}
 
     @Get()
@@ -38,7 +37,7 @@ export class PodController {
       @Query('page') page?: number,
       @Query('sort') sort?: {field: string; direction: string; },
     ): Promise<PodDto[]>{
-        const violations = await this.clusterService.listGateKeeperTemplateConstraints(clusterId);
+        const violations = await this.gatekeeperService.getTotalViolations(clusterId);
         const pods =  await this.podService.getAllPods(clusterId, namespace, sort, page, limit);
         if (pods && pods.length) {
             pods.map(p => p.violations = violations.filter(v => v.name === p.name));
@@ -95,7 +94,7 @@ export class PodController {
         return await this.podService.countPodsByDate(clusterId, namespace, startTime, endTime);
     }
 
-   
+
 
     @Get(':podIdentifier/history')
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.SUPER_ADMIN, Authority.ADMIN)
@@ -152,7 +151,7 @@ export class PodController {
       @Query('clusterId') clusterId: number,
       @Query('namespace') namespace: string,
     ): Promise<PodDto> {
-        const violations = await this.clusterService.listGateKeeperTemplateConstraints(clusterId);
+        const violations = await this.gatekeeperService.getTotalViolations(clusterId);
         let pod = null;
         if (typeof(podIdentifier) === 'number') {
             pod = await this.podService.getPodById(podIdentifier);

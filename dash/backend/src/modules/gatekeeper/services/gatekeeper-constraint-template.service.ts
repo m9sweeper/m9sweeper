@@ -16,11 +16,11 @@ import { plainToInstance } from 'class-transformer';
 import { GatekeeperConstraintService } from './gatekeeper-constraint.service';
 import * as jsYaml from 'js-yaml';
 import { GatekeeperConstraintDto } from '../dto/gatekeeper-constraint.dto';
-import { GatekeeperConstraintDetailsDto } from '../../cluster/dto/deprecated-gatekeeper-constraint-dto';
 
 @Injectable()
 export class GatekeeperConstraintTemplateService {
   defaultTemplateDir: string;
+
   constructor(
     @Inject(forwardRef(() => ClusterService))
     private readonly clusterService: ClusterService,
@@ -30,6 +30,7 @@ export class GatekeeperConstraintTemplateService {
   ) {
     this.defaultTemplateDir = this.configService.get('gatekeeper.gatekeeperTemplateDir');
   }
+
   private validateConstraintTemplate(template: string, existingTemplateName?: string): { isValid: boolean, reason?: string } {
     let templateAsObject: GatekeeperConstraintTemplateDto;
     try {
@@ -68,9 +69,11 @@ export class GatekeeperConstraintTemplateService {
       const templates: any[] = templateListResponse.body['items'];
       const templateDTOs: GatekeeperConstraintTemplateDto[] = plainToInstance(GatekeeperConstraintTemplateDto, templates);
       for (const template of templateDTOs) {
-        const constraintCount = await this.gatekeeperConstraintService.getNumConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
+        const constraints = await this.gatekeeperConstraintService.getConstraintsForTemplate(clusterId, template.metadata.name, kubeConfig);
+        const constraintCount = constraints.length;
         template.constraintsCount = constraintCount;
         template.enforced = !!constraintCount;
+        template.constraints = constraints;
       }
       return templateDTOs;
     } catch (e) {
@@ -224,16 +227,13 @@ export class GatekeeperConstraintTemplateService {
           data: {notDeleted: constraintsDeleted.notDeleted},
           message: 'Constraint Template not deleted: failed to delete all Constraints'
         });
-        // throw new InternalServerErrorException({
-        //   data: { notDeleted: constraintsDeleted.notDeleted }
-        // }, 'Could not delete all Constraints: Constraint Template not deleted');
       }
 
       const destroyTemplate = await customObjectApi.deleteClusterCustomObject('templates.gatekeeper.sh', 'v1beta1', 'constrainttemplates', templateName);
       return {message: `${templateName} and related constraints were deleted successfully`, status: 200};
     }
     catch(e) {
-      this.logger.error({label: 'Error deleting GateKeeper constraint template by name', data: { clusterId, templateName }}, e, 'ClusterService.destroyOPAGateKeeperConstraintTemplateByName');
+      this.logger.error({label: 'Error deleting Gatekeeper constraint template by name', data: { clusterId, templateName }}, e, 'GatekeeperConstraintTemplateService.deleteConstraintTemplate');
       throw new InternalServerErrorException(e);
     }
   }
