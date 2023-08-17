@@ -38,6 +38,17 @@ export class GatekeeperConstraintService {
     }
   }
 
+  async createConstraintForTemplate(clusterId: number, templateName: string, constraint: any, kubeConfig?: KubeConfig): Promise<GatekeeperConstraintDto> {
+    if (!kubeConfig) {
+      kubeConfig = await this.clusterService.getKubeConfig(clusterId);
+    }
+
+    // gatekeeperConstraintDto.metadata.annotations.mode = String(constraint.mode).toLowerCase() === 'dryrun' ? 'Audit' : 'Enforce';
+    const newConstraint = constraint as GatekeeperConstraintDto;
+    // newConstraint.metadata.annotations.mode = String(newConstraint.mode).toLowerCase() === 'dryrun' ? 'Audit' : 'Enforce';
+    return newConstraint;
+  }
+
   async deleteConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<{
     constraintsExisted: boolean;
     successfullyDeleted?: string[];
