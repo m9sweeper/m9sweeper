@@ -8,6 +8,7 @@ import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConst
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private formBuilder: FormBuilder,
-    private readonly gatekeeperService: GateKeeperService,
+    private readonly gateKeeperService: GateKeeperService,
+    private readonly gatekeeperService: GatekeeperService,
     private alertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data,
     private elementRef: ElementRef,
@@ -126,7 +128,7 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       this.addTemplateConstraintForm.value.criterias = this.templateConstraintCriteria;
       if (this.data && this.data.isEdit) {
         // need to add the name to it (since it's disabled when it's an edit)
-        this.gatekeeperService.patchGateKeeperTemplateConstraint({
+        this.gateKeeperService.patchGateKeeperTemplateConstraint({
           name: this.data.constraint.metadata.name,
           ...this.addTemplateConstraintForm.value
         }, this.templateName, this.data.clusterId)
@@ -142,16 +144,15 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
             this.alertService.danger(error.statusText);
           });
       } else {
-        this.gatekeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId).subscribe(response => {
-          if (response.data.statusCode === 200 ) {
-            this.alertService.success(response.data.message);
-            this.dialogRef.close({reload: true});
-          } else if (response.data.statusCode === 409) {
-            this.alertService.warning(response.data.message);
-          } else {
-            this.alertService.danger(response.data.message);
-          }
-        });
+        // this.gateKeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId)
+        // JSON.stringify(t.selectedTemplate)?
+        this.gatekeeperService.createConstraint(this.data.clusterId, this.templateName, this.addTemplateConstraintForm.value)
+          .subscribe(response => {
+            this.alertService.success('Deployed the new constraint');
+            // this.dialogRef.close({reload: true});
+          }, error => {
+            this.alertService.dangerAlertForHTTPError(error, 'AddTemplateConstraintComponent.onSubmit');
+          });
       }
     }
   }
@@ -176,6 +177,10 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       disableClose: false,
       data: {clusterId: this.data.clusterId, templateData: formValues, dynamicProperties: this.dynamicProperties}
     });
+
+    // @TODO: manifest --> form
+    // @TODO: form --> manifest
+    // @TODO: pass manifest to the backend, not the form value
 
     openTemplateConstraintDialog.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response.manifestData) {
