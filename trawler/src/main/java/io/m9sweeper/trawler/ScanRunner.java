@@ -168,24 +168,10 @@ public class ScanRunner {
                                 .data(o.getExtraData())
                 ).collect(Collectors.toList()))).collect(Collectors.toList());
 
-        // The hash has changed if the hash from the scan does not match the one from dash AND it is not a placeholder
-        boolean hashHasChanged = !scanConfig.getImage().getHash().equals(newImageHash) && (scanConfig.getImage().getHash() != null && !scanConfig.getImage().getHash().startsWith("TMP_"));
-        boolean compliant = true;
-
-        // If we have an error, or the hash has changed,
-        // Return an error response under the original hash
-        if (hashHasChanged || errorEncountered) {
-            String errorSummary = "";
-            if (errorEncountered) {
-                errorSummary = imageTrawlerResultDtos.get(0).getSummary();
-            } else {
-                errorSummary = "Image ID does not match most recent image pulled from Trawler";
-                if (scanConfig.getImage().getTag().contains("latest")) {
-                    errorSummary = errorSummary.concat(". Note, using the latest tag for images is not recommended and can cause undesirable behavior");
-                }
-            }
+        // If we have an error, save a "blank" scan with the error, otherwise just save the actual results
+        if (errorEncountered) {
             ImageTrawlerResultDto outdatedImageIdResult = new ImageTrawlerResultDto()
-                    .summary(errorSummary)
+                    .summary(imageTrawlerResultDtos.get(0).getSummary())
                     .encounterError(true)
                     .criticalIssues(new BigDecimal(0))
                     .majorIssues(new BigDecimal(0))
@@ -195,30 +181,22 @@ public class ScanRunner {
                     .policyId(imageTrawlerResultDtos.get(0).getPolicyId());
             List<ImageTrawlerResultDto> outdatedImageIdArray = new ArrayList<ImageTrawlerResultDto>();
             outdatedImageIdArray.add(outdatedImageIdResult);
-            compliant &= saveScanResults(outdatedImageIdArray);
-        }
-
-        // If we didn't encounter an error, save the results
-        // Note that if the image hash changed and we didn't encounter an error this will result in sending 2 results,
-        // The first being the error for the old hash, and this one which will save the actual scan under
-        // the correct hash.
-        if (!errorEncountered) {
-            compliant &= saveScanResults(imageTrawlerResultDtos);
-        }
-
-        if(!compliant) {
-            throw new NoncompliantException("Image Is not compliant", imageTrawlerResultDtos);
+            saveScanResults(outdatedImageIdArray);
+        } else {
+            saveScanResults(imageTrawlerResultDtos);
         }
     }
 
-    /** Returns whether or not the saved scan was compliant or not */
-    private boolean saveScanResults(List<ImageTrawlerResultDto> imageTrawlerResultDtos) throws Exception {
+    /** Throws an error if the image is not compliant  */
+    private void saveScanResults(List<ImageTrawlerResultDto> imageTrawlerResultDtos) throws Exception {
         TrawlerScanResults body = new TrawlerScanResults();
         body.setData(imageTrawlerResultDtos);
         if (TrawlerConfiguration.getInstance().getDebug()) {
             System.out.println("Saving Scan Results: " + body.toString());
         }
         ImageScanResultSaveResponse complianceResponse = apiInstance.imageControllerSaveImageScanResults(body, new BigDecimal(message.getCluster().getId()), new BigDecimal(message.getImage().getId()));
-        return complianceResponse.getData() == null || complianceResponse.getData().isComplaint();
+        if (complianceResponse.getData() != null && !complianceResponse.getData().isComplaint()) {
+            throw new NoncompliantException("Image Is not compliant", imageTrawlerResultDtos);
+        }
     }
 }
