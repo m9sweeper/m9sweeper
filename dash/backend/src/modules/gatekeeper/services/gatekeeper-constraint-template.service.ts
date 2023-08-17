@@ -195,7 +195,7 @@ export class GatekeeperConstraintTemplateService {
         { 'headers': { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH }},
       );
       this.logger.log({label: 'Patched Gatekeeper template successfully', data: { clusterId, template }}, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
-      return {message: 'Successfully patched the template', statusCode: patchTemplate.response.statusCode};
+      return 'Successfully patched the template';
     } catch (e) {
       this.logger.error({label: 'Error patching Gatekeeper template', data: { clusterId, templateName }}, e, 'GatekeeperConstraintTemplateService.updateConstraintTemplate');
       if (e instanceof HttpError) {

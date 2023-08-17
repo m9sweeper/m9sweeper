@@ -1,5 +1,5 @@
 import { InvalidClusterIdInterceptor, ResponseTransformerInterceptor } from '../../../interceptors';
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
@@ -76,9 +76,12 @@ export class GatekeeperConstraintTemplateController {
   @Put(':templateName')
   @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
   @UseGuards(AuthGuard, AuthorityGuard)
+  @HttpCode(204)
   @ApiResponse({
-    status: 200,
-    schema: GATEKEEPER_CONSTRAINT_TEMPLATE_BY_NAME_SCHEMA,
+    status: 204,
+    schema: {
+      "description": "The resource was updated successfully"
+    },
   })
   async updateConstraintTemplateByName(
     @Param('clusterId') clusterId: number,
