@@ -9,7 +9,7 @@ export class ResponseTransformerInterceptor implements NestInterceptor {
 
     private readonly CONTEXT = ResponseTransformerInterceptor.name;
 
-    constructor(private readonly logger: MineLoggerService){}
+    constructor(private readonly logger: MineLoggerService) {}
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const req = context.switchToHttp().getRequest();
