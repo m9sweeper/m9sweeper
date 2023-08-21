@@ -63,7 +63,7 @@ public class Trivy implements Scanner {
      */
     @Override
     public void runScan() throws Exception {
-        System.out.println("Initiating scan of " + config.getImage().getName() + ":" + config.getImage().getTag() +
+        System.out.println("Initiating scan of " + config.getImage().buildFullPath(false, true) +
                 " with trivy for " + config.getPolicy().getName() + ":" + config.getScannerName());
         StringBuilder trivyScanCommandBuilder = new StringBuilder();
 
@@ -147,7 +147,7 @@ public class Trivy implements Scanner {
         // run trivy scan
         trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
         trivyScanCommandBuilder.append(escapeXsi(
-                registry.getHostname() + "/" + config.getImage().getName() + ":" + config.getImage().getTag()
+                config.getImage().buildFullPath(true, true)
         ));
         trivyScanCommandBuilder.append("';");
 
