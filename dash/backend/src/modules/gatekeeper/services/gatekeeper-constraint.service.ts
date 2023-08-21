@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { ClusterService } from '../../cluster/services/cluster.service';
 import { ConfigService } from '@nestjs/config';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
@@ -33,7 +33,7 @@ export class GatekeeperConstraintService {
       return plainToInstance(GatekeeperConstraintDto, response.body['items']) as unknown as GatekeeperConstraintDto[];
     }
     catch(e) {
-      this.logger.error({label: 'Error counting Gatekeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'ClusterService.gatekeeperTemplateConstraintsCount');
+      this.logger.error({label: 'Error counting Gatekeeper constraints - assuming none exist ', data: { clusterId, templateName }}, e, 'GatekeeperConstraintService.gatekeeperTemplateConstraintsCount');
       return [];
     }
   }
@@ -46,7 +46,16 @@ export class GatekeeperConstraintService {
     // gatekeeperConstraintDto.metadata.annotations.mode = String(constraint.mode).toLowerCase() === 'dryrun' ? 'Audit' : 'Enforce';
     const newConstraint = constraint as GatekeeperConstraintDto;
     // newConstraint.metadata.annotations.mode = String(newConstraint.mode).toLowerCase() === 'dryrun' ? 'Audit' : 'Enforce';
-    return newConstraint;
+    // return newConstraint;
+    try {
+      const customObjectApi = kubeConfig.makeApiClient(CustomObjectsApi);
+      const createdConstraint = await customObjectApi.createClusterCustomObject('constraints.gatekeeper.sh', 'v1beta1', templateName, newConstraint);
+      this.logger.log({label: 'Gatekeeper Constraint Created', data: { templateName, clusterId, createdConstraint }}, 'GatekeeperConstraintService.createConstraintForTemplate');
+      return newConstraint;
+    } catch(e) {
+      this.logger.error({label: 'Gatekeeper Constraint Created', data: { templateName, clusterId, constraint }}, e, 'GatekeeperConstraintService.createConstraintForTemplate');
+      throw new HttpException({message: e.body.message}, e.statusCode);
+    }
   }
 
   async deleteConstraintsForTemplate(clusterId: number, templateName: string, kubeConfig?: KubeConfig): Promise<{

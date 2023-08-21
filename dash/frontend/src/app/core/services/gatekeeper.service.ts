@@ -105,7 +105,7 @@ export class GatekeeperService {
         );
   }
 
-  createConstraint(clusterId: number, templateName: string, constraint: string) {
+  createConstraint(clusterId: number, templateName: string, constraint: any) {
     return this.httpClient.post<IServerResponse<IGatekeeperConstraint>>(`${this.buildBaseUrl(clusterId)}/constraint-templates/${templateName}/constraints`, { constraint })
         .pipe(
             map(response => response?.data),

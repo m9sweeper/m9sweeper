@@ -1,8 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
+import {IGatekeeperConstraint} from '../../../../../core/entities/gatekeeper';
 import {AlertService} from '../../../../../core/services/alert.service';
-import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-template-constraint-manifest',
@@ -23,29 +22,20 @@ export class TemplateConstraintManifestComponent implements OnInit {
     viewportMargin: 100,
   };
   rawTemplate: any;
-  rawTemplateObject: IGateKeeperConstraintDetails = {};
+  rawTemplateObject: Partial<IGatekeeperConstraint> = {};
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: {
+      clusterId: number,
+      templateData: Partial<IGatekeeperConstraint>,
+    },
     private alertService: AlertService,
-    private clipboard: Clipboard,
-    @Inject(MAT_DIALOG_DATA) public data,
     private dialogRef: MatDialogRef<TemplateConstraintManifestComponent>
   ) {
-    this.rawTemplateObject.apiVersion = 'constraints.gatekeeper.sh/v1beta1';
-    this.rawTemplateObject.kind = this.data.templateData.kind;
-    this.rawTemplateObject.metadata = {};
-    this.rawTemplateObject.metadata.name = this.data.templateData.name;
-    this.rawTemplateObject.metadata.annotations = {};
-    this.rawTemplateObject.metadata.annotations.description = this.data.templateData.description;
-    this.rawTemplateObject.spec = {};
-    this.rawTemplateObject.spec.enforcementAction = this.data.templateData.mode;
-    this.rawTemplateObject.spec.parameters = {};
-    this.rawTemplateObject.spec.parameters = this.data.dynamicProperties;
-    this.rawTemplateObject.spec.match = {};
-    this.rawTemplateObject.spec.match.kinds = this.data.templateData.criterias;
-    this.rawTemplateObject.spec.match.excludedNamespaces = this.data.templateData.excludedNamespaces;
+    this.rawTemplateObject = this.data.templateData;
 
-    this.rawTemplate = JSON.stringify((this.rawTemplateObject), null, ' ');
+    console.log(this.rawTemplateObject);
+    this.rawTemplate = JSON.stringify((this.rawTemplateObject), null, '  ');
   }
 
   ngOnInit(): void {}
@@ -53,7 +43,13 @@ export class TemplateConstraintManifestComponent implements OnInit {
   setEditorContent($event: any) {}
 
   saveManifest() {
-    this.dialogRef.close({manifestData: JSON.parse(this.rawTemplate)});
+    try {
+      const manifestData = JSON.parse(this.rawTemplate);
+      this.dialogRef.close({manifestData});
+    } catch (e) {
+      console.error(e);
+      this.alertService.warning('Invalid JSON');
+    }
   }
 
   onNoClick() {

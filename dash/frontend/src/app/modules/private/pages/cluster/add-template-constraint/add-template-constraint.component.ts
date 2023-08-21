@@ -4,11 +4,11 @@ import {AddConstraintCriteriaComponent} from '../add-constraint-criteria/add-con
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
 import {GateKeeperService} from '../../../../../core/services/gate-keeper.service';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
 import {TemplateConstraintManifestComponent} from '../template-constraint-manifest/template-constraint-manifest.component';
 import {take} from 'rxjs/operators';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {IConstraintSpecMatchKinds, IGatekeeperConstraint} from '../../../../../core/entities/gatekeeper';
 
 
 @Component({
@@ -20,8 +20,8 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   templateName: string;
   addTemplateConstraintForm: FormGroup;
   // templateConstraintCriteria: IConstraintCriteria[] = [{kinds: ['Pod'], apiGroups: []}];
-  initialTemplateConstraintCriteria: IConstraintCriteria[] = [];
-  templateConstraintCriteria: IConstraintCriteria[] = [];
+  initialTemplateConstraintCriteria: IConstraintSpecMatchKinds[] = [];
+  templateConstraintCriteria: IConstraintSpecMatchKinds[] = [];
   k8sNamespaces: string[];
   dynamicProperties = {};
   formSchema = {
@@ -144,12 +144,12 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
             this.alertService.danger(error.statusText);
           });
       } else {
-        // this.gateKeeperService.createGateKeeperTemplateConstraint(this.addTemplateConstraintForm.value, this.templateName, this.data.clusterId)
-        // JSON.stringify(t.selectedTemplate)?
-        this.gatekeeperService.createConstraint(this.data.clusterId, this.templateName, this.addTemplateConstraintForm.value)
+        const jsonTemplate = this.formToTemplate();
+        // const stringifiedTemplate = JSON.stringify((jsonTemplate), null, '  ');
+        this.gatekeeperService.createConstraint(this.data.clusterId, this.templateName, jsonTemplate)
           .subscribe(response => {
             this.alertService.success('Deployed the new constraint');
-            // this.dialogRef.close({reload: true});
+            this.dialogRef.close({reload: true});
           }, error => {
             this.alertService.dangerAlertForHTTPError(error, 'AddTemplateConstraintComponent.onSubmit');
           });
@@ -167,40 +167,63 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   }
 
   editRawKubernetesManifest() {
-    const formValues = this.addTemplateConstraintForm.value;
-    formValues.criterias = this.templateConstraintCriteria;
+    const formValues = this.formToTemplate();
     // formValues.labels = this.addTemplateConstraintForm.controls.labels.value.split(',').map(label => label.trim());
     const openTemplateConstraintDialog = this.dialog.open(TemplateConstraintManifestComponent, {
       width: '650px',
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {clusterId: this.data.clusterId, templateData: formValues, dynamicProperties: this.dynamicProperties}
+      data: {
+        clusterId: this.data.clusterId,
+        templateData: formValues,
+      }
     });
 
     // @TODO: manifest --> form
-    // @TODO: form --> manifest
     // @TODO: pass manifest to the backend, not the form value
-
     openTemplateConstraintDialog.afterClosed().pipe(take(1)).subscribe(response => {
       if (response && response.manifestData) {
-        this.addTemplateConstraintForm.controls.name.setValue(response.manifestData.metadata.name);
-        this.addTemplateConstraintForm.controls.description.setValue(response.manifestData.metadata.annotations.description);
-        this.addTemplateConstraintForm.controls.excludedNamespaces.setValue(response.manifestData.spec.match.excludedNamespaces);
-        this.addTemplateConstraintForm.controls.mode.setValue(response.manifestData.spec.enforcementAction);
-        // this.addTemplateConstraintForm.controls.labels.setValue(response.manifestData.spec.parameters.labels);
-        this.templateConstraintCriteria = response.manifestData.spec.match.kinds;
-
-        this.generateFormFromSchema = false;
-        this.generateFormFromJsonData = response.manifestData.spec.parameters;
-        this.dynamicProperties = response.manifestData.spec.parameters;
-        this.removeSubmitButtonAndSchemaText();
-        const propertiesForm = this.elementRef.nativeElement.querySelector('#schema_form_edit');
-        // const button = propertiesForm.nativeElement.querySelector('.button-row');
-        // button.remove();
-        propertiesForm.click();
+        this.templateToForm(response.manifestData);
       }
     });
+  }
+
+  templateToForm(template: IGatekeeperConstraint) {
+    console.log({template});
+    this.addTemplateConstraintForm.controls.name.setValue(template.metadata.name);
+    this.addTemplateConstraintForm.controls.description.setValue(template.metadata.annotations.description);
+    this.addTemplateConstraintForm.controls.excludedNamespaces.setValue(template.spec.match.excludedNamespaces);
+    this.addTemplateConstraintForm.controls.mode.setValue(template.spec.enforcementAction);
+    // this.addTemplateConstraintForm.controls.labels.setValue(template.spec.parameters.labels);
+    this.templateConstraintCriteria = template.spec.match.kinds;
+
+    this.generateFormFromSchema = false;
+    this.generateFormFromJsonData = template.spec.parameters;
+    this.dynamicProperties = template.spec.parameters;
+    this.removeSubmitButtonAndSchemaText();
+    const propertiesForm = this.elementRef.nativeElement.querySelector('#schema_form_edit');
+  }
+
+  formToTemplate() {
+    const rawValues = this.addTemplateConstraintForm.value;
+    const template: Partial<IGatekeeperConstraint> = {};
+
+    template.apiVersion = 'constraints.gatekeeper.sh/v1beta1';
+    template.kind = rawValues.kind;
+    template.metadata = {};
+    template.metadata.name = rawValues.name;
+    template.metadata.annotations = {};
+    template.metadata.annotations.description = rawValues.description;
+    template.spec = {};
+    template.spec.enforcementAction = rawValues.mode;
+    template.spec.parameters = {};
+    template.spec.parameters = this.dynamicProperties;
+    template.spec.match = {};
+    template.spec.match.kinds = this.templateConstraintCriteria;
+    template.spec.match.excludedNamespaces = rawValues.excludedNamespaces;
+
+    return template;
   }
 
   saveSchemaFormValue($event: any) {
@@ -214,7 +237,9 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
   removeSubmitButtonAndSchemaText(){
     // Remove Submit button of the form generated from json schema
     const button = this.elementRef.nativeElement.querySelector('.button-row');
-    button.remove();
+    if (button) {
+      button.remove();
+    }
     // schema text
     const schemaText = this.elementRef.nativeElement.querySelector('legend');
     if (schemaText) {
@@ -232,13 +257,13 @@ export class AddTemplateConstraintComponent implements OnInit, AfterViewInit {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < m9sKinds.length; i++) {
         const apiGroup = m9sApiGroup[i] === undefined ? m9sApiGroup[0] === undefined ? [] : [m9sApiGroup[0]] : [m9sApiGroup[i]];
-        const criteria: IConstraintCriteria = {kinds: [m9sKinds[i]], apiGroups: apiGroup};
+        const criteria: IConstraintSpecMatchKinds = {kinds: [m9sKinds[i]], apiGroups: apiGroup};
         this.templateConstraintCriteria.push(criteria);
       }
     } else {
       for (let i = 0; i < m9sApiGroup.length; i++) {
         const kind = m9sKinds[i] === undefined ? m9sKinds[0] === undefined ? [] : [m9sKinds[0]] : [m9sKinds[i]];
-        const criteria: IConstraintCriteria = {kinds: kind, apiGroups: [m9sApiGroup[i]]};
+        const criteria: IConstraintSpecMatchKinds = {kinds: kind, apiGroups: [m9sApiGroup[i]]};
         this.templateConstraintCriteria.push(criteria);
       }
     }

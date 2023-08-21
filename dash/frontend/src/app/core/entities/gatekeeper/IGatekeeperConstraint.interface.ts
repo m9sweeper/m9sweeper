@@ -1,7 +1,7 @@
 import {IV1ObjectMeta} from '../kubernetesObjects';
 
 export interface IGatekeeperConstraint {
-  apiVersion: string;
+  apiVersion?: string;
   kind?: string;
   metadata?: IV1ObjectMeta;
   spec?: IConstraintSpec;
@@ -12,14 +12,17 @@ interface IConstraintSpec {
   enforcementAction?: string;
   match?: {
     excludedNamespaces?: string[];
-    kinds?: {
-      [key: string]: string[];
-    }[]
+    kinds?: IConstraintSpecMatchKinds[];
   };
   parameters?: {
     cpu?: string;
     memory?: string;
   };
+}
+
+export interface IConstraintSpecMatchKinds {
+  apiGroups?: string[];
+  kinds?: string[];
 }
 
 interface IConstraintStatus {
