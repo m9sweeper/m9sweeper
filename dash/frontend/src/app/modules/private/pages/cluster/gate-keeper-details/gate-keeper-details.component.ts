@@ -129,8 +129,14 @@ export class GateKeeperDetailsComponent implements OnInit {
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: { clusterId: this.clusterId, templateName: this.templateName, templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-              openapiProperties: this.openapiProperties, openApiSchema: this.openApiSchema, annotations: this.gatekeeperTemplate.metadata.annotations }
+      data: {
+        clusterId: this.clusterId,
+        templateName: this.templateName,
+        templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
+        openapiProperties: this.openapiProperties,
+        openApiSchema: this.openApiSchema,
+        annotations: this.gatekeeperTemplate.metadata.annotations,
+      }
     });
 
     openAddConstraintTemplate.afterClosed()
@@ -169,9 +175,11 @@ export class GateKeeperDetailsComponent implements OnInit {
       disableClose: false,
       data: {
         isEdit: true, constraint,
-        clusterId: this.clusterId, templateName: this.templateName,
+        clusterId: this.clusterId,
+        templateName: this.templateName,
         templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-        openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations,
+        openapiProperties: this.openapiProperties,
+        annotations: this.gatekeeperTemplate.metadata.annotations,
       },
     });
 

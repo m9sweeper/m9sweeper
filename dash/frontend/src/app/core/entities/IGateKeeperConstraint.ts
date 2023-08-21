@@ -66,11 +66,3 @@ export interface IGateKeeperConstraintDetails {
   status?: IGatekeeperConstraintStatus;
   spec?: IGatekeeperConstraintSpec;
 }
-
-/**
- * @deprecated
- */
-export interface IConstraintCriteria {
-  kinds?: string[];
-  apiGroups?: string[];
-}
