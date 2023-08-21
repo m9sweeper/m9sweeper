@@ -41,6 +41,7 @@ jobs:
     with:
       dash-image-tags: ${{ needs.versioning.outputs.dash-image-tags }}
       trawler-image-tags: ${{ needs.versioning.outputs.trawler-image-tags }}
+      build-all-architectures: false
 
   release_individual_charts:
     name: Release Individual Charts
@@ -193,102 +194,56 @@ jobs:
           checkName: 'deploy'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  test-k8s-v1_18:
-    name: Test Against Kubernetes v1.18
+  test_matrix:
+    name: Run Selenium Tests
     uses: ./.github/workflows/selenium-test.yaml
     needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.18.20'
-      gatekeeper-version: '3.7.2'
-      helm-version: 'v3.6.3'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+    permissions:
+      checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s-version: ['v1.19.16', 'v1.20.15', 'v1.21.14', 'v1.22.17', 'v1.23.17', 'v1.24.14', 'v1.25.10', 'v1.26.5', 'v1.27.3']
+        include:
+          - k8s-version: 'v1.19.16'
+            gatekeeper-version: '3.9.2'
+            helm-version: 'v3.7.2'
+            cni: 'auto'
 
-  test-k8s-v1_19:
-    name: Test Against Kubernetes v1.19
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.19.16'
-      gatekeeper-version: '3.9.2'
-      helm-version: 'v3.7.2'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.20.15'
+            gatekeeper-version: '3.9.2'
+            helm-version: 'v3.8.2'
 
-  test-k8s-v1_20:
-    name: Test Against Kubernetes v1.20
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.20.15'
-      gatekeeper-version: '3.9.2'
-      helm-version: 'v3.8.2'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.21.14'
+            gatekeeper-version: '3.10.0'
+            helm-version: 'v3.9.4'
 
-  test-k8s-v1_21:
-    name: Test Against Kubernetes v1.21
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.21.14'
-      gatekeeper-version: '3.10.0'
-      helm-version: 'v3.9.4'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.22.17'
+            gatekeeper-version: '3.11.0'
+            helm-version: 'v3.10.3'
 
-  test-k8s-v1_22:
-    name: Test Against Kubernetes v1.22
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.22.17'
-      gatekeeper-version: '3.11.0'
-      helm-version: 'v3.10.3'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.23.17'
+            gatekeeper-version: '3.11.0'
+            helm-version: 'v3.11.3'
 
-  test-k8s-v1_23:
-    name: Test Against Kubernetes v1.23
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.23.17'
-      gatekeeper-version: '3.11.0'
-      helm-version: 'v3.11.3'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.24.15'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.11.3'
 
-  test-k8s-v1_24:
-    name: Test Against Kubernetes v1.24
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.24.14'
-      gatekeeper-version: '3.12.0'
-      helm-version: 'v3.11.3'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.25.10'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
 
-  test-k8s-v1_25:
-    name: Test Against Kubernetes v1.25
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.25.10'
-      gatekeeper-version: '3.12.0'
-      helm-version: 'v3.12.0'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+          - k8s-version: 'v1.26.5'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
 
-  test-k8s-v1_26:
-    name: Test Against Kubernetes v1.26
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
+          - k8s-version: 'v1.27.3'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
     with:
-      kubernetes-version: 'v1.26.5'
-      gatekeeper-version: '3.12.0'
-      helm-version: 'v3.12.0'
+      kubernetes-version: ${{ matrix.k8s-version }}
+      gatekeeper-version: ${{ matrix.gatekeeper-version }}
+      helm-version: ${{ matrix.helm-version }}
       m9sweeper-chart-version: ${{ github.ref_name }}
-
-  test-k8s-v1_27:
-    name: Test Against Kubernetes v1.27
-    uses: ./.github/workflows/selenium-test.yaml
-    needs: release_umbrella_chart
-    with:
-      kubernetes-version: 'v1.27.3'
-      gatekeeper-version: '3.12.0'
-      helm-version: 'v3.12.0'
-      m9sweeper-chart-version: ${{ github.ref_name }}
+      cni: ${{ matrix.cni || 'calico' }}

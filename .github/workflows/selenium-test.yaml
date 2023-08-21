@@ -24,10 +24,14 @@ on:
       m9sweeper-chart-version:
         required: false
         type: string
+      cni:
+        required: false
+        type: string
+        default: 'calico'
 
 jobs:
   run_tests:
-    name: Run Tests
+    name: Test on k8s ${{ inputs.kubernetes-version }}
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -61,7 +65,7 @@ jobs:
           helm repo update
 
       - name: Start minikube
-        run: minikube start --cni='calico' --cpus='4' --kubernetes-version=${{ inputs.kubernetes-version }} --memory='6g'
+        run: minikube start --cpus=4 --memory=6g --cni=${{ inputs.cni }} --kubernetes-version=${{ inputs.kubernetes-version }}
 
       - name: Wait for Trawler Build
         uses: fountainhead/action-wait-for-check@v1.1.0
@@ -93,7 +97,7 @@ jobs:
             --set-string postgresql.volumePermissions.image.repository=\"ghcr.io/m9sweeper/debian\" \
             --set-string dash.kubesec.registry=\"ghcr.io\" \
             --set-string dash.kubesec.repository=\"m9sweeper/kubesec\" \
-            --debug"
+            --debug --timeout 10m0s"
 
           if [ -n "${{ inputs.m9sweeper-chart-version }}" ]; then
             helm_upgrade_cmd="${helm_upgrade_cmd} --version ${{ inputs.m9sweeper-chart-version }}"
@@ -128,7 +132,10 @@ jobs:
         with:
           path: |
             selenium-testing/screenshots/
-            selenium-testing/downloads
+            selenium-testing/downloads/
+            selenium-testing/reports/
+          if-no-files-found: ignore
+          name: k8s-${{ inputs.kubernetes-version }}-testing-artifacts
 
       - name: Upload Test Reports
         uses: mikepenz/action-junit-report@v3
@@ -141,7 +148,7 @@ jobs:
           require_passed_tests: true
           detailed_summary: true
           include_passed: true
-          check_name: Selenium Test Report
+          check_name: Test Report - k8s ${{ inputs.kubernetes-version }}
 
       - name: Cleanup
         if: always()

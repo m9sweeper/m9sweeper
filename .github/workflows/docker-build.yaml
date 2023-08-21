@@ -9,6 +9,10 @@ on:
       trawler-image-tags:
         required: true
         type: string
+      build-all-architectures:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   docker_dash:
@@ -18,6 +22,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up QEMU
+        if: inputs.build-all-architectures
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
@@ -29,14 +37,28 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Dash
+      - name: Build & Push Dash (amd64)
         uses: docker/build-push-action@v4
+        if: inputs.build-all-architectures == false
         with:
           context: .
           push: true
+          provenance: false
           tags: ${{ inputs.dash-image-tags }}
-          cache-from: type=gha,scope=build-dash
-          cache-to: type=gha,mode=max,scope=build-dash
+          cache-from: type=gha,scope=build-dash-amd64
+          cache-to: type=gha,mode=max,scope=build-dash-amd64
+
+      - name: Build & Push Dash (all architectures)
+        uses: docker/build-push-action@v4
+        if: inputs.build-all-architectures
+        with:
+          context: .
+          push: true
+          provenance: false
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ inputs.dash-image-tags }}
+          cache-from: type=gha,scope=build-dash-all-archs
+          cache-to: type=gha,mode=max,scope=build-dash-all-archs
 
   docker_trawler:
     name: Build Trawler Image
@@ -45,6 +67,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up QEMU
+        if: inputs.build-all-architectures
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
@@ -56,11 +82,25 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Trawler
+      - name: Build & Push Trawler (amd64)
         uses: docker/build-push-action@v4
+        if: inputs.build-all-architectures == false
         with:
           context: trawler/
           push: true
+          provenance: false
           tags: ${{ inputs.trawler-image-tags }}
-          cache-from: type=gha,scope=build-trawler
-          cache-to: type=gha,mode=max,scope=build-trawler
+          cache-from: type=gha,scope=build-trawler-amd64
+          cache-to: type=gha,mode=max,scope=build-trawler-amd64
+
+      - name: Build & Push Trawler (all architectures)
+        uses: docker/build-push-action@v4
+        if: inputs.build-all-architectures
+        with:
+          context: trawler/
+          push: true
+          provenance: false
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ inputs.trawler-image-tags }}
+          cache-from: type=gha,scope=build-trawler-all-archs
+          cache-to: type=gha,mode=max,scope=build-trawler-all-archs
