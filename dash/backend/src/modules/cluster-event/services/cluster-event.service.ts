@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {ClusterEventDto} from '../dto/cluster-event-dto';
 import {ClusterEventDao} from '../dao/cluster-event.dao';
 import {instanceToPlain} from 'class-transformer';
@@ -113,4 +113,5 @@ export class ClusterEventService {
         kubeConfig.setCurrentContext(cluster.context);
         return kubeConfig;
     }
+
 }
