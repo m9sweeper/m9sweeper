@@ -215,22 +215,6 @@ export class ClusterController {
     /**
      * @deprecated
      */
-    @Post('/opa/:clusterId/:templateName/constraints')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
-    @UseGuards(AuthGuard, AuthorityGuard)
-    @ApiResponse({
-        status: 201,
-        schema: DELETE_CLUSTER_RESPONSE_SCHEMA
-    })
-    async createOPAGateKeeperTemplateConstraint( @Body() constraint: any,
-                                                 @Param('templateName') templateName: string,
-                                                 @Param('clusterId') clusterId: number): Promise<{message: string, statusCode: number}> {
-        return this.clusterService.createOPAGateKeeperTemplateConstraint(constraint, templateName, clusterId );
-    }
-
-    /**
-     * @deprecated
-     */
     @Put('/opa/:clusterId/:templateName/constraints')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)

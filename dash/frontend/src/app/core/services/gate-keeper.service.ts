@@ -17,13 +17,6 @@ export class GateKeeperService {
   /**
    * @deprecated
    */
-  createGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number, ): Observable<IServerResponse<{message: string, statusCode: number}>> {
-    return this.httpClient.post(`/api/clusters/opa/${clusterId}/${templateName}/constraints`, constraint);
-  }
-
-  /**
-   * @deprecated
-   */
   patchGateKeeperTemplateConstraint(constraint: any, templateName: string, clusterId: number, ): Observable<IServerResponse<{message: string, statusCode: number}>> {
     return this.httpClient.put(`/api/clusters/opa/${clusterId}/${templateName}/constraints`, constraint);
   }
