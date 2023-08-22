@@ -14,7 +14,7 @@ spec:
       initContainers:
         - name: wait-for-postgresql
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - 'sh'
             - '-c'
@@ -28,6 +28,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-init
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         command: ["npm"]
         args:
           - "run"

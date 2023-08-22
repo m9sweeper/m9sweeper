@@ -29,7 +29,7 @@ spec:
       initContainers:
         - name: wait-for-postgresql
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - 'sh'
             - '-c'
@@ -82,6 +82,7 @@ spec:
 {{- toYaml .Values.resources | nindent 12 }}
         - name: kubesec
           image: "{{ .Values.kubesec.registry }}/{{ .Values.kubesec.repository }}:{{ .Values.kubesec.tag }}"
+          imagePullPolicy: {{ .Values.kubesec.pullPolicy }}
           ports:
             - containerPort: 8080
           resources:
