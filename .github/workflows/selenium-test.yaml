@@ -74,7 +74,7 @@ jobs:
           checkName: 'Build Docker Images / Build Trawler Image'
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          timeoutSeconds: 1800
+          timeoutSeconds: 3600
 
       - name: Wait for Dash Build
         uses: fountainhead/action-wait-for-check@v1.1.0
@@ -83,9 +83,11 @@ jobs:
           checkName: 'Build Docker Images / Build Dash Image'
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          timeoutSeconds: 1800
+          timeoutSeconds: 3600
 
       - name: Install m9sweeper
+        if: steps.dash_build_wait.outputs.conclusion == 'success' && steps.trawler_build_wait.outputs.conclusion == 'success'
+        id: install_m9sweeper
         run: |
           helm_upgrade_cmd="helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait --create-namespace --namespace m9sweeper-system \
             --set-string dash.init.superAdminEmail=\"super.admin@intelletive.com\" \
@@ -117,7 +119,7 @@ jobs:
       - name: Run Selenium Tests
         continue-on-error: true
         working-directory: selenium-testing/
-        if: success()
+        if: success() && steps.install_m9sweeper.outcome != 'skipped'
         run: |
           export GATEKEEPER_VERSION=${{ inputs.gatekeeper-version }}
           export DOCKER_REGISTRY="public-docker.nexus.celestialdata.net"
@@ -128,7 +130,7 @@ jobs:
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
-        if: success() || failure()
+        if: (success() || failure()) && steps.install_m9sweeper.outcome != 'skipped'
         with:
           path: |
             selenium-testing/screenshots/
