@@ -70,7 +70,7 @@ jobs:
           helm repo update
 
       - name: Start minikube
-        run: minikube start --cpus=4 --memory=6g --cni=${{ inputs.cni }} --kubernetes-version=${{ inputs.kubernetes-version }}
+        run: minikube start --cpus=4 --memory=6g --cni=${{ inputs.cni }} --kubernetes-version=${{ inputs.kubernetes-version }} --registry-mirror="https://public-docker.nexus.celestialdata.net"
 
       - name: Wait for Trawler Build
         uses: fountainhead/action-wait-for-check@v1.1.0
