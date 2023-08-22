@@ -18,6 +18,10 @@ on:
       - 'trawler/**'
       - 'Dockerfile'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   versioning:
     name: Determine Image Versioning
@@ -55,6 +59,7 @@ jobs:
     name: Build Docker Images
     uses: ./.github/workflows/docker-build.yaml
     needs: versioning
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork != true)
     permissions:
       packages: write
     with:
@@ -65,6 +70,7 @@ jobs:
     name: Run Selenium Tests
     uses: ./.github/workflows/selenium-test.yaml
     needs: versioning
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork != true)
     permissions:
       checks: write
     with:
@@ -73,3 +79,19 @@ jobs:
       helm-version: 'v3.12.0'
       dash-image-version: ${{ needs.versioning.outputs.dash-image-version }}
       trawler-image-version: ${{ needs.versioning.outputs.trawler-image-version }}
+
+  forked_pr_tests:
+    name: Run Selenium Tests
+    uses: ./.github/workflows/forked-pr.yaml
+    needs: versioning
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true
+    permissions:
+      checks: write
+    with:
+      kubernetes-version: 'v1.27.3'
+      gatekeeper-version: '3.12.0'
+      helm-version: 'v3.12.0'
+      dash-image-version: ${{ needs.versioning.outputs.dash-image-version }}
+      dash-image-tags: ${{ needs.versioning.outputs.dash-image-tags }}
+      trawler-image-version: ${{ needs.versioning.outputs.trawler-image-version }}
+      trawler-image-tags: ${{ needs.versioning.outputs.trawler-image-tags }}
