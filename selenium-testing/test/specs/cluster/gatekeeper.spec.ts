@@ -142,7 +142,7 @@ describe('Gatekeeper Page::', () => {
 
         // Locate the setup button and click it
         // @ts-ignore
-        await $("//span[contains(text(), 'Setup')]").customClick("setup");
+        await $("//span[contains(text(), 'Set Up')]").customClick("setup");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-constraint-dialog")).toBePresent(
             {message: "The dialog for adding a constraint template should be visible"}
         );
