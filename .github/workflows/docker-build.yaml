@@ -42,6 +42,10 @@ jobs:
           username: m9sweeper
           password: ${{ github.token }}
 
+      - name: Update Dockerfile
+        run: |
+          sed -i 's@FROM @FROM public-docker.nexus.celestialdata.net/@g' Dockerfile
+
       - name: Build & Push Dash (amd64)
         uses: docker/build-push-action@v4
         if: inputs.build-all-architectures == false && inputs.push-images == true
@@ -107,6 +111,10 @@ jobs:
           registry: ghcr.io
           username: m9sweeper
           password: ${{ github.token }}
+
+      - name: Update Dockerfile
+        run: |
+          sed -i 's@FROM @FROM public-docker.nexus.celestialdata.net/@g' trawler/Dockerfile
 
       - name: Build & Push Trawler (amd64)
         uses: docker/build-push-action@v4
