@@ -36,16 +36,67 @@ on:
         default: 'calico'
 
 jobs:
+  docker_dash:
+    name: Build Dash Image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Dash
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          provenance: false
+          tags: ${{ inputs.dash-image-tags }}
+          cache-from: type=gha,scope=build-dash-amd64
+          cache-to: type=gha,mode=max,scope=build-dash-amd64
+          outputs: type=docker,dest=/tmp/dash.tar
+
+      - name: Upload Dash Image
+        uses: actions/upload-artifact@v3
+        with:
+          path: /tmp/dash.tar
+          name: dash
+          retention-days: 5
+
+  docker_trawler:
+    name: Build Trawler Image
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Trawler
+        uses: docker/build-push-action@v4
+        with:
+          context: trawler/
+          push: false
+          provenance: false
+          tags: ${{ inputs.trawler-image-tags }}
+          cache-from: type=gha,scope=build-trawler-amd64
+          cache-to: type=gha,mode=max,scope=build-trawler-amd64
+
+      - name: Upload Trawler Image
+        uses: actions/upload-artifact@v3
+        with:
+          path: /tmp/dash.tar
+          name: trawler
+          retention-days: 5
+
   run_tests:
     name: Test on k8s ${{ inputs.kubernetes-version }}
     runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
 
       - name: Install Helm
         uses: azure/setup-helm@v3
@@ -74,35 +125,53 @@ jobs:
           helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper
           helm repo update
 
-      - name: Build Dash
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: false
-          provenance: false
-          tags: ${{ inputs.dash-image-tags }}
-          cache-from: type=gha,scope=build-dash-amd64
-          cache-to: type=gha,mode=max,scope=build-dash-amd64
-
-      - name: Build Trawler
-        uses: docker/build-push-action@v4
-        with:
-          context: trawler/
-          push: false
-          provenance: false
-          tags: ${{ inputs.trawler-image-tags }}
-          cache-from: type=gha,scope=build-trawler-amd64
-          cache-to: type=gha,mode=max,scope=build-trawler-amd64
-
       - name: Start minikube
         run: minikube start --cpus=4 --memory=6g --cni=${{ inputs.cni }} --kubernetes-version=${{ inputs.kubernetes-version }}
 
+      - name: Wait for Trawler Build
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        id: trawler_build_wait
+        with:
+          checkName: 'Run Selenium Tests / Build Trawler Image'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 3600
+
+      - name: Wait for Dash Build
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        id: dash_build_wait
+        with:
+          checkName: 'Run Selenium Tests / Build Dash Image'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          timeoutSeconds: 3600
+
+      - name: Download Dash Image
+        id: download_dash
+        uses: actions/download-artifact@v3
+        if: steps.dash_build_wait.outputs.conclusion == 'success'
+        with:
+          name: dash
+          path: /tmp
+
+      - name: Download Trawler Image
+        id: download_trawler
+        uses: actions/download-artifact@v3
+        if: steps.trawler_build_wait.outputs.conclusion == 'success'
+        with:
+          name: trawler
+          path: /tmp
+
       - name: Load images to minikube
+        id: load_images
+        if: success() && steps.download_dash.outcome != 'skipped' && steps.download_trawler.outcome != 'skipped'
         run: |
-          minikube image load ghcr.io/m9sweeper/dash:${{ inputs.dash-image-version }}
-          minikube image load ghcr.io/m9sweeper/trawler:${{ inputs.trawler-image-version }}
+          minikube image load /tmp/dash.tar
+          minikube image load /tmp/trawler.tar
 
       - name: Install m9sweeper
+        id: install_m9sweeper
+        if: success() && steps.load_images.outcome != 'skipped'
         run: |
           helm_upgrade_cmd="helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait --create-namespace --namespace m9sweeper-system \
             --set-string dash.init.superAdminEmail=\"super.admin@intelletive.com\" \
@@ -130,7 +199,7 @@ jobs:
       - name: Run Selenium Tests
         continue-on-error: true
         working-directory: selenium-testing/
-        if: success()
+        if: success() && steps.install_m9sweeper.outcome != 'skipped'
         run: |
           export GATEKEEPER_VERSION=${{ inputs.gatekeeper-version }}
           export DOCKER_REGISTRY="public-docker.nexus.celestialdata.net"
@@ -141,7 +210,7 @@ jobs:
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
-        if: success() || failure()
+        if: (success() || failure()) && steps.install_m9sweeper.outcome != 'skipped'
         with:
           path: |
             selenium-testing/screenshots/
