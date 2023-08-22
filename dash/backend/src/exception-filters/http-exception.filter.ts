@@ -23,22 +23,28 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     let errorMessage = exception.message;
 
-    const respFromException: any = exception.getResponse();
+
     let data = null;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (typeof respFromException !== 'string' && respFromException?.data) {
+    if (typeof exception.getResponse === 'function') {
+      const respFromException: any = exception.getResponse();
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      data = respFromException?.data;
-    } else if (typeof respFromException !== 'string' && respFromException?.response?.data) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      data = respFromException.response.data;
+      if (typeof respFromException !== 'string' && respFromException?.data) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        data = respFromException?.data;
+      } else if (typeof respFromException !== 'string' && respFromException?.response?.data) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        data = respFromException.response.data;
+      }
     }
 
-    if (exception instanceof BadRequestException && typeof exception.getResponse === 'function' &&
-        (<any>exception.getResponse())?.message) {
+    if (
+      exception instanceof BadRequestException &&
+      typeof exception.getResponse === 'function' &&
+      (<any>exception.getResponse())?.message
+    ) {
       if ((<any>exception.getResponse()).message && Array.isArray((<any>exception.getResponse()).message)) {
         errorMessage = (<any>exception.getResponse()).message?.join(', ');
       }
