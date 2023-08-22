@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { GateKeeperService } from '../../../../../core/services/gate-keeper.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IGatekeeperTemplate} from '../../../../../core/entities/IGatekeeperTemplate';
 import {MatTableDataSource} from '@angular/material/table';
-import {IGateKeeperConstraintDetails} from '../../../../../core/entities/IGateKeeperConstraint';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {AlertService} from '../../../../../core/services/alert.service';
-import {AddCustomConstraintTemplateComponent} from '../add-custom-constraint-template/add-custom-constraint-template.component';
+import {AddEditConstraintTemplateManifestComponent} from '../add-edit-constraint-template-manifest/add-edit-constraint-template-manifest.component';
 import {AddTemplateConstraintComponent} from '../add-template-constraint/add-template-constraint.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {take} from 'rxjs/operators';
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
-import {Authority} from '../../../../../core/enum/Authority';
+import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
+import {IGatekeeperConstraint, IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
 
 @Component({
   selector: 'app-gate-keeper-details',
@@ -20,34 +19,31 @@ import {Authority} from '../../../../../core/enum/Authority';
   styleUrls: ['./gate-keeper-details.component.scss']
 })
 export class GateKeeperDetailsComponent implements OnInit {
-  gatekeeperTemplate: IGatekeeperTemplate;
+  gatekeeperTemplate: IGatekeeperConstraintTemplate;
   constraintCount: number;
   isMobileDevice = false;
   clusterId: number;
   templateName: string;
-  constraintsList: MatTableDataSource<IGateKeeperConstraintDetails>;
+  constraintsList: MatTableDataSource<IGatekeeperConstraint>;
   displayedColumns: string[];
-  rawTemplate: any;
   openapiProperties = [];
   openApiSchema: any;
 
-  constructor(private readonly gatekeeperService: GateKeeperService,
-              private route: ActivatedRoute,
-              private dialog: MatDialog,
-              private alertService: AlertService,
-              private router: Router,
-              private jwtAuthService: JwtAuthService,
-              ) {
+  constructor(
+    private readonly gateKeeperService: GateKeeperService,
+    private readonly gatekeeperService: GatekeeperService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private alertService: AlertService,
+    private router: Router,
+    private jwtAuthService: JwtAuthService,
+  ) {
     this.clusterId = +this.route.parent.snapshot.paramMap.get('id');
     this.templateName = this.route.snapshot.paramMap.get('templateName');
   }
 
   ngOnInit(): void {
-    this.gatekeeperService.gateKeeperTemplateByName(this.clusterId, this.templateName).subscribe(data => {
-      this.gatekeeperTemplate = data;
-    });
-    this.gatekeeperConstraintsByTemplate(this.templateName);
-    this.gateKeeperTemplateByNameRaw();
+    this.getConstraintTemplateDetails();
     if (this.jwtAuthService.isAdmin()) {
       this.displayedColumns = ['name', 'description', 'mode', 'action', 'violations'];
     } else {
@@ -55,24 +51,25 @@ export class GateKeeperDetailsComponent implements OnInit {
     }
   }
 
-  gateKeeperTemplateByNameRaw() {
-    this.gatekeeperService.gateKeeperTemplateByNameRaw(this.clusterId, this.templateName).subscribe(data => {
-      this.rawTemplate = data;
-      const tempData = JSON.parse(data);
-      const tempProperties = tempData.spec.crd.spec.validation.openAPIV3Schema ? tempData.spec.crd.spec.validation.openAPIV3Schema.properties : {};
-      this.openApiSchema = tempProperties;
-      const propertyKeys = Object.keys(tempProperties);
-      for (const key of propertyKeys) {
-        this.openapiProperties.push([key, tempProperties[key].type]);
-      }
+  getConstraintTemplateDetails(excludeConstraints = false) {
+    this.gatekeeperService.getConstraintTemplateByName(this.clusterId, this.templateName, excludeConstraints).subscribe(data => {
+      this.gatekeeperTemplate = data.template;
+
+      const associatedConstraints = data.associatedConstraints ?? [];
+      this.constraintCount = associatedConstraints.length ?? 0;
+      this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(associatedConstraints);
+      this.updateConstraintTemplateProperties();
     });
   }
 
-  gatekeeperConstraintsByTemplate(templateName: string) {
-    this.gatekeeperService.gateKeeperConstraintsByTemplate(this.clusterId, templateName).subscribe(data => {
-      this.constraintCount = data.length ?? 0;
-      this.constraintsList = new MatTableDataSource<IGateKeeperConstraintDetails>(data);
-    });
+  updateConstraintTemplateProperties() {
+    const tempData = this.gatekeeperTemplate;
+    const tempProperties = tempData.spec.crd.spec.validation.openAPIV3Schema ? tempData.spec.crd.spec.validation.openAPIV3Schema.properties : {};
+    this.openApiSchema = tempProperties;
+    const propertyKeys = Object.keys(tempProperties);
+    for (const key of propertyKeys) {
+      this.openapiProperties.push([key, tempProperties[key].type]);
+    }
   }
 
   destroyConstraintTemplate() {
@@ -81,7 +78,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: true,
       data: {
-        functionToRun: this.gatekeeperService.destroyConstraintTemplate(this.clusterId, this.templateName),
         afterRoute: [],
         returnResult: true
       }
@@ -90,25 +86,40 @@ export class GateKeeperDetailsComponent implements OnInit {
     openDestroyTemplateDialog.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-      if (response === true) {
-        this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
-      }
-    });
+        this.gatekeeperService.deleteConstraintTemplate(this.clusterId, this.templateName)
+          .pipe(take(1))
+          .subscribe(() => {
+            this.alertService.success('Constraint Template successfully deleted');
+            this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
+          }, error => {
+            this.alertService.dangerAlertForHTTPError(error, 'GateKeeperDetailsComponent.destroyConstraintTemplate');
+            this.getConstraintTemplateDetails();
+          });
+      });
   }
 
-  editRawTemplate() {
-    const rawTemplate = this.dialog.open(AddCustomConstraintTemplateComponent, {
+  editTemplate() {
+    const editTemplateDialog = this.dialog.open(AddEditConstraintTemplateManifestComponent, {
       width: '1000px',
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {clusterId: this.clusterId, subDir: this.templateName, templateContent: this.rawTemplate, referer: 'gate-keeper-details'}
+      data: {
+        clusterId: `${this.clusterId}`,
+        templateName: this.templateName,
+        templateContent: this.gatekeeperTemplate,
+        subDir: this.templateName,
+        saveTemplate: true,
+        referer: 'gate-keeper-details'
+      }
     });
 
-    rawTemplate.afterClosed()
+    editTemplateDialog.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-      this.gateKeeperTemplateByNameRaw();
+        if (response && response.editedTemplate) {
+          this.getConstraintTemplateDetails(true);
+        }
     });
   }
 
@@ -118,38 +129,45 @@ export class GateKeeperDetailsComponent implements OnInit {
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: { clusterId: this.clusterId, templateName: this.templateName, templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-              openapiProperties: this.openapiProperties, openApiSchema: this.openApiSchema, annotations: this.gatekeeperTemplate.metadata.annotations }
+      data: {
+        clusterId: this.clusterId,
+        templateName: this.templateName,
+        templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
+        openapiProperties: this.openapiProperties,
+        openApiSchema: this.openApiSchema,
+        annotations: this.gatekeeperTemplate.metadata.annotations,
+      }
     });
 
     openAddConstraintTemplate.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-      if (response && !response.cancel) {
-        this.gatekeeperConstraintsByTemplate(this.templateName);
-      }
+        if (response && !response.cancel) {
+          this.getConstraintTemplateDetails();
+        }
     });
   }
 
-  destroyTemplateConstraint(constraint: IGateKeeperConstraintDetails) {
+  destroyTemplateConstraint(constraint: IGatekeeperConstraint) {
     const openDestroyConstraintTemplate = this.dialog.open(AlertDialogComponent, {
       width: '850px',
       height: 'auto',
       closeOnNavigation: true,
       disableClose: false,
-      data: {functionToRun: this.gatekeeperService.destroyGateKeeperTemplateConstraint(this.clusterId, this.templateName, constraint.metadata.name),
-              afterRoute: []
+      data: {
+        functionToRun: this.gateKeeperService.destroyGateKeeperTemplateConstraint(this.clusterId, this.templateName, constraint.metadata.name),
+        afterRoute: [],
       }
     });
 
     openDestroyConstraintTemplate.afterClosed()
       .pipe(take(1))
       .subscribe(() => {
-      this.gatekeeperConstraintsByTemplate(this.templateName);
+        this.getConstraintTemplateDetails();
     });
   }
 
-  editTemplateConstraint(constraint) {
+  editTemplateConstraint(constraint: IGatekeeperConstraint) {
     const openAddConstraintTemplate = this.dialog.open(AddTemplateConstraintComponent, {
       width: '1000px',
       height: 'auto',
@@ -157,24 +175,26 @@ export class GateKeeperDetailsComponent implements OnInit {
       disableClose: false,
       data: {
         isEdit: true, constraint,
-        clusterId: this.clusterId, templateName: this.templateName,
+        clusterId: this.clusterId,
+        templateName: this.templateName,
         templateSpecKind: this.gatekeeperTemplate.spec.crd.spec.names.kind,
-        openapiProperties: this.openapiProperties, annotations: this.gatekeeperTemplate.metadata.annotations,
+        openapiProperties: this.openapiProperties,
+        annotations: this.gatekeeperTemplate.metadata.annotations,
       },
     });
 
     openAddConstraintTemplate.afterClosed()
       .pipe(take(1))
       .subscribe(response => {
-      if (response && !response.cancel) {
-        this.gatekeeperConstraintsByTemplate(this.templateName);
-      }
+        if (response && !response.cancel) {
+          this.getConstraintTemplateDetails();
+        }
     });
   }
 
 
   // @TODO: if needed we will replace ImageIssueMoreDataDialogComponent with a new gatekeeper specific component. For now it works.
-  showViolations(constraint: IGateKeeperConstraintDetails) {
+  showViolations(constraint: IGatekeeperConstraint) {
     this.dialog.open(GatekeeperViolationDialogComponent, {
       width: 'auto',
       data: {violations: constraint.status.violations}

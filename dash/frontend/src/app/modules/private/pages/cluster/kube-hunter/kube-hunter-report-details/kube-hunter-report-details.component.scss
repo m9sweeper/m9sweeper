@@ -10,14 +10,17 @@ mat-card {
 
   .mat-column-severity {
     min-width: 100px;
+    max-width: 105px;
   }
 
   .mat-column-category {
     min-width: 300px;
+    max-width: 400px;
   }
 
   .mat-column-vulnerability {
     min-width: 200px;
+    max-width: 400px;
   }
 
   .mat-column-description {
@@ -26,6 +29,7 @@ mat-card {
 
   .mat-column-additionalInfo {
     min-width: 400px;
+    max-width: 500px;
   }
 
 }

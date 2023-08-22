@@ -68,12 +68,17 @@ mat-card {
   }
 }
 
+$danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
+.error-text {
+  color: map-get($danger-palette, "default") !important;
+}
+
 @mixin snackbar-theme($theme) {
   $color-config: mat.get-color-config($theme);
   $primary-palette: map-get($color-config, primary);
   $success-palette: map-get($color-config, accent);
   $warning-palette: map-get($color-config, warn);
-  $danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
+  $danger-palette: $danger-palette;
 
   .mat-mdc-snack-bar-container {
     .mdc-snackbar__label, .mdc-button__label {

@@ -44,6 +44,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
+import { GatekeeperModule } from './modules/gatekeeper/gatekeeper.module';
 
 
 const myFormatter = info => {
@@ -111,6 +112,7 @@ const myFormatter = info => {
     ImageModule,
     ClusterModule,
     ClusterGroupModule,
+    GatekeeperModule,
     PolicyModule,
     ScannerModule,
     HealthModule,

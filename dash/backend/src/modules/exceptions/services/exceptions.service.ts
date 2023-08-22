@@ -18,10 +18,8 @@ import { MineLoggerService } from '../../shared/services/mine-logger.service';
 export class ExceptionsService {
   constructor(
     private readonly exceptionsDao: ExceptionsDao,
-    @Inject(forwardRef(() => ClusterService))
-    private readonly clusterService: ClusterService,
-    @Inject(forwardRef(() => ExceptionBlockService))
-    private readonly exceptionBlockService: ExceptionBlockService,
+    @Inject(forwardRef(() => ClusterService)) private readonly clusterService: ClusterService,
+    @Inject(forwardRef(() => ExceptionBlockService)) private readonly exceptionBlockService: ExceptionBlockService,
     private readonly email: EmailService,
     private readonly configService: ConfigService,
     private readonly clusterEventService: ClusterEventService,
@@ -33,7 +31,7 @@ export class ExceptionsService {
   // fromClusterValidation : whether the exception is being created from cluster validation controller or not
   // k8sInfo : object being passed here from cluster validation containing some Pod info
   async createException(exceptionInfo: {exception: ExceptionCreateDto, k8sInfo?: ExceptionK8sInfoDto}[],
-                        userId: number = 1,
+                        userId = 1,
                         fromClusterValidation = false, skipEmail = false): Promise<number[]> {
       const createdExceptionIds: number[] = [];
       const createdExceptions: {exception: ExceptionDto, k8sInfo: ExceptionK8sInfoDto}[] = [];

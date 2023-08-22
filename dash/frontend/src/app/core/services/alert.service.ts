@@ -53,7 +53,8 @@ export class AlertService {
     });
   }
 
-  dangerAlertForHTTPError(error, caller, label = 'close', config?: Partial<MatSnackBarConfig>) {
+  dangerAlertForHTTPError(error, caller: string, label = 'x', config?: Partial<MatSnackBarConfig>) {
+    console.log(`error from ${caller}:`, error);
     let message = '';
     if (error?.error?.message) {
       message = error.error.message;
@@ -73,6 +74,7 @@ export class AlertService {
       politeness: 'assertive',  // for the text reader
       panelClass: ['danger-alert'],
       ...this.defaultConfig,
+      duration: 15000,
       ...config,
     });
   }

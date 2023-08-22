@@ -259,7 +259,7 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   handleImageScanResultsIssues(response: IServerResponse<{totalCount: number, list: IImageScanResultIssue[]}>) {
-    if (!response.data?.totalCount) {
+    if (!response.data?.totalCount && !this.lastScanReport.encounterError) {
       this.alertService.warning('There are no issues for the current image and/or scanner');
     }
     const modifiedData = response.data.list ? response.data.list.map(d => {
