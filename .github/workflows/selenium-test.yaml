@@ -28,6 +28,11 @@ on:
         required: false
         type: string
         default: 'calico'
+      load-image-from-artifact:
+        required: false
+        type: boolean
+        default: false
+
 
 jobs:
   run_tests:
@@ -85,8 +90,30 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           timeoutSeconds: 3600
 
+      - name: Download Dash Image Artifact
+        id: download_dash_artifact
+        uses: actions/download-artifact@v3
+        if: steps.dash_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
+        with:
+          name: dash
+          path: /tmp
+
+      - name: Download Trawler Image Artifact
+        id: download_trawler_artifact
+        uses: actions/download-artifact@v3
+        if: steps.trawler_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
+        with:
+          name: trawler
+          path: /tmp
+
+      - name: Load images to minikube
+        if: success() && inputs.load-image-from-artifact == true
+        run: |
+          minikube image load /tmp/dash.tar
+          minikube image load /tmp/trawler.tar
+
       - name: Install m9sweeper
-        if: steps.dash_build_wait.outputs.conclusion == 'success' && steps.trawler_build_wait.outputs.conclusion == 'success'
+        if: success() && steps.dash_build_wait.outputs.conclusion == 'success' && steps.trawler_build_wait.outputs.conclusion == 'success'
         id: install_m9sweeper
         run: |
           helm_upgrade_cmd="helm upgrade m9sweeper m9sweeper/m9sweeper --install --wait --create-namespace --namespace m9sweeper-system \
@@ -111,6 +138,11 @@ jobs:
 
           if [ -n "${{ inputs.trawler-image-version }}" ]; then
             helm_upgrade_cmd="${helm_upgrade_cmd} --set-string trawler.image.tag=\"${{ inputs.trawler-image-version }}\""
+          fi
+
+          if [ -n "${{ inputs.load-image-from-artifact == true }}" ]; then
+            helm_upgrade_cmd="${helm_upgrade_cmd} --set-string dash.image.pullPolicy=\"Never\""
+            helm_upgrade_cmd="${helm_upgrade_cmd} --set-string trawler.image.pullPolicy=\"Never\""
           fi
 
           echo "$helm_upgrade_cmd"
@@ -141,7 +173,7 @@ jobs:
 
       - name: Upload Test Reports
         uses: mikepenz/action-junit-report@v3
-        if: success() || failure()
+        if: (success() || failure()) && steps.install_m9sweeper.outcome != 'skipped'
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
         with:
