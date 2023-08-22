@@ -43,10 +43,10 @@ jobs:
 
       - name: Build & Push Dash (amd64)
         uses: docker/build-push-action@v4
-        if: inputs.build-all-architectures == false
+        if: inputs.build-all-architectures == false && inputs.push-images == true
         with:
           context: .
-          push: ${{ inputs.push-images }}
+          push: true
           provenance: false
           tags: ${{ inputs.dash-image-tags }}
           cache-from: type=gha,scope=build-dash-amd64
@@ -55,15 +55,26 @@ jobs:
 
       - name: Build & Push Dash (all architectures)
         uses: docker/build-push-action@v4
-        if: inputs.build-all-architectures
+        if: inputs.build-all-architectures && inputs.push-images == true
         with:
           context: .
-          push: ${{ inputs.push-images }}
+          push: true
           provenance: false
           platforms: linux/amd64,linux/arm64
           tags: ${{ inputs.dash-image-tags }}
           cache-from: type=gha,scope=build-dash-all-archs
           cache-to: type=gha,mode=max,scope=build-dash-all-archs
+
+      - name: Build & Export Dash
+        uses: docker/build-push-action@v4
+        if: inputs.push-images == false
+        with:
+          context: .
+          push: false
+          provenance: false
+          tags: ${{ inputs.dash-image-tags }}
+          cache-from: type=gha,scope=build-dash-amd64
+          cache-to: type=gha,mode=max,scope=build-dash-amd64
           outputs: type=docker,dest=/tmp/dash.tar
 
       - name: Upload Dash Image Archive
@@ -98,28 +109,38 @@ jobs:
 
       - name: Build & Push Trawler (amd64)
         uses: docker/build-push-action@v4
-        if: inputs.build-all-architectures == false
+        if: inputs.build-all-architectures == false && inputs.push-images == true
         with:
           context: trawler/
-          push: ${{ inputs.push-images }}
+          push: true
           provenance: false
           tags: ${{ inputs.trawler-image-tags }}
           cache-from: type=gha,scope=build-trawler-amd64
           cache-to: type=gha,mode=max,scope=build-trawler-amd64
-          outputs: type=docker,dest=/tmp/trawler.tar
 
       - name: Build & Push Trawler (all architectures)
         uses: docker/build-push-action@v4
-        if: inputs.build-all-architectures
+        if: inputs.build-all-architectures && inputs.push-images == true
         with:
           context: trawler/
-          push: ${{ inputs.push-images }}
+          push: true
           provenance: false
           platforms: linux/amd64,linux/arm64
           tags: ${{ inputs.trawler-image-tags }}
           cache-from: type=gha,scope=build-trawler-all-archs
           cache-to: type=gha,mode=max,scope=build-trawler-all-archs
-          outputs: type=docker,dest=/tmp/trawler.tar
+
+      - name: Build & Export Trawler
+        uses: docker/build-push-action@v4
+        if: inputs.push-images == false
+        with:
+          context: trawler/
+          push: false
+          provenance: false
+          tags: ${{ inputs.trawler-image-tags }}
+          cache-from: type=gha,scope=build-trawler-amd64
+          cache-to: type=gha,mode=max,scope=build-trawler-amd64
+          outputs: type=docker,dest=/tmp/tawler.tar
 
       - name: Upload Trawler Image Archive
         uses: actions/upload-artifact@v3
