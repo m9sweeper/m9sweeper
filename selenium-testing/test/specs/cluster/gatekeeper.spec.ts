@@ -140,17 +140,14 @@ describe('Gatekeeper Page::', () => {
             pending("Gatekeeper is already setup")
         }
 
-        await browser.customScreenshot("before-setup-button-displays");
-
         await $("//p[contains(text(), 'Gatekeeper is installed')]")
             .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Gatekeeper is installed text never displays"});
         
         await browser.customScreenshot("gatekeeper-is-installed-displays");
         
-
         // Wait for the button to display
         // @ts-ignore
-        await $("//button[contains(text(), 'Setup')]")
+        await $("//span[contains(text(), 'Setup')]")
             .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Setup button was not displayed; This suggests that the API is either failing or taking too long"});
 
         await browser.customScreenshot("after-setup-button-displays");
