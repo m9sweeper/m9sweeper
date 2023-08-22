@@ -3,7 +3,7 @@ Hey, thanks for using the awesome-readme-template template.
 If you have any enhancements, then fork this project and create a pull request
 or just open an issue with the label "enhancement".
 
-Testing a change. Testing a change again. Testing once more. Maybe the final time?
+Testing a change. Testing a change again. Testing once more. Maybe the final time? Maybe not.
 
 Don't forget to give this project a star for additional support ;)
 Maybe you can mention me or this repo in the acknowledgements too
