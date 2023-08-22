@@ -1,0 +1,75 @@
+name: Main Workflow
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+    types:
+      - 'opened'
+      - 'synchronize'
+  push:
+    branches:
+      - 'main'
+    tags-ignore:
+      - '*'
+    paths:
+      - 'dash/**'
+      - 'selenium-testing/**'
+      - 'trawler/**'
+      - 'Dockerfile'
+
+jobs:
+  versioning:
+    name: Determine Image Versioning
+    runs-on: self-hosted
+    outputs:
+      dash-image-version: ${{ steps.dash_versioning.outputs.version }}
+      dash-image-tags: ${{ steps.dash_versioning.outputs.tags }}
+      trawler-image-version: ${{ steps.trawler_versioning.outputs.version }}
+      trawler-image-tags: ${{ steps.trawler_versioning.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Dash Versioning
+        id: dash_versioning
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/m9sweeper/dash
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+
+      - name: Trawler Versioning
+        id: trawler_versioning
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/m9sweeper/trawler
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+
+  build_images:
+    name: Build Docker Images
+    uses: ./.github/workflows/docker-build.yaml
+    needs: versioning
+    permissions:
+      packages: write
+    with:
+      dash-image-tags: ${{ needs.versioning.outputs.dash-image-tags }}
+      trawler-image-tags: ${{ needs.versioning.outputs.trawler-image-tags }}
+
+  selenium_testing:
+    name: Run Selenium Tests
+    uses: ./.github/workflows/selenium-test.yaml
+    needs: versioning
+    permissions:
+      checks: write
+    with:
+      kubernetes-version: 'v1.27.3'
+      gatekeeper-version: '3.12.0'
+      helm-version: 'v3.12.0'
+      dash-image-version: ${{ needs.versioning.outputs.dash-image-version }}
+      trawler-image-version: ${{ needs.versioning.outputs.trawler-image-version }}

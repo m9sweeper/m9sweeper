@@ -1,0 +1,249 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  versioning:
+    name: Determine Image Versioning
+    runs-on: self-hosted
+    outputs:
+      dash-image-version: ${{ steps.dash_versioning.outputs.version }}
+      dash-image-tags: ${{ steps.dash_versioning.outputs.tags }}
+      trawler-image-version: ${{ steps.trawler_versioning.outputs.version }}
+      trawler-image-tags: ${{ steps.trawler_versioning.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Dash Versioning
+        id: dash_versioning
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/m9sweeper/dash
+          tags: type=semver,pattern={{version}}
+
+      - name: Trawler Versioning
+        id: trawler_versioning
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/m9sweeper/trawler
+          tags: type=semver,pattern={{version}}
+
+  build_images:
+    name: Build Docker Images
+    uses: ./.github/workflows/docker-build.yaml
+    needs: versioning
+    permissions:
+      packages: write
+    with:
+      dash-image-tags: ${{ needs.versioning.outputs.dash-image-tags }}
+      trawler-image-tags: ${{ needs.versioning.outputs.trawler-image-tags }}
+      build-all-architectures: false
+
+  release_individual_charts:
+    name: Release Individual Charts
+    permissions:
+      contents: write
+    runs-on: self-hosted
+    needs: build_images
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: "src"
+          fetch-depth: 0
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          path: "dest"
+          ref: "gh-pages"
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.12.0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Chart Versioning
+        run: |
+          sed -i 's/tag: latest/tag: '${{ github.ref_name }}'/g' dash/values.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/g' dash/Chart.yaml
+          sed -i 's/appVersion: 0.0.0/appVersion: '${{ github.ref_name }}'/g' dash/Chart.yaml
+          sed -i 's/tag: latest/tag: '${{ github.ref_name }}'/' trawler/values.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/g' trawler/Chart.yaml
+          sed -i 's/appVersion: 0.0.0/appVersion: '${{ github.ref_name }}'/g' trawler/Chart.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/' postgres/Chart.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/' rabbitmq/Chart.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/' kube-bench/Chart.yaml
+          sed -i 's/appVersion: 0.0.0/appVersion: '${{ github.ref_name }}'/' kube-bench/Chart.yaml
+          sed -i 's/version: 0.0.0/version: '${{ github.ref_name }}'/' kube-hunter/Chart.yaml
+          sed -i 's/appVersion: 0.0.0/appVersion: '${{ github.ref_name }}'/' kube-hunter/Chart.yaml
+        working-directory: src/manifests/charts
+
+      - name: Package Dash Chart
+        run: helm package src/manifests/charts/dash --dependency-update --destination dest/
+
+      - name: Package Trawler Chart
+        run: helm package src/manifests/charts/trawler --dependency-update --destination dest/
+
+      - name: Package Postgres Chart
+        run: helm package src/manifests/charts/postgres --dependency-update --destination dest/
+
+      - name: Package RabbitMQ Chart
+        run: helm package src/manifests/charts/rabbitmq --dependency-update --destination dest/
+
+      - name: Package kube-bench Chart
+        run: helm package src/manifests/charts/kube-bench --dependency-update --destination dest/
+
+      - name: Package kube-hunter Chart
+        run: helm package src/manifests/charts/kube-hunter --dependency-update --destination dest/
+
+      - name: Update Chart Index
+        working-directory: dest
+        run: |
+          helm repo index --url https://m9sweeper.github.io/m9sweeper --merge index.yaml .
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: auto-commit
+        with:
+          repository: dest
+          branch: gh-pages
+          file_pattern: "index.yaml *.tgz *.md"
+          commit_message: Release individual charts for v${{ github.ref_name }}
+
+      - name: Wait for deploy
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        if: ${{ steps.auto-commit.outputs.changes_detected }}
+        id: wait-for-deploy
+        with:
+          ref: ${{ steps.auto-commit.outputs.commit_hash }}
+          checkName: 'deploy'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  release_umbrella_chart:
+    name: Release Umbrella Chart
+    permissions:
+      contents: write
+    runs-on: self-hosted
+    needs: release_individual_charts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: "src"
+          fetch-depth: 0
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          path: "dest"
+          ref: "gh-pages"
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 3.12.0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Chart Versioning
+        run: |
+          sed -i '0,/version: 0.0.0/s//version: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/dash_version: 0.0.0/version: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/trawler_version: 0.0.0/version: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/rabbitmq_version: 0.0.0/version: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/postgres_version: 0.0.0/version: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/appVersion: 0.0.0/appVersion: '${{ github.ref_name }}'/' Chart.yaml
+          sed -i 's/tag: 0.0.0/tag: '${{ github.ref_name }}'/g' values.yaml
+        working-directory: src/manifests/charts/m9sweeper
+
+      - name: Add m9sweeper repo
+        run: |
+          helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper
+          helm repo update
+
+      - name: Package m9sweeper Chart
+        run: helm package src/manifests/charts/m9sweeper --dependency-update --destination dest/
+
+      - name: Update Chart Index
+        working-directory: dest
+        run: |
+          helm repo index --url https://m9sweeper.github.io/m9sweeper --merge index.yaml .
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: auto-commit
+        with:
+          repository: dest
+          branch: gh-pages
+          file_pattern: "index.yaml *.tgz *.md"
+          commit_message: Release umbrella chart for v${{ github.ref_name }}
+
+      - name: Wait for deploy
+        uses: fountainhead/action-wait-for-check@v1.1.0
+        if: ${{ steps.auto-commit.outputs.changes_detected }}
+        id: wait-for-deploy
+        with:
+          ref: ${{ steps.auto-commit.outputs.commit_hash }}
+          checkName: 'deploy'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test_matrix:
+    name: Run Selenium Tests
+    uses: ./.github/workflows/selenium-test.yaml
+    needs: release_umbrella_chart
+    permissions:
+      checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s-version: ['v1.19.16', 'v1.20.15', 'v1.21.14', 'v1.22.17', 'v1.23.17', 'v1.24.14', 'v1.25.10', 'v1.26.5', 'v1.27.3']
+        include:
+          - k8s-version: 'v1.19.16'
+            gatekeeper-version: '3.9.2'
+            helm-version: 'v3.7.2'
+            cni: 'auto'
+
+          - k8s-version: 'v1.20.15'
+            gatekeeper-version: '3.9.2'
+            helm-version: 'v3.8.2'
+
+          - k8s-version: 'v1.21.14'
+            gatekeeper-version: '3.10.0'
+            helm-version: 'v3.9.4'
+
+          - k8s-version: 'v1.22.17'
+            gatekeeper-version: '3.11.0'
+            helm-version: 'v3.10.3'
+
+          - k8s-version: 'v1.23.17'
+            gatekeeper-version: '3.11.0'
+            helm-version: 'v3.11.3'
+
+          - k8s-version: 'v1.24.15'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.11.3'
+
+          - k8s-version: 'v1.25.10'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
+
+          - k8s-version: 'v1.26.5'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
+
+          - k8s-version: 'v1.27.3'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
+    with:
+      kubernetes-version: ${{ matrix.k8s-version }}
+      gatekeeper-version: ${{ matrix.gatekeeper-version }}
+      helm-version: ${{ matrix.helm-version }}
+      m9sweeper-chart-version: ${{ github.ref_name }}
+      cni: ${{ matrix.cni || 'calico' }}
