@@ -76,8 +76,8 @@ export class GateKeeperComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: data => {
-          // this.gatekeeperConstraintTemplates = data;
-          // this.gatekeeperTemplates = new MatTableDataSource<IGatekeeperConstraintTemplate>(data);
+          this.gatekeeperConstraintTemplates = data;
+          this.gatekeeperTemplates = new MatTableDataSource<IGatekeeperConstraintTemplate>(data);
           this.gatekeeperTemplates.paginator = this.paginator;
         },
         error: err => {

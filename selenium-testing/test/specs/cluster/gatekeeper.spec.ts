@@ -142,6 +142,12 @@ describe('Gatekeeper Page::', () => {
 
         await browser.customScreenshot("before-setup-button-displays");
 
+        await $("//p[contains(text(), 'Gatekeeper is installed')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Gatekeeper is installed text never displays"});
+        
+        await browser.customScreenshot("gatekeeper-is-installed-displays");
+        
+
         // Wait for the button to display
         // @ts-ignore
         await $("//button[contains(text(), 'Setup')]")
