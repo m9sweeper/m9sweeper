@@ -142,7 +142,9 @@ describe('Gatekeeper Page::', () => {
 
         // Locate the setup button and click it
         // @ts-ignore
-        await $("//button[contains(text(), 'Setup')]").customClick("setup");
+        await $("//button[contains(text(), 'Setup')]")
+            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Setup button was not displayed; This suggests that the API is either failing or taking too long"})
+            .customClick("setup");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//app-add-constraint-dialog")).toBePresent(
             {message: "The dialog for adding a constraint template should be visible"}
         );
