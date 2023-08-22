@@ -140,7 +140,7 @@ jobs:
             helm_upgrade_cmd="${helm_upgrade_cmd} --set-string trawler.image.tag=\"${{ inputs.trawler-image-version }}\""
           fi
 
-          if [ -n "${{ inputs.load-image-from-artifact == true }}" ]; then
+          if [ "${{ inputs.load-image-from-artifact }}" == "true" ]; then
             helm_upgrade_cmd="${helm_upgrade_cmd} --set-string dash.image.pullPolicy=\"Never\""
             helm_upgrade_cmd="${helm_upgrade_cmd} --set-string trawler.image.pullPolicy=\"Never\""
           fi
