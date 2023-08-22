@@ -141,7 +141,7 @@ jobs:
           tags: ${{ inputs.trawler-image-tags }}
           cache-from: type=gha,scope=build-trawler-amd64
           cache-to: type=gha,mode=max,scope=build-trawler-amd64
-          outputs: type=docker,dest=/tmp/tawler.tar
+          outputs: type=docker,dest=/tmp/trawler.tar
 
       - name: Upload Trawler Image Archive
         uses: actions/upload-artifact@v3
