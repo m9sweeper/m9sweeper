@@ -51,7 +51,6 @@ jobs:
           tags: ${{ inputs.dash-image-tags }}
           cache-from: type=gha,scope=build-dash-amd64
           cache-to: type=gha,mode=max,scope=build-dash-amd64
-          outputs: type=docker,dest=/tmp/dash.tar
 
       - name: Build & Push Dash (all architectures)
         uses: docker/build-push-action@v4
