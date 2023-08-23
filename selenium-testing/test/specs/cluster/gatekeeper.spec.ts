@@ -142,8 +142,9 @@ describe('Gatekeeper Page::', () => {
 
         // Wait for the button to display
         // @ts-ignore
-        await $("//span[contains(text(), 'Setup')]")
-            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Setup button was not displayed; This suggests that the API is either failing or taking too long"});
+        await $("//span[contains(text(), 'Setup')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "Setup button was not displayed; This suggests that the API is either failing or taking too long"}
+        );
 
         // Locate the setup button and click it
         // @ts-ignore
@@ -152,11 +153,21 @@ describe('Gatekeeper Page::', () => {
             {message: "The dialog for adding a constraint template should be visible"}
         );
 
+        // Wait for the expansion panel to be available
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-expansion-panel//span[contains(text(), 'general')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "The ability to expand the general category should be present"}
+        );
+
         // Expand the general dropdown menu in the constraint library
         // @ts-ignore
         await $("//div[contains(@class, 'cdk-overlay-container')]//mat-expansion-panel//span[contains(text(), 'general')]").customClick("expand-general");
         expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-expansion-panel/div[contains(@class, 'mat-expansion-panel-content') and contains(@style, 'visibility: visible;')]")).toBePresent(
             {message: "The general section should be expanded to view the constraint templates within"}
+        );
+
+        // Wait for the ability to select the containerlimits option to be available
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "The ability to select the containerlimits constraint template should be present"}
         );
 
         // Enable the container limits constraint template
@@ -175,8 +186,9 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Wait for the alert stating the template was deployed successfully
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Templates were deployed successfully')]")
-            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Templates were deployed successfully alert did not appear, this suggests the constraint template was not created successfully."});
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Templates were deployed successfully')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "Templates were deployed successfully alert did not appear, this suggests the constraint template was not created successfully."}
+        );
 
         // Verify the status text is now showing Gatekeeper as setup
         expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
@@ -191,15 +203,14 @@ describe('Gatekeeper Page::', () => {
 
     // Set up the constraint template
     it('4 Setup Constraint Template', async () => {
-        // Verify that the constraint template exists
-        const templateListItem = await $("//mat-table//mat-row[contains(normalize-space(), 'k8scontainerlimits')]");
-        expect(templateListItem).toBePresent(
-            {message: "The k8scontainerlimits constraint should be present"}
+        // Wait for the constrain template to appear in the list
+        await $("//mat-table//mat-row[contains(normalize-space(), 'k8scontainerlimits')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "The templated added in the above test should be present"}
         );
 
         // Click on the constraint template to open the constraint template editing page
         // @ts-ignore
-        await templateListItem.customClick("open-edit-page");
+        await $("//mat-table//mat-row[contains(normalize-space(), 'k8scontainerlimits')]").customClick("open-edit-page");
         expect(browser).toHaveUrl(
             buildUrl('private/clusters/1/gatekeeper/k8scontainerlimits'),
             {message: "m9sweeper should be displaying the k8scontainerlimits gatekeeper constraint page"}
