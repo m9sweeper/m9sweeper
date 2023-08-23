@@ -232,11 +232,11 @@ jobs:
 
           - k8s-version: 'v1.25.12'
             gatekeeper-version: '3.12.0'
-            helm-version: 'v3.12.0'
+            helm-version: 'v3.13.0'
 
           - k8s-version: 'v1.26.7'
             gatekeeper-version: '3.12.0'
-            helm-version: 'v3.12.0'
+            helm-version: 'v3.13.0'
 
           - k8s-version: 'v1.27.4'
             gatekeeper-version: '3.12.0'
@@ -244,7 +244,7 @@ jobs:
 
           - k8s-version: 'v1.28.0'
             gatekeeper-version: '3.12.0'
-            helm-version: 'v3.12.0'
+            helm-version: 'v3.13.0'
     with:
       kubernetes-version: ${{ matrix.k8s-version }}
       gatekeeper-version: ${{ matrix.gatekeeper-version }}
