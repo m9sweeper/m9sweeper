@@ -2,8 +2,21 @@ apiVersion: v1
 entries:
   dash:
   - apiVersion: v2
+    appVersion: 1.4.1
+    created: "2023-08-23T03:52:34.775995087Z"
+    description: A Helm chart for the m9sweeper Dashboard and API
+    digest: 2e3ea4016a68b25a5b6718e3ef90418c71395e277308dfad5f6f4a963da25c5c
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: dash
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/dash-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
     appVersion: 1.4.0
-    created: "2023-08-08T14:44:22.573318-05:00"
+    created: "2023-08-23T03:52:34.774403988Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: a2df77e054af4dffb71d75af9e5ac57fe77be96c78104a7777b973a2c7037639
     maintainers:
@@ -16,7 +29,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.07184-05:00"
+    created: "2023-08-23T03:52:34.77255643Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 8b76b5f4d4f1dfec44a3af3df31f9089249aeead88f1d4f6d2d7c2aa955e990b
     maintainers:
@@ -29,7 +42,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 1.3.4
-    created: "2023-06-28T01:27:07.06746-05:00"
+    created: "2023-08-23T03:52:34.771667454Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 17af782da96257aa925340a4cbd44070bf03508d64fdaceae49424d84e20c402
     maintainers:
@@ -42,7 +55,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2023-06-28T01:27:07.066742-05:00"
+    created: "2023-08-23T03:52:34.770696207Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 840c873412197e18a97e90c97e108ee1ee7cf835537deb978b530ea4881bb51a
     maintainers:
@@ -55,7 +68,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2023-06-28T01:27:07.066081-05:00"
+    created: "2023-08-23T03:52:34.769785423Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: e7faa81a561274fc3beffa7a063f299595319157bb6d0a997d88e7c40f6dda44
     maintainers:
@@ -68,7 +81,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-06-28T01:27:07.065456-05:00"
+    created: "2023-08-23T03:52:34.768788881Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 95fdf434856a59cf63f25b6679996333b3adaa80aad0cb64b9cc5165bde7e1d3
     maintainers:
@@ -81,7 +94,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2023-06-28T01:27:07.064857-05:00"
+    created: "2023-08-23T03:52:34.767819549Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 50916296340fc8226bf362d1e8f9903070333c1533f84d47b9c9ec1f0d888c30
     maintainers:
@@ -94,7 +107,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2023-06-28T01:27:07.064222-05:00"
+    created: "2023-08-23T03:52:34.766921263Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 9a3729b495c8b91036fe84ba71b7b58844104df552de4ecaca6407754901c680
     maintainers:
@@ -107,7 +120,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-06-28T01:27:07.063544-05:00"
+    created: "2023-08-23T03:52:34.765857641Z"
     description: A Helm chart for the m9sweeper Dashboard and API
     digest: 02ef314572ab50155db793de3fe0681a478e4f79d2ec076fceead68083a5b033
     maintainers:
@@ -120,8 +133,23 @@ entries:
     version: 1.2.0
   kube-bench:
   - apiVersion: v2
+    appVersion: 1.4.1
+    created: "2023-08-23T03:52:34.783136812Z"
+    description: A Helm chart for kube-bench in m9sweeper
+    digest: 2340fe02286c9cfbe0505b00a47c33c3abdb467553ce5fc25b207886ee4a03a6
+    home: https://m9sweeper.io/
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: kube-bench
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/kube-bench-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
     appVersion: 0.6.17
-    created: "2023-08-08T14:44:22.581725-05:00"
+    created: "2023-08-23T03:52:34.781470533Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 8a219e1cc782b812eef013e09575a58b8b0415950bf9c7a64b228964c3ea1b37
     home: https://m9sweeper.io/
@@ -136,7 +164,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.075605-05:00"
+    created: "2023-08-23T03:52:34.780861117Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: b7f4a8647363b21be9e5ec0789a543f6a3cbef3414b56af6d4dc0d5652a36319
     home: https://m9sweeper.io/
@@ -151,7 +179,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 1.3.4
-    created: "2023-06-28T01:27:07.075058-05:00"
+    created: "2023-08-23T03:52:34.780329545Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: b2687fd40977f0a6b150770097de7e9e82eac4c4f7f26b9dd75761aad27de256
     home: https://m9sweeper.io/
@@ -166,7 +194,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2023-06-28T01:27:07.074607-05:00"
+    created: "2023-08-23T03:52:34.779746051Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 255dd71e248b73901657183dd0f5859c8b75984f7cd89a4039dcf6162ac298a3
     home: https://m9sweeper.io/
@@ -181,7 +209,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2023-06-28T01:27:07.074158-05:00"
+    created: "2023-08-23T03:52:34.77913325Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: e55e145824627cbeb2ec5403ea5b7c3f7c91fff88994ea2c2fefb1568fc2c612
     home: https://m9sweeper.io/
@@ -196,7 +224,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-06-28T01:27:07.073704-05:00"
+    created: "2023-08-23T03:52:34.778496534Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 576de7113c051f78c5533b467359c59095308155149e847416bae08a78bc767f
     home: https://m9sweeper.io/
@@ -211,7 +239,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2023-06-28T01:27:07.073247-05:00"
+    created: "2023-08-23T03:52:34.777847036Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 85ac53cc773bc4e0dc698991ba3c902439a214856d74bd7f29f5b4b14954b772
     home: https://m9sweeper.io/
@@ -226,7 +254,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2023-06-28T01:27:07.072791-05:00"
+    created: "2023-08-23T03:52:34.777259743Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 0115c8bb3bf28dbff2c27f90292a8087c6bd1b13ea581561e3cccaf69a016d84
     home: https://m9sweeper.io/
@@ -241,7 +269,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-06-28T01:27:07.072324-05:00"
+    created: "2023-08-23T03:52:34.7766505Z"
     description: A Helm chart for kube-bench in m9sweeper
     digest: 31b249b380f4b6723af3d00e022cc70c94c6df910de8ae17b5c9dac26659b6af
     home: https://m9sweeper.io/
@@ -256,8 +284,23 @@ entries:
     version: 1.2.0
   kube-hunter:
   - apiVersion: v2
+    appVersion: 1.4.1
+    created: "2023-08-23T03:52:34.787032007Z"
+    description: A Helm chart for kube-hunter in m9sweeper
+    digest: db0db2d151edef320a8a06847d52f32df6e39734f40954ba2125c80b9693aea5
+    home: https://m9sweeper.io/
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: kube-hunter
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/kube-hunter-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
     appVersion: 0.6.8
-    created: "2023-08-08T14:44:22.585615-05:00"
+    created: "2023-08-23T03:52:34.786654887Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: 7dfead11c19b94b4ccb908c9766a1f663a926afff2b44b3ea346094f42b4b40f
     home: https://m9sweeper.io/
@@ -272,7 +315,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.079894-05:00"
+    created: "2023-08-23T03:52:34.786268737Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: ab675d82d39de82570305a542fc0b0cc980362f6eeaf8e0662b56e08a78dcf3d
     home: https://m9sweeper.io/
@@ -287,7 +330,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 1.3.4
-    created: "2023-06-28T01:27:07.079111-05:00"
+    created: "2023-08-23T03:52:34.78584575Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: afbde80b70e47b6b28087fbcaa9f8f7d9cf3db386bb7772f1c5d3aff5394a8b7
     home: https://m9sweeper.io/
@@ -302,7 +345,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2023-06-28T01:27:07.077695-05:00"
+    created: "2023-08-23T03:52:34.785464262Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: 10351da7816b299742573dac3f00de49e6f9bbb143ba342bc0b8d707ef57658d
     home: https://m9sweeper.io/
@@ -317,7 +360,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2023-06-28T01:27:07.077328-05:00"
+    created: "2023-08-23T03:52:34.785084177Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: 6f55cbbcd9706206506b2e1dbae8be6ccef4f7a0ca3b1c6aada38db2bdf6c696
     home: https://m9sweeper.io/
@@ -332,7 +375,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-06-28T01:27:07.07696-05:00"
+    created: "2023-08-23T03:52:34.784699088Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: df297791481e0437640328040b5cd1be93255b834af333bf98392dcbdf0a0d23
     home: https://m9sweeper.io/
@@ -347,7 +390,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2023-06-28T01:27:07.076604-05:00"
+    created: "2023-08-23T03:52:34.784316615Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: 3baccbec40b351f58ec0c0f9bd21dfaa177dfd24ce5f598d8d729e76d70e3261
     home: https://m9sweeper.io/
@@ -362,7 +405,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2023-06-28T01:27:07.076279-05:00"
+    created: "2023-08-23T03:52:34.783929924Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: b9a1b1e9680faf192f639728073f1bd9cd37111c88a6b35278efacc410dbfc87
     home: https://m9sweeper.io/
@@ -377,7 +420,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-06-28T01:27:07.075936-05:00"
+    created: "2023-08-23T03:52:34.783545401Z"
     description: A Helm chart for kube-hunter in m9sweeper
     digest: 655213f2d54531cb0bbd1a0ba4727846eb4d9a9ec23b1e024e5188c5df13c64b
     home: https://m9sweeper.io/
@@ -393,7 +436,7 @@ entries:
   m9sweeper:
   - apiVersion: v2
     appVersion: 1.4.0
-    created: "2023-08-08T15:29:41.985641-05:00"
+    created: "2023-08-23T03:52:34.808656145Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -431,7 +474,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.096334-05:00"
+    created: "2023-08-23T03:52:34.806252168Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -469,7 +512,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 1.3.4
-    created: "2023-06-28T01:27:07.094503-05:00"
+    created: "2023-08-23T03:52:34.803475589Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -507,7 +550,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2023-06-28T01:27:07.092646-05:00"
+    created: "2023-08-23T03:52:34.801134855Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -545,7 +588,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2023-06-28T01:27:07.090755-05:00"
+    created: "2023-08-23T03:52:34.7990483Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -583,7 +626,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-06-28T01:27:07.08709-05:00"
+    created: "2023-08-23T03:52:34.796761052Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -621,7 +664,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2023-06-28T01:27:07.085308-05:00"
+    created: "2023-08-23T03:52:34.794552913Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -659,7 +702,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2023-06-28T01:27:07.083558-05:00"
+    created: "2023-08-23T03:52:34.791644721Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -697,7 +740,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-06-28T01:27:07.081794-05:00"
+    created: "2023-08-23T03:52:34.789339041Z"
     dependencies:
     - name: dash
       repository: https://m9sweeper.github.io/m9sweeper
@@ -736,7 +779,26 @@ entries:
   postgresql:
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-08-08T14:44:22.611736-05:00"
+    created: "2023-08-23T03:52:34.815758206Z"
+    description: PostgreSQL is an open-source object-relational database management
+      system (ORDBMS) emphasizing extensibility and technical standards compliance.
+    digest: 2a27d7d4c9c0526e9eee0a3cc844bd1378d2f0cef891e9d6a09f231719f131f8
+    home: https://www.postgresql.org/
+    icon: https://en.wikipedia.org/wiki/PostgreSQL#/media/File:Postgresql_elephant.svg
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    maintainers:
+    - email: support@m9sweeper.io
+      name: m9sweeper Support
+    name: postgresql
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/postgresql-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
+    appVersion: "11.10"
+    created: "2023-08-23T03:52:34.81476019Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: 56ea915045ac633c5404fc19c999758361e88a932d794606290557e738b43167
@@ -755,7 +817,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.101693-05:00"
+    created: "2023-08-23T03:52:34.813708085Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: 337a4b754879366d19a383931ac245408285fa05f558c196785072f851b2523f
@@ -774,7 +836,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.101142-05:00"
+    created: "2023-08-23T03:52:34.813075717Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: a7ed558b0cf44ef92833bf26d03cabcca49a933f24e03732468b40af199e41e5
@@ -793,7 +855,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.100288-05:00"
+    created: "2023-08-23T03:52:34.812459433Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: e6952923e74fd4d956f6a719d843949ce52d8eff8186c0754af0d0d581dce1f4
@@ -812,7 +874,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.099091-05:00"
+    created: "2023-08-23T03:52:34.81184074Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: b10c0982c9af1ce5a6954559367b0ea23c90c09b5c91bded07d62eb6c46bf4aa
@@ -831,7 +893,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.098536-05:00"
+    created: "2023-08-23T03:52:34.811222667Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: efa55deaefcb74c7ccc1389356c1e2a7a0659b21547e8a9c612b47c08cffa1a1
@@ -850,7 +912,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.097986-05:00"
+    created: "2023-08-23T03:52:34.810601044Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: 9a84682320dd5e1635d26931f9f77a3250405eef7e2eda9122b3ea66ab0ee9e2
@@ -869,7 +931,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.097434-05:00"
+    created: "2023-08-23T03:52:34.809920568Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: 0c4d61895df93601e10cfd3b3ca657992aa66024fd27fc73bf7e6f842accf05f
@@ -888,7 +950,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: "11.10"
-    created: "2023-06-28T01:27:07.096885-05:00"
+    created: "2023-08-23T03:52:34.809285633Z"
     description: PostgreSQL is an open-source object-relational database management
       system (ORDBMS) emphasizing extensibility and technical standards compliance.
     digest: 921b3282c41f73bb55a3e34c49529ff4685d85a919072cf98dc48b0dd590e2c7
@@ -908,7 +970,20 @@ entries:
   rabbitmq:
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-08-08T14:44:22.61539-05:00"
+    created: "2023-08-23T03:52:34.818828679Z"
+    description: A Helm chart for the RabbitMQ
+    digest: 9637c286c52869960d405f45835b26a84f55391391aaec916a39ffebd33f2b3a
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: rabbitmq
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/rabbitmq-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
+    appVersion: 3.8.34
+    created: "2023-08-23T03:52:34.81852421Z"
     description: A Helm chart for the RabbitMQ
     digest: b72952b789925865916044acb43515aeb5a2266f36518b70b595f2f484aeb8d8
     maintainers:
@@ -921,7 +996,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.103601-05:00"
+    created: "2023-08-23T03:52:34.818216622Z"
     description: A Helm chart for the RabbitMQ
     digest: dcd46ce708afe0b9dc1481af242f5c7be87d03fb460c2528ab8eba0278e8372a
     maintainers:
@@ -934,7 +1009,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.103601-05:00"
+    created: "2023-08-23T03:52:34.817872538Z"
     description: A Helm chart for the RabbitMQ
     digest: b394e6a0b9dd4b355b2b6a78637215b1c5f2d0387b02ea3617dc5b5143269f83
     maintainers:
@@ -947,7 +1022,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.10326-05:00"
+    created: "2023-08-23T03:52:34.8175857Z"
     description: A Helm chart for the RabbitMQ
     digest: c1e42e3eead7b2953189b9d3207e98d51a4ee7fd81e54142f0012e1e34bed87f
     maintainers:
@@ -960,7 +1035,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.103004-05:00"
+    created: "2023-08-23T03:52:34.81729246Z"
     description: A Helm chart for the RabbitMQ
     digest: ff8aaa836ad63550063eff36e4151ca91e44ee7beb2ef2a059b146e1566b7a34
     maintainers:
@@ -973,7 +1048,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.10275-05:00"
+    created: "2023-08-23T03:52:34.817005616Z"
     description: A Helm chart for the RabbitMQ
     digest: 06eadfe0f2782cc6c17e5a416f5c2831c4aa48938b0718121d21dc576d0b6a02
     maintainers:
@@ -986,7 +1061,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.102494-05:00"
+    created: "2023-08-23T03:52:34.816708388Z"
     description: A Helm chart for the RabbitMQ
     digest: 29dd1aba67ee4bd8958597a265cefa0248c0983d6715cff562f24166adb7dac5
     maintainers:
@@ -999,7 +1074,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.102236-05:00"
+    created: "2023-08-23T03:52:34.81640747Z"
     description: A Helm chart for the RabbitMQ
     digest: b1c5189bf9898ef431d1aef2a509d100b065a425e5e3a3eecd067bf28aa0afd6
     maintainers:
@@ -1012,7 +1087,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 3.8.34
-    created: "2023-06-28T01:27:07.101969-05:00"
+    created: "2023-08-23T03:52:34.81608118Z"
     description: A Helm chart for the RabbitMQ
     digest: 71d05932b650e61f30ec0757634d54d95b5703bcac96b1ddecdf455edf0da23d
     maintainers:
@@ -1025,8 +1100,22 @@ entries:
     version: 1.2.0
   trawler:
   - apiVersion: v2
+    appVersion: 1.4.1
+    created: "2023-08-23T03:52:34.821876536Z"
+    description: A Helm chart for the M9sweeper Trawler
+    digest: 598231fdb4c65c366ddd1ce70738cbeb0e866627bb4e308ead3d3b64eed5056d
+    home: https://m9sweeper.io
+    maintainers:
+    - email: info@m9sweeper.io
+      name: m9sweeper Support Team
+    name: trawler
+    type: application
+    urls:
+    - https://m9sweeper.github.io/m9sweeper/trawler-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v2
     appVersion: 1.4.0
-    created: "2023-08-08T14:44:22.618866-05:00"
+    created: "2023-08-23T03:52:34.821573518Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: 1e3dc3e5e95e2e204df357dfd451e4e3fa5fed3a6d931112973d781db74a2517
     home: https://m9sweeper.io
@@ -1040,7 +1129,7 @@ entries:
     version: 1.4.0
   - apiVersion: v2
     appVersion: 1.3.5
-    created: "2023-06-28T01:27:07.106039-05:00"
+    created: "2023-08-23T03:52:34.821269214Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: b25f69bae71c143c1de55315c80c478fbfc965eafc5a8f0db40961e2c94def44
     home: https://m9sweeper.io
@@ -1054,7 +1143,7 @@ entries:
     version: 1.3.5
   - apiVersion: v2
     appVersion: 1.3.4
-    created: "2023-06-28T01:27:07.105767-05:00"
+    created: "2023-08-23T03:52:34.820963117Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: 505bdd862f4f2ee21beb984517dbdcb3f6fcf6af236151838c668c2c4c23aa3c
     home: https://m9sweeper.io
@@ -1068,7 +1157,7 @@ entries:
     version: 1.3.4
   - apiVersion: v2
     appVersion: 1.3.2
-    created: "2023-06-28T01:27:07.105493-05:00"
+    created: "2023-08-23T03:52:34.820653484Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: ebed8ffa7743dc774a3bc5ee37efe07032e35e31255ddc9bdd3ec0efdebdc4b4
     home: https://m9sweeper.io
@@ -1082,7 +1171,7 @@ entries:
     version: 1.3.2
   - apiVersion: v2
     appVersion: 1.3.1
-    created: "2023-06-28T01:27:07.105224-05:00"
+    created: "2023-08-23T03:52:34.820349646Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: 2842090bd3b2d32481d2d4ea8d054c4858c9c523eb4627208ea9c49d96a11555
     home: https://m9sweeper.io
@@ -1096,7 +1185,7 @@ entries:
     version: 1.3.1
   - apiVersion: v2
     appVersion: 1.3.0
-    created: "2023-06-28T01:27:07.104949-05:00"
+    created: "2023-08-23T03:52:34.820044991Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: 39850123a350c39a6c6f3812a9b1c0da33e6942642156c18e934604bb9ce19c8
     home: https://m9sweeper.io
@@ -1110,7 +1199,7 @@ entries:
     version: 1.3.0
   - apiVersion: v2
     appVersion: 1.2.2
-    created: "2023-06-28T01:27:07.104679-05:00"
+    created: "2023-08-23T03:52:34.819743612Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: d39e195b1ce69b1148a7e2191c9359d446608cbc7a8fea0747f4099ff7d44d43
     home: https://m9sweeper.io
@@ -1124,7 +1213,7 @@ entries:
     version: 1.2.2
   - apiVersion: v2
     appVersion: 1.2.1
-    created: "2023-06-28T01:27:07.104407-05:00"
+    created: "2023-08-23T03:52:34.81944215Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: aaf7b229a1c8f03cda48bbf8fed22f566bc3cc4dcbad447fcc174596c3ed45b4
     home: https://m9sweeper.io
@@ -1138,7 +1227,7 @@ entries:
     version: 1.2.1
   - apiVersion: v2
     appVersion: 1.2.0
-    created: "2023-06-28T01:27:07.104135-05:00"
+    created: "2023-08-23T03:52:34.819140828Z"
     description: A Helm chart for the M9sweeper Trawler
     digest: a0113853972f44a71ef3872ee9494df88b5524d44cf72de79140db24fd35e218
     home: https://m9sweeper.io
@@ -1150,4 +1239,4 @@ entries:
     urls:
     - https://m9sweeper.github.io/m9sweeper/trawler-1.2.0.tgz
     version: 1.2.0
-generated: "2023-08-08T15:29:41.95217-05:00"
+generated: "2023-08-23T03:52:34.764553152Z"
