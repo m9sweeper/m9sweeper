@@ -73,7 +73,7 @@ jobs:
     permissions:
       checks: write
     with:
-      kubernetes-version: 'v1.27.3'
+      kubernetes-version: 'v1.27.4'
       gatekeeper-version: '3.12.0'
       helm-version: 'v3.12.0'
       dash-image-version: ${{ needs.versioning.outputs.dash-image-version }}

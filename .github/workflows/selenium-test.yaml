@@ -6,7 +6,7 @@ on:
       kubernetes-version:
         required: false
         type: string
-        default: 'v1.27.3'
+        default: 'v1.27.4'
       gatekeeper-version:
         required: false
         type: string

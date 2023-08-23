@@ -203,7 +203,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        k8s-version: ['v1.19.16', 'v1.20.15', 'v1.21.14', 'v1.22.17', 'v1.23.17', 'v1.24.14', 'v1.25.10', 'v1.26.5', 'v1.27.3']
+        k8s-version: ['v1.19.16', 'v1.20.15', 'v1.21.14', 'v1.22.17', 'v1.23.17', 'v1.24.16', 'v1.25.12', 'v1.26.7', 'v1.27.4', 'v1.28.0']
         include:
           - k8s-version: 'v1.19.16'
             gatekeeper-version: '3.9.2'
@@ -226,19 +226,23 @@ jobs:
             gatekeeper-version: '3.11.0'
             helm-version: 'v3.11.3'
 
-          - k8s-version: 'v1.24.15'
+          - k8s-version: 'v1.24.16'
             gatekeeper-version: '3.12.0'
             helm-version: 'v3.11.3'
 
-          - k8s-version: 'v1.25.10'
+          - k8s-version: 'v1.25.12'
             gatekeeper-version: '3.12.0'
             helm-version: 'v3.12.0'
 
-          - k8s-version: 'v1.26.5'
+          - k8s-version: 'v1.26.7'
             gatekeeper-version: '3.12.0'
             helm-version: 'v3.12.0'
 
-          - k8s-version: 'v1.27.3'
+          - k8s-version: 'v1.27.4'
+            gatekeeper-version: '3.12.0'
+            helm-version: 'v3.12.0'
+
+          - k8s-version: 'v1.28.0'
             gatekeeper-version: '3.12.0'
             helm-version: 'v3.12.0'
     with:
