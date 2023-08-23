@@ -81,6 +81,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           timeoutSeconds: 3600
 
+      - name: Download Trawler Image Artifact
+        id: download_trawler_artifact
+        uses: actions/download-artifact@v3
+        if: steps.trawler_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
+        with:
+          name: trawler
+          path: /tmp
+
       - name: Wait for Dash Build
         uses: fountainhead/action-wait-for-check@v1.1.0
         id: dash_build_wait
@@ -96,14 +104,6 @@ jobs:
         if: steps.dash_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
         with:
           name: dash
-          path: /tmp
-
-      - name: Download Trawler Image Artifact
-        id: download_trawler_artifact
-        uses: actions/download-artifact@v3
-        if: steps.trawler_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
-        with:
-          name: trawler
           path: /tmp
 
       - name: Load images to minikube
