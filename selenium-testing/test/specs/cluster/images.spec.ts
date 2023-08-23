@@ -105,7 +105,7 @@ describe('Images Page::', () => {
 
         // Locate the button used to scan/rescan images. It maye be labeled as Rescan Image or Scan Image depending on if the image has been scanned or not yet.
         // We also want to wait until it is clickable, it may take a while if a scan is currently in progress.
-        await $("//span[contains(normalize-space(),'can Image')]").waitForClickable({timeout: 120000, interval: 1000, timeoutMsg: "Timed out waiting for the Rescan Image button to be usable."});
+        await $("//span[contains(normalize-space(),'can Image')]").waitForClickable({timeout: 300000, interval: 1000, timeoutMsg: "Timed out waiting for the Rescan Image button to be usable."});
         // @ts-ignore
         await $("//span[contains(normalize-space(),'can Image')]").customClick("rescan-image");
 
