@@ -166,14 +166,14 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Wait for the ability to select the containerlimits option to be available
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']").waitForDisplayed(
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='checkbox-general-containerlimits']").waitForDisplayed(
             {timeout: 60000, interval: 1000, timeoutMsg: "The ability to select the containerlimits constraint template should be present"}
         );
 
         // Enable the container limits constraint template
         // @ts-ignore
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']").customClick("enable-containerlimits");
-        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='containerlimits']")).toHaveElementClassContaining(
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='checkbox-general-containerlimits']").customClick("enable-containerlimits");
+        expect(await $("//div[contains(@class, 'cdk-overlay-container')]//mat-checkbox[@id='checkbox-general-containerlimits']")).toHaveElementClassContaining(
             "mat-mdc-checkbox-checked",
             {message: "The container limits constraint template should be selected"}
         );
@@ -277,8 +277,9 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Wait for the alert stating the constraint was created successfully
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Constraint created successfully')]")
-            .waitForDisplayed({timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created successfully."});
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Constraint created successfully')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created successfully."}
+        );
 
         // Verify the status text is now showing Gatekeeper as setup
         expect(await $("//mat-card/mat-card-content/h2[contains(normalize-space(), 'Setup')]")).toBePresent(
