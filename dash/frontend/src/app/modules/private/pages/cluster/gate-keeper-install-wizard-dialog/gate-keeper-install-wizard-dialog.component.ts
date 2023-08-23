@@ -6,7 +6,8 @@ export interface GatekeeperVersionRow {
 }
 
 const VERSION_DATA: GatekeeperVersionRow[] = [
-  { k8sVersion: 'v1.24.x - v1.27.x', gatekeeperVersion: 'v3.12.0' },
+  { k8sVersion: 'v1.25.x - v1.28.x', gatekeeperVersion: 'v3.13.0' },
+  { k8sVersion: 'v1.24.x', gatekeeperVersion: 'v3.12.0' },
   { k8sVersion: 'v1.22.x - v1.23.x', gatekeeperVersion: 'v3.11.0' },
   { k8sVersion: 'v1.21.x', gatekeeperVersion: 'v3.10.0' },
   { k8sVersion: 'v1.19.x - v1.20.x', gatekeeperVersion: 'v3.9.2' },
