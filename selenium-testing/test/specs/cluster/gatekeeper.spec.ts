@@ -186,12 +186,12 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Wait for the alert stating the template was deployed successfully
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Templates were deployed successfully')]").waitForDisplayed(
-            {timeout: 60000, interval: 1000, timeoutMsg: "Templates were deployed successfully alert did not appear, this suggests the constraint template was not created successfully."}
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Templates successfully deployed')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "Templates successfully deployed alert did not appear, this suggests the constraint template was not created successfully."}
         );
 
         // Verify the status text is now showing Gatekeeper as setup
-        expect(await $("//mat-card-content//h1[contains(normalize-space(), 'Setup')]")).toBePresent(
+        expect(await $("//mat-card-content//h2[contains(normalize-space(), 'Setup')]")).toBePresent(
             {message: "m9sweeper should be reporting gatekeeper as Setup"}
         );
 
@@ -277,8 +277,8 @@ describe('Gatekeeper Page::', () => {
         );
 
         // Wait for the alert stating the constraint was created successfully
-        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Constraint created successfully')]").waitForDisplayed(
-            {timeout: 60000, interval: 1000, timeoutMsg: "Constraint created successfully alert did not appear, this suggests the constraint was not created successfully."}
+        await $("//div[contains(@class, 'cdk-overlay-container')]//mat-snack-bar-container[contains(normalize-space(), 'Deployed the new constraint ')]").waitForDisplayed(
+            {timeout: 60000, interval: 1000, timeoutMsg: "Deployed the new constraint alert did not appear, this suggests the constraint was not created successfully."}
         );
 
         // Verify the status text is now showing Gatekeeper as setup
