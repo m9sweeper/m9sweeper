@@ -1,6 +1,9 @@
 import {IsOptional} from "class-validator";
 import {Exclude, Expose, Type} from "class-transformer";
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class MetaDataAnnotation{
     @IsOptional()
@@ -16,6 +19,9 @@ export class MetaDataAnnotation{
     'minesweeper.io/kinds': string;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class TemplateTarget {
     @IsOptional()
@@ -27,6 +33,9 @@ export class TemplateTarget {
     rego: string;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class TemplateCrd {
     @IsOptional()
@@ -34,6 +43,9 @@ export class TemplateCrd {
     spec: { names: { kind: string }}; // @TODO: refactor properly
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class TemplateSpec {
     @IsOptional()
@@ -47,6 +59,9 @@ export class TemplateSpec {
     targets: TemplateTarget[];
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class TemplateMetaData{
     @IsOptional()
@@ -59,8 +74,11 @@ export class TemplateMetaData{
     annotations: MetaDataAnnotation;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
-export class GatekeeperTemplateDto {
+export class DeprecatedGatekeeperTemplateDto {
     @IsOptional()
     @Expose()
     apiVersion: string;

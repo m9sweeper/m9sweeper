@@ -74,7 +74,7 @@ import { GateKeeperDetailsComponent } from './pages/cluster/gate-keeper-details/
 import { KubernetesPodDetailsComponent } from './pages/cluster/kubernetes-pod-details/kubernetes-pod-details.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { AddConstraintDialogComponent } from './pages/cluster/add-constraint-dialog/add-constraint-dialog.component';
-import { AddCustomConstraintTemplateComponent } from './pages/cluster/add-custom-constraint-template/add-custom-constraint-template.component';
+import { AddEditConstraintTemplateManifestComponent } from './pages/cluster/add-edit-constraint-template-manifest/add-edit-constraint-template-manifest.component';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { AddTemplateConstraintComponent } from './pages/cluster/add-template-constraint/add-template-constraint.component';
 import { AddConstraintCriteriaComponent } from './pages/cluster/add-constraint-criteria/add-constraint-criteria.component';
@@ -179,7 +179,7 @@ import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     GateKeeperDetailsComponent,
     GateKeeperInstallWizardDialogComponent,
     AddConstraintDialogComponent,
-    AddCustomConstraintTemplateComponent,
+    AddEditConstraintTemplateManifestComponent,
     AddTemplateConstraintComponent,
     AddConstraintCriteriaComponent,
     TemplateConstraintManifestComponent,

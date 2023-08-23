@@ -1,27 +1,46 @@
+/**
+ * @deprecated
+ */
 export interface MetaDataAnnotation {
     description?: string;
     'minesweeper.io/apiGroup'?: string;
     'minesweeper.io/kinds'?: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface TemplateMetaData {
   name?: string;
   annotations?: MetaDataAnnotation;
 }
 
+/**
+ * @deprecated
+ */
 export interface TemplateCrd {
   spec: { names: { kind: string }}; // @TODO: refactor properly
 }
 
+/**
+ * @deprecated
+ */
 export interface TemplateTarget {
   target?: string;
   rego?: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface TemplateSpec {
   crd?: TemplateCrd;
   targets?: TemplateTarget[];
 }
+
+/**
+ * @deprecated
+ */
 export interface IGatekeeperTemplate {
   apiVersion?: string;
   kind?: string;
@@ -29,11 +48,4 @@ export interface IGatekeeperTemplate {
   spec?: TemplateSpec;
   constraintsCount?: number;
   enforced?: number;
-}
-
-export interface IGSelectedTemplate {
-  selectedTemplate: IGatekeeperTemplate;
-  selectedTemplateName: string;
-  selectedTopDir?: string;
-  displayTemplateContent?: boolean;
 }

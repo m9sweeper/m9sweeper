@@ -5,7 +5,7 @@
         {{templateName}}
       </div>
       <div class="col-xs-12 col-sm-6 start-xs end-sm page-button-spacing">
-          <button class="me-xs-1" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click)="editRawTemplate()">
+          <button [disabled]="!gatekeeperTemplate" class="me-xs-1" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="primary" (click)="editTemplate()">
             <mat-icon>create</mat-icon>
             Edit
           </button>

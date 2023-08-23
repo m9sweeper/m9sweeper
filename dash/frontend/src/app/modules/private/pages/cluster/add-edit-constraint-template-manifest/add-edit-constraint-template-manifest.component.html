@@ -1,0 +1,20 @@
+<div mat-dialog-title>
+  Edit {{this.data?.subDir ? this.data.subDir : 'Constraint'}} Template
+</div>
+<mat-dialog-content>
+  <ngx-codemirror #codemirror
+                  [options]="codeMirrorOptions"
+                  [(ngModel)]="rawTemplate">
+  </ngx-codemirror>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="ps-xs-3">
+    <div>
+      <button [disabled]="true" mat-raised-button color="primary" type="submit" style="display: none;">REgo IDE</button>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" type="submit" (click)="deployCustomTemplate()">Save Changes</button>
+      <button mat-raised-button mat-dialog-close color="warn" type="button">Cancel</button>
+    </div>
+  </div>
+</mat-dialog-actions>

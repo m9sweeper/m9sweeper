@@ -1,15 +1,14 @@
-export interface IGateKeeperConstraint {
-  name?: string;
-  uid?: string;
-  creationTimestamp?: string;
-  regos?: string[];
-}
-
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintMetadataAnnotations {
   mode?: string;
   description?: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintMetadata {
   name?: string;
   annotations?: IGatekeeperConstraintMetadataAnnotations;
@@ -17,6 +16,9 @@ export interface IGatekeeperConstraintMetadata {
   creationTimestamp?: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintViolation {
   enforcementAction?: string;
   kind?: string;
@@ -25,17 +27,26 @@ export interface IGatekeeperConstraintViolation {
   namespace?: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintStatus {
   auditTimestamp?: string;
   totalViolations?: number;
   violations?: IGatekeeperConstraintViolation[];
 }
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintSpecKind {
   apiGroups?: string[];
   kinds?: string[];
 }
 
+/**
+ * @deprecated
+ */
 export interface IGatekeeperConstraintSpec {
   enforcementAction?: string;
   parameters?: {labels?: string[]};
@@ -45,15 +56,13 @@ export interface IGatekeeperConstraintSpec {
   };
 }
 
+/**
+ * @deprecated
+ */
 export interface IGateKeeperConstraintDetails {
   apiVersion?: string;
   kind?: string;
   metadata?: IGatekeeperConstraintMetadata;
   status?: IGatekeeperConstraintStatus;
   spec?: IGatekeeperConstraintSpec;
-}
-
-export interface IConstraintCriteria {
-  kinds?: string[];
-  apiGroups?: string[];
 }

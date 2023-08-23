@@ -8,20 +8,22 @@ import {ExceptionBlockService} from "../command-line/services/exception-block.se
 
 @Global()
 @Module({
-  providers: [
-    ClusterDao,
-    ClusterService,
-    KubernetesClusterService,
-    KubernetesApiService,
-    ExceptionBlockService
+  controllers: [
+    ClusterController,
   ],
   exports: [
     ClusterDao,
     ClusterService,
+    ExceptionBlockService,
     KubernetesClusterService,
     KubernetesApiService,
-    ExceptionBlockService
   ],
-  controllers: [ClusterController]
+  providers: [
+    ClusterDao,
+    ClusterService,
+    ExceptionBlockService,
+    KubernetesClusterService,
+    KubernetesApiService,
+  ],
 })
 export class ClusterModule {}

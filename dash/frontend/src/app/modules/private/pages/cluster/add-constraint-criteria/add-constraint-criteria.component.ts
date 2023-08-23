@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { Validators,  FormGroup, FormBuilder} from '@angular/forms';
-import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConstraint';
+import {IConstraintSpecMatchKinds} from '../../../../../core/entities/gatekeeper';
 
 @Component({
   selector: 'app-add-constraint-criteria',
@@ -11,12 +11,13 @@ import {IConstraintCriteria} from '../../../../../core/entities/IGateKeeperConst
 export class AddConstraintCriteriaComponent implements OnInit {
 
   addConstraintCriteria: FormGroup;
-  constraintCriteria: IConstraintCriteria = {};
+  constraintCriteria: IConstraintSpecMatchKinds = {};
 
-  constructor(public dialogRef: MatDialogRef<AddConstraintCriteriaComponent>,
-              private formBuilder: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) public data) {
-
+  constructor(
+    public dialogRef: MatDialogRef<AddConstraintCriteriaComponent>,
+    private formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data
+  ) {
     this.addConstraintCriteria = this.formBuilder.group({
       kinds: ['', [Validators.required]],
       apiGroups: ['', [Validators.nullValidator]],

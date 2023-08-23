@@ -36,7 +36,7 @@ export class ClusterService implements OnDestroy{
   }
 
   getClustersByClusterGroupId(groupId: number): Observable<any> {
-    // if groupId if undefined then we will use 1 as groupId for now
+    // if groupId is undefined then we will use 1 as groupId for now
     const clusterGroupId = groupId ? groupId : 1 ;
     return this.httpClient.get(`/api/clusters/group-by/${clusterGroupId}`);
   }

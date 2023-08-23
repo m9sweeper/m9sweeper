@@ -1,6 +1,9 @@
 import {IsOptional} from "class-validator";
 import {Exclude, Expose, Type} from "class-transformer";
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintMetadataAnnotations {
     @IsOptional()
@@ -12,6 +15,9 @@ export class GatekeeperConstraintMetadataAnnotations {
     description: string;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintMetadata {
     @IsOptional()
@@ -32,6 +38,9 @@ export class GatekeeperConstraintMetadata {
     creationTimestamp: string;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintSpecMatchKind {
     @IsOptional()
@@ -43,6 +52,9 @@ export class GatekeeperConstraintSpecMatchKind {
     kinds: string[];
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintSpecMatch {
     @IsOptional()
@@ -59,14 +71,9 @@ export class GatekeeperConstraintSpecMatch {
     namespaces: string[];
 }
 
-// @Exclude()
-// export class GatekeeperConstraintSpecLabel {
-//     @IsOptional()
-//     @Expose()
-//     labels: string[];
-//
-// }
-
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintSpec {
     @IsOptional()
@@ -83,6 +90,9 @@ export class GatekeeperConstraintSpec {
     parameters: any;
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GateKeeperConstraintViolation{
     @IsOptional()
@@ -106,6 +116,9 @@ export class GateKeeperConstraintViolation{
     namespace: string
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintStatus {
     @IsOptional()
@@ -121,6 +134,9 @@ export class GatekeeperConstraintStatus {
     violations: GateKeeperConstraintViolation[];
 }
 
+/**
+ * @deprecated
+ */
 @Exclude()
 export class GatekeeperConstraintDetailsDto {
     @IsOptional()
