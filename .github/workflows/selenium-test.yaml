@@ -183,6 +183,7 @@ jobs:
           detailed_summary: true
           include_passed: true
           check_name: Test Report - k8s ${{ inputs.kubernetes-version }}
+          annotate_only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
 
       - name: Cleanup
         if: always()
