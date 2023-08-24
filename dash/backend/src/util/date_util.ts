@@ -45,3 +45,19 @@ export const lastThirtyDaysFromYesterDayAsStr = function lastThirtyDaysFromYeste
   
   return dayStrings;
 }
+
+/** Returns all the days between the given dates in yyyy-M-d format */
+export const getDaysBetween = function(start: Date, end: Date): string[] {
+  // Ensure start & end are both valid dates
+  if (isNaN(start?.getTime()) || isNaN(end?.getTime())) {
+    return [];
+  }
+  const days = [];
+  const current = new Date(start.getTime()); // copy so that we don't mutate the original
+  while(current < end) {
+    days.push(format(current, 'yyyy-M-d'));
+    current.setDate(current.getDate() + 1); // mutates current
+  }
+  return days;
+}
+
