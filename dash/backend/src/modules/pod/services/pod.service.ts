@@ -153,15 +153,15 @@ export class PodService {
         return await this.podDao.getCurrentPodsComplianceSummary(clusterId);
     }
 
-    async getPodsComplianceSummary(clusterId: number, clusterCreationDate?: Date): Promise<PodComplianceSummaryDto[]> {
+    async getPodsComplianceSummary(options?: {clusterId?: number, clusterGroupId?: number, earliestStartDate?: Date}): Promise<PodComplianceSummaryDto[]> {
         const yesterDayDate = yesterdaysDate();
         const defaultStart = previousDayDate(28);
         // If the cluster creation date is after the default start date, use it sa the start date
-        const startDate = clusterCreationDate && clusterCreationDate > defaultStart ? clusterCreationDate : defaultStart;
+        const startDate = options?.earliestStartDate && options.earliestStartDate > defaultStart ? options.earliestStartDate : defaultStart;
 
         const historyPodsOf30Days: PodComplianceSummaryGroupDto[]
-          = await this.podDao.getPodsComplianceSummaryBetweenDates(clusterId,
-          format(startDate, 'yyyy-MM-dd'), format(yesterDayDate, 'yyyy-MM-dd'));
+          = await this.podDao.getPodsComplianceSummaryBetweenDates(format(startDate, 'yyyy-MM-dd'),
+          format(yesterDayDate, 'yyyy-MM-dd'), { clusterId: options?.clusterId, clusterGroupId: options?.clusterGroupId });
 
         const podsSummaries: PodComplianceSummaryDto[] = [];
 

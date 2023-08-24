@@ -347,7 +347,7 @@ export class ClusterListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getPodComplianceSummaryForAllClusters() {
-    this.podService.getPodsComplianceSummary(undefined)
+    this.podService.getPodsComplianceSummary({ clusterGroupId: this.groupId})
       .pipe(take(1))
       .subscribe(response => {
       const complianceSummaryData = response.data;

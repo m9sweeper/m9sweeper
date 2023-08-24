@@ -540,33 +540,35 @@ export class PodDao {
         return query.then( pods => plainToInstance(PodComplianceDto, pods));
     }
 
-    async getPodsComplianceSummaryBetweenDates(clusterId: number, daySmall: string, dayLarge: string): Promise<PodComplianceSummaryGroupDto[]> {
+    async getPodsComplianceSummaryBetweenDates(daySmall: string, dayLarge: string, options?: { clusterId?: number, clusterGroupId?: number }): Promise<PodComplianceSummaryGroupDto[]> {
       const knex = await this.databaseService.getConnection();
-      let queryArray = [
-        'p.compliant as compliant',
-        'p.saved_date as savedDate',
-      ];
-
-      if (clusterId) {
-        queryArray.push('p.cluster_id as clusterId')
-      }
-
 
       let sql = knex
-        .select(queryArray)
+        .select([
+          'p.compliant as compliant',
+          'p.saved_date as savedDate',
+        ])
         .from('history_kubernetes_pods as p')
-        .count<Record<number, string | number>>('id', {as: 'count'});
+        .count<Record<number, string | number>>('p.id', {as: 'count'});
 
-        if (clusterId) {
+      if (options?.clusterGroupId) {
+        sql = sql.groupBy('p.saved_date', 'p.compliant', 'p.cluster_id', 'c.group_id');
+      }
+      else if (options?.clusterId) {
           sql = sql.groupBy('p.saved_date', 'p.compliant', 'p.cluster_id');
         }
         else {
           sql = sql.groupBy('p.saved_date', 'p.compliant');
         }
 
+        if (options?.clusterId) {
+          sql.select('p.cluster_id as clusterId')
+          sql = sql.having('p.cluster_id', '=', options.clusterId);
+        }
 
-        if (clusterId) {
-          sql = sql.having('p.cluster_id', '=', clusterId);
+        if (options?.clusterGroupId) {
+          sql.leftJoin('clusters as c', 'c.id', 'p.cluster_id');
+          sql.having('c.group_id', '=', options.clusterGroupId);
         }
 
         sql = sql.havingBetween('p.saved_date', [daySmall, dayLarge]);
