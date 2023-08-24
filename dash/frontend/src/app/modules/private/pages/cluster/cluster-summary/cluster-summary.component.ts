@@ -2,8 +2,7 @@ import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, ViewChild} fr
 import { IImageScanCount } from '../../../../../core/entities/IImage';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from 'src/app/core/services/alert.service';
-import { DeploymentService } from '../../../../../core/services/deployment.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IServerResponse } from '../../../../../core/entities/IServerResponse';
 import { ImageService } from '../../../../../core/services/image.service';
 import { ClusterService } from '../../../../../core/services/cluster.service';
@@ -11,13 +10,14 @@ import { INamespaceTotalVulnerability } from '../../../../../core/entities/IName
 import { IClusterEvent } from '../../../../../core/entities/IClusterEvent';
 import { MatDialog } from '@angular/material/dialog';
 import { ClusterEventComponent } from '../cluster-event/cluster-event.component';
-import { merge, Subscription, Subject } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { MatSort} from '@angular/material/sort';
 import { PodService } from 'src/app/core/services/pod.service';
 import { format, sub } from 'date-fns';
 import { take, takeUntil } from 'rxjs/operators';
 import { ChartSizeService } from '../../../../../core/services/chart-size.service';
 import {environment} from '../../../../../../environments/environment.prod';
+import {NgxUiLoaderConfig, NgxUiLoaderService, POSITION, SPINNER} from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-cluster-summary',
@@ -96,21 +96,23 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   page = 0;
   limit = 10;
   clusterEvents: IClusterEvent[];
-  expandStatus: boolean;
-  expandSubscription: Subscription;
   resizeTimeout;
+  logLoaderName = 'cluster-logs-loader';
+  logsLoaderConfig: NgxUiLoaderConfig = {
+    bgsType: SPINNER.rectangleBounce,
+    bgsPosition: POSITION.centerCenter,
+  };
   scanXTickFormatting = (e: string) => {
     return e.split('-')[2];
   }
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private imageService: ImageService,
               private clusterService: ClusterService,
               private podService: PodService,
-              private deploymentService: DeploymentService,
               private alertService: AlertService,
               private dialog: MatDialog,
               private chartSizeService: ChartSizeService,
+              protected readonly loaderService: NgxUiLoaderService,
               ) {
   }
 
@@ -295,19 +297,25 @@ export class ClusterSummaryComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   getClusterEvents(limit: number, page: number) {
+    this.loaderService.startBackgroundLoader(this.logLoaderName, 'load-logs');
     this.clusterService.getClusterEvents(this.clusterId, limit, page)
       .pipe(take(1))
-      .subscribe((response: IServerResponse<IClusterEvent[]>) => {
-      if (response.data) {
-        if (this.page > 0){
-          this.clusterEvents.push(...response.data);
-        } else {
-          this.clusterEvents = response.data;
+      .subscribe({
+        next: (response: IServerResponse<IClusterEvent[]>) => {
+          if (response.data) {
+            if (this.page > 0) {
+              this.clusterEvents.push(...response.data);
+            } else {
+              this.clusterEvents = response.data;
+            }
+          }
+          this.loaderService.stopBackgroundLoader(this.logLoaderName, 'load-logs');
+          },
+        error: error => {
+          this.loaderService.stopBackgroundLoader(this.logLoaderName, 'load-logs');
+          this.alertService.danger(error.error.message);
         }
-      }
-    }, error => {
-      this.alertService.danger(error.error.message);
-    });
+      });
   }
 
   getPolicyViolationCount(clusterId: number) {
