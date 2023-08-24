@@ -55,7 +55,7 @@ export class FalcoEventsListComponent implements OnInit {
   ngOnInit() {
     this.filterForm = this.formBuilder.group({
       selectedPriorityLevels: [[]],
-      selectedOrderBy: [],
+      selectedOrderBy: ['Date Desc'],
       startDate: [],
       endDate: [],
       namespaceInput: [],

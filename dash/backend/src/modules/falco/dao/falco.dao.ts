@@ -8,8 +8,7 @@ import {FalcoSettingDto} from "../dto/falco-setting.dto";
 import * as knexnest from 'knexnest'
 import {FalcoEmailDto} from "../dto/falco-email.dto";
 import { FalcoRuleCreateDto, FalcoRuleDto } from '../dto/falco-rule.dto';
-import { knex, Knex } from 'knex';
-import QueryBuilder = knex.QueryBuilder;
+import { Knex } from 'knex';
 
 
 @Injectable()
@@ -31,53 +30,42 @@ export class FalcoDao {
         if (priorities) {
             query = query.whereIn('level', priorities);
         }
-        const relevantOrderBys = [
-          'Priority Desc',
-          'Priority Asc',
-          'Date Desc',
-          'Date Asc',
-          null,
-          undefined,
-        ];
-        if (orderBy in relevantOrderBys) {
-            switch (orderBy) {
-                case 'Priority Desc':
-                    query = query.orderByRaw(
-                      'CASE ' +
-                      ' WHEN level = \'Emergency\' then 1' +
-                      ' WHEN level = \'Alert\' then 2' +
-                      ' WHEN level = \'Critical\' then 3' +
-                      ' WHEN level = \'Error\' then 4' +
-                      ' WHEN level = \'Warning\' then 5' +
-                      ' WHEN level = \'Notice\' then 6' +
-                      ' WHEN level = \'Informational\' then 7' +
-                      ' WHEN level = \'Debug\' then 8' +
-                      'END'
-                    );
-                    break;
-                case 'Priority Asc':
-                    query = query.orderByRaw(
-                      'CASE ' +
-                      ' WHEN level = \'Debug\' then 1' +
-                      ' WHEN level = \'Informational\' then 2' +
-                      ' WHEN level = \'Notice\' then 3' +
-                      ' WHEN level = \'Warning\' then 4' +
-                      ' WHEN level = \'Error\' then 5' +
-                      ' WHEN level = \'Critical\' then 6' +
-                      ' WHEN level = \'Alert\' then 7' +
-                      ' WHEN level = \'Emergency\' then 8' +
-                      'END'
-                    );
-                    break;
-                case 'Date Desc':
-                    query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
-                    break;
-                case 'Date Asc':
-                    query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
-                    break;
-                default:
-                    query = query.orderBy([{column: 'id', order: 'desc'}]);
-            }
+        switch (orderBy) {
+            case 'Priority Desc':
+                query = query.orderByRaw(
+                  'CASE ' +
+                  ' WHEN level = \'Emergency\' then 1' +
+                  ' WHEN level = \'Alert\' then 2' +
+                  ' WHEN level = \'Critical\' then 3' +
+                  ' WHEN level = \'Error\' then 4' +
+                  ' WHEN level = \'Warning\' then 5' +
+                  ' WHEN level = \'Notice\' then 6' +
+                  ' WHEN level = \'Informational\' then 7' +
+                  ' WHEN level = \'Debug\' then 8' +
+                  'END'
+                );
+                break;
+            case 'Priority Asc':
+                query = query.orderByRaw(
+                  'CASE ' +
+                  ' WHEN level = \'Debug\' then 1' +
+                  ' WHEN level = \'Informational\' then 2' +
+                  ' WHEN level = \'Notice\' then 3' +
+                  ' WHEN level = \'Warning\' then 4' +
+                  ' WHEN level = \'Error\' then 5' +
+                  ' WHEN level = \'Critical\' then 6' +
+                  ' WHEN level = \'Alert\' then 7' +
+                  ' WHEN level = \'Emergency\' then 8' +
+                  'END'
+                );
+                break;
+            case 'Date Asc':
+                query = query.orderBy([{column: 'creation_timestamp', order: 'asc'}]);
+                break;
+            case 'Date Desc':
+            default:
+                query = query.orderBy([{column: 'creation_timestamp', order: 'desc'}]);
+                break;
         }
 
         if (startDate) {
