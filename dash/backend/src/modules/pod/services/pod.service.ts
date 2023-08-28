@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { PodDao } from '../dao/pod.dao';
 import { PodDto } from '../dto/pod-dto';
 import { V1Pod } from '@kubernetes/client-node/dist/gen/model/v1Pod';
-import { lastThirtyDaysFromYesterDayAsStr, previousDayDate, yesterdaysDate } from '../../../util/date_util';
+import {
+    getDaysBetween,
+    previousDayDate,
+    yesterdaysDate
+} from '../../../util/date_util';
 import { PodComplianceSummaryDto } from '../dto/pod-compliance-summary-dto';
 import { PodComplianceSummaryGroupDto } from '../dto/pod_compliance_sumamry_group_dto';
 import { format } from 'date-fns';
@@ -149,32 +153,27 @@ export class PodService {
         return await this.podDao.getCurrentPodsComplianceSummary(clusterId);
     }
 
-    async getPodsComplianceSummary(clusterId: number): Promise<PodComplianceSummaryDto[]> {
-        let yesterDayDate = yesterdaysDate();
-        let dateBack30Days = previousDayDate(28);
+    async getPodsComplianceSummary(options?: {clusterId?: number, clusterGroupId?: number, earliestStartDate?: Date}): Promise<PodComplianceSummaryDto[]> {
+        const yesterDayDate = yesterdaysDate();
+        const defaultStart = previousDayDate(28);
+        // If the cluster creation date is after the default start date, use it sa the start date
+        const startDate = options?.earliestStartDate && options.earliestStartDate > defaultStart ? options.earliestStartDate : defaultStart;
 
-        let historyPodsOf30Days: PodComplianceSummaryGroupDto[];
+        const historyPodsOf30Days: PodComplianceSummaryGroupDto[]
+          = await this.podDao.getPodsComplianceSummaryBetweenDates(format(startDate, 'yyyy-MM-dd'),
+          format(yesterDayDate, 'yyyy-MM-dd'), { clusterId: options?.clusterId, clusterGroupId: options?.clusterGroupId });
 
-        if (clusterId) {
-            historyPodsOf30Days = await this.podDao.getPodsComplianceSummaryBetweenDates(clusterId,
-                format(dateBack30Days, 'yyyy-MM-dd'), format(yesterDayDate, 'yyyy-MM-dd'));
-        }
-        else {
-            historyPodsOf30Days = await this.podDao.getPodsComplianceSummaryBetweenDates(undefined,
-                format(dateBack30Days, 'yyyy-MM-dd'), format(yesterDayDate, 'yyyy-MM-dd'));
-        }
-
-        let podsSummaries: PodComplianceSummaryDto[] = [];
+        const podsSummaries: PodComplianceSummaryDto[] = [];
 
         if (historyPodsOf30Days) {
-            let last30Days = lastThirtyDaysFromYesterDayAsStr(28);
+            const days = getDaysBetween(startDate, yesterDayDate);
 
-            for (let dayStr of last30Days) {
-                let summaryDto = new PodComplianceSummaryDto();
+            for (const dayStr of days) {
+                const summaryDto = new PodComplianceSummaryDto();
                 summaryDto.dateString = dayStr;
                 summaryDto.percentage = 0;
 
-                let historyPods = historyPodsOf30Days.filter(p => format(p.savedDate, 'yyyy-M-d') === dayStr);
+                const historyPods = historyPodsOf30Days.filter(p => format(p.savedDate, 'yyyy-M-d') === dayStr);
 
                 if (!!historyPods === false) {
                     podsSummaries.push(summaryDto);
@@ -182,19 +181,15 @@ export class PodService {
                     continue;
                 }
 
-                let total = historyPods.reduce((sum, element) => {
+                const total = historyPods.reduce((sum, element) => {
                     return sum + (+element.count);
                 }, 0);
 
-                let compliantPodsCount = historyPods.filter(p => p.compliant).reduce((sum, element) => {
+                const compliantPodsCount = historyPods.filter(p => p.compliant).reduce((sum, element) => {
                     return sum + (+element.count);
                 }, 0);
 
-                let percentage = 0;
-
-                if (total > 0) {
-                    percentage = (compliantPodsCount * 100) / total;
-                }
+                const percentage = total > 0 ? (compliantPodsCount * 100) / total : 100;
 
                 summaryDto.dateString = dayStr;
                 summaryDto.percentage = percentage;

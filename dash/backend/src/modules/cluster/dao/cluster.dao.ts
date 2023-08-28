@@ -72,7 +72,7 @@ export class ClusterDao {
         const knex = await this.databaseService.getConnection();
         return knexnest(knex
             .select(['c.id as _id', 'c.name as _name', 'c.ip_address as _ipAddress', 'c.port as _port',
-                'c.context as _context', 'c.tags as _tags', 'c.group_id as _groupId',
+                'c.context as _context', 'c.tags as _tags', 'c.group_id as _groupId', 'c.created_at as _createdAt',
                 'c.is_enforcement_enabled as _isEnforcementEnabled', 'c.kube_config as _kubeConfig',
                 'c.is_image_scanning_enforcement_enabled as _isImageScanningEnforcementEnabled',
                 'c.grace_period_days as _gracePeriodDays'])
@@ -80,7 +80,11 @@ export class ClusterDao {
             .where('c.id', id)
             .andWhere('c.deleted_at', null)
             .orderBy('id', 'desc'))
-            .then(result => plainToInstance(ClusterDto, result[0]));
+            .then(result => {
+              const instance = plainToInstance(ClusterDto, result[0]);
+              instance.createdAt = + instance.createdAt;
+              return instance;
+            });
     }
 
     async getClustersByGroupId(id: number): Promise<ClusterDto[]> {

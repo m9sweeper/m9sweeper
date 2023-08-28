@@ -89,7 +89,15 @@ export class PodService {
     );
   }
 
-  getPodsComplianceSummary(clusterId: number): Observable<IServerResponse<IPodComplianceSummary[]>> {
-    return this.httpClient.get(`/api/k8s-pods/summary`,{params: new HttpParams().set('clusterId', String(clusterId))});
+  getPodsComplianceSummary(options?: {clusterId?: number, clusterGroupId?: number}): Observable<IServerResponse<IPodComplianceSummary[]>> {
+    let params = new HttpParams();
+    if (options?.clusterId) {
+      params = params.set('clusterId', String(options.clusterId));
+    }
+    if (options?.clusterGroupId) {
+      params = params.set('clusterGroupId', String(options.clusterGroupId));
+    }
+
+    return this.httpClient.get(`/api/k8s-pods/summary`, { params });
   }
 }

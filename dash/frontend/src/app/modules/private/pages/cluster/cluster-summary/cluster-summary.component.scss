@@ -71,9 +71,9 @@ mat-card-title {
   }
 
   #cluster-event-items {
-    max-height: 8em;  // smaller than the #cluster-events element to account for margins & header
+    height: 8em;  // smaller than the #cluster-events element to account for margins & header
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     flex: none;
 
     table {

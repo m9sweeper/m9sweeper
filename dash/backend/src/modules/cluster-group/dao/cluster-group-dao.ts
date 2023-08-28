@@ -14,12 +14,18 @@ export class ClusterGroupDao {
             .select([
                 'cg.id as _id',
                 'cg.name as _name',
-                'cg.user_id as _userId' ])
+                'cg.user_id as _userId',
+                'cg.created_at as _createdAt'
+            ])
             .from('cluster_group as cg')
             .where('cg.id', id)
             .andWhere('cg.deleted_at', null)
         )
-            .then(clusterGroup => plainToInstance(ClusterGroupDto, clusterGroup?.[0]));
+            .then(clusterGroup => {
+                const instance = plainToInstance(ClusterGroupDto, clusterGroup?.[0]);
+                instance.createdAt = +instance.createdAt;
+                return instance
+            });
     }
 
     async getClusterGroups(): Promise<ClusterGroupDto[]> {

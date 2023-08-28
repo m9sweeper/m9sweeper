@@ -1,4 +1,14 @@
-import {BadRequestException, Controller, Get, Inject, Param, Query, UseGuards, UseInterceptors} from '@nestjs/common';
+import {
+    BadRequestException,
+    Controller,
+    Get,
+    HttpException, HttpStatus,
+    Inject,
+    Param,
+    Query,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseTransformerInterceptor } from '../../../interceptors/response-transformer.interceptor';
 import { PodDto } from '../dto/pod-dto';
@@ -11,6 +21,8 @@ import {AuthGuard} from "../../../guards/auth.guard";
 import {AuthorityGuard} from "../../../guards/authority.guard";
 import { PodComplianceSummaryDto } from '../dto/pod-compliance-summary-dto';
 import { GatekeeperService } from '../../gatekeeper/services/gatekeeper.service';
+import {ClusterService} from '../../cluster/services/cluster.service';
+import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
 
 @ApiTags('Pods')
 @Controller()
@@ -21,6 +33,8 @@ export class PodController {
       @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
       private readonly podService: PodService,
       private readonly gatekeeperService: GatekeeperService,
+      protected readonly clusterService: ClusterService,
+      protected readonly clusterGroupService: ClusterGroupService,
     ) {}
 
     @Get()
@@ -136,8 +150,24 @@ export class PodController {
         status: 200
     })
     async getPodsComplianceSummary(
-      @Query('clusterId') clusterId: number): Promise<PodComplianceSummaryDto[]> {
-        return await this.podService.getPodsComplianceSummary(clusterId);
+      @Query('clusterId') clusterId: number,
+      @Query('clusterGroupId') clusterGroupId: number
+    ): Promise<PodComplianceSummaryDto[]> {
+        let earliestStartDate: Date = undefined;
+        if (clusterId) {
+            const cluster = await this.clusterService.getClusterById(clusterId);
+            if (!cluster) {
+                throw new HttpException('Cluster not found', HttpStatus.NOT_FOUND);
+            }
+            earliestStartDate = new Date(cluster.createdAt);
+        } else if (clusterGroupId) {
+            const group = await this.clusterGroupService.getClusterGroupById(clusterGroupId);
+            if (!group) {
+                throw new HttpException('Cluster Group not found', HttpStatus.NOT_FOUND);
+            }
+            earliestStartDate = new Date(group.createdAt);
+        }
+        return await this.podService.getPodsComplianceSummary({clusterId, clusterGroupId, earliestStartDate});
     }
 
     @Get(':podIdentifier')
