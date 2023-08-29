@@ -12,8 +12,12 @@ jobs:
     outputs:
       dash-image-version: ${{ steps.dash_versioning.outputs.version }}
       dash-image-tags: ${{ steps.dash_versioning.outputs.tags }}
+      dash-image-labels: ${{ steps.dash_versioning.outputs.labels }}
+      dash-image-json: ${{ steps.dash_versioning.outputs.json }}
       trawler-image-version: ${{ steps.trawler_versioning.outputs.version }}
       trawler-image-tags: ${{ steps.trawler_versioning.outputs.tags }}
+      trawler-image-labels: ${{ steps.trawler_versioning.outputs.labels }}
+      trawler-image-json: ${{ steps.trawler_versioning.outputs.json }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,14 +38,19 @@ jobs:
 
   build_images:
     name: Build Docker Images
-    uses: ./.github/workflows/docker-build.yaml
+    uses: ./.github/workflows/multi-arch-docker-build.yaml
     needs: versioning
     permissions:
       packages: write
     with:
+      dash-image-version: ${{ needs.versioning.outputs.dash-image-version }}
       dash-image-tags: ${{ needs.versioning.outputs.dash-image-tags }}
+      dash-image-labels: ${{ needs.versioning.outputs.dash-image-labels }}
+      dash-image-json: ${{ needs.versioning.outputs.dash-image-json }}
+      trawler-image-version: ${{ needs.versioning.outputs.trawler-image-version }}
       trawler-image-tags: ${{ needs.versioning.outputs.trawler-image-tags }}
-      build-all-architectures: false
+      trawler-image-labels: ${{ needs.versioning.outputs.trawler-image-labels }}
+      trawler-image-json: ${{ needs.versioning.outputs.trawler-image-json }}
 
   release_individual_charts:
     name: Release Individual Charts

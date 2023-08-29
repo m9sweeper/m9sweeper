@@ -87,7 +87,6 @@ jobs:
         if: steps.trawler_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
         with:
           name: trawler
-          path: /tmp
 
       - name: Wait for Dash Build
         uses: fountainhead/action-wait-for-check@v1.1.0
@@ -104,13 +103,12 @@ jobs:
         if: steps.dash_build_wait.outputs.conclusion == 'success' && inputs.load-image-from-artifact == true
         with:
           name: dash
-          path: /tmp
 
       - name: Load images to minikube
         if: success() && inputs.load-image-from-artifact == true
         run: |
-          minikube image load /tmp/dash.tar
-          minikube image load /tmp/trawler.tar
+          minikube image load dash.tar
+          minikube image load trawler.tar
 
       - name: Install m9sweeper
         if: success() && steps.dash_build_wait.outputs.conclusion == 'success' && steps.trawler_build_wait.outputs.conclusion == 'success'

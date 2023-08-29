@@ -1,0 +1,25 @@
+######################
+## Stage 3: DELIVER ##
+######################
+FROM node:18.17-alpine
+
+# Make the app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY extracted/usr/src/app /usr/src/app
+
+# Create non root user
+RUN addgroup -g 1050 -S limitedaccessaccount && \
+    adduser -u 1050 -S limitedaccessaccount -G limitedaccessaccount && \
+    mkdir -p /usr/src/app/mnt/storage && \
+    chown -R limitedaccessaccount:limitedaccessaccount /usr/src/app
+
+# Set non root user
+USER 1050
+
+# Expose the port the dashboard is on
+EXPOSE 3000
+
+# Start the server
+CMD [ "node", "main" ]

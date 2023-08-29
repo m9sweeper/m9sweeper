@@ -71,9 +71,6 @@ COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/node_modules
 COPY --from=builder /usr/src/app/backend/vendor /usr/src/app/vendor
 COPY --from=docs-builder /usr/src/public /usr/src/app/public/docs
 
-# Upgrade npm
-RUN npm install -g npm
-
 # Create non root user
 RUN addgroup -g 1050 -S limitedaccessaccount && \
     adduser -u 1050 -S limitedaccessaccount -G limitedaccessaccount && \
