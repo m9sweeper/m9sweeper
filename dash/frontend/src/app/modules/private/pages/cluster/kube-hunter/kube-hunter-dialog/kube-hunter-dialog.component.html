@@ -31,12 +31,11 @@
 
         <div >
           <textarea #run class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
-        helm repo update && \
-        helm upgrade --install kube-hunter m9sweeper/kube-hunter \
-        -n m9sweeper-system --create-namespace \
-        --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
-        --set cronjob.enabled=false
-            </textarea>
+helm repo update && \
+helm upgrade --install kube-hunter m9sweeper/kube-hunter \
+  -n m9sweeper-system --create-namespace \
+  --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
+  --set cronjob.enabled=false</textarea>
         </div>
       </div>
 
@@ -70,14 +69,13 @@
         </div>
 
         <div >
-            <textarea #run class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
-              helm repo update && \
-              helm upgrade --install kube-hunter m9sweeper/kube-hunter \
-              -n m9sweeper-system --create-namespace \
-              --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
-              --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}" \
-              --set cronjob.enabled=true
-            </textarea>
+          <textarea #run class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+helm repo update && \
+helm upgrade --install kube-hunter m9sweeper/kube-hunter \
+  -n m9sweeper-system --create-namespace \
+  --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
+  --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}" \
+  --set cronjob.enabled=true</textarea>
         </div>
 
       </div>

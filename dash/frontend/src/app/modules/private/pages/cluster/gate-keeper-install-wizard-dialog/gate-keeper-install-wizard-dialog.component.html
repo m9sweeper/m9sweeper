@@ -19,10 +19,10 @@
       <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100 modal-content-left-align-no-margin modal-content-no-right-margin margin-top-1em" readonly>
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
 helm install gatekeeper/gatekeeper --name-template=gatekeeper \
-    --namespace gatekeeper-system \
-    --create-namespace \
-    --version 3.13.0
-      </textarea>
+  --namespace gatekeeper-system \
+  --create-namespace \
+  --version 3.13.0 \
+  --set-string replicas=1</textarea>
     </div>
 
     <div class="padding-top-15">Note: You may need to adjust the GateKeeper version depending on your Kubernetes version.</div>

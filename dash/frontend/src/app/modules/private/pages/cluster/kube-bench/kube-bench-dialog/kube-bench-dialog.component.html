@@ -49,30 +49,28 @@
       <br>
       <div *ngIf="cronjobTime">
         <div class="page-title-button-group-spacing" >
-            <div>Run kube-bench using the following CLI command:</div>
-            <div>
+          <div>Run kube-bench using the following CLI command:</div>
+          <div>
             <app-copy-to-clipboard-button
               successMessage="Command copied to clipboard!"
               errorMessage="Command could not be copied"
               [text]="run.value">
             </app-copy-to-clipboard-button>
-            </div>
+          </div>
         </div>
       </div>
       <div>
-          <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100" readonly>helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
-            helm repo update && \
-            helm upgrade --install kube-bench m9sweeper/kube-bench \
-            -n m9sweeper-system --create-namespace \
-            --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}' \
-            --set-string provider={{selectedProvider}} \
-            --set cronjob.enabled=true \
-            --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}"
-          </textarea>
+        <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100" readonly>helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+helm repo update && \
+helm upgrade --install kube-bench m9sweeper/kube-bench \
+  -n m9sweeper-system --create-namespace \
+  --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}' \
+  --set-string provider={{selectedProvider}} \
+  --set cronjob.enabled=true \
+  --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}"</textarea>
       </div>
-      </div>
-
     </div>
+  </div>
 
 
 
@@ -91,20 +89,19 @@
       </div>
       <div >
         <textarea #cliCommand class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
-          helm repo update && \
-          helm upgrade --install kube-bench m9sweeper/kube-bench \
-          -n m9sweeper-system --create-namespace \
-          --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}'\
-          --set-string provider={{selectedProvider}} \
-          --set cronjob.enabled=false
-        </textarea>
+helm repo update && \
+helm upgrade --install kube-bench m9sweeper/kube-bench \
+  -n m9sweeper-system --create-namespace \
+  --set-string reportsurl='{{backendUrl}}/api/kube-bench/{{clusterId}}/?key={{apiKey}}'\
+  --set-string provider={{selectedProvider}} \
+  --set cronjob.enabled=false</textarea>
       </div>
     </div>
-    </div>
+  </div>
 
-      <div class="next-button">
-        <button mat-raised-button [matDialogClose]="true" color="primary">Done</button>
-      </div>
+  <div class="next-button">
+    <button mat-raised-button [matDialogClose]="true" color="primary">Done</button>
+  </div>
 
   </mat-step>
 </mat-horizontal-stepper>
