@@ -463,6 +463,8 @@ app-private {
 .code-snippet {
   width: -webkit-fill-available;
   max-height: 400px;
+  overflow: auto;
+  white-space: pre; // Without this, long lines will wrap to new lines instead of scrolling
   resize: none;
   margin: 0 0 16px 0;
   box-sizing: border-box;
