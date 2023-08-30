@@ -7,7 +7,9 @@ FROM node:18.17-alpine
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY extracted/usr/src/app /usr/src/app
+COPY app.tar.gz /usr/src/app/
+RUN tar -xf app.tar.gz
+RUN rm app.tar.gz
 
 # Create non root user
 RUN addgroup -g 1050 -S limitedaccessaccount && \

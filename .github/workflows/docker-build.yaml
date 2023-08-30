@@ -68,6 +68,10 @@ jobs:
           name: dash
           retention-days: 5
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   docker_trawler:
     name: Build Trawler Image
     runs-on: self-hosted
@@ -120,3 +124,7 @@ jobs:
           path: trawler.tar
           name: trawler
           retention-days: 5
+
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()

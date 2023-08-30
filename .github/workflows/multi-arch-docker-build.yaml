@@ -55,24 +55,28 @@ jobs:
           cache-to: type=gha,mode=max,scope=build-dash-common
           load: true
 
-      - name: Prepare Artifact
+      - name: Prepare App Artifact
         run: |
           container_id=$(docker create ghcr.io/m9sweeper/dash:${{ inputs.dash-image-version }})
-          docker export $container_id -o exported.tar.gz
+          docker export $container_id -o common-filesystem.tar.gz
           docker rm $container_id
-          docker rmi ghcr.io/m9sweeper/dash:${{ inputs.dash-image-version }}
-          mkdir -p extracted
-          tar -xf exported.tar.gz -C extracted/
+          docker rmi ghcr.io/m9sweeper/dash
+          tar -xf common-filesystem.tar.gz
+          tar -czvf app.tar.gz -C usr/src/app .
 
-      - name: Upload Common Artifact
+      - name: Upload App Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: extracted/usr/src/app
-          name: dash-common
+          path: app.tar.gz
+          name: app-artifact
           retention-days: 5
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   build_dash:
-    name: Build Dash Multi-Arch
+    name: Build Dash
     runs-on: self-hosted
     strategy:
       fail-fast: false
@@ -97,18 +101,17 @@ jobs:
 
       - name: Login to GHCR
         uses: docker/login-action@v2
-        if: inputs.push-images
         with:
           registry: ghcr.io
           username: m9sweeper
           password: ${{ github.token }}
 
-      - name: Download Common Artifact
+      - name: Download App Artifact
         uses: actions/download-artifact@v3
         with:
-          name: dash-common
+          name: app-artifact
 
-      - name: Build and Push (${{ matrix.platform }})
+      - name: Build and Push
         id: build
         uses: docker/build-push-action@v4
         with:
@@ -122,55 +125,26 @@ jobs:
           cache-to: type=gha,mode=max,scope=build-dash-${{ matrix.platform }}
 
       - name: Export Digest
-        run:
-          mkdir digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "digests/${digest#sha256:}"
+        run: |
+          mkdir -p digests
+          touch "digests/${DIGEST#sha256:}"
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
 
       - name: Upload Digest
         uses: actions/upload-artifact@v3
         with:
           name: dash-digests
-          path: digests/*
+          path: digests/
           if-no-files-found: error
           retention-days: 1
 
-  merge_dash:
-    name: Build Dash Image
-    needs: build_dash
-    runs-on: self-hosted
-    steps:
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          config-inline: |
-            [registry."docker.io"]
-              mirrors = ["public-docker.nexus.celestialdata.net"]
-
-      - name: Login to GHCR
-        uses: docker/login-action@v2
-        if: inputs.push-images
-        with:
-          registry: ghcr.io
-          username: m9sweeper
-          password: ${{ github.token }}
-
-      - name: Download Digests
-        uses: actions/download-artifact@v3
-        with:
-          name: dash-digests
-
-      - name: Create Manifest and Push
-        working-directory: digests
-        run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "${{ inputs.dash-image-json }}") \
-            $(printf 'ghcr.io/m9sweeper/dash@sha256:%s ' *)
-
-      - name: Inspect Image
-        run: docker buildx imagetools inspect ghcr.io/m9sweeper/dash:${{ inputs.dash-image-version }}
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
 
   build_trawler:
-    name: Build Trawler Multi-Arch
+    name: Build Trawler
     runs-on: self-hosted
     strategy:
       fail-fast: false
@@ -194,13 +168,12 @@ jobs:
 
       - name: Login to GHCR
         uses: docker/login-action@v2
-        if: inputs.push-images
         with:
           registry: ghcr.io
           username: m9sweeper
           password: ${{ github.token }}
 
-      - name: Build and Push (${{ matrix.platform }})
+      - name: Build and Push
         id: build
         uses: docker/build-push-action@v4
         with:
@@ -213,18 +186,62 @@ jobs:
           cache-to: type=gha,mode=max,scope=build-trawler-${{ matrix.platform }}
 
       - name: Export Digest
-        run:
-          mkdir digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "digests/${digest#sha256:}"
+        run: |
+          mkdir -p digests
+          touch "digests/${DIGEST#sha256:}"
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
 
       - name: Upload Digest
         uses: actions/upload-artifact@v3
         with:
           name: trawler-digests
-          path: digests/*
+          path: digests/
           if-no-files-found: error
           retention-days: 1
+
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
+  merge_dash:
+    name: Build Dash Image
+    needs: build_dash
+    runs-on: self-hosted
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          config-inline: |
+            [registry."docker.io"]
+              mirrors = ["public-docker.nexus.celestialdata.net"]
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: m9sweeper
+          password: ${{ github.token }}
+
+      - name: Download Digests
+        uses: actions/download-artifact@v3
+        with:
+          name: dash-digests
+          path: digests/
+
+      - name: Create Manifest and Push
+        working-directory: digests
+        run: |
+          echo '${{ inputs.dash-image-json }}' > ../image.json
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' < ../image.json) \
+            $(printf 'ghcr.io/m9sweeper/dash@sha256:%s ' *)
+
+      - name: Inspect Image
+        run: docker buildx imagetools inspect ghcr.io/m9sweeper/dash:${{ inputs.dash-image-version }}
+
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
 
   merge_trawler:
     name: Build Trawler Image
@@ -240,7 +257,6 @@ jobs:
 
       - name: Login to GHCR
         uses: docker/login-action@v2
-        if: inputs.push-images
         with:
           registry: ghcr.io
           username: m9sweeper
@@ -250,12 +266,18 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: trawler-digests
+          path: digests/
 
       - name: Create Manifest and Push
         working-directory: digests
         run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "${{ inputs.trawler-image-json }}") \
+          echo '${{ inputs.trawler-image-json }}' > ../image.json
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' < ../image.json) \
             $(printf 'ghcr.io/m9sweeper/trawler@sha256:%s ' *)
 
       - name: Inspect Image
         run: docker buildx imagetools inspect ghcr.io/m9sweeper/trawler:${{ inputs.trawler-image-version }}
+
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()

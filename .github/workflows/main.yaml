@@ -55,6 +55,10 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   build_images:
     name: Build Docker Images
     uses: ./.github/workflows/docker-build.yaml

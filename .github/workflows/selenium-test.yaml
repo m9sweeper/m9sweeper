@@ -183,8 +183,12 @@ jobs:
           check_name: Test Report - k8s ${{ inputs.kubernetes-version }}
           annotate_only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
 
-      - name: Cleanup
+      - name: Cleanup k8s
         if: always()
         run: |
           minikube delete
           helm repo remove m9sweeper
+
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()

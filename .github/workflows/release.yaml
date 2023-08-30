@@ -36,6 +36,10 @@ jobs:
           images: ghcr.io/m9sweeper/trawler
           tags: type=semver,pattern={{version}}
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   build_images:
     name: Build Docker Images
     uses: ./.github/workflows/multi-arch-docker-build.yaml
@@ -135,6 +139,10 @@ jobs:
           checkName: 'deploy'
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   release_umbrella_chart:
     name: Release Umbrella Chart
     permissions:
@@ -203,6 +211,10 @@ jobs:
           checkName: 'deploy'
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Cleanup Work Directory
+        uses: AutoModality/action-clean@v1
+        if: always()
+
   test_matrix:
     name: Run Selenium Tests
     uses: ./.github/workflows/selenium-test.yaml
@@ -240,20 +252,20 @@ jobs:
             helm-version: 'v3.11.3'
 
           - k8s-version: 'v1.25.12'
-            gatekeeper-version: '3.12.0'
-            helm-version: 'v3.13.0'
+            gatekeeper-version: '3.13.0'
+            helm-version: 'v3.12.0'
 
           - k8s-version: 'v1.26.7'
-            gatekeeper-version: '3.12.0'
-            helm-version: 'v3.13.0'
+            gatekeeper-version: '3.13.0'
+            helm-version: 'v3.12.0'
 
           - k8s-version: 'v1.27.4'
-            gatekeeper-version: '3.12.0'
+            gatekeeper-version: '3.13.0'
             helm-version: 'v3.12.0'
 
           - k8s-version: 'v1.28.0'
-            gatekeeper-version: '3.12.0'
-            helm-version: 'v3.13.0'
+            gatekeeper-version: '3.13.0'
+            helm-version: 'v3.12.0'
     with:
       kubernetes-version: ${{ matrix.k8s-version }}
       gatekeeper-version: ${{ matrix.gatekeeper-version }}
