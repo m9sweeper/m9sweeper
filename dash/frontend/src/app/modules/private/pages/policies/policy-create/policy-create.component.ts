@@ -191,8 +191,8 @@ export class PolicyCreateComponent implements OnInit {
 
   openAddScannerDialog() {
     const confirmDialog = this.dialog.open(ScannerCreateComponent, {
-      width: '620px',
-      height: '500px',
+      width: '100%',
+      maxWidth: '620px',
       closeOnNavigation: true,
       disableClose: true,
       data: {policyId: +this.policyId, isPolicyEdit: this.checkIfEdit}
@@ -223,8 +223,8 @@ export class PolicyCreateComponent implements OnInit {
 
   editScanner(scannerRow, index) {
     const confirmDialog = this.dialog.open(ScannerCreateComponent, {
-      width: '620px',
-      height: '500px',
+      width: '100%',
+      maxWidth: '620px',
       closeOnNavigation: true,
       disableClose: true,
       data: {scannerData: scannerRow, isEdit: true, isPolicyEdit: this.checkIfEdit, policyId: +this.policyId}
