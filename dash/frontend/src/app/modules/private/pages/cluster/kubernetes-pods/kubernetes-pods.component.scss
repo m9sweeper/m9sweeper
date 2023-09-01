@@ -5,3 +5,7 @@
 .adjust-height {
   height: fit-content !important;
 }
+
+.mat-column-name, .mat-column-generateName {
+  min-width: 250px;
+}
