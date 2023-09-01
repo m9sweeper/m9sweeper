@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {KubeBenchDialogComponent} from './kube-bench-dialog/kube-bench-dialog.component';
-import {FormBuilder} from '@angular/forms';
 import {KubeBenchService} from '../../../../../core/services/kube-bench.service';
 import {take} from 'rxjs/operators';
 import {IKubeBenchLog, IKubeBenchReport} from '../../../../../core/entities/IKubeBenchReport';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {DatePipe} from '@angular/common';
 import {UserService} from '../../../../../core/services/user.service';
 import {KubeBenchDeleteReportDialogComponent} from './kube-bench-delete-report-dialog/kube-bench-delete-report-dialog.component';
@@ -35,11 +34,9 @@ export class KubeBenchComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private formBuilder: FormBuilder,
     private kubeBenchService: KubeBenchService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-    private router: Router,
     private userService: UserService,
   ) { }
 
@@ -52,7 +49,7 @@ export class KubeBenchComponent implements OnInit {
   openDialog() {
     this.dialog.open(KubeBenchDialogComponent, {
       maxWidth: '1000px',
-      minWidth: '800px',
+      width: '100%',
       maxHeight: '80vh',
       closeOnNavigation: true,
       disableClose: false,
