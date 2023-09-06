@@ -2,22 +2,21 @@
 <div class="page-container">
   <div class="page-container-content">
     <div class="page-title-button-group-spacing row" id="clusterSummaryHeader">
-      <div class="col-md-6 col-xs-12 start-xs cluster-group-name display-flex">
+      <div class="col-sm-7 col-xs-12 start-xs cluster-group-name display-flex">
         {{ clusterGroupName }}
-        <button  [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button  (click)="editClusterGroupNameDialog()">
+        <button class="align-self-center" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button  (click)="editClusterGroupNameDialog()">
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
-      <div class="col-md-6 col-xs-12 start-xs end-md display-flex flex-direction-xs-col flex-direction-md-row align-items-center">
+      <div class="col-sm-5 col-xs-12 start-xs end-sm display-flex flex-direction-xs-row align-items-center">
         <button
-          class="margin-right-10 mb-xs-2 mb-md-0"
+          class="margin-right-10"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="warn"
           [disabled]="!clustersList || clustersList.length || disableOnSearch"
           (click)="deleteClusterGroup()">Delete Cluster Group</button>
         <button
-          class="margin-right-10"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="primary"

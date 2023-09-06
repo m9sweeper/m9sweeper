@@ -21,6 +21,7 @@ import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
 import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
 import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { SimpleMessageDialogComponent } from './simple-message-dialog/simple-message-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     SideNavComponent,
     HideableTextComponent,
     ReadonlyCheckboxComponent,
+    SimpleMessageDialogComponent,
   ],
   imports: [
     MatDialogModule,

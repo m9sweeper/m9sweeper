@@ -15,14 +15,13 @@
           <mat-label>Search image</mat-label>
           <input #imageInput matInput autocomplete="off" type="search" value="{{searchTerm}}"/>
         </mat-form-field>
-        <button mat-raised-button color="primary"
+        <button mat-raised-button color="primary" class="w-100 min-height-btn"
           [ngClass]="userIsAdmin ? 'mb-xs-2 mb-md-0 me-xs-0 me-md-2' : 'mb-xs-3 mb-md-0'"
-          id="advancedSearchButton"
           (click)="openAdvancedSearchDialog()">
           Advanced Search
         </button>
         <button
-          class="mb-xs-3 mb-md-0" id="scanDisplayedButton"
+          class="mb-xs-3 mb-md-0 w-100 min-height-btn"
           *ngIf="userIsAdmin"
           [disabled]="!(dataSource && dataSource.data)"
           (click)="openConfirmScanDialog()"

@@ -6,6 +6,7 @@ import {KubeHunterService} from '../../../../../../core/services/kube-hunter.ser
 import {MatTableDataSource} from '@angular/material/table';
 import {ClusterService} from '../../../../../../core/services/cluster.service';
 import {ICluster} from '../../../../../../core/entities/ICluster';
+import {UtilService} from '../../../../../../core/services/util.service';
 
 @Component({
   selector: 'app-kube-hunter-report-details',
@@ -31,6 +32,7 @@ export class KubeHunterReportDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private kubehunterService: KubeHunterService,
     private clusterService: ClusterService,
+    protected readonly utils: UtilService
   ) {
     this.id = +this.route.snapshot.paramMap.get('id');
   }
@@ -64,5 +66,9 @@ export class KubeHunterReportDetailsComponent implements OnInit {
 
   getCluster(clusterId: number) {
     this.clusterService.getClusterById(clusterId).pipe(take(1)).subscribe(cluster => this.cluster = cluster.data);
+  }
+
+  showFullDescription(vulnName: string, desc: string) {
+    this.utils.showGenericMessageDialog(vulnName, desc);
   }
 }

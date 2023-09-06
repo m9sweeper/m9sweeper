@@ -23,6 +23,7 @@ import { PodComplianceSummaryDto } from '../dto/pod-compliance-summary-dto';
 import { GatekeeperService } from '../../gatekeeper/services/gatekeeper.service';
 import {ClusterService} from '../../cluster/services/cluster.service';
 import {ClusterGroupService} from '../../cluster-group/services/cluster-group-service';
+import {MineLoggerService} from '../../shared/services/mine-logger.service';
 
 @ApiTags('Pods')
 @Controller()
@@ -35,6 +36,7 @@ export class PodController {
       private readonly gatekeeperService: GatekeeperService,
       protected readonly clusterService: ClusterService,
       protected readonly clusterGroupService: ClusterGroupService,
+      protected readonly logger: MineLoggerService,
     ) {}
 
     @Get()
@@ -51,10 +53,19 @@ export class PodController {
       @Query('page') page?: number,
       @Query('sort') sort?: {field: string; direction: string; },
     ): Promise<PodDto[]>{
-        const violations = await this.gatekeeperService.getTotalViolations(clusterId);
         const pods =  await this.podService.getAllPods(clusterId, namespace, sort, page, limit);
-        if (pods && pods.length) {
-            pods.map(p => p.violations = violations.filter(v => v.name === p.name));
+        // Add violation info to pods if Gatekeeper is installed & available
+        const gatekeeperStatus = await this.gatekeeperService.getInstallationInfo(clusterId);
+        if (gatekeeperStatus.status) {
+            // Failures to get violations don't cause endpoint to fail
+            const violations = await this.gatekeeperService.getTotalViolations(clusterId)
+              .catch((err) => {
+                  this.logger.error('Could not retrieve gatekeeper violations', err, 'PodController.getAllPods');
+                  return [];
+              });
+            if (pods?.length && violations?.length) {
+                pods.map(p => p.violations = violations.filter(v => v.name === p.name));
+            }
         }
         return pods;
     }
@@ -181,14 +192,24 @@ export class PodController {
       @Query('clusterId') clusterId: number,
       @Query('namespace') namespace: string,
     ): Promise<PodDto> {
-        const violations = await this.gatekeeperService.getTotalViolations(clusterId);
+
         let pod = null;
         if (typeof(podIdentifier) === 'number') {
             pod = await this.podService.getPodById(podIdentifier);
         } else {
             pod = await this.podService.getPodByName(clusterId, namespace, podIdentifier);
         }
-        pod.violations = violations.filter(v => v.name === pod.name);
+        // If Gatekeeper is installed, get relevant violations for this pod
+        const gatekeeperStatus = await this.gatekeeperService.getInstallationInfo(clusterId);
+        if (gatekeeperStatus.status) {
+            // Failures to get violations don't cause endpoint to fail
+            const violations = await this.gatekeeperService.getTotalViolations(clusterId)
+              .catch((err) => {
+                  this.logger.error('Could not retrieve gatekeeper violations', err, 'PodController.getSinglePod');
+                  return [];
+              });
+            pod.violations = violations.filter(v => v.name === pod.name);
+        }
         return pod;
     }
 }
