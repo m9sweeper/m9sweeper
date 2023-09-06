@@ -153,8 +153,6 @@ mat-card div div {
 
     .mat-column-name {
       min-width: 250px;
-      white-space: nowrap;
-      overflow: hidden;
     }
 
     .mat-column-installedVersion {
@@ -167,7 +165,7 @@ mat-card div div {
     }
     .mat-column-isFixable {
       min-width: 125px;
-      max-width: 150px;
+      max-width: 300px;
       .row {
         margin: 0;
       }
@@ -187,5 +185,20 @@ mat-card div div {
       min-width: 155px;
       margin-left: 0.25em;
     }
+  }
+}
+
+.ellipsis-text {
+  // Old browsers elipsis - will only allow single line of text with ellipsis
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  white-space: nowrap;
+
+  // Modern browsers - will support multiple lines before showing ellipsis
+  @supports (-webkit-line-clamp: 2) {
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 }

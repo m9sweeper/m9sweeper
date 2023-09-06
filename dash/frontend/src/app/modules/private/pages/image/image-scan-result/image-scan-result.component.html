@@ -196,7 +196,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</mat-header-cell>
             <mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
-              {{issue.name}}
+              <span class="w-100 ellipsis-text">{{issue.name}}</span>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="installedVersion">
@@ -208,8 +208,12 @@
           <ng-container matColumnDef="isFixable" >
             <mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
-              <span *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+              <div class="display-flex w-100 overflow-hidden">
+                <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
+                <div class="overflow-hidden">
+                  <span class="ellipsis-text w-100" *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+                </div>
+              </div>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="more">
