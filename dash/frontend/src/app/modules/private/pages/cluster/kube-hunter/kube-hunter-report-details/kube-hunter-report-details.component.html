@@ -32,7 +32,11 @@
           </ng-container>
           <ng-container matColumnDef="description">
             <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-            <mat-cell *matCellDef="let vuln" [matTooltip]="vuln.description"> {{vuln.description}} </mat-cell>
+            <mat-cell *matCellDef="let vuln" [matTooltip]="vuln.description">
+              <div class="description-wrapper" (click)="showFullDescription(vuln.vulnerability, vuln.description)">
+                {{vuln.description}}
+              </div>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="additionalInfo">
             <mat-header-cell *matHeaderCellDef> Additional Information </mat-header-cell>
