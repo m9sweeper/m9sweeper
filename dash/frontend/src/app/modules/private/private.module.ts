@@ -40,7 +40,6 @@ import { OrganizationSettingsComponent } from './pages/organization-settings/org
 import { PolicyListComponent } from './pages/policies/policy-list/policy-list.component';
 import { PolicyCreateComponent } from './pages/policies/policy-create/policy-create.component';
 import { ScannerCreateComponent } from './pages/scanners/scanner-create/scanner-create.component';
-import { ScannerListComponent } from './pages/scanners/scanner-list/scanner-list.component';
 import { SubNavigationComponent } from '../shared/subnavigation/sub-navigation.component';
 import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 import { ExternalAuthConfigurationListComponent } from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
@@ -148,7 +147,6 @@ import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     PolicyListComponent,
     PolicyCreateComponent,
     ScannerCreateComponent,
-    ScannerListComponent,
     SubNavigationComponent,
     ChangePasswordComponent,
     ExternalAuthConfigurationListComponent,

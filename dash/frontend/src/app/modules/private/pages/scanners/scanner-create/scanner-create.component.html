@@ -1,19 +1,23 @@
-<div class="create-scanner-form" >
+<mat-dialog-content class="overflow-visible">
   <form [formGroup]="createScannerForm" class="scanner-form" (ngSubmit)="onSubmit()">
-    <div>
-      <p>
+    <div class="row">
+      <div class="col-xs-12">
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Scanner Name" type="text" formControlName="name">
         </mat-form-field>
-      </p>
-      <p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
         <mat-form-field appearance="fill">
           <mat-label>Description</mat-label>
           <textarea matInput rows="5" placeholder="Description" type="text" formControlName="description" > </textarea>
         </mat-form-field>
-      </p>
-      <p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
         <mat-form-field>
           <mat-label>Type</mat-label>
           <mat-select formControlName="type" (valueChange)="displayTrivySettings($event)">
@@ -22,87 +26,95 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </p>
-      <p>
-        <mat-checkbox formControlName="enabled" class="checkbox-margin">Active</mat-checkbox>
-      </p>
-      <p>
-        <mat-checkbox formControlName="required" class="checkbox-margin">Required</mat-checkbox>
-      </p>
-
-      <div style="display: flex; flex-direction: row" *ngIf="displayTrivyVulnerabilitySettings">
-        <div>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Fixable Critical</mat-label>
-              <input matInput type="text" formControlName="fixableCritical">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Fixable Major</mat-label>
-              <input matInput type="text" formControlName="fixableMajor">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Fixable Normal</mat-label>
-              <input matInput type="text" formControlName="fixableNormal">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Fixable Low</mat-label>
-              <input matInput type="text" formControlName="fixableLow">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Fixable Negligible</mat-label>
-              <input matInput type="text" formControlName="fixableNegligible">
-            </mat-form-field>
-          </p>
-        </div>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <div>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Unfixable Critical</mat-label>
-              <input matInput type="text" formControlName="unFixableCritical">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Unfixable Major</mat-label>
-              <input matInput type="text" formControlName="unFixableMajor">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Unfixable Normal</mat-label>
-              <input matInput type="text" formControlName="unFixableNormal">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Unfixable Low</mat-label>
-              <input matInput type="text" formControlName="unFixableLow">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Max Unfixable Negligible</mat-label>
-              <input matInput type="text" formControlName="unFixableNegligible">
-            </mat-form-field>
-          </p>
-        </div>
-
       </div>
-
     </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-checkbox formControlName="enabled" class="checkbox-margin">Active</mat-checkbox>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-checkbox formControlName="required" class="checkbox-margin">Required</mat-checkbox>
+      </div>
+    </div>
+
+    <ng-container *ngIf="displayTrivyVulnerabilitySettings">
+      <div class="row">
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Fixable Critical</mat-label>
+            <input matInput type="text" formControlName="fixableCritical">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Unfixable Critical</mat-label>
+            <input matInput type="text" formControlName="unFixableCritical">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Fixable Major</mat-label>
+            <input matInput type="text" formControlName="fixableMajor">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Unfixable Major</mat-label>
+            <input matInput type="text" formControlName="unFixableMajor">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Fixable Normal</mat-label>
+            <input matInput type="text" formControlName="fixableNormal">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Unfixable Normal</mat-label>
+            <input matInput type="text" formControlName="unFixableNormal">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Fixable Low</mat-label>
+            <input matInput type="text" formControlName="fixableLow">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Unfixable Low</mat-label>
+            <input matInput type="text" formControlName="unFixableLow">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Fixable Negligible</mat-label>
+            <input matInput type="text" formControlName="fixableNegligible">
+          </mat-form-field>
+        </div>
+        <div class="col-xs-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Max Unfixable Negligible</mat-label>
+            <input matInput type="text" formControlName="unFixableNegligible">
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+
     <div mat-dialog-actions>
       <button [disabled]="!createScannerForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
       <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
     </div>
   </form>
-</div>
+</mat-dialog-content>

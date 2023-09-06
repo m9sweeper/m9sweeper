@@ -8,7 +8,6 @@ import {MatSort} from '@angular/material/sort';
 import {AlertService} from 'src/app/core/services/alert.service';
 import {PolicyService} from '../../../../../core/services/policy.service';
 import {ScannerService} from '../../../../../core/services/scanner.service';
-import {ScannerListComponent} from '../../scanners/scanner-list/scanner-list.component';
 import {IScanner, IScannerDialogData} from '../../../../../core/entities/IScanner';
 import {ScannerCreateComponent} from '../../scanners/scanner-create/scanner-create.component';
 import {IServerResponse} from '../../../../../core/entities/IServerResponse';
@@ -32,7 +31,6 @@ export class PolicyCreateComponent implements OnInit {
   policyId: number;
   dataSource: MatTableDataSource<IScanner>;
   displayedColumns: string[] = ['enabled', 'required', 'name', 'description', 'type', 'actions', 'delete'];
-  @ViewChild(ScannerListComponent) scannerList;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   currentScannerData: any;
   currentPolicy: any;
@@ -193,8 +191,8 @@ export class PolicyCreateComponent implements OnInit {
 
   openAddScannerDialog() {
     const confirmDialog = this.dialog.open(ScannerCreateComponent, {
-      width: '620px',
-      height: '500px',
+      width: '100%',
+      maxWidth: '620px',
       closeOnNavigation: true,
       disableClose: true,
       data: {policyId: +this.policyId, isPolicyEdit: this.checkIfEdit}
@@ -225,8 +223,8 @@ export class PolicyCreateComponent implements OnInit {
 
   editScanner(scannerRow, index) {
     const confirmDialog = this.dialog.open(ScannerCreateComponent, {
-      width: '620px',
-      height: '500px',
+      width: '100%',
+      maxWidth: '620px',
       closeOnNavigation: true,
       disableClose: true,
       data: {scannerData: scannerRow, isEdit: true, isPolicyEdit: this.checkIfEdit, policyId: +this.policyId}

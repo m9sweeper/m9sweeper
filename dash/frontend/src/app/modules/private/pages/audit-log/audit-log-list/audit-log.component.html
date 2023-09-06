@@ -74,7 +74,7 @@
             </ng-container>
             <ng-container matColumnDef="event_time">
               <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Time</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog"> {{auditLog.createdAt}} </mat-cell>
+              <mat-cell *matCellDef="let auditLog"> {{auditLog.createdAt | date: 'short'}} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="data">
               <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> MetaData</mat-header-cell>

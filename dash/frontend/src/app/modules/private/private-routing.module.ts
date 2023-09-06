@@ -10,7 +10,6 @@ import {ClusterSummaryComponent} from './pages/cluster/cluster-summary/cluster-s
 import {ClusterInfoComponent} from './pages/cluster/cluster-info/cluster-info.component';
 import {OrganizationSettingsComponent} from './pages/organization-settings/organization-settings.component';
 import {PolicyListComponent} from './pages/policies/policy-list/policy-list.component';
-import {ScannerListComponent} from './pages/scanners/scanner-list/scanner-list.component';
 import {PolicyCreateComponent} from './pages/policies/policy-create/policy-create.component';
 import {ChangePasswordComponent} from './pages/change-password/change-password.component';
 import {ExternalAuthConfigurationListComponent} from './pages/external-auth-configuration/external-auth-configuration-list/external-auth-configuration-list.component';
@@ -377,15 +376,6 @@ const routes: Routes = [
             canActivate: [RoleGuard],
             data: {
               title: 'Edit Policy',
-              allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
-            }
-          },
-          {
-            path: 'scanners',
-            component: ScannerListComponent,
-            canActivate: [RoleGuard],
-            data: {
-              title: 'Scanners',
               allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
             }
           }

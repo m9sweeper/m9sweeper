@@ -819,3 +819,7 @@ app-datepicker-component {
 .ngx-charts .circle {
   cursor: default !important; // disable ngx-chart's default behavior of changing the cursor to a pointer on hover
 }
+
+.overflow-visible {
+  overflow: visible!important;
+}
