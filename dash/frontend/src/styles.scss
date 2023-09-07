@@ -532,10 +532,10 @@ mat-form-field {
   }
 }
 
-.main-container{
-  height:100%;
+.main-container {
+  height: 100%;
   display: flex;
-  flex-display: row;
+  flex-direction: row;
 }
 
 // CSS for Report pages [Start]
@@ -826,4 +826,19 @@ app-datepicker-component {
 
 .overflow-hidden {
   overflow: hidden!important;
+}
+
+.ellipsis-two-lines {
+  // Old browsers ellipsis - will only allow single line of text with ellipsis
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  white-space: nowrap;
+
+  // Modern browsers - will support multiple lines before showing ellipsis
+  @supports (-webkit-line-clamp: 2) {
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 }

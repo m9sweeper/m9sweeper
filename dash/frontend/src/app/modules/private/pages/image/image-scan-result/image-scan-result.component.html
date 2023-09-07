@@ -150,7 +150,9 @@
         <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
-            <mat-cell *matCellDef="let issue" [matTooltip]="issue.scannerName"> {{issue.scannerName}} </mat-cell>
+            <mat-cell *matCellDef="let issue">
+              <app-expandable-cell-contents [text]="issue.scannerName" dialogHeader="Scanner"></app-expandable-cell-contents>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
             <mat-header-cell class="ps-xs-0" *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</mat-header-cell>
@@ -196,7 +198,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</mat-header-cell>
             <mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
-              <span class="w-100 ellipsis-text">{{issue.name}}</span>
+              <app-expandable-cell-contents [text]="issue.name" dialogHeader="Issue Titles"></app-expandable-cell-contents>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="installedVersion">
@@ -211,7 +213,7 @@
               <div class="display-flex w-100 overflow-hidden">
                 <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
                 <div class="overflow-hidden">
-                  <span class="ellipsis-text w-100" *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+                  <span class="ellipsis-two-lines w-100" *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
                 </div>
               </div>
             </mat-cell>

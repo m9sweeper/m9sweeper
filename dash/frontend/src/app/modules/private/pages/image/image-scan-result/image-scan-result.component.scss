@@ -114,8 +114,8 @@ mat-card div div {
 
   #issuesTable {
     .mat-column-scanner {
-      min-width: 50px;
-      max-width: 100px;
+      min-width: 100px;
+      max-width: 300px;
     }
 
     mat-header-cell.mat-column-isCompliant {
@@ -188,17 +188,4 @@ mat-card div div {
   }
 }
 
-.ellipsis-text {
-  // Old browsers elipsis - will only allow single line of text with ellipsis
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-  white-space: nowrap;
 
-  // Modern browsers - will support multiple lines before showing ellipsis
-  @supports (-webkit-line-clamp: 2) {
-    white-space: initial;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-}
