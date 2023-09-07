@@ -213,7 +213,9 @@
               <div class="display-flex w-100 overflow-hidden">
                 <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
                 <div class="overflow-hidden">
-                  <span class="ellipsis-two-lines w-100" *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+                  <app-ellipsis-text class="w-100" *ngIf="issue.isFixable"
+                                     [text]="'(' + (issue.fixedVersion ? issue.fixedVersion : 'N/A') + ')'"
+                  ></app-ellipsis-text>
                 </div>
               </div>
             </mat-cell>
