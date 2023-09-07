@@ -151,7 +151,7 @@
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <app-expandable-cell-contents [text]="issue.scannerName" dialogHeader="Scanner"></app-expandable-cell-contents>
+              <app-ellipsis-text [text]="issue.scannerName" dialogHeader="Scanner"></app-ellipsis-text>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
@@ -198,7 +198,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</mat-header-cell>
             <mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
-              <app-expandable-cell-contents [text]="issue.name" dialogHeader="Issue Titles"></app-expandable-cell-contents>
+              <app-ellipsis-text [text]="issue.name" dialogHeader="Issue Titles"></app-ellipsis-text>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="installedVersion">
