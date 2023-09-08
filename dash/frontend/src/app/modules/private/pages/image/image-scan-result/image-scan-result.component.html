@@ -32,7 +32,7 @@
       <div class="image-details">
         <div class="left-elements">
           <div class="elements" style="min-width: 110px;">
-            <p>Scan Result</p>
+            <p>Compliant</p>
             <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>
           </div>
           <div class="elements" style="min-width: 160px;">
@@ -100,11 +100,15 @@
           </ng-container>
           <ng-container matColumnDef="compliant">
             <mat-header-cell *matHeaderCellDef matTooltip="Compliant">Compliant</mat-header-cell>
-            <mat-cell *matCellDef="let result"> {{result.policyStatus ? 'Yes' : 'No'}} </mat-cell>
+            <mat-cell *matCellDef="let result">
+              <app-readonly-checkbox [checked]="result.policyStatus"></app-readonly-checkbox>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="required">
             <mat-header-cell *matHeaderCellDef matTooltip="Required">Required</mat-header-cell>
-            <mat-cell *matCellDef="let result"> {{result.policyRequirement ? 'Yes' : 'No' }} </mat-cell>
+            <mat-cell *matCellDef="let result">
+              <app-readonly-checkbox [checked]="result.policyRequirement"></app-readonly-checkbox>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="critical_issues">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear [matTooltip]="VulnerabilitySeverity.CRITICAL">{{VulnerabilitySeverityAbbreviations.CRITICAL |titlecase }}</mat-header-cell>
