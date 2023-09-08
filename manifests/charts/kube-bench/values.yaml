@@ -57,7 +57,7 @@ resources:
 priorityClassName: ""
 
 securityContext:
-  enabled: true
+  enabled: false
   fsGroup: 1000
   runAsGroup: 1000
   runAsNonRoot: true
