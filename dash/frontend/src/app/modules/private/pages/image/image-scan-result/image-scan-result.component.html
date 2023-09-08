@@ -30,47 +30,80 @@
         </div>
       </div>
       <div class="image-details">
-        <div class="left-elements">
-          <div class="elements" style="min-width: 110px;">
-            <p>Compliant</p>
-            <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>
-          </div>
-          <div class="elements" style="min-width: 160px;">
-            <p>Last Scanned</p>
-            <div *ngIf="dataSource.lastScanned; else elseBlock">
-              <p>{{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}</p>
-            </div>
-            <ng-template #elseBlock>
-              <p>Not Scanned</p>
-            </ng-template>
-          </div>
-          <div class="elements">
-            <p>Running</p>
-            <p >{{dataSource.runningInCluster}}</p>
-          </div>
-        </div>
-        <div class="right-elements" >
-          <div class="elements">
-            <p>{{VulnerabilitySeverity.CRITICAL | titlecase}}</p>
-            <p>{{dataSource.criticalIssues}}</p>
-          </div>
-          <div class="elements">
-            <p>{{VulnerabilitySeverity.MAJOR | titlecase}}</p>
-            <p >{{dataSource.majorIssues}}</p>
-          </div>
-          <div class="elements">
-            <p>{{VulnerabilitySeverity.MEDIUM | titlecase}}</p>
-            <p >{{dataSource.mediumIssues}}</p>
-          </div>
-          <div class="elements">
-            <p>{{VulnerabilitySeverity.LOW | titlecase}}</p>
-            <p >{{dataSource.lowIssues}}</p>
-          </div>
-          <div class="elements">
-            <p>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</p>
-            <p >{{dataSource.negligibleIssues}}</p>
-          </div>
-        </div>
+        <table class="w-100 image-details-table">
+          <tr>
+            <th>Compliant</th>
+            <th>Last Scanned</th>
+            <th>Running</th>
+            <th>{{VulnerabilitySeverity.CRITICAL | titlecase}}</th>
+            <th>{{VulnerabilitySeverity.MAJOR | titlecase}}</th>
+            <th>{{VulnerabilitySeverity.MEDIUM | titlecase}}</th>
+            <th>{{VulnerabilitySeverity.LOW | titlecase}}</th>
+            <th>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</th>
+          </tr>
+          <tr class="text-align-center">
+            <td>
+              <app-readonly-checkbox [checked]="scanResultText === 'Compliant'"></app-readonly-checkbox>
+            </td>
+            <td>
+              <ng-container *ngIf="dataSource.lastScanned; else unscanned">
+                {{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}
+              </ng-container>
+              <ng-template #unscanned>
+                Not Scanned
+              </ng-template>
+            </td>
+            <td>
+              <app-readonly-checkbox [checked]="dataSource.runningInCluster"></app-readonly-checkbox>
+            </td>
+            <td>{{dataSource.criticalIssues}}</td>
+            <td>{{dataSource.majorIssues}}</td>
+            <td>{{dataSource.mediumIssues}}</td>
+            <td>{{dataSource.lowIssues}}</td>
+            <td>{{dataSource.negligibleIssues}}</td>
+          </tr>
+        </table>
+<!--        <div class="left-elements">-->
+<!--          <div class="elements" style="min-width: 110px;">-->
+<!--            <p>Compliant</p>-->
+<!--            <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>-->
+<!--          </div>-->
+<!--          <div class="elements" style="min-width: 160px;">-->
+<!--            <p>Last Scanned</p>-->
+<!--            <div *ngIf="dataSource.lastScanned; else elseBlock">-->
+<!--              <p>{{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}</p>-->
+<!--            </div>-->
+<!--            <ng-template #elseBlock>-->
+<!--              <p>Not Scanned</p>-->
+<!--            </ng-template>-->
+<!--          </div>-->
+<!--          <div class="elements">-->
+<!--            <p>Running</p>-->
+<!--            <p >{{dataSource.runningInCluster}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="right-elements" >-->
+<!--          <div class="elements">-->
+<!--            <p>{{VulnerabilitySeverity.CRITICAL | titlecase}}</p>-->
+<!--            <p>{{dataSource.criticalIssues}}</p>-->
+<!--          </div>-->
+<!--          <div class="elements">-->
+<!--            <p>{{VulnerabilitySeverity.MAJOR | titlecase}}</p>-->
+<!--            <p >{{dataSource.majorIssues}}</p>-->
+<!--          </div>-->
+<!--          <div class="elements">-->
+<!--            <p>{{VulnerabilitySeverity.MEDIUM | titlecase}}</p>-->
+<!--            <p >{{dataSource.mediumIssues}}</p>-->
+<!--          </div>-->
+<!--          <div class="elements">-->
+<!--            <p>{{VulnerabilitySeverity.LOW | titlecase}}</p>-->
+<!--            <p >{{dataSource.lowIssues}}</p>-->
+<!--          </div>-->
+<!--          <div class="elements">-->
+<!--            <p>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</p>-->
+<!--            <p >{{dataSource.negligibleIssues}}</p>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
     </mat-card>
     <mat-card id="scannerError" class="mb-xs-3 pt-xs-3" *ngIf="lastScanReport?.encounterError">
