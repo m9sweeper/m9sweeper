@@ -41,8 +41,7 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header> Compliant </mat-header-cell>
             <mat-cell *matCellDef="let element">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', this.namespace, 'pods', element?.name]">
-                <mat-icon *ngIf="element?.compliant === true">check_circle</mat-icon>
-                <mat-icon *ngIf="element?.compliant !== true">highlight_off</mat-icon>
+                <app-readonly-checkbox [checked]="element?.compliant"></app-readonly-checkbox>
               </a>
             </mat-cell>
           </ng-container>
