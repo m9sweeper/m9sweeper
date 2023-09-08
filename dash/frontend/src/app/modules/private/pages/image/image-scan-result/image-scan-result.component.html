@@ -187,7 +187,9 @@
         <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
-            <mat-cell *matCellDef="let issue" [matTooltip]="issue.scannerName"> {{issue.scannerName}} </mat-cell>
+            <mat-cell *matCellDef="let issue">
+              <app-ellipsis-text [text]="issue.scannerName" dialogHeader="Scanner"></app-ellipsis-text>
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="isCompliant">
             <mat-header-cell class="ps-xs-0" *matHeaderCellDef mat-sort-header="required_for_compliance" disableClear> Compliant</mat-header-cell>
@@ -233,7 +235,7 @@
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner_name" disableClear> Issue Title</mat-header-cell>
             <mat-cell *matCellDef="let issue" [matTooltip]="issue.name">
-              {{issue.name}}
+              <app-ellipsis-text [text]="issue.name" dialogHeader="Issue Titles"></app-ellipsis-text>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="installedVersion">
@@ -245,8 +247,14 @@
           <ng-container matColumnDef="isFixable" >
             <mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
-              <span *ngIf="issue.isFixable"> ({{ issue.fixedVersion ? issue.fixedVersion : 'N/A' }})</span>
+              <div class="display-flex w-100 overflow-hidden">
+                <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
+                <div class="overflow-hidden">
+                  <app-ellipsis-text class="w-100" *ngIf="issue.isFixable"
+                                     [text]="'(' + (issue.fixedVersion ? issue.fixedVersion : 'N/A') + ')'"
+                  ></app-ellipsis-text>
+                </div>
+              </div>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="more">

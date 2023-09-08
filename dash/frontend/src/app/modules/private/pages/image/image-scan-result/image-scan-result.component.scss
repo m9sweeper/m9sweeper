@@ -97,8 +97,8 @@ mat-card div div {
 
   #issuesTable {
     .mat-column-scanner {
-      min-width: 50px;
-      max-width: 100px;
+      min-width: 100px;
+      max-width: 300px;
     }
 
     mat-header-cell.mat-column-isCompliant {
@@ -136,8 +136,6 @@ mat-card div div {
 
     .mat-column-name {
       min-width: 250px;
-      white-space: nowrap;
-      overflow: hidden;
     }
 
     .mat-column-installedVersion {
@@ -150,7 +148,7 @@ mat-card div div {
     }
     .mat-column-isFixable {
       min-width: 125px;
-      max-width: 150px;
+      max-width: 300px;
       .row {
         margin: 0;
       }

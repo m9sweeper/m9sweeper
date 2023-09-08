@@ -1,3 +1,18 @@
 .mat-mdc-card {
   max-width: 2000px;
 }
+.vuln-history-table {
+  .mat-column-savedDate,
+  .mat-column-totalCritical,
+  .mat-column-totalMajor,
+  .mat-column-totalMedium,
+  .mat-column-totalLow,
+  .mat-column-totalNegligible,
+  .mat-column-totalFixableCritical,
+  .mat-column-totalFixableMajor,
+  .mat-column-totalFixableMedium,
+  .mat-column-totalFixableLow,
+  .mat-column-totalFixableNegligible {
+    min-width: 100px;
+  }
+}

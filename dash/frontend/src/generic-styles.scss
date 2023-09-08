@@ -107,6 +107,16 @@ $classesToGenerate: (
       unset: unset,
     ),
   ),
+  text-align: (
+    abbreviation: 'text-align',
+    values: (
+      left: left, center: center, right: right,
+      start: start, end: end, justify: justify,
+      justify-all: "justify-all", match-parent: "match-parent",
+      inherit: inherit, initial: initial, revert: revert,
+      revert-layer: "revert-layer", unset: unset
+    )
+  )
 );
 
 $spacer: 1em;

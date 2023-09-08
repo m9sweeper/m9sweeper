@@ -22,6 +22,7 @@ import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.compone
 import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SimpleMessageDialogComponent } from './simple-message-dialog/simple-message-dialog.component';
+import { EllipsisTextComponent } from './components/expandable-cell-contents/ellipsis-text.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { SimpleMessageDialogComponent } from './simple-message-dialog/simple-mes
     HideableTextComponent,
     ReadonlyCheckboxComponent,
     SimpleMessageDialogComponent,
+    EllipsisTextComponent,
   ],
   imports: [
     MatDialogModule,
@@ -62,6 +64,7 @@ import { SimpleMessageDialogComponent } from './simple-message-dialog/simple-mes
     SideNavComponent,
     HideableTextComponent,
     ReadonlyCheckboxComponent,
+    EllipsisTextComponent,
   ]
 })
 export class SharedModule {

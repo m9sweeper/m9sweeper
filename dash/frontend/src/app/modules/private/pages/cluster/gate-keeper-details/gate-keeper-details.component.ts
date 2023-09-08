@@ -85,16 +85,18 @@ export class GateKeeperDetailsComponent implements OnInit {
 
     openDestroyTemplateDialog.afterClosed()
       .pipe(take(1))
-      .subscribe(response => {
-        this.gatekeeperService.deleteConstraintTemplate(this.clusterId, this.templateName)
-          .pipe(take(1))
-          .subscribe(() => {
-            this.alertService.success('Constraint Template successfully deleted');
-            this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
-          }, error => {
-            this.alertService.dangerAlertForHTTPError(error, 'GateKeeperDetailsComponent.destroyConstraintTemplate');
-            this.getConstraintTemplateDetails();
-          });
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.gatekeeperService.deleteConstraintTemplate(this.clusterId, this.templateName)
+            .pipe(take(1))
+            .subscribe(() => {
+              this.alertService.success('Constraint Template successfully deleted');
+              this.router.navigate([`private/clusters/${this.clusterId}/gatekeeper`]);
+            }, error => {
+              this.alertService.dangerAlertForHTTPError(error, 'GateKeeperDetailsComponent.destroyConstraintTemplate');
+              this.getConstraintTemplateDetails();
+            });
+        }
       });
   }
 
