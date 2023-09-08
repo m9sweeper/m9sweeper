@@ -1,8 +1,9 @@
 <div class="pod-score row">
-  <div class="col-xs-9 pod-name">
-    {{'Kubesec ' + kubesecReport.object.substring(4)}}
+  <div class="col-xs-10 col-sm-9 pod-name first-sm">
+    <app-ellipsis-text class="w-100" [text]="'Kubesec ' + kubesecReport.object.substring(4)"></app-ellipsis-text>
+
   </div>
-  <div class="col-xs-3 kubesec-score" [ngStyle]="{'background': decideScoreColor(kubesecReport.score)}" [matTooltip]="'Overall Score: ' + kubesecReport.score">
+  <div class="col-xs-2 col-sm-3 kubesec-score" [ngStyle]="{'background-color': decideScoreColor(kubesecReport.score)}" [matTooltip]="'Overall Score: ' + kubesecReport.score">
     {{kubesecReport.score}}
   </div>
 </div>

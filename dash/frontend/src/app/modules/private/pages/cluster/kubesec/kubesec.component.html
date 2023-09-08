@@ -78,12 +78,24 @@
             <mat-accordion *ngFor="let report of kubesecReports" multi>
               <mat-expansion-panel class="light-border">
                 <mat-expansion-panel-header>
-                  <mat-panel-title>{{report.object.substring(4)}}</mat-panel-title>
-                  <mat-panel-description> Score:
-                    <span [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
-                      {{ report.score }}
-                    </span>
-                  </mat-panel-description>
+                  <mat-panel-title>
+                    <div class="row w-100">
+                      <div class="col-md-9 col-sm-8 col-xs-12">
+                        <app-ellipsis-text
+                          [clickable]="false"
+                          [text]="report.object.substring(4)">
+                        </app-ellipsis-text>
+                      </div>
+                      <div class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
+                        <span>
+                        Score:
+                        <span [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
+                          {{ report.score }}
+                        </span>
+                          </span>
+                      </div>
+                    </div>
+                  </mat-panel-title>
                 </mat-expansion-panel-header>
                 <app-kubesec-report [kubesecReport]="report"></app-kubesec-report>
               </mat-expansion-panel>

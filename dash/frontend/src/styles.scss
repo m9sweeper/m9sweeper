@@ -532,10 +532,10 @@ mat-form-field {
   }
 }
 
-.main-container{
-  height:100%;
+.main-container {
+  height: 100%;
   display: flex;
-  flex-display: row;
+  flex-direction: row;
 }
 
 // CSS for Report pages [Start]
@@ -822,4 +822,8 @@ app-datepicker-component {
 
 .overflow-visible {
   overflow: visible!important;
+}
+
+.overflow-hidden {
+  overflow: hidden!important;
 }
