@@ -1,0 +1,18 @@
+.expandable-cell-btn {
+  cursor: pointer;
+}
+
+.ellipsis-two-lines {
+  // Old browsers ellipsis - will only allow single line of text with ellipsis
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  white-space: nowrap;
+
+  // Modern browsers - will support multiple lines before showing ellipsis
+  @supports (-webkit-line-clamp: 2) {
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}

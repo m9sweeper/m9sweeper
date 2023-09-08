@@ -13,7 +13,7 @@ export class TemplateConstraintManifestComponent implements OnInit {
     theme: 'idea',
     mode: 'application/javascript',
     lineNumbers: true,
-    lineWrapping: true,
+    lineWrapping: false,
     foldGutter: true,
     // gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
     autoCloseBrackets: true,
