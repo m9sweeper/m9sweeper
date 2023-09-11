@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import { take, takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import { NamespaceService } from '../../../../../core/services/namespace.service';
@@ -98,7 +98,7 @@ export class WorstImagesComponent implements OnInit, AfterViewInit, OnDestroy {
             name: data.savedDate,
             series: [
               {
-                name: 'None',
+                name: 'No CVEs',
                 value: +data.safeImages
               },
               {
