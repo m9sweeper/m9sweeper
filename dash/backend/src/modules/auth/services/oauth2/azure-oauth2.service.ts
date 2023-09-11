@@ -9,6 +9,7 @@ import { SourceSystem, UserAuthority, UserProfileDto } from '../../../user/dto/u
 import {lastValueFrom} from 'rxjs';
 import {AuthorityId} from '../../../user/enum/authority-id';
 import {UserProfileService} from '../../../user/services/user-profile.service';
+import {DirectoryGroup} from '../interfaces/Azure/directory-group';
 
 @Injectable({scope: Scope.REQUEST})
 export class AzureOauth2Service extends Oauth2AuthProvider {
@@ -29,6 +30,7 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
     });
     const userEmail = oAuthUserProfile.data?.userPrincipalName;
     const emailDomain = userEmail.split('@').pop().toLowerCase().trim();
+    let user: UserProfileDto;
     if (!oAuth2Config.allowedDomains.includes(emailDomain)) {
       // Check that the email domain of the OAuth user is within the allowed list before anything else
       throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
@@ -39,7 +41,7 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
         if (!users[0].isActive) {
           throw new Error('This user is not active.');
         } else {
-          return users[0];
+          user = users[0];
         }
       } else {
         // If the OAuth user is valid and does not yet exist, create a new user to return
@@ -61,8 +63,13 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
         userAuthority.id = AuthorityId.READ_ONLY;
         userProfile.authorities.push(userAuthority);
 
-        return await this.userProfileService.createUser(userProfile);
+        user = await this.userProfileService.createUser(userProfile);
       }
+
+      // @TODO map
+      // const groups = await this.getAdGroups(accessToken);
+
+      return user;
     }
   }
 
@@ -92,5 +99,14 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
     }
 
     return `${oAuth2Config.authorizationUri}?${qs.stringify(authQuery)}`;
+  }
+
+  async getAdGroups(token: string): Promise<DirectoryGroup[]> {
+    return this.getOauthProfile('https://graph.microsoft.com/v1.0/me/memberOf', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(resp => resp?.data?.value);
   }
 }
