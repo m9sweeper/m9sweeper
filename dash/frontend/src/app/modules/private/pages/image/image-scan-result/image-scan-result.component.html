@@ -63,47 +63,6 @@
             <td>{{dataSource.negligibleIssues}}</td>
           </tr>
         </table>
-<!--        <div class="left-elements">-->
-<!--          <div class="elements" style="min-width: 110px;">-->
-<!--            <p>Compliant</p>-->
-<!--            <p class="first-element-content" [ngStyle]="{'color': scanResultTextColor}">{{scanResultText}}</p>-->
-<!--          </div>-->
-<!--          <div class="elements" style="min-width: 160px;">-->
-<!--            <p>Last Scanned</p>-->
-<!--            <div *ngIf="dataSource.lastScanned; else elseBlock">-->
-<!--              <p>{{dataSource.lastScanned | date: 'MM/dd/yyyy hh:mma'}}</p>-->
-<!--            </div>-->
-<!--            <ng-template #elseBlock>-->
-<!--              <p>Not Scanned</p>-->
-<!--            </ng-template>-->
-<!--          </div>-->
-<!--          <div class="elements">-->
-<!--            <p>Running</p>-->
-<!--            <p >{{dataSource.runningInCluster}}</p>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="right-elements" >-->
-<!--          <div class="elements">-->
-<!--            <p>{{VulnerabilitySeverity.CRITICAL | titlecase}}</p>-->
-<!--            <p>{{dataSource.criticalIssues}}</p>-->
-<!--          </div>-->
-<!--          <div class="elements">-->
-<!--            <p>{{VulnerabilitySeverity.MAJOR | titlecase}}</p>-->
-<!--            <p >{{dataSource.majorIssues}}</p>-->
-<!--          </div>-->
-<!--          <div class="elements">-->
-<!--            <p>{{VulnerabilitySeverity.MEDIUM | titlecase}}</p>-->
-<!--            <p >{{dataSource.mediumIssues}}</p>-->
-<!--          </div>-->
-<!--          <div class="elements">-->
-<!--            <p>{{VulnerabilitySeverity.LOW | titlecase}}</p>-->
-<!--            <p >{{dataSource.lowIssues}}</p>-->
-<!--          </div>-->
-<!--          <div class="elements">-->
-<!--            <p>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</p>-->
-<!--            <p >{{dataSource.negligibleIssues}}</p>-->
-<!--          </div>-->
-<!--        </div>-->
       </div>
     </mat-card>
     <mat-card id="scannerError" class="mb-xs-3 pt-xs-3" *ngIf="lastScanReport?.encounterError">
