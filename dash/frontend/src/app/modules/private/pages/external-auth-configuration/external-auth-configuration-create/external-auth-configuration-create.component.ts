@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from 'src/app/core/services/alert.service';
 import {
   IAuthConfig,
@@ -28,6 +28,10 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   ldapPasswordHide = true;
   // Make enum accessible to HTML
   AuthorityId = AuthorityId;
+
+  get groupAuthorities(): FormArray {
+    return this.authConfigForm.controls.groupAuthorities as FormArray;
+  }
 
   constructor(
     private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
@@ -65,7 +69,8 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
       groupViewOnlyAttribute: [''],
       groupAdminAttribute: [''],
       groupSuperAdminAttribute: [''],
-      defaultAuthorityId: [AuthorityId.READ_ONLY]
+      defaultAuthorityId: [AuthorityId.READ_ONLY],
+      groupAuthorities: this.formBuilder.array([])
     });
   }
 
@@ -224,6 +229,13 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         this.authConfigForm.controls.groupSuperAdminAttribute.setValue(ldapConfig.groupAuthLevelMapping.superAdmin);
         break;
     }
+  }
+
+  addGroupAuthority(values?: { groupId?: string, authorityId?: AuthorityId}): void {
+    this.groupAuthorities.push(this.formBuilder.group({
+      groupId: [values?.groupId || '', Validators.required],
+      authorityId: [values?.authorityId || AuthorityId.READ_ONLY, Validators.required]
+    }));
   }
 
   private stringToArray(commaSeparatedList) {
