@@ -1,6 +1,6 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Validators,  FormGroup, FormBuilder} from '@angular/forms';
-import {Observable, throwError} from 'rxjs';
+import {Observable, Subject, throwError} from 'rxjs';
 import {parse as yamlParse} from 'yaml';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {ClusterService} from '../../../../../core/services/cluster.service';
@@ -13,18 +13,20 @@ import {ClusterGroupService} from '../../../../../core/services/cluster-group.se
 import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 import {CommonService} from '../../../../../core/services/common.service';
 import {ServiceAccountWizardComponent} from '../service-account-wizard/service-account-wizard.component';
-import {take} from 'rxjs/operators';
+import {map, take, takeUntil} from 'rxjs/operators';
 import {MatSelectChange} from '@angular/material/select';
 import {MatRadioChange} from '@angular/material/radio';
 import {environment} from '../../../../../../environments/environment.prod';
 import {ClusterListMenuService} from '../../../menus/services/cluster-list-menu.service';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-add-cluster-wizard',
   templateUrl: './add-cluster-wizard.component.html',
   styleUrls: ['./add-cluster-wizard.component.scss']
 })
-export class AddClusterWizardComponent implements OnInit {
+export class AddClusterWizardComponent implements OnInit, OnDestroy {
+  protected unsubscribe$ = new Subject<void>();
   createClusterForm: FormGroup;
   serviceAccountForm = this.formBuilder.group({
     automaticInstall: [false, Validators.required],
@@ -32,6 +34,7 @@ export class AddClusterWizardComponent implements OnInit {
   },
     {validators: this.validateConfigOption});
 
+  isSmallScreen = false;
   config: IKubeConfig;
   serviceAccountContext: string;
   isCompleted = true;
@@ -51,6 +54,7 @@ export class AddClusterWizardComponent implements OnInit {
                private commonService: CommonService,
                protected dialog: MatDialog,
                protected clusterListMenuService: ClusterListMenuService,
+               protected readonly breakpointObserver: BreakpointObserver,
                @Inject(MAT_DIALOG_DATA) public data: any) {
       this.createClusterForm = this.formBuilder.group({
       name: ['', [CustomValidators.requiredNoTrim, Validators.maxLength(100)]],
@@ -62,21 +66,33 @@ export class AddClusterWizardComponent implements OnInit {
       gracePeriodDays: [0, [Validators.nullValidator]],
       automaticClusterInstall: [true]
     });
-      this.commonService.getBaseUrl().subscribe(response => {
-        const url = response.data.baseUrl;
-        try {
-          const baseUrl = new URL(url);
-          this.baseUrl = `${baseUrl.hostname}${baseUrl.pathname}`;
-        } catch (e) {
-            this.baseUrl = response.data.baseUrl;
-        }
-        if (this.data.isEdit) {
-          this.setDefaultWebhookText();
-        }
-      });
+      this.commonService.getBaseUrl()
+        .pipe(take(1))
+        .subscribe({
+          next: response => {
+            const url = response.data.baseUrl;
+            try {
+              const baseUrl = new URL(url);
+              this.baseUrl = `${baseUrl.hostname}${baseUrl.pathname}`;
+            } catch (e) {
+              this.baseUrl = response.data.baseUrl;
+            }
+            if (this.data.isEdit) {
+              this.setDefaultWebhookText();
+            }
+          }
+        });
   }
 
   ngOnInit(): void {
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
+      .pipe(
+        map(result => result.matches),
+        takeUntil(this.unsubscribe$)
+      ).subscribe({
+      next: isSmall => this.isSmallScreen = isSmall
+    });
+
     if (this.data.isEdit) {
       this.nextClusterId = this.data.clusterId;
       this.populateClusterWizard();
@@ -112,12 +128,16 @@ export class AddClusterWizardComponent implements OnInit {
           name: 'default',
           userId: this.jwtAuthService.getCurrentUserData().id
         };
-        this.clusterGroupService.createClusterGroup(formData).subscribe(response => {
-          formValues.groupId = response.data.id;
-          this.createCluster(formValues, stepper);
-          this.clusterListMenuService.buildClusterMenu();
-        }, error => {
-        });
+        this.clusterGroupService.createClusterGroup(formData)
+          .pipe(take(1))
+          .subscribe({
+            next: response => {
+              formValues.groupId = response.data.id;
+              this.createCluster(formValues, stepper);
+              this.clusterListMenuService.buildClusterMenu();
+            },
+            error: err => {}
+          });
       }
       else {
         this.createCluster(formValues, stepper);
@@ -136,18 +156,20 @@ export class AddClusterWizardComponent implements OnInit {
       serviceAccountConfig: serviceAccountValues.automaticInstall ? undefined : serviceAccountValues.config
     })
       .pipe(take(1))
-      .subscribe((response) => {
-        this.nextClusterId = response.data.id;
-        this.setDefaultWebhookText();
-        this.submitting = false;
-        this.isCompleted = false;
-        this.dialogRef.disableClose = true;
-        stepper.next();
-        this.alertService.success('Cluster added successfully');
-      }, error => {
-        this.submitting = false;
-        this.alertService.danger(error.error.message);
-      });
+      .subscribe({
+        next: (response) => {
+          this.nextClusterId = response.data.id;
+          this.setDefaultWebhookText();
+          this.submitting = false;
+          this.isCompleted = false;
+          this.dialogRef.disableClose = true;
+          stepper.next();
+          this.alertService.success('Cluster added successfully');
+        },
+        error: error => {
+          this.submitting = false;
+          this.alertService.danger(error.error.message);
+        }});
   }
 
   updateCluster(formValue: any, stepper?: MatStepper){
@@ -163,15 +185,18 @@ export class AddClusterWizardComponent implements OnInit {
       serviceAccountConfig: serviceAccountValues.automaticInstall ? 'automatically' : serviceAccountValues.config
     }, this.data.clusterId)
       .pipe(take(1))
-      .subscribe((response) => {
-        this.submitting = false;
-        this.isCompleted = false;
-        this.dialogRef.disableClose = true;
-        stepper.next();
-        this.alertService.success('Cluster updated successfully');
-      }, error => {
-        this.submitting = false;
-        this.alertService.danger(error.error.message);
+      .subscribe({
+        next: (response) => {
+          this.submitting = false;
+          this.isCompleted = false;
+          this.dialogRef.disableClose = true;
+          stepper.next();
+          this.alertService.success('Cluster updated successfully');
+        },
+        error: (err) => {
+          this.submitting = false;
+          this.alertService.danger(err.error.message);
+        }
       });
   }
 
@@ -193,21 +218,24 @@ export class AddClusterWizardComponent implements OnInit {
     if ($event.target.files.length > 0) {
       const configFile: File = $event.target.files[0];
       const fileName = configFile.name;
-      this.readConfigFile(configFile).subscribe(result => {
-        try {
-          this.config = yamlParse(result) as IKubeConfig;
-          // @TODO: Potentially upgrade validation that the yaml file is a valid kubeconfig
-          if (!this.config?.contexts) {
-            this.alertService.warning('Selected file was not a valid kubeconfig');
-            this.config = undefined;
-          }
-        } catch (e) {
-          this.alertService.warning('Selected file was not a valid YAML file');
-          this.config = undefined;
-        }
-      }, error => {
-
-      });
+      this.readConfigFile(configFile)
+        .pipe(take(1))
+        .subscribe({
+          next: result => {
+            try {
+              this.config = yamlParse(result) as IKubeConfig;
+              // @TODO: Potentially upgrade validation that the yaml file is a valid kubeconfig
+              if (!this.config?.contexts) {
+                this.alertService.warning('Selected file was not a valid kubeconfig');
+                this.config = undefined;
+              }
+            } catch (e) {
+              this.alertService.warning('Selected file was not a valid YAML file');
+              this.config = undefined;
+            }
+          },
+           error: (err) => {}
+        });
     }
     return false;
   }
@@ -324,7 +352,8 @@ webhooks:
     return null;
   }
 
-  displayWebhookText() {
-    return { display : this.installWebhook === 'manually' ? '' : 'none' };
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

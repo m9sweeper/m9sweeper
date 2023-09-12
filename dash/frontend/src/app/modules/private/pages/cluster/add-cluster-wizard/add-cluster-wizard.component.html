@@ -1,4 +1,4 @@
-<mat-horizontal-stepper mat-dialog-content linear #stepper>
+<mat-stepper [orientation]="isSmallScreen ? 'vertical' : 'horizontal'" class="no-padding" mat-dialog-content linear #stepper>
   <mat-step [editable]="isCompleted" [stepControl]="createClusterForm">
     <ng-template matStepLabel>Setup Cluster</ng-template>
     <div class="modal-content-left-align-no-margin">
@@ -175,28 +175,23 @@
         <span class="col-xs-12 col-md-8 mb-xs-2">
           Your cluster is set up and being scanned now!
         </span>
-        <span [style]="displayWebhookText()" class="col-xs-12 col-md-4 text-align-right mb-xs-3">
+      </div>
+      <div *ngIf="installWebhook === 'manually'">
+        <label>Install enforcement webhook</label>
+        <textarea #defaultWebhookTextArea [cdkTextareaAutosize]="true" class="w-100 code-snippet" matInput></textarea>
+        <div class="text-align-right">
           <app-copy-to-clipboard-button
             [text]="defaultWebhookTextArea.value"
             successMessage="Command copied to clipboard!"
             errorMessage="Command could not be copied."
+            [responsive]="true"
           ></app-copy-to-clipboard-button>
-        </span>
-      </div>
-      <div>
-        <form [style]="displayWebhookText()">
-          <mat-form-field appearance="fill">
-            <label>
-              <textarea #defaultWebhookTextArea class="manually-textarea" matInput></textarea>
-            </label>
-          </mat-form-field>
-        </form>
+        </div>
       </div>
     </div>
     <mat-card-actions class="mt-xs-2">
       <button mat-raised-button color="primary" (click)="viewResults()">View Results</button>
     </mat-card-actions>
   </mat-step>
-
-</mat-horizontal-stepper>
+</mat-stepper>
 
