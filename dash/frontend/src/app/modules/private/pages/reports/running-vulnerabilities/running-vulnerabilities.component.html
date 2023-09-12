@@ -96,8 +96,10 @@
                 <mat-cell class="min-width-8" *matCellDef="let vulnerability" [matTooltip]="vulnerability.namespaces">{{vulnerability.namespaces}}</mat-cell>
               </ng-container>
               <ng-container matColumnDef="scanResults">
-                <mat-header-cell class="min-width-4" *matHeaderCellDef>Compliance</mat-header-cell>
-                <mat-cell class="min-width-4" *matCellDef="let vulnerability" [matTooltip]="vulnerability.scanResults">{{vulnerability.scanResults}}</mat-cell>
+                <mat-header-cell class="min-width-4" *matHeaderCellDef>Compliant</mat-header-cell>
+                <mat-cell class="min-width-4" *matCellDef="let vulnerability" [matTooltip]="vulnerability.scanResults">
+                  <app-readonly-checkbox [checked]="vulnerability.scanResults === 'Compliant'"></app-readonly-checkbox>
+                </mat-cell>
               </ng-container>
               <ng-container matColumnDef="lastScanned" class="column-word-break">
                 <mat-header-cell class="min-width-4" *matHeaderCellDef>Date Scanned</mat-header-cell>

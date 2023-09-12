@@ -52,18 +52,18 @@
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="runningCluster">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Running on Cluster</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Running in Cluster</mat-header-cell>
             <mat-cell *matCellDef="let image">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
-                {{image.runningInCluster}}
+                <app-readonly-checkbox [checked]="image.runningInCluster === 'YES'"></app-readonly-checkbox>
               </a>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="scanResult">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Scan Result</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
             <mat-cell *matCellDef="let image">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', image.id]">
-                {{image.scanResults}}
+                <app-readonly-checkbox [checked]="image.scanResults === 'Compliant'"></app-readonly-checkbox>
               </a>
             </mat-cell>
           </ng-container>

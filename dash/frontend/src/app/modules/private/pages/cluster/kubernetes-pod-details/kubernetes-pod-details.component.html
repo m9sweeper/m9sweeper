@@ -54,10 +54,15 @@
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="compliant">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Compliance </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Compliant </mat-header-cell>
             <mat-cell *matCellDef="let element">
               <a [routerLink]="['/private', 'clusters', this.clusterId, 'images', 'image-scan', element?.id]">
-                {{element?.scanResults ? element.scanResults : 'Not Yet Scanned'}}
+                <ng-container *ngIf="!!element.scanResults; else unscanned">
+                  <app-readonly-checkbox [checked]="element.scanResults === 'Compliant'"></app-readonly-checkbox>
+                </ng-container>
+                <ng-template #unscanned>
+                  Not Yet Scanned
+                </ng-template>
               </a>
             </mat-cell>
           </ng-container>
