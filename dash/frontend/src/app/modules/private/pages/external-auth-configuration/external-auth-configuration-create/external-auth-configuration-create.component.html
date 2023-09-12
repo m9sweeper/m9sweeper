@@ -72,6 +72,21 @@
         <mat-hint>Email domains allowed access to this application e.g. "example.com" to allow "user@example.com"</mat-hint>
       </mat-form-field>
     </p>
+    <ng-container *ngIf="authConfigForm.get('providerType').value === 'AZURE'">
+      <p>
+        <mat-form-field>
+          <mat-label>Default Authority Level</mat-label>
+          <mat-select formControlName="defaultAuthorityId">
+            <mat-option [value]="AuthorityId.READ_ONLY">Read Only</mat-option>
+            <mat-option [value]="AuthorityId.ADMIN">Admin</mat-option>
+            <mat-option [value]="AuthorityId.SUPER_ADMIN">Super Admin</mat-option>
+          </mat-select>
+          <mat-hint>
+            Users will be granted this authority level unless they have an authority level granted by their AD Groups
+          </mat-hint>
+        </mat-form-field>
+      </p>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="ldapAuthActivated">

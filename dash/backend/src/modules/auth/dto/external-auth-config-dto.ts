@@ -13,6 +13,7 @@ import {
 import { AuthenticationType } from '../enum/AuthenticationType';
 import {ApiProperty} from '@nestjs/swagger';
 import {ProviderType} from "../enum/ProviderType";
+import {AuthorityId} from '../../user/enum/authority-id';
 
 export abstract class AuthStrategyConfigDTO {
 }
@@ -40,6 +41,10 @@ export class AzureOAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
     @IsString({each: true})
     @IsLowercase({each: true})
     allowedDomains: string[];
+
+    @IsOptional()
+    @IsNumber()
+    defaultAuthorityId: AuthorityId;
 }
 
 export class OAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {

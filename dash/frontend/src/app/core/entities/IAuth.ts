@@ -1,4 +1,5 @@
 import {AuthenticationType} from '../enum/AuthenticationType';
+import {AuthorityId} from '../enum/Authority';
 
 export interface IAuth {
   accessToken: string;
@@ -49,6 +50,10 @@ export interface IOAUTHConfigStrategy {
   redirectUri: string;
   scopes: string[];
   allowedDomains: string[];
+}
+
+export interface IAzureConfigStrategy extends IOAUTHConfigStrategy {
+  defaultAuthorityId: AuthorityId;
 }
 
 export interface ILDAPConfigStrategy {
