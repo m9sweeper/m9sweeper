@@ -32,30 +32,13 @@ mat-card div div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    @media all and (max-width: 1186px) {
-      overflow-x: auto;
-    }
-
-    .left-elements {
-      display: flex;
-      flex-direction: row;
-
-      .elements {
-        display: flex;
-        flex-direction: column;
-        margin: 10px 30px 0 15px;
+    overflow-x: auto;
+    .image-details-table {
+      th {
+        font-weight: normal;
       }
-    }
-
-    .right-elements {
-      display: flex;
-      flex-direction: row;
-
-      .elements {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin: 10px 30px 0 15px;
+      th, td {
+        padding: 5px 10px;
       }
     }
   }
