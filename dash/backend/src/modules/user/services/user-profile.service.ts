@@ -5,8 +5,9 @@ import {SourceSystem, UserAuthority, UserListDto, UserProfileDto} from '../dto/u
 import {UserCreateDto} from '../dto/user-create-dto';
 import {ResetPasswordService} from '../../auth/services/reset-password.service';
 import * as bcrypt from 'bcryptjs';
-import { Authority } from "../enum/Authority";
+import { Authority } from '../enum/Authority';
 import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
+import {AuthorityId} from '../enum/authority-id';
 
 
 @Injectable()
@@ -144,5 +145,22 @@ export class UserProfileService {
 
   async getUserFailedAttemptCountInLastHour(userId: number): Promise<number> {
     return await this.userDao.getUserFailedAttemptCount(userId);
+  }
+
+  /**
+   * Expects all authority ids to be a user-relevant type.
+   * returns null if no applicable types can be found
+   * */
+  maxUserAuthorityLevel(...authorities: AuthorityId[]): AuthorityId {
+    if (authorities?.some(a => a === AuthorityId.SUPER_ADMIN)) {
+      return AuthorityId.SUPER_ADMIN;
+    }
+    if (authorities?.some(a => a === AuthorityId.ADMIN)) {
+      return AuthorityId.ADMIN;
+    }
+    if (authorities?.some(a => a === AuthorityId.READ_ONLY)) {
+      return AuthorityId.READ_ONLY;
+    }
+    return null;
   }
 }

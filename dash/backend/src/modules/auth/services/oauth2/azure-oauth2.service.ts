@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios';
 import * as qs from 'qs';
 import { Oauth2AuthProvider } from './oauth2-auth-provider';
 import { ConfigService } from '@nestjs/config';
-import { OAuth2AuthStrategyConfig } from '../../models/auth-configuration';
+import { AuthConfiguration, AzureAuthStrategyConfig, OAuth2AuthStrategyConfig } from '../../models/auth-configuration';
 import { SourceSystem, UserAuthority, UserProfileDto } from '../../../user/dto/user-profile-dto';
 import {lastValueFrom} from 'rxjs';
 import {AuthorityId} from '../../../user/enum/authority-id';
@@ -13,6 +13,7 @@ import {DirectoryGroup} from '../interfaces/Azure/directory-group';
 
 @Injectable({scope: Scope.REQUEST})
 export class AzureOauth2Service extends Oauth2AuthProvider {
+  _authConfiguration: AuthConfiguration<AzureAuthStrategyConfig>;
 
   constructor(private readonly httpClient: HttpService,
               protected readonly configService: ConfigService,
@@ -30,18 +31,25 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
     });
     const userEmail = oAuthUserProfile.data?.userPrincipalName;
     const emailDomain = userEmail.split('@').pop().toLowerCase().trim();
-    let user: UserProfileDto;
+
     if (!oAuth2Config.allowedDomains.includes(emailDomain)) {
       // Check that the email domain of the OAuth user is within the allowed list before anything else
       throw new ForbiddenException('Access Denied', 'User is not permitted to access this site');
     } else {
       // If user is in an allowed domain, check to see if they already exist, and if so return the existing user
       const users: UserProfileDto[] = await this.userProfileService.loadUserByEmail(userEmail);
+      const expectedAuthority = await this.determineAuthority(accessToken);
+
       if (users && Array.isArray(users) && users.length > 0) {
         if (!users[0].isActive) {
           throw new Error('This user is not active.');
         } else {
-          user = users[0];
+          const user = users[0];
+          if (user.authorities?.length !== 1 || user.authorities[0].id !== expectedAuthority) {
+            user.authorities = [{ id: expectedAuthority }];
+            return this.userProfileService.updateUser(user).then(resp => resp[0]);
+          }
+          return user;
         }
       } else {
         // If the OAuth user is valid and does not yet exist, create a new user to return
@@ -58,18 +66,13 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
 
         userProfile.authorities = [];
 
-        // Set the default authority for new OAuth users to read only
+        // Set the default authority for new OAuth users based on their AD group(s)
         const userAuthority = new UserAuthority();
-        userAuthority.id = AuthorityId.READ_ONLY;
+        userAuthority.id = expectedAuthority;
         userProfile.authorities.push(userAuthority);
 
-        user = await this.userProfileService.createUser(userProfile);
+        return this.userProfileService.createUser(userProfile);
       }
-
-      // @TODO map
-      // const groups = await this.getAdGroups(accessToken);
-
-      return user;
     }
   }
 
@@ -108,5 +111,28 @@ export class AzureOauth2Service extends Oauth2AuthProvider {
       }
     })
       .then(resp => resp?.data?.value);
+  }
+
+  async determineAuthority(token: string): Promise<AuthorityId> {
+    const groups = await this.getAdGroups(token);
+
+    // Find all authority levels granted by AD group(s) the user is part of
+    const eligibleAuthorities = new Set<AuthorityId>();
+    if (groups?.length) {
+      for (const mapping of (this._authConfiguration.authConfig.groupAuthorities || [])) {
+        if(groups.some(g => g.id === mapping.groupId)) {
+          eligibleAuthorities.add(mapping.authorityId);
+        }
+      }
+    }
+
+    // Find the highest authority level granted by the user's AD groups
+    const maxLevel = this.userProfileService.maxUserAuthorityLevel(...Array.from(eligibleAuthorities));
+    // The user gets: the highest level granted by an AD group (if any), the default authority level if not,
+    // and READ_ONLY if the default isn't set and they aren't granted any by their groups.
+    return maxLevel
+      ? maxLevel
+      : this._authConfiguration.authConfig.defaultUserAuthorityId || AuthorityId.READ_ONLY;
+
   }
 }
