@@ -1,5 +1,6 @@
 import { Expose, Type} from 'class-transformer';
 import {
+    IsArray,
     IsBoolean,
     IsEnum,
     IsLowercase,
@@ -45,7 +46,24 @@ export class AzureOAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
     @IsOptional()
     @IsNumber()
     defaultAuthorityId: AuthorityId;
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => AzureOAuth2AuthStrategyConfigDTOGroupAuthority)
+    groupAuthorities: AzureOAuth2AuthStrategyConfigDTOGroupAuthority[];
 }
+
+export class AzureOAuth2AuthStrategyConfigDTOGroupAuthority {
+    @IsString()
+    @IsNotEmpty()
+    groupId: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    authorityId: number;
+}
+
 
 export class OAuth2AuthStrategyConfigDTO extends AuthStrategyConfigDTO {
 

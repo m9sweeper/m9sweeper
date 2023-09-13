@@ -129,7 +129,8 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
           scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
           allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
-          defaultAuthorityId: this.authConfigForm.value.defaultAuthorityId
+          defaultAuthorityId: this.authConfigForm.value.defaultAuthorityId,
+          groupAuthorities: this.authConfigForm.value.groupAuthorities?.filter(ga => ga.groupId) || []
         } as IAzureConfigStrategy) : ({
           clientId: this.authConfigForm.value.oauthClientId,
           clientSecret: this.authConfigForm.value.oauthClientSecret,
@@ -203,6 +204,11 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
           if (azureConfig.defaultAuthorityId) {
             this.authConfigForm.controls.defaultAuthorityId.setValue(azureConfig.defaultAuthorityId);
           }
+          if (azureConfig.groupAuthorities?.length) {
+            for (const ga of azureConfig.groupAuthorities) {
+              this.addGroupAuthority(ga);
+            }
+          }
         }
         this.authConfigForm.controls.oauthAuthorizationUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).authorizationUri);
         this.authConfigForm.controls.oauthScopes.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).scopes.join(','));
@@ -233,9 +239,13 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
 
   addGroupAuthority(values?: { groupId?: string, authorityId?: AuthorityId}): void {
     this.groupAuthorities.push(this.formBuilder.group({
-      groupId: [values?.groupId || '', Validators.required],
+      groupId: [values?.groupId || ''],
       authorityId: [values?.authorityId || AuthorityId.READ_ONLY, Validators.required]
     }));
+  }
+
+  removeGroupAuthority(index: number): void {
+    this.groupAuthorities.removeAt(index);
   }
 
   private stringToArray(commaSeparatedList) {

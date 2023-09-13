@@ -108,37 +108,54 @@
           </mat-form-field>
         </div>
       </div>
-      <ng-container *ngFor="let gaForm of groupAuthorities.controls; let idx = index">
-        <form [formGroup]="gaForm">
-        <div class="group-authority-wrapper row">
-            <div class="col-sm-5 col-xs-12">
-              <mat-form-field>
-                <mat-label>Active Directory Group Id</mat-label>
-                <input formControlName="groupId" matInput>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-5 col-xs-12">
-              <mat-form-field>
-                <mat-label>Authority Level</mat-label>
-                <mat-select formControlName="authorityId">
-                  <mat-option [value]="AuthorityId.READ_ONLY">Read Only</mat-option>
-                  <mat-option [value]="AuthorityId.ADMIN">Admin</mat-option>
-                  <mat-option [value]="AuthorityId.SUPER_ADMIN">Super Admin</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-sm-2 col-xs-12">
-              <button mat-icon-button><mat-icon>delete</mat-icon></button>
-            </div>
+      <div class="group-authority-wrapper p-xs-3">
+        <div class="row">
+          <div class="col-xs-12">
+            <h3>Grant Authority to Active Directory Groups</h3>
+            <p>
+              Users will receive the highest authority level granted by an active directory group they are a part of.
+              You will need to know the Object ID of a group to set this up.
+              You can find this id by
+              <a target="_blank" href="https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/groups-view-azure-portal#search-for-a-group">
+                searching for a group.
+              </a>
+            </p>
+          </div>
         </div>
-        </form>
-      </ng-container>
-      <div class="row">
-        <div class="col-xs-12 text-align-center">
-          <button mat-button mat-raised-button color="primary" type="button" (click)="addGroupAuthority()">
-            <mat-icon>add_circle</mat-icon>
-            Add Another
-          </button>
+        <ng-container *ngFor="let gaForm of groupAuthorities.controls; let idx = index">
+          <form [formGroup]="gaForm">
+          <div class="row">
+              <div class="col-sm-5 col-xs-12">
+                <mat-form-field>
+                  <mat-label>Active Directory Group Id</mat-label>
+                  <input formControlName="groupId" matInput>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-5 col-xs-12">
+                <mat-form-field>
+                  <mat-label>Authority Level</mat-label>
+                  <mat-select formControlName="authorityId">
+                    <mat-option [value]="AuthorityId.READ_ONLY">Read Only</mat-option>
+                    <mat-option [value]="AuthorityId.ADMIN">Admin</mat-option>
+                    <mat-option [value]="AuthorityId.SUPER_ADMIN">Super Admin</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-2 col-xs-12">
+                <button mat-icon-button (click)="removeGroupAuthority(idx)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+          </div>
+          </form>
+        </ng-container>
+        <div class="row">
+          <div class="col-xs-12 text-align-center">
+            <button mat-button mat-raised-button color="primary" type="button" (click)="addGroupAuthority()">
+              <mat-icon>add_circle</mat-icon>
+              Add Group
+            </button>
+          </div>
         </div>
       </div>
     </ng-container>

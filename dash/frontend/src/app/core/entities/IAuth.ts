@@ -54,6 +54,10 @@ export interface IOAUTHConfigStrategy {
 
 export interface IAzureConfigStrategy extends IOAUTHConfigStrategy {
   defaultAuthorityId: AuthorityId;
+  groupAuthorities?: {
+    groupId: string;
+    authorityId: AuthorityId;
+  }[];
 }
 
 export interface ILDAPConfigStrategy {
