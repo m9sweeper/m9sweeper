@@ -163,6 +163,7 @@ $sides: (
 }
 
 @mixin generate-basic-classes($breakpointShorthand: xs) {
+  // @if $sideShorthand == 'all' {}
   @each $propertyName, $definition in $classesToGenerate {
     $propertyAbbreviation: map-get($definition, abbreviation);
     $usesSides: map-get($definition, usesSides);
@@ -196,4 +197,9 @@ $sides: (
 @media only screen and (min-width: 75em) {
   @include build-spacing-classes(lg);
   @include generate-basic-classes(lg);
+}
+
+@media print {
+  @include build-spacing-classes(print);
+  @include generate-basic-classes(print);
 }
