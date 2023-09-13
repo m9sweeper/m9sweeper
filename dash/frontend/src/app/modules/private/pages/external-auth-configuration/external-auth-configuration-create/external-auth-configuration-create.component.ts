@@ -1,10 +1,16 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ExternalAuthConfigurationService} from '../../../../../core/services/external-auth-configuration.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from 'src/app/core/services/alert.service';
-import {IAuthConfig, ILDAPConfigStrategy, IOAUTHConfigStrategy} from '../../../../../core/entities/IAuth';
+import {
+  IAuthConfig,
+  IAzureConfigStrategy,
+  ILDAPConfigStrategy,
+  IOAUTHConfigStrategy
+} from '../../../../../core/entities/IAuth';
 import {AuthenticationType} from '../../../../../core/enum/AuthenticationType';
+import {AuthorityId} from '../../../../../core/enum/Authority';
 
 @Component({
   selector: 'app-external-auth-configuration-create',
@@ -20,6 +26,12 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
   oauthAuthActivated = false;
   ldapAuthActivated = false;
   ldapPasswordHide = true;
+  // Make enum accessible to HTML
+  AuthorityId = AuthorityId;
+
+  get groupAuthorities(): FormArray {
+    return this.authConfigForm.controls.groupAuthorities as FormArray;
+  }
 
   constructor(
     private dialogRef: MatDialogRef<ExternalAuthConfigurationCreateComponent>,
@@ -57,6 +69,8 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
       groupViewOnlyAttribute: [''],
       groupAdminAttribute: [''],
       groupSuperAdminAttribute: [''],
+      defaultAuthorityId: [AuthorityId.READ_ONLY],
+      groupAuthorities: this.formBuilder.array([])
     });
   }
 
@@ -115,7 +129,9 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
           authorizationUri: this.authConfigForm.value.oauthAuthorizationUri,
           scopes: this.stringToArray(this.authConfigForm.value.oauthScopes),
           allowedDomains: this.stringToArray(this.authConfigForm.value.oauthAllowedDomains),
-        } as IOAUTHConfigStrategy) : ({
+          defaultAuthorityId: this.authConfigForm.value.defaultAuthorityId,
+          groupAuthorities: this.authConfigForm.value.groupAuthorities?.filter(ga => ga.groupId) || []
+        } as IAzureConfigStrategy) : ({
           clientId: this.authConfigForm.value.oauthClientId,
           clientSecret: this.authConfigForm.value.oauthClientSecret,
           accessTokenUri: this.authConfigForm.value.oauthAccessTokenUri,
@@ -183,6 +199,16 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         if (this.data.authConfigData.providerType === 'GOOGLE') {
           this.authConfigForm.controls.oauthClientSecret.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).clientSecret);
           this.authConfigForm.controls.oauthAccessTokenUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).accessTokenUri);
+        } else if (this.data.authConfigData.providerType === 'AZURE') {
+          const azureConfig = this.data.authConfigData.authConfig as IAzureConfigStrategy;
+          if (azureConfig.defaultAuthorityId) {
+            this.authConfigForm.controls.defaultAuthorityId.setValue(azureConfig.defaultAuthorityId);
+          }
+          if (azureConfig.groupAuthorities?.length) {
+            for (const ga of azureConfig.groupAuthorities) {
+              this.addGroupAuthority(ga);
+            }
+          }
         }
         this.authConfigForm.controls.oauthAuthorizationUri.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).authorizationUri);
         this.authConfigForm.controls.oauthScopes.setValue((this.data.authConfigData.authConfig as IOAUTHConfigStrategy).scopes.join(','));
@@ -209,6 +235,17 @@ export class ExternalAuthConfigurationCreateComponent implements OnInit {
         this.authConfigForm.controls.groupSuperAdminAttribute.setValue(ldapConfig.groupAuthLevelMapping.superAdmin);
         break;
     }
+  }
+
+  addGroupAuthority(values?: { groupId?: string, authorityId?: AuthorityId}): void {
+    this.groupAuthorities.push(this.formBuilder.group({
+      groupId: [values?.groupId || ''],
+      authorityId: [values?.authorityId || AuthorityId.READ_ONLY, Validators.required]
+    }));
+  }
+
+  removeGroupAuthority(index: number): void {
+    this.groupAuthorities.removeAt(index);
   }
 
   private stringToArray(commaSeparatedList) {

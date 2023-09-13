@@ -1,7 +1,7 @@
 import {AuthenticationType} from '../enum/AuthenticationType';
 
 export interface IAuthenticationMethod {
-  id: string;
+  id: number;
   type: AuthenticationType;
   label: string;
   redirectable: boolean;

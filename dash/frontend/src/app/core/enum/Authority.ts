@@ -3,6 +3,12 @@ export enum Authority {
     ADMIN = 'ADMIN',
     READ_ONLY = 'READ_ONLY'
 }
+
+export enum AuthorityId {
+  SUPER_ADMIN = 1,
+  ADMIN = 2,
+  READ_ONLY = 3
+}
 export const AuthorityValues = [
   Authority.SUPER_ADMIN,
   Authority.ADMIN,
