@@ -44,18 +44,26 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
-    this.authService.getAvailableAuthenticationMethods().subscribe((response: IServerResponse<IAuthenticationMethod[]>) => {
-      const authenticationMethods = response.data;
-      this.inSiteCredentialAuthenticationMethods = authenticationMethods;
-      this.selectedInSiteCredentialAuthenticationMethod = this.inSiteCredentialAuthenticationMethods.find(iscam => iscam.type === 'LOCAL_AUTH');
-    }, error => {
-      this.alertService.danger('Failed to load authentication methods!');
-    }, () => {
-    });
+    this.authService.getAvailableAuthenticationMethods()
+      .pipe(take(1))
+      .subscribe({
+        next: (response: IServerResponse<IAuthenticationMethod[]>) => {
+          const authenticationMethods = response.data;
+          this.inSiteCredentialAuthenticationMethods = authenticationMethods;
+          const savedLoginId = this.retrieveLastAuthMethod();
+          const signInMethod = this.inSiteCredentialAuthenticationMethods.find(iscam => String(iscam.id) === savedLoginId)
+            || this.inSiteCredentialAuthenticationMethods.find(iscam => iscam.type === 'LOCAL_AUTH');
+          this.selectedInSiteCredentialAuthenticationMethod = signInMethod;
+          },
+        error: error => {
+          this.alertService.danger('Failed to load authentication methods!');
+        }
+      });
   }
 
   onInSiteAuthMethodSelection(event: MatSelectChange) {
     this.selectedInSiteCredentialAuthenticationMethod = (event.value as IAuthenticationMethod);
+    this.storeLastAuthMethod(this.selectedInSiteCredentialAuthenticationMethod.id);
     if (this.selectedInSiteCredentialAuthenticationMethod.type === 'LOCAL_AUTH') {
       this.loginForm.get('username').setValidators([Validators.required, Validators.email]);
       this.loginForm.get('username').updateValueAndValidity();
@@ -90,5 +98,12 @@ export class LoginComponent implements OnInit {
       this.alertService.danger(error.error.message);
     });
 
+  }
+
+  retrieveLastAuthMethod(): string {
+    return localStorage.getItem('login_method_id');
+  }
+  storeLastAuthMethod(id: number) {
+    localStorage.setItem('login_method_id', String(id));
   }
 }
