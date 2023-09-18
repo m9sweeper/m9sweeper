@@ -130,7 +130,7 @@ $sides: (
   all: ['inline-start', 'top', 'inline-end', 'bottom'],
 );
 
-@mixin build-spacing-classes($breakpointShorthand: xs) {
+@mixin build-spacing-classes($breakpointShorthand: xs, $makeImportant: 'false') {
   $properties: (
     p: "padding",
     m: "margin",
@@ -153,8 +153,14 @@ $sides: (
       }
       @each $sizeShorthand, $size in $sizes {
         #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
-          @each $side in $sideList {
-            #{$property}-#{$side}: #{$size};
+          @if $makeImportant == 'true' {
+            @each $side in $sideList {
+              #{$property}-#{$side}: #{$size} !important;
+            }
+          } @else {
+            @each $side in $sideList {
+              #{$property}-#{$side}: #{$size};
+            }
           }
         }
       }
@@ -200,6 +206,6 @@ $sides: (
 }
 
 @media print {
-  @include build-spacing-classes(print);
+  @include build-spacing-classes(print, 'true');
   @include generate-basic-classes(print);
 }
