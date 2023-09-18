@@ -86,7 +86,7 @@ export class KubesecReportComponent implements OnInit {
     }
   }
   decideCriticalScoreColor(scoreNum): string | number {
-    scoreNum = +scoreNum;  // cast to number just in case
+    scoreNum = Math.abs(+scoreNum);  // cast to positive number just in case
     if (scoreNum <= 0) {
       return this.scoreColors.green;
     } else if (0 < scoreNum && scoreNum <= 3) {
