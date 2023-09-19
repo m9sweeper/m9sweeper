@@ -73,7 +73,7 @@
             <div class="col-xs-10 vulnerability-count">
               <p class="title-font title-margin">Displaying {{lowNumCurrentShownVulnerabilities}}-{{highNumCurrentShownVulnerabilities}} out of {{vulnerabilityCount}} vulnerabilities</p>
             </div>
-            <div class="col-xs-2 vulnerability-download-button">
+            <div class="col-xs-2 vulnerability-download-button display-print-none">
               <button (click)="downloadReport()"
                       mat-mini-fab
                       color="primary"
@@ -151,7 +151,7 @@
             </mat-table>
           </div>
         </mat-card-content>
-        <mat-card-footer>
+        <mat-card-footer class="display-print-none">
           <mat-paginator
             [length]="vulnerabilityCount"
             [pageSize]="20"

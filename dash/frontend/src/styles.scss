@@ -827,3 +827,13 @@ app-datepicker-component {
 .overflow-hidden {
   overflow: hidden!important;
 }
+
+@media print {
+  @page {
+    size: landscape;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}

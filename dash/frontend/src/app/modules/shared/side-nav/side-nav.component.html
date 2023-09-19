@@ -2,6 +2,7 @@
   <mat-sidenav
     #sidenav
     id="primary-side-nav"
+    class="display-print-none"
     [attr.role]="isHandsetOrXS ? 'dialog' : 'navigation'"
     [mode]="isHandsetOrXS ? 'over' : 'side'"
     [opened]="(isHandsetOrXS === false) || sidenavExpanded"
@@ -76,7 +77,7 @@
     </mat-nav-list>
 
   </mat-sidenav>
-  <mat-sidenav-content style="height: 100%">
+  <mat-sidenav-content style="height: 100%" class="mx-print-0">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

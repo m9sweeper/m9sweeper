@@ -130,7 +130,7 @@ $sides: (
   all: ['inline-start', 'top', 'inline-end', 'bottom'],
 );
 
-@mixin build-spacing-classes($breakpointShorthand: xs) {
+@mixin build-spacing-classes($breakpointShorthand: xs, $makeImportant: 'false') {
   $properties: (
     p: "padding",
     m: "margin",
@@ -153,8 +153,14 @@ $sides: (
       }
       @each $sizeShorthand, $size in $sizes {
         #{"."}#{$propertyShorthand}#{$sideShorthandToUse}-#{$breakpointShorthand}-#{$sizeShorthand} {
-          @each $side in $sideList {
-            #{$property}-#{$side}: #{$size};
+          @if $makeImportant == 'true' {
+            @each $side in $sideList {
+              #{$property}-#{$side}: #{$size} !important;
+            }
+          } @else {
+            @each $side in $sideList {
+              #{$property}-#{$side}: #{$size};
+            }
           }
         }
       }
@@ -163,6 +169,7 @@ $sides: (
 }
 
 @mixin generate-basic-classes($breakpointShorthand: xs) {
+  // @if $sideShorthand == 'all' {}
   @each $propertyName, $definition in $classesToGenerate {
     $propertyAbbreviation: map-get($definition, abbreviation);
     $usesSides: map-get($definition, usesSides);
@@ -196,4 +203,9 @@ $sides: (
 @media only screen and (min-width: 75em) {
   @include build-spacing-classes(lg);
   @include generate-basic-classes(lg);
+}
+
+@media print {
+  @include build-spacing-classes(print, 'true');
+  @include generate-basic-classes(print);
 }
