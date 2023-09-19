@@ -585,7 +585,6 @@ export class ImageDao {
 
         query = query.orderBy('hki.saved_date', 'asc');
 
-        const rawSQL = query.toSQL();
         return query;
     }
 

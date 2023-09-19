@@ -11,7 +11,7 @@ import {
 } from '../dto/reports-running-vulnerabilities-preview-dto';
 import {ReportsHistoricalVulnerabilitiesDto} from '../dto/reports-historical-vulnerabilities-dto';
 import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
-import {format} from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import knex, { Knex } from 'knex';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
@@ -531,10 +531,83 @@ export class ReportsDao {
         });
     }
 
-    async getDifferencesInVulnerabilities(startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,
-                                          severityLevels?: Array<VulnerabilitySeverity>, fixAvailable?: string,
-                                          limit?: number): Promise<ReportsDifferenceByDateDto>
-     {
+    async getVulnerabilityDifferenceSummaryByDate(
+      startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,
+      severityLevels?: Array<VulnerabilitySeverity>, fixAvailable?: string,
+    ): Promise<{ countOfFixedVulnerabilities: number, countOfNewVulnerabilities: number }> {
+      const knex = await this.databaseService.getConnection();
+
+      const image_details_query = knex.select([
+        'i.id',
+        knex.raw("concat(i.name,':', i.tag) as image"),
+        'i.running_in_cluster',
+        knex.raw("array_agg(distinct hki.namespace) as namespaces"),
+        knex.raw("array_agg(distinct hki.saved_date) as saved_dates")
+      ])
+        .from('images as i')
+        .leftJoin(knex.raw('clusters as c on c.id=i.cluster_id'))
+        .innerJoin(knex.raw('history_kubernetes_images as hki on hki.image_id = i.id'))
+        .where('i.deleted_at', null)
+        .andWhere('c.deleted_at', null)
+        .whereIn('hki.saved_date', [startDate, endDate]);
+
+      if (clusterId) {
+        image_details_query.andWhere('i.cluster_id', clusterId);
+      }
+      if (namespaces) {
+        image_details_query.whereIn('hki.namespace', namespaces);
+      }
+      image_details_query.groupBy(['i.id', 'i.name', 'hki.name']);
+
+      const scan_results_query = knex.select([
+        "image_details.saved_dates",
+        "isrs.scanner_name",
+        knex.raw('image_details.id as image_id'),
+        "image_details.image",
+        "image_details.running_in_cluster",
+        "isrs.type",
+        "isrs.severity",
+        "isrs.is_fixable",
+        "image_details.namespaces"
+      ])
+        .from(image_details_query.as('image_details'))
+        .leftJoin(knex.raw('image_scan_results as isr on isr.image_id = image_details.id and isr.is_latest=true'))
+        .innerJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'));
+
+      if (severityLevels) {
+          if (severityLevels.includes(VulnerabilitySeverity.MAJOR)) {
+              /** Major vulnerabilities are stored as 'High' on this database, ensures that the proper values
+               * are being searched for */
+              severityLevels.push(VulnerabilitySeverity.HIGH);
+          }
+        scan_results_query.whereIn('isrs.severity', severityLevels);
+      }
+      if (fixAvailable) {
+          scan_results_query.andWhere('isrs.is_fixable', fixAvailable);
+      }
+      const endDateAsDate = parseISO(endDate);
+      const validatedEndDate = endDateAsDate.toISOString().split('T')[0];
+      const startDateAsDate = parseISO(startDate);
+      const validatedStartDate = startDateAsDate.toISOString().split('T')[0];
+      const final_query = knex.select([
+        knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedEndDate}"}' THEN 1 ELSE 0 END) AS fixed`),
+        knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedStartDate}"}' THEN 1 ELSE 0 END) AS new`),
+        knex.raw(`SUM(CASE WHEN saved_dates @> '{"${validatedEndDate}", "${validatedStartDate}"}' THEN 1 ELSE 0 END) AS "persistent"`),
+      ])
+        .from(scan_results_query.as('scan_results'));
+
+      const finalQueryResults: { fixed: string, new: string, total: string } = await final_query.then(results => results[0]);
+      return {
+        countOfFixedVulnerabilities: parseInt(finalQueryResults.fixed),  // should be 18
+        countOfNewVulnerabilities: parseInt(finalQueryResults.new),  // should be 20
+      };
+    }
+
+    async getDifferencesInVulnerabilities(
+      startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,
+      severityLevels?: Array<VulnerabilitySeverity>, fixAvailable?: string,
+      limit?: number,
+    ): Promise<{ fixedVulnerabilities: ReportsVulnerabilityExportDto[], newVulnerabilities: ReportsVulnerabilityExportDto[] }> {
         const knex = await this.databaseService.getConnection();
 
         let baseSubQuery = knex
@@ -603,8 +676,8 @@ export class ReportsDao {
         )
             .innerJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'))
 
-        let startQuery = baseQuery.clone().from(startSubQuery.as('image_details'));
-        let endQuery = baseQuery.clone().from(endSubQuery.as('image_details'));
+        const startQuery = baseQuery.clone().from(startSubQuery.as('image_details'));
+        const endQuery = baseQuery.clone().from(endSubQuery.as('image_details'));
 
         const rawQuery = limit ? '(? EXCEPT ALL ?) ORDER BY image_id, type LIMIT ?' :
             '(? EXCEPT ALL ?) ORDER BY image_id, type';
@@ -615,29 +688,15 @@ export class ReportsDao {
             return plainToClass(ReportsVulnerabilityExportDto, response.rows);
         });
 
-        const numFixedVulns = await knex
-            .count('*', {as: 'entries'})
-            .from(knex.raw('(? EXCEPT ALL ?) AS results', [startQuery, endQuery]))
-            .returning('entries')
-            .then(resp => parseInt(resp[0].entries, 10));
-
         const newVulns = await knex.raw(rawQuery,
             limit ? [endQuery, startQuery, limit] : [endQuery, startQuery])
             .then(response => {
             return plainToClass(ReportsVulnerabilityExportDto, response.rows);
         });
 
-         const numNewVulns = await knex
-             .count('*', {as: 'entries'})
-             .from(knex.raw('(? EXCEPT ALL ?) AS results', [endQuery, startQuery]))
-             .returning('entries')
-             .then(resp => parseInt(resp[0].entries, 10));
-
         return {
             fixedVulnerabilities: Array.isArray(fixedVulns) ? fixedVulns : [fixedVulns],
             newVulnerabilities: Array.isArray(newVulns) ? newVulns : [newVulns],
-            countOfFixedVulnerabilities: numFixedVulns,
-            countOfNewVulnerabilities: numNewVulns
         }
     }
 }
