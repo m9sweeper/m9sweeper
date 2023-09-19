@@ -100,16 +100,15 @@
       </div>
     </div>
 
-    <div class="row action-button-row">
-      <div id="action-btn">
-        <button [disabled]="!addTemplateConstraintForm.valid" (click)="onSubmit()" mat-raised-button color="primary"
-                type="submit" class="me-xs-2">
-          Save Changes
-        </button>
-        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+      <div class="row action-button-row">
+        <div id="action-btn">
+          <button [disabled]="!addTemplateConstraintForm.valid" (click)="onSubmit()" mat-raised-button color="primary"
+                  type="submit" class="me-xs-2">
+            Save Changes
+          </button>
+          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+        </div>
       </div>
     </div>
-
-  </div>
   </div>
 </mat-dialog-content>

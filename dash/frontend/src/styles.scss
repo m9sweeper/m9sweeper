@@ -664,9 +664,8 @@ div.collapse-item {
   }
 }
 div.cluster-dashboard {
-  //width: calc(100% - 300px);
   flex-direction: column;
-  background-color: #e0e0e0;
+  background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
 }
 
 // RESPONSIVE - work for large screen to collapse or expand
@@ -721,13 +720,6 @@ div.cluster-dashboard.responsive {
 
 .flex-column {
   flex-direction: column;
-}
-
-.action-button-row {
-  display: flex;
-  justify-content: end;
-  align-content: center;
-  margin-right: 5px;
 }
 
 .light-border {
@@ -835,5 +827,15 @@ app-datepicker-component {
 
   ::-webkit-scrollbar {
     display: none;
+  }
+
+  #cluster-dashboard, .page-container {
+    background-color: white;
+  }
+  mat-card.mat-mdc-card {
+    box-shadow: unset !important;
+  }
+  .page-title {
+    margin-left: 14px;
   }
 }
