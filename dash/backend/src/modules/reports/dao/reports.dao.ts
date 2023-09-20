@@ -43,7 +43,7 @@ export class ReportsDao {
             .andWhere('i.deleted_at', null)
             .andWhere('c.deleted_at', null);
         if (clusterId) {
-            subQuery = subQuery.andWhere('i.cluster_id', clusterId);
+            subQuery = subQuery.andWhere('hki.cluster_id', clusterId);
         }
         if (namespaces) {
             subQuery = subQuery.whereIn('ki.namespace', namespaces);
@@ -552,7 +552,7 @@ export class ReportsDao {
         .whereIn('hki.saved_date', [startDate, endDate]);
 
       if (clusterId) {
-        imageDetailsQuery.andWhere('i.cluster_id', clusterId);
+        imageDetailsQuery.andWhere('hki.cluster_id', clusterId);
       }
       if (namespaces) {
         imageDetailsQuery.whereIn('hki.namespace', namespaces);
