@@ -197,17 +197,7 @@ export class ReportsService {
         limit?: number
     }): Promise<ReportsDifferenceByDateDto>
     {
-        return Promise.all([
-            this.reportsDao.getVulnerabilityDifferenceSummaryByDate(startDate, endDate, clusterId, options?.namespaces, options?.severity, options?.fixAvailable),
-            this.reportsDao.getDifferencesInVulnerabilities(startDate, endDate, clusterId, options?.namespaces, options?.severity, options?.fixAvailable, options?.limit),
-        ]).then(values => {
-            return {
-                countOfFixedVulnerabilities: values[0].countOfFixedVulnerabilities,
-                countOfNewVulnerabilities: values[0].countOfNewVulnerabilities,
-                fixedVulnerabilities: values[1].fixedVulnerabilities,
-                newVulnerabilities: values[1].newVulnerabilities,
-            }
-        });
+        return this.reportsDao.getDifferencesInVulnerabilities(startDate, endDate, clusterId, options?.namespaces, options?.severity, options?.fixAvailable);
     }
 
     async getVulnerabilityDifferenceByDateCsv(clusterId: number, startDate: string, endDate: string,
