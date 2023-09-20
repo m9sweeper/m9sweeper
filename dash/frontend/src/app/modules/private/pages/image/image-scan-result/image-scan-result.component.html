@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="row header-row m-xs-0">
-        <div class="col-xs-12">
+        <div class="col-lg-9 col-xs-12">
           <span [matTooltip]="dataSource.dockerImageId"
                 matTooltipClass="image-id-tooltip"
                 style="overflow:hidden; text-overflow:ellipsis"
@@ -26,6 +26,16 @@
                 matTooltipClass="image-id-tooltip"
           >Image ID: {{dataSource.dockerImageId.length > 15 ?
             dataSource.dockerImageId.substring(0, 15) + '...' : dataSource.dockerImageId}}</span>
+        </div>
+        <div class="col-lg-2 col-lg-offset-1 justify-content-lg-end col-xs-12 justify-content-xs-start display-print-none">
+          <div class="me-lg-3 me-xs-0">
+          </div>
+          <button type="button" color="primary" mat-raised-button
+             class="mb-half-rem"
+             (click)="downloadReport()">
+            <mat-icon>print</mat-icon>
+            Print Report
+          </button>
         </div>
       </div>
       <div class="image-details">
