@@ -17,7 +17,7 @@ export default {
             let userInfo: any;
             if (authorization) {
                 userInfo =  await jwtUtilityService.verify(authorization);
-            } else if(apiKey){
+            } else if (apiKey) {
                 userInfo = await apiKeyService.getUserInfoByApiKey(apiKey);
             } else {
                 userInfo = '';

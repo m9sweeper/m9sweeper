@@ -14,11 +14,12 @@ import {generateRandomString} from "./generate-random-string";
 
 
 /**
- * These commands are used to setup initial m9sweeper data, such as the first admin user, when installing m9sweeper on
+ * These commands are used to set up initial m9sweeper data, such as the first admin user, when installing m9sweeper on
  * the kubernetes cluster
  */
 @Injectable()
 export class HelmSetupCommand {
+    promises: Promise<any>[] = [];
 
     constructor(private readonly databaseService: DatabaseService,
                 private readonly userDao: UserDao,
@@ -68,11 +69,12 @@ export class HelmSetupCommand {
                 console.log('Trawler user exists.... skipping');
             }
         }
-        
+
         // generate KubeBench and KubeHunter api keys
         const randomKHApiKey = process.env.KUBE_HUNTER_API_KEY || generateRandomString(33);
         const randomKBApiKey = process.env.KUBE_BENCH_API_KEY || generateRandomString(33);
         const randomFalcoApiKey = process.env.FALCO_API_KEY || generateRandomString(33);
+        const metricsApiKey = process.env.METRICS_API_KEY || generateRandomString(33);
 
         const kubebenchUserExists = !!(await this.userDao.loadUser({email: 'Kubebench'}));
         if (!kubebenchUserExists) {
@@ -154,8 +156,34 @@ export class HelmSetupCommand {
             console.log('Falco user exists.... skipping');
         }
 
+      promises.push(this.createServiceProfile('Metrics', metricsApiKey));
       await Promise.all(promises);
       return true;
+    }
+
+    async createServiceProfile(profileName: string, apiKey: string) {
+      const userExists = !!(await this.userDao.loadUser({email: profileName}));
+      if (!userExists) {
+        const encryptedApiKey = await bcrypt.hash(apiKey, await bcrypt.genSalt(10))
+        return this.userDao.create({
+          email: profileName,
+          first_name: profileName,
+          last_name: profileName,
+          source_system_id: '0',
+          source_system_type: 'LOCAL_AUTH',
+          source_system_user_id: '0',
+          password: encryptedApiKey,
+          authorities: [{id: 7}],
+        }).then(newUser => this.apiKeyDao.createApiKey({
+          user_id: newUser[0],
+          name: `${profileName} API key`,
+          api: apiKey,
+          is_active: true,
+        })).catch();
+      } else {
+        // @TODO: clean up this message when making cli commands silent
+        console.log(`${profileName} user exists.... skipping`);
+      }
     }
 
     // @TODO: clean up log messages to make this silent

@@ -14,7 +14,9 @@ import { ConfigService } from '@nestjs/config';
 export class MetricsGuard implements CanActivate {
   constructor(
     private configService: ConfigService,
-    @Inject('LOGGED_IN_USER') private readonly _loggedInUser: UserProfileDto,
+    // if this isn't populated, then the apiKey was empty
+    @Inject('LOGGED_IN_USER')
+    private readonly _loggedInUser: UserProfileDto,
     private readonly logger: MineLoggerService
   ) {}
 
@@ -26,7 +28,9 @@ export class MetricsGuard implements CanActivate {
     }
     if (metricsConfig.secureEndpoint) {
       console.log('helloworld');
-      // validate authorization
+      const currentUser = this._loggedInUser;
+      // check if logged in user is the metrics api key user
+      // if it isn't, check if they have the minimum required permission level
       throw new UnauthorizedException('Access denied');
     }
     return true;
