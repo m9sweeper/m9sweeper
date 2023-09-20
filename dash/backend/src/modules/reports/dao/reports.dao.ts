@@ -585,11 +585,14 @@ export class ReportsDao {
       if (fixAvailable) {
           scanResultsQuery.andWhere('isrs.is_fixable', fixAvailable);
       }
-      const endDateAsDate = parseISO(endDate);
-      const validatedEndDate = endDateAsDate.toISOString().split('T')[0];
       const startDateAsDate = parseISO(startDate);
       const validatedStartDate = startDateAsDate.toISOString().split('T')[0];
+      const endDateAsDate = parseISO(endDate);
+      const validatedEndDate = endDateAsDate.toISOString().split('T')[0];
 
+      // the queries below ONLY use validatedStartDate & validatedEndDate so we avoid SQL injection
+      // DO NOT string interpolate raw values into raw SQL unless they've been carefully cleaned!!
+      // in this case, the combination of '{" makes parameterization fail, so we use carefully-built interpolation
       const listsQuery = knex
         .select(['scanner_name', 'image_id', 'image', 'running_in_cluster', 'type', 'severity', 'is_fixable', 'namespaces'])
         .from(scanResultsQuery.as('scan_results'))
@@ -600,8 +603,7 @@ export class ReportsDao {
         knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedEndDate}"}' THEN 1 ELSE 0 END) AS fixed`),
         knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedStartDate}"}' THEN 1 ELSE 0 END) AS new`),
         knex.raw(`SUM(CASE WHEN saved_dates @> '{"${validatedEndDate}", "${validatedStartDate}"}' THEN 1 ELSE 0 END) AS "persistent"`),
-      ])
-        .from(scanResultsQuery.as('scan_results'));
+      ]).from(scanResultsQuery.as('scan_results'));
 
       return Promise.all([
         newVulnerabilities.then(response => {
@@ -610,9 +612,17 @@ export class ReportsDao {
         fixedVulnerabilities.then(response => { return plainToClass(ReportsVulnerabilityExportDto, response); }),
         summaryQuery,
       ]).then((values) => {
-          const newVulnerabilitiesResult = values[0] ? (Array.isArray(values[0]) ? values[0] : [values[0]]) : [];
-          const fixedVulnerabilitiesResult = values[1] ? (Array.isArray(values[1]) ? values[1] : [values[1]]) : [];
-          const summaryResult: { fixed: string, new: string, total: string } = values[2][0];
+          const newVulnerabilitiesRaw = values[0];
+          const fixedVulnerabilitiesRaw = values[1];
+          const summaryResultRaw = values[2];
+
+          const newVulnerabilitiesResult = newVulnerabilitiesRaw
+            ? (Array.isArray(newVulnerabilitiesRaw) ? newVulnerabilitiesRaw : [newVulnerabilitiesRaw])
+            : [];
+          const fixedVulnerabilitiesResult = fixedVulnerabilitiesRaw
+            ? (Array.isArray(fixedVulnerabilitiesRaw) ? fixedVulnerabilitiesRaw : [fixedVulnerabilitiesRaw])
+            : [];
+          const summaryResult: { fixed: string, new: string, total: string } = summaryResultRaw[0];  // it's some sums, so it's only one row
           return {
             countOfFixedVulnerabilities: parseInt(summaryResult.fixed),
             countOfNewVulnerabilities: parseInt(summaryResult.new),
