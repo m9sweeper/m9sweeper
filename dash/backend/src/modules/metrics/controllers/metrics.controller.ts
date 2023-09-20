@@ -21,7 +21,7 @@ export class MetricsController {
   @Get('/environment')
   async index(@Res() response: Response) {
     const metricsConfig = await this.configService.get('metrics');
-    if (this.configService.get('metrics.secureEndpoint')) {
+    if (metricsConfig.secureEndpoint) {
       // validate authorization
     }
     response.header('Content-Type', client.register.contentType);
