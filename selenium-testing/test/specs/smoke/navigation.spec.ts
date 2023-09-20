@@ -120,7 +120,7 @@ describe('Check Navigation::', () => {
     it('3 Verify Organization Settings Navigation', async () => {
         // Navigate to the list of cluster groups.
         // @ts-ignore
-        await $("//span[@class='menu-item-name'][contains(text(), 'Home')]").customClick("load-m9sweeper-home");
+        await $("//span[@class='menu-item-name'][contains(text(), 'Home')]").customClick("m9sweeper-home");
         expect(browser).toHaveUrl(
             buildUrl('private/dashboard'),
             {message: "m9sweeper should be showing the base dashboard"}
