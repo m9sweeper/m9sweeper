@@ -5,12 +5,11 @@
         <div class="col-lg-9 col-xs-12">
           <span id="image-name" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
         </div>
-        <div class="col-lg-2 col-lg-offset-1 justify-content-lg-end col-xs-12 justify-content-xs-start">
+        <div class="col-lg-2 col-lg-offset-1 justify-content-lg-end col-xs-12 justify-content-xs-start display-print-none">
           <div class="me-lg-3 me-xs-0">
             <mat-spinner *ngIf="displayImageScanSpinner$ | async" [diameter]="30"></mat-spinner>
           </div>
           <button type="button" color="primary" mat-raised-button
-             class=""
              *ngIf="dataSource || !dataSource"
              [disabled]="displayImageScanSpinner$ | async"
              (click)="scanImage()">{{ scanButtonText }}</button>
@@ -127,6 +126,7 @@
         </mat-table>
       </div>
       <mat-paginator
+        class="display-print-none"
         [length]="totalCount"
         [pageSize]="limit"
         [pageSizeOptions]="[10, 20, 50, 100, 200, 500, 1000]"
@@ -139,7 +139,7 @@
           Issues
         </div>
         <div class="col-xs-3 col-sm-9" id="issuesButtons">
-          <button mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
+          <button class="display-print-none" mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
         </div>
       </div>
       <div class="table-wrapper">
@@ -221,9 +221,10 @@
             <mat-cell *matCellDef="let issue">
               <button mat-raised-button color="primary"
                       id="details-button"
+                      class="display-print-none"
                       (click)="showMoreIssueDetails(issue)"
               >Details</button>
-              <button color="accent" id="request-exception-button" mat-raised-button *ngIf="issue.isFixable"
+              <button color="accent" id="request-exception-button"  class="display-print-none" mat-raised-button *ngIf="issue.isFixable"
                       [routerLink]="['/private', 'exceptions','create']"
                       [queryParams]="{clusterId: clusterId, scannerId: issue.scannerId, cve: issue.type, policyIds: policyIds, namespaces: imageNamespaces, imageName: dataSource.url + '/' + dataSource.name  }"
               > Request Exception</button>
@@ -243,6 +244,7 @@
         </mat-table>
       </div>
       <mat-paginator
+        class="display-print-none"
         [length]="totalImageScanResultData"
         [pageSize]="imageScanResultLimit"
         [pageSizeOptions]="[10, 20, 50, 100, 200, 500, 1000]"
