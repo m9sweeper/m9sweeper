@@ -62,12 +62,6 @@ export class CliCommandBuilderService {
                 () => this.helmSetupCommand.loadDefaultNamespaceExceptions(),
             ),
             new CliCommand(
-              CliCommands.AddAPIKey,
-              'Adds an API key if the entry doesn\'t already exist',
-              (profileName, apiKey) => this.helmSetupCommand.createAPIKeyProfile(profileName, apiKey),
-              ['profileName', 'apiKey'],
-            ),
-            new CliCommand(
                 CliCommands.SyncGateKeeperExceptions,
                 'Synchronizes gatekeeper exception blocks.',
                 () => this.gatekeeperExceptionCommand.syncGatekeeperExceptionBlocks(),

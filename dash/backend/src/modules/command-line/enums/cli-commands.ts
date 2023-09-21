@@ -9,5 +9,4 @@ export enum CliCommands {
   PopulateKubernetesHistory = 'populate:kubernetes-history',
   DatabaseCheck = 'database:check',
   DatabaseWait = 'database:wait',
-  AddAPIKey = 'apikey:new'
 }
