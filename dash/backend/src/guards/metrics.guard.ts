@@ -48,7 +48,7 @@ export class MetricsGuard implements CanActivate {
       // the following portion could be moved into LoggedInUserFactory.ts
       // it would allow us to retrieve API Keys as Bearer tokens, from headers, and from query strings
       // if we moved it, _loggedInUser would be populated for us
-      const apiKey = this.extractTokenFromHeader(request) || this.extractApiKeyFromHeader(request) || this.extractApiKeyFromQueryString(request);
+      const apiKey = this.extractTokenFromHeader(request) || this.extractApiKeyFromHeader(request);
       if (apiKey) {
         const userInfo = await this.apiKeyService.getUserInfoByApiKey(apiKey);
         if (userInfo) {
@@ -99,8 +99,5 @@ export class MetricsGuard implements CanActivate {
   }
   private extractApiKeyFromHeader(request: Request): string | undefined {
     return request.headers['x-api-key'] as string || undefined;
-  }
-  private extractApiKeyFromQueryString(request: Request): string | undefined {
-    return request.query['x-api-key'] as string || undefined;
   }
 }
