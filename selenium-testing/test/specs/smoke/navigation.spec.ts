@@ -122,7 +122,7 @@ describe('Check Navigation::', () => {
         // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Home')]").customClick("m9sweeper-home");
         expect(browser).toHaveUrl(
-            buildUrl('private/dashboard'),
+            buildUrl('private/dashboard/group/1'),
             {message: "m9sweeper should be showing the base dashboard"}
         );
 
