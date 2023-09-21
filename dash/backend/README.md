@@ -146,8 +146,8 @@ This endpoint can be disabled or secured using the following env vars:
 
 | Env Var                         | Default     | Purpose                                                                                              |
 |---------------------------------|-------------|------------------------------------------------------------------------------------------------------|
-| METRICS_DISABLE_ENDPOINT        | false       | will disable the endpoint if set to "true"                                                           |
-| METRICS_SECURE_ENDPOINT         | false       | will require authentication if set to "true"                                                         |
+| METRICS_DISABLE_ENDPOINT        | 0           | will disable the endpoint if set to "true"                                                           |
+| METRICS_SECURE_ENDPOINT         | 0           | will require authentication if set to "true"                                                         |
 | METRICS_API_KEY                 | -           | an API key that allows access to the endpoint                                                        |
 | METRICS_MINIMUM_AUTHORITY_LEVEL | SUPER_ADMIN | the minimum authority level to allow access to the endpoint (`SUPER_ADMIN`, `ADMIN`, or `READ_ONLY`) |
 
