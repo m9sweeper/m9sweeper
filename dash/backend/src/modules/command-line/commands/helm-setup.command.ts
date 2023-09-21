@@ -198,7 +198,7 @@ export class HelmSetupCommand {
           source_system_type: 'LOCAL_AUTH',
           source_system_user_id: '0',
           password: encryptedApiKey,
-          authorities: [{id: 7}],
+          authorities: [{id: 8}],
         }).then(userIDAsArray => {
           console.log(`User created for ${titlecaseProfileName}. New user id: ${userIDAsArray[0]}`);
           this.userDao.loadUser({id: userIDAsArray[0]})
