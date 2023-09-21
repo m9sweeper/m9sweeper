@@ -27,9 +27,8 @@ export class MetricsGuard implements CanActivate {
       throw new NotFoundException('ENOENT: no such file or directory');
     }
     if (metricsConfig.secureEndpoint) {
-      console.log('helloworld');
       const currentUser = this._loggedInUser;
-      // check if logged in user is the metrics api key user
+      // check if logged-in user is the metrics api key user
       // if it isn't, check if they have the minimum required permission level
       throw new UnauthorizedException('Access denied');
     }

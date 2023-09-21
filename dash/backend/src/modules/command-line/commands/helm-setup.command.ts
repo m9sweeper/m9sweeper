@@ -161,29 +161,75 @@ export class HelmSetupCommand {
       return true;
     }
 
-    async createServiceProfile(profileName: string, apiKey: string) {
-      const userExists = !!(await this.userDao.loadUser({email: profileName}));
+    async createServiceProfile(profileName: string, apiKey: string): Promise<boolean> {
+      const titlecaseProfileName = profileName.toLowerCase().split(' ')
+        .map(word => (word.charAt(0).toUpperCase() + word.slice(1)))
+        .join(' ');
+      // const titlecaseProfileName = profileName.charAt(0).toUpperCase() + profileName.slice(1);
+      const encryptedApiKey = await bcrypt.hash(apiKey, await bcrypt.genSalt(10));
+
+      // check if api key already exists
+      if (await this.apiKeyDao.apiKeyExists(apiKey)) {
+        // @TODO: clean up this message when making cli commands silent
+        console.log('API Key is already in use.... skipping');
+        return true;
+      }
+
+      // check if user already exists
+      let user = await this.userDao.loadUser({email: profileName});
+      let userExists = !!user;
+
+      // if the user doesn't already exist, check to see if the title-case version exists
+      if (!userExists && profileName !== titlecaseProfileName) {
+        user = await this.userDao.loadUser({email: titlecaseProfileName});
+        userExists = !!user;
+        console.log('user 2: ', user);
+      }
+
+      if (userExists && user.length > 1) {
+        // @TODO: clean up this message when making cli commands silent
+        console.log(`${titleCaseProfileName} has multiple associated users.... skipping`);
+        return true;
+      }
+
       if (!userExists) {
-        const encryptedApiKey = await bcrypt.hash(apiKey, await bcrypt.genSalt(10))
-        return this.userDao.create({
-          email: profileName,
-          first_name: profileName,
-          last_name: profileName,
+        await this.userDao.create({
+          email: titleCaseProfileName,
+          first_name: titleCaseProfileName,
+          last_name: titleCaseProfileName,
           source_system_id: '0',
           source_system_type: 'LOCAL_AUTH',
           source_system_user_id: '0',
           password: encryptedApiKey,
           authorities: [{id: 7}],
-        }).then(newUser => this.apiKeyDao.createApiKey({
-          user_id: newUser[0],
-          name: `${profileName} API key`,
-          api: apiKey,
-          is_active: true,
-        })).catch();
-      } else {
-        // @TODO: clean up this message when making cli commands silent
-        console.log(`${profileName} user exists.... skipping`);
+        }).then(userIDAsArray => {
+          console.log(`User created for ${titleCaseProfileName}. New user id: ${userIDAsArray[0]}`);
+          this.userDao.loadUser({id: userIDAsArray[0]})
+            .then(loadedUser => {
+              user = loadedUser;
+              userExists = !!user;
+            });
+        }).catch((e) => {
+          console.error(`Unable to create or retrieve user for ${titleCaseProfileName}`, e);
+          userExists = false;
+        });
+        if (!userExists) {
+          return false;
+        }
       }
+
+      const newApiKey = this.apiKeyDao.createApiKey({
+        user_id: user[0],
+        name: `${titleCaseProfileName} API key`,
+        api: apiKey,
+        is_active: true,
+      }).catch(e => {
+        console.error('Error saving new API key: ', e);
+        return false;
+      });
+
+      console.log(`API Key saved. New API Key id: ${newApiKey[0]}`);
+      return true;
     }
 
     // @TODO: clean up log messages to make this silent

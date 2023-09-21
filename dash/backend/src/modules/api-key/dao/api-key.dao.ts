@@ -53,6 +53,17 @@ export class ApiKeyDao {
         return knex.insert(apikey).into('api_keys').returning(['id']);
     }
 
+    async apiKeyExists(apiKey: string): Promise<boolean> {
+        const knex = await this.databaseService.getConnection();
+        const apiKeyEntry = await knexnest(
+          knex
+            .select(['*'])
+            .from('api_keys as a')
+            .where('a.api', apiKey)
+        );
+        console.log('api key entry: ', apiKeyEntry);
+        return !!apiKeyEntry;
+    }
 
     async getUserInfoByApiKey(searchClause: any): Promise<any> {
         const knex = await this.databaseService.getConnection();
