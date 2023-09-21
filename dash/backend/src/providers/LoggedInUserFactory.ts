@@ -14,7 +14,13 @@ export default {
     mineLoggerService: MineLoggerService
   ) => {
     const authorization = request.get('Authorization')?.split(' ')[1] || '';
-    const apiKey = request.get('x-api-key');
+
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    const bearerToken = type === 'Bearer' ? token : undefined;
+
+    // allows us to retrieve API Keys as Bearer tokens, from headers, and from query strings
+    const apiKey = bearerToken || request.get('x-api-key') || request.query['x-api-key'];
+
     try {
       let userInfo: any;
       if (authorization) {

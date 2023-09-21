@@ -6,5 +6,5 @@ export enum Authority {
     KUBEBENCH = 'KUBEBENCH',
     TRAWLER = 'TRAWLER',
     FALCO = 'FALCO',
-    API_KEY = 'API_KEY',
+    METRICS = 'METRICS',
 }

@@ -25,9 +25,9 @@ export class MetricsGuard implements CanActivate {
   };
 
   constructor(
-    private apiKeyService: ApiKeyService,
     private configService: ConfigService,
     // if this isn't populated, then the apiKey was empty
+    // (LoggedInUserFactory.ts)
     @Inject('LOGGED_IN_USER')
     private readonly _loggedInUser: UserProfileDto,
     private readonly logger: MineLoggerService
@@ -40,25 +40,7 @@ export class MetricsGuard implements CanActivate {
       throw new NotFoundException('ENOENT: no such file or directory');
     }
     if (this.metricsConfig.secureEndpoint) {
-      if (this._loggedInUser) {
-        return this.userHasMinimumRequiredAuthority(this._loggedInUser);
-      }
-
-      const request = context.switchToHttp().getRequest();
-      // the following portion could be moved into LoggedInUserFactory.ts
-      // it would allow us to retrieve API Keys as Bearer tokens, from headers, and from query strings
-      // if we moved it, _loggedInUser would be populated for us
-      const apiKey = this.extractTokenFromHeader(request) || this.extractApiKeyFromHeader(request);
-      if (apiKey) {
-        const userInfo = await this.apiKeyService.getUserInfoByApiKey(apiKey);
-        if (userInfo) {
-          return this.userHasMinimumRequiredAuthority(userInfo);
-        }
-
-        return this.metricsConfig.security.apiKey && apiKey === this.metricsConfig.security.apiKey;
-      }
-
-      return false;
+      return this._loggedInUser && this.userHasMinimumRequiredAuthority(this._loggedInUser);
     }
     return true;
   }
@@ -76,7 +58,7 @@ export class MetricsGuard implements CanActivate {
   }
 
   private getAllowedAuthorities() {
-    const allowedAuthorities = [Authority.API_KEY];
+    const allowedAuthorities = [Authority.METRICS];
     if (this.metricsConfig.security?.minimumAuthority) {
       switch (this.metricsConfig.security.minimumAuthority) {
         case Authority.READ_ONLY:
@@ -91,13 +73,5 @@ export class MetricsGuard implements CanActivate {
       }
     }
     return allowedAuthorities;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
-  }
-  private extractApiKeyFromHeader(request: Request): string | undefined {
-    return request.headers['x-api-key'] as string || undefined;
   }
 }
