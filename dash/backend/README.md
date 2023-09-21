@@ -140,4 +140,29 @@ http://host:port/trawler-doc
 ex. http://localhost:3200/trawler-doc
 ```
 
- 
+## Metrics
+Metrics are exposed by default at `/api/metrics/environment`.
+This endpoint can be disabled or secured using the following env vars:
+
+| Env Var                         | Default     | Purpose                                                                                              |
+|---------------------------------|-------------|------------------------------------------------------------------------------------------------------|
+| METRICS_DISABLE_ENDPOINT        | false       | will disable the endpoint if set to "true"                                                           |
+| METRICS_SECURE_ENDPOINT         | false       | will require authentication if set to "true"                                                         |
+| METRICS_API_KEY                 | -           | an API key that allows access to the endpoint                                                        |
+| METRICS_MINIMUM_AUTHORITY_LEVEL | SUPER_ADMIN | the minimum authority level to allow access to the endpoint (`SUPER_ADMIN`, `ADMIN`, or `READ_ONLY`) |
+
+The endpoint can be customized from `metrics.controller.ts`.
+
+### Adding metrics
+In order to add new metrics, you first have to define them here:
+`src/modules/metrics/utilities/metric_definitions.ts`
+
+Next, open this file:
+`src/modules/metrics/services/prometheus-environment-metrics.service.ts`
+
+1. Add an `@InjectMetric` entry to the constructor
+2. Scroll down to `environmentMetrics()`. Add an entry to the list of envMetrics.
+3. Scroll down to `updateEnvMetrics()`
+4. In the loop through of the clusters, select the relevant function or create a new one.
+5. Calculate the new value and set it: `this.metric-name-here.labels(cluster.name, my-cool-label).set(value-here);`
+6.

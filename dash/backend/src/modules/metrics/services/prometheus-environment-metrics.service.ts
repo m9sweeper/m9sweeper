@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {Counter, Gauge, Summary} from 'prom-client';
 import {InjectMetric} from "@willsoto/nestjs-prometheus";
 import * as client from "prom-client";
@@ -8,6 +8,7 @@ import { ClusterDto } from 'src/modules/cluster/dto/cluster-dto';
 import { ReportsService } from '../../reports/services/reports.service';
 import { PodService } from '../../pod/services/pod.service';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
+import { KubeBenchService } from '../../kube-bench/services/kube-bench.service';
 
 @Injectable()
 export class PrometheusEnvironmentMetricsService {
@@ -32,8 +33,14 @@ export class PrometheusEnvironmentMetricsService {
     @InjectMetric('num_fixable_low_cves') public numFixableLowCVEs: Gauge<string>,
     @InjectMetric('num_negligible_cves') public numNegligibleCVEs: Gauge<string>,
     @InjectMetric('num_fixable_negligible_cves') public numFixableNegligibleCVEs: Gauge<string>,
+
+    @InjectMetric('kube_bench_recent_results_passed') public kubeBenchRecentResultsPassed: Gauge<string>,
+    @InjectMetric('kube_bench_recent_results_failed') public kubeBenchRecentResultsFailed: Gauge<string>,
+    @InjectMetric('kube_bench_recent_results_warning') public kubeBenchRecentResultsWarning: Gauge<string>,
+    @InjectMetric('kube_bench_recent_results_info') public kubeBenchRecentResultsInfo: Gauge<string>,
     private clusterService: ClusterService,
     private imageService: ImageService,
+    private kubeBenchService: KubeBenchService,
     private reportsService: ReportsService,
     private podService: PodService,
     protected readonly logger: MineLoggerService,
@@ -67,7 +74,11 @@ export class PrometheusEnvironmentMetricsService {
       client.register.getSingleMetricAsString("num_negligible_cves"),
       client.register.getSingleMetricAsString("num_fixable_negligible_cves"),
 
-    ]
+      client.register.getSingleMetricAsString("kube_bench_recent_results_passed"),
+      client.register.getSingleMetricAsString("kube_bench_recent_results_failed"),
+      client.register.getSingleMetricAsString("kube_bench_recent_results_warning"),
+      client.register.getSingleMetricAsString("kube_bench_recent_results_info"),
+    ];
 
     return envMetrics.join('\n\n');
   }
@@ -80,6 +91,7 @@ export class PrometheusEnvironmentMetricsService {
         await this.updateNumVulnerabilitiesDetected(cluster);
         await this.updatePodCompliancePercentage(cluster);
         await this.updateCVEReports(cluster);
+        await this.updateKubeBenchMetrics(cluster);
       }
       this.envMetricsUpdatedTimestamp = Date.now();
     } catch (e) {
@@ -146,5 +158,15 @@ export class PrometheusEnvironmentMetricsService {
     } catch (e) {
       return;
     }
+  }
+
+  private async updateKubeBenchMetrics(cluster: ClusterDto): Promise<void> {
+    await this.kubeBenchService.getLastBenchReportSummary(cluster.id).then(summary => {
+      const totals = summary[0].resultsSummary;
+      this.kubeBenchRecentResultsPassed.labels(cluster.name).set(totals.total_pass);
+      this.kubeBenchRecentResultsFailed.labels(cluster.name).set(totals.total_fail);
+      this.kubeBenchRecentResultsWarning.labels(cluster.name).set(totals.total_warn);
+      this.kubeBenchRecentResultsInfo.labels(cluster.name).set(totals.total_info);
+    });
   }
 }

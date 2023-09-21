@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { makeGaugeProvider } from '@willsoto/nestjs-prometheus';
 
-export const MetricDefinitions: Provider<any>[] = [
+const basicMetrics: Provider<any>[] = [
   makeGaugeProvider({
     name: 'num_images_running',
     help: 'Number of images running',
@@ -89,3 +89,28 @@ export const MetricDefinitions: Provider<any>[] = [
     labelNames: ['cluster'],
   }),
 ];
+
+const kubeBenchMetrics: Provider<any>[] = [
+  makeGaugeProvider({
+    name: 'kube_bench_recent_results_passed',
+    help: 'kube-bench most recent run: number of passed tests',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_recent_results_failed',
+    help: 'kube-bench most recent run: number of failed tests',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_recent_results_warning',
+    help: 'kube-bench most recent run: number of tests with warnings',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_recent_results_info',
+    help: 'kube-bench most recent run: number of tests with info alerts',
+    labelNames: ['cluster'],
+  }),
+];
+
+export const MetricDefinitions: Provider<any>[] = [].concat(basicMetrics, kubeBenchMetrics);
