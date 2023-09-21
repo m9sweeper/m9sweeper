@@ -61,7 +61,6 @@ export class ApiKeyDao {
             .from('api_keys as a')
             .where('a.api', apiKey)
         );
-        console.log('api key entry: ', apiKeyEntry);
         return !!apiKeyEntry;
     }
 

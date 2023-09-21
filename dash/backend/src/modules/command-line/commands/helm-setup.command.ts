@@ -161,16 +161,15 @@ export class HelmSetupCommand {
       return true;
     }
 
+    // @TODO: clean up console statements when making cli commands silent
     async createServiceProfile(profileName: string, apiKey: string): Promise<boolean> {
       const titlecaseProfileName = profileName.toLowerCase().split(' ')
         .map(word => (word.charAt(0).toUpperCase() + word.slice(1)))
         .join(' ');
-      // const titlecaseProfileName = profileName.charAt(0).toUpperCase() + profileName.slice(1);
       const encryptedApiKey = await bcrypt.hash(apiKey, await bcrypt.genSalt(10));
 
       // check if api key already exists
       if (await this.apiKeyDao.apiKeyExists(apiKey)) {
-        // @TODO: clean up this message when making cli commands silent
         console.log('API Key is already in use.... skipping');
         return true;
       }
@@ -183,11 +182,9 @@ export class HelmSetupCommand {
       if (!userExists && profileName !== titlecaseProfileName) {
         user = await this.userDao.loadUser({email: titlecaseProfileName});
         userExists = !!user;
-        console.log('user 2: ', user);
       }
 
       if (userExists && user.length > 1) {
-        // @TODO: clean up this message when making cli commands silent
         console.log(`${titlecaseProfileName} has multiple associated users.... skipping`);
         return true;
       }
@@ -218,18 +215,18 @@ export class HelmSetupCommand {
         }
       }
 
-      const newApiKey = this.apiKeyDao.createApiKey({
-        user_id: user[0],
+      return this.apiKeyDao.createApiKey({
+        user_id: user[0].id,
         name: `${titlecaseProfileName} API key`,
         api: apiKey,
         is_active: true,
+      }).then(newApiKey => {
+        console.log(`API Key saved. New API Key id: ${newApiKey[0]}`);
+        return true;
       }).catch(e => {
         console.error('Error saving new API key: ', e);
         return false;
       });
-
-      console.log(`API Key saved. New API Key id: ${newApiKey[0]}`);
-      return true;
     }
 
     // @TODO: clean up log messages to make this silent
