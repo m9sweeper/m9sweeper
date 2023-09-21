@@ -188,29 +188,29 @@ export class HelmSetupCommand {
 
       if (userExists && user.length > 1) {
         // @TODO: clean up this message when making cli commands silent
-        console.log(`${titleCaseProfileName} has multiple associated users.... skipping`);
+        console.log(`${titlecaseProfileName} has multiple associated users.... skipping`);
         return true;
       }
 
       if (!userExists) {
         await this.userDao.create({
-          email: titleCaseProfileName,
-          first_name: titleCaseProfileName,
-          last_name: titleCaseProfileName,
+          email: titlecaseProfileName,
+          first_name: titlecaseProfileName,
+          last_name: titlecaseProfileName,
           source_system_id: '0',
           source_system_type: 'LOCAL_AUTH',
           source_system_user_id: '0',
           password: encryptedApiKey,
           authorities: [{id: 7}],
         }).then(userIDAsArray => {
-          console.log(`User created for ${titleCaseProfileName}. New user id: ${userIDAsArray[0]}`);
+          console.log(`User created for ${titlecaseProfileName}. New user id: ${userIDAsArray[0]}`);
           this.userDao.loadUser({id: userIDAsArray[0]})
             .then(loadedUser => {
               user = loadedUser;
               userExists = !!user;
             });
         }).catch((e) => {
-          console.error(`Unable to create or retrieve user for ${titleCaseProfileName}`, e);
+          console.error(`Unable to create or retrieve user for ${titlecaseProfileName}`, e);
           userExists = false;
         });
         if (!userExists) {
@@ -220,7 +220,7 @@ export class HelmSetupCommand {
 
       const newApiKey = this.apiKeyDao.createApiKey({
         user_id: user[0],
-        name: `${titleCaseProfileName} API key`,
+        name: `${titlecaseProfileName} API key`,
         api: apiKey,
         is_active: true,
       }).catch(e => {
