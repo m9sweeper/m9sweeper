@@ -156,13 +156,13 @@ export class HelmSetupCommand {
             console.log('Falco user exists.... skipping');
         }
 
-      promises.push(this.createServiceProfile('Metrics', metricsApiKey));
+      promises.push(this.createAPIKeyProfile('Metrics', metricsApiKey));
       await Promise.all(promises);
       return true;
     }
 
     // @TODO: clean up console statements when making cli commands silent
-    async createServiceProfile(profileName: string, apiKey: string): Promise<boolean> {
+    async createAPIKeyProfile(profileName: string, apiKey: string): Promise<boolean> {
       const titlecaseProfileName = profileName.toLowerCase().split(' ')
         .map(word => (word.charAt(0).toUpperCase() + word.slice(1)))
         .join(' ');

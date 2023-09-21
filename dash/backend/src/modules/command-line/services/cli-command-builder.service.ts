@@ -64,7 +64,7 @@ export class CliCommandBuilderService {
             new CliCommand(
               CliCommands.AddAPIKey,
               'Adds an API key if the entry doesn\'t already exist',
-              (profileName, apiKey) => this.helmSetupCommand.createServiceProfile(profileName, apiKey),
+              (profileName, apiKey) => this.helmSetupCommand.createAPIKeyProfile(profileName, apiKey),
               ['profileName', 'apiKey'],
             ),
             new CliCommand(
