@@ -19,15 +19,14 @@ import {generateRandomString} from "./generate-random-string";
  */
 @Injectable()
 export class HelmSetupCommand {
-    promises: Promise<any>[] = [];
-
-    constructor(private readonly databaseService: DatabaseService,
-                private readonly userDao: UserDao,
-                private readonly apiKeyDao: ApiKeyDao,
-                private readonly kubernetesApiService: KubernetesApiService,
-                private readonly registryDao: DockerRegistriesDao,
-                private readonly exceptionService: ExceptionsService) {
-    }
+    constructor(
+      private readonly databaseService: DatabaseService,
+      private readonly userDao: UserDao,
+      private readonly apiKeyDao: ApiKeyDao,
+      private readonly kubernetesApiService: KubernetesApiService,
+      private readonly registryDao: DockerRegistriesDao,
+      private readonly exceptionService: ExceptionsService
+    ) {}
 
     async runSeed(): Promise<boolean> {
         const promises: Promise<any>[] = [];
