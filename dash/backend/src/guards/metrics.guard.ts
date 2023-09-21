@@ -9,8 +9,6 @@ import {
 import { UserProfileDto } from '../modules/user/dto/user-profile-dto';
 import { MineLoggerService } from '../modules/shared/services/mine-logger.service';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
-import { ApiKeyService } from '../modules/api-key/services/api-key.service';
 import { Authority } from '../modules/user/enum/Authority';
 
 @Injectable()
