@@ -84,6 +84,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       name: 'add-cluster-group',
       title: 'Add Cluster Group',
       icon: 'add',
+      adminsOnly: true,
       callback: this.openAddGroupDialog,
     }];
     this.currentMenuContentTriggers.next(this.menuContentTriggers);

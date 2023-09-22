@@ -10,7 +10,7 @@
 
     <mat-nav-list id="main-list">
       <div *ngFor="let contentTrigger of contentTriggerButtons">
-        <mat-list-item (click)="contentTriggerClicked(contentTrigger.name)">
+        <mat-list-item (click)="contentTriggerClicked(contentTrigger.name)" *ngIf="!contentTrigger.adminsOnly || isAdmin">
           <mat-icon title="Add Cluster Group">{{ contentTrigger.icon }}</mat-icon>
           {{ contentTrigger.title }}
         </mat-list-item>
