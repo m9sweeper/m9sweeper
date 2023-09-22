@@ -51,15 +51,25 @@ export class GateKeeperDetailsComponent implements OnInit {
     }
   }
 
+  /**
+   * If excludeConstraints is true, this will only load & update data relevant to the constraint template itself,
+   * and not update the table of Constraints
+   * */
   getConstraintTemplateDetails(excludeConstraints = false) {
-    this.gatekeeperService.getConstraintTemplateByName(this.clusterId, this.templateName, excludeConstraints).subscribe(data => {
-      this.gatekeeperTemplate = data.template;
+    this.gatekeeperService.getConstraintTemplateByName(this.clusterId, this.templateName, excludeConstraints)
+      .pipe(take(1))
+      .subscribe({
+        next: data => {
+          this.gatekeeperTemplate = data.template;
 
-      const associatedConstraints = data.associatedConstraints ?? [];
-      this.constraintCount = associatedConstraints.length ?? 0;
-      this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(associatedConstraints);
-      this.updateConstraintTemplateProperties();
-    });
+          if (!excludeConstraints) {
+            const associatedConstraints = data.associatedConstraints ?? [];
+            this.constraintCount = associatedConstraints.length ?? 0;
+            this.constraintsList = new MatTableDataSource<IGatekeeperConstraint>(associatedConstraints);
+          }
+          this.updateConstraintTemplateProperties();
+    }
+      });
   }
 
   updateConstraintTemplateProperties() {
@@ -120,6 +130,7 @@ export class GateKeeperDetailsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         if (response && response.editedTemplate) {
+          console.log('hereere');
           this.getConstraintTemplateDetails(true);
         }
     });
