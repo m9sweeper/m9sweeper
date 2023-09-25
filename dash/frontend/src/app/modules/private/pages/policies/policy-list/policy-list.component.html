@@ -29,8 +29,8 @@
             <mat-cell *matCellDef="let policy">{{policy?.rescanGracePeriod || 'None'}}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="edit">
-            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-            <mat-cell *matCellDef="let policy">
+            <mat-header-cell *matHeaderCellDef [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">Actions</mat-header-cell>
+            <mat-cell *matCellDef="let policy" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
               <a mat-icon-button [routerLink]="['/private', 'policies', policy?.id, 'edit']">
                 <mat-icon>create</mat-icon>
               </a>

@@ -51,7 +51,7 @@
               </p>
             </div>
             <div class="col-sm-5 col-xs-5 page-card-title-button-group-right-align">
-              <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+              <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
             </div>
           </div>
           </mat-card-content>
@@ -69,7 +69,7 @@
               </div>
             </div>
             <div class="col-xs-7 run-audit-button">
-              <button mat-raised-button color="primary" (click)="openDialog()">Run Audit</button>
+              <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
             </div>
           </mat-card-header>
           <mat-card-content>
