@@ -55,6 +55,16 @@ prometheusOperator:
     percentNoncompliance:
       enabled: true
       threshold: 20
+    # Alerts if there's a significant increase in number of failed tests (as run by kube-bench)
+    numNewTestFailures:
+      enabled: true
+      threshold: 5
+      duration: 6h  # defaults to 6h
+    # Alerts if there's a significant increase in high-severity vulnerabilities (as detected by kube-hunter)
+    numNewVulnerabilitiesDetected:
+      enabled: true
+      threshold: 20
+      duration: 6h  # defaults to 6h
   # Convenient way of specifying additional rules
   additionalRules: {}
 #    ruleName:
