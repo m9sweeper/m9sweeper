@@ -8,9 +8,10 @@ import { CommentService } from '../../../../../core/services/comment.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { JwtAuthService } from '../../../../../core/services/jwt-auth.service';
 import { IComment } from '../../../../../core/entities/IComment';
-import { Observable } from 'rxjs';
 import {AlertDialogComponent} from '../../../../shared/alert-dialog/alert-dialog.component';
 import {take} from 'rxjs/operators';
+import {Authority, AuthorityId} from '../../../../../core/enum/Authority';
+import {ThemePalette} from '@angular/material/core';
 
 @Component({
   selector: 'app-exception-details',
@@ -23,6 +24,15 @@ export class ExceptionDetailsComponent implements OnInit {
   commentForm: FormGroup;
   comments: IComment[];
   isSubmitting = false;
+  subnavigationButton2Config = {
+    title: 'Delete',
+    icon: 'delete',
+    color: 'warn' as ThemePalette,
+    allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN]
+  };
+
+  // Make accessible to HTML
+  readonly Authority = Authority;
 
   constructor(
     private router: Router,
