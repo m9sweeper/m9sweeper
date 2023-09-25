@@ -113,4 +113,27 @@ const kubeBenchMetrics: Provider<any>[] = [
   }),
 ];
 
-export const MetricDefinitions: Provider<any>[] = [].concat(basicMetrics, kubeBenchMetrics);
+const kubeHunterMetrics: Provider<any>[] = [
+  makeGaugeProvider({
+    name: 'kube_hunter_recent_results_low',
+    help: 'kube-hunter most recent run: number of low vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_recent_results_medium',
+    help: 'kube-hunter most recent run: number of medium vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_recent_results_high',
+    help: 'kube-hunter most recent run: number of critical vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_recent_results_unknown',
+    help: 'kube-hunter most recent run: number of unknown-severity vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+];
+
+export const MetricDefinitions: Provider<any>[] = [].concat(basicMetrics, kubeBenchMetrics, kubeHunterMetrics);
