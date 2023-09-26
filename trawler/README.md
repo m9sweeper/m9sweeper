@@ -6,14 +6,14 @@ Trawler is the component of m9sweeper in charge of scanning images and providing
 
 ## Configuration
 
-The configuration that Trawler requires in order to be run can be provided in a number of different ways. Below they are listed in the order they are utilized upon startup. It is important to note that items further down in the list CAN override items set in config methods further up in the list. An example of this would be if you set the enviroment variable `M9SWEEPER_URL` to `https://dev-m9sweeper.ngrok.io` but then in the CLI arguments you set the `--api-key` to `https://m9sweeper.somedomain.com` then Trawler will utilize the `https://m9sweeper.somedomain.com` URL.
+The configuration that Trawler requires in order to be run can be provided in a number of different ways. Below they are listed in the order they are utilized upon startup. It is important to note that items further down in the list CAN override items set in config methods further up in the list. An example of this would be if you set the environment variable `M9SWEEPER_URL` to `https://dev-m9sweeper.ngrok.io` but then in the CLI arguments you set the `--url` to `https://m9sweeper.somedomain.com` then Trawler will utilize the `https://m9sweeper.somedomain.com` URL.
 
 
 
 ### Configuration Methods:
 
 1. **Enviroment Variables:** You can configure all options of Trawler using enviroment variables configured within your system. This can make it simply to use in things like Docker containers where values might change often.
-2. **Local `.env` file:** Trawler can also load its configuration using a standard env file containing a key/value list of enviroment variables. These variables are the same ones that are used in the above Enviroment Variables option.
+2. **Local `.env` file:** Trawler can also load its configuration using a standard env file containing a key/value list of enviroment variables. These variables are the same ones that are used in the above Environment Variables option.
 3. **Command Line Interface Arguments (CLI args):** Finally, you can pass in configuration options to Trawler using CLI arguments. Trawler utilize the Pico CLI library in order to provide a clean and familiar method of running Trawler as a CLI application. See the below section on running Trawler to see example commands.
 
 

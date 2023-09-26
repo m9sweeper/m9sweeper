@@ -1,13 +1,5 @@
 package io.m9sweeper.trawler.scanners;
 
-
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.ecr.AmazonECR;
-import com.amazonaws.services.ecr.AmazonECRClientBuilder;
-import com.amazonaws.services.ecr.model.GetAuthorizationTokenRequest;
-import com.amazonaws.services.ecr.model.GetAuthorizationTokenResult;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -18,9 +10,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 public class Trivy implements Scanner {
 
