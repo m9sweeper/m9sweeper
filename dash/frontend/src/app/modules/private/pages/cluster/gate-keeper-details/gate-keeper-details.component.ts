@@ -132,7 +132,6 @@ export class GateKeeperDetailsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(response => {
         if (response && response.editedTemplate) {
-          console.log('hereere');
           this.getConstraintTemplateDetails(true);
         }
     });
