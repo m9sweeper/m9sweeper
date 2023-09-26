@@ -28,6 +28,7 @@ export class GateKeeperDetailsComponent implements OnInit {
   displayedColumns: string[];
   openapiProperties = [];
   openApiSchema: any;
+  isAdmin: boolean;
 
   constructor(
     private readonly gateKeeperService: GateKeeperService,
@@ -44,7 +45,8 @@ export class GateKeeperDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getConstraintTemplateDetails();
-    if (this.jwtAuthService.isAdmin()) {
+    this.isAdmin = this.jwtAuthService.isAdmin();
+    if (this.isAdmin) {
       this.displayedColumns = ['name', 'description', 'mode', 'action', 'violations'];
     } else {
       this.displayedColumns = ['name', 'description', 'mode', 'violations'];

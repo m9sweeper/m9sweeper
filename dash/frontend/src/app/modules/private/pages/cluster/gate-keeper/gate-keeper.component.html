@@ -39,11 +39,11 @@
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
                 <div class="text-align-right">
-                  <button  mat-raised-button color="primary" (click)="openInstallWizard()" *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
+                  <button mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" (click)="openInstallWizard()" *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
                     Install
                   </button>
                   <ng-template #recommendationButton>
-                    <button  mat-raised-button color="primary" (click)="openAddConstraintDialog()" *ngIf="gatekeeperConstraintTemplates?.length === 0">
+                    <button  mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" (click)="openAddConstraintDialog()" *ngIf="gatekeeperConstraintTemplates?.length === 0">
                       Setup
                     </button>
                   </ng-template>

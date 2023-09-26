@@ -4,6 +4,7 @@ import {AlertService} from 'src/app/core/services/alert.service';
 import {IGatekeeperConstraintTemplate} from '../../../../../core/entities/gatekeeper';
 import {GatekeeperService} from '../../../../../core/services/gatekeeper.service';
 import {take} from 'rxjs/operators';
+import {JwtAuthService} from '../../../../../core/services/jwt-auth.service';
 
 @Component({
   selector: 'app-add-edit-constraint-template-manifest',
@@ -12,6 +13,7 @@ import {take} from 'rxjs/operators';
 })
 export class AddEditConstraintTemplateManifestComponent implements OnInit {
   codeMirrorOptions: any = {
+    readOnly: false,
     theme: 'material',
     mode: {name: 'javascript', json: true},
     lineNumbers: true,
@@ -25,6 +27,7 @@ export class AddEditConstraintTemplateManifestComponent implements OnInit {
   };
   initialHeight = 300; // this is the initial height of codemirror
   rawTemplate: any;
+  readOnly: boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -33,14 +36,19 @@ export class AddEditConstraintTemplateManifestComponent implements OnInit {
       templateName: string;
       saveTemplate?: boolean;
       subDir?: string;
+      readOnly: boolean;
     },
     private gatekeeperService: GatekeeperService,
     private dialogRef: MatDialogRef<AddEditConstraintTemplateManifestComponent>,
-    private alertService: AlertService
+    private alertService: AlertService,
+    protected readonly authService: JwtAuthService
   ) {}
 
   ngOnInit(): void {
     this.rawTemplate = JSON.stringify(this.data.templateContent, null, ' ');
+    // Readonly if in read only mode or not an admin
+    this.readOnly = this.data?.readOnly || !this.authService.isAdmin();
+    this.codeMirrorOptions.readOnly = this.readOnly;
   }
 
   deployCustomTemplate() {
