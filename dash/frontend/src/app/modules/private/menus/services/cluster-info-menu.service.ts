@@ -115,6 +115,14 @@ export class ClusterInfoMenuService implements NavServiceInterface, OnDestroy {
         path: ['/private', 'clusters', `${this.clusterId}`, 'reports'],
         icon: 'feed',
       },
+      {
+        name: 'Snyk',
+        path: ['/private', 'clusters', `${this.clusterId}`, 'reports'],
+        image: {
+          src: '/assets/images/snyk-logo.png',
+          alt: 'Snyk Logo',
+        },
+      },
     ];
     this.currentMenuItems.next(this.menuItems);
   }
