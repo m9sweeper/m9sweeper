@@ -92,22 +92,22 @@ const basicMetrics: Provider<any>[] = [
 
 const kubeBenchMetrics: Provider<any>[] = [
   makeGaugeProvider({
-    name: 'kube_bench_recent_results_passed',
+    name: 'kube_bench_passed_tests',
     help: 'kube-bench most recent run: number of passed tests',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_bench_recent_results_failed',
+    name: 'kube_bench_failed_tests',
     help: 'kube-bench most recent run: number of failed tests',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_bench_recent_results_warning',
+    name: 'kube_bench_tests_with_warnings',
     help: 'kube-bench most recent run: number of tests with warnings',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_bench_recent_results_info',
+    name: 'kube_bench_tests_with_info_alerts',
     help: 'kube-bench most recent run: number of tests with info alerts',
     labelNames: ['cluster'],
   }),
@@ -115,22 +115,22 @@ const kubeBenchMetrics: Provider<any>[] = [
 
 const kubeHunterMetrics: Provider<any>[] = [
   makeGaugeProvider({
-    name: 'kube_hunter_recent_results_low',
+    name: 'kube_hunter_num_low_vulnerabilities',
     help: 'kube-hunter most recent run: number of low vulnerabilities',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_hunter_recent_results_medium',
+    name: 'kube_hunter_num_medium_vulnerabilities',
     help: 'kube-hunter most recent run: number of medium vulnerabilities',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_hunter_recent_results_high',
+    name: 'kube_hunter_num_high_vulnerabilities',
     help: 'kube-hunter most recent run: number of critical vulnerabilities',
     labelNames: ['cluster'],
   }),
   makeGaugeProvider({
-    name: 'kube_hunter_recent_results_unknown',
+    name: 'kube_hunter_num_unknown_vulnerabilities',
     help: 'kube-hunter most recent run: number of unknown-severity vulnerabilities',
     labelNames: ['cluster'],
   }),

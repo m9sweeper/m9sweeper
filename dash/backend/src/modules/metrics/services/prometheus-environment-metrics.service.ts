@@ -40,15 +40,15 @@ export class PrometheusEnvironmentMetricsService {
     @InjectMetric('num_negligible_cves') public numNegligibleCVEs: Gauge<string>,
     @InjectMetric('num_fixable_negligible_cves') public numFixableNegligibleCVEs: Gauge<string>,
 
-    @InjectMetric('kube_bench_recent_results_passed') public kubeBenchRecentResultsPassed: Gauge<string>,
-    @InjectMetric('kube_bench_recent_results_failed') public kubeBenchRecentResultsFailed: Gauge<string>,
-    @InjectMetric('kube_bench_recent_results_warning') public kubeBenchRecentResultsWarning: Gauge<string>,
-    @InjectMetric('kube_bench_recent_results_info') public kubeBenchRecentResultsInfo: Gauge<string>,
+    @InjectMetric('kube_bench_passed_tests') public kubeBenchRecentResultsPassed: Gauge<string>,
+    @InjectMetric('kube_bench_failed_tests') public kubeBenchRecentResultsFailed: Gauge<string>,
+    @InjectMetric('kube_bench_tests_with_warnings') public kubeBenchRecentResultsWarning: Gauge<string>,
+    @InjectMetric('kube_bench_tests_with_info_alerts') public kubeBenchRecentResultsInfo: Gauge<string>,
 
-    @InjectMetric('kube_hunter_recent_results_low') public kubeHunterRecentResultsLow: Gauge<string>,
-    @InjectMetric('kube_hunter_recent_results_medium') public kubeHunterRecentResultsMedium: Gauge<string>,
-    @InjectMetric('kube_hunter_recent_results_high') public kubeHunterRecentResultsHigh: Gauge<string>,
-    @InjectMetric('kube_hunter_recent_results_unknown') public kubeHunterRecentResultsUnknown: Gauge<string>,
+    @InjectMetric('kube_hunter_num_low_vulnerabilities') public kubeHunterRecentResultsLow: Gauge<string>,
+    @InjectMetric('kube_hunter_num_medium_vulnerabilities') public kubeHunterRecentResultsMedium: Gauge<string>,
+    @InjectMetric('kube_hunter_num_high_vulnerabilities') public kubeHunterRecentResultsHigh: Gauge<string>,
+    @InjectMetric('kube_hunter_num_unknown_vulnerabilities') public kubeHunterRecentResultsUnknown: Gauge<string>,
     private clusterService: ClusterService,
     private imageService: ImageService,
     private kubeBenchService: KubeBenchService,
@@ -86,15 +86,15 @@ export class PrometheusEnvironmentMetricsService {
       client.register.getSingleMetricAsString("num_negligible_cves"),
       client.register.getSingleMetricAsString("num_fixable_negligible_cves"),
 
-      client.register.getSingleMetricAsString("kube_bench_recent_results_passed"),
-      client.register.getSingleMetricAsString("kube_bench_recent_results_failed"),
-      client.register.getSingleMetricAsString("kube_bench_recent_results_warning"),
-      client.register.getSingleMetricAsString("kube_bench_recent_results_info"),
+      client.register.getSingleMetricAsString("kube_bench_passed_tests"),
+      client.register.getSingleMetricAsString("kube_bench_failed_tests"),
+      client.register.getSingleMetricAsString("kube_bench_tests_with_warnings"),
+      client.register.getSingleMetricAsString("kube_bench_tests_with_info_alerts"),
 
-      client.register.getSingleMetricAsString("kube_hunter_recent_results_low"),
-      client.register.getSingleMetricAsString("kube_hunter_recent_results_medium"),
-      client.register.getSingleMetricAsString("kube_hunter_recent_results_high"),
-      client.register.getSingleMetricAsString("kube_hunter_recent_results_unknown"),
+      client.register.getSingleMetricAsString("kube_hunter_num_low_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_medium_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_high_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_unknown_vulnerabilities"),
     ];
 
     return envMetrics.join('\n\n');
