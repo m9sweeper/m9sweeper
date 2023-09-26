@@ -143,4 +143,9 @@ export class ReportsService {
     return this.httpClient.get<IServerResponse<IReportsCsv>>(`${this.baseUrl}/vulnerability-difference/download`,
       {params});
   }
+
+  generateSimpleSecurityAuditReport(): Observable<any> {
+    const url = this.baseUrl.concat('/printable-audit-report');
+    return this.httpClient.get(url);
+  }
 }

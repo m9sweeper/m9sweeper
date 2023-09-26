@@ -128,6 +128,7 @@ import {MenuComponent} from './menus/menu.component';
 import {FalcoJsonDataDialogComponent} from './pages/falco/falco-json-data-dialog/falco-json-data-dialog.component';
 import {FalcoRelatedEventsTableComponent} from './pages/falco/falco-related-events-table/falco-related-events-table.component';
 import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kubesec-report.component';
+import { PrintableAuditReportComponent } from './pages/reports/printable-audit-report/printable-audit-report.component';
 
 
 @NgModule({
@@ -217,6 +218,7 @@ import {KubesecReportComponent} from './pages/cluster/kubesec/kubesec-report/kub
     FalcoRulesClusterListComponent,
     ArrayTextPipe,
     MenuComponent,
+    PrintableAuditReportComponent,
   ],
   imports: [
       CommonModule,

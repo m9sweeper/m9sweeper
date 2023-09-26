@@ -29,6 +29,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: './src/gatekeeper-templates', to: './gatekeeper-templates' },
+        { from: './src/fonts', to: './fonts' },
         { from: './src/modules/kube-bench/config_files', to: './kube-bench-templates' },
         { from: './src/gatekeeper-templates', to: './src/gatekeeper-templates' },
         { from: './src/email-templates', to: './dist/email-templates' },

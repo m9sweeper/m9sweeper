@@ -52,6 +52,7 @@ import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-ev
 import {FalcoEventDetailsComponent} from './pages/falco/falco-event-details/falco-event-details.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {FalcoOrgSettingsPageComponent} from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
+import {PrintableAuditReportComponent} from './pages/reports/printable-audit-report/printable-audit-report.component';
 
 const routes: Routes = [
   {
@@ -207,6 +208,13 @@ const routes: Routes = [
                   title: 'Vulnerability Difference By Date'
                 }
               },
+              {
+                path: 'printable-audit-report',
+                component: PrintableAuditReportComponent,
+                data: {
+                  title: 'Printable Audit Report'
+                }
+              }
             ]
           },
           {

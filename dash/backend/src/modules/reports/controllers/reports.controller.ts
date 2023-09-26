@@ -17,6 +17,7 @@ import { AuthorityGuard } from '../../../guards/authority.guard';
 import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity';
 import { EnsureArrayTyping } from '../../shared/utilities/ensure-array-typing';
 import {format} from 'date-fns'
+import {PrintableAuditReportService} from '../services/printable-audit-report.service';
 
 @ApiTags('Reports')
 @Controller()
@@ -25,6 +26,7 @@ import {format} from 'date-fns'
 export class ReportsController {
     constructor(
         private readonly reportsService: ReportsService,
+        protected readonly printableAuditReportService: PrintableAuditReportService
     ) {}
 
     @Get('/vulnerability-export')
@@ -75,6 +77,13 @@ export class ReportsController {
             throw new BadRequestException('Please provide a limit between 1 and 100');
         }
         return this.reportsService.getRunningVulnerabilities(limit, clusterId, namespaces, isCompliant, date, page);
+    }
+
+    @Get('/printable-audit-report')
+    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    async generatePrintableAuditReport() {
+        return this.printableAuditReportService.generate();
     }
 
     @Get('/running-vulnerabilities/download')
