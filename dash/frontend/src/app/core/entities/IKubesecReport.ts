@@ -18,10 +18,8 @@ export interface IKubesecReport {
       points: number | string;
     }[];
     advise: {
-      id: string;
       selector: string;
       reason: string;
-      points: number | string;
     }[];
   };
 }

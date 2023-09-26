@@ -37,7 +37,7 @@
                   </form>
                 </mat-form-field>
               </div>
-              <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length">
+              <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length && !loadingPods">
                 <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
                   <mat-label>Select a pod</mat-label>
                   <form [formGroup]="podForm">
@@ -55,7 +55,7 @@
                   </form>
                 </mat-form-field>
               </div>
-              <div class="heading" *ngIf="namespaceForm.controls.namespaceFormControl.value && (!currentPods || !currentPods.length)">
+              <div class="heading" *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
                 No pods in the selected namespace(s)
               </div>
             </div>
