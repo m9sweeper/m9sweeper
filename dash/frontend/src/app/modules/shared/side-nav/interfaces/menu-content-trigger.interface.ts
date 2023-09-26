@@ -1,7 +1,9 @@
+import {Authority} from '../../../../core/enum/Authority';
+
 export class IMenuContentTrigger {
   name: string;
   title: string;
   icon: string;
-  adminsOnly: boolean;
+  allowedRoles: Authority[];
   callback: (parent) => void;
 }
