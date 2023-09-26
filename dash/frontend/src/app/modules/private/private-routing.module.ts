@@ -294,6 +294,9 @@ const routes: Routes = [
               title: 'kube-bench Report Details'
             }
           },
+          {
+            path: 'falco'
+          }
         ]
       },
       {
@@ -438,6 +441,15 @@ const routes: Routes = [
             title: 'Falco Settings',
           }
         }]
+      },
+      {
+        path: 'snyk',
+        component: OrganizationSettingsComponent,
+        canActivateChild: [RoleGuard],
+        data: {
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN],
+        },
+        children: [{}],
       },
       {
         path: 'change-password',

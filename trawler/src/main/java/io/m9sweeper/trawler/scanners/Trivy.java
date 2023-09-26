@@ -31,7 +31,7 @@ public class Trivy implements Scanner {
 
     /**
      * Initializes the Scanner. This is a required Scanner method
-     * and is should be used to initialize the configuration for the plugin and any
+     * and is used to initialize the configuration for the plugin and any
      * plugin specific things. This acts as the constructor for the scanner.
      *
      * @param scanConfig the ScanConfig that defines the plugin settings and scan information
@@ -58,83 +58,21 @@ public class Trivy implements Scanner {
     /**
      * Runs the scan as defined by the ScanConfig passed into the scanner
      * in the {@link #initScanner(ScanConfig)} method. This should start the scan,
-     * and wait for it to complete. Raw scan results should be saved so they can be executed
-     * in the next stage, {@link #parseResults()}.
+     * and wait for it to complete. Raw scan results should be saved so that they
+     * can be executed in the next stage, {@link #parseResults()}.
      */
     @Override
     public void runScan() throws Exception {
-        System.out.println("Initiating scan of " + config.getImage().buildFullPath(false, true) +
-                " with trivy for " + config.getPolicy().getName() + ":" + config.getScannerName());
+        String fullPath = config.getImage().buildFullPath(false, true);
+        String policyName = config.getPolicy().getName();
+        String scannerName = config.getScannerName();
+        System.out.println("Initiating scan of " + fullPath + " with trivy for " + policyName + ":" + scannerName);
         StringBuilder trivyScanCommandBuilder = new StringBuilder();
 
         // If registry is Amazon Container Registry, set aws access key and secret key to get token
         DockerRegistry registry = config.getImage().getRegistry();
-        if ("ACR".equals(registry.getAuthType())) {
-
-            String aws_account_id = TrawlerConfiguration.getInstance().dockerImageUrl().split("\\.")[0];
-
-            try {
-                Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
-
-                String region = authDetails.getOrDefault("acrDefaultRegion", "").toString();
-                String accessKey = authDetails.getOrDefault("acrAccessKey", "").toString();
-                String secretKey = authDetails.getOrDefault("acrSecretKey", "").toString();
-
-                AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-                AmazonECR amazonECR = AmazonECRClientBuilder.standard()
-                        .withRegion(region)
-                        .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                        .build();
-
-                //Get Auth Token for Repository using it's registry Id
-                GetAuthorizationTokenResult authorizationData = amazonECR
-                        .getAuthorizationToken(new GetAuthorizationTokenRequest().withRegistryIds(aws_account_id));
-                String authTokenBase64 = authorizationData.getAuthorizationData().get(0).getAuthorizationToken();
-                byte[] decodedBytes = Base64.getDecoder().decode(authTokenBase64);
-                String decodedString = new String(decodedBytes);
-                String authToken = decodedString.substring(4); // skip AWS: at the start of the string
-
-                trivyScanCommandBuilder.append("export TRIVY_USERNAME=").append(escapeXsi("AWS")).append("; ");
-                trivyScanCommandBuilder.append("export TRIVY_PASSWORD=").append(escapeXsi(authToken)).append("; ");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else if ("GCR".equals(registry.getAuthType())) {
-            // Create a temporary auth file for Trivy to use for authentication with GCR
-            File gcrAuthFile = File.createTempFile("gcrAuthFile-", ".json");
-
-            // Fetch the authentication details from the registry details
-            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
-
-            // Write the auth JSON to the temp JSON file
-            try (FileWriter writer = new FileWriter(gcrAuthFile)) {
-                writer.write(authDetails.getOrDefault("gcrAuthJson", "").toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // Ensure that the file is deleted upon exiting so that we do not leave credentials lying around.
-            gcrAuthFile.deleteOnExit();
-
-            // Export the location of this file so that Trivy can utilize it
-            trivyScanCommandBuilder.append("export GOOGLE_APPLICATION_CREDENTIALS=").append(gcrAuthFile.getAbsolutePath()).append("; ");
-        } else if ("AZCR".equals(registry.getAuthType())) {
-            // Azure Container Registry images are accessed with a service principal set up beforehand. Trawler only needs to
-            // export the Client ID, Secret, and Tenant ID of the service principal to allow Trivy to connect to it
-            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
-
-            String clientId = authDetails.getOrDefault("azureClientId", "").toString();
-            String clientSecret = authDetails.getOrDefault("azureClientSecret", "").toString();
-            String tenantId = authDetails.getOrDefault("azureTenantId", "").toString();
-
-            trivyScanCommandBuilder.append("export AZURE_CLIENT_ID=").append(escapeXsi(clientId)).append("; ");
-            trivyScanCommandBuilder.append("export AZURE_CLIENT_SECRET=").append(escapeXsi(clientSecret)).append("; ");
-            trivyScanCommandBuilder.append("export AZURE_TENANT_ID=").append(escapeXsi(tenantId)).append("; ");
-        } else if (registry.getIsLoginRequired()) {
-            trivyScanCommandBuilder.append("export TRIVY_USERNAME=").append(escapeXsi(registry.getUsername())).append("; ");
-            trivyScanCommandBuilder.append("export TRIVY_PASSWORD=").append(escapeXsi(registry.getPassword())).append("; ");
-        }
+        String authorization = getRegistryAuthorization(registry);
+        trivyScanCommandBuilder.append(authorization);
 
         // Clear Trivy cache
         ProcessBuilder clearCacheProcessBuilder = new ProcessBuilder();
@@ -143,13 +81,12 @@ public class Trivy implements Scanner {
 
         Process clearCacheProcess = clearCacheProcessBuilder.start();
         clearCacheProcess.waitFor();
-        
+
         // run trivy scan
         trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
-        trivyScanCommandBuilder.append(escapeXsi(
-                config.getImage().buildFullPath(true, true)
-        ));
-        trivyScanCommandBuilder.append("';");
+        String imageFullPath = config.getImage().buildFullPath(true, true);
+        String stringEscapedFullPath = StringEscapeUtils.escapeXSI(imageFullPath);
+        trivyScanCommandBuilder.append(stringEscapedFullPath).append("';");
 
         if (registry.getIsLoginRequired()) {
             trivyScanCommandBuilder.append(" unset TRIVY_USERNAME; unset TRIVY_PASSWORD;");
@@ -225,10 +162,6 @@ public class Trivy implements Scanner {
         } else {
             throw new Exception(errorMessage);
         }
-    }
-
-    private String escapeXsi(String authToken) {
-        return StringEscapeUtils.escapeXSI(authToken);
     }
 
     /**
