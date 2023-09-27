@@ -9,5 +9,5 @@ export interface NavServiceInterface {
   currentMenuItems: BehaviorSubject<IMenuItem[]>;
   currentMenuContentTriggers: BehaviorSubject<IMenuContentTrigger[]>;
   showOrgSettingsButton: boolean;
-  showClusterListButton: boolean;
+  showReturnHomeButton: boolean;
 }
