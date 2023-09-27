@@ -5,49 +5,51 @@ import io.m9sweeper.trawler.framework.scans.ScanConfig;
 import io.m9sweeper.trawler.framework.scans.ScanResultIssue;
 import io.m9sweeper.trawler.framework.scans.Scanner;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Snyk implements Scanner {
-    private ScanConfig config;
-    private String rawResults;
+    ScanConfig config;
+    String rawResults;
     ArrayList<ScanResultIssue> scanResultIssues;
 
-    /**
-     * Initializes the Scanner. This is a required Scanner method
-     * and is used to initialize the configuration for the plugin and any
-     * plugin specific things. This acts as the constructor for the scanner.
-     *
-     * @param scanConfig the ScanConfig that defines the plugin settings and scan information
-     * @see ScanConfig
-     * @see Scanner
-     */
     @Override
     public void initScanner(ScanConfig scanConfig) {
         this.config = scanConfig;
     }
 
-    /**
-     * Prepares the host system and plugin for running a scan.
-     * Anything that needs to be done prior to a scan being run
-     * should be placed in here.
-     */
     @Override
-    public void prepSystem() {}
+    public void prepSystem() {
+        this.rawResults = "";
+        this.scanResultIssues = new ArrayList<>(0);
+    }
 
-    /**
-     * Runs the scan as defined by the ScanConfig passed into the scanner
-     * in the {@link #initScanner(ScanConfig)} method. This should start the scan,
-     * and wait for it to complete. Raw scan results should be saved so that they
-     * can be executed in the next stage, {@link #parseResults()}.
-     */
     @Override
     public void runScan() throws Exception {
         String fullPath = config.getImage().buildFullPath(false, true);
         String policyName = config.getPolicy().getName();
         String scannerName = config.getScannerName();
         System.out.println("Initiating scan of " + fullPath + " with Snyk for " + policyName + ":" + scannerName);
+
         StringBuilder snykScanCommandBuilder = new StringBuilder();
+        snykScanCommandBuilder.append(this.buildAuth());
+
+        // add the snyk call to the command
+        snykScanCommandBuilder.append("snyk container test --json ");
+        String imageFullPath = config.getImage().buildFullPath(true, true);
+        snykScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("; ");
+
+        this.rawResults = this.runProcess(snykScanCommandBuilder.toString());
+    }
+
+    @Override
+    public String buildAuth() throws Exception {
+        StringBuilder snykAuthorization = new StringBuilder();
+
+        String snykToken = this.escapeXsi("");
+        this.authorizationEnvVars.put("SNYK_TOKEN", snykToken);
 
         // If registry is Amazon Container Registry, set aws access key and secret key to get token
         DockerRegistry registry = config.getImage().getRegistry();
@@ -64,45 +66,30 @@ public class Snyk implements Scanner {
         } else if (registry.getIsLoginRequired()) {
             this.authorizationEnvVars.put("SNYK_REGISTRY_USERNAME", this.escapeXsi(registry.getUsername()));
             this.authorizationEnvVars.put("SNYK_REGISTRY_PASSWORD", this.escapeXsi(registry.getPassword()));
+        } else if ("GCR".equals(authType)) {
+            GCRAuthorization gcrAuth = getGCRRegistryAuthorization(registry);
+            // note that we add this directly to the builder and not to the env vars
+            snykAuthorization
+                    .append("cat ")
+                    .append(gcrAuth.credentialPath)
+                    .append("docker login -u _json_key --password-stdin; ");
         }
 
         // add authorization to the command
-        if ("GCR".equals(authType)) {
-            GCRAuthorization gcrAuth = getGCRRegistryAuthorization(registry);
-            snykScanCommandBuilder
-                    .append("cat ")
-                    .append(gcrAuth.credentialPath)
-                    .append("docker login -u _json_key --password-stdin ");
-        } else {
-            String registryAuthorizationEnvVars = this.templateEnvVars();
-            snykScanCommandBuilder.append(registryAuthorizationEnvVars);
-        }
+        String registryAuthorizationEnvVars = this.templateEnvVars();
+        snykAuthorization.append(registryAuthorizationEnvVars);
 
-        snykScanCommandBuilder.append("");
+        return snykAuthorization.toString();
     }
 
-    /**
-     * This runs after the scan has been completed. Logic that will parse the results and store them in
-     * the ScanResult object so the result can get reported back to m9sweeper or output to the console
-     * if running in the standalone mode.
-     */
     @Override
     public void parseResults() {}
 
-    /**
-     * Report the results of the scan to m9sweeper.
-     */
+    @Override
+    public void cleanup() {}
+
     @Override
     public List<ScanResultIssue> getScanResult() {
         return scanResultIssues;
     }
-
-    /**
-     * Cleans up the host system and any plugin specific items. This is run after the
-     * method and should be used to remove any containers, images,
-     * networks, or other resources created while running the scan.
-     */
-    @Override
-    public void cleanup() {}
-
 }

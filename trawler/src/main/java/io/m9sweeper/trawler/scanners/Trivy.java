@@ -13,31 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Trivy implements Scanner {
-
     private ScanConfig config;
     private String rawResults;
     private String imageHash;
     ArrayList<ScanResultIssue> allIssues;
 
-    /**
-     * Initializes the Scanner. This is a required Scanner method
-     * and is used to initialize the configuration for the plugin and any
-     * plugin specific things. This acts as the constructor for the scanner.
-     *
-     * @param scanConfig the ScanConfig that defines the plugin settings and scan information
-     * @see ScanConfig
-     * @see Scanner
-     */
     @Override
     public void initScanner(ScanConfig scanConfig) {
         this.config = scanConfig;
     }
 
-    /**
-     * Prepares the host system and plugin for running a scan.
-     * Anything that needs to be done prior to a scan being run
-     * should be placed in here.
-     */
     @Override
     public void prepSystem() {
         this.rawResults = "";
@@ -45,20 +30,35 @@ public class Trivy implements Scanner {
         this.imageHash = "";
     }
 
-    /**
-     * Runs the scan as defined by the ScanConfig passed into the scanner
-     * in the {@link #initScanner(ScanConfig)} method. This should start the scan,
-     * and wait for it to complete. Raw scan results should be saved so that they
-     * can be executed in the next stage, {@link #parseResults()}.
-     */
     @Override
     public void runScan() throws Exception {
         String fullPath = config.getImage().buildFullPath(false, true);
         String policyName = config.getPolicy().getName();
         String scannerName = config.getScannerName();
         System.out.println("Initiating scan of " + fullPath + " with trivy for " + policyName + ":" + scannerName);
-        StringBuilder trivyScanCommandBuilder = new StringBuilder();
 
+        StringBuilder trivyScanCommandBuilder = new StringBuilder();
+        trivyScanCommandBuilder.append(this.buildAuth());
+
+        // Clear Trivy cache
+        ProcessBuilder clearCacheProcessBuilder = new ProcessBuilder();
+        clearCacheProcessBuilder.command("bash", "-c", "trivy image --clear-cache");
+        clearCacheProcessBuilder.redirectErrorStream(true);
+        Process clearCacheProcess = clearCacheProcessBuilder.start();
+        clearCacheProcess.waitFor();
+
+        // add the trivy call to the command
+        trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
+        String imageFullPath = config.getImage().buildFullPath(true, true);
+        trivyScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("';");
+
+        this.unsetEnvVars();
+        this.rawResults = this.runProcess(trivyScanCommandBuilder.toString());
+    }
+
+    @Override
+    public String buildAuth() throws Exception {
+        StringBuilder trivyAuthorization = new StringBuilder();
         DockerRegistry registry = config.getImage().getRegistry();
 
         String authType = registry.getAuthType();
@@ -79,103 +79,13 @@ public class Trivy implements Scanner {
             this.authorizationEnvVars.put("TRIVY_PASSWORD", this.escapeXsi(registry.getPassword()));
         }
         String registryAuthorizationEnvVars = this.templateEnvVars();
-        trivyScanCommandBuilder.append(registryAuthorizationEnvVars);
+        trivyAuthorization.append(registryAuthorizationEnvVars);
 
-        // Clear Trivy cache
-        ProcessBuilder clearCacheProcessBuilder = new ProcessBuilder();
-        clearCacheProcessBuilder.command("bash", "-c", "trivy image --clear-cache");
-        clearCacheProcessBuilder.redirectErrorStream(true);
-
-        Process clearCacheProcess = clearCacheProcessBuilder.start();
-        clearCacheProcess.waitFor();
-
-        // run trivy scan
-        trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
-        String imageFullPath = config.getImage().buildFullPath(true, true);
-        String stringEscapedFullPath = this.escapeXsi(imageFullPath);
-        trivyScanCommandBuilder.append(stringEscapedFullPath).append("';");
-
-        if ("AZCR".equals(authType) || registry.getIsLoginRequired()) {
-            this.unsetEnvVars();
-        }
-
-        if (TrawlerConfiguration.getInstance().getDebug()) {
-            System.out.println("Scan command: " + trivyScanCommandBuilder.toString());
-        }
-
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", trivyScanCommandBuilder.toString());
-        processBuilder.redirectErrorStream(true);
-
-        Process process = processBuilder.start();
-
-        StringBuilder output = new StringBuilder();
-        StringBuilder errorOutput = new StringBuilder();
-        StringBuilder jsonScanResultOutput = new StringBuilder();
-
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(process.getInputStream()));
-
-//        BufferedReader readerErr = new BufferedReader(
-//                new InputStreamReader(process.getErrorStream()));
-
-        boolean isJsonOutputStarted = false;
-
-        String line;
-        if (TrawlerConfiguration.getInstance().getDebug()) {
-            System.out.println("RAW TRIVY STDOUT:");
-        }
-
-        while ((line = reader.readLine()) != null) {
-            if (TrawlerConfiguration.getInstance().getDebug()) {
-                System.out.println(line);
-            }
-
-            output.append(line + "\n");
-
-            if (line.startsWith("{") && jsonScanResultOutput.length() == 0) {
-                isJsonOutputStarted = true;
-            }
-
-            if (isJsonOutputStarted) {
-                jsonScanResultOutput.append(line);
-            }
-
-            if (line.startsWith("}") && line.length() == 1 && jsonScanResultOutput.length() > 0) {
-                isJsonOutputStarted = false;
-            }
-
-            if (!line.isEmpty()) {
-                if (line.contains("FATAL") || errorOutput.length() > 0) {
-                    errorOutput.append(line + "\n");
-                }
-            }
-        }
-        String errorMessage = errorOutput.length() > 0 ? errorOutput.substring(errorOutput.indexOf("FATAL") + 10, errorOutput.length()) : errorOutput.toString();
-        if (TrawlerConfiguration.getInstance().getDebug() && errorMessage.length() > 0) {
-            System.err.println("ERROR: " + errorMessage);
-        }
-
-        int exitVal = process.waitFor();
-        if (exitVal == 0) {
-            if (errorMessage.length() > 0) {
-                throw new Exception(errorMessage);
-            } else {
-                rawResults = jsonScanResultOutput.toString();
-            }
-        } else {
-            throw new Exception(errorMessage);
-        }
+        return trivyAuthorization.toString();
     }
 
-    /**
-     * This runs after the scan has been completed. Logic that will parse the results and store them in
-     * the ScanResult object so the result can get reported back to m9sweeper or output to the console
-     * if running in the standalone mode.
-     */
     @Override
     public void parseResults() {
-
         Gson parser = new Gson();
         JsonObject imageScanObject = parser.fromJson(rawResults, JsonObject.class);
         if (TrawlerConfiguration.getInstance().getDebug() || imageScanObject == null) {
@@ -235,11 +145,6 @@ public class Trivy implements Scanner {
 
     public String getImageHash() { return imageHash; }
 
-    /**
-     * Cleans up the host system and any plugin specific items. This is run after the
-     * method and should be used to remove any containers, images,
-     * networks, or other resources created while running the scan.
-     */
     @Override
     public void cleanup() {
 

@@ -11,9 +11,7 @@ import io.m9sweeper.trawler.TrawlerConfiguration;
 import io.m9sweeper.trawler.framework.docker.DockerRegistry;
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -79,6 +77,11 @@ public interface Scanner extends Runnable {
      * in the next stage, {@link #parseResults()}.
      */
     void runScan() throws Exception;
+
+    /**
+     *  Builds the string that exports auth env vars and authenticates with registries
+     */
+    String buildAuth() throws Exception;
 
     /**
      * This runs after the scan has been completed. Logic that will parse the results and store them in
@@ -201,5 +204,76 @@ public interface Scanner extends Runnable {
                     .append("; ");
         }
         return authorizationUnset.toString();
+    }
+
+    default String runProcess(String fullCommand) throws Exception {
+        if (TrawlerConfiguration.getInstance().getDebug()) {
+            System.out.println("Scan command: " + fullCommand);
+        }
+
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", fullCommand);
+        processBuilder.redirectErrorStream(true);
+
+        Process process = processBuilder.start();
+
+        StringBuilder output = new StringBuilder();
+        StringBuilder errorOutput = new StringBuilder();
+        StringBuilder jsonScanResultOutput = new StringBuilder();
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+
+//        BufferedReader readerErr = new BufferedReader(
+//                new InputStreamReader(process.getErrorStream()));
+
+        boolean isJsonOutputStarted = false;
+
+        String line;
+        if (TrawlerConfiguration.getInstance().getDebug()) {
+            System.out.println("RAW TRIVY STDOUT:");
+        }
+
+        while ((line = reader.readLine()) != null) {
+            if (TrawlerConfiguration.getInstance().getDebug()) {
+                System.out.println(line);
+            }
+
+            output.append(line + "\n");
+
+            if (line.startsWith("{") && jsonScanResultOutput.length() == 0) {
+                isJsonOutputStarted = true;
+            }
+
+            if (isJsonOutputStarted) {
+                jsonScanResultOutput.append(line);
+            }
+
+            if (line.startsWith("}") && line.length() == 1 && jsonScanResultOutput.length() > 0) {
+                isJsonOutputStarted = false;
+            }
+
+            if (!line.isEmpty()) {
+                if (line.contains("FATAL") || errorOutput.length() > 0) {
+                    errorOutput.append(line + "\n");
+                }
+            }
+        }
+        String errorMessage = errorOutput.length() > 0 ? errorOutput.substring(errorOutput.indexOf("FATAL") + 10, errorOutput.length()) : errorOutput.toString();
+        if (TrawlerConfiguration.getInstance().getDebug() && errorMessage.length() > 0) {
+            System.err.println("ERROR: " + errorMessage);
+        }
+
+        int exitVal = process.waitFor();
+        if (exitVal == 0) {
+            if (errorMessage.length() > 0) {
+                throw new Exception(errorMessage);
+            } else {
+                return jsonScanResultOutput.toString();
+            }
+        } else {
+            throw new Exception(errorMessage);
+        }
+
     }
 }
