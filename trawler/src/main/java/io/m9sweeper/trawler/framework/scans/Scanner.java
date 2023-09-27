@@ -9,9 +9,7 @@ import com.amazonaws.services.ecr.model.GetAuthorizationTokenRequest;
 import com.amazonaws.services.ecr.model.GetAuthorizationTokenResult;
 import io.m9sweeper.trawler.TrawlerConfiguration;
 import io.m9sweeper.trawler.framework.docker.DockerRegistry;
-import io.m9sweeper.trawler.framework.queue.Registry;
 import org.apache.commons.text.StringEscapeUtils;
-import org.graalvm.collections.Pair;
 
 import java.io.File;
 import java.io.FileWriter;

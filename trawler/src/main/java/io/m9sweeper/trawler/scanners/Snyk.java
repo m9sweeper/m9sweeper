@@ -54,23 +54,31 @@ public class Snyk implements Scanner {
         String authType = registry.getAuthType();
         if ("ACR".equals(authType)) {
             BasicAuthorization acrAuth = getACRRegistryAuthorization(registry);
-            this.authorizationEnvVars.put("TRIVY_USERNAME", acrAuth.username);
-            this.authorizationEnvVars.put("TRIVY_PASSWORD", acrAuth.password);
-        } else if ("GCR".equals(authType)) {
-            GCRAuthorization gcrAuth = getGCRRegistryAuthorization(registry);
-            this.authorizationEnvVars.put("GOOGLE_APPLICATION_CREDENTIALS", gcrAuth.credentialPath);
+            this.authorizationEnvVars.put("SNYK_REGISTRY_USERNAME", acrAuth.username);
+            this.authorizationEnvVars.put("SNYK_REGISTRY_PASSWORD", acrAuth.password);
         } else if ("AZCR".equals(authType)) {
             AZCRAuthorization azcrAuth = getAZCRRegistryAuthorization(registry);
             this.authorizationEnvVars.put("AZURE_CLIENT_ID", azcrAuth.clientId);
             this.authorizationEnvVars.put("AZURE_CLIENT_SECRET", azcrAuth.clientSecret);
             this.authorizationEnvVars.put("AZURE_TENANT_ID", azcrAuth.tenantId);
         } else if (registry.getIsLoginRequired()) {
-            this.authorizationEnvVars.put("TRIVY_USERNAME", this.escapeXsi(registry.getUsername()));
-            this.authorizationEnvVars.put("TRIVY_PASSWORD", this.escapeXsi(registry.getPassword()));
+            this.authorizationEnvVars.put("SNYK_REGISTRY_USERNAME", this.escapeXsi(registry.getUsername()));
+            this.authorizationEnvVars.put("SNYK_REGISTRY_PASSWORD", this.escapeXsi(registry.getPassword()));
         }
-        String registryAuthorizationEnvVars = this.templateEnvVars();
-        snykScanCommandBuilder.append(registryAuthorizationEnvVars);
 
+        // add authorization to the command
+        if ("GCR".equals(authType)) {
+            GCRAuthorization gcrAuth = getGCRRegistryAuthorization(registry);
+            snykScanCommandBuilder
+                    .append("cat ")
+                    .append(gcrAuth.credentialPath)
+                    .append("docker login -u _json_key --password-stdin ");
+        } else {
+            String registryAuthorizationEnvVars = this.templateEnvVars();
+            snykScanCommandBuilder.append(registryAuthorizationEnvVars);
+        }
+
+        snykScanCommandBuilder.append("");
     }
 
     /**
