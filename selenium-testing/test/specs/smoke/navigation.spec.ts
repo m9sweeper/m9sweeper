@@ -118,6 +118,14 @@ describe('Check Navigation::', () => {
 
     // Verify the navigation is correct for the organization pages
     it('3 Verify Organization Settings Navigation', async () => {
+        // Navigate to the list of cluster groups.
+        // @ts-ignore
+        await $("//span[@class='menu-item-name'][contains(text(), 'Home')]").customClick("m9sweeper-home");
+        expect(browser).toHaveUrl(
+            buildUrl('private/dashboard/group/1'),
+            {message: "m9sweeper should be showing the base dashboard"}
+        );
+
         // Navigate to the organization settings. By default, it goes to the users page.
         // @ts-ignore
         await $("//span[@class='menu-item-name'][contains(text(), 'Organization Settings')]").customClick("load-organization-settings");
