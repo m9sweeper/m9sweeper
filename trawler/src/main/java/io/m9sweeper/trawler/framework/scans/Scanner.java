@@ -9,14 +9,14 @@ import com.amazonaws.services.ecr.model.GetAuthorizationTokenRequest;
 import com.amazonaws.services.ecr.model.GetAuthorizationTokenResult;
 import io.m9sweeper.trawler.TrawlerConfiguration;
 import io.m9sweeper.trawler.framework.docker.DockerRegistry;
+import io.m9sweeper.trawler.framework.queue.Registry;
 import org.apache.commons.text.StringEscapeUtils;
+import org.graalvm.collections.Pair;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Create and run the scanner. This runnable defaults to running the scanner methods in the following order:
@@ -29,6 +29,33 @@ import java.util.Map;
  * You may wish to override the default run method described here to better handle errors for the scanner.
  */
 public interface Scanner extends Runnable {
+    HashMap<String, String> authorizationEnvVars = new HashMap<String, String>();
+
+    class BasicAuthorization {
+        public String username;
+        public String password;
+        public BasicAuthorization(String username, String authToken) {
+            this.username = username;
+            this.password = authToken;
+        }
+    }
+    class GCRAuthorization {
+        public String credentialPath;
+        public GCRAuthorization(String credentialPath) {
+            this.credentialPath = credentialPath;
+        }
+    }
+    class AZCRAuthorization {
+        public String clientId;
+        public String clientSecret;
+        public String tenantId;
+        public AZCRAuthorization(String clientId, String clientSecret, String tenantId) {
+            this.clientId = clientId;
+            this.clientSecret = clientSecret;
+            this.tenantId = tenantId;
+        }
+    }
+
     /**
      * Initializes the Scanner. This is a required Scanner method
      * and is should be used to initialize the configuration for the plugin and any
@@ -91,60 +118,37 @@ public interface Scanner extends Runnable {
         }
     }
 
-    default String getRegistryAuthorization(DockerRegistry registry) throws Exception {
-        String authType = registry.getAuthType();
-        if ("ACR".equals(authType)) {
-            return getACRRegistryAuthorization(registry);
-        } else if ("GCR".equals(authType)) {
-            return getGCRRegistryAuthorization(registry);
-        } else if ("AZCR".equals(authType)) {
-            return getAZCRRegistryAuthorization(registry);
-        } else if (registry.getIsLoginRequired()) {
-            String authPartOne = "export TRIVY_USERNAME=" + escapeXsi(registry.getUsername()) + "; ";
-            String authPartTwo = "export TRIVY_PASSWORD=" + escapeXsi(registry.getPassword()) + "; ";
-            return authPartOne + authPartTwo;
-        }
-        return "";
-    }
-
-    private String escapeXsi(String authToken) {
+    default String escapeXsi(String authToken) {
         return StringEscapeUtils.escapeXSI(authToken);
     }
 
-    default String getACRRegistryAuthorization(DockerRegistry registry) {
+    default BasicAuthorization getACRRegistryAuthorization(DockerRegistry registry) {
         String aws_account_id = TrawlerConfiguration.getInstance().dockerImageUrl().split("\\.")[0];
 
-        try {
-            Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
+        Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
 
-            String region = authDetails.getOrDefault("acrDefaultRegion", "").toString();
-            String accessKey = authDetails.getOrDefault("acrAccessKey", "").toString();
-            String secretKey = authDetails.getOrDefault("acrSecretKey", "").toString();
+        String region = authDetails.getOrDefault("acrDefaultRegion", "").toString();
+        String accessKey = authDetails.getOrDefault("acrAccessKey", "").toString();
+        String secretKey = authDetails.getOrDefault("acrSecretKey", "").toString();
 
-            AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-            AmazonECR amazonECR = AmazonECRClientBuilder.standard()
-                    .withRegion(region)
-                    .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                    .build();
+        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        AmazonECR amazonECR = AmazonECRClientBuilder.standard()
+                .withRegion(region)
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
 
-            //Get Auth Token for Repository using its registry ID
-            GetAuthorizationTokenRequest request = new GetAuthorizationTokenRequest().withRegistryIds(aws_account_id);
-            GetAuthorizationTokenResult authorizationData = amazonECR.getAuthorizationToken(request);
-            String authTokenBase64 = authorizationData.getAuthorizationData().get(0).getAuthorizationToken();
-            byte[] decodedBytes = Base64.getDecoder().decode(authTokenBase64);
-            String decodedString = new String(decodedBytes);
-            String authToken = decodedString.substring(4); // skip AWS: at the start of the string
+        //Get Auth Token for Repository using its registry ID
+        GetAuthorizationTokenRequest request = new GetAuthorizationTokenRequest().withRegistryIds(aws_account_id);
+        GetAuthorizationTokenResult authorizationData = amazonECR.getAuthorizationToken(request);
+        String authTokenBase64 = authorizationData.getAuthorizationData().get(0).getAuthorizationToken();
+        byte[] decodedBytes = Base64.getDecoder().decode(authTokenBase64);
+        String decodedString = new String(decodedBytes);
+        String authToken = decodedString.substring(4); // skip AWS: at the start of the string
 
-            String authorization = "export TRIVY_USERNAME=" + escapeXsi("AWS") + "; ";
-            String authPartTwo = "export TRIVY_PASSWORD=" + escapeXsi(authToken) + "; ";
-            return authorization + authPartTwo;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
+        return new BasicAuthorization(escapeXsi("AWS"), escapeXsi(authToken));
     }
 
-    default String getGCRRegistryAuthorization(DockerRegistry registry) throws Exception {
+    default GCRAuthorization getGCRRegistryAuthorization(DockerRegistry registry) throws Exception {
         // Create a temporary auth file for the Scanner to use for authentication with GCR
         File gcrAuthFile = File.createTempFile("gcrAuthFile-", ".json");
 
@@ -162,10 +166,10 @@ public interface Scanner extends Runnable {
         gcrAuthFile.deleteOnExit();
 
         // Export the location of this file so that the scanner can utilize it
-        return "export GOOGLE_APPLICATION_CREDENTIALS=" + gcrAuthFile.getAbsolutePath() + "; ";
+        return new GCRAuthorization(this.escapeXsi(gcrAuthFile.getAbsolutePath()));
     }
 
-    default String getAZCRRegistryAuthorization(DockerRegistry registry) {
+    default AZCRAuthorization getAZCRRegistryAuthorization(DockerRegistry registry) {
         // Azure Container Registry images are accessed with a service principal set up beforehand. Trawler only needs to
         // export the Client ID, Secret, and Tenant ID of the service principal to allow Trivy to connect to it
         Map<String, Object> authDetails = (Map<String, Object>) registry.getAuthDetails();
@@ -174,9 +178,30 @@ public interface Scanner extends Runnable {
         String clientSecret = authDetails.getOrDefault("azureClientSecret", "").toString();
         String tenantId = authDetails.getOrDefault("azureTenantId", "").toString();
 
-        String authPartOne = "export AZURE_CLIENT_ID=" + escapeXsi(clientId) + "; ";
-        String authPartTwo = "export AZURE_CLIENT_SECRET=" + escapeXsi(clientSecret) + "; ";
-        String authPartThree = "export AZURE_TENANT_ID=" + escapeXsi(tenantId) + "; ";
-        return authPartOne + authPartTwo + authPartThree;
+        return new AZCRAuthorization(this.escapeXsi(clientId), this.escapeXsi(clientSecret), this.escapeXsi(tenantId));
+    }
+
+    default String templateEnvVars() {
+        StringBuilder fullAuthorization = new StringBuilder();
+        for (String envVar : this.authorizationEnvVars.keySet()) {
+            fullAuthorization
+                    .append("export ")
+                    .append(envVar)
+                    .append("=")
+                    .append(this.authorizationEnvVars.get(envVar))
+                    .append("; ");
+        }
+        return fullAuthorization.toString();
+    }
+
+    default String unsetEnvVars() {
+        StringBuilder authorizationUnset = new StringBuilder();
+        for (String envVar : this.authorizationEnvVars.keySet()) {
+            authorizationUnset
+                    .append("unset ")
+                    .append(envVar)
+                    .append("; ");
+        }
+        return authorizationUnset.toString();
     }
 }

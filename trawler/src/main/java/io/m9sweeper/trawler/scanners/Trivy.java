@@ -59,10 +59,27 @@ public class Trivy implements Scanner {
         System.out.println("Initiating scan of " + fullPath + " with trivy for " + policyName + ":" + scannerName);
         StringBuilder trivyScanCommandBuilder = new StringBuilder();
 
-        // If registry is Amazon Container Registry, set aws access key and secret key to get token
         DockerRegistry registry = config.getImage().getRegistry();
-        String authorization = getRegistryAuthorization(registry);
-        trivyScanCommandBuilder.append(authorization);
+
+        String authType = registry.getAuthType();
+        if ("ACR".equals(authType)) {
+            BasicAuthorization acrAuth = getACRRegistryAuthorization(registry);
+            this.authorizationEnvVars.put("TRIVY_USERNAME", acrAuth.username);
+            this.authorizationEnvVars.put("TRIVY_PASSWORD", acrAuth.password);
+        } else if ("GCR".equals(authType)) {
+            GCRAuthorization gcrAuth = getGCRRegistryAuthorization(registry);
+            this.authorizationEnvVars.put("GOOGLE_APPLICATION_CREDENTIALS", gcrAuth.credentialPath);
+        } else if ("AZCR".equals(authType)) {
+            AZCRAuthorization azcrAuth = getAZCRRegistryAuthorization(registry);
+            this.authorizationEnvVars.put("AZURE_CLIENT_ID", azcrAuth.clientId);
+            this.authorizationEnvVars.put("AZURE_CLIENT_SECRET", azcrAuth.clientSecret);
+            this.authorizationEnvVars.put("AZURE_TENANT_ID", azcrAuth.tenantId);
+        } else if (registry.getIsLoginRequired()) {
+            this.authorizationEnvVars.put("TRIVY_USERNAME", this.escapeXsi(registry.getUsername()));
+            this.authorizationEnvVars.put("TRIVY_PASSWORD", this.escapeXsi(registry.getPassword()));
+        }
+        String registryAuthorizationEnvVars = this.templateEnvVars();
+        trivyScanCommandBuilder.append(registryAuthorizationEnvVars);
 
         // Clear Trivy cache
         ProcessBuilder clearCacheProcessBuilder = new ProcessBuilder();
@@ -75,14 +92,11 @@ public class Trivy implements Scanner {
         // run trivy scan
         trivyScanCommandBuilder.append("trivy -q image --timeout 30m --scanners vuln -f json '");
         String imageFullPath = config.getImage().buildFullPath(true, true);
-        String stringEscapedFullPath = StringEscapeUtils.escapeXSI(imageFullPath);
+        String stringEscapedFullPath = this.escapeXsi(imageFullPath);
         trivyScanCommandBuilder.append(stringEscapedFullPath).append("';");
 
-        if (registry.getIsLoginRequired()) {
-            trivyScanCommandBuilder.append(" unset TRIVY_USERNAME; unset TRIVY_PASSWORD;");
-        }
-        if ("AZCR".equals(registry.getAuthType())) {
-            trivyScanCommandBuilder.append(" unset AZURE_CLIENT_ID; unset AZURE_CLIENT_SECRET; unset AZURE_TENANT_ID;");
+        if ("AZCR".equals(authType) || registry.getIsLoginRequired()) {
+            this.unsetEnvVars();
         }
 
         if (TrawlerConfiguration.getInstance().getDebug()) {
