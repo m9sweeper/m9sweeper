@@ -351,6 +351,10 @@ export class ImageScanResultComponent implements OnInit, AfterViewInit, OnDestro
       });
   }
 
+  downloadReport() {
+    print();
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

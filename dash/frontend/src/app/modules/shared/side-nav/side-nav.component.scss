@@ -1,3 +1,9 @@
 #main-list, #settings-link {
   padding-block: 0;
 }
+
+mat-sidenav {
+  height: 100%;
+  display: flex;
+  width: 225px;
+}
