@@ -47,10 +47,11 @@ prometheusOperator:
   scrapeInterval: "60s"
   defaultRules:
     enabled: true
-    # Alert if more than X new unique CVEs discovered in an hour
+    # Alert if more than X new unique CVEs discovered
     numNewCVEs:
       enabled: false
       threshold: 20
+      duration: 10m  # defaults to 10m
     # Alerts if over X% of pods in the cluster are non-compliant with CVE standards
     percentNoncompliance:
       enabled: true

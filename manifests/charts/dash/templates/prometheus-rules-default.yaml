@@ -17,13 +17,14 @@ spec:
       rules:
       - alert: ManyNewCVEs
         annotations:
-          description: Fires when the number of new major + critical CVEs in the last 10m exceeds {{ .threshold }}
+          description: Fires when the number of new major + critical CVEs in the last {{ .duration }} exceeds {{ .threshold }}
           summary: The number of new CVEs breached {{ .threshold }}
-        expr: (delta(num_critical_cves[10m])+delta(num_major_cves[10m])) > {{ .threshold }}
+        expr: (delta(num_critical_cves[{{ .duration }}])+delta(num_major_cves[{{ .duration }}])) > {{ .threshold }}
         labels:
           severity: warning
     {{- end }}{{/* closes if .Values.prometheusOperator.defaultRules.numNewCVEs.enabled */}}
     {{- end }}{{/* closes with .Values.prometheusOperator.defaultRules.numNewCVEs */}}
+
     {{- with .Values.prometheusOperator.defaultRules.percentNoncompliance }}
     {{- if .enabled }}
     - name: PercentNoncompliance
