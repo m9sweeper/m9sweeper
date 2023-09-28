@@ -31,14 +31,20 @@ export class AlertDialogComponent {
               console.log(result);
             }
 
-            this.matDialogRef.close(true);
-            if (this.data?.afterRoute?.length > 0) {
-              this.router.navigate(this.data.afterRoute);
-            } else if (this.data?.reload) {
-              window.location.reload();
-            }
+            this.submitComplete();
           }
         });
+    } else {
+      this.submitComplete();
+    }
+  }
+
+  submitComplete() {
+    this.matDialogRef.close(true);
+    if (this.data?.afterRoute?.length > 0) {
+      this.router.navigate(this.data.afterRoute);
+    } else if (this.data?.reload) {
+      window.location.reload();
     }
   }
 
