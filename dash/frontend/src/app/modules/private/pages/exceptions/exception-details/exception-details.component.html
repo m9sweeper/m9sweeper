@@ -2,7 +2,8 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="exception?.title + ' Details'"
                         buttonTitle="Edit" buttonIcon="create"
-                        [button2]="{title: 'Delete', icon: 'delete', color: 'warn'}"
+                        [buttonAllowedRoles]="[Authority.ADMIN, Authority.SUPER_ADMIN]"
+                        [button2]="subnavigationButton2Config"
                         (buttonClicked)="editException()"
                         (button2Clicked)="deleteException()"
     ></app-sub-navigation>

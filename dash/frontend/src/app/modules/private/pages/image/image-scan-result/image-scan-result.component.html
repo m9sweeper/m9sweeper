@@ -10,6 +10,7 @@
             <mat-spinner *ngIf="displayImageScanSpinner$ | async" [diameter]="30"></mat-spinner>
           </div>
           <button type="button" color="primary" mat-raised-button
+             [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
              *ngIf="dataSource || !dataSource"
              [disabled]="displayImageScanSpinner$ | async"
              (click)="scanImage()">{{ scanButtonText }}</button>

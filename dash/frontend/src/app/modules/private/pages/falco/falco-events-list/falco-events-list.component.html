@@ -3,7 +3,7 @@
     <div class="row page-title-button-group-spacing">
       <div class="page-title col-xs-12 col-sm-9">Project Falco</div>
       <div class="col-xs-12 col-sm-3 start-xs end-sm">
-        <button mat-raised-button color="primary" id="installButton" (click)="openDialog()">Install</button>
+        <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" id="installButton" (click)="openDialog()">Install</button>
         <button mat-raised-button color="primary"
                 *ngIf="isAllowed"
                 [routerLink]="['/private', 'clusters', this.clusterId, 'falco', 'settings']"
