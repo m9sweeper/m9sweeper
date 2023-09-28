@@ -18,7 +18,7 @@ export class KubesecReportComponent implements OnInit {
   adviseDataSource: MatTableDataSource<any>;
   criticalDataSource: MatTableDataSource<any>;
   criticalDisplayedColumns: string[] = ['criticalId', 'criticalPoints', 'criticalReason'];
-  adviseDisplayColumns: string[] = ['adviseReason'];
+  adviseDisplayColumns: string[] = ['adviseId', 'advisePoints', 'adviseReason'];
   passedDisplayColumns: string[] = ['passedId', 'passedPoints', 'passedReason'];
 
   passed: any[];

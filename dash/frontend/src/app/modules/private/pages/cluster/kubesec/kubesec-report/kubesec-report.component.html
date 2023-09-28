@@ -93,6 +93,14 @@
     <div class="table-wrapper">
       <mat-table [dataSource]="adviseDataSource">
         <ng-container matColumnDef="adviseReason">
+          <ng-container matColumnDef="adviseId">
+            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+            <mat-cell *matCellDef="let advice" [matTooltip]="advice?.id"> {{advice?.id}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="advisePoints">
+            <mat-header-cell *matHeaderCellDef class="mat-cell-points"> Points </mat-header-cell>
+            <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': scoreColors.yellow}" [matTooltip]="advice?.points"> {{advice?.points}} </mat-cell>
+          </ng-container>
           <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
           <mat-cell *matCellDef="let advice" [matTooltip]="advice?.reason"> {{advice?.reason}} </mat-cell>
         </ng-container>
