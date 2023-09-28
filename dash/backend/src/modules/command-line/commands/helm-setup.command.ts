@@ -14,19 +14,19 @@ import {generateRandomString} from "./generate-random-string";
 
 
 /**
- * These commands are used to setup initial m9sweeper data, such as the first admin user, when installing m9sweeper on
+ * These commands are used to set up initial m9sweeper data, such as the first admin user, when installing m9sweeper on
  * the kubernetes cluster
  */
 @Injectable()
 export class HelmSetupCommand {
-
-    constructor(private readonly databaseService: DatabaseService,
-                private readonly userDao: UserDao,
-                private readonly apiKeyDao: ApiKeyDao,
-                private readonly kubernetesApiService: KubernetesApiService,
-                private readonly registryDao: DockerRegistriesDao,
-                private readonly exceptionService: ExceptionsService) {
-    }
+    constructor(
+      private readonly databaseService: DatabaseService,
+      private readonly userDao: UserDao,
+      private readonly apiKeyDao: ApiKeyDao,
+      private readonly kubernetesApiService: KubernetesApiService,
+      private readonly registryDao: DockerRegistriesDao,
+      private readonly exceptionService: ExceptionsService
+    ) {}
 
     async runSeed(): Promise<boolean> {
         const promises: Promise<any>[] = [];
@@ -68,11 +68,12 @@ export class HelmSetupCommand {
                 console.log('Trawler user exists.... skipping');
             }
         }
-        
+
         // generate KubeBench and KubeHunter api keys
         const randomKHApiKey = process.env.KUBE_HUNTER_API_KEY || generateRandomString(33);
         const randomKBApiKey = process.env.KUBE_BENCH_API_KEY || generateRandomString(33);
         const randomFalcoApiKey = process.env.FALCO_API_KEY || generateRandomString(33);
+        const metricsApiKey = process.env.METRICS_API_KEY || generateRandomString(33);
 
         const kubebenchUserExists = !!(await this.userDao.loadUser({email: 'Kubebench'}));
         if (!kubebenchUserExists) {
@@ -154,8 +155,77 @@ export class HelmSetupCommand {
             console.log('Falco user exists.... skipping');
         }
 
+      promises.push(this.createAPIKeyProfile('Metrics', metricsApiKey));
       await Promise.all(promises);
       return true;
+    }
+
+    // @TODO: clean up console statements when making cli commands silent
+    async createAPIKeyProfile(profileName: string, apiKey: string): Promise<boolean> {
+      const titlecaseProfileName = profileName.toLowerCase().split(' ')
+        .map(word => (word.charAt(0).toUpperCase() + word.slice(1)))
+        .join(' ');
+      const encryptedApiKey = await bcrypt.hash(apiKey, await bcrypt.genSalt(10));
+
+      // check if api key already exists
+      if (await this.apiKeyDao.apiKeyExists(apiKey)) {
+        console.log('API Key is already in use.... skipping');
+        return true;
+      }
+
+      // check if user already exists
+      let user = await this.userDao.loadUser({email: profileName});
+      let userExists = !!user;
+
+      // if the user doesn't already exist, check to see if the title-case version exists
+      if (!userExists && profileName !== titlecaseProfileName) {
+        user = await this.userDao.loadUser({email: titlecaseProfileName});
+        userExists = !!user;
+      }
+
+      if (userExists && user.length > 1) {
+        console.log(`${titlecaseProfileName} has multiple associated users.... skipping`);
+        return true;
+      }
+
+      if (!userExists) {
+        await this.userDao.create({
+          email: titlecaseProfileName,
+          first_name: titlecaseProfileName,
+          last_name: titlecaseProfileName,
+          source_system_id: '0',
+          source_system_type: 'LOCAL_AUTH',
+          source_system_user_id: '0',
+          password: encryptedApiKey,
+          authorities: [{id: 8}],
+        }).then(userIDAsArray => {
+          console.log(`User created for ${titlecaseProfileName}. New user id: ${userIDAsArray[0]}`);
+          this.userDao.loadUser({id: userIDAsArray[0]})
+            .then(loadedUser => {
+              user = loadedUser;
+              userExists = !!user;
+            });
+        }).catch((e) => {
+          console.error(`Unable to create or retrieve user for ${titlecaseProfileName}`, e);
+          userExists = false;
+        });
+        if (!userExists) {
+          return false;
+        }
+      }
+
+      return this.apiKeyDao.createApiKey({
+        user_id: user[0].id,
+        name: `${titlecaseProfileName} API key`,
+        api: apiKey,
+        is_active: true,
+      }).then(newApiKey => {
+        console.log(`API Key saved. New API Key id: ${newApiKey[0]}`);
+        return true;
+      }).catch(e => {
+        console.error('Error saving new API key: ', e);
+        return false;
+      });
     }
 
     // @TODO: clean up log messages to make this silent

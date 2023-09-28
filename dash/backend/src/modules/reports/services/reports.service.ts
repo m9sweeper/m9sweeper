@@ -189,14 +189,15 @@ export class ReportsService {
         return this.reportsDao.getWorstImages(clusterId, startDate, endDate, namespaces);
     }
 
-    async getVulnerabilityDifferenceByDate(clusterId: number, startDate: string, endDate: string,
-                                           options?: {namespaces?: Array<string>,
-                                               severity?: Array<VulnerabilitySeverity>, fixAvailable?: string,
-                                               limit?: number})
-    : Promise<ReportsDifferenceByDateDto>
+    async getVulnerabilityDifferenceByDate(
+      clusterId: number, startDate: string, endDate: string,
+      options?: {
+        namespaces?: Array<string>,
+        severity?: Array<VulnerabilitySeverity>, fixAvailable?: string,
+        limit?: number
+    }): Promise<ReportsDifferenceByDateDto>
     {
-        return this.reportsDao.getDifferencesInVulnerabilities(startDate, endDate, clusterId, options?.namespaces,
-            options?.severity, options?.fixAvailable, options?.limit);
+        return this.reportsDao.getDifferencesInVulnerabilities(startDate, endDate, clusterId, options?.namespaces, options?.severity, options?.fixAvailable);
     }
 
     async getVulnerabilityDifferenceByDateCsv(clusterId: number, startDate: string, endDate: string,

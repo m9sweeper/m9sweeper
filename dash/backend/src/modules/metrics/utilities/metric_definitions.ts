@@ -1,7 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { makeGaugeProvider } from '@willsoto/nestjs-prometheus';
 
-export const MetricDefinitions: Provider<any>[] = [
+const basicMetrics: Provider<any>[] = [
   makeGaugeProvider({
     name: 'num_images_running',
     help: 'Number of images running',
@@ -89,3 +89,51 @@ export const MetricDefinitions: Provider<any>[] = [
     labelNames: ['cluster'],
   }),
 ];
+
+const kubeBenchMetrics: Provider<any>[] = [
+  makeGaugeProvider({
+    name: 'kube_bench_passed_tests',
+    help: 'kube-bench most recent run: number of passed tests',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_failed_tests',
+    help: 'kube-bench most recent run: number of failed tests',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_tests_with_warnings',
+    help: 'kube-bench most recent run: number of tests with warnings',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_bench_tests_with_info_alerts',
+    help: 'kube-bench most recent run: number of tests with info alerts',
+    labelNames: ['cluster'],
+  }),
+];
+
+const kubeHunterMetrics: Provider<any>[] = [
+  makeGaugeProvider({
+    name: 'kube_hunter_num_low_vulnerabilities',
+    help: 'kube-hunter most recent run: number of low vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_num_medium_vulnerabilities',
+    help: 'kube-hunter most recent run: number of medium vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_num_high_vulnerabilities',
+    help: 'kube-hunter most recent run: number of critical vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+  makeGaugeProvider({
+    name: 'kube_hunter_num_unknown_vulnerabilities',
+    help: 'kube-hunter most recent run: number of unknown-severity vulnerabilities',
+    labelNames: ['cluster'],
+  }),
+];
+
+export const MetricDefinitions: Provider<any>[] = [].concat(basicMetrics, kubeBenchMetrics, kubeHunterMetrics);

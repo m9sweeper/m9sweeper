@@ -524,6 +524,15 @@ export class ImageDao {
         if (filters['namespace']?.length > 0) {
             subQuery = subQuery.whereIn('history_kubernetes_images.namespace', filters['namespace']);
         }
+
+
+        if (filters.hasOwnProperty('startDate')) {
+          subQuery = subQuery.andWhere('history_kubernetes_images.saved_date', '>=', filters['startDate']);
+        }
+
+        if (filters.hasOwnProperty('endDate')) {
+          subQuery = subQuery.andWhere('history_kubernetes_images.saved_date', '<=', filters['endDate']);
+        }
         subQuery = subQuery.groupBy([
             'history_kubernetes_images.image',
             'history_kubernetes_images.image_hash',

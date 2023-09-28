@@ -27,6 +27,7 @@ export class KubesecComponent implements OnInit, OnDestroy {
   podSelectionOpt: number;
   selectedPodNames = [];
   currentPods = [];
+  loadingPods = false;
   selectedNamespaces: string[];
   clusterId: number;
   currentNamespaces: any[];
@@ -48,8 +49,6 @@ export class KubesecComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private alertService: AlertService,
-    private podService: PodService,
-    private namespaceService: NamespaceService,
     private kubesecService: KubesecService,
     private loaderService: NgxUiLoaderService,
     private route: ActivatedRoute,
@@ -63,7 +62,13 @@ export class KubesecComponent implements OnInit, OnDestroy {
       podFormControl: new FormControl('')
     });
 
-    this.namespaceForm.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(data => this.getPodsFromSelectedNamespace());
+    // this.namespaceForm.valueChanges.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+    //   console.log(data);
+    //   // if
+    //   if (!(data.namespaceFormControl.length === 1 && data.namespaceFormControl[0] === 'selectAll')) {
+    //     this.getPodsFromSelectedNamespace();
+    //   }
+    // });
 
     this.route.parent.params.pipe(take(1)).subscribe(param => {
       this.clusterId = param.id;
@@ -89,22 +94,36 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   getPodsFromSelectedNamespace() {
     this.podFile = null;
-    this.kubesecService.listPods(this.clusterId, this.namespaceForm.controls.namespaceFormControl.value)
-      .pipe(take(1)).subscribe(list => {
-      if (list) {
-        list = list.filter(data => data !== null);
-        this.currentPods = [];
-        for (const pod of list) {
-          if (pod && pod.items.length > 0) {
-            for (const item of pod.items) {
-              this.currentPods.push(item);
+    this.loadingPods = true;
+    if (!this.namespaceForm.controls.namespaceFormControl.value || !this.namespaceForm.controls.namespaceFormControl.value.length) {
+      this.currentPods = [];
+      this.loadingPods = false;
+      return;
+    }
+    // @TODO: implement debouncing (only set currentPods from the most recent API call)
+    this.kubesecService.listPods(this.clusterId, this.namespaceForm.controls.namespaceFormControl.value).pipe(take(1)).subscribe(
+      (list) => {
+        if (list) {
+          list = list.filter(data => data !== null);
+          this.currentPods = [];
+          for (const pod of list) {
+            if (pod && pod.items.length > 0) {
+              for (const item of pod.items) {
+                this.currentPods.push(item);
+              }
             }
           }
+        } else {
+          this.alertService.danger('Could not get pods in ' + this.selectedNamespaces);
         }
-      } else {
+        this.loadingPods = false;
+      },
+      (error) => {
+        console.log(error);
         this.alertService.danger('Could not get pods in ' + this.selectedNamespaces);
+        this.loadingPods = false;
       }
-    });
+    );
   }
 
   getKubesecReport() {
@@ -162,11 +181,13 @@ export class KubesecComponent implements OnInit, OnDestroy {
     if (matOption.selected && namespace) {
       this.namespaceForm.controls.namespaceFormControl
         .patchValue([...this.currentNamespaces.map(item => item.metadata.name), 'selectAll']);
+      this.getPodsFromSelectedNamespace();
     }
     // if the select all option is not selected for namespaces
     else if (!matOption.selected && namespace) {
       this.namespaceForm.controls.namespaceFormControl.patchValue([]);
       this.podForm.controls.podFormControl.patchValue([]);
+      this.getPodsFromSelectedNamespace();
     }
     // if the select all option is selected for pods
     else if (matOption.selected && !namespace) {
@@ -184,11 +205,13 @@ export class KubesecComponent implements OnInit, OnDestroy {
     if (namespace) {
       if (matOption.selected) {
         matOption.deselect();
+        this.getPodsFromSelectedNamespace();
         return false;
       }
       if (this.namespaceForm.controls.namespaceFormControl.value.length === this.currentNamespaces.length) {
         matOption.select();
       }
+      this.getPodsFromSelectedNamespace();
     }
     // unlike pods that need a ViewChild because of the *ngIf
     else {
