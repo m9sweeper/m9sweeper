@@ -32,6 +32,7 @@ export class KubeHunterController {
         status: 201,
     })
     async saveKubeHunterReport(@QuotedBody() report: any, @Param('clusterId') clusterId: number, @Query('key') key: string): Promise<any> {
+        // @TODO: use LOGGED_IN_USER
 
         // find user authority by user's apikey
         const currentUserAuthObj = await this.userDao.loadUserByApiKey(key);

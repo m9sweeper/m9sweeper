@@ -1,5 +1,5 @@
 import {Expose} from "class-transformer";
-import {IsJSON, IsNumber, IsString} from "class-validator";
+import { IsJSON, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class KubeBenchLogDto {
     @IsJSON()
@@ -48,14 +48,32 @@ export class KubeBenchLogDto {
     }
 }
 
+// this will have either Totals or just the raw values
 export class KubeBenchSummaryDto {
     @IsJSON()
+    @IsOptional()
     Totals: {
         total_pass: number,
         total_fail: number,
         total_warn: number,
         total_info: number,
     }
+
+    @IsOptional()
+    @IsNumber()
+    total_pass: number;
+
+    @IsOptional()
+    @IsNumber()
+    total_fail: number;
+
+    @IsOptional()
+    @IsNumber()
+    total_warn: number;
+
+    @IsOptional()
+    @IsNumber()
+    total_info: number;
 }
 
 export class KubeBenchSummaryTimestampedDto {
