@@ -11,7 +11,7 @@ import {
 } from '../dto/reports-running-vulnerabilities-preview-dto';
 import {ReportsHistoricalVulnerabilitiesDto} from '../dto/reports-historical-vulnerabilities-dto';
 import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
-import {format} from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import knex, { Knex } from 'knex';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
@@ -43,7 +43,7 @@ export class ReportsDao {
             .andWhere('i.deleted_at', null)
             .andWhere('c.deleted_at', null);
         if (clusterId) {
-            subQuery = subQuery.andWhere('i.cluster_id', clusterId);
+            subQuery = subQuery.andWhere('hki.cluster_id', clusterId);
         }
         if (namespaces) {
             subQuery = subQuery.whereIn('ki.namespace', namespaces);
@@ -531,113 +531,104 @@ export class ReportsDao {
         });
     }
 
-    async getDifferencesInVulnerabilities(startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,
-                                          severityLevels?: Array<VulnerabilitySeverity>, fixAvailable?: string,
-                                          limit?: number): Promise<ReportsDifferenceByDateDto>
-     {
-        const knex = await this.databaseService.getConnection();
+    async getDifferencesInVulnerabilities(
+      startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,
+      severityLevels?: Array<VulnerabilitySeverity>, fixAvailable?: string,
+    ): Promise<ReportsDifferenceByDateDto> {
+      const knex = await this.databaseService.getConnection();
 
-        let baseSubQuery = knex
-            .select([
-                'i.id',
-                knex.raw("concat(i.name,':', i.tag) as image"),
-                'i.running_in_cluster',
-                knex.raw("array_agg(distinct hki.namespace) as namespaces")
-            ])
-            .from('images as i')
-            .leftJoin(knex.raw('clusters as c on c.id=i.cluster_id'))
-            .where('i.deleted_at', null)
-            .andWhere('c.deleted_at', null);
-        if (clusterId) {
-            baseSubQuery = baseSubQuery.andWhere('i.cluster_id', clusterId);
-        }
-        if (namespaces) {
-            baseSubQuery = baseSubQuery.whereIn('hki.namespace', namespaces);
-        }
-        baseSubQuery = baseSubQuery
-            .groupBy([
-                'i.id',
-                'i.name',
-                'hki.name'
-            ])
+      const imageDetailsQuery = knex.select([
+        'i.id',
+        knex.raw("concat(i.name,':', i.tag) as image"),
+        'i.running_in_cluster',
+        knex.raw("array_agg(distinct hki.namespace) as namespaces"),
+        knex.raw("array_agg(distinct hki.saved_date) as saved_dates")
+      ])
+        .from('images as i')
+        .leftJoin(knex.raw('clusters as c on c.id=i.cluster_id'))
+        .innerJoin(knex.raw('history_kubernetes_images as hki on hki.image_id = i.id'))
+        .where('i.deleted_at', null)
+        .andWhere('c.deleted_at', null)
+        .whereIn('hki.saved_date', [startDate, endDate]);
 
-        let startSubQuery = baseSubQuery.clone();
-        let endSubQuery = baseSubQuery.clone();
-        startSubQuery = startSubQuery
-            .innerJoin(knex.raw('history_kubernetes_images as hki on hki.image_id = i.id'))
-            .andWhere('hki.saved_date', startDate);
+      if (clusterId) {
+        imageDetailsQuery.andWhere('hki.cluster_id', clusterId);
+      }
+      if (namespaces) {
+        imageDetailsQuery.whereIn('hki.namespace', namespaces);
+      }
+      imageDetailsQuery.groupBy(['i.id', 'i.name', 'hki.name']);
 
-        if (endDate !== format(new Date(), 'yyyy-MM-dd')) {
-            endSubQuery = endSubQuery
-                .innerJoin(knex.raw('history_kubernetes_images as hki on hki.image_id = i.id'))
-                .andWhere('hki.saved_date', endDate);
-        } else {
-            endSubQuery = endSubQuery
-                .innerJoin(knex.raw('kubernetes_images as hki on hki.image_id = i.id'));
-        }
+      const scanResultsQuery = knex.select([
+        "image_details.saved_dates",
+        "isrs.scanner_name",
+        knex.raw('image_details.id as image_id'),
+        "image_details.image",
+        "image_details.running_in_cluster",
+        "isrs.type",
+        "isrs.severity",
+        "isrs.is_fixable",
+        "image_details.namespaces"
+      ])
+        .from(imageDetailsQuery.as('image_details'))
+        .leftJoin(knex.raw('image_scan_results as isr on isr.image_id = image_details.id and isr.is_latest=true'))
+        .innerJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'));
 
-        let baseQuery = knex
-            .select([
-                'isrs.scanner_name',
-                'image_details.id as image_id',
-                'image_details.image',
-                'image_details.running_in_cluster',
-                'isrs.type',
-                'isrs.severity',
-                'isrs.is_fixable',
-                'image_details.namespaces'
-            ]);
-        if (severityLevels) {
-            if (severityLevels.includes(VulnerabilitySeverity.MAJOR)) {
-                /** Major vulnerabilities are stored as 'High' on this database, ensures that the proper values
-                 * are being searched for */
-                severityLevels.push(VulnerabilitySeverity.HIGH);
-            }
-            baseQuery = baseQuery.whereIn('isrs.severity', severityLevels);
-        }
-        if (fixAvailable) {
-            baseQuery = baseQuery.andWhere('isrs.is_fixable', fixAvailable);
-        }
-        baseQuery = baseQuery.leftJoin(
-            knex.raw('image_scan_results as isr on isr.image_id = image_details.id and isr.is_latest=true')
-        )
-            .innerJoin(knex.raw('image_scan_results_issues as isrs on isrs.image_results_id = isr.id'))
+      if (severityLevels) {
+          if (severityLevels.includes(VulnerabilitySeverity.MAJOR)) {
+              /** Major vulnerabilities are stored as 'High' on this database, ensures that the proper values
+               * are being searched for */
+              severityLevels.push(VulnerabilitySeverity.HIGH);
+          }
+        scanResultsQuery.whereIn('isrs.severity', severityLevels);
+      }
+      if (fixAvailable) {
+          scanResultsQuery.andWhere('isrs.is_fixable', fixAvailable);
+      }
+      const startDateAsDate = parseISO(startDate);
+      const validatedStartDate = startDateAsDate.toISOString().split('T')[0];
+      const endDateAsDate = parseISO(endDate);
+      const validatedEndDate = endDateAsDate.toISOString().split('T')[0];
 
-        let startQuery = baseQuery.clone().from(startSubQuery.as('image_details'));
-        let endQuery = baseQuery.clone().from(endSubQuery.as('image_details'));
+      // the queries below ONLY use validatedStartDate & validatedEndDate so we avoid SQL injection
+      // DO NOT string interpolate raw values into raw SQL unless they've been carefully cleaned!!
+      // in this case, the combination of '{" makes parameterization fail, so we use carefully-built interpolation
+      const listsQuery = knex
+        .select(['scanner_name', 'image_id', 'image', 'running_in_cluster', 'type', 'severity', 'is_fixable', 'namespaces'])
+        .from(scanResultsQuery.as('scan_results'))
+        .whereRaw(knex.raw(`NOT saved_dates @> '{"${validatedStartDate}", "${validatedEndDate}"}'`));
+      const newVulnerabilities= listsQuery.clone().whereRaw(knex.raw(`NOT saved_dates @> '{"${validatedStartDate}"}'`));
+      const fixedVulnerabilities= listsQuery.clone().whereRaw(knex.raw(`NOT saved_dates @> '{"${validatedEndDate}"}'`));
+      const summaryQuery = knex.select([
+        knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedEndDate}"}' THEN 1 ELSE 0 END) AS fixed`),
+        knex.raw(`SUM(CASE WHEN NOT saved_dates @> '{"${validatedStartDate}"}' THEN 1 ELSE 0 END) AS new`),
+        knex.raw(`SUM(CASE WHEN saved_dates @> '{"${validatedEndDate}", "${validatedStartDate}"}' THEN 1 ELSE 0 END) AS "persistent"`),
+      ]).from(scanResultsQuery.as('scan_results'));
 
-        const rawQuery = limit ? '(? EXCEPT ALL ?) ORDER BY image_id, type LIMIT ?' :
-            '(? EXCEPT ALL ?) ORDER BY image_id, type';
+      return Promise.all([
+        newVulnerabilities.then(response => {
+          return plainToClass(ReportsVulnerabilityExportDto, response);
+        }),
+        fixedVulnerabilities.then(response => { return plainToClass(ReportsVulnerabilityExportDto, response); }),
+        summaryQuery,
+      ]).then((values) => {
+          const newVulnerabilitiesRaw = values[0];
+          const fixedVulnerabilitiesRaw = values[1];
+          const summaryResultRaw = values[2];
 
-        const fixedVulns = await knex.raw(rawQuery,
-            limit ? [startQuery, endQuery, limit] : [startQuery, endQuery])
-            .then(response => {
-            return plainToClass(ReportsVulnerabilityExportDto, response.rows);
+          const newVulnerabilitiesResult = newVulnerabilitiesRaw
+            ? (Array.isArray(newVulnerabilitiesRaw) ? newVulnerabilitiesRaw : [newVulnerabilitiesRaw])
+            : [];
+          const fixedVulnerabilitiesResult = fixedVulnerabilitiesRaw
+            ? (Array.isArray(fixedVulnerabilitiesRaw) ? fixedVulnerabilitiesRaw : [fixedVulnerabilitiesRaw])
+            : [];
+          const summaryResult: { fixed: string, new: string, total: string } = summaryResultRaw[0];  // it's some sums, so it's only one row
+          return {
+            countOfFixedVulnerabilities: parseInt(summaryResult.fixed),
+            countOfNewVulnerabilities: parseInt(summaryResult.new),
+            newVulnerabilities: newVulnerabilitiesResult,
+            fixedVulnerabilities: fixedVulnerabilitiesResult,
+          }
         });
-
-        const numFixedVulns = await knex
-            .count('*', {as: 'entries'})
-            .from(knex.raw('(? EXCEPT ALL ?) AS results', [startQuery, endQuery]))
-            .returning('entries')
-            .then(resp => parseInt(resp[0].entries, 10));
-
-        const newVulns = await knex.raw(rawQuery,
-            limit ? [endQuery, startQuery, limit] : [endQuery, startQuery])
-            .then(response => {
-            return plainToClass(ReportsVulnerabilityExportDto, response.rows);
-        });
-
-         const numNewVulns = await knex
-             .count('*', {as: 'entries'})
-             .from(knex.raw('(? EXCEPT ALL ?) AS results', [endQuery, startQuery]))
-             .returning('entries')
-             .then(resp => parseInt(resp[0].entries, 10));
-
-        return {
-            fixedVulnerabilities: Array.isArray(fixedVulns) ? fixedVulns : [fixedVulns],
-            newVulnerabilities: Array.isArray(newVulns) ? newVulns : [newVulns],
-            countOfFixedVulnerabilities: numFixedVulns,
-            countOfNewVulnerabilities: numNewVulns
-        }
     }
 }
