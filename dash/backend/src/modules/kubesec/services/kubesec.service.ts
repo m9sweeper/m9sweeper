@@ -9,6 +9,7 @@ import {Express} from 'express';
 import {V1PodList} from "@kubernetes/client-node";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
 import {ConfigService} from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
 
 
 @Injectable()
@@ -42,7 +43,7 @@ export class KubesecService {
                 const v1Pod = await this.kubernetesApiService.getNamespacedPod(podName, namespace, cluster.kubeConfig);
                 const plainV1Pod = instanceToPlain(v1Pod);
                 const url = this.configService.get('kubesec.url') + '/scan';
-                return this.httpService.post(url, plainV1Pod).pipe(take(1)).toPromise();
+                return await firstValueFrom(this.httpService.post(url, plainV1Pod).pipe(take(1)));
             } catch (err) {
                 return await new Promise(reject => reject('Pod couldn\'t be reached'));
             }

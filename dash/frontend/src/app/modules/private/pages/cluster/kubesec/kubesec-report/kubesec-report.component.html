@@ -101,7 +101,7 @@
           <mat-cell *matCellDef="let advice" [ngStyle] = "{'background': scoreColors.yellow}" [matTooltip]="advice?.points"> {{advice?.points}} </mat-cell>
         </ng-container>
         <ng-container matColumnDef="adviseReason">
-          <mat-header-cell *matHeaderCellDef> Reason </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Details </mat-header-cell>
           <mat-cell *matCellDef="let advice" [matTooltip]="advice?.reason"> {{advice?.reason}} </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="adviseDisplayColumns"></mat-header-row>
