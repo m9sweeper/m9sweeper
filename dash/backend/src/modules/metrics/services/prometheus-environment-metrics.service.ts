@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {Counter, Gauge, Summary} from 'prom-client';
 import {InjectMetric} from "@willsoto/nestjs-prometheus";
 import * as client from "prom-client";
@@ -8,6 +8,13 @@ import { ClusterDto } from 'src/modules/cluster/dto/cluster-dto';
 import { ReportsService } from '../../reports/services/reports.service';
 import { PodService } from '../../pod/services/pod.service';
 import {MineLoggerService} from '../../shared/services/mine-logger.service';
+import { KubeBenchService } from '../../kube-bench/services/kube-bench.service';
+import { KubeHunterService } from '../../kube-hunter/service/kube-hunter.service';
+import {
+  IKubeHunterRawNodes,
+  IKubeHunterRawServices,
+  IKubeHunterRawVulnerabilities
+} from '../../kube-hunter/dto/kube-hunter-raw.interface';
 
 @Injectable()
 export class PrometheusEnvironmentMetricsService {
@@ -32,8 +39,20 @@ export class PrometheusEnvironmentMetricsService {
     @InjectMetric('num_fixable_low_cves') public numFixableLowCVEs: Gauge<string>,
     @InjectMetric('num_negligible_cves') public numNegligibleCVEs: Gauge<string>,
     @InjectMetric('num_fixable_negligible_cves') public numFixableNegligibleCVEs: Gauge<string>,
+
+    @InjectMetric('kube_bench_passed_tests') public kubeBenchRecentResultsPassed: Gauge<string>,
+    @InjectMetric('kube_bench_failed_tests') public kubeBenchRecentResultsFailed: Gauge<string>,
+    @InjectMetric('kube_bench_tests_with_warnings') public kubeBenchRecentResultsWarning: Gauge<string>,
+    @InjectMetric('kube_bench_tests_with_info_alerts') public kubeBenchRecentResultsInfo: Gauge<string>,
+
+    @InjectMetric('kube_hunter_num_low_vulnerabilities') public kubeHunterRecentResultsLow: Gauge<string>,
+    @InjectMetric('kube_hunter_num_medium_vulnerabilities') public kubeHunterRecentResultsMedium: Gauge<string>,
+    @InjectMetric('kube_hunter_num_high_vulnerabilities') public kubeHunterRecentResultsHigh: Gauge<string>,
+    @InjectMetric('kube_hunter_num_unknown_vulnerabilities') public kubeHunterRecentResultsUnknown: Gauge<string>,
     private clusterService: ClusterService,
     private imageService: ImageService,
+    private kubeBenchService: KubeBenchService,
+    private kubeHunterService: KubeHunterService,
     private reportsService: ReportsService,
     private podService: PodService,
     protected readonly logger: MineLoggerService,
@@ -67,7 +86,16 @@ export class PrometheusEnvironmentMetricsService {
       client.register.getSingleMetricAsString("num_negligible_cves"),
       client.register.getSingleMetricAsString("num_fixable_negligible_cves"),
 
-    ]
+      client.register.getSingleMetricAsString("kube_bench_passed_tests"),
+      client.register.getSingleMetricAsString("kube_bench_failed_tests"),
+      client.register.getSingleMetricAsString("kube_bench_tests_with_warnings"),
+      client.register.getSingleMetricAsString("kube_bench_tests_with_info_alerts"),
+
+      client.register.getSingleMetricAsString("kube_hunter_num_low_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_medium_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_high_vulnerabilities"),
+      client.register.getSingleMetricAsString("kube_hunter_num_unknown_vulnerabilities"),
+    ];
 
     return envMetrics.join('\n\n');
   }
@@ -80,6 +108,8 @@ export class PrometheusEnvironmentMetricsService {
         await this.updateNumVulnerabilitiesDetected(cluster);
         await this.updatePodCompliancePercentage(cluster);
         await this.updateCVEReports(cluster);
+        await this.updateKubeBenchMetrics(cluster);
+        await this.updateKubeHunterMetrics(cluster);
       }
       this.envMetricsUpdatedTimestamp = Date.now();
     } catch (e) {
@@ -146,5 +176,46 @@ export class PrometheusEnvironmentMetricsService {
     } catch (e) {
       return;
     }
+  }
+
+  private async updateKubeBenchMetrics(cluster: ClusterDto): Promise<void> {
+    await this.kubeBenchService.getLastBenchReportSummary(cluster.id).then(summary => {
+      const totals = summary[0].resultsSummary;
+      this.kubeBenchRecentResultsPassed.labels(cluster.name).set(totals.total_pass);
+      this.kubeBenchRecentResultsFailed.labels(cluster.name).set(totals.total_fail);
+      this.kubeBenchRecentResultsWarning.labels(cluster.name).set(totals.total_warn);
+      this.kubeBenchRecentResultsInfo.labels(cluster.name).set(totals.total_info);
+    });
+  }
+
+  private async updateKubeHunterMetrics(cluster: ClusterDto): Promise<void> {
+    await this.kubeHunterService.getRecentKubeHunterReportForCluster(cluster.id).then(report => {
+      const rawVulnerabilities = JSON.parse(report.vulnerabilities) as IKubeHunterRawVulnerabilities;
+      const vulnerabilities = rawVulnerabilities.value.value
+      let numLowSeverity = 0;
+      let numMediumSeverity = 0;
+      let numHighSeverity = 0;
+      let numUnknownSeverity = 0;
+      vulnerabilities.forEach(vulnerability => {
+        switch(vulnerability.severity) {
+          case "low":
+            numLowSeverity++;
+            break;
+          case "medium":
+            numMediumSeverity++;
+            break;
+          case "high":
+            numHighSeverity++;
+            break;
+          default:
+            numUnknownSeverity++;
+            break;
+        }
+      });
+      this.kubeHunterRecentResultsLow.labels(cluster.name).set(numLowSeverity);
+      this.kubeHunterRecentResultsMedium.labels(cluster.name).set(numMediumSeverity);
+      this.kubeHunterRecentResultsHigh.labels(cluster.name).set(numHighSeverity);
+      this.kubeHunterRecentResultsUnknown.labels(cluster.name).set(numUnknownSeverity);
+    });
   }
 }

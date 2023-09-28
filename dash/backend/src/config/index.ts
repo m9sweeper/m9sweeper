@@ -13,6 +13,7 @@ import kubebench from './kubebench';
 import kubesec from './kubesec';
 import releaseNamespace from './releaseNamespace';
 import nodeCron from './node-cron';
+import metrics from './metrics';
 
 export default () => ({
   test: {
@@ -24,13 +25,14 @@ export default () => ({
   defaultSeedEmailPassword,
   email,
   fileManagement,
-  messageQueue,
-  rabbitMQ,
-  security,
-  server,
   gatekeeper,
   kubebench,
   kubesec,
+  messageQueue,
+  metrics,
+  nodeCron,
+  rabbitMQ,
   releaseNamespace,
-  nodeCron
+  security,
+  server,
 });

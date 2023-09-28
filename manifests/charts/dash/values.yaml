@@ -47,14 +47,25 @@ prometheusOperator:
   scrapeInterval: "60s"
   defaultRules:
     enabled: true
-    # Alert if more than X new unique CVEs discovered in an hour
+    # Alert if more than X new unique CVEs discovered
     numNewCVEs:
       enabled: false
       threshold: 20
+      duration: 10m  # defaults to 10m
     # Alerts if over X% of pods in the cluster are non-compliant with CVE standards
     percentNoncompliance:
       enabled: true
       threshold: 20
+    # Alerts if there's a significant increase in number of failed tests (as run by kube-bench)
+    numNewTestFailures:
+      enabled: true
+      threshold: 5
+      duration: 6h  # defaults to 6h
+    # Alerts if there's a significant increase in high-severity vulnerabilities (as detected by kube-hunter)
+    numNewVulnerabilitiesDetected:
+      enabled: true
+      threshold: 20
+      duration: 6h  # defaults to 6h
   # Convenient way of specifying additional rules
   additionalRules: {}
 #    ruleName:
