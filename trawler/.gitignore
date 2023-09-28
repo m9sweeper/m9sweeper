@@ -39,4 +39,6 @@ hs_err_pid*
 # macOS Filesystem Files
 .DS_Store
 
-.env
+*.env*
+!.env.sample
+

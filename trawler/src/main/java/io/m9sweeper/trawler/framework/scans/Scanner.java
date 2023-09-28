@@ -212,7 +212,7 @@ public interface Scanner extends Runnable {
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", fullCommand);
+        processBuilder.command("bash", "-c", "'" + fullCommand + "'");
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();

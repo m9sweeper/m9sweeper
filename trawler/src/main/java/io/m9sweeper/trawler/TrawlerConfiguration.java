@@ -20,6 +20,8 @@ public class TrawlerConfiguration {
     private String trawlerRunMode;
     private String m9sweeperUrl;
     private String m9sweeperApiKey;
+    private boolean trivyEnabled = true;
+    private boolean snykEnabled = true;
     private String rabbitmqUsername;
     private String rabbitmqPassword;
     private String rabbitmqHostname;
@@ -56,6 +58,10 @@ public class TrawlerConfiguration {
 
         // Load the API key to the m9sweeper instance
         m9sweeperApiKey = dotenv.get("M9SWEEPER_API_KEY", "");
+
+        // Load the Trivy & Snyk Settings
+        trivyEnabled = dotenv.get("TRIVY_ENABLED", "1").equals("1");
+        snykEnabled = dotenv.get("SNYK_ENABLED", "1").equals("1");
 
         // Load the username to RabbitMQ
         rabbitmqUsername = dotenv.get("RABBITMQ_USERNAME", "guest");

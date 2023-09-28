@@ -1,5 +1,8 @@
 package io.m9sweeper.trawler.scanners;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import io.m9sweeper.trawler.TrawlerConfiguration;
 import io.m9sweeper.trawler.framework.docker.DockerRegistry;
 import io.m9sweeper.trawler.framework.scans.ScanConfig;
 import io.m9sweeper.trawler.framework.scans.ScanResultIssue;
@@ -37,9 +40,9 @@ public class Snyk implements Scanner {
         snykScanCommandBuilder.append(this.buildAuth());
 
         // add the snyk call to the command
-        snykScanCommandBuilder.append("snyk container test --json ");
-        String imageFullPath = config.getImage().buildFullPath(true, true);
-        snykScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("; ");
+//        snykScanCommandBuilder.append("snyk container test --json ");
+//        String imageFullPath = config.getImage().buildFullPath(true, true);
+//        snykScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("; ");
 
         this.rawResults = this.runProcess(snykScanCommandBuilder.toString());
     }
@@ -83,7 +86,13 @@ public class Snyk implements Scanner {
     }
 
     @Override
-    public void parseResults() {}
+    public void parseResults() {
+        Gson gsonParser = new Gson();
+        JsonObject imageScanObject = gsonParser.fromJson(rawResults, JsonObject.class);
+        if (TrawlerConfiguration.getInstance().getDebug() || imageScanObject == null) {
+            System.out.println("Parsed Snyk Scan Results: " + imageScanObject.toString());
+        }
+    }
 
     @Override
     public void cleanup() {}
