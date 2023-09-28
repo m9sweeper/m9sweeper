@@ -4,6 +4,7 @@ export enum Authority {
     READ_ONLY = 'READ_ONLY',
     KUBEHUNTER = 'KUBEHUNTER',
     KUBEBENCH = 'KUBEBENCH',
-    TRAWLER ='TRAWLER',
-    FALCO = 'FALCO'
+    TRAWLER = 'TRAWLER',
+    FALCO = 'FALCO',
+    METRICS = 'METRICS',
 }

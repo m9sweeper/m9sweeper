@@ -19,15 +19,18 @@ export class KubeHunterDto {
     @IsString()
     uuid: string;
 
+    // structure: IKubeHunterRawNodes
     @Expose({name: 'nodes', toPlainOnly: true})
     @Transform(value => JSON.stringify(value))
-    nodes: any[];
+    nodes: string;
 
+    // structure: IKubeHunterRawServices
     @Expose({name: 'services', toPlainOnly: true})
     @Transform(value => JSON.stringify(value))
-    services: any[];
+    services: string;
 
+    // structure: IKubeHunterRawVulnerabilities
     @Expose({name: 'vulnerabilities', toPlainOnly: true})
     @Transform(value => JSON.stringify(value))
-    vulnerabilities: any[];
+    vulnerabilities: string;
 }

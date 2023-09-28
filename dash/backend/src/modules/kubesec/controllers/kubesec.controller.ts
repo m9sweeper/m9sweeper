@@ -43,9 +43,9 @@ export class KubesecController {
             return (await this.kubesecService.runKubesecByPod(podInfo.name, podInfo.namespace, clusterId)).data[0];
         }
         for (const info of podInfo) {
-            res.push((await this.kubesecService.runKubesecByPod(info.name, info.namespace, clusterId)).data[0]);
+            res.push(this.kubesecService.runKubesecByPod(info.name, info.namespace, clusterId).then(result => result.data[0]));
         }
-        return res;
+        return await Promise.all(res);
     }
 
     @Post()
