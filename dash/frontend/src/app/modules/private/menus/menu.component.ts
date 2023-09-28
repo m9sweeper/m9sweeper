@@ -20,7 +20,7 @@ export class MenuComponent implements OnDestroy {
   public currentMenuItems: IMenuItem[] = [];
   public currentMenuContentTriggers: IMenuContentTrigger[] = [];
   public showOrgSettingsButton = true;
-  public showClusterListButton = true;
+  public showReturnHomeButton = true;
 
   public isHandsetOrXS$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.XSmall])
     .pipe(
@@ -84,24 +84,33 @@ export class MenuComponent implements OnDestroy {
     const menuShouldBeClusterList = this.clusterListMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     const menuShouldBeClusterInfo = this.clusterInfoMenu.associatedRegexPaths.some(rx => rx.test(currentURL));
     if (menuShouldBeClusterList) {
-      this.currentMenuToUse = this.menuOptions.clusterList;
-      this.currentMenuItems = this.clusterListMenu.currentMenuItems.getValue();
-      this.currentMenuContentTriggers = this.clusterListMenu.currentMenuContentTriggers.getValue();
-      this.showOrgSettingsButton = this.clusterListMenu.showOrgSettingsButton;
-      this.showClusterListButton = this.clusterListMenu.showClusterListButton;
+      this.useClusterListMenu();
     } else if (menuShouldBeClusterInfo) {
-      this.currentMenuToUse = this.menuOptions.clusterInfo;
-      this.currentMenuItems = this.clusterInfoMenu.currentMenuItems.getValue();
-      this.currentMenuContentTriggers = this.clusterInfoMenu.currentMenuContentTriggers.getValue();
-      this.showOrgSettingsButton = this.clusterInfoMenu.showOrgSettingsButton;
-      this.showClusterListButton = this.clusterInfoMenu.showClusterListButton;
+      this.useClusterInfoMenu();
     } else {
-      this.currentMenuToUse = this.menuOptions.settings;
-      this.currentMenuItems = this.settingsMenu.currentMenuItems.getValue();
-      this.currentMenuContentTriggers = this.settingsMenu.currentMenuContentTriggers.getValue();
-      this.showOrgSettingsButton = this.settingsMenu.showOrgSettingsButton;
-      this.showClusterListButton = this.settingsMenu.showClusterListButton;
+      this.useSettingsMenu();
     }
+  }
+  useClusterListMenu() {
+    this.currentMenuToUse = this.menuOptions.clusterList;
+    this.currentMenuItems = this.clusterListMenu.currentMenuItems.getValue();
+    this.currentMenuContentTriggers = this.clusterListMenu.currentMenuContentTriggers.getValue();
+    this.showOrgSettingsButton = this.clusterListMenu.showOrgSettingsButton;
+    this.showReturnHomeButton = this.clusterListMenu.showReturnHomeButton;
+  }
+  useClusterInfoMenu() {
+    this.currentMenuToUse = this.menuOptions.clusterInfo;
+    this.currentMenuItems = this.clusterInfoMenu.currentMenuItems.getValue();
+    this.currentMenuContentTriggers = this.clusterInfoMenu.currentMenuContentTriggers.getValue();
+    this.showOrgSettingsButton = this.clusterInfoMenu.showOrgSettingsButton;
+    this.showReturnHomeButton = this.clusterInfoMenu.showReturnHomeButton;
+  }
+  useSettingsMenu() {
+    this.currentMenuToUse = this.menuOptions.settings;
+    this.currentMenuItems = this.settingsMenu.currentMenuItems.getValue();
+    this.currentMenuContentTriggers = this.settingsMenu.currentMenuContentTriggers.getValue();
+    this.showOrgSettingsButton = this.settingsMenu.showOrgSettingsButton;
+    this.showReturnHomeButton = this.settingsMenu.showReturnHomeButton;
   }
 
   instantiateClusterListMenuSubscriptions() {
