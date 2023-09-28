@@ -6,7 +6,6 @@
     [attr.role]="isHandsetOrXS ? 'dialog' : 'navigation'"
     [mode]="isHandsetOrXS ? 'over' : 'side'"
     [opened]="(isHandsetOrXS === false) || sidenavExpanded"
-    style="height: 100%; display: flex;"
   >
 
     <mat-nav-list id="main-list">
@@ -48,13 +47,13 @@
 
     <mat-nav-list style="flex:1"></mat-nav-list>
 
-    <mat-nav-list id="settings-link" *ngIf="showOrgSettingsButton || showClusterListButton">
+    <mat-nav-list id="settings-link" *ngIf="showOrgSettingsButton || showReturnHomeButton">
       <mat-divider></mat-divider>
-      <a mat-list-item *ngIf="showClusterListButton"
+      <a mat-list-item *ngIf="showReturnHomeButton"
          [routerLink]="['/private', 'dashboard']"
       >
-        <mat-icon title="Cluster List">list</mat-icon>
-        <span class="menu-item-name">List of Clusters</span>
+        <mat-icon title="Return Home">home</mat-icon>
+        <span class="menu-item-name">Home</span>
       </a>
       <a mat-list-item
          *ngIf="showOrgSettingsButton && isAdmin"
