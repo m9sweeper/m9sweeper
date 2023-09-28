@@ -1,64 +1,64 @@
 export interface IKubeHunterRawNodes extends IKubeHunterRawResponseSection {
-  value: Nodes;
+  value: IKHRawResponseNodes;
 }
 export interface IKubeHunterRawServices extends IKubeHunterRawResponseSection {
-  value: Services;
+  value: IKHRawResponseServices;
 }
 export interface IKubeHunterRawVulnerabilities extends IKubeHunterRawResponseSection {
-  value: Vulnerabilities;
+  value: IKHRawResponseVulnerabilities;
 }
 
 interface IKubeHunterRawResponseSection {
-  value: Nodes | Services | Vulnerabilities;
+  value: IKHRawResponseNodes | IKHRawResponseServices | IKHRawResponseVulnerabilities;
   key: string;
-  obj: RawObj;
+  obj: IKHRawResponseRawObj;
   type: number;
-  options: Options;
+  options: IKHRawResponseOptions;
 }
 
-interface Nodes {
-  value: Node[]
+interface IKHRawResponseNodes {
+  value: IKHRawResponseNode[]
   key: string
-  obj: ObjDefinition
+  obj: IKHRawResponseObjDefinition
   type: number
-  options: Options
+  options: IKHRawResponseOptions
 }
 
-interface Services {
-  value: Service[]
+interface IKHRawResponseServices {
+  value: IKHRawResponseService[]
   key: string
-  obj: ObjDefinition
+  obj: IKHRawResponseObjDefinition
   type: number
-  options: Options
+  options: IKHRawResponseOptions
 }
 
-interface Vulnerabilities {
-  value: Vulnerability[]
+interface IKHRawResponseVulnerabilities {
+  value: IKHRawResponseVulnerability[]
   key: string
-  obj: ObjDefinition
+  obj: IKHRawResponseObjDefinition
   type: number
-  options: Options
+  options: IKHRawResponseOptions
 }
 
-interface ObjDefinition {
-  nodes: Node[]
-  services: Service[]
-  vulnerabilities: Vulnerability[]
+interface IKHRawResponseObjDefinition {
+  nodes: IKHRawResponseNode[]
+  services: IKHRawResponseService[]
+  vulnerabilities: IKHRawResponseVulnerability[]
   uuid: string
   clusterId: number
 }
 
-interface Node {
+interface IKHRawResponseNode {
   type: string
   location: string
 }
 
-interface Service {
+interface IKHRawResponseService {
   service: string
   location: string
 }
 
-interface Vulnerability {
+interface IKHRawResponseVulnerability {
   location: string
   vid: string
   category: string
@@ -70,7 +70,7 @@ interface Vulnerability {
   hunter: string
 }
 
-interface Options {
+interface IKHRawResponseOptions {
   enableCircularCheck: boolean
   enableImplicitConversion: boolean
   excludeExtraneousValues: boolean
@@ -79,12 +79,12 @@ interface Options {
   ignoreDecorators: boolean
 }
 
-interface RawObj {
+interface IKHRawResponseRawObj {
   id: number
   cluster_id: number
   created_at: string
   uuid: string
-  nodes: Nodes
-  services: Services
-  vulnerabilities: Vulnerabilities
+  nodes: IKHRawResponseNodes
+  services: IKHRawResponseServices
+  vulnerabilities: IKHRawResponseVulnerabilities
 }
