@@ -3,11 +3,22 @@
     {{ title }}
   </div>
   <div *ngIf="buttonTitle || buttonUrl || button2" class="col-xs-12 col-sm-6 start-xs end-sm" id="sub-navigation-buttons">
-    <button mat-raised-button color="primary" [routerLink]="buttonUrl" (click)="emitButtonEvent($event)" id="sub-navigation-button-one">
+    <button mat-raised-button color="primary"
+            [allowedRoles]="buttonAllowedRoles || ['READ_ONLY', 'ADMIN', 'SUPER_ADMIN']"
+            [routerLink]="buttonUrl"
+            (click)="emitButtonEvent($event)"
+            id="sub-navigation-button-one"
+    >
       <mat-icon *ngIf="buttonIcon">{{buttonIcon}}</mat-icon>
       {{buttonTitle}}
     </button>
-    <button mat-raised-button *ngIf="button2" [color]="button2.color || 'accent'" [routerLink]="button2.url" (click)="emitButton2Event($event)" id="sub-navigation-button-two">
+    <button mat-raised-button *ngIf="button2"
+            [allowedRoles]="button2?.allowedRoles || ['READ_ONLY', 'ADMIN', 'SUPER_ADMIN']"
+            [color]="button2.color || 'accent'"
+            [routerLink]="button2.url"
+            (click)="emitButton2Event($event)"
+            id="sub-navigation-button-two"
+    >
       <mat-icon *ngIf="button2?.icon">{{button2.icon}}</mat-icon>
       {{button2.title}}
     </button>

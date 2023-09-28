@@ -52,7 +52,7 @@ export class SettingsMenuService implements NavServiceInterface, OnDestroy {
         name: 'Sign on Methods',
         path: ['/private', 'single-sign-on'],
         icon: 'vpn_key',
-        allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
+        allowedRoles: [Authority.SUPER_ADMIN],
       },
       {
         name: 'Docker Registries',

@@ -41,9 +41,9 @@
             </mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="edit" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
-            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-            <mat-cell *matCellDef="let exception">
+          <ng-container matColumnDef="edit">
+            <mat-header-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matHeaderCellDef>Actions</mat-header-cell>
+            <mat-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matCellDef="let exception">
               <a mat-icon-button [routerLink]="['/private', 'exceptions', exception?.id, 'edit']">
                 <mat-icon>create</mat-icon>
               </a>

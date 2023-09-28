@@ -9,6 +9,7 @@ import {
   ClusterGroupCreateComponent
 } from '../../pages/cluster-group/cluster-group-create/cluster-group-create.component';
 import {take} from 'rxjs/operators';
+import {Authority} from '../../../../core/enum/Authority';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,7 @@ export class ClusterListMenuService implements NavServiceInterface, OnDestroy {
       name: 'add-cluster-group',
       title: 'Add Cluster Group',
       icon: 'add',
+      allowedRoles: [Authority.ADMIN, Authority.SUPER_ADMIN],
       callback: this.openAddGroupDialog,
     }];
     this.currentMenuContentTriggers.next(this.menuContentTriggers);

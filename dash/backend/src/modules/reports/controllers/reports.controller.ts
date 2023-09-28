@@ -3,12 +3,10 @@ import {
     Controller,
     Get,
     Header,
-    Inject,
     Query,
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import { UserProfileDto } from '../../user/dto/user-profile-dto';
 import { AllowedAuthorityLevels } from '../../../decorators/allowed-authority-levels.decorator';
 import { Authority } from '../../user/enum/Authority';
 import { ReportsService } from '../services/reports.service';
@@ -26,13 +24,11 @@ import {format} from 'date-fns'
 @UseInterceptors(ResponseTransformerInterceptor)
 export class ReportsController {
     constructor(
-        @Inject('LOGGED_IN_USER')
-        private readonly _loggedInUser: UserProfileDto,
         private readonly reportsService: ReportsService,
     ) {}
 
     @Get('/vulnerability-export')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async getVulnerabilityExport(
         @Query('limit') limit: number,
@@ -50,7 +46,7 @@ export class ReportsController {
     }
 
     @Get('/vulnerability-export/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @Header('Content-Type', 'text/csv')
     @UseGuards(AuthGuard, AuthorityGuard)
     async downloadVulnerabilityExport(
@@ -65,7 +61,7 @@ export class ReportsController {
     }
 
     @Get('/running-vulnerabilities')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async getRunningVulnerabilities(
         @Query('limit') limit: number,
@@ -82,7 +78,7 @@ export class ReportsController {
     }
 
     @Get('/running-vulnerabilities/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @Header('Content-Type', 'text/csv')
     @UseGuards(AuthGuard, AuthorityGuard)
     async downloadRunningVulnerabilitiesReport(
@@ -95,7 +91,7 @@ export class ReportsController {
     }
 
     @Get('/historical-vulnerabilities')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async getHistoricalVulnerabilities(
         @Query('limit') limit: number,
@@ -119,7 +115,7 @@ export class ReportsController {
     }
 
     @Get('/worst-images')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async getWorstImages(
         @Query('cluster-id') clusterId?: number,
@@ -132,7 +128,7 @@ export class ReportsController {
     }
 
     @Get('/historical-vulnerabilities/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @Header('Content-Type', 'text/csv')
     @UseGuards(AuthGuard, AuthorityGuard)
     async downloadHistoricalVulnerabilitiesReport(
@@ -154,7 +150,7 @@ export class ReportsController {
     }
 
     @Get('/vulnerability-difference')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async getVulnerabilityDifferences(
         @Query('cluster-id') clusterId: number,
@@ -177,7 +173,7 @@ export class ReportsController {
     }
 
     @Get('/vulnerability-difference/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async downloadVulnerabilityDifferences(
         @Query('cluster-id') clusterId: number,

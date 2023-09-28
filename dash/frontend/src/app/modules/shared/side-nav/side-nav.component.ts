@@ -1,12 +1,10 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Observable, Subject} from 'rxjs';
-import {map, shareReplay} from 'rxjs/operators';
+import {AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {IMenuItem} from './interfaces/menu-item.interface';
 import {JwtAuthService} from '../../../core/services/jwt-auth.service';
 import {IMenuContentTrigger} from './interfaces/menu-content-trigger.interface';
-import {Authority, AuthorityValues} from '../../../core/enum/Authority';
+import {AuthorityValues} from '../../../core/enum/Authority';
 import {MatSidenav} from '@angular/material/sidenav';
 
 @Component({

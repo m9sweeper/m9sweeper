@@ -159,7 +159,7 @@ export class ClusterDao {
         return knex
             .where('id', +id)
             .update(deletedTime, ['id'])
-            .into('clusters')
+            .into('clusters');
     }
 
     async searchClusters(groupId: number, searchTerm: string): Promise<ClusterDto[]> {
