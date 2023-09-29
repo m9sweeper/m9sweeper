@@ -13,6 +13,7 @@ import kubebench from './kubebench';
 import kubesec from './kubesec';
 import releaseNamespace from './releaseNamespace';
 import nodeCron from './node-cron';
+import pdfmake from './pdfmake';
 import metrics from './metrics';
 
 export default () => ({
@@ -31,6 +32,7 @@ export default () => ({
   messageQueue,
   metrics,
   nodeCron,
+  pdfmake,
   rabbitMQ,
   releaseNamespace,
   security,

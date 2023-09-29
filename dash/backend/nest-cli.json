@@ -4,6 +4,10 @@
   "compilerOptions": {
     "assets": [
       {
+        "include": "**/*.ttf",
+        "watchAssets": true
+      },
+      {
         "include": "**/*.hbs",
         "watchAssets": true
       },
