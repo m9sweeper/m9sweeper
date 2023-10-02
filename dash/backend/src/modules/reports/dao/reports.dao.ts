@@ -43,7 +43,7 @@ export class ReportsDao {
             .andWhere('i.deleted_at', null)
             .andWhere('c.deleted_at', null);
         if (clusterId) {
-            subQuery = subQuery.andWhere('hki.cluster_id', clusterId);
+            subQuery = subQuery.andWhere('ki.cluster_id', clusterId);
         }
         if (namespaces) {
             subQuery = subQuery.whereIn('ki.namespace', namespaces);
