@@ -133,7 +133,7 @@ public class Trawler extends AbstractCommand implements Runnable {
         factory.setUsername(TrawlerConfiguration.getInstance().rabbitmqUsername());
         factory.setPassword(TrawlerConfiguration.getInstance().rabbitmqPassword());
         factory.setAutomaticRecoveryEnabled(true);
-        factory.setTopologyRecoveryEnabled(true); 
+        factory.setTopologyRecoveryEnabled(true);
         factory.setConnectionTimeout(5000);
         factory.setNetworkRecoveryInterval(5000);
 
@@ -157,7 +157,7 @@ public class Trawler extends AbstractCommand implements Runnable {
                     // Get the contents of the message
                     String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
                     Message payload = mapper.readValue(message, Message.class);
-                        
+
                     try {
                         DockerRegistriesResponseDto registries = api.dockerRegistriesControllerGetDockerRegistries(
                                 null, null, "id", "asc",
@@ -183,8 +183,8 @@ public class Trawler extends AbstractCommand implements Runnable {
                         payload.setRegistry(registry);
                     } catch (Exception e) {
                         // TODO: Should save that it failed and why it failed back (the exception message)
-                        e.printStackTrace(); 
-                    } 
+                        e.printStackTrace();
+                    }
 
                     // Run the scan as long as the contents of the message are valid
                     if (payload != null && payload.getCluster() != null && payload.getCluster().getId() != null) {
@@ -203,7 +203,7 @@ public class Trawler extends AbstractCommand implements Runnable {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace(); 
+                    e.printStackTrace();
                 }
             }, consumerTag -> {});
         } catch (IOException | InterruptedException e) {

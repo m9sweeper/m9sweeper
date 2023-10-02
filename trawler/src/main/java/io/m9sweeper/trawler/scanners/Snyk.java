@@ -45,6 +45,8 @@ public class Snyk implements Scanner {
 //        snykScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("; ");
 
         this.rawResults = this.runProcess(snykScanCommandBuilder.toString());
+        System.out.println("RAW RESULTS: ");
+        System.out.println(this.rawResults);
     }
 
     @Override

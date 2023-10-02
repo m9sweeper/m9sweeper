@@ -48,7 +48,8 @@ public class TrawlerConfiguration {
         }
 
         // Try loading the trawler run mode
-        trawlerRunMode = dotenv.get("TRAWLER_RUN_MODE", "rabbitmq");
+//        trawlerRunMode = dotenv.get("TRAWLER_RUN_MODE", "rabbitmq");
+        trawlerRunMode = dotenv.get("TRAWLER_RUN_MODE", "standalone");
 
         // load debug flag
         debug = dotenv.get("DEBUG", "0").equals("1");
@@ -57,7 +58,8 @@ public class TrawlerConfiguration {
         m9sweeperUrl = StringUtils.stripEnd(dotenv.get("M9SWEEPER_URL", ""),"/");
 
         // Load the API key to the m9sweeper instance
-        m9sweeperApiKey = dotenv.get("M9SWEEPER_API_KEY", "");
+//        m9sweeperApiKey = dotenv.get("M9SWEEPER_API_KEY", "");
+        m9sweeperApiKey = dotenv.get("M9SWEEPER_API_KEY", "aEA3iO627zFSdrlsJipXHO91jzswd5f5m8Il9tstgW.zdSLB91beS");
 
         // Load the Trivy & Snyk Settings
         trivyEnabled = dotenv.get("TRIVY_ENABLED", "1").equals("1");
@@ -70,7 +72,8 @@ public class TrawlerConfiguration {
         rabbitmqPassword = dotenv.get("RABBITMQ_PASSWORD", "guest");
 
         // Load the hostname to RabbitMQ
-        rabbitmqHostname = dotenv.get("RABBITMQ_HOSTNAME", "rabbitmq");
+//        rabbitmqHostname = dotenv.get("RABBITMQ_HOSTNAME", "rabbitmq");
+        rabbitmqHostname = dotenv.get("RABBITMQ_HOSTNAME", "host.docker.internal");
 
         // Load the port to RabbitMQ
         try {

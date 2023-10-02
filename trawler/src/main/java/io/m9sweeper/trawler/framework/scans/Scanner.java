@@ -208,11 +208,12 @@ public interface Scanner extends Runnable {
 
     default String runProcess(String fullCommand) throws Exception {
         if (TrawlerConfiguration.getInstance().getDebug()) {
-            System.out.println("Scan command: " + fullCommand);
+            System.out.println("Scan command: " + "'" + fullCommand + "'");
         }
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", "'" + fullCommand + "'");
+//        processBuilder.command(fullCommand);
+        processBuilder.command("bash", "-c", fullCommand);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();

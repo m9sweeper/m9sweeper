@@ -29,6 +29,7 @@ public class ScanRunner {
     }
 
     public void scan() throws Exception {
+        System.out.println("Scanning");
         ScanConfig scanConfig = new ScanConfig();
         scanConfig.setImage(new DockerImageBuilder(message.getImage().getId().intValue())
                 .withName(message.getImage().getName())
@@ -99,6 +100,7 @@ public class ScanRunner {
                         } catch (Exception e) {
                             scanResultBuilder.withEncounteredError(true);
                             scanResultBuilder.withSummary(e.getMessage());
+                            return;
                         }
                     }
                 } else {

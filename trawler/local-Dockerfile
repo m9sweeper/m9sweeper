@@ -1,0 +1,7 @@
+FROM openjdk:17-alpine
+
+RUN wget https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.43.1
+RUN wget https://static.snyk.io/cli/latest/snyk-alpine
+RUN chmod +x snyk-alpine && mv snyk-alpine /usr/local/bin/
+
+RUN ls /opt/openjdk-17

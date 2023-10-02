@@ -52,7 +52,7 @@ public class Trivy implements Scanner {
         String imageFullPath = config.getImage().buildFullPath(true, true);
         trivyScanCommandBuilder.append(this.escapeXsi(imageFullPath)).append("';");
 
-        this.unsetEnvVars();
+        trivyScanCommandBuilder.append(this.unsetEnvVars());
         this.rawResults = this.runProcess(trivyScanCommandBuilder.toString());
     }
 
