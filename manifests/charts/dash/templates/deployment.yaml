@@ -5,6 +5,13 @@ metadata:
   name: {{ include "dash.fullname" . }}
   labels:
     {{- include "dash.labels" . | nindent 4 }}
+{{- if .Values.extraDeploymentLabels }}
+    {{- .Values.extraDeploymentLabels | toYaml | nindent 4 }}
+{{- end }}
+{{- if .Values.extraDeploymentAnnotations }}
+  annotations:
+    {{- .Values.extraDeploymentAnnotations | toYaml | nindent 4 }}
+{{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -22,8 +29,14 @@ spec:
         checksum/{{ include "dash.fullname" . }}-secrets-extra: {{ include (print $.Template.BasePath "/secret-extra.yaml") . | sha256sum }}
 {{- end }}
 {{- end }}
+{{- if .Values.extraPodAnnotations }}
+        {{- .Values.extraPodAnnotations | toYaml | nindent 8 }}
+{{- end }}
       labels:
         {{- include "dash.selectorLabels" . | nindent 8 }}
+{{- if .Values.extraPodLabels }}
+        {{- .Values.extraPodLabels | toYaml | nindent 8 }}
+{{- end }}
     spec:
       serviceAccount: dash-sa
       initContainers:
