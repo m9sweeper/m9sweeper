@@ -5,11 +5,16 @@ import {Content, StyleDictionary, TDocumentDefinitions} from 'pdfmake/interfaces
 import {ConfigService} from '@nestjs/config';
 import {assetsConfig} from '../../../config/types/assets-config';
 import {format} from 'date-fns';
+import {ClusterService} from '../../cluster/services/cluster.service';
+import {PrCluster} from '../interfaces/printable-report-cluster';
 
 @Injectable()
 export class PrintableAuditReportService {
 
-  constructor(protected readonly config: ConfigService) {
+  constructor(
+    protected readonly config: ConfigService,
+    protected readonly clusterService: ClusterService
+  ) {
 
   }
 
@@ -32,8 +37,6 @@ export class PrintableAuditReportService {
   }
 
   async generate() {
-    const assetsConfig = this.config.get<assetsConfig>('assets');
-
     const today = format(new Date(), 'PPP');
 
     const definition: TDocumentDefinitions = {
@@ -48,30 +51,19 @@ export class PrintableAuditReportService {
         }
       },
       content: [
-        { image: assetsConfig.imagesDirectory.concat('/m9sweeper-logo.png')},
-        { text: 'Kubernetes Security Audit Report', style: 'title' },
-        { text: 'Overview', style: 'h1' },
-        {
-          style: 'body',
-          text: [
-            'This security audit report was generated automatically m9sweeper. ',
-            'M9sweeper has run a number of kubernetes security tools to produce this report. ',
-            'Each tool will be given a section along with a description of the tool, ',
-            'what element of security it covers, and the results reported by the tool.',
-            '\n\n',
-            'A separate report will be given for each of your clusters as well as a summary of all of your clusters, if you have multiple.\n'
-          ]
-        },
-        {
-          toc: {
-            title: { text: 'Table of Contents', style: 'h1'},
-          }
-        },
-        [ ... this.buildClustersSummary()]
-
+        ...this.buildIntro()
       ],
       styles: this.buildStyles()
     };
+    // @TODO make cluster configurable
+    const clusters = await this.clusterService.getAllClusters()
+
+    const reportsByCluster = [];
+    for (const cluster of clusters) {
+      reportsByCluster.push(this.buildClusterReport(cluster.id, cluster.name));
+    }
+
+
     const pdf = this.printer.createPdfKitDocument(definition);
     const fname = Date.now() + '-test.pdf';
 
@@ -107,6 +99,31 @@ export class PrintableAuditReportService {
         fontSize: 11
       }
     };
+  }
+
+  buildIntro(): Content[] {
+    const assetsConfig = this.config.get<assetsConfig>('assets');
+    return [
+      { image: assetsConfig.imagesDirectory.concat('/m9sweeper-logo.png')},
+      { text: 'Kubernetes Security Audit Report', style: 'title' },
+      { text: 'Overview', style: 'h1' },
+      {
+        style: 'body',
+          text: [
+        'This security audit report was generated automatically m9sweeper. ',
+        'M9sweeper has run a number of kubernetes security tools to produce this report. ',
+        'Each tool will be given a section along with a description of the tool, ',
+        'what element of security it covers, and the results reported by the tool.',
+        '\n\n',
+        'A separate report will be given for each of your clusters as well as a summary of all of your clusters, if you have multiple.\n'
+      ]
+      },
+      {
+        toc: {
+          title: { text: 'Table of Contents', style: 'h1'},
+        }
+      }
+    ];
   }
 
   buildClustersSummary(): Content[] {
@@ -176,6 +193,17 @@ export class PrintableAuditReportService {
       tocStyle: 'tocSub',
       tocNumberStyle: 'tocSub'
     }
+  }
+
+  buildClusterReport(clusterId: number, clusterName: string): PrCluster {
+    const report: PrCluster = {
+      id: clusterId,
+      name: clusterName,
+      trivy: null
+    };
+
+    return report;
+
   }
 
 
