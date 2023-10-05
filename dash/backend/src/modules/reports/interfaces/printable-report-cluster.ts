@@ -19,6 +19,8 @@ export interface PrTrivyOverview {
   major: number;
   medium: number;
   low: number;
+  negligible: number;
+  unscanned: number;
   clean: number;
 }
 

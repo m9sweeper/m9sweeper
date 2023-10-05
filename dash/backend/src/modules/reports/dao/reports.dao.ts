@@ -10,10 +10,10 @@ import {
     ReportsRunningVulnerabilitiesPreviewDto
 } from '../dto/reports-running-vulnerabilities-preview-dto';
 import {ReportsHistoricalVulnerabilitiesDto} from '../dto/reports-historical-vulnerabilities-dto';
-import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
-import { format, parseISO } from 'date-fns';
+import {ReportsCurrentWorstImagesDto, ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
+import { parseISO } from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
-import knex, { Knex } from 'knex';
+import { Knex } from 'knex';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
 
 
@@ -438,7 +438,7 @@ export class ReportsDao {
         return {count, results: queryResults};
     }
 
-    async getWorstImages(clusterId: number, startDate?: string, endDate?: string, namespaces?: Array<string>)
+    async getHistoricalWorstImages(clusterId: number, startDate?: string, endDate?: string, namespaces?: Array<string>)
         : Promise<ReportsWorstImagesDto[]>{
 
         const knex = await this.databaseService.getConnection();
@@ -530,6 +530,52 @@ export class ReportsDao {
             return plainToClass(ReportsWorstImagesDto, response);
         });
     }
+
+  async getCurrentWorstImages(clusterId: number, options?: { namespaces?: Array<string> })
+    : Promise<ReportsCurrentWorstImagesDto> {
+
+    const knex = await this.databaseService.getConnection();
+
+    const innerQuery = knex
+      .from('kubernetes_images as ki')
+      .leftJoin('images as i', 'i.id', 'ki.image_id')
+      .select([
+        'ki.id',
+        'i.last_scanned as saved_date',
+        knex.raw(`CASE
+            WHEN i.last_scanned IS NULL THEN -1
+            WHEN i.critical_issues > 0 THEN 5
+            WHEN i.major_issues > 0 THEN 4
+            WHEN i.medium_issues > 0 THEN 3
+            WHEN i.low_issues > 0 THEN 2
+            WHEN i.negligible_issues > 0 THEN 1
+            ELSE 0 
+            END AS vuln_rating`)
+      ])
+      .andWhere('i.running_in_cluster', true)
+      .andWhere('ki.cluster_id', clusterId)
+
+    if (options?.namespaces?.length > 0) {
+        innerQuery.whereIn('ki.namespace', options.namespaces);
+    }
+
+    const query = knex
+      .select([
+        knex.raw('COUNT(*) as "totalImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = -1 THEN 1 END) as "unscannedImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 5 THEN 1 END) as "criticalImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 4 THEN 1 END) as "majorImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 3 THEN 1 END) as "mediumImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 2 THEN 1 END) as "lowImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 1 THEN 1 END) as "negligibleImages"'),
+        knex.raw('COUNT (CASE WHEN iq.vuln_rating = 0 THEN 1 END) as "safeImages"')
+      ])
+      .from(innerQuery.as('iq'));
+
+    return query.then((response) => {
+      return plainToClass(ReportsCurrentWorstImagesDto, response[0]);
+    });
+  }
 
     async getDifferencesInVulnerabilities(
       startDate: string, endDate: string, clusterId?: number, namespaces?: Array<string>,

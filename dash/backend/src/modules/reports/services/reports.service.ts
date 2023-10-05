@@ -8,7 +8,7 @@ import {
     ReportsHistoricalVulnerabilitiesPreviewDto,
     ReportsRunningVulnerabilitiesPreviewDto
 } from '../dto/reports-running-vulnerabilities-preview-dto';
-import {ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
+import {ReportsCurrentWorstImagesDto, ReportsWorstImagesDto} from '../dto/reports-worst-images-dto';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import {ReportsCsvDto} from '../dto/reports-csv-dto';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
@@ -183,10 +183,16 @@ export class ReportsService {
         }
     }
 
-    async getWorstImages(clusterId: number, startDate?: string, endDate?: string, namespaces?: Array<string>)
+    async getHistoricalWorstImages(clusterId: number, startDate?: string, endDate?: string, namespaces?: Array<string>)
         : Promise<ReportsWorstImagesDto[]>
     {
-        return this.reportsDao.getWorstImages(clusterId, startDate, endDate, namespaces);
+        return this.reportsDao.getHistoricalWorstImages(clusterId, startDate, endDate, namespaces);
+    }
+
+    async getCurrentWorstImage(clusterId: number, options?: { namespaces?: Array<string>})
+      : Promise<ReportsCurrentWorstImagesDto>
+    {
+        return this.reportsDao.getCurrentWorstImages(clusterId, options);
     }
 
     async getVulnerabilityDifferenceByDate(
