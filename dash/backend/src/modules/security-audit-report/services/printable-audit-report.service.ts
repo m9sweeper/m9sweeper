@@ -51,6 +51,7 @@ export class PrintableAuditReportService {
     }
 
     (definition.content as Content[]).push(...this.buildClusterSummary(reportsByCluster));
+    (definition.content as Content[]).push(reportsByCluster.map(c => this.buildClusterContent(c)));
 
     const pdf = this.pdfService.buildPdfStream(definition);
     const fname = Date.now() + '-test.pdf';
@@ -281,6 +282,52 @@ export class PrintableAuditReportService {
     }
 
     return report;
+  }
+
+  buildClusterContent(cluster: PrCluster): Content[] {
+    const content: Content[] = [
+      { text: `Cluster ${cluster.name}`, style: 'h1', tocItem: true, tocStyle: 'tocMain' },
+    ];
+    content.push(this.buildClusterTrivyDetails(cluster.trivy));
+    return content;
+  }
+
+  buildClusterTrivyDetails(trivyReport: PrTrivyReport): Content[] {
+    const tableRows:any[][] = [
+      ['Cluster', 'Total Images', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'No', 'Not Scanned']
+    ];
+    trivyReport.namespaceOverview.forEach((overview, key) => {
+      tableRows.push([key, overview.total, overview.critical, overview.major, overview.medium, overview.low, overview.negligible, overview.clean, overview.unscanned])
+    })
+    const trivyTable: ContentTable = {
+      table: {
+        widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+        body: tableRows
+      },
+      layout: {
+        // Makes header row have gray background
+        fillColor: (rowIndex: number) => rowIndex === 0 ? '#d9d9d9' : null
+      }
+    }
+
+
+    const content = [
+      { text: 'Image Scanning with Trivy', style: 'h2', ...this.tocSubItemSettings, },
+      {
+        style: 'body',
+        text: [
+          'Trivy scans the software running in your cluster for common vulnerabilities and exposures (CVEs). ',
+          'CVEs are publicly disclosed security flaws that (generally) can be fixed by upgrading to the latest package that has a fix available. ',
+          '\n\n',
+          'Summary of worst CVE by workload by image running in the namespace:\n'
+        ]
+      },
+      trivyTable
+    ];
+
+
+
+    return content;
 
   }
 
