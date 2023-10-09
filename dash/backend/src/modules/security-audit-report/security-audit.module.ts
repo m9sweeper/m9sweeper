@@ -1,11 +1,22 @@
 import { Global, Module } from '@nestjs/common';
 import {SecurityAuditReportService} from './services/security-audit-report.service';
+import {SecurityAuditReportPdfHelpersService} from './services/security-audit-report-pdf-helpers.service';
+import {SecurityAuditTrivyService} from './services/security-audit-trivy.service';
+import {SecurityAuditClusterService} from './services/security-audit-cluster.service';
 
 @Global()
 @Module({
-  providers: [ SecurityAuditReportService],
+  providers: [
+    SecurityAuditReportService,
+    SecurityAuditReportPdfHelpersService,
+    SecurityAuditClusterService,
+    SecurityAuditTrivyService,
+  ],
   exports: [
-    SecurityAuditReportService
+    SecurityAuditReportService,
+    SecurityAuditReportPdfHelpersService,
+    SecurityAuditClusterService,
+    SecurityAuditTrivyService,
   ],
   controllers: []
 })
