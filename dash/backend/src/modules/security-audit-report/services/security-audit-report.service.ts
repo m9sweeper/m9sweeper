@@ -11,7 +11,7 @@ import {NamespaceService} from '../../namespace/services/namespace.service';
 import {ReportsService} from '../../reports/services/reports.service';
 
 @Injectable()
-export class PrintableAuditReportService {
+export class SecurityAuditReportService {
 
   constructor(
     protected readonly config: ConfigService,

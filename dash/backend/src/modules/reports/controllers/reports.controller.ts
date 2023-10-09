@@ -17,7 +17,7 @@ import { AuthorityGuard } from '../../../guards/authority.guard';
 import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity';
 import { EnsureArrayTyping } from '../../shared/utilities/ensure-array-typing';
 import {format} from 'date-fns'
-import {PrintableAuditReportService} from '../../security-audit-report/services/printable-audit-report.service';
+import {SecurityAuditReportService} from '../../security-audit-report/services/security-audit-report.service';
 
 
 @ApiTags('Reports')
@@ -27,7 +27,7 @@ import {PrintableAuditReportService} from '../../security-audit-report/services/
 export class ReportsController {
     constructor(
         private readonly reportsService: ReportsService,
-        protected readonly printableAuditReportService: PrintableAuditReportService
+        protected readonly printableAuditReportService: SecurityAuditReportService
     ) {}
 
     @Get('/vulnerability-export')
