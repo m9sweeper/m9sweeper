@@ -41,6 +41,7 @@ export class SecurityAuditClusterService {
   buildClusterSummaryTrivySection(clusters: PrCluster[]): Content[] {
 
     const trivyTable: ContentTable = {
+      marginBottom: 10,
       table: {
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: [

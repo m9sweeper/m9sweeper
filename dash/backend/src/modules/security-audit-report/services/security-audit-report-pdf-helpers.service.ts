@@ -42,15 +42,19 @@ export class SecurityAuditReportPdfHelpersService {
       },
       h2: {
         fontSize: 16,
+        marginBottom: 10
       },
       body: {
-        fontSize: 11
+        fontSize: 11,
+        marginBottom: 10
       },
       tocMain: {
-        fontSize: 16
+        fontSize: 16,
+        marginBottom: 8
       },
       tocSub: {
-        fontSize: 11
+        fontSize: 11,
+        marginBottom: 5
       }
     };
   }

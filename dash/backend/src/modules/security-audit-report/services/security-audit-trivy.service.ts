@@ -64,6 +64,7 @@ export class SecurityAuditTrivyService {
       tableRows.push([key, overview.total, overview.critical, overview.major, overview.medium, overview.low, overview.negligible, overview.clean, overview.unscanned])
     })
     const trivyTable: ContentTable = {
+      marginBottom: 10,
       table: {
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: tableRows

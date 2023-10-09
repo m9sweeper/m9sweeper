@@ -80,6 +80,7 @@ export class SecurityAuditReportService {
       ]
       },
       {
+        marginBottom: 24,
         toc: {
           title: { text: 'Table of Contents', style: 'h1'},
         }
