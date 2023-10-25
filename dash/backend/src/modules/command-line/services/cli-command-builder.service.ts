@@ -99,7 +99,7 @@ export class CliCommandBuilderService {
             ),
             new CliCommand(
               CliCommands.DatabaseMigrate,
-              'Runs database migrations if they are enabled.',
+              'Runs database migrations.',
               () => this.databaseCommand.runMigrations()
             )
         ];
