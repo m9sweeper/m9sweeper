@@ -8,9 +8,8 @@ export interface PrCluster {
 
 export interface PrTrivyReport {
   clusterOverview: PrTrivyOverview;
-  namespaceOverview: Map<string, PrTrivyOverview>;
+  namespaces: Record<string, PrTrivyNamespaceReport>;
   vulnerabilities: PrTrivyVulnerability[];
-
 }
 
 export interface PrTrivyOverview {
@@ -28,5 +27,10 @@ export interface PrTrivyVulnerability {
   image: string;
   cve: string;
   severity: IssueSeverityType;
+}
+
+export interface PrTrivyNamespaceReport {
+  overview: PrTrivyOverview;
+  pods: Record<string, PrTrivyOverview>;
 }
 

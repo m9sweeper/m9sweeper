@@ -4,6 +4,7 @@ import {ReportsService} from '../../reports/services/reports.service';
 import {NamespaceService} from '../../namespace/services/namespace.service';
 import {Content, ContentTable} from 'pdfmake/interfaces';
 import {SecurityAuditReportPdfHelpersService} from './security-audit-report-pdf-helpers.service';
+import {PodService} from '../../pod/services/pod.service';
 
 @Injectable()
 export class SecurityAuditTrivyService {
@@ -12,6 +13,7 @@ export class SecurityAuditTrivyService {
     protected readonly reportService: ReportsService,
     protected readonly namespaceService: NamespaceService,
     protected readonly pdfHelpers: SecurityAuditReportPdfHelpersService,
+    protected readonly podService: PodService,
   ) {
 
   }
@@ -19,7 +21,7 @@ export class SecurityAuditTrivyService {
   async buildClusterTrivyReport(clusterId: number): Promise<PrTrivyReport> {
     const report: PrTrivyReport = {
       clusterOverview: null,
-      namespaceOverview: new Map<string, PrTrivyOverview>(),
+      namespaces: {},
       vulnerabilities: []
     };
 
@@ -40,16 +42,22 @@ export class SecurityAuditTrivyService {
     const namespaces = await this.namespaceService.getNamespacesByClusterId(clusterId);
     for (const namespace of namespaces) {
       const worstImageReport = await this.reportService.getCurrentWorstImage(clusterId, { namespaces: [namespace.name]});
-      report.namespaceOverview.set(namespace.name, {
-        total: worstImageReport.totalImages,
-        critical: worstImageReport.criticalImages,
-        major: worstImageReport.majorImages,
-        medium: worstImageReport.mediumImages,
-        low: worstImageReport.lowImages,
-        negligible: worstImageReport.negligibleImages,
-        unscanned: worstImageReport.unscannedImages,
-        clean: worstImageReport.safeImages
-      });
+      report.namespaces[namespace.name] ={
+        overview: {
+          total: worstImageReport.totalImages,
+          critical: worstImageReport.criticalImages,
+          major: worstImageReport.majorImages,
+          medium: worstImageReport.mediumImages,
+          low: worstImageReport.lowImages,
+          negligible: worstImageReport.negligibleImages,
+          unscanned: worstImageReport.unscannedImages,
+          clean: worstImageReport.safeImages
+        },
+        pods: {}
+      }
+      const pods = undefined;
+
+
     }
 
     return report;
@@ -57,17 +65,18 @@ export class SecurityAuditTrivyService {
 
 
   buildClusterTrivyDetails(trivyReport: PrTrivyReport): Content[] {
-    const tableRows:any[][] = [
-      ['Cluster', 'Total Images', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'No', 'Not Scanned']
-    ];
-    trivyReport.namespaceOverview.forEach((overview, key) => {
-      tableRows.push([key, overview.total, overview.critical, overview.major, overview.medium, overview.low, overview.negligible, overview.clean, overview.unscanned])
+    const rows = Object.keys(trivyReport.namespaces).map((key: string) => {
+      const overview = trivyReport.namespaces[key]?.overview;
+      return [key, overview.total, overview.critical, overview.major, overview.medium, overview.low, overview.negligible, overview.clean, overview.unscanned];
     })
     const trivyTable: ContentTable = {
       marginBottom: 10,
       table: {
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
-        body: tableRows
+        body: [
+          ['Cluster', 'Total Images', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'No', 'Not Scanned'],
+          ...rows
+        ]
       },
       layout: this.pdfHelpers.coloredTableHeaderLayout()
     }
