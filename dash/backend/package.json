@@ -33,9 +33,10 @@
     "cli:users:init": "node ${CLI_PATH:=./dist/src/cli.js} users:init",
     "cli:populate:kubernetes-history": "node ${CLI_PATH:=./dist/src/cli.js} populate:kubernetes-history",
     "cli:cluster:seed": "node ${CLI_PATH:=./dist/src/cli.js} cluster:seed",
-    "cli:init:all": "npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all",
+    "cli:init:all": "npm run cli:database:migrate && npm run cli:users:init && npm run cli:cluster:seed && npm run cli:registries:init && npm run cli:exceptions:init && npm run cli:cluster:sync-all",
     "cli:database:check": "node ${CLI_PATH:=./dist/src/cli.js} database:check",
-    "cli:database:wait": "node ${CLI_PATH:=./dist/src/cli.js} database:wait"
+    "cli:database:wait": "node ${CLI_PATH:=./dist/src/cli.js} database:wait",
+    "cli:database:migrate": "node ${CLI_PATH:=./dist/src/cli.js} database:migrate"
   },
   "dependencies": {
     "@kubernetes/client-node": "^0.18.1",

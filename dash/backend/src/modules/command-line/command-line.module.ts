@@ -13,7 +13,7 @@ import { JobsCliController } from './controllers/jobs-cli.controller';
 import { CronJobsController } from './controllers/cron-jobs.controller';
 import { CliCommandBuilderService } from './services/cli-command-builder.service';
 import { ScheduleModule } from '@nestjs/schedule';
-import { DatabaseStatusCommand } from './commands/database-status.command';
+import { DatabaseCommand } from './commands/database-command.service';
 
 @Global()
 @Module({
@@ -30,7 +30,7 @@ import { DatabaseStatusCommand } from './commands/database-status.command';
         GatekeeperExceptionCommand,
         SyncExceptionStatusCommand,
         ImageRescanningService,
-        DatabaseStatusCommand,
+        DatabaseCommand,
         CliCommandBuilderService
     ],
     imports: [

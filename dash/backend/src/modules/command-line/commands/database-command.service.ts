@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../shared/services/database.service';
+import { MineLoggerService } from '../../shared/services/mine-logger.service';
 
 /**
  * This command is used mainly by init containers and stuff to verify database connectivity before attempting to start pods to helm with errors
  */
 @Injectable()
-export class DatabaseStatusCommand {
+export class DatabaseCommand {
     // Create the constructor so that we can utilize the DatabaseService for this command
-    constructor(private readonly databaseService: DatabaseService) {}
+    constructor(
+      private readonly databaseService: DatabaseService,
+      protected readonly logger: MineLoggerService
+    ) {}
 
     /**
      * Run a check against the defined database to ensure it is responding to queries.
@@ -39,7 +43,7 @@ export class DatabaseStatusCommand {
      * Waits for the defined database to ensure it is responding to queries.
      * @returns true once the database is online and responding to queries.
      */
-    async waitForDatabse(): Promise<boolean> {
+    async waitForDatabase(): Promise<boolean> {
         // Create a variable to track if we have been able to connect to the database or not
         let isOnline = false;
 
@@ -69,6 +73,18 @@ export class DatabaseStatusCommand {
         }
 
         // Return that the database is now online and responding to queries
+        return true;
+    }
+
+    async runMigrations(): Promise<boolean> {
+        try {
+            this.logger.log({label: 'Running Migrations'}, 'DatabaseCommand.runMigrations');
+            await this.databaseService.runMigration();
+        } catch(e) {
+            this.logger.error({label: 'Error running migrations'}, e, 'DatabaseCommand.runMigrations');
+            return false;
+        }
+        this.logger.log({label: 'Migrations Complete.'}, 'DatabaseCommand.runMigrations');
         return true;
     }
 }

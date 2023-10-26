@@ -7,7 +7,7 @@ import { GatekeeperExceptionCommand } from '../commands/gatekeeper-exception.com
 import { KubernetesHistoryCommand } from '../commands/kubernetes-history.command';
 import { ClusterCommand } from '../commands/cluster.command';
 import { SyncExceptionStatusCommand } from '../commands/exception.command';
-import { DatabaseStatusCommand } from "../commands/database-status.command";
+import { DatabaseCommand } from "../commands/database-command.service";
 
 
 @Injectable()
@@ -21,7 +21,7 @@ export class CliCommandBuilderService {
       protected readonly kubernetesHistoryCommand: KubernetesHistoryCommand,
       protected readonly clusterCommand: ClusterCommand,
       protected readonly exceptionCommand: SyncExceptionStatusCommand,
-      protected readonly databaseStatusCommand: DatabaseStatusCommand
+      protected readonly databaseCommand: DatabaseCommand
     ) {}
 
     get commands(): CliCommand[] {
@@ -90,13 +90,18 @@ export class CliCommandBuilderService {
             new CliCommand(
                 CliCommands.DatabaseCheck,
                 'Runs a one-time check against the database to see if it is available and responding to queries',
-                () => this.databaseStatusCommand.runCheck(),
+                () => this.databaseCommand.runCheck(),
             ),
             new CliCommand(
                 CliCommands.DatabaseWait,
                 'Waits for the database to be available and responding to queries',
-                () => this.databaseStatusCommand.waitForDatabse(),
+                () => this.databaseCommand.waitForDatabase(),
             ),
+            new CliCommand(
+              CliCommands.DatabaseMigrate,
+              'Runs database migrations.',
+              () => this.databaseCommand.runMigrations()
+            )
         ];
     }
 }
