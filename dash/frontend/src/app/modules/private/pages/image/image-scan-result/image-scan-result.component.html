@@ -9,10 +9,10 @@
           <div class="me-lg-3 me-xs-0">
             <mat-spinner *ngIf="displayImageScanSpinner$ | async" [diameter]="30"></mat-spinner>
           </div>
+          <!-- This button should not be disabled, as it allows re-queueing image scans where image scans get "stuck"-->
           <button type="button" color="primary" mat-raised-button
              [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
              *ngIf="dataSource || !dataSource"
-             [disabled]="displayImageScanSpinner$ | async"
              (click)="scanImage()">{{ scanButtonText }}</button>
         </div>
       </div>
