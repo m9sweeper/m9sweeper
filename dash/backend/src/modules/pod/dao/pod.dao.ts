@@ -8,7 +8,6 @@ import {PodHistoryDto} from "../dto/pod-history-dto";
 import { PodComplianceSummaryGroupDto } from '../dto/pod_compliance_sumamry_group_dto';
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
 import { PodComplianceForNamespace } from '../dto/pod-compliance-for-namespace';
-import { PodVulnerabilitySummaryDto } from '../dto/pod-vulnerability-summary-dto';
 
 @Injectable()
 export class PodDao {
@@ -603,48 +602,5 @@ export class PodDao {
       }
       return summariesAsObjects;
     });
-  }
-
-  async getPodIssueCountForNamespace(clusterId: number, namespace: string): Promise<PodVulnerabilitySummaryDto[]> {
-    const knex = await this.databaseService.getConnection();
-    const query = knex
-      .select([
-        'kp.name',
-        'COUNT(ki.id) as images',
-        'SUM(i.negligible_issues) as "negligibleIssues"',
-        'SUM(i.low_issues) as "lowIssues"',
-        'SUM(i.medium_issues) as "mediumIssues"',
-        'SUM(i.major_issues) as "majorIssues"',
-        'SUM(i.critical_issues) as "criticalIssues"'
-      ])
-      .from('kubernetes_pods as kp')
-      .leftJoin('pod_images as pi', 'pi.pod_id', 'kp.id')
-      .leftJoin('kubernetes_images ki', 'ki.id', 'pi.image_id')
-      .leftJoin('images i', 'i.id', 'ki.image_id')
-      .where('kp.cluster_id', clusterId)
-      .andWhere('kp.namespace', namespace)
-      .groupBy('kp.id');
-    return query.then(raw => {
-      return plainToInstance(PodVulnerabilitySummaryDto, raw)
-    })
-
-
-/*
-select
-kp.name,
-	COUNT(ki.id) as images,
-	SUM(i.negligible_issues) as neg,
-	SUM(i.low_issues) as low,
-	SUM(i.medium_issues) as med,
-	SUM(i.major_issues) as maj,
-	SUM(i.critical_issues) as crit
-from kubernetes_pods kp
-left join pod_images pi on pi.pod_id = kp.id
-left join kubernetes_images ki on ki.id = pi.image_id
-left join images i on i.id = ki.id
-WHERE kp.cluster_id = 2
-AND kp.namespace = 'default'
-group by kp.id
- */
   }
 }

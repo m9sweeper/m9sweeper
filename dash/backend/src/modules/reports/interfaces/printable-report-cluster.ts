@@ -12,13 +12,16 @@ export interface PrTrivyReport {
   vulnerabilities: PrTrivyVulnerability[];
 }
 
-export interface PrTrivyOverview {
-  total: number;
+export interface PrTrivyIssueCount {
   critical: number;
   major: number;
   medium: number;
   low: number;
   negligible: number;
+}
+
+export interface PrTrivyOverview extends PrTrivyIssueCount {
+  total: number;
   unscanned: number;
   clean: number;
 }
@@ -31,6 +34,6 @@ export interface PrTrivyVulnerability {
 
 export interface PrTrivyNamespaceReport {
   overview: PrTrivyOverview;
-  pods: Record<string, PrTrivyOverview>;
+  pods: Record<string, PrTrivyIssueCount>;
 }
 

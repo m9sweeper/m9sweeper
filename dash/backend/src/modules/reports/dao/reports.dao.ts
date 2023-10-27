@@ -15,6 +15,7 @@ import { parseISO } from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import { Knex } from 'knex';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
+import {ReportsWorkloadVulnSummary} from '../dto/reports-workload-vuln-summary';
 
 
 @Injectable()
@@ -248,6 +249,29 @@ export class ReportsDao {
         .orderBy('image_details.last_scanned', 'desc');
 
       return { query, knex };
+    }
+
+    async getRunningVulnerabilitiesInPodsByNamespace(clusterId: number, namespace: string): Promise<ReportsWorkloadVulnSummary[]> {
+      const knex = await this.databaseService.getConnection();
+      const query = knex
+        .select([
+          'kp.name',
+          knex.raw('COUNT(i.id) as images'),
+          knex.raw('SUM(i.negligible_issues) as "negligibleIssues"'),
+          knex.raw('SUM(i.low_issues) as "lowIssues"'),
+          knex.raw('SUM(i.medium_issues) as "mediumIssues"'),
+          knex.raw('SUM(i.major_issues) as "majorIssues"'),
+          knex.raw('SUM(i.critical_issues) as "criticalIssues"')
+        ])
+        .from('kubernetes_pods as kp')
+        .leftJoin('pod_images as pi', 'pi.pod_id', 'kp.id')
+        .leftJoin('images as i', 'i.id', 'pi.image_id')
+        .where('kp.cluster_id', clusterId)
+        .andWhere('kp.namespace', namespace)
+        .orderBy('kp.name', 'ASC')
+        .groupBy('kp.id');
+
+      return query.then(res => plainToInstance(ReportsWorkloadVulnSummary, res))
     }
 
     async getRunningVulnerabilities(

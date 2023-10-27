@@ -9,12 +9,12 @@ export class SecurityAuditReportPdfHelpersService {
     return { text: title, style: 'h1', tocItem: !options?.skipToc, tocStyle: 'tocMain' }
   }
 
-  buildSubHeader(title: string, options?: { skipToc?: boolean }): Content {
+  buildSubHeader(title: string, options?: { skipToc?: boolean, level?: number }): Content {
       return {
         text: title,
         style: 'h2',
         tocItem: !options?.skipToc,
-        tocMargin: [16, 0, 0, 0],
+        tocMargin: [options?.level ? options.level * 16 : 16, 0, 0, 0],
         tocStyle: 'tocSub',
         tocNumberStyle: 'tocSub'
       }
