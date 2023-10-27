@@ -183,8 +183,8 @@ export class HelmSetupCommand {
         userExists = !!user;
       }
 
-      if (userExists && user.length > 1) {
-        console.log(`${titlecaseProfileName} has multiple associated users.... skipping`);
+      if (userExists) {
+        console.log(`${titlecaseProfileName} user exists.... skipping`);
         return true;
       }
 
