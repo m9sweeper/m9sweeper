@@ -5,8 +5,14 @@ import {Content, StyleDictionary, TableLayout} from 'pdfmake/interfaces';
 export class SecurityAuditReportPdfHelpersService {
 
   /** Large header. BY DEfault added to the Table Of Contents */
-  buildHeader(title: string, options?: { skipToc?: boolean }): Content {
-    return { text: title, style: 'h1', tocItem: !options?.skipToc, tocStyle: 'tocMain' }
+  buildHeader(title: string, options?: { skipToc?: boolean, pageBreak?: 'before' | 'after' }): Content {
+    return {
+      text: title,
+      style: 'h1',
+      tocItem: !options?.skipToc,
+      tocStyle: 'tocMain',
+      pageBreak: options?.pageBreak
+    };
   }
 
   buildSubHeader(title: string, options?: { skipToc?: boolean, level?: number }): Content {
@@ -43,6 +49,10 @@ export class SecurityAuditReportPdfHelpersService {
       h2: {
         fontSize: 16,
         marginBottom: 10
+      },
+      tableLabel: {
+        fontSize: 12,
+        marginBottom: 4
       },
       body: {
         fontSize: 11,

@@ -34,6 +34,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     const trivyTable: ContentTable = {
       marginBottom: 10,
       table: {
+        headerRows: 1,
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: [
           ['Cluster', 'Total Images', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'No', 'Not Scanned'],
@@ -51,7 +52,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
           'Trivy scans the software running in your cluster for common vulnerabilities and exposures (CVEs). ',
           'CVEs are publicly disclosed security flaws that (generally) can be fixed by upgrading to the latest package that has a fix available. ',
           '\n\n',
-          'Summary of worst CVE by workload by image running in the cluster:\n'
+          {text: 'Summary of worst CVE by workload by image running in the cluster:', style: 'tableLabel' }
         ]
       },
       trivyTable
@@ -125,6 +126,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     const trivyTable: ContentTable = {
       marginBottom: 10,
       table: {
+        headerRows: 1,
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: [
           ['Cluster', 'Total Images', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'No', 'Not Scanned'],
@@ -143,7 +145,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
           'Trivy scans the software running in your cluster for common vulnerabilities and exposures (CVEs). ',
           'CVEs are publicly disclosed security flaws that (generally) can be fixed by upgrading to the latest package that has a fix available. ',
           '\n\n',
-          'Summary of worst CVE by workload by image running in the namespace:\n'
+          { text: 'Summary of worst CVE by workload by image running in the namespace:', style: 'tableLabel' }
         ]
       },
       trivyTable
@@ -171,6 +173,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     const table: ContentTable = {
       marginBottom: 10,
       table: {
+        headerRows: 1,
         widths: ['*', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: [
           ['Workload', 'Crt', 'Maj', 'Med', 'Low', 'Ngl'],
@@ -182,7 +185,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
 
     return [
       {
-        style: 'body',
+        style: 'tableLabel',
         text: [
           `namespace ${namespaceName}`
         ]
@@ -201,6 +204,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     const table: ContentTable = {
       marginBottom: 10,
       table: {
+        headerRows: 1,
         widths: ['*', 'auto', 'auto'],
         body: [
           ['Image', 'CVE', 'Severity'],
@@ -212,9 +216,9 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
 
     return [
       {
-        style: 'body',
+        style: 'tableLabel',
         text: [
-          `Pod ${podName}\n`
+          `Pod ${podName}`
         ]
       },
       table

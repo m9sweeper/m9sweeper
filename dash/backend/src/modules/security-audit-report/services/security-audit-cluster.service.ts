@@ -28,7 +28,7 @@ export class SecurityAuditClusterService {
 
   buildClusterSummary(cluster: SecurityAuditReportCluster, tools: SecurityAuditReportTools[]): Content[] {
     return [
-      this.pdfHelpers.buildHeader(`Cluster ${cluster.name}`),
+      this.pdfHelpers.buildHeader(`Cluster ${cluster.name}`, { pageBreak: 'before' }),
       tools.map(tool => {
         return cluster.toolResults[tool].content
       })
