@@ -12,7 +12,7 @@ import {ReportsCurrentWorstImagesDto, ReportsWorstImagesDto} from '../dto/report
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import {ReportsCsvDto} from '../dto/reports-csv-dto';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
-import {ReportsWorkloadVulnSummary} from '../dto/reports-workload-vuln-summary';
+import {ReportsPodVulnSummary} from '../dto/reports-pod-vuln-summary';
 
 
 @Injectable()
@@ -77,7 +77,7 @@ export class ReportsService {
         return this.getRunningVulnerabilitiesNoRequirements(clusterId, limit, namespaces, isCompliant, date, page);
     }
 
-    async getRunningVulnerabilitiesInPodsByNamespace(clusterId: number, namespace: string): Promise<ReportsWorkloadVulnSummary[]> {
+    async getRunningVulnerabilitiesInPodsByNamespace(clusterId: number, namespace: string): Promise<ReportsPodVulnSummary[]> {
         return this.reportsDao.getRunningVulnerabilitiesInPodsByNamespace(clusterId, namespace);
     }
 

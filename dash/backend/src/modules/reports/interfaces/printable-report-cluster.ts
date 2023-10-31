@@ -26,6 +26,11 @@ export interface PrTrivyOverview extends PrTrivyIssueCount {
   clean: number;
 }
 
+export interface PrTrivyPod {
+  overview: PrTrivyIssueCount;
+  issues: any[];
+}
+
 export interface PrTrivyVulnerability {
   image: string;
   cve: string;
@@ -34,6 +39,6 @@ export interface PrTrivyVulnerability {
 
 export interface PrTrivyNamespaceReport {
   overview: PrTrivyOverview;
-  pods: Record<string, PrTrivyIssueCount>;
+  pods: Record<string, PrTrivyPod>;
 }
 

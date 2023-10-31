@@ -5,6 +5,7 @@ import {CsvService} from '../../shared/services/csv.service';
 import {ReportsCsvDto} from '../../reports/dto/reports-csv-dto';
 import {format} from 'date-fns';
 import {UtilitiesService} from '../../shared/services/utilities.service';
+import {PodIssueSummaryDto} from '../dto/pod-issue-summary.dto';
 
 @Injectable()
 export class ImageScanResultsIssueService {
@@ -97,5 +98,9 @@ export class ImageScanResultsIssueService {
     async getCountOfImageScanResultsIssues(imageResultsId: number, imageId: number): Promise<any> {
         const totalImageScanResultsIssues = await this.imageScanResultsIssueDao.getCountOfImageScanResultsIssues(imageResultsId);
         return totalImageScanResultsIssues[0].count;
+    }
+
+    async getAllIssuesForKubernetesPod(podId: number): Promise<PodIssueSummaryDto[]> {
+      return this.imageScanResultsIssueDao.getAllIssuesForKubernetesPod(podId);
     }
 }

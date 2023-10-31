@@ -15,7 +15,7 @@ import { parseISO } from 'date-fns';
 import {ReportsDifferenceByDateDto} from '../dto/reports-difference-by-date-dto';
 import { Knex } from 'knex';
 import { ReportsRunningVulnerabilitiesSummaryDto } from '../dto/reports-running-vulnerabilities-summary-dto';
-import {ReportsWorkloadVulnSummary} from '../dto/reports-workload-vuln-summary';
+import {ReportsPodVulnSummary} from '../dto/reports-pod-vuln-summary';
 
 
 @Injectable()
@@ -251,11 +251,11 @@ export class ReportsDao {
       return { query, knex };
     }
 
-    async getRunningVulnerabilitiesInPodsByNamespace(clusterId: number, namespace: string): Promise<ReportsWorkloadVulnSummary[]> {
+    async getRunningVulnerabilitiesInPodsByNamespace(clusterId: number, namespace: string): Promise<ReportsPodVulnSummary[]> {
       const knex = await this.databaseService.getConnection();
       const query = knex
         .select([
-          'kp.name',
+          'kp.name', 'kp.id',
           knex.raw('COUNT(i.id) as images'),
           knex.raw('SUM(i.negligible_issues) as "negligibleIssues"'),
           knex.raw('SUM(i.low_issues) as "lowIssues"'),
@@ -271,7 +271,7 @@ export class ReportsDao {
         .orderBy('kp.name', 'ASC')
         .groupBy('kp.id');
 
-      return query.then(res => plainToInstance(ReportsWorkloadVulnSummary, res))
+      return query.then(res => plainToInstance(ReportsPodVulnSummary, res))
     }
 
     async getRunningVulnerabilities(

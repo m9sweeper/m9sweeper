@@ -1,7 +1,7 @@
 import {Expose, Transform} from 'class-transformer';
 import {IsNumber, IsString} from 'class-validator';
 
-export class ReportsWorkloadVulnSummary {
+export class ReportsPodVulnSummary {
   @Expose({ name: 'name' })
   @IsString()
   name: string;
@@ -10,6 +10,11 @@ export class ReportsWorkloadVulnSummary {
   @IsString()
   @Transform(params => parseInt(params.value), { toClassOnly: true })
   images: number;
+
+  @Expose({name: 'id'})
+  @IsNumber()
+  @Transform(params => parseInt(params.value), { toClassOnly: true })
+  id: number;
 
   @Expose({name: 'criticalIssues'})
   @IsNumber()

@@ -55,6 +55,9 @@ export class SecurityAuditReportPdfHelpersService {
       tocSub: {
         fontSize: 11,
         marginBottom: 5
+      },
+      italics: {
+        italics: true
       }
     };
   }
