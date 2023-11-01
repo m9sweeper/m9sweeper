@@ -62,6 +62,11 @@ export class SecurityAuditReportPdfHelpersService {
         fontSize: 16,
         marginBottom: 8
       },
+      alert: {
+        fontSize: 12,
+        color: 'red',
+        marginBottom: 10
+      },
       tocSub: {
         fontSize: 11,
         marginBottom: 5

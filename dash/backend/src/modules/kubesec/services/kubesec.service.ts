@@ -5,11 +5,11 @@ import {instanceToPlain} from "class-transformer";
 import {take} from "rxjs/operators";
 import {PodService} from "../../pod/services/pod.service";
 import {ClusterService} from "../../cluster/services/cluster.service";
-import {Express} from 'express';
 import {V1PodList} from "@kubernetes/client-node";
 import {V1NamespaceList} from "@kubernetes/client-node/dist/gen/model/v1NamespaceList";
 import {ConfigService} from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import {KubesecScanResults} from '../interfaces/kubesec-response';
 
 
 @Injectable()
@@ -36,17 +36,13 @@ export class KubesecService {
         return podList;
     }
 
-    async runKubesecByPod(podName: string, namespace: string, clusterId: number): Promise<any> {
+    async runKubesecByPod(podName: string, namespace: string, clusterId: number): Promise<{ data: KubesecScanResults }> {
         const cluster = await this.clusterService.getClusterById(clusterId);
         if (cluster) {
-            try {
-                const v1Pod = await this.kubernetesApiService.getNamespacedPod(podName, namespace, cluster.kubeConfig);
-                const plainV1Pod = instanceToPlain(v1Pod);
-                const url = this.configService.get('kubesec.url') + '/scan';
-                return await firstValueFrom(this.httpService.post(url, plainV1Pod).pipe(take(1)));
-            } catch (err) {
-                return await new Promise(reject => reject('Pod couldn\'t be reached'));
-            }
+            const v1Pod = await this.kubernetesApiService.getNamespacedPod(podName, namespace, cluster.kubeConfig);
+            const plainV1Pod = instanceToPlain(v1Pod);
+            const url = this.configService.get('kubesec.url') + '/scan';
+            return await firstValueFrom(this.httpService.post(url, plainV1Pod).pipe(take(1)));
         }
     }
 

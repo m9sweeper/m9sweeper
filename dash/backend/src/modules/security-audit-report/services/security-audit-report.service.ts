@@ -49,7 +49,7 @@ export class SecurityAuditReportService {
 
 
     // @TODO: allow selecting which tool(s) to run, and ordering
-    const tools = [ SecurityAuditReportTools.TRIVY ];
+    const tools = [ SecurityAuditReportTools.TRIVY, SecurityAuditReportTools.KUBESEC ];
 
     // For each cluster, build its content for each tool
     const reportsByCluster: SecurityAuditReportCluster[] = [];

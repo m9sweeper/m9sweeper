@@ -4,6 +4,7 @@ import {SecurityAuditReportPdfHelpersService} from './services/security-audit-re
 import {SecurityAuditTrivyService} from './services/security-audit-trivy.service';
 import {SecurityAuditClusterService} from './services/security-audit-cluster.service';
 import {SecurityAuditToolServiceFactory} from './services/security-audit-tool-service.factory';
+import {SecurityAuditKubesecService} from './services/security-audit-kubesec.service';
 
 @Global()
 @Module({
@@ -13,6 +14,7 @@ import {SecurityAuditToolServiceFactory} from './services/security-audit-tool-se
     SecurityAuditClusterService,
     SecurityAuditTrivyService,
     SecurityAuditToolServiceFactory,
+    SecurityAuditKubesecService,
   ],
   exports: [
     SecurityAuditReportService,
@@ -20,6 +22,7 @@ import {SecurityAuditToolServiceFactory} from './services/security-audit-tool-se
     SecurityAuditClusterService,
     SecurityAuditTrivyService,
     SecurityAuditToolServiceFactory,
+    SecurityAuditKubesecService,
   ],
   controllers: []
 })
