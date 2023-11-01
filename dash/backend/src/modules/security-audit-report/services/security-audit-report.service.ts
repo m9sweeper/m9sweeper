@@ -52,10 +52,12 @@ export class SecurityAuditReportService {
     const tools = [ SecurityAuditReportTools.TRIVY, SecurityAuditReportTools.KUBESEC ];
 
     // For each cluster, build its content for each tool
-    const reportsByCluster: SecurityAuditReportCluster[] = [];
+    const reportPromises: Promise<SecurityAuditReportCluster>[] = [];
     for (const cluster of clusters) {
-      reportsByCluster.push(await this.securityAuditClusterService.getClusterReportData(cluster, tools));
+      reportPromises.push(this.securityAuditClusterService.getClusterReportData(cluster, tools));
     }
+
+    const reportsByCluster: SecurityAuditReportCluster[] = await Promise.all(reportPromises);
 
     // Build the overview section for each tool
     for (const tool of tools) {

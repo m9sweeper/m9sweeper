@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {Content} from 'pdfmake/interfaces';
+import {Content, TableCell} from 'pdfmake/interfaces';
 import {SecurityAuditReportPdfHelpersService} from './security-audit-report-pdf-helpers.service';
 import {SecurityAuditReportCluster} from '../interfaces/security-audit-report-cluster';
 import {SecurityAuditReportTools} from '../enums/security-audit-report-tools';
@@ -19,11 +19,17 @@ export class SecurityAuditClusterService {
       name: cluster.name,
       toolResults: {}
     };
+    const toolRunPromises: Promise<{ content: Content, summaryRow: TableCell[] }>[] = [];
     for (const tool of tools) {
       const service = this.SecurityAuditToolServiceFactory.getTool(tool);
-      report.toolResults[tool] = await service.buildClusterContent(cluster);
+      toolRunPromises.push(
+        service.buildClusterContent(cluster)
+          .then(res => report.toolResults[tool] = res)
+      );
     }
-    return report;
+
+    return Promise.all(toolRunPromises)
+      .then(() => report);
   }
 
   buildClusterSummary(cluster: SecurityAuditReportCluster, tools: SecurityAuditReportTools[]): Content[] {
