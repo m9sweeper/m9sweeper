@@ -1,4 +1,7 @@
 {{- if .Values.validatingWebhook.enabled }}
+{{- if not (and .Values.ingress.hosts (index .Values.ingress.hosts 0))}}
+{{- required "If the validating webhook is enabled, ingress.hosts must also have an entry. For clusters where traditional ingress can't be set up, see https://m9sweeper.io/docs/latest/docs/getting-started/advanced-install/#validating-webhook" "" }}
+{{- end }}
 
 ---
 apiVersion: admissionregistration.k8s.io/v1
