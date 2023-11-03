@@ -25,7 +25,7 @@ export class SecurityAuditReportService {
 
   }
 
-  async generate() {
+  async generate(options?: { clusterIds: number[], namespaces?: string[],  tools?: SecurityAuditReportTools[] }) {
     const today = format(new Date(), 'PPP');
 
     const definition: TDocumentDefinitions = {
@@ -44,12 +44,14 @@ export class SecurityAuditReportService {
       ],
       styles: this.pdfHelpers.buildStyles()
     };
-    // @TODO make included clusters/namespaces configurable
-    const clusters = await this.clusterService.getClusterObjectSummaries();
+    const clusters = await this.clusterService.getClusterObjectSummaries({ clusterIds: options?.clusterIds, namespaces: options?.namespaces });
 
-
-    // @TODO: allow selecting which tool(s) to run, and ordering
-    const tools = [ SecurityAuditReportTools.TRIVY, SecurityAuditReportTools.KUBESEC ];
+    // Filter out invalid tool names
+    let tools = options?.tools?.filter(t => Object.values(SecurityAuditReportTools).includes(t));
+    // If there are no tools, include all
+    if (!tools?.length) {
+      tools = Object.values(SecurityAuditReportTools);
+    }
 
     // For each cluster, build its content for each tool
     const reportPromises: Promise<SecurityAuditReportCluster>[] = [];

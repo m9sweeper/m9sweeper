@@ -289,7 +289,11 @@ export class ClusterDao {
       ])
         .from('clusters AS cl')
         .leftJoin('kubernetes_namespaces AS ns', 'ns.cluster_id', 'cl.id')
-        .leftJoin('kubernetes_pods AS kp', knex.raw('kp.cluster_id = cl.id AND kp.namespace = ns.name'));
+        .leftJoin('kubernetes_pods AS kp', knex.raw('kp.cluster_id = cl.id AND kp.namespace = ns.name'))
+        .innerJoin('cluster_group as cg', function () {
+          this.on('cg.id', '=', 'cl.group_id');
+        })
+        .where({'cl.deleted_at': null, 'cg.deleted_at': null})
 
       if (options?.clusterIds?.length) {
         query.andWhere('cl.id', 'IN', options.clusterIds);

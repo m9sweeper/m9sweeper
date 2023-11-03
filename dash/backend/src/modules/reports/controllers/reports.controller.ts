@@ -18,6 +18,7 @@ import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity
 import { EnsureArrayTyping } from '../../shared/utilities/ensure-array-typing';
 import {format} from 'date-fns'
 import {SecurityAuditReportService} from '../../security-audit-report/services/security-audit-report.service';
+import {SecurityAuditReportTools} from '../../security-audit-report/enums/security-audit-report-tools';
 
 
 @ApiTags('Reports')
@@ -83,8 +84,12 @@ export class ReportsController {
     @Get('/security-audit-report')
     @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
-    async generatePrintableAuditReport() {
-        return this.printableAuditReportService.generate();
+    async generatePrintableAuditReport(
+      @Query('namespaces') namespaces?: string[],
+      @Query('clusterIds') clusterIds?: number[],
+      @Query('tools') tools?: SecurityAuditReportTools[],
+    ) {
+        return this.printableAuditReportService.generate({ namespaces, clusterIds, tools });
     }
 
     @Get('/running-vulnerabilities/download')

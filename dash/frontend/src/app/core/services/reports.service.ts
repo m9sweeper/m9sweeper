@@ -144,8 +144,19 @@ export class ReportsService {
       {params});
   }
 
-  generateSimpleSecurityAuditReport(): Observable<any> {
+  generateSimpleSecurityAuditReport(options?: { namespaces?: string[], tools?: string[], clusterIds: number[]}): Observable<any> {
+    let params = new HttpParams();
+    if (options?.namespaces?.length) {
+      params = params.appendAll({'namespaces[]': options.namespaces});
+    }
+    if (options?.tools?.length) {
+      params = params.appendAll({'tools[]': options.tools});
+    }
+    if (options?.clusterIds?.length) {
+      params = params.appendAll({'clusterIds[]': options.clusterIds});
+    }
+
     const url = this.baseUrl.concat('/security-audit-report');
-    return this.httpClient.get(url);
+    return this.httpClient.get(url, { params });
   }
 }

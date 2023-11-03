@@ -46,7 +46,7 @@ export class SecurityAuditReportComponent implements OnInit {
   ngOnInit() {
     const defaultClusterId = +this.activeRoute.parent.parent.snapshot.params.id;
     this.settingsForm = this.fb.group({
-      clusters: [[defaultClusterId], []],
+      clusterIds: [[defaultClusterId], []],
       namespaces: [[], []],
       tools: [[], []]
     });
@@ -80,7 +80,7 @@ export class SecurityAuditReportComponent implements OnInit {
 
   updateVisibleNamespaces() {
     const namespaces = Object.keys(this.namespaceMap);
-    const selectedClusterIds = this.settingsForm.controls.clusters.value as number[];
+    const selectedClusterIds = this.settingsForm.controls.clusterIds.value as number[];
     if (selectedClusterIds?.length === 0) {
       this.visibleNamespaces = namespaces;
     } else {
@@ -89,12 +89,8 @@ export class SecurityAuditReportComponent implements OnInit {
   }
 
   generatePDF() {
-    console.log(this.settingsForm.getRawValue());
-    return;
-    this.reportsService.generateSimpleSecurityAuditReport().pipe(take(1))
-      .subscribe({
-        next: (x) => console.log(x)
-      });
+    this.reportsService.generateSimpleSecurityAuditReport(this.settingsForm.getRawValue()).pipe(take(1))
+      .subscribe();
   }
 
 }
