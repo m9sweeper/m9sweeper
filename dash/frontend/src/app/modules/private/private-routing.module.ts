@@ -52,7 +52,7 @@ import {FalcoEventsListComponent} from './pages/falco/falco-events-list/falco-ev
 import {FalcoEventDetailsComponent} from './pages/falco/falco-event-details/falco-event-details.component';
 import {FalcoSettingsComponent} from './pages/falco/falco-settings/falco-settings.component';
 import {FalcoOrgSettingsPageComponent} from './pages/falco/falco-org-settings-page/falco-org-settings-page.component';
-import {PrintableAuditReportComponent} from './pages/reports/printable-audit-report/printable-audit-report.component';
+import {SecurityAuditReportComponent} from './pages/reports/security-audit-report/security-audit-report.component';
 
 const routes: Routes = [
   {
@@ -209,10 +209,10 @@ const routes: Routes = [
                 }
               },
               {
-                path: 'printable-audit-report',
-                component: PrintableAuditReportComponent,
+                path: 'security-audit-report',
+                component: SecurityAuditReportComponent,
                 data: {
-                  title: 'Printable Audit Report'
+                  title: 'Security Audit Report'
                 }
               }
             ]

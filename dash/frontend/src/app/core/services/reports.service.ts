@@ -145,7 +145,7 @@ export class ReportsService {
   }
 
   generateSimpleSecurityAuditReport(): Observable<any> {
-    const url = this.baseUrl.concat('/printable-audit-report');
+    const url = this.baseUrl.concat('/security-audit-report');
     return this.httpClient.get(url);
   }
 }

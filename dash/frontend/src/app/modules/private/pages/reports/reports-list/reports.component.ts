@@ -83,10 +83,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
         icon: 'addchart',
       },
       {
-        title: 'Printable Audit Report',
-        description: 'Generate a PDF report',
-        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'printable-audit-report'],
-        icon: 'print',
+        title: 'Security Audit Report',
+        description: 'Generate a detailed security audit report as a PDF.',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'security-audit-report'],
+        icon: 'lock',
       },
     ];
   }

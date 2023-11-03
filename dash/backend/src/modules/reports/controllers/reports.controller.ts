@@ -80,7 +80,7 @@ export class ReportsController {
         return this.reportsService.getRunningVulnerabilities(limit, clusterId, namespaces, isCompliant, date, page);
     }
 
-    @Get('/printable-audit-report')
+    @Get('/security-audit-report')
     @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     async generatePrintableAuditReport() {
