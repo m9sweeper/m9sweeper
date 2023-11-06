@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { ReportsController } from './controllers/reports.controller';
 import { ReportsService } from './services/reports.service';
 import { ReportsDao } from './dao/reports.dao';
+import {ReportsDownloadController} from './controllers/reports-download.controller';
 
 @Global()
 @Module({
@@ -10,7 +11,7 @@ import { ReportsDao } from './dao/reports.dao';
         ReportsService,
         ReportsDao,
     ],
-    controllers: [ReportsController]
+    controllers: [ReportsController, ReportsDownloadController]
 })
 
 export class ReportsModule {}

@@ -144,7 +144,7 @@ export class ReportsService {
       {params});
   }
 
-  generateSimpleSecurityAuditReport(options?: { namespaces?: string[], tools?: string[], clusterIds: number[]}): Observable<any> {
+  generateSimpleSecurityAuditReport(options?: { namespaces?: string[], tools?: string[], clusterIds: number[]}) {
     let params = new HttpParams();
     if (options?.namespaces?.length) {
       params = params.appendAll({'namespaces[]': options.namespaces});
@@ -157,6 +157,6 @@ export class ReportsService {
     }
 
     const url = this.baseUrl.concat('/security-audit-report');
-    return this.httpClient.get(url, { params });
+    return this.httpClient.get(url, { params, responseType: 'blob' });
   }
 }

@@ -90,7 +90,17 @@ export class SecurityAuditReportComponent implements OnInit {
 
   generatePDF() {
     this.reportsService.generateSimpleSecurityAuditReport(this.settingsForm.getRawValue()).pipe(take(1))
-      .subscribe();
+      .subscribe({
+        next: res => {
+          // Creates a temporary anchor tag, and uses it to download the pdf
+          const blob = new Blob([res], { type: 'application/pdf' });
+          const pdfUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = pdfUrl;
+          link.download = `${Date.now()}-security-audit-report.pdf`;
+          link.click();
+        }
+      });
   }
 
 }

@@ -25,7 +25,7 @@ export class SecurityAuditReportService {
 
   }
 
-  async generate(options?: { clusterIds: number[], namespaces?: string[],  tools?: SecurityAuditReportTools[] }) {
+  async generate(options?: { clusterIds: number[], namespaces?: string[],  tools?: SecurityAuditReportTools[] }): Promise<PDFKit.PDFDocument> {
     const today = format(new Date(), 'PPP');
 
     const definition: TDocumentDefinitions = {
@@ -73,13 +73,7 @@ export class SecurityAuditReportService {
       (definition.content as Content[]).push(this.securityAuditClusterService.buildClusterSummary(report, tools));
     }
 
-    const pdf = this.pdfService.buildPdfStream(definition);
-    const fname = Date.now() + '-test.pdf';
-
-    pdf.pipe(fs.createWriteStream(`/Users/kyle/WebstormProjects/m9sweeper/dash/backend/dist/${fname}`));
-    pdf.end();
-
-    return null;
+    return this.pdfService.buildPdfStream(definition);
   }
 
   buildIntro(): Content[] {
