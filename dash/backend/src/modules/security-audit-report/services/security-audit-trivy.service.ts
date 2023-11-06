@@ -103,6 +103,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
         report.namespaces[namespace.name].pods[pod.name] = {
           issues,
           overview: {
+            unscannedImages: pod.unscannedImages,
             critical: pod.criticalIssues,
             low: pod.lowIssues,
             major: pod.majorIssues,
@@ -165,18 +166,18 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
   protected buildNamespaceTable(namespaceName:string, namespaceReport: SecurityAuditTrivyNamespaceReport): Content[] {
     let rows: TableCell[][] = Object.keys(namespaceReport.pods).map((key: string) => {
       const overview = namespaceReport.pods[key].overview;
-      return [key, overview.critical, overview.major, overview.medium, overview.low, overview.negligible];
+      return [key, overview.critical, overview.major, overview.medium, overview.low, overview.negligible, overview.unscannedImages];
     });
     if (!rows?.length) {
-      rows = [[{text: 'No workloads', style: 'italics', colSpan: 6 },{},{},{},{},{}]];
+      rows = [[{text: 'No workloads', style: 'italics', colSpan: 7 },{},{},{},{},{}, {}]];
     }
     const table: ContentTable = {
       marginBottom: 10,
       table: {
         headerRows: 1,
-        widths: ['*', 'auto', 'auto', 'auto', 'auto', 'auto'],
+        widths: ['*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
         body: [
-          ['Workload', 'Crt', 'Maj', 'Med', 'Low', 'Ngl'],
+          ['Workload', 'Crt', 'Maj', 'Med', 'Low', 'Ngl', 'Unscanned Images'],
           ...rows
         ]
       },

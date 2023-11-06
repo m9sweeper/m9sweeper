@@ -257,11 +257,12 @@ export class ReportsDao {
         .select([
           'kp.name', 'kp.id',
           knex.raw('COUNT(i.id) as images'),
-          knex.raw('SUM(i.negligible_issues) as "negligibleIssues"'),
-          knex.raw('SUM(i.low_issues) as "lowIssues"'),
-          knex.raw('SUM(i.medium_issues) as "mediumIssues"'),
-          knex.raw('SUM(i.major_issues) as "majorIssues"'),
-          knex.raw('SUM(i.critical_issues) as "criticalIssues"')
+          knex.raw('COALESCE(SUM(CASE WHEN i.last_scanned IS NULL THEN 1 ELSE 0 END), 0) as "unscannedImages"'),
+          knex.raw('COALESCE(SUM(i.negligible_issues), 0) as "negligibleIssues"'),
+          knex.raw('COALESCE(SUM(i.low_issues), 0) as "lowIssues"'),
+          knex.raw('COALESCE(SUM(i.medium_issues), 0) as "mediumIssues"'),
+          knex.raw('COALESCE(SUM(i.major_issues), 0) as "majorIssues"'),
+          knex.raw('COALESCE(SUM(i.critical_issues), 0) as "criticalIssues"')
         ])
         .from('kubernetes_pods as kp')
         .leftJoin('pod_images as pi', 'pi.pod_id', 'kp.id')

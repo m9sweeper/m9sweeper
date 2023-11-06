@@ -16,6 +16,11 @@ export class ReportsPodVulnSummary {
   @Transform(params => parseInt(params.value), { toClassOnly: true })
   id: number;
 
+  @Expose({name: 'unscannedImages'})
+  @IsNumber()
+  @Transform(params => parseInt(params.value), { toClassOnly: true })
+  unscannedImages: number
+
   @Expose({name: 'criticalIssues'})
   @IsNumber()
   @Transform(params => parseInt(params.value), { toClassOnly: true })

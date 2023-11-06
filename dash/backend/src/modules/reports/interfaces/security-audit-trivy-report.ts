@@ -1,4 +1,5 @@
 import {IssueSeverityType} from '../../policy/enum/IssueSeverityType';
+import {PodIssueSummaryDto} from '../../image-scan-results-issue/dto/pod-issue-summary.dto';
 
 export interface SecurityAuditTrivyReport {
   clusterOverview: SecurityAuditTrivyOverview;
@@ -20,9 +21,13 @@ export interface SecurityAuditTrivyOverview extends SecurityAuditTrivyIssueCount
   clean: number;
 }
 
+export interface SecurityAuditTrivyPodOverview  extends SecurityAuditTrivyIssueCount {
+  unscannedImages: number;
+}
+
 export interface SecurityAuditTrivyPod {
-  overview: SecurityAuditTrivyIssueCount;
-  issues: any[];
+  overview: SecurityAuditTrivyPodOverview;
+  issues: PodIssueSummaryDto[];
 }
 
 export interface SecurityAuditTrivyVulnerability {
