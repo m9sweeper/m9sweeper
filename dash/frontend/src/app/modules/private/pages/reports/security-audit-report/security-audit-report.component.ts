@@ -23,6 +23,7 @@ export class SecurityAuditReportComponent implements OnInit {
 
   clustersLoaded = false;
   namespacesLoaded = false;
+  submitting = false;
 
   toolOptions: SelectOptionDisplaySetting<SecurityAuditReportTools>[] = [
     {
@@ -89,6 +90,7 @@ export class SecurityAuditReportComponent implements OnInit {
   }
 
   generatePDF() {
+    this.submitting = true;
     this.reportsService.generateSimpleSecurityAuditReport(this.settingsForm.getRawValue()).pipe(take(1))
       .subscribe({
         next: res => {
@@ -99,6 +101,12 @@ export class SecurityAuditReportComponent implements OnInit {
           link.href = pdfUrl;
           link.download = `${Date.now()}-security-audit-report.pdf`;
           link.click();
+        },
+        error: (err) => {
+          this.submitting = false;
+        },
+        complete: () => {
+          this.submitting = false;
         }
       });
   }

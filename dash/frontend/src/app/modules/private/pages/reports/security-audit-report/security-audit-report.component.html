@@ -55,11 +55,12 @@
                 </div>
               </div>
               <div class="row vulnerability-filter-button">
-                <button [disabled]="settingsForm.invalid"
+                <button [disabled]="settingsForm.invalid || submitting"
                         mat-raised-button
                         color="primary"
                         type="submit">Download
                 </button>
+                <mat-spinner *ngIf="submitting" class="ml-10" [diameter]="30"></mat-spinner>
               </div>
             </form>
           </div>
