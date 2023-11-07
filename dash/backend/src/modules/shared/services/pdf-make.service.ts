@@ -4,8 +4,6 @@ import {ConfigService} from '@nestjs/config';
 import {assetsConfig} from '../../../config/types/assets-config';
 import {BufferOptions, TDocumentDefinitions} from 'pdfmake/interfaces';
 
-
-
 @Injectable()
 export class PdfMakeService {
   protected _printer: PdfPrinter;

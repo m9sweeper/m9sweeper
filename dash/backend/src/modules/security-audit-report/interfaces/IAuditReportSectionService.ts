@@ -8,8 +8,8 @@ export interface IAuditReportSectionService {
    * */
   buildClusterContent(cluster: ClusterObjectSummary): Promise<{ content: Content, summaryRow: TableCell[] }>;
 
-  /** Takes the data created by buildData, and generates the table/summary
-   * to be included in the cluster overview section
+  /** Takes an array of the summaryRows from buildClusterContent()
+   * and builds the section to be included in the cluster overviews.
    * */
   buildSummaryContent(summaries: TableCell[][]): Content;
 }
