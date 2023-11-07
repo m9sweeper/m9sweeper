@@ -67,6 +67,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
         this.isClusterLoaded = true;
         this.cluster = response.data;
         this.isEnforcementEnabled = this.cluster.isEnforcementEnabled;
+        this.isImageScanningEnforcementEnabled = this.cluster.isImageScanningEnforcementEnabled;
 
         this.infoService.getDatabaseStatus().pipe(take(1)).subscribe(res => {
           this.m9ver = res.data.git_tag;
