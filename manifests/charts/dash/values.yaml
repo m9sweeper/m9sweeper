@@ -117,9 +117,9 @@ init:
         hostname: registry.k8s.io
         login_required: false
 
-# install validating webhook by default
+# validating webhook not installed by default
 validatingWebhook:
-  enabled: true
+  enabled: false
 
 ###########
 # Ingress #
@@ -127,10 +127,9 @@ validatingWebhook:
 # Kubernetes native ingress and Istio are supported, only enable one or neither of them.
 # If you enable neither you will need to port-forward to dash
 ingress:
-  hosts:
+  hosts: []
     # Add lists of hosts
     # - example.local
-    - "localhost"
   path: /
 
   # Deploys a Kubernetes Ingress resource, defaults to nginx ingress controller.
