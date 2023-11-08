@@ -28,5 +28,5 @@ For more information, please see the [advanced installation guide](../advanced-i
 
 {{% alert title="Installation Note" color="primary" %}}
 If you are installing this on Azure Kubernetes Services (AKS) or Google Kubernetes Engine (GKE) or any other installation where the kubernetes API is blocked from reaching
-out to external URL for things such as Validating Webhooks, please see the section reguarding Validating Webhook installations in the [advanced installation guide](../advanced-install).
+out to external URL for things such as Validating Webhooks, please see the section regarding Validating Webhook installations in the [advanced installation guide](../advanced-install).
 {{% /alert %}}
