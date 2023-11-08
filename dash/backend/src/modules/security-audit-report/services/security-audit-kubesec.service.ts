@@ -62,6 +62,7 @@ export class SecurityAuditKubesecService implements IAuditReportSectionService {
   buildSummaryContent(summaries: TableCell[][]): Content {
     const summaryTable: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['*', 'auto', 'auto', 'auto'],
@@ -78,8 +79,8 @@ export class SecurityAuditKubesecService implements IAuditReportSectionService {
       {
         style: 'body',
         text: [
-          'Kubesec analyzes your pods and warns you if any of your applications are being deployed in an insecure way,',
-          'such as running with escalated privileges, not limiting resources, or mounting folders from the host machine.',
+          'Kubesec analyzes your pods and warns you if any of your applications are being deployed in an insecure way, ',
+          'such as running with escalated privileges, not limiting resources, or mounting folders from the host machine. ',
           'Its output should be used to coach developers to improve how they are configuring applications in Kubernetes.',
           '\n\n',
           {text: 'Summary of kubesec results by cluster:', style: 'tableLabel' }
@@ -126,6 +127,7 @@ export class SecurityAuditKubesecService implements IAuditReportSectionService {
     }
     const table: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['auto', 'auto', 'auto', '*'],
@@ -159,6 +161,7 @@ export class SecurityAuditKubesecService implements IAuditReportSectionService {
 
     const summaryTable: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['*', 'auto', 'auto', 'auto'],
@@ -175,8 +178,8 @@ export class SecurityAuditKubesecService implements IAuditReportSectionService {
       {
         style: 'body',
         text: [
-          'Kubesec analyzes your pods and warns you if any of your applications are being deployed in an insecure way,',
-          'such as running with escalated privileges, not limiting resources, or mounting folders from the host machine.',
+          'Kubesec analyzes your pods and warns you if any of your applications are being deployed in an insecure way, ',
+          'such as running with escalated privileges, not limiting resources, or mounting folders from the host machine. ',
           'Its output should be used to coach developers to improve how they are configuring applications in Kubernetes.',
           '\n\n',
           {text: 'Summary of kubesec results by namespace:', style: 'tableLabel' }

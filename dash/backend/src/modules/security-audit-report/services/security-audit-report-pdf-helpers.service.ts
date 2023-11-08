@@ -37,38 +37,38 @@ export class SecurityAuditReportPdfHelpersService {
     const m9sweeperBlue = '#1155cc';
     return {
       title: {
-        fontSize: 26,
+        fontSize: 24,
         color: m9sweeperBlue,
-        marginBottom: 26
+        marginBottom: 24
       },
       h1: {
-        fontSize: 20,
+        fontSize: 18,
         color: m9sweeperBlue,
         marginBottom: 10
       },
       h2: {
-        fontSize: 16,
+        fontSize: 14,
         marginBottom: 10
       },
       tableLabel: {
-        fontSize: 12,
+        fontSize: 10,
         marginBottom: 4
       },
       body: {
-        fontSize: 11,
+        fontSize: 9,
         marginBottom: 10
       },
       tocMain: {
-        fontSize: 16,
+        fontSize: 12,
         marginBottom: 8
       },
       alert: {
-        fontSize: 12,
+        fontSize: 10,
         color: 'red',
         marginBottom: 10
       },
       tocSub: {
-        fontSize: 11,
+        fontSize: 9,
         marginBottom: 5
       },
       italics: {

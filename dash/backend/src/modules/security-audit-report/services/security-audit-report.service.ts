@@ -85,8 +85,8 @@ export class SecurityAuditReportService {
       {
         style: 'body',
           text: [
-        'This security audit report was generated automatically m9sweeper. ',
-        'M9sweeper has run a number of kubernetes security tools to produce this report. ',
+        'This security audit report was generated automatically by m9sweeper. ',
+        'M9sweeper ran a number of kubernetes security tools to produce this report. ',
         'Each tool will be given a section along with a description of the tool, ',
         'what element of security it covers, and the results reported by the tool.',
         '\n\n',

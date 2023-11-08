@@ -328,7 +328,8 @@ export class ImageScanResultsIssueDao {
       const query = knex.select([
           knex.raw('i.url || \'/\' || i.name || \':\' || i.tag as image'),
         'isrs.severity as severity',
-        'isrs.type as cve'
+        'isrs.type as cve',
+        'isrs.fixed_version as fixedVersion'
       ])
         .from('pod_images as pi')
         .leftJoin('images as i', 'i.id', 'pi.image_id')

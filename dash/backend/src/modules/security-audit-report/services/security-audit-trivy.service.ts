@@ -33,6 +33,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
   buildSummaryContent(summaries: TableCell[][]): Content {
     const trivyTable: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
@@ -126,6 +127,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     })
     const trivyTable: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['*', '*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
@@ -173,6 +175,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
     }
     const table: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
         widths: ['*', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
@@ -197,18 +200,19 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
 
   protected buildPodIssueTable(podName:string, issues: PodIssueSummaryDto[]): Content[] {
     let rows: TableCell[][] = issues.map((issue: PodIssueSummaryDto) => {
-      return [issue.image, issue.cve, issue.severity];
+      return [issue.image, issue.cve, issue.severity, issue.fixedVersion || {text: 'N/A', style: 'italics'}];
     });
     if (!rows?.length) {
-      rows = [[{text: 'No issues', style: 'italics', colSpan: 3 }, {}, {}]];
+      rows = [[{text: 'No issues', style: 'italics', colSpan: 4 }, {}, {}, {}]];
     }
     const table: ContentTable = {
       marginBottom: 10,
+      style: 'body',
       table: {
         headerRows: 1,
-        widths: ['*', 'auto', 'auto'],
+        widths: ['*', 'auto', 'auto', 'auto'],
         body: [
-          ['Image', 'CVE', 'Severity'],
+          ['Image', 'CVE', 'Severity', 'Fixed Version'],
           ...rows
         ]
       },

@@ -10,6 +10,10 @@ export class PodIssueSummaryDto {
   @IsString()
   severity: string;
 
+  @Expose({name: 'fixedVersion'})
+  @IsString()
+  fixedVersion: string;
+
   @Expose({name: 'cve'})
   @IsString()
   cve: string;
