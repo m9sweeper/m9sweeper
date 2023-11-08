@@ -339,21 +339,24 @@ export class PodDao {
     async linkExistingPodImages(podId: number, imageIds: Array<number>): Promise<void> {
       const knex = await this.databaseService.getConnection();
 
-      const links = imageIds.map(id => ([podId, id]));
+      const links = imageIds.map(id => ({pod_id: podId, image_id: id}));
 
-      let existingLinks = await knex('pod_images').whereIn(['pod_id', 'image_id'], links) as [{pod_id: number, image_id: number}];
+      await knex.transaction(async function(trx){
+        try {
+          // Clear all existing links to the pod
+          await knex.delete()
+            .from('pod_images')
+            .where({ pod_id: podId });
+          // Add the currently existing links to the pod
+          await knex('pod_images').insert(links);
 
-      let newLinks: {pod_id: number,  image_id: number}[] = [];
-
-      links.forEach(element => {
-        if (!existingLinks.find((pod_images) => pod_images.pod_id === element[0] && pod_images.image_id == element[1])) {
-          newLinks.push({pod_id: element[0], image_id: element[1]});
+          await trx.commit();
+        }
+        catch (e) {
+          await trx.rollback();
+          throw e;
         }
       });
-
-      if (newLinks.length) {
-        await knex('pod_images').insert(newLinks);
-      }
     }
 
     async linkImagesToPod(podId: number, imageIds: Array<number>): Promise<void> {
