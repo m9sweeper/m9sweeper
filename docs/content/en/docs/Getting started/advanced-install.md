@@ -15,7 +15,7 @@ description: >
 
 {{% alert title="Installation Note" color="primary" %}}
 If you are installing this on Azure Kubernetes Services (AKS) or Google Kubernetes Engine (GKE) or any other installation where the kubernetes API is blocked from reaching
-out to external URL for things such as Validating Webhooks, please see the section below reguarding Validating Webhook installations.
+out to external URL for things such as Validating Webhooks, please see the section below regarding Validating Webhook installations.
 {{% /alert %}}
 
 We recommend putting your configuration in a values.yaml file and then deploying our app using helm. This
@@ -156,3 +156,5 @@ The following table lists the configurable parameters of the chart and the defau
 | `dash.ingress.istio.gateways.gatewayRefs`                                                             | Provide name to create istio gateway                                           | `istio-system/example`               |
 | `dash.ingress.istio.loadBalancerType`                                                                 | Write name of loadBalancerType                                                 | `ROUND_ROBIN`                        |
 | `dash.ingress.istio.mtlsMode`                                                                         | Set mtls mode, options are: PERMISSIVE or STRICT                               | `PERMISSIVE`                         |
+| ** Other **                                                                                           |                                                                                |                                      |
+| `dash.validatingWebhook.enabled`                                                                      | Determines whether or not the validating webhook will be installed.            | `false`                              |
