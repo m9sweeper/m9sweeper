@@ -42,12 +42,12 @@ export class SecurityAuditReportPdfHelpersService {
         marginBottom: 24
       },
       h1: {
-        fontSize: 18,
+        fontSize: 20,
         color: m9sweeperBlue,
         marginBottom: 10
       },
       h2: {
-        fontSize: 14,
+        fontSize: 16,
         marginBottom: 10
       },
       tableLabel: {
@@ -77,6 +77,12 @@ export class SecurityAuditReportPdfHelpersService {
       },
       italics: {
         italics: true
+      },
+      'mt-10': {
+        marginTop: 10
+      },
+      bold: {
+        bold: true
       }
     };
   }

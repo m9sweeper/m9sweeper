@@ -8,6 +8,7 @@ import {ActivatedRoute} from '@angular/router';
 import {NamespaceService} from '../../../../../core/services/namespace.service';
 import {SelectOptionDisplaySetting} from '../../../../../core/types/select-option-display-setting';
 import {SecurityAuditReportTools} from '../../../../../core/enum/SecurityAuditReportTools';
+import {AlertService} from '../../../../../core/services/alert.service';
 
 @Component({
   selector: 'app-security-audit-report',
@@ -41,7 +42,8 @@ export class SecurityAuditReportComponent implements OnInit {
     protected readonly fb: FormBuilder,
     protected readonly clusterService: ClusterService,
     protected readonly activeRoute: ActivatedRoute,
-    protected readonly namespaceService: NamespaceService
+    protected readonly namespaceService: NamespaceService,
+    protected readonly alertService: AlertService,
   ) {}
 
   ngOnInit() {
@@ -102,8 +104,9 @@ export class SecurityAuditReportComponent implements OnInit {
           link.download = `${Date.now()}-security-audit-report.pdf`;
           link.click();
         },
-        error: (err) => {
+        error: () => {
           this.submitting = false;
+          this.alertService.danger('Report could not be generated.');
         },
         complete: () => {
           this.submitting = false;
