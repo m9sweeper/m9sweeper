@@ -54,6 +54,10 @@ export class SecurityAuditReportPdfHelpersService {
         fontSize: 10,
         marginBottom: 4
       },
+      tableLabelMd: {
+        fontSize: 12,
+        marginBottom: 4
+      },
       body: {
         fontSize: 9,
         marginBottom: 10

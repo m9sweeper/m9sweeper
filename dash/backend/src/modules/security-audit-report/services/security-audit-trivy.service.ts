@@ -189,7 +189,7 @@ export class SecurityAuditTrivyService implements IAuditReportSectionService {
 
     return [
       {
-        style: 'tableLabel',
+        style: 'tableLabelMd',
         text: [
           `namespace ${namespaceName}`
         ]
