@@ -143,4 +143,20 @@ export class ReportsService {
     return this.httpClient.get<IServerResponse<IReportsCsv>>(`${this.baseUrl}/vulnerability-difference/download`,
       {params});
   }
+
+  generateSimpleSecurityAuditReport(options?: { namespaces?: string[], tools?: string[], clusterIds: number[]}) {
+    let params = new HttpParams();
+    if (options?.namespaces?.length) {
+      params = params.appendAll({'namespaces[]': options.namespaces});
+    }
+    if (options?.tools?.length) {
+      params = params.appendAll({'tools[]': options.tools});
+    }
+    if (options?.clusterIds?.length) {
+      params = params.appendAll({'clusterIds[]': options.clusterIds});
+    }
+
+    const url = this.baseUrl.concat('/security-audit-report');
+    return this.httpClient.get(url, { params, responseType: 'blob' });
+  }
 }

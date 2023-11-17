@@ -3,6 +3,7 @@ import { DatabaseService } from '../../shared/services/database.service';
 import { ImageScanResultsIssueDto } from '../dto/image-scan-results-issue-dto';
 import { plainToInstance } from 'class-transformer';
 import * as knexnest from 'knexnest';
+import {PodIssueSummaryDto} from '../dto/pod-issue-summary.dto';
 
 @Injectable()
 export class ImageScanResultsIssueDao {
@@ -320,5 +321,34 @@ export class ImageScanResultsIssueDao {
             .orderByRaw(`${sort.field} ${sort.direction}`);
         return await knexnest(query)
             .then(data => plainToInstance(ImageScanResultsIssueDto, data));
+    }
+
+    async getAllIssuesForKubernetesPod(podId: number): Promise<PodIssueSummaryDto[]> {
+      const knex = await this.databaseService.getConnection();
+      const query = knex.select([
+          knex.raw('i.url || \'/\' || i.name || \':\' || i.tag as image'),
+        'isrs.severity as severity',
+        'isrs.type as cve',
+        'isrs.fixed_version as fixedVersion'
+      ])
+        .from('pod_images as pi')
+        .leftJoin('images as i', 'i.id', 'pi.image_id')
+        .leftJoin('image_scan_results as isr', knex.raw('isr.image_id = i.id AND isr.is_latest'))
+        // Inner joining here prevents us from returning images that do not have any issues scan
+        .innerJoin('image_scan_results_issues as isrs', 'isrs.image_results_id', 'isr.id')
+        .where('pi.pod_id', '=', podId)
+        .orderByRaw(`CASE
+          WHEN isrs.severity ='Critical' THEN 5000
+          WHEN isrs.severity ='High' THEN 4000
+          WHEN isrs.severity ='Medium' THEN 3000
+          WHEN isrs.severity ='Low' THEN 2000
+          WHEN isrs.severity ='Negligible' THEN 1000
+          END DESC`)
+        // with a sort column of 1, it uses the 1st returned column, so this effectively sorts by the built image
+        // name without having to redo the concatenation
+        .orderByRaw('1 ASC')
+        .orderBy('isrs.type', 'ASC');
+      return query
+        .then(res => plainToInstance(PodIssueSummaryDto, res));
     }
 }

@@ -8,6 +8,7 @@ import { Knex } from "knex";
 import {PolicyDto} from "../../policy/dto/policy-dto";
 import {ScannerDto} from "../../scanner/dto/scanner-dto";
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
+import {ClusterObjectSummary} from '../dto/cluster-object-summary';
 
 @Injectable()
 export class ClusterDao {
@@ -274,6 +275,35 @@ export class ClusterDao {
         })
         .then(() => this.logger.log({label: 'Initial cluster & cluster group saved' }, 'ClusterDao.seedInitialCluster'))
         .catch(e => this.logger.log({label: 'Error saving initial cluster & cluster group saved' }, e, 'ClusterDao.seedInitialCluster'));
+    }
+
+    async getClusterObjectSummaries(options?: { clusterIds?: number[], namespaces?: string[] }): Promise<ClusterObjectSummary[]> {
+      const knex = await this.databaseService.getConnection();
+      const query = knex.select([
+        'cl.id AS _id',
+        'cl.name AS _name',
+        'ns.id AS _namespaces__id',
+        'ns.name AS _namespaces__name',
+        'kp.id AS _namespaces__pods__id',
+        'kp.name AS _namespaces__pods__name',
+      ])
+        .from('clusters AS cl')
+        .leftJoin('kubernetes_namespaces AS ns', 'ns.cluster_id', 'cl.id')
+        .leftJoin('kubernetes_pods AS kp', knex.raw('kp.cluster_id = cl.id AND kp.namespace = ns.name'))
+        .innerJoin('cluster_group as cg', function () {
+          this.on('cg.id', '=', 'cl.group_id');
+        })
+        .where({'cl.deleted_at': null, 'cg.deleted_at': null})
+
+      if (options?.clusterIds?.length) {
+        query.andWhere('cl.id', 'IN', options.clusterIds);
+      }
+
+      if (options?.namespaces?.length) {
+        query.andWhere('ns.name', 'IN', options.namespaces);
+      }
+
+      return knexnest(query).then(res => plainToInstance(ClusterObjectSummary, res));
     }
 
 }

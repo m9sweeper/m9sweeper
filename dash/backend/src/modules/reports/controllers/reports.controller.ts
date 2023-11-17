@@ -17,6 +17,7 @@ import { AuthorityGuard } from '../../../guards/authority.guard';
 import { VulnerabilitySeverity } from '../../shared/enums/vulnerability-severity';
 import { EnsureArrayTyping } from '../../shared/utilities/ensure-array-typing';
 import {format} from 'date-fns'
+import {SecurityAuditReportService} from '../../security-audit-report/services/security-audit-report.service';
 
 @ApiTags('Reports')
 @Controller()
@@ -25,6 +26,7 @@ import {format} from 'date-fns'
 export class ReportsController {
     constructor(
         private readonly reportsService: ReportsService,
+        protected readonly printableAuditReportService: SecurityAuditReportService
     ) {}
 
     @Get('/vulnerability-export')
@@ -117,14 +119,14 @@ export class ReportsController {
     @Get('/worst-images')
     @AllowedAuthorityLevels(Authority.READ_ONLY, Authority.ADMIN, Authority.SUPER_ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
-    async getWorstImages(
+    async getHistoricalWorstImages(
         @Query('cluster-id') clusterId?: number,
         @Query('start-date') startDate?: string,
         @Query('end-date') endDate?: string,
         @Query('namespaces') namespaces?: Array<string>
     ) {
         namespaces = EnsureArrayTyping.ensureArrayTyping(namespaces);
-        return this.reportsService.getWorstImages(clusterId, startDate, endDate, namespaces);
+        return this.reportsService.getHistoricalWorstImages(clusterId, startDate, endDate, namespaces);
     }
 
     @Get('/historical-vulnerabilities/download')

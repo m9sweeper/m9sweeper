@@ -14,6 +14,7 @@ import {MessagingService} from './services/messaging-service';
 import {UtilitiesService} from './services/utilities.service';
 import {CommonController} from './controllers/common.controller';
 import {CsvService} from './services/csv.service';
+import {PdfMakeService} from './services/pdf-make.service';
 
 @Global()
 @Module({
@@ -53,6 +54,7 @@ import {CsvService} from './services/csv.service';
         MineLoggerService,
         FileManagementService,
         EmailService,
+        PdfMakeService,
         RabbitMQService,
         MessagingService,
         UtilitiesService,
@@ -69,6 +71,7 @@ import {CsvService} from './services/csv.service';
         FileManagementService,
         FileManagementDao,
         EmailService,
+        PdfMakeService,
         RabbitMQService,
         MessagingService,
         UtilitiesService,

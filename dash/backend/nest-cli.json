@@ -4,6 +4,10 @@
   "compilerOptions": {
     "assets": [
       {
+        "include": "assets/**/*",
+        "watchAssets": true
+      },
+      {
         "include": "**/*.hbs",
         "watchAssets": true
       },

@@ -1,8 +1,8 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {ClusterDto} from '../dto/cluster-dto';
 import {ClusterDao} from '../dao/cluster.dao';
 import {ClusterEventService} from '../../cluster-event/services/cluster-event.service';
-import {instanceToPlain, plainToInstance} from "class-transformer";
+import {instanceToPlain} from "class-transformer";
 import {KubeConfig} from "@kubernetes/client-node/dist/config";
 import {
   AdmissionregistrationV1Api,
@@ -16,25 +16,20 @@ import {KubernetesApiService} from "../../command-line/services/kubernetes-api.s
 import {V1ValidatingWebhookConfiguration} from "@kubernetes/client-node/dist/gen/model/v1ValidatingWebhookConfiguration";
 import {V1ValidatingWebhook} from "@kubernetes/client-node/dist/gen/model/v1ValidatingWebhook";
 import {ConfigService} from "@nestjs/config";
-import * as jsYaml from 'js-yaml';
-import * as fs from "fs";
-import {DeprecatedGatekeeperTemplateDto} from "../dto/deprecated-gatekeeper-template-dto";
 import {
   GatekeeperConstraintDetailsDto,
   GatekeeperConstraintMetadata,
   GatekeeperConstraintMetadataAnnotations,
   GatekeeperConstraintSpec,
   GatekeeperConstraintSpecMatch,
-  GatekeeperConstraintSpecMatchKind,
-  GateKeeperConstraintViolation
+  GatekeeperConstraintSpecMatchKind
 } from "../dto/deprecated-gatekeeper-constraint-dto";
-import {CoreV1Api} from "@kubernetes/client-node/dist/gen/api/coreV1Api";
-import {ApiregistrationV1Api} from "@kubernetes/client-node/dist/gen/api/apiregistrationV1Api";
 import {KubernetesClusterService} from "../../command-line/services/kubernetes-cluster.service";
 import {ExceptionBlockService} from "../../command-line/services/exception-block.service";
 import { PrometheusV1Service } from '../../metrics/services/prometheus-v1.service';
 import {AuditLogService} from "../../audit-log/services/audit-log.service";
 import { MineLoggerService } from '../../shared/services/mine-logger.service';
+import {ClusterObjectSummary} from '../dto/cluster-object-summary';
 
 @Injectable()
 export class ClusterService {
@@ -445,5 +440,13 @@ export class ClusterService {
       this.logger.error({label: 'Error getting deployed GateKeeper Template list - assuming there are none', data: { clusterId }}, e, 'ClusterService.getDeployedTemplateList');
       return [];
     }
+  }
+
+  /**
+   * If clusterIds or namespaces is provided with a non-zero length, this will ony return objects from those clusters/namespaces.
+   * If unspecified, will not filter.
+   * */
+  async getClusterObjectSummaries(options? : { clusterIds?: number[], namespaces?: string[] }): Promise<ClusterObjectSummary[]> {
+    return this.clusterDao.getClusterObjectSummaries(options);
   }
 }

@@ -82,6 +82,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
         path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'vulnerability-difference-by-date'],
         icon: 'addchart',
       },
+      {
+        title: 'Security Audit Report',
+        description: 'Generate a detailed security audit report as a PDF.',
+        path: ['/private', 'clusters', this.clusterId.toString(), 'reports', 'security-audit-report'],
+        icon: 'lock',
+      },
     ];
   }
 }

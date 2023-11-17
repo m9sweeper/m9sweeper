@@ -13,6 +13,7 @@ import kubebench from './kubebench';
 import kubesec from './kubesec';
 import releaseNamespace from './releaseNamespace';
 import nodeCron from './node-cron';
+import assets from './assets';
 import metrics from './metrics';
 
 export default () => ({
@@ -20,6 +21,7 @@ export default () => ({
     port: process.env.SERVER_PORT || 3000,
   },
   admissionController,
+  assets,
   common,
   database,
   defaultSeedEmailPassword,

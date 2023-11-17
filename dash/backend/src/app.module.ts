@@ -45,6 +45,7 @@ import {AuditLogModule} from './modules/audit-log/audit-log.module';
 import {FalcoModule} from './modules/falco/falco.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
 import { GatekeeperModule } from './modules/gatekeeper/gatekeeper.module';
+import {SecurityAuditModule} from './modules/security-audit-report/security-audit.module';
 
 
 const myFormatter = info => {
@@ -115,6 +116,7 @@ const myFormatter = info => {
     GatekeeperModule,
     PolicyModule,
     ScannerModule,
+    SecurityAuditModule,
     HealthModule,
     InfoModule,
     DockerRegistriesModule,
