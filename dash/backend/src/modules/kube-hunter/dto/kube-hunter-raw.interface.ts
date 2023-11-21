@@ -32,7 +32,7 @@ interface IKHRawResponseServices {
   options: IKHRawResponseOptions
 }
 
-interface IKHRawResponseVulnerabilities {
+export interface IKHRawResponseVulnerabilities {
   value: IKHRawResponseVulnerability[]
   key: string
   obj: IKHRawResponseObjDefinition
@@ -58,7 +58,7 @@ interface IKHRawResponseService {
   location: string
 }
 
-interface IKHRawResponseVulnerability {
+export interface IKHRawResponseVulnerability {
   location: string
   vid: string
   category: string

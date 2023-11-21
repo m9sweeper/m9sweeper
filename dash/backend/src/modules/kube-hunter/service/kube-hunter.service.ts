@@ -25,6 +25,11 @@ export class KubeHunterService {
         return this.kubeHunterDao.getRecentKubeHunterReportForCluster(clusterId, minDate);
     }
 
+    async getMostRecentReportForCluster(clusterId: number): Promise<KubeHunterDto> {
+        return this.kubeHunterDao.getAllReportsForCluster(clusterId, 0, 1)
+          .then(r => r[0]);
+    }
+
     async getAllReportsForCluster(clusterId: number,
                                   page  = 0,
                                   limit  = 10):
