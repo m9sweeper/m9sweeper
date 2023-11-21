@@ -34,6 +34,10 @@ export class SecurityAuditReportComponent implements OnInit {
     {
       displayName: 'Kubesec',
       value: SecurityAuditReportTools.KUBESEC
+    },
+    {
+      displayName: 'kube-hunter',
+      value: SecurityAuditReportTools.KUBEHUNTER
     }
   ];
 
