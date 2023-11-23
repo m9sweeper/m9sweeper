@@ -8,6 +8,7 @@ import io.m9sweeper.trawler.framework.exception.NoncompliantException;
 import io.m9sweeper.trawler.framework.policies.Policy;
 import io.m9sweeper.trawler.framework.queue.Message;
 import io.m9sweeper.trawler.framework.scans.*;
+import io.m9sweeper.trawler.scanners.Snyk;
 import io.m9sweeper.trawler.scanners.Trivy;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class ScanRunner {
     }
 
     public void scan() throws Exception {
+        System.out.println("Scanning");
         ScanConfig scanConfig = new ScanConfig();
         scanConfig.setImage(new DockerImageBuilder(message.getImage().getId().intValue())
                 .withName(message.getImage().getName())
@@ -78,6 +80,17 @@ public class ScanRunner {
                                 t.run();
                                 scanResultIssues.addAll(t.getScanResult());
                                 newImageHash = t.getImageHash();
+                            } else if (scannerDto.getType().toUpperCase().equals(ScannerType.SNYK.name())) {
+                                scanConfig.setScanId(scannerDto.getId().intValue());
+                                scanConfig.setScannerName(scannerDto.getName());
+                                scanConfig.setPolicy(new Policy() {{
+                                    setEnforced(policyWithScannerDto.isEnforcement());
+                                    setName(policyWithScannerDto.getName());
+                                }});
+                                Snyk t = new Snyk();
+                                t.initScanner(scanConfig);
+                                t.run();
+                                throw new UnsupportedOperationException("Scanner " + scannerDto.getType().toUpperCase() + " is not implemented yet.");
                             } else {
                                 System.out.println("Scanner " + scannerDto.getType().toUpperCase() + " is not implemented yet.");
                                 throw new UnsupportedOperationException("Scanner " + scannerDto.getType().toUpperCase() + " is not implemented yet.");
@@ -87,6 +100,7 @@ public class ScanRunner {
                         } catch (Exception e) {
                             scanResultBuilder.withEncounteredError(true);
                             scanResultBuilder.withSummary(e.getMessage());
+                            return;
                         }
                     }
                 } else {

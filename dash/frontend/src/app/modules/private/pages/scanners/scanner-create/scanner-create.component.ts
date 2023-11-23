@@ -21,7 +21,7 @@ export class ScannerCreateComponent implements OnInit {
               private scannerService: ScannerService,
               private alertService: AlertService,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.scannerTypes = [{name: 'Trivy', value: 'TRIVY' }, {name: 'Mock', value: 'MOCK'}];
+    this.scannerTypes = [{name: 'Trivy', value: 'TRIVY' }, {name: 'Snyk', value: 'SNYK'}, {name: 'Mock', value: 'MOCK'}];
     this.createScannerForm = this.formBuilder.group({
       name: [this.data.isEdit ? this.data.scannerData.name : '', [CustomValidators.requiredNoTrim,
         Validators.maxLength(255)]],
