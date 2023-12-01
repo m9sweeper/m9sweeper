@@ -11,6 +11,9 @@ image:
 
 replicaCount: 1
 
+serviceAccount:
+  annotations: {}
+
 # Set to true to set log level to debug
 enableDebugLogs: false
 
