@@ -83,6 +83,9 @@ export class SecurityAuditReportPdfHelpersService {
       },
       bold: {
         bold: true
+      },
+      link: {
+        color: '#0000EE'
       }
     };
   }
