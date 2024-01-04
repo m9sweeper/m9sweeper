@@ -9,7 +9,7 @@ export class CsvService {
 
   downloadCsvFile(csvData: string, filename: string) {
     const payload = `data:text/csv;charset=utf-8,${csvData}`;
-    const encoded = encodeURI(payload);
+    const encoded = encodeURI(payload).replace(/#/g, '%23');
     const encodedFilename = encodeURI(filename);
 
     const link = document.createElement('a');
