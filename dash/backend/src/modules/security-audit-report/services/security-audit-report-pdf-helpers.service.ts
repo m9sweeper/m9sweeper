@@ -75,6 +75,12 @@ export class SecurityAuditReportPdfHelpersService {
         color: 'red',
         marginBottom: 10
       },
+      redText: {
+        color: 'red'
+      },
+      goldText: {
+        color: '#f39c11'
+      },
       tocSub: {
         fontSize: 9,
         marginBottom: 5
