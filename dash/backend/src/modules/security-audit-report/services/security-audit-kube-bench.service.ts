@@ -123,6 +123,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
       }
     } else {
       scannedMessage = 'Unscanned';
+      body.push({ text: 'kube-bench scan not run', style: 'italics', marginBottom: 10 });
     }
 
     const content = [
