@@ -5,6 +5,7 @@ import {IAuditReportSectionService} from '../interfaces/IAuditReportSectionServi
 import {ClusterObjectSummary} from '../../cluster/dto/cluster-object-summary';
 import {KubeBenchService} from '../../kube-bench/services/kube-bench.service';
 import {KubeBenchDto} from '../../kube-bench/dto/kube-bench-dto';
+import {format} from 'date-fns';
 
 @Injectable()
 export class SecurityAuditKubeBenchService implements IAuditReportSectionService {
@@ -17,15 +18,24 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
   }
 
   async buildClusterContent(cluster: ClusterObjectSummary): Promise<{ content: Content; summaryRow: TableCell[] }> {
-      const kbReport = await this.kubebenchService.getLastBenchReportSummary(cluster.id)
-        .then(r => r?.length ? r[0] : undefined);
+    const kbReport = await this.kubebenchService.getLastBenchReportSummary(cluster.id)
+      .then(r => r?.length ? r[0] : undefined);
 
-    const summaryRow = [
-      cluster.name,
-      kbReport?.resultsSummary?.total_pass ?? 'N/A',
-      kbReport?.resultsSummary?.total_fail ?? 'N/A',
-      kbReport?.resultsSummary?.total_warn ?? 'N/A',
-    ];
+    const summaryRow = kbReport
+      ? [
+        cluster.name,
+        format(new Date(+kbReport.createdAt), 'PPP'),
+        kbReport.resultsSummary?.total_pass ?? 0,
+        kbReport.resultsSummary?.total_fail ?? 0,
+        kbReport.resultsSummary?.total_warn ?? 0,
+      ]
+      : [
+        cluster.name,
+        'N/A',
+        // element with colspan followed by empty objects makes this take up multiple columns in the generated table
+        { text: 'No scan run', style: 'italics', colSpan: 3 },
+        {},{}
+      ]
 
     return {
       summaryRow,
@@ -41,9 +51,9 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
       style: 'body',
       table: {
         headerRows: 1,
-        widths: ['*', 'auto', 'auto', 'auto'],
+        widths: ['*', 'auto', 'auto', 'auto', 'auto'],
         body: [
-          ['Cluster', 'Passed', 'Failed', 'Warnings'],
+          ['Cluster', 'Last Scanned', 'Passed', 'Failed', 'Warnings'],
           ...summaries
         ]
       },
@@ -75,14 +85,17 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
 
       // Outer loop over the high level sections (ex: 3. Worker Node Security Configuration), and appears in Table of Contents
       for (const section of results.Controls) {
-        body.push(this.pdfHelpers.buildSubHeader(`${section.id}. ${section.text} (${section.version} v${section.detected_version})`, { level: 2, style: ['h3', 'bold'] } ));
+        body.push(this.pdfHelpers.buildSubHeader(`${section.id}. ${section.text} (${section.version} v${section.detected_version})`, {
+          level: 2,
+          style: ['h3', 'bold']
+        }));
 
         // Inner loop over the tests (ex: 3.2. Kubelet) in the section, creating a table for each.
         for (const test of section.tests) {
           // Create a table row for each of the individual items tested in this test.
           const rows = test.results
             .map(res => {
-              const statusCell: Content = { text: res.status };
+              const statusCell: Content = {text: res.status};
               switch (res.status) {
                 case 'FAIL':
                   statusCell.style = 'redText';
@@ -123,7 +136,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
       }
     } else {
       scannedMessage = 'Unscanned';
-      body.push({ text: 'kube-bench scan not run', style: 'italics', marginBottom: 10 });
+      body.push({text: 'kube-bench scan not run', style: 'italics', marginBottom: 10});
     }
 
     const content = [
