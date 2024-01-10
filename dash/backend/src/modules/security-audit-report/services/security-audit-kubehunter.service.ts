@@ -49,7 +49,7 @@ export class SecurityAuditKubehunterService implements IAuditReportSectionServic
       content = this.buildKubeHunterLocationTables(locations);
       summaryRow = [cluster.name, format(new Date(+report.createdAt), 'PPP'), totalHigh, totalMed, totalLow];
     } else {
-      content = { text: 'kube-hunter scan not run', style: 'italics'};
+      content = { text: 'kube-hunter scan not run', style: 'italics', marginBottom: 10 };
       summaryRow = [cluster.name, 'N/A', {text: 'No scan run', style: 'italics', colSpan: 3 },{},{}];
     }
 
