@@ -6,5 +6,6 @@
 export enum SecurityAuditReportTools {
   TRIVY = 'trivy',
   KUBESEC = 'kubesec',
-  KUBEHUNTER = 'kubehunter'
+  KUBEHUNTER = 'kubehunter',
+  KUBEBENCH = 'kubebench'
 }

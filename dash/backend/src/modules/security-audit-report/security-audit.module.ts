@@ -6,6 +6,7 @@ import {SecurityAuditClusterService} from './services/security-audit-cluster.ser
 import {SecurityAuditToolServiceFactory} from './services/security-audit-tool-service.factory';
 import {SecurityAuditKubesecService} from './services/security-audit-kubesec.service';
 import {SecurityAuditKubehunterService} from './services/security-audit-kubehunter.service';
+import {SecurityAuditKubeBenchService} from './services/security-audit-kube-bench.service';
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import {SecurityAuditKubehunterService} from './services/security-audit-kubehunt
     SecurityAuditToolServiceFactory,
     SecurityAuditKubesecService,
     SecurityAuditKubehunterService,
+    SecurityAuditKubeBenchService,
   ],
   exports: [
     SecurityAuditReportService,
@@ -26,6 +28,7 @@ import {SecurityAuditKubehunterService} from './services/security-audit-kubehunt
     SecurityAuditToolServiceFactory,
     SecurityAuditKubesecService,
     SecurityAuditKubehunterService,
+    SecurityAuditKubeBenchService,
   ],
   controllers: []
 })
