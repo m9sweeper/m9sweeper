@@ -28,14 +28,14 @@
   },
   "private": false,
   "dependencies": {
-    "lodash-es": "~4.17.21",
     "@ajsf/core": "~0.8.0",
-    "tslib": "^2.0.0"
+    "lodash-es": "~4.17.21",
+    "tslib": "^2.6.2"
   },
   "peerDependencies": {
-    "@angular/flex-layout": ">=14.0.0-beta.40",
-    "@angular/material": ">=14.0.0",
-    "@angular/cdk": ">=14.0.0"
+    "@angular/cdk": ">=14.0.0",
+    "@angular/flex-layout": "^14.0.0-beta.41",
+    "@angular/material": ">=14.0.0"
   },
   "module": "fesm2015/ajsf-material.mjs",
   "es2020": "fesm2020/ajsf-material.mjs",
