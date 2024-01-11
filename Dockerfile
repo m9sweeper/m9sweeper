@@ -1,7 +1,7 @@
 #####################
 ## STAGE 1 - BUILD ##
 #####################
-FROM node:18.17-buster-slim as builder
+FROM node:20.10-buster-slim as builder
 
 # Install Python3 used in dependencies for building
 RUN apt update && \
@@ -60,7 +60,7 @@ RUN hugo --config config-local.toml
 ######################
 ## Stage 3: DELIVER ##
 ######################
-FROM node:18.17-alpine
+FROM node:20.10-alpine
 
 # Make the app directory
 RUN mkdir -p /usr/src/app

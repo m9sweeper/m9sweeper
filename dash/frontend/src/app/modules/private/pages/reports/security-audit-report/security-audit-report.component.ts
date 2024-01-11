@@ -38,7 +38,11 @@ export class SecurityAuditReportComponent implements OnInit {
     {
       displayName: 'kube-hunter',
       value: SecurityAuditReportTools.KUBEHUNTER
-    }
+    },
+    {
+      displayName: 'kube-bench',
+      value: SecurityAuditReportTools.KUBEBENCH
+    },
   ];
 
   constructor(
