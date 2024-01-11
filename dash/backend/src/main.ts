@@ -49,7 +49,10 @@ async function registerSwaggerBrowserForTrawler(app) {
       if (swaggerYml.paths[path][request]['tags'] && swaggerYml.paths[path][request]['tags'].some(t => authorizedTags.includes(t))) {
         swaggerYml.paths[path][request]['tags'] = authorizedTags;
         try {
-          allowedSchemas.push(swaggerYml.paths[path][request]['requestBody']['content']['application/json']['schema']['$ref']);
+          // GET requests don't have schemas
+          if(request !== 'get') {
+            allowedSchemas.push(swaggerYml.paths[path][request]['requestBody']['content']['application/json']['schema']['$ref']);
+          }
         } catch (e) {
           logger.error('Error pushing to Swagger request schema to allowedSchemas', e, 'registerSwaggerBrowserForTrawler');
         }
