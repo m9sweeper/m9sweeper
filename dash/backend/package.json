@@ -62,7 +62,6 @@
     "client-oauth2": "^4.3.3",
     "copy-webpack-plugin": "^12.0.1",
     "date-fns": "^3.2.0",
-    "docker-registry-api": "0.0.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "fs-extra": "^11.2.0",
