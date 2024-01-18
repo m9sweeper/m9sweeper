@@ -182,6 +182,26 @@ export class ClusterService {
     return updatedCluster;
   }
 
+  async activateWebhook(cluster: ClusterDto, enforceWebhook: boolean): Promise<ClusterDto> {
+    const isEnforcementEnabledBackup = cluster.isEnforcementEnabled;
+    if (enforceWebhook) {
+      try {
+        await this.checkIfWebhookExists(`m9sweeper-validation-hook-cluster-${cluster.id}`, cluster.id);
+      }
+      catch(error) {
+        try {
+          await this.createWebhookForCluster(cluster.id);
+        } catch (e) {
+          this.logger.error({label: 'Error creating webhook for cluster', data: { clusterId: cluster.id }}, e, 'ClusterService.activateWebhook');
+        }
+      }
+    }
+    cluster.isEnforcementEnabled = enforceWebhook;
+    const updatedCluster = await this.clusterDao.updateCluster(cluster, cluster.id);
+    cluster.isEnforcementEnabled = isEnforcementEnabledBackup;
+    return updatedCluster;
+  }
+
   async getAllClusters(): Promise<ClusterDto[]> {
     return this.clusterDao.getAllClusters();
   }

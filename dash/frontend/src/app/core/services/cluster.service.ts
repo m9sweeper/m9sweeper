@@ -92,4 +92,8 @@ export class ClusterService implements OnDestroy{
     return {yScaleMin: 0 , yAxisTicks: range};
   }
 
+  activateWebhook(activateWebhook: boolean, id: number): Observable<any> {
+    return this.httpClient.put(`/api/clusters/${id}/activateWebhook`, {value: activateWebhook});
+  }
+
 }
