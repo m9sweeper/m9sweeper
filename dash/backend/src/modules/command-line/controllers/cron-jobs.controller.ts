@@ -33,19 +33,19 @@ export class CronJobsController {
 
       // Define Cron jobs
       const scrapeJob = new CronJob(cronConfig.clusterScrapeSchedule, async () => {
-        return await this.syncClusters();
+        await this.syncClusters();
       });
 
       const gatekeeperSyncJob = new CronJob(cronConfig.gatekeeperExceptionSyncSchedule, async () => {
-        return await this.syncGatekeeperExceptions();
+        await this.syncGatekeeperExceptions();
       });
 
       const k8sHistoryJob = new CronJob(cronConfig.kubernetesHistorySchedule, async () => {
-        return await this.populateKubernetesHistory();
+        await this.populateKubernetesHistory();
       });
 
       const exceptionSyncJob = new CronJob(cronConfig.updateExceptionStatusSchedule, async () => {
-        return await this.syncExceptionStatus();
+        await this.syncExceptionStatus();
       });
 
       // Register and start cron jobs
