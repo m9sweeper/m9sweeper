@@ -158,7 +158,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.cluster.isImageScanningEnforcementEnabled = changedValue;
     const displayText = changedValue ? 'enabled' : 'disabled';
     this.awaitingImageScanningEnforcementResponse = true;
-    this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
+    this.clusterService.activateImageScanningEnforcement(changedValue, this.cluster.id).subscribe(clusterUpdateResponse => {
         this.awaitingImageScanningEnforcementResponse = false;
         if (clusterUpdateResponse.success) {
           this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);

@@ -577,7 +577,6 @@ export class PodDao {
         sql = sql.whereBetween('p.saved_date', [daySmall, dayLarge]);
 
         sql = sql.orderBy('p.saved_date', 'asc');
-        console.log(sql.toQuery());
         return sql.then();
     }
 

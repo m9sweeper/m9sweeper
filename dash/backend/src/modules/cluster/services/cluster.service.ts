@@ -202,6 +202,14 @@ export class ClusterService {
     return updatedCluster;
   }
 
+  async activateImageScanningEnforcement(cluster: ClusterDto, imageScanningEnforcement: boolean): Promise<ClusterDto> {
+    const isimageScanningEnforcementBackup = cluster.isImageScanningEnforcementEnabled;
+    cluster.isImageScanningEnforcementEnabled = imageScanningEnforcement;
+    const updatedCluster = await this.clusterDao.updateCluster(cluster, cluster.id);
+    cluster.isImageScanningEnforcementEnabled = isimageScanningEnforcementBackup;
+    return updatedCluster;
+  }
+
   async getAllClusters(): Promise<ClusterDto[]> {
     return this.clusterDao.getAllClusters();
   }

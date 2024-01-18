@@ -226,6 +226,23 @@ export class ClusterController {
         return currentCluster;
     }
 
+    @Put(':clusterId/activateImageScanningEnforcement')
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @UseGuards(AuthGuard, AuthorityGuard)
+    @ApiResponse({
+        status: 200,
+        schema: UPDATE_CLUSTER_SCHEMA_RESPONSE
+    })
+    @UseInterceptors(AuditLogInterceptor)
+    async activateImageScanningEnforcement(@Body() activateImageScanningEnforcement: { value: boolean }, @Param('clusterId') clusterId: number): Promise<ClusterDto> {
+        const previousCluster = await this.clusterService.getClusterById(clusterId);
+        const currentCluster = await this.clusterService.activateImageScanningEnforcement(previousCluster, activateImageScanningEnforcement.value);
+        delete previousCluster.kubeConfig;
+        delete currentCluster.kubeConfig;
+        currentCluster.metadata = await this.clusterService.calculateClusterMetaData(previousCluster, currentCluster);
+        return currentCluster;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                   Gatekeeper
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
