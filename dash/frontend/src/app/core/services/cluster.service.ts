@@ -93,11 +93,11 @@ export class ClusterService implements OnDestroy{
   }
 
   activateWebhook(activateWebhook: boolean, id: number): Observable<any> {
-    return this.httpClient.put(`/api/clusters/${id}/activateWebhook`, {value: activateWebhook});
+    return this.httpClient.put(`/api/clusters/${id}/activate-webhook`, {value: activateWebhook});
   }
 
   activateImageScanningEnforcement(activateImageScanningEnforcement: boolean, id: number): Observable<any> {
-    return this.httpClient.put(`/api/clusters/${id}/activateImageScanningEnforcement`, {value: activateImageScanningEnforcement});
+    return this.httpClient.put(`/api/clusters/${id}/activate-image-scanning-enforcement`, {value: activateImageScanningEnforcement});
   }
 
 }

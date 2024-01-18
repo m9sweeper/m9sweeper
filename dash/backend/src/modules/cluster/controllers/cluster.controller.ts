@@ -209,7 +209,7 @@ export class ClusterController {
         return cluster;
     }
 
-    @Put(':clusterId/activateWebhook')
+    @Put(':clusterId/activate-webhook')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
@@ -226,7 +226,7 @@ export class ClusterController {
         return currentCluster;
     }
 
-    @Put(':clusterId/activateImageScanningEnforcement')
+    @Put(':clusterId/activate-image-scanning-enforcement')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
