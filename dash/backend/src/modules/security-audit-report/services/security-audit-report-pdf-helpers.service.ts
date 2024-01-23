@@ -15,10 +15,10 @@ export class SecurityAuditReportPdfHelpersService {
     };
   }
 
-  buildSubHeader(title: string, options?: { skipToc?: boolean, level?: number }): Content {
+  buildSubHeader(title: string, options?: { skipToc?: boolean, level?: number, style?: string | string[] }): Content {
       return {
         text: title,
-        style: 'h2',
+        style: options?.style ? options?.style : 'h2',
         tocItem: !options?.skipToc,
         tocMargin: [options?.level ? options.level * 16 : 16, 0, 0, 0],
         tocStyle: 'tocSub',
@@ -50,6 +50,10 @@ export class SecurityAuditReportPdfHelpersService {
         fontSize: 16,
         marginBottom: 10
       },
+      h3: {
+        fontSize: 12,
+        marginBottom: 10
+      },
       tableLabel: {
         fontSize: 10,
         marginBottom: 4
@@ -70,6 +74,12 @@ export class SecurityAuditReportPdfHelpersService {
         fontSize: 10,
         color: 'red',
         marginBottom: 10
+      },
+      redText: {
+        color: 'red'
+      },
+      goldText: {
+        color: '#f39c11'
       },
       tocSub: {
         fontSize: 9,

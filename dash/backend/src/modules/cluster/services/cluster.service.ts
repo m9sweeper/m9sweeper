@@ -162,23 +162,29 @@ export class ClusterService {
     await this.clusterEventService.createClusterEvent(clusterEventData, id);
 
     if (installWebhook) {
-      // I'm not convinced that this is working as expected.
-      // checkIfWebhookExists should return boolean T/F indicating whether it exists
-      // if it doesn't exist, it should create it
-      // instead, it's creating it if it gets an error
-      try {
-        await this.checkIfWebhookExists(`m9sweeper-validation-hook-cluster-${id}`, id);
-      }
-      catch(error) {
-        try {
-          await this.createWebhookForCluster(id);
-        } catch (e) {
-          this.logger.error({label: 'Error creating webhook for cluster', data: { clusterId: id }}, e, 'ClusterService.updateCluster');
-        }
-      }
+      await this.checkOrCreateWebhook(id);
     }
     await this.kubernetesClusterService.sync(updatedCluster);
     updatedCluster.kubeConfig = null;
+    return updatedCluster;
+  }
+
+  async activateWebhook(cluster: ClusterDto, enforceWebhook: boolean): Promise<ClusterDto> {
+    const isEnforcementEnabledBackup = cluster.isEnforcementEnabled;
+    if (enforceWebhook) {
+      await this.checkOrCreateWebhook(cluster.id);
+    }
+    cluster.isEnforcementEnabled = enforceWebhook;
+    const updatedCluster = await this.clusterDao.updateCluster(cluster, cluster.id);
+    cluster.isEnforcementEnabled = isEnforcementEnabledBackup;
+    return updatedCluster;
+  }
+
+  async activateImageScanningEnforcement(cluster: ClusterDto, imageScanningEnforcement: boolean): Promise<ClusterDto> {
+    const isimageScanningEnforcementBackup = cluster.isImageScanningEnforcementEnabled;
+    cluster.isImageScanningEnforcementEnabled = imageScanningEnforcement;
+    const updatedCluster = await this.clusterDao.updateCluster(cluster, cluster.id);
+    cluster.isImageScanningEnforcementEnabled = isimageScanningEnforcementBackup;
     return updatedCluster;
   }
 
@@ -276,6 +282,15 @@ export class ClusterService {
     }
     catch (e) {
       this.logger.error({label: 'Error creating webhook', data: { clusterId }}, e, 'ClusterService.createWebhookForCluster');
+    }
+  }
+
+  async checkOrCreateWebhook(clusterId: number): Promise<void> {
+    const webhookAlreadyExists = await this.checkIfWebhookExists(`m9sweeper-validation-hook-cluster-${clusterId}`, clusterId);
+    if (!webhookAlreadyExists) {
+      await this.createWebhookForCluster(clusterId);
+    } else {
+      this.logger.log({label: 'Webhook already exists', data: { name: `m9sweeper-validation-hook-cluster-${clusterId}` }}, 'ClusterService.checkOrCreateWebhook');
     }
   }
 

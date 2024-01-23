@@ -566,18 +566,17 @@ export class PodDao {
 
         if (options?.clusterId) {
           sql.select('p.cluster_id as clusterId')
-          sql = sql.having('p.cluster_id', '=', options.clusterId);
+          sql = sql.where('p.cluster_id', '=', options.clusterId);
         }
 
         if (options?.clusterGroupId) {
           sql.leftJoin('clusters as c', 'c.id', 'p.cluster_id');
-          sql.having('c.group_id', '=', options.clusterGroupId);
+          sql.where('c.group_id', '=', options.clusterGroupId);
         }
 
-        sql = sql.havingBetween('p.saved_date', [daySmall, dayLarge]);
+        sql = sql.whereBetween('p.saved_date', [daySmall, dayLarge]);
 
         sql = sql.orderBy('p.saved_date', 'asc');
-
         return sql.then();
     }
 

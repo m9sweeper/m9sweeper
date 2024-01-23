@@ -136,7 +136,7 @@ export class NonRedirectableLoginController {
                 const failAttemptInTheLastHour = await this.userProfileService.getUserFailedAttemptCountInLastHour(user.id);
                 this.logger.log({label: 'Failed login attempts by user in the past hour', data: { failAttemptInTheLastHour, user_id: user.id }}, 'NonRedirectableLoginController.localAuthLoginAction');
                 // if exceed failed attempt limit, the user cannot log in
-                if (failAttemptInTheLastHour >= common.loginAttemptAllowed){
+                if (failAttemptInTheLastHour >= parseInt(common.loginAttemptAllowed)){
                     throw new UnauthorizedException('Log in attempts exceed limit. Please try again later.');
                 }
 

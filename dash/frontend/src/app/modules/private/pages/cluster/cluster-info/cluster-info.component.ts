@@ -138,7 +138,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.cluster.isEnforcementEnabled = changedValue;
     const displayText = changedValue ? 'enabled' : 'disabled';
     this.awaitingWebhookEnforcementResponse = true;
-    this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(response => {
+    this.clusterService.activateWebhook(changedValue, this.cluster.id).subscribe(response => {
         this.awaitingWebhookEnforcementResponse = false;
         if (response.success) {
           this.alertService.success(`Webhook Enforcement has been ${displayText}.`);
@@ -158,7 +158,7 @@ export class ClusterInfoComponent implements OnInit, OnDestroy {
     this.cluster.isImageScanningEnforcementEnabled = changedValue;
     const displayText = changedValue ? 'enabled' : 'disabled';
     this.awaitingImageScanningEnforcementResponse = true;
-    this.clusterService.updateCluster(this.cluster, this.cluster.id).subscribe(clusterUpdateResponse => {
+    this.clusterService.activateImageScanningEnforcement(changedValue, this.cluster.id).subscribe(clusterUpdateResponse => {
         this.awaitingImageScanningEnforcementResponse = false;
         if (clusterUpdateResponse.success) {
           this.alertService.success(`Image Scanning Enforcement has been ${displayText}.`);
