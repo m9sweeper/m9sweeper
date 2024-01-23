@@ -10,6 +10,7 @@ export interface ComplianceIssue {
   cve: string;
   compliant: boolean;
   severity?: string;
+  reason?: string;
 }
 
 type cveMap = Map<string, complianceResult>
@@ -17,13 +18,13 @@ type scannerMap = Map<number, complianceResult | cveMap>;
 type policyMap = Map<number, complianceResult | scannerMap>;
 
 export class ComplianceResultMap {
-  private policyMap = new Map<number, complianceResult | scannerMap>();
+  private policyMap: policyMap = new Map<number, complianceResult | scannerMap>();
 
   /**
    * Get flattened array of issues that have a special reason for being (non-)compliant
    */
   getAllIssues(): ComplianceIssue[] {
-    const issues = [];
+    const issues: ComplianceIssue[] = [];
 
     // loop through policies
     for (const [policyId, scannerMap] of this.policyMap) {
@@ -41,7 +42,8 @@ export class ComplianceResultMap {
                 scannerId: scannerId,
                 cve: cve,
                 compliant: complianceReason.compliant,
-                severity: complianceReason.severity
+                severity: complianceReason.severity,
+                reason: complianceReason.complianceReason
               });
             }
           }
@@ -67,6 +69,20 @@ export class ComplianceResultMap {
       return;
     }
     (<scannerMap>scannerMapForPolicy).set(scannerId, { compliant, complianceReason: reason});
+  }
+
+  /**
+   * Save the reasons CVEs caused it to fail, or that had an "interesting"
+   * reason for being compliant (like having an exception applied)
+   */
+  setResultForCve(policyId: number, scannerId: number, cve: string, compliant: boolean, reason?: string,
+                  severity?: string): void {
+    const cveMap = this.getCveMap(policyId, scannerId, true);
+    // Don't override any global compliance results
+    if (this.isComplianceResult(cveMap)) {
+      return;
+    }
+    (<cveMap>cveMap).set(cve, { compliant, complianceReason: reason, severity });
   }
 
   /**
@@ -103,20 +119,6 @@ export class ComplianceResultMap {
     }
     // Nothing non-compliant was found in the maps, it must be compliant
     return true;
-  }
-
-  /**
-   * Save the reasons CVEs caused it to fail, or that had an "interesting"
-   * reason for being compliant (like having an exception applied)
-   */
-  setResultForCve(policyId: number, scannerId: number, cve: string, compliant: boolean, reason?: string,
-                  severity?: string): void {
-    const cveMap = this.getCveMap(policyId, scannerId, true);
-    // Don't override any global compliance results
-    if (this.isComplianceResult(cveMap)) {
-      return;
-    }
-    (<cveMap>cveMap).set(cve, { compliant, complianceReason: reason, severity });
   }
 
   /**
