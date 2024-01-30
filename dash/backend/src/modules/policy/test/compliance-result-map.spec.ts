@@ -44,11 +44,18 @@ describe('ComplianceResultMap', () => {
   const testCve3 = buildCveTestCase(1, 1, 'CVE-3333', true);
   const testCve4 = buildCveTestCase(2, 3, 'CVE-4444', false, undefined, 'It is bad');
 
-  const policy1Scanner2Exception = {
+  const policy1Scanner2CompliantException = {
     compliant: true,
     policyId: 1,
     scannerId: 2,
     reason: 'Temporary Exception Blah applied'
+  };
+
+  const policy1Scanner2NoncompliantException = {
+    compliant: false,
+    policyId: 1,
+    scannerId: 2,
+    reason: 'We trust nothing.'
   };
 
   const policy1NoncompliantException = {
@@ -88,8 +95,8 @@ describe('ComplianceResultMap', () => {
     describe('Scanner level exceptions should not include CVEs from that scanner', () => {
       it('CVE with scanner level override is not included - scanner first', () => {
         complianceResultMap.setResultForScanner(
-          policy1Scanner2Exception.policyId, policy1Scanner2Exception.scannerId,
-          policy1Scanner2Exception.compliant, policy1Scanner2Exception.reason
+          policy1Scanner2CompliantException.policyId, policy1Scanner2CompliantException.scannerId,
+          policy1Scanner2CompliantException.compliant, policy1Scanner2CompliantException.reason
         );
         applyCveTestInput(complianceResultMap, testCve1);
 
@@ -101,8 +108,8 @@ describe('ComplianceResultMap', () => {
       it('CVE with scanner level override is not included - cve first', () => {
         applyCveTestInput(complianceResultMap, testCve1);
         complianceResultMap.setResultForScanner(
-          policy1Scanner2Exception.policyId, policy1Scanner2Exception.scannerId,
-          policy1Scanner2Exception.compliant, policy1Scanner2Exception.reason
+          policy1Scanner2CompliantException.policyId, policy1Scanner2CompliantException.scannerId,
+          policy1Scanner2CompliantException.compliant, policy1Scanner2CompliantException.reason
         );
 
         const allIssues = complianceResultMap.getAllIssues();
@@ -113,8 +120,8 @@ describe('ComplianceResultMap', () => {
       it('Issues from other scanners are still included', () => {
         applyCveTestInput(complianceResultMap, testCve3);
         complianceResultMap.setResultForScanner(
-          policy1Scanner2Exception.policyId, policy1Scanner2Exception.scannerId,
-          policy1Scanner2Exception.compliant, policy1Scanner2Exception.reason
+          policy1Scanner2CompliantException.policyId, policy1Scanner2CompliantException.scannerId,
+          policy1Scanner2CompliantException.compliant, policy1Scanner2CompliantException.reason
         );
 
         const allIssues = complianceResultMap.getAllIssues();
@@ -149,8 +156,8 @@ describe('ComplianceResultMap', () => {
         complianceResultMap.setResultForCve(testCve4.policyId, testCve4.scannerId, testCve4.cve, testCve4.compliant, testCve4.severity);
 
         complianceResultMap.setResultForScanner(
-          policy1Scanner2Exception.policyId, policy1Scanner2Exception.scannerId,
-          policy1Scanner2Exception.compliant, policy1Scanner2Exception.reason
+          policy1Scanner2CompliantException.policyId, policy1Scanner2CompliantException.scannerId,
+          policy1Scanner2CompliantException.compliant, policy1Scanner2CompliantException.reason
         );
 
         const allIssues = complianceResultMap.getAllIssues();
@@ -162,8 +169,8 @@ describe('ComplianceResultMap', () => {
 
   });
 
-  describe('Should Calculate Compliance Correctly (isCompliant)', () => {
-    describe('CVEs with no overrides', () => {
+  describe('Should Calculate Compliance Correctly (isCompliant) for...', () => {
+    describe('...CVEs with no overrides', () => {
       it.each([
         {msg: 'compliance map with no issues should be compliant', cves: [], expected: true},
         {msg: 'compliance map with only compliant issues should be compliant', cves: [testCve1], expected: true},
@@ -182,6 +189,39 @@ describe('ComplianceResultMap', () => {
         expect(complianceResultMap.isCompliant).toBe(data.expected);
       });
     });
+
+    describe('...Scanner overrides', () => {
+      it.each([
+        { msg: 'Compliant Scanner exception overrides non-compliant CVES', scannerOverride: policy1Scanner2CompliantException, cves: [testCve2], expected: true },
+        { msg: 'Non-Compliant Scanner exception overrides compliant CVES', scannerOverride: policy1Scanner2NoncompliantException, cves: [testCve1], expected: false },
+        { msg: 'Compliant scanner override will not override compliance from CVE from another scanner', scannerOverride: policy1Scanner2CompliantException, cves: [testCve1, testCve2, testCve4], expected: false }
+      ])('$msg', (data) => {
+        data.cves.forEach(cve => applyCveTestInput(complianceResultMap, cve));
+        complianceResultMap.setResultForScanner(data.scannerOverride.policyId, data.scannerOverride.scannerId, data.scannerOverride.compliant, data.scannerOverride.reason);
+        expect(complianceResultMap.isCompliant).toBe(data.expected);
+
+      });
+    });
+
+    describe('...Policy overrides', () => {
+      it.each([
+        { msg: 'Compliant policy exception overrides non-compliant CVES', policyOverride: policy1CompliantException, cves: [testCve2], expected: true },
+        { msg: 'Non-Compliant policy exception overrides compliant CVES', policyOverride: policy1NoncompliantException, cves: [testCve1], expected: false },
+        { msg: 'Compliant policy override will not override compliance from CVE from another policy', policyOverride: policy1CompliantException, cves: [testCve1, testCve2, testCve4], expected: false }
+      ])('$msg', (data) => {
+        data.cves.forEach(cve => applyCveTestInput(complianceResultMap, cve));
+        complianceResultMap.setResultForPolicy(data.policyOverride.policyId, data.policyOverride.compliant, data.policyOverride.reason);
+        expect(complianceResultMap.isCompliant).toBe(data.expected);
+      });
+    });
+
+    describe('...More complex cases', () => {
+      it.each([
+        { msg: '' }
+      ])('$msg', (data) => {
+
+      })
+    })
   });
 
   describe('Should Return correct compliance results for Issues (getResultForCve)', () => {
