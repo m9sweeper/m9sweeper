@@ -51,19 +51,24 @@ describe('ComplianceResultMap', () => {
     reason: 'Temporary Exception Blah applied'
   };
 
-  const policy1Exception = {
+  const policy1NoncompliantException = {
     compliant: false,
     policyId: 1,
     reason: 'Everything is dangerous!'
   };
 
+  const policy1CompliantException = {
+    compliant: true,
+    policyId: 1,
+    reason: 'Everything is awesome!'
+  };
 
   beforeEach(() => {
     // Create a fresh map for each run
     complianceResultMap = new ComplianceResultMap();
   })
 
-  describe('getAllIssues Should return correct data', () => {
+  describe('getAllIssues Should return correct list of issues', () => {
     describe.each([
       testCve1,
       testCve2,
@@ -121,7 +126,7 @@ describe('ComplianceResultMap', () => {
 
     describe('Policy level exceptions should not include CVEs from that policy', () => {
       it('CVE with policy level override is not included - policy first', () => {
-        complianceResultMap.setResultForPolicy(policy1Exception.policyId, policy1Exception.compliant, policy1Exception.reason);
+        complianceResultMap.setResultForPolicy(policy1NoncompliantException.policyId, policy1NoncompliantException.compliant, policy1NoncompliantException.reason);
         applyCveTestInput(complianceResultMap, testCve1);
 
         const allIssues = complianceResultMap.getAllIssues();
@@ -131,7 +136,7 @@ describe('ComplianceResultMap', () => {
       // The same inputs as the test case above, only the order of being added to the map was switched.
       it('CVE with policy level override is not included - cve first', () => {
         complianceResultMap.setResultForCve(testCve1.policyId, testCve1.scannerId, testCve1.cve, testCve1.compliant, testCve1.severity);
-        complianceResultMap.setResultForPolicy(policy1Exception.policyId, policy1Exception.compliant, policy1Exception.reason);
+        complianceResultMap.setResultForPolicy(policy1NoncompliantException.policyId, policy1NoncompliantException.compliant, policy1NoncompliantException.reason);
 
         complianceResultMap.getAllIssues();
         const allIssues = complianceResultMap.getAllIssues();
@@ -157,26 +162,71 @@ describe('ComplianceResultMap', () => {
 
   });
 
-  describe('Should Calculate Compliance Correctly', () => {
-    it('compliance map with no issues should be compliant', () => {
-      expect(complianceResultMap.isCompliant).toBe(true);
+  describe('Should Calculate Compliance Correctly (isCompliant)', () => {
+    describe('CVEs with no overrides', () => {
+      it.each([
+        {msg: 'compliance map with no issues should be compliant', cves: [], expected: true},
+        {msg: 'compliance map with only compliant issues should be compliant', cves: [testCve1], expected: true},
+        {
+          msg: 'compliance map with only non-compliant issues should be non-compliant',
+          cves: [testCve2],
+          expected: false
+        },
+        {
+          msg: 'compliance map with both compliant & non-compliant issues should be non-compliant',
+          cves: [testCve1, testCve2],
+          expected: false
+        }
+      ])('$msg', (data) => {
+        data.cves.forEach(cve => applyCveTestInput(complianceResultMap, cve));
+        expect(complianceResultMap.isCompliant).toBe(data.expected);
+      });
+    });
+  });
+
+  describe('Should Return correct compliance results for Issues (getResultForCve)', () => {
+    it('Empty Compliance map defaults to compliant for any CVE', () => {
+      const compliance = complianceResultMap.getResultForCve(1, 2, 'CVE-1234');
+      expect(compliance).toMatchObject({compliant: true});
     });
 
-    it('compliance map with only compliant issues should be compliant', () => {
+    it('Compliant CVE is considered compliant', () => {
       applyCveTestInput(complianceResultMap, testCve1);
-      expect(complianceResultMap.isCompliant).toBe(true);
+      const compliance = complianceResultMap.getResultForCve(testCve1.policyId, testCve1.scannerId, testCve1.cve);
+      expect(compliance).toMatchObject({compliant: true});
     });
 
-    it('compliance map with only non-compliant issues should be non-compliant', () => {
+    it('Non-compliant CVE is considered non-compliant', () => {
       applyCveTestInput(complianceResultMap, testCve2);
-      expect(complianceResultMap.isCompliant).toBe(false);
+      const compliance = complianceResultMap.getResultForCve(testCve2.policyId, testCve2.scannerId, testCve2.cve);
+      expect(compliance).toMatchObject({compliant: false});
     });
 
-    it('compliance map with both compliant & non-compliant issues should be non-compliant', () => {
-      applyCveTestInput(complianceResultMap, testCve1);
-      applyCveTestInput(complianceResultMap, testCve2);
-      expect(complianceResultMap.isCompliant).toBe(false);
-    });
+    describe('Policy Overrides take precedence over individual issue results', () => {
+      it.each([
+        {
+          msg: 'Policy level non-compliant exception should make all cves non-compliant',
+          cves: [testCve1, testCve2, testCve3],
+          exception: policy1NoncompliantException
+        },
+        {
+          msg: 'Policy level compliant exception should make all cves compliant',
+          cves: [testCve1, testCve2, testCve3],
+          exception: policy1CompliantException
+        }
+      ])('$msg', (data) => {
+        // Add all CVEs to map
+        data.cves.forEach(cve => applyCveTestInput(complianceResultMap, cve));
+        complianceResultMap.setResultForPolicy(data.exception.policyId, data.exception.compliant, data.exception.reason);
+
+        data.cves.forEach(cve => {
+          const compliance = complianceResultMap.getResultForCve(cve.policyId, cve.scannerId, cve.cve);
+          expect(compliance).toMatchObject({compliant: data.exception.compliant});
+        });
+      });
+
+    })
+
 
   });
 });
