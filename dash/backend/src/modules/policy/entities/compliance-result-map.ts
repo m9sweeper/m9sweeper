@@ -1,9 +1,17 @@
+/**
+ * Data returned when requesting compliance results for an issue.
+ * Note that complianceReason and severity will only be set if initially
+ * provided at the level (policy, scanner or issue) that determined this issue's compliance
+ */
 interface complianceResult {
-  complianceReason?: string
   compliant: boolean
+  complianceReason?: string
   severity?: string
 }
 
+/**
+ * Interface for a flattened issue from the map.
+ */
 export interface ComplianceIssue {
   policyId: number;
   scannerId: number;
@@ -12,11 +20,28 @@ export interface ComplianceIssue {
   severity?: string;
   reason?: string;
 }
-
+/////////////////////////////////////
+/// Internal types for this class ///
+/////////////////////////////////////
 type cveMap = Map<string, complianceResult>
 type scannerMap = Map<number, complianceResult | cveMap>;
 type policyMap = Map<number, complianceResult | scannerMap>;
 
+/**
+ * Class to simplify calculating compliance for issues.
+ * High level usage:
+ * 1. Instantiate a ComplianceResultMap
+ * 2. Call yourMap.setResultFor[Policy | Scanner | Cve] with all relevant data
+ * 3. Use yourMap.IsCompliant to determine if the image is compliant or not based on the provided information
+ * If needed, use yourMap.getResultForCve to determine the compliance for a specific CVE
+ * If needed, use yourMap.getIssuesList to get a flattened list of all issues that were not overwritten by a policy or scanner level result
+ *
+ * The priority for determining if an issue is compliant or not is based on:
+ * 1. If a result was set at the policy level, that is used
+ * 2. If a result was set at the scanner level, that is used
+ * 3. If a result was set at the CVE level, that is used
+ * 4. If no result was set at any level, it is defaulted to compliant
+ */
 export class ComplianceResultMap {
   private policyMap: policyMap = new Map<number, complianceResult | scannerMap>();
 
@@ -132,8 +157,8 @@ export class ComplianceResultMap {
     if (this.isComplianceResult(cveMap)) {
       return <complianceResult>cveMap;
     }
-    // Get the reason from the map If the mpa or a specific entry
-    // within the map for the cve doesn't exist, assumes it is compliant
+    // Get the reason from the map if it has a specific entry.
+    // If the cve had no entry, it defaults to compliant
     const reason = cveMap ? (<cveMap>cveMap).get(cve) : { compliant: true };
     return reason || { compliant: true };
   }
