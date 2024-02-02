@@ -8,7 +8,7 @@
       <p> Date run: {{dateRan}} </p>
     </div>
 
-    <mat-card class="scrollable-table-card" *ngFor="let data of dataSource; let i = index">
+    <mat-card appearance="outlined" class="scrollable-table-card" *ngFor="let data of dataSource; let i = index">
       <mat-card-header>
         Location: {{location[i]}}
       </mat-card-header>

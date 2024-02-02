@@ -6,7 +6,7 @@
                         (buttonClicked)="openDockerRegistryDialog(false)"></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
+    <mat-card appearance="outlined" class="settings-card">
       <div class="table-wrapper">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear
                matSortDirection="asc">

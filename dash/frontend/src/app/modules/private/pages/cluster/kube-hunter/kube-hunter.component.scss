@@ -10,7 +10,7 @@
         width: 100%;
       }
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
     mat-card {
       height: 90%;
 
@@ -23,6 +23,7 @@
 }
 
 #past-audits-table {
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card-header {
     margin-bottom: 1em;
 
@@ -31,7 +32,7 @@
       display: flex;
     }
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     width: 100%;
     overflow-x: auto;

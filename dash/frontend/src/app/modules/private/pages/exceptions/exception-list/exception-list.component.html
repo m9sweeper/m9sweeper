@@ -2,7 +2,7 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card class="component-with-scrollable-table">
+    <mat-card appearance="outlined" class="component-with-scrollable-table">
       <div class="table-wrapper">
         <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort id="listOfExceptions">
           <ng-container matColumnDef="title">

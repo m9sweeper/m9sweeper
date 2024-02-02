@@ -52,6 +52,7 @@
   box-shadow: none !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
 mat-dialog-actions {
   border-top: rgba(0, 0, 0, 0.12) solid 1px;
 }

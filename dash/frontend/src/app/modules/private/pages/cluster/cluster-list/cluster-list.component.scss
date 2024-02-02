@@ -1,3 +1,5 @@
+
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
   font-size: 18px !important;
 }
@@ -7,9 +9,11 @@ mat-card-title {
   padding-right: 20px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card.overview-graph-card {
   margin: 0 5px 0 5px;  // set to match legacy margins
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-content {
     margin: 6px 16px 16px 6px !important;
     padding: unset;
@@ -19,7 +23,8 @@ mat-card.overview-graph-card {
 .cluster-element {
   display: flex;
   margin-top: 15px;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     padding: 1em 0.5em;
     margin: 10px 5px 0 5px;  // set to match legacy margins
@@ -35,14 +40,16 @@ mat-card.overview-graph-card {
       min-width: 60px;
       padding-right: 10px;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-title {
       padding-top: 0;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-subtitle {
       font-style: italic;
       font-size: 11px;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-content {
       padding-left: 0;
     }
@@ -51,7 +58,7 @@ mat-card.overview-graph-card {
 
 .cluster-info-header {
   overflow-x: hidden;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-subtitle {
     text-wrap: nowrap;
   }

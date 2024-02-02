@@ -1,6 +1,7 @@
 ::ng-deep  .mat-mdc-card-header-text {
   width: 100% !important;
 }
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
   display: flex !important;  // adding class="display-flex" to the element wasn't enough
 }

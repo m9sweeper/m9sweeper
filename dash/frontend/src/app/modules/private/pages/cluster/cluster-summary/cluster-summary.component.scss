@@ -2,11 +2,13 @@
   margin: 0.625em 0 0.625em 0;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card-title {
   padding-top: 10px;
 }
 
 #cluster-summary-row {
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin: 10px 5px 0 5px;  // set to match legacy margins
     height: 80%;
@@ -29,9 +31,11 @@ mat-card-title {
 }
 
 #cluster-graphs-row {
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin: 10px 5px 0 5px;  // set to match legacy margins
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
     mat-card-content {
       margin: 6px 16px 16px 6px !important;
       padding: unset;
@@ -44,8 +48,11 @@ mat-card-title {
 }
 
 #cluster-vulnerability-table-row {
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     margin: 10px 5px 0 5px;  // set to match legacy margins
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
     mat-table {
       min-width: 500px;
 
@@ -64,7 +71,7 @@ mat-card-title {
   position: sticky;
   position: -webkit-sticky; /* Safari */
   bottom: 0;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     padding: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);

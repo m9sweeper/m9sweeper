@@ -50,7 +50,9 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card {
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card-title {
     font-weight: bold;
   }
@@ -63,6 +65,7 @@ mat-card {
 
 .graph-card {
   padding-bottom: 20px;
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card {
     overflow: auto;
   }
@@ -327,6 +330,7 @@ app-private {
   th, mat-header-cell {
     font-weight: 550 !important;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     display: table;
   }
@@ -497,7 +501,7 @@ mat-form-field {
   // flex: 1;
   overflow: auto;
   background: #F9F9F9;
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     min-width: 800px;
 
@@ -832,6 +836,7 @@ app-datepicker-component {
   #cluster-dashboard, .page-container {
     background-color: white;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card.mat-mdc-card {
     box-shadow: unset !important;
   }
