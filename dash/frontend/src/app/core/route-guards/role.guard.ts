@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivateChild, Router} from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import {JwtAuthService} from '../services/jwt-auth.service';
 import {AlertService} from '../services/alert.service';
@@ -7,7 +7,7 @@ import {AlertService} from '../services/alert.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RoleGuard implements CanActivate, CanActivateChild {
+export class RoleGuard  {
 
   constructor(private readonly router: Router,
               private readonly jwtAuthService: JwtAuthService,
