@@ -1,6 +1,5 @@
 .overview-cards {
   margin-bottom: 1em;
-  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card {
     height: 400px;
     display: grid;
@@ -27,11 +26,9 @@
 }
 
 #incidence-rate-graph-card {
-  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-header {
     padding: 16px;
   }
-  /*TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
   mat-card-content {
     align-self: center;
   }
