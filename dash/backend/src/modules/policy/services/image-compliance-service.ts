@@ -47,11 +47,12 @@ export class ImageComplianceService {
             throw new NotFoundException("No policies defined");
         }
 
+        // Issues in policies with no scanners are considered compliant
         if (!!result.scanners === false || result.scanners.length === 0) {
             complianceMap.setResultForPolicy(result.policy.id, true, `Policy ${result.policy.name} has no scanners defined`);
         }
 
-        //by default compliant
+        // Issues in disabled policies are considered compliant
         if (result.policy.enabled === false) {
             complianceMap.setResultForPolicy(result.policy.id, true, `Policy ${result.policy.name} was disabled`);
         }
@@ -80,8 +81,8 @@ export class ImageComplianceService {
         //find all the exceptions which are not a scanner specific
         const exceptionsWithoutScanner = exceptions.filter(element => !!element.scannerId === false);
 
-        //check whether there exist an exception which is not bound to any specific cve in
-        //the scannerless exception list
+        // check whether there exist an exception which is not bound to any specific cve in
+        // the scannerless exception list, and apply it to all issues if one os found
        const overallException = exceptionsWithoutScanner.find(element => !!element.issueIdentifier === false || element.issueIdentifier.trim() === "");
         if (!!overallException) {
             issues.forEach((issue) => {
@@ -109,7 +110,7 @@ export class ImageComplianceService {
             if (scannerToExceptionsMap.has(issue.scannerId)) {
                 const scannerExceptions = scannerToExceptionsMap.get(issue.scannerId);
 
-                //check whether scanner specific exceptions contains generic cve
+                // Check whether scanner specific exceptions contains generic cve and apply it to all issues if found
                 const scannerSpecificException = scannerExceptions.find(element => !!element.issueIdentifier === false || element.issueIdentifier.trim() === "");
                 if (!!scannerSpecificException) {
                     complianceMap.setResultForCve(policyId, issue.scannerId, issue.cveCode, true,
@@ -117,7 +118,7 @@ export class ImageComplianceService {
                     return false;
                 }
 
-                //check whether scanner specific exceptions contains cve code of the issue
+                // If a scanner specific exception exists for a cve, apply it.
                 const cveException = scannerExceptions.find(element => element.issueIdentifier.trim() === issue.cveCode);
                 if (!!cveException) {
                     complianceMap.setResultForCve(policyId, issue.scannerId, issue.cveCode, true,
@@ -126,7 +127,7 @@ export class ImageComplianceService {
                 }
             }
 
-            //check whether cve code of the issue exist in scannerless exceptions
+            // Check whether cve code of the issue exist in scannerless exceptions, and apply it if found
             const globalCveException = exceptionsWithoutScanner.find(element => element.issueIdentifier === issue.cveCode)
             if (!!globalCveException) {
                 complianceMap.setResultForCve(policyId, issue.scannerId, issue.cveCode, true,
@@ -197,6 +198,7 @@ export class ImageComplianceService {
          * exceptions beforehand.
          */
         const results = filteredScanners.map(scanner => {
+            // Issues in disabled scanners are considered compliant
             if (scanner.enabled === false) {
                 complianceMap.setResultForScanner(scanner.policyId, scanner.id, true, `Scanner ${scanner.name} disabled.`);
                 return true;
@@ -282,6 +284,7 @@ export class ImageComplianceService {
                 break;
         }
 
+        // If more unfixable issues of a severity exist than allowed by the scanner settings, all of those issues are considered non-compliant
         const unfixableIssues = issues.filter(issue => !issue.isFixable);
         const totalUnfixableIssues = unfixableIssues.length;
         if (totalUnfixableIssues >= unfixableLimit) {
@@ -291,6 +294,8 @@ export class ImageComplianceService {
             });
         }
 
+        // If more fixable issues of a severity exist than allowed by the scanner settings, all of those issues are considered non-compliant
+        // Note: if an issue exceeds both the fixable and non-fixable limit, the reason will be set to the message from this block.
         const fixableIssues = issues.filter(issue => issue.isFixable);
         const totalFixableIssues = fixableIssues.length;
         if (totalFixableIssues >= fixableLimit) {
