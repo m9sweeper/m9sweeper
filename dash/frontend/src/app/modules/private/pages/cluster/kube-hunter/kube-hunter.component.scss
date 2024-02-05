@@ -28,11 +28,11 @@
     margin-bottom: 1em;
 
     .run-audit-button {
-      justify-content: end;
+      justify-content: flex-end;
       display: flex;
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
+
   mat-table {
     width: 100%;
     overflow-x: auto;
