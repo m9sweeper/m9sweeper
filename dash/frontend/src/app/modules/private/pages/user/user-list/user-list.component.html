@@ -2,7 +2,7 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card appearance="outlined" class="settings-card">
+    <mat-card class="settings-card">
       <div class="table-wrapper">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="id">

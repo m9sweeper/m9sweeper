@@ -306,7 +306,6 @@ const routes: Routes = [
       },
       {
         path: 'users', component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN]
         },
@@ -357,7 +356,6 @@ const routes: Routes = [
       {
         path: 'policies',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
         },
@@ -392,7 +390,6 @@ const routes: Routes = [
       {
         path: 'exceptions',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
         },
@@ -435,7 +432,6 @@ const routes: Routes = [
       {
         path: 'falco',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
         },
@@ -454,7 +450,6 @@ const routes: Routes = [
       {
         path: 'docker-registries',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
         },
@@ -489,7 +484,6 @@ const routes: Routes = [
       {
         path: 'api-key',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN]
         },
@@ -525,7 +519,6 @@ const routes: Routes = [
       {
         path: 'audit-logs',
         component: OrganizationSettingsComponent,
-        canActivateChild: [RoleGuard],
         data: {
           allowedUserRoles: [Authority.SUPER_ADMIN]
         },

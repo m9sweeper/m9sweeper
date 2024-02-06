@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-container-content">
-    <mat-card appearance="outlined" id="scanInformation" class="mb-xs-3 pt-xs-3" *ngIf="dataSource">
+    <mat-card id="scanInformation" class="mb-xs-3 pt-xs-3" *ngIf="dataSource">
       <div class="row header-row m-xs-0">
         <div class="col-lg-9 col-xs-12">
           <span id="image-name" [matTooltip]="dataSource.url + '/' + dataSource.name + ':' + dataSource.tag" >Image: {{dataSource.name+':'+dataSource.tag}}</span>
@@ -75,11 +75,11 @@
         </table>
       </div>
     </mat-card>
-    <mat-card appearance="outlined" id="scannerError" class="mb-xs-3 pt-xs-3" *ngIf="lastScanReport?.encounterError">
+    <mat-card id="scannerError" class="mb-xs-3 pt-xs-3" *ngIf="lastScanReport?.encounterError">
       <h3 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h3>
       <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
     </mat-card>
-    <mat-card appearance="outlined" id="scannerComplianceList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+    <mat-card id="scannerComplianceList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
       <div class="row header-row m-xs-0">
         <div class="col-xs-12 col-sm-9 col-lg-10" id="compliance-report-title">
           <span matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
@@ -144,7 +144,7 @@
         (page)="scannerPageEvent($event)"
         showFirstLastButtons #compliancePaginator></mat-paginator>
     </mat-card>
-    <mat-card appearance="outlined" id="issuesList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+    <mat-card id="issuesList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
       <div class="row header-row m-xs-0">
         <div class="col-xs-9 col-sm-3" id="issuesTitle">
           Issues

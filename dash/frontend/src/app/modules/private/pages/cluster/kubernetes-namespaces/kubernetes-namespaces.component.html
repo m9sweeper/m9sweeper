@@ -7,7 +7,7 @@
         <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
-    <mat-card appearance="outlined" class="mb-xs-3 scrollable-table-card">
+    <mat-card class="mb-xs-3 scrollable-table-card">
       <div class="table-wrapper">
         <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="name">

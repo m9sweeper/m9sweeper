@@ -7,7 +7,7 @@
         <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
       </div>
     </div>
-    <mat-card appearance="outlined" class="mb-xs-2 scrollable-table-card">
+    <mat-card class="mb-xs-2 scrollable-table-card">
       <div class="m-xs-3" *ngIf="!pageLoading && !totalNumPods">
         No pods found
       </div>

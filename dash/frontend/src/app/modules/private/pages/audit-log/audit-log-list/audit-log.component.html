@@ -1,7 +1,7 @@
 <div class="page-container ">
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card appearance="outlined" class="settings-card">
+    <mat-card class="settings-card">
       <mat-card-content>
         <form id="auditLogFilterForm">
           <div class="row">
@@ -39,7 +39,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card appearance="outlined" class="scrollable-table-card" *ngIf="showAuditLogTable">
+    <mat-card class="scrollable-table-card" *ngIf="showAuditLogTable">
       <mat-card-header id="auditLogTableHeader" class="row">
         <div class="page-card-title col-xs-12 col-sm-9">
           Audit logs count: {{totalAuditLogs}}
