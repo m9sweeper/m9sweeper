@@ -28,22 +28,16 @@ mat-card div div {
     word-break: break-word;
   }
 
-  .image-details {
-    background-color: mat.get-color-from-palette(mat.$gray-palette, 300);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    overflow-x: auto;
-    .image-details-table {
-      th {
-        font-weight: normal;
-      }
-      th, td {
-        padding: 5px 10px;
-      }
+  .image-details-table {
+    th {
+      font-weight: normal;
+    }
+    th, td {
+      padding: 5px 10px;
     }
   }
 }
+
 
 #scannerComplianceList {
   flex: 3;
