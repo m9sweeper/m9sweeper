@@ -162,10 +162,13 @@ $spacer: 1em;
 $sides: (
   t: ['top'],
   b: ['bottom'],
+  l: ['left'],
+  r: ['right'],
   s: ['inline-start'],
   e: ['inline-end'],
   x: ['inline'],
   y: ['top', 'bottom'],
+  z: ['right', 'left'],
   all: ['inline-start', 'top', 'inline-end', 'bottom'],
 );
 
@@ -173,7 +176,6 @@ $sides: (
   $properties: (
     p: "padding",
     m: "margin",
-    mt: "margin-top",
   );
   $sizes: (
     auto: 'auto',
