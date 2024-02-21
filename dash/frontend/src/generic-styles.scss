@@ -67,7 +67,7 @@ $classesToGenerate: (
     values: (
       auto: auto, unset: unset,
       fit: 'fit-content',
-      0: 0, 50: 50%, 75: 75%, 97: 97%, 100: 100%,
+      0: 0, 50: 50%, 75: 75%, 100: 100%,
     ),
   ),
   width: (
@@ -151,7 +151,7 @@ $classesToGenerate: (
     )
   ),
   background-color: (
-  abbreviation: 'background-color',
+    abbreviation: 'background-color',
     values: (
       grey: mat.get-color-from-palette(mat.$gray-palette, 300),
     )
@@ -162,13 +162,10 @@ $spacer: 1em;
 $sides: (
   t: ['top'],
   b: ['bottom'],
-  l: ['left'],
-  r: ['right'],
   s: ['inline-start'],
   e: ['inline-end'],
-  x: ['inline'],
+  x: ['right', 'left'],
   y: ['top', 'bottom'],
-  z: ['right', 'left'],
   all: ['inline-start', 'top', 'inline-end', 'bottom'],
 );
 
