@@ -155,7 +155,6 @@ jobs:
           export DOCKER_REGISTRY="public-docker.nexus.celestialdata.net"
           export SKIP_GATEKEEPER_TESTS="false"
           kubectl port-forward service/m9sweeper-dash 3000:3000 -n m9sweeper-system > /dev/null &
-          docker ps
           npm install -y
           npm run test:pipeline
 
