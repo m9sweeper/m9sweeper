@@ -11,7 +11,7 @@ export const config: Options.Testrunner = {
         capabilities: [{
             // capabilities for local browser web tests
             browserName: 'chrome',
-            browserVersion: '122.0.6261.57',
+            browserVersion: '122.0.1', // '122.0.6261.57',
             'goog:chromeOptions': {
                 args: ['headless', 'disable-gpu'],
                 prefs: {
