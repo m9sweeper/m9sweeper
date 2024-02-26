@@ -11,8 +11,10 @@ export const config: Options.Testrunner = {
         capabilities: [{
             // capabilities for local browser web tests
             browserName: 'chrome',
-            browserVersion: '122.0.1', // '122.0.6261.57',
+            // browserVersion: '122.0.6261.57',
             'goog:chromeOptions': {
+                // path to the download file:
+                // https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.57/linux64/chrome-linux64.zip
                 args: ['headless', 'disable-gpu'],
                 prefs: {
                     // Download files without showing a prompt
