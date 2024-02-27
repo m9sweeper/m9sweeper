@@ -192,4 +192,3 @@ jobs:
 
       - name: Cleanup Work Directory
         uses: AutoModality/action-clean@v1
-        if: always()
