@@ -10,7 +10,7 @@ export const config: Options.Testrunner = {
         //
         capabilities: [{
             // capabilities for local browser web tests
-            // browserName: 'chrome',
+            browserName: 'chrome',
             // browserVersion: '122.0.6261.57',
             'goog:chromeOptions': {
                 // path to the download file:
