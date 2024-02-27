@@ -122,7 +122,7 @@ describe('Images Page::', () => {
     it('5 Download the Issues list', async () => {
         // Locate the download link
         await $("//mat-icon[contains(normalize-space(), 'download')]/parent::button/span[contains(@class, 'mat-mdc-button-touch-target')]")
-          .waitForExist({timeout: 30000, interval: 1000, timeoutMsg: "Issues list download button should be present"});
+          .waitForExist({timeout: 30000, interval: 1000, timeoutMsg: "Timed out while waiting for issues list download button should be present"});
         const downloadButton = await $("//mat-icon[contains(normalize-space(), 'download')]/parent::button/span[contains(@class, 'mat-mdc-button-touch-target')]");
         expect(downloadButton).toBePresent(
             {message: "Issues list download button should be present"}
