@@ -1,58 +1,61 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-card">
-
-        <mat-card appearance="outlined">
-          <mat-card-content>
-            <div class="page-title-button-group-spacing">
-              <span class="page-title" style="vertical-align: middle">{{subMenuTitle}}</span>
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row">
+          <span class="page-title" style="vertical-align: middle">{{ subMenuTitle }}</span>
+        </div>
+        <form [formGroup]="userForm">
+          <div class="row">
+            <div class="col-xs-12 mt-xs-3">
+              <mat-form-field appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input matInput placeholder="Enter your first name" type="text" formControlName="firstName"
+                       [readonly]="activateReadOly">
+              </mat-form-field>
             </div>
-            <form [formGroup]="userForm">
-              <p >
-                <mat-form-field appearance="fill">
-                  <mat-label>First Name</mat-label>
-                  <input matInput placeholder="Enter your first name" type="text" formControlName="firstName" [readonly]="activateReadOly">
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Last Name</mat-label>
-                  <input matInput placeholder="Enter your last name" type="text" formControlName="lastName" [readonly]="activateReadOly">
-                </mat-form-field>
-              </p>
-              <p *ngIf="!isEdit">
-                <mat-form-field appearance="fill">
-                  <mat-label>Email</mat-label>
-                  <input matInput placeholder="Enter your email" type="text" formControlName="email">
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Phone</mat-label>
-                  <input matInput
-                         placeholder="Enter phone number" type="text"
-                         formControlName="phone"
-                         [readonly]="activateReadOly">
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Authority</mat-label>
-                  <mat-select formControlName="authorities" multiple>
-                    <mat-option *ngFor="let authority of authorities" [value]="authority.id">{{authority.type}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
-              </p>
-            </form>
-            <button [disabled]="!userForm.valid" mat-raised-button type="button" color="primary" id="create-user-button" (click)="onSubmit()">
-              {{ isEdit ? 'Save' : 'Create'}}
-            </button>
-            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
-          </mat-card-content>
-        </mat-card>
-      </div>
-</div>
+            <div class="col-xs-12 mt-xs-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Last Name</mat-label>
+                <input matInput placeholder="Enter your last name" type="text" formControlName="lastName"
+                       [readonly]="activateReadOly">
+              </mat-form-field>
+            </div>
+            <div class="col-xs-12 mt-xs-3" *ngIf="!isEdit">
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Enter your email" type="text" formControlName="email">
+              </mat-form-field>
+            </div>
+            <div class="col-xs-12 mt-xs-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Phone</mat-label>
+                <input matInput
+                       placeholder="Enter phone number" type="text"
+                       formControlName="phone"
+                       [readonly]="activateReadOly">
+              </mat-form-field>
+            </div>
+            <div class="col-xs-12 mt-xs-3">
+              <mat-form-field appearance="fill">
+                <mat-label>Authority</mat-label>
+                <mat-select formControlName="authorities" multiple>
+                  <mat-option *ngFor="let authority of authorities" [value]="authority.id">{{ authority.type }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-xs-12 mt-xs-3">
+              <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+            </div>
+          </div>
+        </form>
+        <button [disabled]="!userForm.valid" mat-raised-button type="button" color="primary" class="me-xs-3 mt-xs-3"
+                (click)="onSubmit()">
+          {{ isEdit ? 'Save' : 'Create' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" class="mt-xs-3" (click)="cancel()">Cancel</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

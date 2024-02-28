@@ -116,8 +116,66 @@ $classesToGenerate: (
       inherit: inherit, initial: initial, revert: revert,
       revert-layer: "revert-layer", unset: unset
     )
+  ),
+
+  overflow: (
+    abbreviation: 'overflow',
+    values: (
+      scroll: 'scroll',
+      hidden: 'hidden',
+      auto: 'auto',
+      clip: 'clip',
+      visible: 'visible'
+    )
+  ),
+
+  overflow-x: (
+    abbreviation: 'overflow-x',
+    values: (
+      scroll: 'scroll',
+      hidden: 'hidden',
+      auto: 'auto',
+      visible: 'visible'
+    )
+  ),
+
+  overflow-y: (
+    abbreviation: 'overflow-x',
+    values: (
+      scroll: 'scroll',
+      hidden: 'hidden',
+      auto: 'auto',
+      visible: 'visible'
+    )
+  ),
+
+  font-size: (
+    abbreviation: 'font-size',
+    values: (
+      20: '20px'
+    )
+  ),
+  font-weight: (
+    abbreviation: 'font-weight',
+    values: (
+      bold: 'bold'
+    )
+  ),
+  line-height: (
+    abbreviation: 'line-height',
+    values: (
+      1: '1.5em'
+    )
+  ),
+  width: (
+    abbreviation: 'width',
+    values: (
+      100: 100%,
+      500px: '500px'
+    )
   )
 );
+
 
 $spacer: 1em;
 $sides: (

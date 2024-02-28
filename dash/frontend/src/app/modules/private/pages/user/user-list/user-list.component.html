@@ -2,8 +2,8 @@
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
+    <mat-card>
+      <div class="overflow-x-xs-auto display-xs-flex">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> No.</th>

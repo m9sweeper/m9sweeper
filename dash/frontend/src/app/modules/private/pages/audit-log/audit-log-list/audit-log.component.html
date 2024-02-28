@@ -1,7 +1,7 @@
 <div class="page-container ">
   <div class="page-container-content">
     <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
+    <mat-card>
       <mat-card-content>
         <form id="auditLogFilterForm">
           <div class="row">
@@ -39,9 +39,9 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="scrollable-table-card" *ngIf="showAuditLogTable">
+    <mat-card *ngIf="showAuditLogTable">
       <mat-card-header id="auditLogTableHeader" class="row">
-        <div class="page-card-title col-xs-12 col-sm-9">
+        <div class="font-size-xs-20 line-height-xs-1 font-weight-xs-bold col-xs-12 col-sm-9">
           Audit logs count: {{totalAuditLogs}}
         </div>
         <div class="col-xs-12 col-sm-3 start-xs end-sm">
@@ -53,9 +53,9 @@
         </div>
       </mat-card-header>
       <mat-card-content>
-        <div class="table-wrapper">
+        <div class="overflow-x-xs-auto display-xs-flex">
           <mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
-                 matSortDirection="asc">
+                 matSortDirection="asc" class="display-xs-table">
             <ng-container matColumnDef="id">
               <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>ID</mat-header-cell>
               <mat-cell *matCellDef="let auditLog"> {{auditLog?.id}} </mat-cell>
