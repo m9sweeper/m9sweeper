@@ -163,6 +163,7 @@ jobs:
         if: (success() || failure()) && steps.install_m9sweeper.outcome != 'skipped'
         with:
           path: |
+            /home/intelletive/.npm/_logs/
             selenium-testing/screenshots/
             selenium-testing/downloads/
             selenium-testing/reports/
