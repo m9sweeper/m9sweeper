@@ -1,4 +1,6 @@
 // Load dotenv so we can utilize .env files
+// noinspection TypeScriptValidateTypes,TypeScriptUnresolvedReference,GrazieInspection,JSUnusedLocalSymbols,JSCommentMatchesSignature,JSIgnoredPromiseFromCall,ES6ConvertVarToLetConst,SpellCheckingInspection
+
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -193,13 +195,13 @@ export const config: Options.Testrunner = {
     // before running any tests.
     framework: 'jasmine',
 
-    // The number of times to retry the entire specfile when it fails as a whole
+    // The number of times to retry the entire spec file when it fails as a whole
     // specFileRetries: 1,
 
     // Delay in seconds between the spec file retry attempts
     // specFileRetriesDelay: 0,
 
-    // Whether or not retried specfiles should be retried immediately or deferred to the end of the queue
+    // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
     // specFileRetriesDeferred: false,
 
     // Test reporter for stdout.

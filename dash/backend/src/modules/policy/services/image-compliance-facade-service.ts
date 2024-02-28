@@ -118,6 +118,8 @@ export class ImageComplianceFacadeService {
             exceptions = [];
         }
 
+        // If there were no results due to the image not being scanned, add a result for a phantom policy
+        // so the image will be considered non-compliant
         if (!results?.length) {
             complianceMap.setResultForPolicy(-1, false, 'image has not been scanned');
             return false;
@@ -191,6 +193,7 @@ export class ImageComplianceFacadeService {
                         severity: issue.severity,
                         namespace
                     });
+                    // Issue is considered compliant due to creation of temporary exception
                     complianceMap.setResultForCve(policy.id, issue.scannerId, issue.cve, true,
                         'Temporary exception created', issue.severity);
                 }
