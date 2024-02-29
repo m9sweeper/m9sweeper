@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SingleSignOnConfigurationComponent } from './single-sign-on-configuration.component';
+import { ExternalAuthConfigurationListComponent } from './external-auth-configuration-list.component';
 
 describe('SingleSignOnConfigurationComponent', () => {
-  let component: SingleSignOnConfigurationComponent;
-  let fixture: ComponentFixture<SingleSignOnConfigurationComponent>;
+  let component: ExternalAuthConfigurationListComponent;
+  let fixture: ComponentFixture<ExternalAuthConfigurationListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SingleSignOnConfigurationComponent ]
+      declarations: [ ExternalAuthConfigurationListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SingleSignOnConfigurationComponent);
+    fixture = TestBed.createComponent(ExternalAuthConfigurationListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

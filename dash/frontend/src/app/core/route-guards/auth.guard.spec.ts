@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AuthGuard } from './auth.guard';
+import {CanActivateFn} from '@angular/router';
 
 describe('AuthGuard', () => {
-  let guard: AuthGuard;
+  let guard: CanActivateFn;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(AuthGuard);
+    guard = AuthGuard;
   });
 
   it('should be created', () => {

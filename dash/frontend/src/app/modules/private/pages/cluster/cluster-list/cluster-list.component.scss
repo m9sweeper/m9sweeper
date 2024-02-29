@@ -1,3 +1,4 @@
+
 mat-card-title {
   font-size: 18px !important;
 }
@@ -9,7 +10,6 @@ mat-card-title {
 
 mat-card.overview-graph-card {
   margin: 0 5px 0 5px;  // set to match legacy margins
-
   mat-card-content {
     margin: 6px 16px 16px 6px !important;
     padding: unset;
@@ -19,7 +19,6 @@ mat-card.overview-graph-card {
 .cluster-element {
   display: flex;
   margin-top: 15px;
-
   mat-card {
     padding: 1em 0.5em;
     margin: 10px 5px 0 5px;  // set to match legacy margins
@@ -35,7 +34,6 @@ mat-card.overview-graph-card {
       min-width: 60px;
       padding-right: 10px;
     }
-
     mat-card-title {
       padding-top: 0;
     }
@@ -51,7 +49,6 @@ mat-card.overview-graph-card {
 
 .cluster-info-header {
   overflow-x: hidden;
-
   mat-card-subtitle {
     text-wrap: nowrap;
   }
