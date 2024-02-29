@@ -1,6 +1,6 @@
-<div class="page-container">
-  <div class="page-container-content">
-    <div class="page-card">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs ms-xs-6 mt-xs-6">
+    <div class="m-xs-0 overflow-x-xs-auto">
       <div >
         <mat-card appearance="outlined">
           <mat-card-content>
@@ -8,7 +8,7 @@
               <span class="page-title">{{subMenuTitle}}</span>
             </div>
             <form  [formGroup]="apiKeyForm">
-              <p >
+              <p>
                 <mat-form-field appearance="fill">
                   <mat-label>Name</mat-label>
                   <input matInput placeholder="Name" type="text" formControlName="name">
@@ -26,7 +26,7 @@
                 <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
               </p>
             </form>
-            <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" color="primary" (click)="onSubmit()" class="create-api-button margin-right-10">
+            <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" color="primary" (click)="onSubmit()" class="margin-right-10">
               {{ isEdit ? 'Update' : 'Create'}}
             </button>
             <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
