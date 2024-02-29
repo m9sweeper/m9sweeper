@@ -20,7 +20,7 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
           <mat-card class="h-xs-100">
             <mat-card-header>
-              <div class="page-card-title">Status</div>
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Status</div>
             </mat-card-header>
             <mat-card-content>
               <h2 class="text-style-orange" *ngIf="gatekeeperTemplate && constraintCount === 0">Not Setup</h2>
@@ -32,7 +32,7 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
           <mat-card class="h-xs-100">
             <mat-card-header>
-              <div class="page-card-title">Recommendation</div>
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Recommendation</div>
             </mat-card-header>
             <mat-card-content >
               <p *ngIf="gatekeeperTemplate && constraintCount === 0">
@@ -48,7 +48,7 @@
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 my-xs-1">
           <mat-card class="h-xs-100">
             <mat-card-header>
-              <div class="page-card-title">Details</div>
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Details</div>
             </mat-card-header>
             <mat-card-content>
               <p   *ngIf="gatekeeperTemplate">
@@ -66,7 +66,7 @@
             Constraints
           </div>
         </div>
-        <div class="col-xs-9 page-card-title-button-group-right-align">
+        <div class="col-xs-9 text-align-xs-right p-xs-0">
           <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openAddConstraintTemplate()"><mat-icon>add</mat-icon>Add More</button>
         </div>
       </mat-card-header>

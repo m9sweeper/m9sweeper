@@ -389,11 +389,11 @@ mat-cell {
 .page-card-line-content {
   display: flex;
 }
-.page-card-title-button-group-right-align{
+.page-card-title-button-group-right-align{ // to be removed
   text-align: right;
   padding: 0;
 }
-.page-card-left-align {
+.page-card-left-align { // to be removed
   margin-left: 0;
 }
 .page-table-container-with-paginator{
@@ -415,17 +415,17 @@ mat-cell {
   flex-direction: column;
 }
 
-.page-title{
+.page-title{ // to be removed
   font-size: 26px;
   vertical-align: bottom;
   line-height: 2;
 }
-.page-title-button-group-spacing {
+.page-title-button-group-spacing { // to be removed
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
-.page-button-spacing{
+.page-button-spacing{ // to be removed
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -434,15 +434,15 @@ mat-cell {
 .modal-container-margin{
   padding: 30px;
 }
-.modal-content-left-align-no-margin{
+.modal-content-left-align-no-margin{ // to be removed
   margin: 0;
   text-align: left;
 }
-.modal-content-right-align-no-margin{
+.modal-content-right-align-no-margin{ // to be removed
   margin: 0;
   text-align: right;
 }
-.modal-content-no-right-margin{
+.modal-content-no-right-margin{ // to be removed
   margin-right: 0;
 }
 

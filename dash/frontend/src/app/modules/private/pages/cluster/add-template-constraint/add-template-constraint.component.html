@@ -1,6 +1,6 @@
 <mat-dialog-content class="modal-container-margin">
   <div class="modal-content-left-align-no-margin">
-    <div class="page-card-title">
+    <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">
       {{isEdit ? 'Edit' : 'Add'}} Template Constraint
     </div>
     <br>
@@ -64,7 +64,7 @@
                     <p>apiGroups:
                       [{{(criteria.apiGroups[0] === ' ' || criteria.apiGroups[0] === '') ? '*' : criteria.apiGroups }}]</p>
                   </div>
-                  <div class="col-xs-4 page-card-title-button-group-right-align">
+                  <div class="col-xs-4 text-align-xs-right p-xs-0">
                     <button  class="mdc-icon-button" (click)="removeCriteria(i)">
                       <mat-icon class="close-icon" color="warn">close</mat-icon>
                     </button>

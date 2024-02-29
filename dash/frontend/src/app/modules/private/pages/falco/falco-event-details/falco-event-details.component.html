@@ -14,7 +14,7 @@
         <mat-card class="scrollable-table-card">
           <mat-card-header>
             <div class="page-card-header">
-              <div class="page-card-title"> Basic Details </div>
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1"> Basic Details </div>
             </div>
           </mat-card-header>
           <mat-card-content>
@@ -39,7 +39,7 @@
         <mat-card id="incidence-rate-graph-card">
           <mat-card-header>
             <div class="page-card-header">
-              <div class="page-card-title">  Incidence Rate </div>
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">  Incidence Rate </div>
             </div>
           </mat-card-header>
           <mat-card-content class="no-padding">
@@ -81,7 +81,7 @@
         <mat-card class="scrollable-table-card col-xs-12">
           <mat-card-header id="related-events-header">
             <div class="page-card-header">
-              <div class="page-card-title">
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">
                 Related Events
               </div>
             </div>
@@ -105,10 +105,10 @@
           <mat-card-header>
             <div class="page-card-header row">
 <!--          Please note that col-xs-12 + col-xs-7 puts the buttons at the start of the next row -->
-              <div class="page-card-title col-xs-12 col-sm-3">
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1 col-xs-12 col-sm-3">
                 Raw Data
               </div>
-              <div class="col-xs-7 col-sm-9 page-card-title-button-group-right-align">
+              <div class="col-xs-7 col-sm-9 text-align-xs-right p-xs-0">
                 <mat-button-toggle-group [value]="format" name="fontStyle" aria-label="Font Style">
                   <mat-button-toggle value="yaml" (click)="onClickYaml()">Yaml</mat-button-toggle>
                   <mat-button-toggle value="json" (click)="onClickJson()">Json</mat-button-toggle>

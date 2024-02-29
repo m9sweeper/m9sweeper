@@ -4,12 +4,12 @@
       <span>Reports</span>
     </div>
     <div class="row">
-      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 card-div">
+      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-xs-3 ms-xs-0 me-xs-0">
         <a
           [routerLink]="reportInfo.path"
           class="report-card"
         >
-          <mat-card>
+          <mat-card class="h-xs-100">
             <mat-card-content>
               <div class="row" style="display: flex; flex-direction: row">
                 <div class="report-icon">

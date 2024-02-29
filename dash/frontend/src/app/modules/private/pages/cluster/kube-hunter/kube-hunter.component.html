@@ -8,7 +8,7 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Penetration Test Status:</div>
+            <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Penetration Test Status:</div>
           </mat-card-header>
           <mat-card-content>
             <h3 [ngClass]="penetrationTestStatusInvalid ? 'text-style-red' : 'text-style-green'">{{penetrationTestText}}</h3>
@@ -19,7 +19,7 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" id="center-card">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Vulnerabilities in Last Run:</div>
+            <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Vulnerabilities in Last Run:</div>
           </mat-card-header>
           <mat-card-content >
             <table>
@@ -41,7 +41,7 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Our Advice:</div>
+            <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Our Advice:</div>
           </mat-card-header>
           <mat-card-content>
             <div class="page-card-header">
@@ -50,7 +50,7 @@
                   {{ourAdvice}}
                 </p>
               </div>
-              <div class="col-sm-5 col-xs-5 page-card-title-button-group-right-align">
+              <div class="col-sm-5 col-xs-5 text-align-xs-right p-xs-0">
                 <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
               </div>
             </div>
@@ -64,7 +64,7 @@
         <mat-card class="scrollable-table-card">
           <mat-card-header class="row">
             <div class="col-xs-5">
-              <div class="page-card-title">
+              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">
                 Past Audits
               </div>
             </div>

@@ -118,64 +118,90 @@ $classesToGenerate: (
     )
   ),
 
+  vertical-align: (
+    abbreviation: 'vertical-align',
+    values: (
+      baseline: baseline,
+      top: top,
+      middle: middle,
+      bottom: bottom,
+      sub: sub,
+      text-top: 'text-top'
+    )
+  ),
+
   overflow: (
     abbreviation: 'overflow',
     values: (
-      scroll: 'scroll',
-      hidden: 'hidden',
-      auto: 'auto',
-      clip: 'clip',
-      visible: 'visible'
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      clip: clip,
+      visible: visible
     )
   ),
 
   overflow-x: (
     abbreviation: 'overflow-x',
     values: (
-      scroll: 'scroll',
-      hidden: 'hidden',
-      auto: 'auto',
-      visible: 'visible'
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      visible: visible
     )
   ),
 
   overflow-y: (
     abbreviation: 'overflow-x',
     values: (
-      scroll: 'scroll',
-      hidden: 'hidden',
-      auto: 'auto',
-      visible: 'visible'
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      visible: visible
     )
   ),
 
   font-size: (
     abbreviation: 'font-size',
     values: (
-      20: '20px'
+      20: '20px',
+      26: '26px'
     )
   ),
+
   font-weight: (
     abbreviation: 'font-weight',
     values: (
-      bold: 'bold'
+      bold: bold
     )
   ),
+
   line-height: (
     abbreviation: 'line-height',
     values: (
-      1: '1.5em'
+      1: '1.5em',
+      2: 2,
+      20: '20px'
     )
   ),
+
   width: (
     abbreviation: 'width',
     values: (
       100: 100%,
       500px: '500px'
     )
+  ),
+
+  min-width: (
+    abbreviation: 'min-width',
+    values: (
+      3: '3rem',
+      4: '4rem',
+      8: '8rem',
+    )
   )
 );
-
 
 $spacer: 1em;
 $sides: (
@@ -201,6 +227,7 @@ $sides: (
     3: ($spacer),
     4: ($spacer * 1.5),
     5: ($spacer * 3),
+    6: ($spacer * 0.8)
   );
 
   @each $propertyShorthand, $property in $properties {
