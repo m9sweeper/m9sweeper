@@ -2,8 +2,9 @@
   <div class="page-container-content">
 
     <div *ngIf="report && cluster">
-      <div class="page-title"> kube-hunter Report: Cluster Vulnerabilities </div>
-
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">
+        kube-hunter Report: Cluster Vulnerabilities
+      </div>
       <p> Cluster: {{cluster.name}}</p>
       <p> Date run: {{dateRan}} </p>
     </div>
@@ -47,7 +48,5 @@
         </mat-table>
       </div>
     </mat-card>
-
   </div>
-
 </div>

@@ -1,7 +1,7 @@
 <mat-stepper [orientation]="isSmallScreen ? 'vertical' : 'horizontal'" class="no-padding" mat-dialog-content linear #stepper>
   <mat-step [editable]="isCompleted" [stepControl]="createClusterForm">
     <ng-template matStepLabel>Setup Cluster</ng-template>
-    <div class="modal-content-left-align-no-margin">
+    <div class="m-xs-3 text-align-xs-left">
     <h3>Setup Cluster</h3>
     <p>This wizard will walk you through setting up your cluster.</p>
 
@@ -87,7 +87,7 @@
 
   <mat-step [editable]="isCompleted" [formGroup]="serviceAccountForm">
     <ng-template matStepLabel>Grant Access</ng-template>
-    <div class="modal-content-left-align-no-margin">
+    <div class="m-xs-3 text-align-xs-left">
       <h3>Grant Access</h3>
       <!--Users are required to go through the manual service account configuration if they have not provided an admin kubeconfig-->
       <ng-container *ngIf="!!this.createClusterForm.get('kubeConfig').value; else manualServiceAccountRequired">
@@ -134,7 +134,7 @@
 
   <mat-step [editable]="isCompleted">
     <ng-template matStepLabel>Install Enforcer</ng-template>
-    <div class="modal-content-left-align-no-margin">
+    <div class="m-xs-3 text-align-xs-left">
       <h3>Install Enforcer</h3>
       <ng-container *ngIf="!!this.createClusterForm.get('kubeConfig').value; else manualWebhookOnlyMessage">
 
@@ -169,7 +169,7 @@
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <div class="modal-content-left-align-no-margin">
+    <div class="m-xs-3 text-align-xs-left">
       <h3>Done!</h3>
       <div class="row">
         <span class="col-xs-12 col-md-8 mb-xs-2">

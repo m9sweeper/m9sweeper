@@ -1,44 +1,47 @@
 <div class="page-container">
   <div class="h-xs-fit page-container-content">
     <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
-    <div class="page-title-button-group-spacing adjust-height">
-      <div class="page-title">Namespaces</div>
-      <div class="calendar-date-picker">
-        <app-datepicker-component (newDateSelected)="getNamespacesInfo($event)" [allowFutureDate]="false"></app-datepicker-component>
-      </div>
+    <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row height-xs-fit-content">
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">Namespaces</div>
+      <app-datepicker-component class="ms-xs-0 ms-sm-3" (newDateSelected)="getNamespacesInfo($event)"
+                                [allowFutureDate]="false"></app-datepicker-component>
     </div>
-    <mat-card class="mb-xs-3 scrollable-table-card">
-      <div class="table-wrapper">
-        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear matSortDirection="asc">
-          <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
-            <mat-cell *matCellDef="let namespace">
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                {{namespace?.name}}
-              </a>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="pod">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
-            <mat-cell *matCellDef="let namespace" >
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                {{namespace?.kubernetesPods? namespace.kubernetesPods : 0}}
-              </a>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="compliant">
-            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
-            <mat-cell *matCellDef="let namespace">
-              <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
-                <app-readonly-checkbox [checked]="namespace?.compliant"></app-readonly-checkbox>
-              </a>
-            </mat-cell>
-          </ng-container>
-          <mat-header-row ></mat-header-row>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']" class="table-row"></mat-row>
-        </mat-table>
-      </div>
+    <mat-card class="mb-xs-3">
+      <mat-table class="table-with-link-rows table-wrapper" [dataSource]="dataSource" matSort matSortActive="name"
+                 matSortDisableClear matSortDirection="asc">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
+          <mat-cell *matCellDef="let namespace">
+            <a
+              [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+              {{ namespace?.name }}
+            </a>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pod">
+          <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Total Pods</mat-header-cell>
+          <mat-cell *matCellDef="let namespace">
+            <a
+              [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+              {{ namespace?.kubernetesPods ? namespace.kubernetesPods : 0 }}
+            </a>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="compliant">
+          <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Compliant</mat-header-cell>
+          <mat-cell *matCellDef="let namespace">
+            <a
+              [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', namespace?.name, 'pods']">
+              <app-readonly-checkbox [checked]="namespace?.compliant"></app-readonly-checkbox>
+            </a>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row></mat-header-row>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
+                 [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', row?.name, 'pods']"
+                 class="table-row"></mat-row>
+      </mat-table>
       <div class="pb-xs-3">
         <mat-paginator
           [length]="totalData"

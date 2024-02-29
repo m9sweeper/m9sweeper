@@ -1,5 +1,5 @@
 <div class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
+  <div class="m-xs-3 text-align-xs-left">
     <a href="https://open-policy-agent.github.io/gatekeeper/website/docs/install/#installation">
       <mat-icon mat-list-item-icon>info</mat-icon>
     </a>
@@ -17,7 +17,7 @@
     </div>
 
     <div>
-      <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100 modal-content-left-align-no-margin modal-content-no-right-margin margin-top-1em" readonly>
+      <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet width-xs-100 m-xs-3 text-align-xs-left modal-content-no-right-margin margin-top-1em" readonly>
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
 helm install gatekeeper/gatekeeper --name-template=gatekeeper \
   --namespace gatekeeper-system \

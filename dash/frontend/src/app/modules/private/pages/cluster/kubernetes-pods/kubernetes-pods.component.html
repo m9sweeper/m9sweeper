@@ -1,18 +1,15 @@
 <div class="page-container">
   <div class="page-container-content">
     <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
-    <div class="page-title-button-group-spacing adjust-height">
-      <div class="page-title">Pods in {{namespace}}</div>
-      <div class="calendar-date-picker">
-        <app-datepicker-component (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
-      </div>
+    <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row height-xs-fit-content">
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">Pods in {{namespace}}</div>
+      <app-datepicker-component class="ms-xs-0 ms-sm-3"  (newDateSelected)="dateChanged($event)" [allowFutureDate]="false"></app-datepicker-component>
     </div>
-    <mat-card class="mb-xs-2 scrollable-table-card">
+    <mat-card class="mb-xs-2 overflow-x-xs-auto display-xs-flex">
       <div class="m-xs-3" *ngIf="!pageLoading && !totalNumPods">
         No pods found
       </div>
-      <div class="table-wrapper" *ngIf="pageLoading || totalNumPods">
-        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort>
+        <mat-table class="table-with-link-rows display-xs-flex display-xs-table" *ngIf="pageLoading || totalNumPods" [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
             <mat-cell *matCellDef="let element">
@@ -57,7 +54,6 @@
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;" class="click-event"></mat-row>
         </mat-table>
-      </div>
       <mat-paginator class="pb-xs-3" [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons *ngIf="pageLoading || totalNumPods"></mat-paginator>
     </mat-card>
   </div>

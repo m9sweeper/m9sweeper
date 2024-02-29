@@ -1,7 +1,7 @@
 <div class="page-container">
   <div class="page-container-content">
-    <div class="page-title-button-group-spacing">
-      <div class="page-title">kube-hunter</div>
+    <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row height-xs-fit-content">
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">kube-hunter</div>
     </div>
 
     <div class="stats-row row">
@@ -44,7 +44,7 @@
             <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Our Advice:</div>
           </mat-card-header>
           <mat-card-content>
-            <div class="page-card-header">
+            <div class="display-xs-flex p-xs-0 ms-xs-0 w-xs-100">
               <div class=" col-sm-7 col-xs-7 no-padding">
                 <p>
                   {{ourAdvice}}
@@ -61,23 +61,21 @@
 
     <div class="row" id="past-audits-table">
       <div class="col-xs-12">
-        <mat-card class="scrollable-table-card">
+        <mat-card>
           <mat-card-header class="row">
             <div class="col-xs-5">
               <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">
                 Past Audits
               </div>
             </div>
-            <div class="col-xs-7 run-audit-button">
+            <div class="col-xs-7 justify-content-xs-end display-xs-flex">
               <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
             </div>
           </mat-card-header>
-          <mat-card-content>
-            <div *ngIf="allReportsForCluster">
-              Click on an audit to learn more about this cluster's vulnerabilities<br>
-            </div>
-
-            <div class="table-wrapper">
+          <mat-card-content *ngIf="allReportsForCluster">
+            Click on an audit to learn more about this cluster's vulnerabilities<br>
+          </mat-card-content>
+          <mat-card-content class="overflow-x-xs-auto display-xs-flex">
               <mat-table class="table-with-link-rows" [dataSource]="dataSource">
                 <ng-container matColumnDef="date">
                   <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
@@ -106,8 +104,6 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
-            </div>
-
             <mat-paginator
               [length]="reportCount"
               [pageSize]="limit"
@@ -119,10 +115,5 @@
         </mat-card>
       </div>
     </div>
-
   </div>
 </div>
-
-
-
-

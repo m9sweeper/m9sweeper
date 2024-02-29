@@ -190,7 +190,7 @@ button {
   }
 }
 
-.no-padding {
+.no-padding { // to be removed
   padding: 0!important;
 }
 
@@ -201,7 +201,7 @@ button {
 .padding-top-10{
   padding-top: 10px;
 }
-.padding-top-15 {
+.padding-top-15 { // to be removed
   padding-top:15px;
   padding-left: 0;
 }
@@ -372,7 +372,7 @@ mat-cell {
   margin: 0;
   overflow-x: auto;
 }
-.page-card-header{
+.page-card-header{ // to be removed
   display:flex;
   padding:0;
   margin-left: 0;
@@ -497,7 +497,7 @@ mat-form-field {
   padding-top: 16px;
   padding-bottom: 16px;
 }
-.next-button {
+.next-button { // to be removed
   display: flex;
   justify-content: flex-end;
 }
@@ -758,7 +758,7 @@ div.cluster-dashboard.responsive {
   height: 100%;
 }
 
-.align-items-center {
+.align-items-center { // tobe removed
   align-items: center!important;
 }
 .align-self-center {

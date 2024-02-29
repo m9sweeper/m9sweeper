@@ -1,5 +1,5 @@
 <div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin" id="modalContentWrapper">
+  <div class="m-xs-3 text-align-xs-left" id="modalContentWrapper">
     <mat-form-field appearance="fill">
       <mat-label>Minimum Priority</mat-label>
       <mat-select [(value)]="level">
@@ -39,7 +39,7 @@ helm upgrade --install falco falcosecurity/falco \
   --set falcosidekick.config.webhook.checkcert=true \
   --set-string falcosidekick.config.webhook.minimumpriority='{{level.toLowerCase()}}'</textarea>
     </div>
-    <div class="modal-content-left-align-no-margin row start-sm between-xs pt-xs-2">
+    <div class="m-xs-3 text-align-xs-left row start-sm between-xs pt-xs-2">
       <button mat-raised-button matDialogClose color="primary" class="me-xs-2 mb-xs-2 mb-md-0">Done</button>
       <app-copy-to-clipboard-button
         successMessage="Command copied to clipboard!"

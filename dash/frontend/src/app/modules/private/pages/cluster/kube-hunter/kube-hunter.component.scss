@@ -25,11 +25,6 @@
 #past-audits-table {
   mat-card-header {
     margin-bottom: 1em;
-
-    .run-audit-button {
-      justify-content: end;
-      display: flex;
-    }
   }
 
   mat-table {

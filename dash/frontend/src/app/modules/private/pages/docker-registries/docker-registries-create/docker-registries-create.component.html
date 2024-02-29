@@ -1,5 +1,5 @@
 <div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
+  <div class="m-xs-3 text-align-xs-left">
   <form [formGroup]="createDockerRegistryForm" (ngSubmit)="onSubmit()">
     <div>
       <div>
@@ -134,7 +134,7 @@
           </mat-form-field>
         </p>
       </div>
-      <div class="modal-content-left-align-no-margin">
+      <div class="m-xs-3 text-align-xs-left">
         <button [disabled]="!createDockerRegistryForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
         &nbsp;
         <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
