@@ -85,7 +85,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
 
       // Outer loop over the high level sections (ex: 3. Worker Node Security Configuration), and appears in Table of Contents
       for (const section of results.Controls) {
-        body.push(this.pdfHelpers.buildSubHeader(`Section ${section.id}. ${section.text} (${section.version} v${section.detected_version})`, {
+        body.push(this.pdfHelpers.buildSubHeader(`Section ${section.id}: ${section.text} (${section.version} v${section.detected_version})`, {
           level: 2,
           style: ['h3', 'bold']
         }));
