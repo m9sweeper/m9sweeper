@@ -50,6 +50,8 @@ height: (
   height: 100%
 }
  */
+@use '@angular/material' as mat;
+
 $classesToGenerate: (
   display: (
     abbreviation: 'display',
@@ -77,6 +79,12 @@ $classesToGenerate: (
       revert: revert, revert-layer: revert-layer,
       unset: unset,
     ),
+  ),
+  flex: (
+    abbreviation: 'flex',
+    values: (
+      1: 1
+    )
   ),
   align-items: (
     abbreviation: 'align-items',
@@ -188,17 +196,23 @@ $classesToGenerate: (
   width: (
     abbreviation: 'width',
     values: (
+      auto: auto,
       100: 100%,
       500px: '500px'
     )
   ),
-
   min-width: (
     abbreviation: 'min-width',
     values: (
       3: '3rem',
       4: '4rem',
       8: '8rem',
+    )
+  ),
+  background-color: (
+    abbreviation: 'background-color',
+    values: (
+      grey: mat.get-color-from-palette(mat.$gray-palette, 300),
     )
   )
 );
@@ -209,7 +223,7 @@ $sides: (
   b: ['bottom'],
   s: ['inline-start'],
   e: ['inline-end'],
-  x: ['inline'],
+  x: ['right', 'left'],
   y: ['top', 'bottom'],
   all: ['inline-start', 'top', 'inline-end', 'bottom'],
 );
@@ -228,7 +242,9 @@ $sides: (
     4: ($spacer * 1.5),
     5: ($spacer * 3),
     6: ($spacer * 0.8),
-    7: ($spacer * 1.25)
+    7: ($spacer * 1.25),
+    8: ($spacer * 1.88), // 30px
+    9: ($spacer * 0.625) // 10px
   );
 
   @each $propertyShorthand, $property in $properties {
