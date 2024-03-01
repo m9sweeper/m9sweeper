@@ -1,36 +1,26 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable, of} from 'rxjs';
-import {AlertService} from '../services/alert.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {inject} from '@angular/core';
 import {catchError, map} from 'rxjs/operators';
-import { IServerResponse } from '../entities/IServerResponse';
-import { JwtAuthService } from '../services/jwt-auth.service';
+import {IServerResponse} from '../entities/IServerResponse';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+import {JwtAuthService} from '../services/jwt-auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class LoginGuard implements CanActivate {
-
-  constructor(
-    private alertService: AlertService,
-    private httpClient: HttpClient,
-    private router: Router,
-    private jwtAuthService: JwtAuthService,
-  ) {}
-
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.httpClient.get('/auth/check-status').pipe(
+export const LoginGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree => {
+  const httpClient = inject(HttpClient);
+  const jwtAuthService = inject(JwtAuthService);
+  const router = inject(Router);
+  return httpClient.get('/auth/check-status').pipe(
       map((response: IServerResponse<{ loggedIn: boolean }>) => {
         if (response.data?.loggedIn) {
-          this.router.navigate(['/private']);
+          router.navigate(['/private']);
           return false;
         }
-        this.jwtAuthService.clearToken();
+        jwtAuthService.clearToken();
         return true;
       }), catchError((err: HttpErrorResponse) => {
         if (!environment.production) {
@@ -39,6 +29,5 @@ export class LoginGuard implements CanActivate {
         return of(true);
       })
     );
-  }
 
-}
+};

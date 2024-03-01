@@ -1,7 +1,6 @@
-import {CanActivate, ExecutionContext, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
+import {CanActivate, ExecutionContext, Inject, Injectable} from '@nestjs/common';
 import {UserProfileDto} from '../modules/user/dto/user-profile-dto';
 import {Reflector} from '@nestjs/core';
-import {MineLoggerService} from '../modules/shared/services/mine-logger.service';
 
 @Injectable()
 export class AuthorityGuard implements CanActivate {

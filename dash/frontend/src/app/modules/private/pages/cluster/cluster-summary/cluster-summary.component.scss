@@ -31,7 +31,6 @@ mat-card-title {
 #cluster-graphs-row {
   mat-card {
     margin: 10px 5px 0 5px;  // set to match legacy margins
-
     mat-card-content {
       margin: 6px 16px 16px 6px !important;
       padding: unset;
@@ -64,7 +63,6 @@ mat-card-title {
   position: sticky;
   position: -webkit-sticky; /* Safari */
   bottom: 0;
-
   mat-card {
     padding: 15px;
     border-top: 1px solid rgba(0, 0, 0, 0.2);

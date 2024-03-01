@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 // @ts-ignore
-import { AlertDialogComponent } from './alert.component';
+import { AlertDialogComponent } from './alert-dialog.component';
 
 describe('AlertComponent', () => {
   let component: AlertDialogComponent;

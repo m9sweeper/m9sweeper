@@ -10,7 +10,6 @@
         width: 100%;
       }
     }
-
     mat-card {
       height: 90%;
 
@@ -25,6 +24,10 @@
 #past-audits-table {
   mat-card-header {
     margin-bottom: 1em;
+    .run-audit-button {
+      justify-content: flex-end;
+      display: flex;
+    }
   }
 
   mat-table {

@@ -5,7 +5,6 @@
 html, body { height: 100%;} // login page requires 100%
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@import '@angular/material/theming';
 @import './app/modules/private/private.component.theme';
 @import 'flexboxgrid/css/flexboxgrid.min.css';
 @import 'codemirror/lib/codemirror';
@@ -50,14 +49,9 @@ $ms-default-theme: mat.define-light-theme((
 @import './app/modules/private/pages/organization-settings/organization-settings.component.theme';
 @import './app/modules/private/pages/audit-log/audit-log-list/audit-log.component.theme';
 
-mat-card {
+mat-mdc-card {
   mat-card-title {
     font-weight: bold;
-  }
-
-  .mat-mdc-card-content {
-    font-size: 14px;
-    line-height: 20px;
   }
 }
 
@@ -149,9 +143,8 @@ $danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
   @include audit-log-component-light-theme($theme)
 }
 
-
 .default-theme {
-  @include angular-material-theme($ms-default-theme);
+  @include mat.all-component-themes($ms-default-theme);
   @include custom-components-theme($ms-default-theme);
   @include custom-dashboard-component-theme($ms-default-theme);
   @include custom-cluster-details-component-theme($ms-default-theme);

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImageScanResultScannerDetailsComponent } from './image-scan-result-scanner-deatils.component';
+import { ImageScanResultScannerDetailsComponent } from './image-scan-result-scanner-details.component';
 
 describe('ImageScanResultScannerDeatilsComponent', () => {
   let component: ImageScanResultScannerDetailsComponent;
