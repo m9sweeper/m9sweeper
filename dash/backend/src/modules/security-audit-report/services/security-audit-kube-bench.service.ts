@@ -65,7 +65,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
       {
         style: 'body',
         text: [
-          'Kube-Bench compares your cluster’s configuration against the Center for Internet Security’s ',
+          'kube-bench compares your cluster’s configuration against the Center for Internet Security’s ',
           'best practices for running a Kubernetes Cluster. It runs as an application with elevated privileges in your cluster ',
           'and then attempts to see whether the cluster is configured securely.',
         ]
@@ -85,7 +85,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
 
       // Outer loop over the high level sections (ex: 3. Worker Node Security Configuration), and appears in Table of Contents
       for (const section of results.Controls) {
-        body.push(this.pdfHelpers.buildSubHeader(`${section.id}. ${section.text} (${section.version} v${section.detected_version})`, {
+        body.push(this.pdfHelpers.buildSubHeader(`Section ${section.id}: ${section.text} (${section.version} v${section.detected_version})`, {
           level: 2,
           style: ['h3', 'bold']
         }));
@@ -144,7 +144,7 @@ export class SecurityAuditKubeBenchService implements IAuditReportSectionService
       {
         style: 'body',
         text: [
-          'Kube-Bench compares your cluster\'s configuration against the Center for Internet Security\'s best practices for running a Kubernetes Cluster. ',
+          'kube-bench compares your cluster\'s configuration against the Center for Internet Security\'s best practices for running a Kubernetes Cluster. ',
           'It runs as an application with elevated privileges in your cluster and then attempts to see whether the cluster is configured correctly. '
         ]
       },
