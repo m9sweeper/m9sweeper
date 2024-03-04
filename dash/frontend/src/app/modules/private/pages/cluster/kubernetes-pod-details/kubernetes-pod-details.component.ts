@@ -16,7 +16,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {KubesecDialogComponent} from '../kubesec/kubesec-dialog/kubesec-dialog.component';
 import {GatekeeperViolationDialogComponent} from '../gatekeeper-violation-dialog/gatekeeper-violation-dialog.component';
 import {DatePipe} from '@angular/common';
-import {Breadcrumb} from '../../../../shared/components/breadcrumbs/breadcrumb.interface';
 
 
 @Component({
@@ -40,26 +39,6 @@ export class KubernetesPodDetailsComponent implements OnInit {
   kubesecReport: string;
   currentDateData: { isToday: boolean, desiredDate: Date, startTime: number, endTime: number };
 
-  breadcrumbs: Breadcrumb[] = [
-    {
-      place: 1,
-      link: [],
-      text: 'namespaces',
-    },
-    {
-      place: 2,
-      text: '',
-    },
-    {
-      place: 3,
-      text: 'pods',
-    },
-    {
-      place: 4,
-      text: 'pods',
-    },
-  ];
-
   constructor(
     private route: ActivatedRoute,
     private alertService: AlertService,
@@ -74,17 +53,13 @@ export class KubernetesPodDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent.parent.parent.parent.params.subscribe(param => {
       this.clusterId = param.id;
-      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 1).link = ['/private', 'clusters', this.clusterId.toString(), 'kubernetes-namespaces'];
       if (this.namespace && this.podName) {
         this.loadImages();
       }
     });
     this.route.params.subscribe(routeParams => {
       this.namespace = routeParams.namespace;
-      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 2).text = this.namespace;
-      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 3).link = ['/private', 'clusters', this.clusterId.toString(), 'kubernetes-namespaces',  this.namespace, 'pods'];
       this.podName = routeParams.pod;
-      this.breadcrumbs.find((breadcrumb) => breadcrumb.place === 4).text = this.podName;
       if (this.clusterId) {
         this.loadImages();
       }

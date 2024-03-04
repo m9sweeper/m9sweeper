@@ -18,7 +18,6 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import {MatListModule} from '@angular/material/list';
 import { HideableTextComponent } from './components/hideable-text/hideable-text.component';
 import {USAPhoneMaskDirective} from './directives/usa-phone-mask.directive';
-import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
 import { ReadonlyCheckboxComponent } from './components/readonly-checkbox/readonly-checkbox.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SimpleMessageDialogComponent } from './simple-message-dialog/simple-message-dialog.component';
@@ -26,7 +25,6 @@ import { EllipsisTextComponent } from './components/expandable-cell-contents/ell
 
 @NgModule({
   declarations: [
-    BreadcrumbsComponent,
     DatepickerComponent,
     GenericErrorDialogComponent,
     USAPhoneMaskDirective,
@@ -55,7 +53,6 @@ import { EllipsisTextComponent } from './components/expandable-cell-contents/ell
     MatCheckboxModule,
   ],
   exports: [
-    BreadcrumbsComponent,
     DatepickerComponent,
     USAPhoneMaskDirective,
     RbacDirective,
