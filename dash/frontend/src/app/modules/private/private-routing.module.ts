@@ -58,6 +58,7 @@ const routes: Routes = [
   {
     path: '',
     component: PrivateComponent,
+    data: { breadcrumb: { skip: true } },
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {
@@ -78,7 +79,8 @@ const routes: Routes = [
         component: ClusterDetailsComponent,
         canActivate: [RoleGuard],
         data: {
-          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY]
+          allowedUserRoles: [Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY],
+          breadcrumb: {skip: true}
         },
         children: [
           {
@@ -224,7 +226,8 @@ const routes: Routes = [
                 path: '',
                 component: KubernetesNamespacesComponent,
                 data: {
-                  title: 'Namespaces Info'
+                  title: 'Namespaces Info',
+                  breadcrumb: 'Namespaces'
                 },
               },
               {
@@ -234,7 +237,8 @@ const routes: Routes = [
                     path: '',
                     component: KubernetesPodsComponent,
                     data: {
-                      title: 'Kubernetes Pods'
+                      title: 'Kubernetes Pods',
+                      breadcrumb: (pathName: string) => '${pathName.split}(\'/\').shift()}'
                     }
                   },
                   {

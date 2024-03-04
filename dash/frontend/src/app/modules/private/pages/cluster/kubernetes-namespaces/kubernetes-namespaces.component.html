@@ -1,6 +1,10 @@
 <div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
   <div class="col-xs ms-xs-6 my-xs-6 h-xs-fit">
-    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+    <xng-breadcrumb>
+      <ng-container *xngBreadcrumbItem="let breadcrumb">
+        <ng-container>{{ breadcrumb | titlecase }}</ng-container>
+      </ng-container>
+    </xng-breadcrumb>
     <div class="page-title-button-group-spacing adjust-height">
       <div class="page-title">Namespaces</div>
       <div class="calendar-date-picker">
