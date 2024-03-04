@@ -1,7 +1,7 @@
-<div class="h-xs-100 overflow-xs-auto">
-  <div class="m-xs-6">
+<div class="h-xs-100 display-xs-block overflow-xs-auto background-color-xs-grey">
+  <div class="col-xs mb-xs-4">
     <div class="row" id="cluster-summary-row">
-      <div class="no-padding full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card>
           <mat-card-content>
             <div class="label">Total Images Running</div>
@@ -9,7 +9,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 m-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card>
           <mat-card-content>
             <div class="label">Total Vulnerabilities Detected in Running Images</div>
@@ -17,7 +17,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="no-padding no-margin full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 m-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card>
           <mat-card-content>
             <div class="label">Policy Violations</div>
@@ -28,191 +28,183 @@
     </div>
 
     <div class="row" id="cluster-graphs-row">
-      <div class="no-padding full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card">
           <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
           <mat-card-content>
-            <div>
-              <ngx-charts-line-chart
-                [view]="complianceSummaryLineChartAttributes.view"
-                [scheme]="complianceSummaryLineChartAttributes.colorScheme"
-                [results]="complianceSummaryLineChartAttributes.results"
-                [legend]="complianceSummaryLineChartAttributes.showLegend"
-                [legendPosition]="complianceSummaryLineChartAttributes.legendPosition"
-                [gradient]="complianceSummaryLineChartAttributes.gradient"
-                [xAxis]="complianceSummaryLineChartAttributes.showXAxis"
-                [yAxis]="complianceSummaryLineChartAttributes.showYAxis"
-                [showXAxisLabel]="complianceSummaryLineChartAttributes.showXAxisLabel"
-                [showYAxisLabel]="complianceSummaryLineChartAttributes.showYAxisLabel"
-                [yAxisLabel]="complianceSummaryLineChartAttributes.yAxisLabel"
-                [xAxisLabel]="complianceSummaryLineChartAttributes.xAxisLabel"
-                [yScaleMin]="complianceSummaryLineChartAttributes.yScaleMin"
-                [yScaleMax]="complianceSummaryLineChartAttributes.yScaleMax"
-                [yAxisTicks]="complianceSummaryLineChartAttributes.yAxisTicks"
-                [xAxisTickFormatting]="scanXTickFormatting"
-                [autoScale]="complianceSummaryLineChartAttributes.autoScale"
-              >
-                <ng-template #tooltipTemplate let-model="model">
+            <ngx-charts-line-chart
+              [view]="complianceSummaryLineChartAttributes.view"
+              [scheme]="complianceSummaryLineChartAttributes.colorScheme"
+              [results]="complianceSummaryLineChartAttributes.results"
+              [legend]="complianceSummaryLineChartAttributes.showLegend"
+              [legendPosition]="complianceSummaryLineChartAttributes.legendPosition"
+              [gradient]="complianceSummaryLineChartAttributes.gradient"
+              [xAxis]="complianceSummaryLineChartAttributes.showXAxis"
+              [yAxis]="complianceSummaryLineChartAttributes.showYAxis"
+              [showXAxisLabel]="complianceSummaryLineChartAttributes.showXAxisLabel"
+              [showYAxisLabel]="complianceSummaryLineChartAttributes.showYAxisLabel"
+              [yAxisLabel]="complianceSummaryLineChartAttributes.yAxisLabel"
+              [xAxisLabel]="complianceSummaryLineChartAttributes.xAxisLabel"
+              [yScaleMin]="complianceSummaryLineChartAttributes.yScaleMin"
+              [yScaleMax]="complianceSummaryLineChartAttributes.yScaleMax"
+              [yAxisTicks]="complianceSummaryLineChartAttributes.yAxisTicks"
+              [xAxisTickFormatting]="scanXTickFormatting"
+              [autoScale]="complianceSummaryLineChartAttributes.autoScale"
+            >
+              <ng-template #tooltipTemplate let-model="model">
                     <span>
                       Date: {{ model.name | date: 'mediumDate' }}
                     </span>
-                  <br/>
-                  <span>Compliance: {{ model.value | number: '1.0-1' }}%</span>
-                </ng-template>
+                <br/>
+                <span>Compliance: {{ model.value | number: '1.0-1' }}%</span>
+              </ng-template>
 
-                <ng-template #seriesTooltipTemplate let-model="model">
+              <ng-template #seriesTooltipTemplate let-model="model">
                     <span>
                       Date: {{ model[0].name | date: 'mediumDate' }}
                     </span>
-                  <br/>
-                  <span>Compliance: {{ model[0].value | number: '1.0-1' }}%</span>
-                </ng-template>
-              </ngx-charts-line-chart>
-            </div>
+                <br/>
+                <span>Compliance: {{ model[0].value | number: '1.0-1' }}%</span>
+              </ng-template>
+            </ngx-charts-line-chart>
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="no-padding full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card">
           <mat-card-title class="center-xs">Scan History</mat-card-title>
           <mat-card-content>
-            <div>
-              <ngx-charts-line-chart
-                [view]="lineChartAttributes.view"
-                [scheme]="lineChartAttributes.colorScheme"
-                [results]="lineChartAttributes.results"
-                [legend]="lineChartAttributes.showLegend"
-                [legendPosition]="lineChartAttributes.legendPosition"
-                [gradient]="lineChartAttributes.gradient"
-                [xAxis]="lineChartAttributes.showXAxis"
-                [yAxis]="lineChartAttributes.showYAxis"
-                [showXAxisLabel]="lineChartAttributes.showXAxisLabel"
-                [showYAxisLabel]="lineChartAttributes.showYAxisLabel"
-                [yAxisLabel]="lineChartAttributes.yAxisLabel"
-                [xAxisLabel]="lineChartAttributes.xAxisLabel"
-                [yScaleMin]="lineChartAttributes.yScaleMin"
-                [yAxisTicks]="lineChartAttributes.yAxisTicks"
-                [xAxisTickFormatting]="scanXTickFormatting"
-                [autoScale]="lineChartAttributes.autoScale">
-                <ng-template #tooltipTemplate let-model="model">
+            <ngx-charts-line-chart
+              [view]="lineChartAttributes.view"
+              [scheme]="lineChartAttributes.colorScheme"
+              [results]="lineChartAttributes.results"
+              [legend]="lineChartAttributes.showLegend"
+              [legendPosition]="lineChartAttributes.legendPosition"
+              [gradient]="lineChartAttributes.gradient"
+              [xAxis]="lineChartAttributes.showXAxis"
+              [yAxis]="lineChartAttributes.showYAxis"
+              [showXAxisLabel]="lineChartAttributes.showXAxisLabel"
+              [showYAxisLabel]="lineChartAttributes.showYAxisLabel"
+              [yAxisLabel]="lineChartAttributes.yAxisLabel"
+              [xAxisLabel]="lineChartAttributes.xAxisLabel"
+              [yScaleMin]="lineChartAttributes.yScaleMin"
+              [yAxisTicks]="lineChartAttributes.yAxisTicks"
+              [xAxisTickFormatting]="scanXTickFormatting"
+              [autoScale]="lineChartAttributes.autoScale">
+              <ng-template #tooltipTemplate let-model="model">
                   <span>
                     Date: {{ model.name | date: 'mediumDate' }}
                   </span>
-                  <br/>
-                  <span>Scans: {{ model.value }}</span>
-                </ng-template>
+                <br/>
+                <span>Scans: {{ model.value }}</span>
+              </ng-template>
 
-                <ng-template #seriesTooltipTemplate let-model="model">
+              <ng-template #seriesTooltipTemplate let-model="model">
                   <span>
                     Date: {{ model[0].name | date: 'mediumDate' }}
                   </span>
-                  <br/>
-                  <span>Scans: {{ model[0].value }}</span>
-                </ng-template>
+                <br/>
+                <span>Scans: {{ model[0].value }}</span>
+              </ng-template>
 
-              </ngx-charts-line-chart>
-            </div>
+            </ngx-charts-line-chart>
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="no-padding full-height col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card">
           <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
           <mat-card-content>
-            <div>
-              <ngx-charts-bar-vertical-stacked
-                [view]="barChartAttributes.view"
-                [scheme]="barChartAttributes.colorScheme"
-                [results]="barChartAttributes.results"
-                [legend]="barChartAttributes.showLegend"
-                [legendPosition]="barChartAttributes.legendPosition"
-                [gradient]="barChartAttributes.gradient"
-                [xAxis]="barChartAttributes.showXAxis"
-                [yAxis]="barChartAttributes.showYAxis"
-                [barPadding]="barChartAttributes.barPadding"
-                [showXAxisLabel]="barChartAttributes.showXAxis"
-                [showYAxisLabel]="barChartAttributes.showYAxis"
-                [xAxisLabel]="barChartAttributes.xAxisLabel"
-                [yAxisLabel]="barChartAttributes.yAxisLabel"
-                [xAxisTickFormatting]="scanXTickFormatting">
-                <ng-template #tooltipTemplate let-model="model">
-                  <span>Date: {{ model.series | date: 'mediumDate' }}</span>
-                  <br/>
-                  <span>Type: {{ model.name }}</span>
-                  <br/>
-                  <span>Vulnerabilities: {{ model.value }}</span>
-                </ng-template>
-              </ngx-charts-bar-vertical-stacked>
-            </div>
+            <ngx-charts-bar-vertical-stacked
+              [view]="barChartAttributes.view"
+              [scheme]="barChartAttributes.colorScheme"
+              [results]="barChartAttributes.results"
+              [legend]="barChartAttributes.showLegend"
+              [legendPosition]="barChartAttributes.legendPosition"
+              [gradient]="barChartAttributes.gradient"
+              [xAxis]="barChartAttributes.showXAxis"
+              [yAxis]="barChartAttributes.showYAxis"
+              [barPadding]="barChartAttributes.barPadding"
+              [showXAxisLabel]="barChartAttributes.showXAxis"
+              [showYAxisLabel]="barChartAttributes.showYAxis"
+              [xAxisLabel]="barChartAttributes.xAxisLabel"
+              [yAxisLabel]="barChartAttributes.yAxisLabel"
+              [xAxisTickFormatting]="scanXTickFormatting">
+              <ng-template #tooltipTemplate let-model="model">
+                <span>Date: {{ model.series | date: 'mediumDate' }}</span>
+                <br/>
+                <span>Type: {{ model.name }}</span>
+                <br/>
+                <span>Vulnerabilities: {{ model.value }}</span>
+              </ng-template>
+            </ngx-charts-bar-vertical-stacked>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
 
-    <div class="row" id="cluster-vulnerability-table-row">
-      <div class="namespaces-table no-padding col-xs-12">
-        <mat-card class="scrollable-table-card">
-          <div class="table-wrapper">
-            <mat-table [dataSource]="dataSource" class="w-100 table-with-link-rows" matSort  matSortActive="namespace" matSortDisableClear matSortDirection="asc">
-              <ng-container  matColumnDef="namespace">
-                <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
-                <mat-cell *matCellDef="let totalSeverity" [matTooltip]="totalSeverity.namespace">
-                  <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.namespace}}
-                  </a>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="criticalIssues">
-                <mat-header-cell class="justify-content-center" *matHeaderCellDef > Critical Issues</mat-header-cell>
-                <mat-cell *matCellDef="let totalSeverity">
-                  <a class="justify-content-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.criticalIssues ? totalSeverity.criticalIssues : 0}}
-                  </a>
-                </mat-cell>>
-              </ng-container>
-              <ng-container matColumnDef="majorIssues">
-                <mat-header-cell class="justify-content-center" *matHeaderCellDef > Major Issues</mat-header-cell>
-                <mat-cell *matCellDef="let totalSeverity">
-                  <a class="justify-content-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.majorIssues ? totalSeverity.majorIssues : 0}}
-                  </a>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="mediumIssues">
-                <mat-header-cell class="justify-content-center" *matHeaderCellDef>Medium Issues</mat-header-cell>>
-                <mat-cell *matCellDef="let totalSeverity">
-                  <a class="justify-content-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.mediumIssues ? totalSeverity.mediumIssues: 0}}
-                  </a>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="lowIssues">
-                <mat-header-cell class="justify-content-center" *matHeaderCellDef > Low Issues</mat-header-cell>
-                <mat-cell *matCellDef="let totalSeverity">
-                  <a class="justify-content-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.lowIssues ? totalSeverity.lowIssues: 0}}
-                  </a>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="negligibleIssues">
-                <mat-header-cell class="justify-content-center" *matHeaderCellDef >Negligible Issues</mat-header-cell>
-                <mat-cell *matCellDef="let totalSeverity">
-                  <a class="justify-content-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
-                    {{totalSeverity.negligibleIssues ? totalSeverity.negligibleIssues: 0}}
-                  </a>
-                </mat-cell>
-              </ng-container>
+    <div class="row mb-xs-4" id="cluster-vulnerability-table-row">
+      <div class="p-xs-0 col-xs-12">
+        <mat-card class="display-xs-flex overflow-x-xs-auto">
+          <mat-table [dataSource]="dataSource" class="width-xs-100 display-xs-table table-with-link-rows" matSort  matSortActive="namespace" matSortDisableClear matSortDirection="asc">
+            <ng-container  matColumnDef="namespace">
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Namespaces</mat-header-cell>>
+              <mat-cell *matCellDef="let totalSeverity" [matTooltip]="totalSeverity.namespace">
+                <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.namespace}}
+                </a>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="criticalIssues">
+              <mat-header-cell class="justify-content-xs-center" *matHeaderCellDef > Critical Issues</mat-header-cell>
+              <mat-cell *matCellDef="let totalSeverity">
+                <a class="justify-content-xs-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.criticalIssues ? totalSeverity.criticalIssues : 0}}
+                </a>
+              </mat-cell>>
+            </ng-container>
+            <ng-container matColumnDef="majorIssues">
+              <mat-header-cell class="justify-content-xs-center" *matHeaderCellDef > Major Issues</mat-header-cell>
+              <mat-cell *matCellDef="let totalSeverity">
+                <a class="justify-content-xs-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.majorIssues ? totalSeverity.majorIssues : 0}}
+                </a>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="mediumIssues">
+              <mat-header-cell class="justify-content-xs-center" *matHeaderCellDef>Medium Issues</mat-header-cell>>
+              <mat-cell *matCellDef="let totalSeverity">
+                <a class="justify-content-xs-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.mediumIssues ? totalSeverity.mediumIssues: 0}}
+                </a>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="lowIssues">
+              <mat-header-cell class="justify-content-xs-center" *matHeaderCellDef > Low Issues</mat-header-cell>
+              <mat-cell *matCellDef="let totalSeverity">
+                <a class="justify-content-xs-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.lowIssues ? totalSeverity.lowIssues: 0}}
+                </a>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="negligibleIssues">
+              <mat-header-cell class="justify-content-xs-center" *matHeaderCellDef >Negligible Issues</mat-header-cell>
+              <mat-cell *matCellDef="let totalSeverity">
+                <a class="justify-content-xs-center" [routerLink]="['/private', 'clusters', this.clusterId, 'kubernetes-namespaces', totalSeverity.namespace, 'pods']">
+                  {{totalSeverity.negligibleIssues ? totalSeverity.negligibleIssues: 0}}
+                </a>
+              </mat-cell>
+            </ng-container>
 
-              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
-              <mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></mat-row>>
-            </mat-table>
-          </div>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></mat-row>>
+          </mat-table>
         </mat-card>
       </div>
     </div>
 
-    <div class="row" id="cluster-events-row">
-      <div class="col-xs-12 no-padding">
+    <div class="row mb-xs-4" id="cluster-events-row">
+      <div class="col-xs-12 p-xs-0">
         <mat-card id="cluster-events-card">
           <h3>Logs</h3>
           <div
@@ -238,3 +230,4 @@
     </div>
   </div>
 </div>
+

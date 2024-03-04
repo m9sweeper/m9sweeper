@@ -78,3 +78,11 @@ mat-card.overview-graph-card {
 .mat-mdc-card-title {
   padding-top: 10px;
 }
+
+.mat-mdc-card-content:first-child {
+  padding-bottom: 0 !important;
+}
+
+#cluster-card-content {
+  padding-top: 0 !important;
+}

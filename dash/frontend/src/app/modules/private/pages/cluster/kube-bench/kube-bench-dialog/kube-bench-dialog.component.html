@@ -62,7 +62,7 @@ helm upgrade --install kube-bench m9sweeper/kube-bench \
 
     <div *ngIf="cronjobOpt === false" class="m-xs-3 text-align-xs-left">
       <ng-template matStepLabel>Create Job</ng-template>
-      <div class="page-title-button-group-spacing">
+      <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row">
         <div>Run kube-bench using the following CLI command:</div>
         <div>
           <app-copy-to-clipboard-button
@@ -73,7 +73,7 @@ helm upgrade --install kube-bench m9sweeper/kube-bench \
         </div>
       </div>
       <div>
-        <textarea #cliCommand class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+        <textarea #cliCommand class="code-snippet width-xs-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
 helm repo update && \
 helm upgrade --install kube-bench m9sweeper/kube-bench \
   -n m9sweeper-system --create-namespace \

@@ -10,9 +10,9 @@
   </div>
 </div>
 <mat-dialog-content>
-  <div class="scrollable-table-card">
+  <div>
     <div class="table-wrapper" id="event-details-wrapper">
-      <mat-table [dataSource]="eventDetails" id="event-details-table">
+      <mat-table [dataSource]="eventDetails" class="display-xs-table" id="event-details-table">
         <ng-container matColumnDef="title">
           <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
           <mat-cell *matCellDef="let detail"><b>{{detail.title}}</b></mat-cell>
@@ -40,12 +40,11 @@
 
   <h3 id="related-events-title">Related Events</h3>
 
-  <div class="scrollable-table-card">
-    <app-falco-related-events-table
-      [clusterId]="data.clusterId"
-      [currentEventLogId]="data.id"
-      [filters]="{ signature: data.anomalySignature }"
-      (recentEventClicked)="displayEventDetails($event)"
-    ></app-falco-related-events-table>
-  </div>
+  <app-falco-related-events-table
+    [clusterId]="data.clusterId"
+    [currentEventLogId]="data.id"
+    [filters]="{ signature: data.anomalySignature }"
+    (recentEventClicked)="displayEventDetails($event)"
+  ></app-falco-related-events-table>
+
 </mat-dialog-content>

@@ -1,12 +1,11 @@
-<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
+<div class="row mx-xs-1 mt-xs-7 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mb-xs-4">
     <app-sub-navigation title="Gatekeeper"></app-sub-navigation>
-
     <div class="row mb-xs-2">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-xs-1">
-        <mat-card class="h-100">
+        <mat-card class="h-xs-100">
           <mat-card-header>
-            <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Status:</div>
+            <div class="font-xs-500">Status:</div>
           </mat-card-header>
           <mat-card-content>
             <h2 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h2>
@@ -16,9 +15,9 @@
         </mat-card>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 my-xs-1">
-        <mat-card class="h-100">
+        <mat-card class="h-xs-100">
           <mat-card-header>
-            <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">Recommendation:</div>
+            <div class="font-xs-500">Recommendation:</div>
           </mat-card-header>
           <mat-card-content>
             <div class="row">
@@ -38,7 +37,7 @@
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                <div class="text-align-right">
+                <div class="text-align-xs-right">
                   <button mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" (click)="openInstallWizard()" *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
                     Install
                   </button>
@@ -56,10 +55,10 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <mat-card class="scrollable-table-card">
+        <mat-card>
           <mat-card-header class="row">
             <div class="col-xs-12 col-sm-3">
-              <div class="font-size-xs-20 font-weight-xs-bold line-weight-xs-1">
+              <div class="font-xs-500">
                 Constraint Templates
               </div>
             </div>
@@ -73,9 +72,8 @@
               </button>
             </div>
           </mat-card-header>
-          <mat-card-content class="row">
-            <div class="table-wrapper">
-              <mat-table class="table-with-link-rows" id="gatekeeperExceptionsTable" [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc">
+          <mat-card-content class="row display-xs-flex overflow-x-xs-auto">
+              <mat-table class="table-with-link-rows display-xs-table" id="gatekeeperExceptionsTable" [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc">
                 <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
                   <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.metadata.name">
@@ -119,7 +117,6 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click pointer"></mat-row>
               </mat-table>
-            </div>
           </mat-card-content>
         </mat-card>
       </div>

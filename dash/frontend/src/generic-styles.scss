@@ -101,6 +101,14 @@ $classesToGenerate: (
       unset: unset,
     ),
   ),
+  align-self: (
+    abbreviation: 'align-self',
+    values: (
+      auto: auto, stretch: stretch, center: center,
+      flex-start: flex-start, flex-end: flex-end,
+      baseline: baseline, initial: initial, inherit: inherit
+    )
+  ),
   justify-content: (
     abbreviation: 'justify-content',
     values: (
@@ -169,6 +177,12 @@ $classesToGenerate: (
     )
   ),
 
+  font: (
+    abbreviation: 'font',
+    values: (
+      500: '500 20px/32px Roboto,Helvetica Neue,sans-serif'
+    )
+  ),
   font-size: (
     abbreviation: 'font-size',
     values: (
@@ -197,8 +211,7 @@ $classesToGenerate: (
     abbreviation: 'width',
     values: (
       auto: auto,
-      100: 100%,
-      500px: '500px'
+      100: 100%
     )
   ),
   min-width: (
@@ -206,13 +219,14 @@ $classesToGenerate: (
     values: (
       3: '3rem',
       4: '4rem',
-      8: '8rem',
+      8: '8rem'
     )
   ),
   background-color: (
     abbreviation: 'background-color',
     values: (
       grey: mat.get-color-from-palette(mat.$gray-palette, 300),
+      white: white
     )
   )
 );
@@ -243,8 +257,10 @@ $sides: (
     5: ($spacer * 3),
     6: ($spacer * 0.8),
     7: ($spacer * 1.25),
-    8: ($spacer * 1.88), // 30px
-    9: ($spacer * 0.625) // 10px
+    8: ($spacer * 1.88),
+    9: ($spacer * 0.625),
+    10: '10px', 15: '15px',
+    20: '20px', 31: '31px'
   );
 
   @each $propertyShorthand, $property in $properties {

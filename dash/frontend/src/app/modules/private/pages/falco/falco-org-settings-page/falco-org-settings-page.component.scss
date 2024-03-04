@@ -1,20 +1,9 @@
 ::ng-deep  .mat-mdc-card-header-text {
   width: 100% !important;
 }
-mat-card-title {
-  display: flex !important;  // adding class="display-flex" to the element wasn't enough
-}
 
 .rule-container {
   border: 2px solid;
   margin: 15px;
   padding: 20px;
-}
-
-.pl-10 {
-  padding-left: 10px;
-}
-
-.ml-10 {
-  margin-left: 10px;
 }

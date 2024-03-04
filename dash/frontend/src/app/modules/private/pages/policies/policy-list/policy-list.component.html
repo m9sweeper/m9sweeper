@@ -1,5 +1,5 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
+<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mt-xs-3 mb-xs-4">
     <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                         [title]="subNavigationTitle"
                         [buttonTitle]="subNavigationButtonTitle"
@@ -8,52 +8,56 @@
     ></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="w-100"
-               matSortDirection="desc">
-          <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
-            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.name"> {{policy?.name}} </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="description">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Description</mat-header-cell>
-            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.description">{{policy?.description}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="new_scan_grace_period">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Temp Exceptions Grace Period</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{policy?.newScanGracePeriod || 'None'}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="rescan_grace_period">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Automatic Rescan Period</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{policy?.rescanGracePeriod || 'None'}}</mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="edit">
-            <mat-header-cell *matHeaderCellDef [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">Actions</mat-header-cell>
-            <mat-cell *matCellDef="let policy" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
-              <a mat-icon-button [routerLink]="['/private', 'policies', policy?.id, 'edit']">
-                <mat-icon>create</mat-icon>
-              </a>
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="delete" *ngIf="isAdmin">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let policy">
-              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="alertDeletePolicy(policy.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container>
+    <mat-card>
+      <div class="row">
+        <div class="col-xs-12">
+          <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="overflow-x-xs-auto"
+                     matSortDirection="desc">
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
+              <mat-cell *matCellDef="let policy" [matTooltip]="policy?.name"> {{policy?.name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Description</mat-header-cell>
+              <mat-cell *matCellDef="let policy" [matTooltip]="policy?.description">{{policy?.description}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="new_scan_grace_period">
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Temp Exceptions Grace Period</mat-header-cell>
+              <mat-cell *matCellDef="let policy">{{policy?.newScanGracePeriod || 'None'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="rescan_grace_period">
+              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Automatic Rescan Period</mat-header-cell>
+              <mat-cell *matCellDef="let policy">{{policy?.rescanGracePeriod || 'None'}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="edit">
+              <mat-header-cell *matHeaderCellDef [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">Actions</mat-header-cell>
+              <mat-cell *matCellDef="let policy" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
+                <a mat-icon-button [routerLink]="['/private', 'policies', policy?.id, 'edit']">
+                  <mat-icon>create</mat-icon>
+                </a>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="delete" *ngIf="isAdmin">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let policy">
+                <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="alertDeletePolicy(policy.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
 
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        </mat-table>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+                         [length]="totalCount"
+                         [pageSize]="limit"
+                         (page)="pageEvent($event)"
+                         showFirstLastButtons></mat-paginator>
+        </div>
+
+
       </div>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-                     [length]="totalCount"
-                     [pageSize]="limit"
-                     (page)="pageEvent($event)"
-                     showFirstLastButtons></mat-paginator>
     </mat-card>
   </div>
 </div>

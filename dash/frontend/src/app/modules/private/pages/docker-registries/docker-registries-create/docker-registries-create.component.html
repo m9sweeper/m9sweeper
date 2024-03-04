@@ -1,145 +1,151 @@
-<div mat-dialog-content class="modal-container-margin">
-  <div class="m-xs-3 text-align-xs-left">
-  <form [formGroup]="createDockerRegistryForm" (ngSubmit)="onSubmit()">
-    <div>
-      <div>
-        <p>
+<div mat-dialog-content class="row">
+  <div class="col-xs">
+    <form [formGroup]="createDockerRegistryForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" type="text" formControlName="name">
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field appearance="fill">
+          <mat-label>Host Name</mat-label>
+          <input matInput placeholder="Host Name" type="text" formControlName="hostname">
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <mat-form-field appearance="fill">
+          <mat-label>Aliases</mat-label>
+          <mat-chip-grid #aliasList
+                         [hidden]="createDockerRegistryForm.get('aliases').value.size === 0"
+                         formControlName="aliases">
+            <mat-chip-row *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
+                          (removed)="removeAlias(alias)">
+              {{ alias }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input placeholder="Add new alias"
+                 class="mat-chip-input"
+                 formControlName="aliasInput"
+                 [matChipInputFor]="aliasList"
+                 [matChipInputSeparatorKeyCodes]="aliasSeparatorKeys"
+                 (matChipInputTokenEnd)="addAlias($event)">
+        </mat-form-field>
+      </div>
+      <div class="row" *ngIf="showBasicAuthFields">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Username" type="text" formControlName="username">
+        </mat-form-field>
+      </div>
+      <ng-container *ngIf="!this.data.isEdit">
+        <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput placeholder="Name" type="text" formControlName="name">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
+            <!--              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>-->
           </mat-form-field>
-        </p>
-        <p>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="this.data.isEdit">
+        <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Host Name</mat-label>
-            <input matInput placeholder="Host Name" type="text" formControlName="hostname">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
+            <mat-icon matSuffix
+                      (click)="passwordHide = !passwordHide">{{ passwordHide ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </mat-form-field>
-        </p>
-        <div>
+        </div>
+      </ng-container>
+      <div *ngIf="showAcrAuthFields">
+        <div class="row">
           <mat-form-field appearance="fill">
-            <mat-label>Aliases</mat-label>
-            <mat-chip-grid #aliasList
-                           [hidden]="createDockerRegistryForm.get('aliases').value.size === 0"
-                           formControlName="aliases">
-              <mat-chip-row *ngFor="let alias of createDockerRegistryForm.get('aliases').value"
-              (removed)="removeAlias(alias)">
-                {{alias}}
-                <button matChipRemove>
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-            <input placeholder="Add new alias"
-                   class="mat-chip-input"
-                   formControlName="aliasInput"
-                   [matChipInputFor]="aliasList"
-                   [matChipInputSeparatorKeyCodes]="aliasSeparatorKeys"
-                   (matChipInputTokenEnd)="addAlias($event)">
+            <mat-label>ACR Access Key</mat-label>
+            <input matInput placeholder="Access Key" type="text" formControlName="acrAccessKey">
           </mat-form-field>
         </div>
-        <div *ngIf="showBasicAuthFields">
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>Username</mat-label>
-              <input matInput placeholder="Username" type="text" formControlName="username">
-            </mat-form-field>
-          </p>
-          <ng-container *ngIf="!this.data.isEdit">
-            <p>
-              <mat-form-field appearance="fill">
-                <mat-label>Password</mat-label>
-                <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
-  <!--              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>-->
-            </mat-form-field>
-            </p>
-          </ng-container>
-          <ng-container *ngIf="this.data.isEdit">
-            <p>
-              <mat-form-field appearance="fill">
-                <mat-label>Password</mat-label>
-                <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="password">
-                <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </mat-form-field>
-            </p>
-          </ng-container>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>ACR Secret Key</mat-label>
+            <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="acrSecretKey">
+            <mat-icon matSuffix
+                      (click)="passwordHide = !passwordHide">{{ passwordHide ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </mat-form-field>
         </div>
-        <div *ngIf="showAcrAuthFields">
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>ACR Access Key</mat-label>
-              <input matInput placeholder="Access Key" type="text" formControlName="acrAccessKey">
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>ACR Secret Key</mat-label>
-              <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="acrSecretKey">
-              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>ACR Default Region</mat-label>
-              <input matInput placeholder="Default Region" type="text" formControlName="acrDefaultRegion">
-            </mat-form-field>
-          </p>
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>ACR Default Region</mat-label>
+            <input matInput placeholder="Default Region" type="text" formControlName="acrDefaultRegion">
+          </mat-form-field>
         </div>
-        <div *ngIf="showGcrAuthFields">
-          <p>
-            <mat-form-field appearance="fill">
-              <mat-label>GCR Authorization JSON</mat-label>
-              <textarea matInput placeholder="Enter full GCR JSON contents here..." formControlName="gcrAuthJson"></textarea>
-            </mat-form-field>
-          </p>
+      </div>
+      <div *ngIf="showGcrAuthFields">
+        <div class="row">
+          <mat-form-field appearance="fill">
+            <mat-label>GCR Authorization JSON</mat-label>
+            <textarea matInput placeholder="Enter full GCR JSON contents here..."
+                      formControlName="gcrAuthJson"></textarea>
+          </mat-form-field>
         </div>
-        <div *ngIf="showAzureAuthFields">
-          <p>
-            <mat-form-field>
-              <mat-label>Azure Client ID</mat-label>
-              <input matInput placeholder="Client ID" type="text" formControlName="azureClientId">
-              <mat-hint *ngIf="createDockerRegistryForm.get('azureClientId').errors &&
+      </div>
+      <div *ngIf="showAzureAuthFields">
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Azure Client ID</mat-label>
+            <input matInput placeholder="Client ID" type="text" formControlName="azureClientId">
+            <mat-hint *ngIf="createDockerRegistryForm.get('azureClientId').errors &&
                (createDockerRegistryForm.get('azureClientId').touched || createDockerRegistryForm.get('azureClientId').dirty)"
-              >"appId" of a service principal with AcrPull permissions</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Azure Client Secret</mat-label>
-              <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="azureClientSecret">
-              <mat-icon matSuffix (click)="passwordHide = !passwordHide">{{passwordHide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              <mat-hint *ngIf="createDockerRegistryForm.get('azureClientSecret').errors &&
-              (createDockerRegistryForm.get('azureClientSecret').touched || createDockerRegistryForm.get('azureClientSecret').dirty)"
-              >"password" of a service principal with AcrPull permissions</mat-hint>
-            </mat-form-field>
-          </p>
-          <p>
-            <mat-form-field>
-              <mat-label>Azure Tenant ID</mat-label>
-              <input matInput placeholder="Tenant ID" type="text" formControlName="azureTenantId">
-              <mat-hint *ngIf="createDockerRegistryForm.get('azureTenantId').errors &&
-               (createDockerRegistryForm.get('azureTenantId').touched || createDockerRegistryForm.get('azureTenantId').dirty)"
-              >"tenant" of service principal with AcrPull permissions</mat-hint>
-            </mat-form-field>
-          </p>
-        </div>
-        <p>
-          <mat-form-field appearance="fill">
-            <mat-label>Registry Authentication Type</mat-label>
-            <mat-select formControlName="authType" (selectionChange)="handleHiddenFields($event)">
-              <mat-option *ngFor="let type of authTypes"
-              [value]="type">
-                {{type | dockerRegistryAuthType}}
-              </mat-option>
-            </mat-select>
+            >"appId" of a service principal with AcrPull permissions
+            </mat-hint>
           </mat-form-field>
-        </p>
+        </div>
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Azure Client Secret</mat-label>
+            <input matInput [type]="passwordHide ? 'password' : 'text'" formControlName="azureClientSecret">
+            <mat-icon matSuffix
+                      (click)="passwordHide = !passwordHide">{{ passwordHide ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+            <mat-hint *ngIf="createDockerRegistryForm.get('azureClientSecret').errors &&
+              (createDockerRegistryForm.get('azureClientSecret').touched || createDockerRegistryForm.get('azureClientSecret').dirty)"
+            >"password" of a service principal with AcrPull permissions
+            </mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field>
+            <mat-label>Azure Tenant ID</mat-label>
+            <input matInput placeholder="Tenant ID" type="text" formControlName="azureTenantId">
+            <mat-hint *ngIf="createDockerRegistryForm.get('azureTenantId').errors &&
+               (createDockerRegistryForm.get('azureTenantId').touched || createDockerRegistryForm.get('azureTenantId').dirty)"
+            >"tenant" of service principal with AcrPull permissions
+            </mat-hint>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="m-xs-3 text-align-xs-left">
-        <button [disabled]="!createDockerRegistryForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+      <div class="row">
+        <mat-form-field appearance="fill">
+          <mat-label>Registry Authentication Type</mat-label>
+          <mat-select formControlName="authType" (selectionChange)="handleHiddenFields($event)">
+            <mat-option *ngFor="let type of authTypes"
+                        [value]="type">
+              {{ type | dockerRegistryAuthType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row start-xs">
+        <button [disabled]="!createDockerRegistryForm.valid" mat-raised-button color="primary" type="submit">Submit
+        </button>
         &nbsp;
-        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
+        <button mat-raised-button color="warn" type="button" (click)="onNoClick()" class="ms-xs-1">Cancel</button>
       </div>
-    </div>
-  </form>
+    </form>
   </div>
 </div>

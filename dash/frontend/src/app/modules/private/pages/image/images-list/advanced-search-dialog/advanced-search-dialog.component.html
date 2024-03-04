@@ -1,19 +1,25 @@
 <h3>Advanced Image Search</h3>
 <form [formGroup]="searchForm">
-  <div>
-    <mat-form-field class="form-field-full-width" appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" placeholder="Image Name" formControlName="name" />
-    </mat-form-field>
+  <div class="row">
+    <div class="col-xs">
+      <mat-form-field class="form-field-full-width" appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Image Name" formControlName="name" />
+      </mat-form-field>
+    </div>
   </div>
-  <div>
-    <mat-form-field class="form-field-full-width" appearance="fill">
-      <mat-label>CVE</mat-label>
-      <input matInput type="text" placeholder="CVE" formControlName="cve" />
-    </mat-form-field>
+  <div class="row">
+    <div class="col-xs">
+      <mat-form-field class="form-field-full-width" appearance="fill">
+        <mat-label>CVE</mat-label>
+        <input matInput type="text" placeholder="CVE" formControlName="cve" />
+      </mat-form-field>
+    </div>
   </div>
-  <div>
-    <mat-checkbox matInput formControlName="onlyRunning"  (change)="onlyRunningImage($event)">Only Running Images</mat-checkbox>
+  <div class="row">
+    <div class="col-xs">
+      <mat-checkbox matInput formControlName="onlyRunning"  (change)="onlyRunningImage($event)">Only Running Images</mat-checkbox>
+    </div>
   </div>
   <div mat-dialog-actions>
     <button mat-raised-button color="primary" type="submit" (click)="onSearch()">Search</button>
