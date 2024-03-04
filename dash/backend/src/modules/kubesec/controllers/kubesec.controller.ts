@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Get, InternalServerErrorException, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
 import {KubesecService} from "../services/kubesec.service";
 import {AllowedAuthorityLevels} from "../../../decorators/allowed-authority-levels.decorator";
 import {Authority} from "../../user/enum/Authority";
@@ -19,7 +19,10 @@ export class KubesecController {
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     async listNamespaces(@Query('cluster') clusterId: number): Promise<V1NamespaceList> {
-        return await this.kubesecService.listNamespaces(clusterId);
+        return await this.kubesecService.listNamespaces(clusterId).catch((err) => {
+            console.log(err);
+            throw new InternalServerErrorException();
+        });
     }
 
     @Get('/listpods')
