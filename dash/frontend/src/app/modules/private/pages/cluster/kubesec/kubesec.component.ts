@@ -78,14 +78,12 @@ export class KubesecComponent implements OnInit, OnDestroy {
 
   getNamespaces() {
     this.kubesecService.listNamespaces(this.clusterId).pipe(takeUntil(this.unsubscribe$)).subscribe(list => {
-      console.log('listNamespaces returned', list);
       if (list) {
         this.currentNamespaces = list.items;
       } else {
         this.alertService.danger('Could not get namespaces');
       }
     }, error => {
-      console.log('listNamespaces returned an error', error);
       this.alertService.danger('Could not get namespaces');
     });
   }
