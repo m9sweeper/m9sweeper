@@ -238,7 +238,7 @@ const routes: Routes = [
                     component: KubernetesPodsComponent,
                     data: {
                       title: 'Kubernetes Pods',
-                      breadcrumb: (pathName: string) => '${pathName.split}(\'/\').shift()}'
+                      breadcrumb: (pathName: string) => `${pathName.split('/').shift()}`
                     }
                   },
                   {
