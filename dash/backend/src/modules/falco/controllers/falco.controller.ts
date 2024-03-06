@@ -100,7 +100,7 @@ export class FalcoController {
     }
 
     @Get('/download')
-    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+    @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN, Authority.READ_ONLY)
     @Header('Content-Type', 'text/csv')
     @UseGuards(AuthGuard, AuthorityGuard)
     async downloadFalcoExport(
