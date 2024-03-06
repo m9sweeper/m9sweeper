@@ -20,7 +20,7 @@ export class ReportsDownloadController {
   ) {}
 
   @Get('/security-audit-report')
-  @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN)
+  @AllowedAuthorityLevels(Authority.ADMIN, Authority.SUPER_ADMIN, Authority.READ_ONLY)
   @UseGuards(AuthGuard, AuthorityGuard)
   async generatePrintableAuditReport(
     @Res({ passthrough: true }) res: Response,
