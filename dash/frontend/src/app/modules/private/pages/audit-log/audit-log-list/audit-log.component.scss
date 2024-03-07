@@ -8,17 +8,6 @@ mat-card {
   }
 }
 
-#auditFilterButtons {
-  display: flex;
-  justify-content: flex-start;
-  #submitButton {
-    margin-right: 1em;
-  }
-  #resetButton {
-    margin-left: 1em;
-  }
-}
-
 #auditLogTableHeader {
   padding-inline: 25px;
   .col-xs-12 {
