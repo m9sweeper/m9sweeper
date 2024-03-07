@@ -34,8 +34,8 @@ export class KubernetesApiService {
             verbs: ['get', 'watch', 'list', 'create']
         }),
 
-        /* WE SHOULD NOT NEED PRIVILEGES FOR SERVICE ACCOUNTS/CLUSTER ROLES AFTER INSTALL, 
-           SO LETS NOT GIVE OURSELVES THESE PRIVILEGES 
+        /* WE SHOULD NOT NEED PRIVILEGES FOR SERVICE ACCOUNTS/CLUSTER ROLES AFTER INSTALL,
+           SO LETS NOT GIVE OURSELVES THESE PRIVILEGES
         Object.assign(new V1PolicyRule(), {
             apiGroups: [''],
             resources: ['serviceaccounts'],
@@ -127,9 +127,6 @@ export class KubernetesApiService {
         return coreV1Config?.listNamespace().then(res => {
             const namespaceList = res.body;
             return namespaceList;
-        }).catch(err => {
-            console.log(err);
-            return null;
         });
     }
 
@@ -274,7 +271,7 @@ export class KubernetesApiService {
 
     /** Retrieves a namespace's token from a cluster & decodes it*/
     async getServiceAccountToken(coreApi: CoreV1Api, serviceAccountName: string, namespaceName: string): Promise<string | null> {
-        try {           
+        try {
             //const secretName = (await coreApi.readNamespacedServiceAccount(serviceAccountName, namespaceName)).body.secrets[0].name;
             const secretName = "m9sweeper"
             const rawToken = (await coreApi.readNamespacedSecret(secretName, namespaceName)).body.data['token'];
@@ -341,7 +338,7 @@ export class KubernetesApiService {
             serviceAccountNamespace = m9sweeperSystemNamespaceName;
         } else if (serviceAccountInM9sweeperSystem.length) {
             // exists in m9sweeper system namespace, so use that one
-            // note: m9sweeper system namespace takes precedence so that you could install m9sweeper multiple times 
+            // note: m9sweeper system namespace takes precedence so that you could install m9sweeper multiple times
             // in same cluster using different releaseNamespace.serviceAccountNamespace
             newServiceAccount = false;
             existingServiceAccount = serviceAccountInM9sweeperSystem[0];
@@ -350,7 +347,7 @@ export class KubernetesApiService {
             // exists in default namespace, so lets use that one
             newServiceAccount = false;
             existingServiceAccount = serviceAccountInDefault[0];
-        } 
+        }
 
         // create/get service account
         let serviceAccount = existingServiceAccount; // defaults to existing one (if it exists)
@@ -387,14 +384,14 @@ export class KubernetesApiService {
         secret.metadata.name = "m9sweeper";
         secret.type = "kubernetes.io/service-account-token"
         secret.metadata.namespace = serviceAccountNamespace;
-        secret.metadata.annotations={'kubernetes.io/service-account.name': "m9sweeper"};     
+        secret.metadata.annotations={'kubernetes.io/service-account.name': "m9sweeper"};
         const secretResponse = await this.applyK8sObject(secret, config)
         if (!secretResponse){
             console.log("secret response", secretResponse);
-            
+
         }
 
-        // Build the clusterRole w/the rules 
+        // Build the clusterRole w/the rules
         console.log(`Creating a cluster role in ${serviceAccountNamespace}`);
         const clusterRole: V1ClusterRole = new V1ClusterRole();
         clusterRole.apiVersion = 'rbac.authorization.k8s.io/v1';
