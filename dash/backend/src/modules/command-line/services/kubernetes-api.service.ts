@@ -134,11 +134,7 @@ export class KubernetesApiService {
         const decodedConfig = this.loadConfigFromBase64Json(kubeConfig);
         const coreV1Config = this.makeCoreV1ApiFromConfig(decodedConfig);
         return coreV1Config?.listNamespacedPod(namespace).then(res => {
-            const podList = res.body;
-            return podList;
-        }).catch(err => {
-            console.log(err);
-            return null;
+            return res.body;
         });
     }
 
