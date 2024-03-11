@@ -60,11 +60,6 @@
               </div>
             </div>
           </div>
-          <div>
-            pods value length: {{ podForm.controls.podFormControl.value.length }}
-            <br />
-            ngif value: {{ namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value.length }}
-          </div>
           <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value.length)">
             <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
               Run Kubesec

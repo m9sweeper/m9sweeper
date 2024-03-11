@@ -31,13 +31,14 @@ export class KubesecController {
     async listPods(
       @Query('cluster') clusterId: number,
       @Query('namespaces') namespaces: string[]
-    ): Promise<(V1PodList | object)[]> {
+    ): Promise<(V1PodList)[]> {
         if (namespaces) {
             // remove "selectAll" (it's not a namespace, it's a value that tells it to return all ns)
             const index = namespaces.indexOf("selectAll");
             if (index !== -1) {
                 namespaces.splice(index, 1);
             }
+            // TODO: if it's "selectAll", use kubectl get pods --all-namespaces instead of individual calls
 
             const response =  await this.kubesecService.listPods(clusterId, namespaces);
             if (response.errors.length) {
