@@ -28,10 +28,23 @@ export class KubesecController {
     @Get('/listpods')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
-    async listPods(@Query('cluster') clusterId: number,
-                   @Query('namespaces') namespaces: string[]): Promise<V1PodList[]> {
+    async listPods(
+      @Query('cluster') clusterId: number,
+      @Query('namespaces') namespaces: string[]
+    ): Promise<(V1PodList)[]> {
         if (namespaces) {
-            return await this.kubesecService.listPods(clusterId, namespaces);
+            // remove "selectAll" (it's not a namespace, it's a value that tells it to return all ns)
+            const index = namespaces.indexOf("selectAll");
+            if (index !== -1) {
+                namespaces.splice(index, 1);
+            }
+            // TODO: if it's "selectAll", use kubectl get pods --all-namespaces instead of individual calls
+
+            const response =  await this.kubesecService.listPods(clusterId, namespaces);
+            if (response.errors.length) {
+              console.log({ method: "KubesecController.listPods", errors: response.errors });
+            }
+            return response.podList;
         } else {
             return [];
         }

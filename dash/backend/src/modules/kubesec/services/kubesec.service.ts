@@ -24,16 +24,27 @@ export class KubesecService {
 
     async listNamespaces(clusterId: number): Promise<V1NamespaceList> {
         const cluster = await this.clusterService.getClusterById(clusterId);
-        const namespaceList = await this.kubernetesApiService.listNamespaces(cluster.kubeConfig);
-        return namespaceList;
+        return await this.kubernetesApiService.listNamespaces(cluster.kubeConfig);
     }
-    async listPods(clusterId: number, namespaces: string[]): Promise<V1PodList[]> {
+    async listPods(clusterId: number, namespaces: string[]): Promise<{podList: V1PodList[], errors: any[]}> {
         const podList = [];
+        const errors = [];
         const cluster = await this.clusterService.getClusterById(clusterId);
         for(let i = 0; i < namespaces.length; i++) {
-            podList.push(await this.kubernetesApiService.listPods(cluster.kubeConfig, namespaces[i]));
+            podList.push(
+              await this.kubernetesApiService
+                .listPods(cluster.kubeConfig, namespaces[i])
+                .catch(e => {
+                    try {
+                        const infoToLog = e.body?.message || e.body;
+                        errors.push(infoToLog);
+                    } catch {
+                        errors.push(e);
+                    }
+                })
+            );
         }
-        return podList;
+        return {podList, errors};
     }
 
     async runKubesecByPod(podName: string, namespace: string, clusterId: number): Promise<{ data: KubesecScanResults }> {

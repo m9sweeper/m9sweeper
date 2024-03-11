@@ -55,12 +55,12 @@
                   </form>
                 </mat-form-field>
               </div>
-              <div class="heading" *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
+              <div class="heading mb-xs-3" *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
                 No pods in the selected namespace(s)
               </div>
             </div>
           </div>
-          <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
+          <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value.length)">
             <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
               Run Kubesec
             </button>
