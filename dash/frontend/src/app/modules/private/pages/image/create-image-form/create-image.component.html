@@ -1,18 +1,10 @@
 <form [formGroup]="imageForm" class="image-form" (ngSubmit)="onSubmit()">
-  <div class="row">
-    <div class="col-xs-12 my-xs-3">
-      <mat-form-field appearance="fill">
-        <mat-label>Image URL</mat-label>
-        <input matInput placeholder="Url" type="url" (keyup)="parseURL($event)" formControlName="fullUrl">
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-    <div mat-dialog-actions>
-      <button [disabled]="!imageForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
-      <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-    </div>
-    </div>
+  <mat-form-field appearance="fill" class="my-xs-3">
+    <mat-label>Image URL</mat-label>
+    <input matInput placeholder="Url" type="url" (keyup)="parseURL($event)" formControlName="fullUrl">
+  </mat-form-field>
+  <div mat-dialog-actions>
+    <button [disabled]="!imageForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
+    <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
   </div>
 </form>

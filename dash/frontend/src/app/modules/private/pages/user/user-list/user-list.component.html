@@ -3,8 +3,8 @@
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
     <mat-card>
-      <div class="row">
-        <div class="col-xs-12">
+      <mat-card-content>
+        <div class="display-xs-flex overflow-x-xs-auto">
           <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
                  matSortDirection="asc">
             <ng-container matColumnDef="id">
@@ -52,13 +52,15 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
-          <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-                         [length]="totalCount"
-                         [pageSize]="limit"
-                         (page)="pageEvent($event)"
-                         showFirstLastButtons></mat-paginator>
         </div>
-      </div>
+        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+                       [length]="totalCount"
+                       [pageSize]="limit"
+                       (page)="pageEvent($event)"
+                       showFirstLastButtons></mat-paginator>
+
+      </mat-card-content>
+
     </mat-card>
   </div>
 </div>

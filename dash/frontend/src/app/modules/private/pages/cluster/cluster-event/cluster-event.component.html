@@ -1,23 +1,11 @@
-<div class="event-details">
-  <div class="elements">
-    <div class="row">
-      <h4> Date: {{formatDate(+data?.createdDate)}}</h4>
-    </div>
-    <div class="row">
-      <h4> Entity Type:  {{data?.type}}</h4>
-    </div>
-    <div class="row">
-      <h4> Description: {{data?.description}}</h4>
-    </div>
-    <div class="row">
-      <h4> Level: {{data?.level}}</h4>
-    </div>
-    <div class="row">
-      <h4> Data: <pre>{{data?.data | json}}</pre> </h4>
-    </div>
-  </div>
+<div class="m-xs-1">
+  <h4> Date: {{formatDate(+data?.createdDate)}}</h4>
+  <h4> Entity Type:  {{data?.type}}</h4>
+  <h4> Description: {{data?.description}}</h4>
+  <h4> Level: {{data?.level}}</h4>
+  <h4> Data: <pre>{{data?.data | json}}</pre> </h4>
 </div>
+
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" type="button" (click)="onClose()">Close</button>
 </div>
-

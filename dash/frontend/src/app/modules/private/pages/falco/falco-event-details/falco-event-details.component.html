@@ -5,7 +5,7 @@
         <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2"> Event Details</div>
       </div>
       <div class="col-xs-6 end-xs">
-        <button mat-raised-button color="primary"  (click)="onClickShare()">Share</button>
+        <button mat-raised-button color="primary" (click)="onClickShare()">Share</button>
       </div>
     </div>
 
@@ -13,22 +13,20 @@
       <div class="col-xs-12 col-md-6 overview-cards">
         <mat-card>
           <mat-card-header>
-            <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100">
-              <div class="font-xs-500"> Basic Details </div>
-            </div>
+            <div class="font-xs-500"> Basic Details</div>
           </mat-card-header>
           <mat-card-content>
             <div class="overflow-x-xs-auto display-xs-flex" id="event-details-wrapper">
               <mat-table [dataSource]="eventDetails" id="event-details-table" class="display-xs-table">
                 <ng-container matColumnDef="title">
                   <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-                  <mat-cell *matCellDef="let detail"><b>{{detail.title}}</b></mat-cell>
+                  <mat-cell *matCellDef="let detail"><b>{{ detail.title }}</b></mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="value">
                   <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-                  <mat-cell *matCellDef="let detail"  [matTooltip]="detail.value">{{detail.value}}</mat-cell>
+                  <mat-cell *matCellDef="let detail" [matTooltip]="detail.value">{{ detail.value }}</mat-cell>
                 </ng-container>
-                <mat-header-row *matHeaderRowDef="['title', 'value']" ></mat-header-row>
+                <mat-header-row *matHeaderRowDef="['title', 'value']"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: ['title', 'value']"></mat-row>
               </mat-table>
             </div>
@@ -38,9 +36,7 @@
       <div class="col-xs-12 col-md-6 overview-cards">
         <mat-card id="incidence-rate-graph-card">
           <mat-card-header>
-            <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100">
-              <div class="font-xs-500">  Incidence Rate </div>
-            </div>
+            <div class="font-xs-500"> Incidence Rate</div>
           </mat-card-header>
           <mat-card-content class="p-xs-0">
             <div id="incidence-rate-graph">
@@ -71,32 +67,28 @@
           <mat-expansion-panel-header>
             <mat-panel-title><b>Full Message</b></mat-panel-title>
           </mat-expansion-panel-header>
-          <div>{{message}}</div>
+          <div>{{ message }}</div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
     <div class="row">
-      <div class="col-xs-12">
-        <mat-card class="col-xs-12">
-          <mat-card-header id="related-events-header">
-            <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100">
-              <div class="font-xs-500">
-                Related Events
-              </div>
-            </div>
-          </mat-card-header>
-          <mat-card-content>
-            <app-falco-related-events-table
-              [clusterId]="clusterId"
-              [currentEventLogId]="eventId"
-              [filters]="{ signature }"
-              [stylingOptions]="falcoEventLogsStylingOptions"
-              (recentEventClicked)="displayEventDetails($event)"
-            ></app-falco-related-events-table>
-          </mat-card-content>
-        </mat-card>
-      </div>
+      <mat-card class="col-xs-12">
+        <mat-card-header id="related-events-header">
+          <div class="font-xs-500">
+            Related Events
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <app-falco-related-events-table
+            [clusterId]="clusterId"
+            [currentEventLogId]="eventId"
+            [filters]="{ signature }"
+            [stylingOptions]="falcoEventLogsStylingOptions"
+            (recentEventClicked)="displayEventDetails($event)"
+          ></app-falco-related-events-table>
+        </mat-card-content>
+      </mat-card>
     </div>
 
     <div class="row" id="raw-data">
@@ -104,7 +96,7 @@
         <mat-card>
           <mat-card-header>
             <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100 row">
-<!--          Please note that col-xs-12 + col-xs-7 puts the buttons at the start of the next row -->
+              <!--          Please note that col-xs-12 + col-xs-7 puts the buttons at the start of the next row -->
               <div class="font-xs-500 col-xs-12 col-sm-3">
                 Raw Data
               </div>
@@ -120,7 +112,7 @@
           <mat-card-content>
             <div id="raw-data-content">
               <b>Raw:</b>
-              <div> {{message}}</div>
+              <div> {{ message }}</div>
               <br>
               <b>Formatted:</b>
               <div>

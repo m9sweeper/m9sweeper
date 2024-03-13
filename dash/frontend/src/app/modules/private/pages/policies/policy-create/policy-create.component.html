@@ -2,98 +2,62 @@
   <div class="col-xs mt-xs-3 mb-xs-4">
     <mat-card>
       <mat-card-content>
-        <div class="row">
-          <div class="col-xs-12 font-size-xs-26 line-height-xs-2">{{ subMenuTitle }}</div>
-        </div>
+        <div class="font-size-xs-26 line-height-xs-2">{{ subMenuTitle }}</div>
         <form [formGroup]="policyForm">
-          <div>
-            <div class="row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-form-field appearance="fill">
-                  <mat-label>Name</mat-label>
-                  <input matInput placeholder="Policy Name" type="text" formControlName="name" required>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-form-field appearance="fill">
-                  <mat-label>Description</mat-label>
-                  <textarea matInput placeholder="Description" type="textarea" formControlName="description"
-                            required></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row active-checkbox-row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-checkbox formControlName="tempExceptionEnabled"
-                              [ngModel]="checkboxDefault"
-                >Enable Temporary Exceptions: Create short-term exceptions
-                  for any newly discovered policy violations
-                </mat-checkbox>
-              </div>
-            </div>
-            <div class="row" *ngIf="policyForm.controls.tempExceptionEnabled.value">
-              <div class="col-lg-12 col-xs-12">
-                <mat-form-field appearance="fill">
-                  <mat-label>Temporary Exception Grace Period (Days)</mat-label>
-                  <input matInput placeholder="None" type="text" formControlName="new_scan_grace_period">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row active-checkbox-row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-checkbox formControlName="rescanEnabled"
-                              [ngModel]="checkboxDefault"
-                >Rescan Images Regularly: Rescan Images regularly to ensure
-                  scan results are up to date with latest CVE definitions.
-                </mat-checkbox>
-              </div>
-            </div>
-            <div class="row" *ngIf="policyForm.controls.rescanEnabled.value">
-              <div class="col-lg-12 col-xs-12">
-                <mat-form-field appearance="fill">
-                  <mat-label>Image Rescan Period (Days)</mat-label>
-                  <input matInput placeholder="None" type="text" formControlName="rescan_grace_period">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row active-checkbox-row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-checkbox formControlName="enabled" [ngModel]="checkboxDefault">Active: Run and summarize all active
-                  scanners in this policy
-                </mat-checkbox>
-                <p
-                  *ngIf="policyForm.errors?.['activePolicyHasActiveScanner'] && (policyForm.touched || policyForm.dirty)"
-                  class="mat-hint">
-                  * Active policies must have at least one active scanner
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-xs-12 ">
-                <mat-checkbox formControlName="enforcement" [ngModel]="checkboxDefault">Required: All required, active
-                  scanners must pass to consider an image valid
-                </mat-checkbox>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 col-xs-12">
-                <mat-form-field appearance="fill">
-                  <mat-label>Clusters</mat-label>
-                  <mat-select formControlName="clusters" multiple required
-                              (selectionChange)="handleRelevantForAllClusters($event)">
-                    <mat-option value="all" [disabled]="relevantForAllClusters === false">For All Clusters</mat-option>
-                    <mat-optgroup *ngFor="let cg of clusterGroups" [label]="cg.name">
-                      <mat-option *ngFor="let c of cg.clusters" [value]="c.id"
-                                  [disabled]="relevantForSpecificClusters === false">{{ c.name }}
-                      </mat-option>
-                    </mat-optgroup>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Policy Name" type="text" formControlName="name" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Description" type="textarea" formControlName="description"
+                      required></textarea>
+          </mat-form-field>
+          <mat-checkbox formControlName="tempExceptionEnabled"
+                        [ngModel]="checkboxDefault"
+          >Enable Temporary Exceptions: Create short-term exceptions
+            for any newly discovered policy violations
+          </mat-checkbox>
+          <mat-form-field appearance="fill" *ngIf="policyForm.controls.tempExceptionEnabled.value" class="mt-xs-3">
+            <mat-label>Temporary Exception Grace Period (Days)</mat-label>
+            <input matInput placeholder="None" type="text" formControlName="new_scan_grace_period">
+          </mat-form-field>
+          <mat-checkbox formControlName="rescanEnabled"
+                        [ngModel]="checkboxDefault"
+          >Rescan Images Regularly: Rescan Images regularly to ensure
+            scan results are up to date with latest CVE definitions.
+          </mat-checkbox>
+          <br>
+          <mat-form-field appearance="fill" *ngIf="policyForm.controls.rescanEnabled.value" class="mt-xs-3">
+            <mat-label>Image Rescan Period (Days)</mat-label>
+            <input matInput placeholder="None" type="text" formControlName="rescan_grace_period">
+          </mat-form-field>
+          <mat-checkbox formControlName="enabled" [ngModel]="checkboxDefault">Active: Run and summarize all active
+            scanners in this policy
+          </mat-checkbox>
+          <p
+            *ngIf="policyForm.errors?.['activePolicyHasActiveScanner'] && (policyForm.touched || policyForm.dirty)"
+            class="mat-hint">
+            * Active policies must have at least one active scanner
+          </p>
+          <br>
+          <mat-checkbox formControlName="enforcement" [ngModel]="checkboxDefault">
+            <p>Required: All required, active
+              scanners must pass to consider an image valid
+            </p>
+          </mat-checkbox>
+          <mat-form-field appearance="fill">
+            <mat-label>Clusters</mat-label>
+            <mat-select formControlName="clusters" multiple required
+                        (selectionChange)="handleRelevantForAllClusters($event)">
+              <mat-option value="all" [disabled]="relevantForAllClusters === false">For All Clusters</mat-option>
+              <mat-optgroup *ngFor="let cg of clusterGroups" [label]="cg.name">
+                <mat-option *ngFor="let c of cg.clusters" [value]="c.id"
+                            [disabled]="relevantForSpecificClusters === false">{{ c.name }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
         </form>
         <!-- Scanner List Table -->
         <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100 row mb-xs-3">
