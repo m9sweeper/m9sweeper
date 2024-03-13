@@ -49,7 +49,7 @@
         </app-copy-to-clipboard-button>
       </div>
       <div>
-        <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet w-100" readonly>helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+        <textarea matInput [cdkTextareaAutosize]="true" #run class="code-snippet width-xs-100" readonly>helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
 helm repo update && \
 helm upgrade --install kube-bench m9sweeper/kube-bench \
   -n m9sweeper-system --create-namespace \

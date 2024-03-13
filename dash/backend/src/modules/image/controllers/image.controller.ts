@@ -494,7 +494,7 @@ export class ImageController {
         return await this.imageService.getDistinctDatesForImageScan(imageId);
     }
     @Get('images/:imageId/scan-queue-status')
-    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN)
+    @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     @ApiResponse({
         status: 200,

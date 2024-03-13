@@ -1,10 +1,9 @@
-<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
-  <div class="col-xs mt-xs-3 mb-xs-4">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
     <mat-card>
-      <div class="row">
-        <div class="col-xs-12">
+
           <mat-table class="table-with-link-rows overflow-x-xs-auto" [dataSource]="dataSource" matSort id="listOfExceptions">
             <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
@@ -65,8 +64,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
           <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
-        </div>
-      </div>
+
     </mat-card>
   </div>
 </div>

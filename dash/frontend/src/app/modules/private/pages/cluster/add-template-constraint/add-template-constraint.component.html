@@ -6,7 +6,7 @@
     <br>
     <div class="row">
       <div class="col-xs-12 col-md-6 col-lg-6">
-        <div class="display-flex">
+        <div class="display-xs-flex">
           <h3 class="mt-xs-3">Basic Details</h3>
         </div>
         <form class="form" [formGroup]="addTemplateConstraintForm" (ngSubmit)="onSubmit()">
@@ -46,7 +46,7 @@
       <div class="col-xs-12 col-md-6 col-lg-6 right-content">
         <div class="width-xs-100">
 
-          <div class="display-flex negative-margin-bottom-8">
+          <div class="display-xs-flex negative-margin-bottom-8">
             <h3 class="padding-top-4">Match Criteria</h3>
             <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="AddConstraintCriteriaDialog()">
               <mat-icon>add</mat-icon>

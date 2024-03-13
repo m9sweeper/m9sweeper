@@ -1,127 +1,128 @@
 <div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
   <div class="col-xs mb-xs-4">
-    <div class="row">
-      <div class="col-xs">
-        <p class="font-size-xs-26 vertical-align-xs-bottom">Kubesec</p>
-      </div>
-    </div>
-   <div class="row">
-     <div class="col-xs">
-       <mat-card>
-         <mat-horizontal-stepper linear>
-           <mat-step [editable]="isCompleted">
-             <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
-             <div class="pod-selection-container">
-               <p class="heading">Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</p>
-               <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group" [(ngModel)]="podSelectionOpt">
-                 <mat-radio-button class="file-radio-button" [value]="1"
-                                   (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
-                   Upload a file
-                 </mat-radio-button>
-                 <mat-radio-button class="cluster-pod-radio-button" [value]="2" (click)="podFile = null;">
-                   Choose pods from your cluster
-                 </mat-radio-button>
-               </mat-radio-group>
-               <div class="upload-file-content" *ngIf="podSelectionOpt === 1">
-                 <input type="file" style="display: none;" #podFileInput (change)="onFileChange($event)"/>
-                 <button type="button" class="mt-half-rem" mat-raised-button color="accent" (click)="podFileInput.click()">
-                   Select Pod File
-                 </button>
-                 <p class="heading" *ngIf="podFile">You've uploaded {{podFile.name}}</p>
-               </div>
-               <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
-                 <div class="row">
-                   <mat-form-field appearance="fill" class="col-xs-12 col-md-6" *ngIf="currentNamespaces">
-                     <mat-label>Select namespaces</mat-label>
-                     <form [formGroup]="namespaceForm">
-                       <mat-select formControlName="namespaceFormControl" multiple>
-                         <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All items</mat-option>
-                         <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name" (click)="togglePerOne(mySelBranch, true)">
-                           {{namespace.metadata.name}}
-                         </mat-option>
-                       </mat-select>
-                     </form>
-                   </mat-form-field>
-                 </div>
-                 <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length && !loadingPods">
-                   <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
-                     <mat-label>Select a pod</mat-label>
-                     <form [formGroup]="podForm">
-                       <mat-select formControlName="podFormControl" multiple>
-                         <mat-option
-                           *ngIf="currentPods.length > 0"
-                           #podAll  [value]="'podAll'"
-                           (click)="toggleAllSelection(podAll, false)">
-                           All items
-                         </mat-option>
-                         <mat-option *ngFor="let pod of currentPods" [value]="pod.metadata" (click)="togglePerOne(null, false)">
-                           {{pod.metadata.name}}
-                         </mat-option>
-                       </mat-select>
-                     </form>
-                   </mat-form-field>
-                 </div>
-                 <div class="heading" *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
-                   No pods in the selected namespace(s)
-                 </div>
-               </div>
-             </div>
-             <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
-               <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
-                 Run Kubesec
-               </button>
-             </div>
-           </mat-step>
-
-           <mat-step>
-             <ng-template matStepLabel>Kubesec Report</ng-template>
-             <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
-               <app-kubesec-report [kubesecReport]="(kubesecReports[0])"></app-kubesec-report>
-             </div>
-             <div id="multipleKubesecReports" *ngIf="kubesecReports.length > 1">
-               <mat-toolbar>
-                 <div>
-                   <span class="subnav-title">Reports</span>
-                 </div>
-               </mat-toolbar>
-               <mat-accordion *ngFor="let report of kubesecReports" multi>
-                 <mat-expansion-panel class="light-border">
-                   <mat-expansion-panel-header>
-                     <mat-panel-title>
-                       <div class="row w-100">
-                         <div class="col-md-9 col-sm-8 col-xs-12">
-                           <app-ellipsis-text
-                             [clickable]="false"
-                             [text]="report.object.substring(4)">
-                           </app-ellipsis-text>
-                         </div>
-                         <div class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
+    <p class="font-size-xs-26 vertical-align-xs-bottom">Kubesec</p>
+    <mat-card class="mb-xs-4">
+      <mat-horizontal-stepper linear>
+        <mat-step [editable]="isCompleted">
+          <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
+          <div class="pod-selection-container">
+            <p class="heading">Choose a pod to scan by uploading its file or selecting an existing one already on your
+              cluster</p>
+            <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group"
+                             [(ngModel)]="podSelectionOpt">
+              <mat-radio-button class="file-radio-button" [value]="1"
+                                (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
+                Upload a file
+              </mat-radio-button>
+              <mat-radio-button class="cluster-pod-radio-button" [value]="2" (click)="podFile = null;">
+                Choose pods from your cluster
+              </mat-radio-button>
+            </mat-radio-group>
+            <div class="upload-file-content" *ngIf="podSelectionOpt === 1">
+              <input type="file" style="display: none;" #podFileInput (change)="onFileChange($event)"/>
+              <button type="button" class="mt-half-rem" mat-raised-button color="accent" (click)="podFileInput.click()">
+                Select Pod File
+              </button>
+              <p class="heading" *ngIf="podFile">You've uploaded {{ podFile.name }}</p>
+            </div>
+            <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
+              <div class="row">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6" *ngIf="currentNamespaces">
+                  <mat-label>Select namespaces</mat-label>
+                  <form [formGroup]="namespaceForm">
+                    <mat-select formControlName="namespaceFormControl" multiple>
+                      <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All
+                        items
+                      </mat-option>
+                      <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name"
+                                  (click)="togglePerOne(mySelBranch, true)">
+                        {{ namespace.metadata.name }}
+                      </mat-option>
+                    </mat-select>
+                  </form>
+                </mat-form-field>
+              </div>
+              <div class="row"
+                   *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length && !loadingPods">
+                <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
+                  <mat-label>Select a pod</mat-label>
+                  <form [formGroup]="podForm">
+                    <mat-select formControlName="podFormControl" multiple>
+                      <mat-option
+                        *ngIf="currentPods.length > 0"
+                        #podAll [value]="'podAll'"
+                        (click)="toggleAllSelection(podAll, false)">
+                        All items
+                      </mat-option>
+                      <mat-option *ngFor="let pod of currentPods" [value]="pod.metadata"
+                                  (click)="togglePerOne(null, false)">
+                        {{ pod.metadata.name }}
+                      </mat-option>
+                    </mat-select>
+                  </form>
+                </mat-form-field>
+              </div>
+              <div class="heading"
+                   *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
+                No pods in the selected namespace(s)
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
+            <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
+              Run Kubesec
+            </button>
+          </div>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Kubesec Report</ng-template>
+          <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
+            <app-kubesec-report [kubesecReport]="(kubesecReports[0])"></app-kubesec-report>
+          </div>
+          <div id="multipleKubesecReports" *ngIf="kubesecReports.length > 1">
+            <mat-toolbar>
+              <div>
+                <span class="subnav-title">Reports</span>
+              </div>
+            </mat-toolbar>
+            <mat-accordion *ngFor="let report of kubesecReports" multi>
+              <mat-expansion-panel class="light-border">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="row width-xs-100">
+                      <div class="col-md-9 col-sm-8 col-xs-12">
+                        <app-ellipsis-text
+                          [clickable]="false"
+                          [text]="report.object.substring(4)">
+                        </app-ellipsis-text>
+                      </div>
+                      <div
+                        class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
                         <span>
                         Score:
-                        <span [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
+                        <span
+                          [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
                           {{ report.score }}
                         </span>
                           </span>
-                         </div>
-                       </div>
-                     </mat-panel-title>
-                   </mat-expansion-panel-header>
-                   <app-kubesec-report [kubesecReport]="report"></app-kubesec-report>
-                 </mat-expansion-panel>
-               </mat-accordion>
-             </div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-kubesec-report [kubesecReport]="report"></app-kubesec-report>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
 
-             <div class="kubesec-popup" *ngIf="kubesecReports">
-               <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReports.length > 1">
+          <div class="kubesec-popup" *ngIf="kubesecReports">
+            <div class="mat-elevation-z8 report-tables" *ngIf="kubesecReports.length > 1">
 
-               </div>
-             </div>
-             <button class="margin-top" mat-raised-button matStepperPrevious color="primary">Back</button>
-           </mat-step>
-         </mat-horizontal-stepper>
-       </mat-card>
-     </div>
-   </div>
-
+            </div>
+          </div>
+          <button class="margin-top" mat-raised-button matStepperPrevious color="primary">Back</button>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </mat-card>
   </div>
 </div>

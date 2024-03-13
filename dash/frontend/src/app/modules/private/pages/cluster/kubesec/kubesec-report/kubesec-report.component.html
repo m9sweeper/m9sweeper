@@ -1,6 +1,6 @@
 <div class="pod-score row">
   <div class="col-xs-10 col-sm-9 pod-name first-sm">
-    <app-ellipsis-text class="w-100" [text]="'Kubesec ' + kubesecReport.object.substring(4)"></app-ellipsis-text>
+    <app-ellipsis-text class="width-xs-100" [text]="'Kubesec ' + kubesecReport.object.substring(4)"></app-ellipsis-text>
   </div>
   <div class="col-xs-2 col-sm-3 kubesec-score" [ngStyle]="{'background-color': decideScoreColor(kubesecReport.score)}" [matTooltip]="'Overall Score: ' + kubesecReport.score">
     {{kubesecReport.score}}

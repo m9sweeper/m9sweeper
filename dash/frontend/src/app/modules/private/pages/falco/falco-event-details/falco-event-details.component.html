@@ -73,22 +73,26 @@
     </div>
 
     <div class="row">
-      <mat-card class="col-xs-12">
-        <mat-card-header id="related-events-header">
-          <div class="font-xs-500">
-            Related Events
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <app-falco-related-events-table
-            [clusterId]="clusterId"
-            [currentEventLogId]="eventId"
-            [filters]="{ signature }"
-            [stylingOptions]="falcoEventLogsStylingOptions"
-            (recentEventClicked)="displayEventDetails($event)"
-          ></app-falco-related-events-table>
-        </mat-card-content>
-      </mat-card>
+      <div class="col-xs-12">
+        <mat-card>
+          <mat-card-header id="related-events-header">
+
+              <div class="font-xs-500">
+                Related Events
+              </div>
+
+          </mat-card-header>
+          <mat-card-content>
+            <app-falco-related-events-table
+              [clusterId]="clusterId"
+              [currentEventLogId]="eventId"
+              [filters]="{ signature }"
+              [stylingOptions]="falcoEventLogsStylingOptions"
+              (recentEventClicked)="displayEventDetails($event)"
+            ></app-falco-related-events-table>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
 
     <div class="row" id="raw-data">

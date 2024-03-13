@@ -67,7 +67,7 @@
               </label>
             </mat-form-field>
 
-          <div class="row end-xs display-flex me-xs-0">
+          <div class="row end-xs display-xs-flex me-xs-0">
             <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary"
                     matStepperNext>Next Step
             </button>
@@ -113,10 +113,10 @@
     </div>
     <br>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-xs-2">
+      <div class="col-xs-12 col-sm-6 center-xs start-sm display-xs-flex mb-xs-2">
         <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
       </div>
-      <div class="col-xs-12 col-sm-6  display-flex">
+      <div class="col-xs-12 col-sm-6  display-xs-flex">
         <button mat-raised-button
                 color="primary" class="center-xs end-sm"
                 [disabled]="serviceAccountForm.invalid"
@@ -149,10 +149,10 @@
       </ng-template>
     </div>
     <div class="row">
-      <div class="col-xs-12 col-sm-6 center-xs start-sm display-flex mb-xs-2">
+      <div class="col-xs-12 col-sm-6 center-xs start-sm display-xs-flex mb-xs-2">
         <button mat-raised-button color="accent" matStepperPrevious>Prev Step</button>
       </div>
-      <div class="col-xs-12 col-sm-6 center-xs end-sm display-flex">
+      <div class="col-xs-12 col-sm-6 center-xs end-sm display-xs-flex">
         <button mat-raised-button color="primary" [disabled]="submitting" (click)="onSubmit(stepper)">Next Step</button>
       </div>
     </div>
@@ -169,7 +169,7 @@
       </div>
       <div *ngIf="installWebhook === 'manually'">
         <label>Install enforcement webhook</label>
-        <textarea #defaultWebhookTextArea [cdkTextareaAutosize]="true" class="w-100 code-snippet" matInput></textarea>
+        <textarea #defaultWebhookTextArea [cdkTextareaAutosize]="true" class="width-xs-100 code-snippet" matInput></textarea>
         <div class="text-align-right">
           <app-copy-to-clipboard-button
             [text]="defaultWebhookTextArea.value"

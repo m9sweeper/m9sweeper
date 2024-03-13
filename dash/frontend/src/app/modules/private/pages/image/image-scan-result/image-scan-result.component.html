@@ -1,5 +1,5 @@
-<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
-  <div class="col-xs mt-xs-3 mb-xs-4">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <mat-card id="scanInformation" class="mb-xs-3 pt-xs-3" *ngIf="dataSource">
       <div class="row header-row m-xs-0">
         <div class="col-lg-9 col-xs-12">
@@ -217,10 +217,10 @@
           <ng-container matColumnDef="isFixable" >
             <mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <div class="display-flex w-100 overflow-hidden">
+              <div class="display-xs-flex width-xs-100 overflow-xs-hidden">
                 <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
-                <div class="overflow-hidden">
-                  <app-ellipsis-text class="w-100" *ngIf="issue.isFixable"
+                <div class="overflow-xs-hidden">
+                  <app-ellipsis-text class="width-xs-100" *ngIf="issue.isFixable"
                                      [text]="'(' + (issue.fixedVersion ? issue.fixedVersion : 'N/A') + ')'"
                   ></app-ellipsis-text>
                 </div>
