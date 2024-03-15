@@ -1,5 +1,5 @@
-<div class="h-xs-100 overflow-xs-auto">
-  <div class="m-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation [title]="exception?.title + ' Details'"
                         buttonTitle="Edit" buttonIcon="create"
                         [buttonAllowedRoles]="[Authority.ADMIN, Authority.SUPER_ADMIN]"
@@ -9,7 +9,7 @@
     ></app-sub-navigation>
 
     <mat-card class="my-xs-2">
-      <mat-card-content class="row display-flex">
+      <mat-card-content class="row display-xs-flex">
         <div class="col-xs-12 col-sm-6">
           <p><b>Status:</b> {{exception?.status}}</p>
           <p><b>Reason: </b> <br/>{{exception?.reason}}</p>
@@ -58,7 +58,7 @@
     </mat-card>
 
     <mat-card class="my-xs-2" id="commentFormCard">
-      <mat-card-content class="row display-flex">
+      <mat-card-content class="row display-xs-flex">
         <form [formGroup]="commentForm" class="col-xs-12 col-sm-6">
           <mat-form-field class="comment-input">
             <mat-label>Leave a comment</mat-label>

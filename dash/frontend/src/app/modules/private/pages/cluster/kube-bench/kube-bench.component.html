@@ -1,17 +1,14 @@
-<div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="page-title-button-group-spacing">
-        <div class="page-title">kube-bench</div>
-    </div>
-
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <span class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">kube-bench</span>
     <div class="stats-row row">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">CIS Benchmark Status:</div>
+            <div class="font-xs-500">CIS Benchmark Status:</div>
           </mat-card-header>
           <mat-card-content>
-            <h3 [ngClass]="statusInvalid ? 'text-style-red' : 'text-style-green'">{{benchmarkStatus}}</h3>
+            <h3 [ngClass]="statusInvalid ? 'text-style-red' : 'text-style-green'">{{ benchmarkStatus }}</h3>
           </mat-card-content>
         </mat-card>
       </div>
@@ -19,19 +16,19 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4" id="center-card">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Results of Last Run:</div>
+            <div class="font-xs-500">Results of Last Run:</div>
           </mat-card-header>
           <mat-card-content>
-            <table >
+            <table>
               <tr>
                 <th>Passed</th>
                 <th>Failed</th>
                 <th>Warnings</th>
               </tr>
               <tr>
-                <td class="last-run-data">{{lastRun ? lastRun.Totals.total_pass : ''}}</td>
-                <td class="last-run-data">{{lastRun ? lastRun.Totals.total_fail : ''}}</td>
-                <td class="last-run-data">{{lastRun ? lastRun.Totals.total_warn : ''}}</td>
+                <td class="text-align-xs-center">{{ lastRun ? lastRun.Totals.total_pass : '' }}</td>
+                <td class="text-align-xs-center">{{ lastRun ? lastRun.Totals.total_fail : '' }}</td>
+                <td class="text-align-xs-center">{{ lastRun ? lastRun.Totals.total_warn : '' }}</td>
               </tr>
             </table>
           </mat-card-content>
@@ -41,19 +38,22 @@
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Our Advice:</div>
+            <div class="font-xs-500">Our Advice:</div>
           </mat-card-header>
           <mat-card-content>
-          <div class="page-card-header">
-            <div class="col-sm-7 col-xs-7 no-padding">
-              <p>
-                {{ourAdvice}}
-              </p>
+
+            <div class="row">
+              <div class="col-sm-7 col-xs-7">
+                <p>
+                  {{ ourAdvice }}
+                </p>
+              </div>
+              <div class="col-sm-5 col-xs-5 end-xs">
+                <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary"
+                        (click)="openDialog()">Run Audit
+                </button>
+              </div>
             </div>
-            <div class="col-sm-5 col-xs-5 page-card-title-button-group-right-align">
-              <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
-            </div>
-          </div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -61,15 +61,15 @@
 
     <div class="row" id="past-audits-table">
       <div class="col-xs-12">
-        <mat-card class="scrollable-table-card">
+        <mat-card>
           <mat-card-header class="row">
-            <div class="col-xs-5">
-              <div class="page-card-title">
-                Past Audits
-              </div>
+            <div class="col-xs-5 font-xs-500">
+              Past Audits
             </div>
-            <div class="col-xs-7 run-audit-button">
-              <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" (click)="openDialog()">Run Audit</button>
+            <div class="col-xs-7 end-xs">
+              <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary"
+                      (click)="openDialog()">Run Audit
+              </button>
             </div>
           </mat-card-header>
           <mat-card-content>
@@ -77,13 +77,13 @@
               Click on an audit to learn more about run results and issue resolution <br>
             </div>
 
-            <div class="table-wrapper">
-              <mat-table class="table-with-link-rows" [dataSource]="datasource">
+            <div class="overflow-x-xs-auto display-xs-flex">
+              <mat-table class="table-with-link-rows display-xs-table" [dataSource]="datasource">
                 <ng-container matColumnDef="date">
                   <mat-header-cell *matHeaderCellDef>Date Audit Ran</mat-header-cell>
                   <mat-cell *matCellDef="let index">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
-                      {{unixToDate(index.createdAt)}}
+                      {{ unixToDate(index.createdAt) }}
                     </a>
                   </mat-cell>
                 </ng-container>
@@ -92,7 +92,7 @@
                   <mat-header-cell *matHeaderCellDef>Total Pass</mat-header-cell>
                   <mat-cell *matCellDef="let index">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
-                      {{index.resultsSummary.total_pass}}
+                      {{ index.resultsSummary.total_pass }}
                     </a>
                   </mat-cell>
                 </ng-container>
@@ -101,7 +101,7 @@
                   <mat-header-cell *matHeaderCellDef>Total Fail</mat-header-cell>
                   <mat-cell *matCellDef="let index">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
-                      {{index.resultsSummary.total_fail}}
+                      {{ index.resultsSummary.total_fail }}
                     </a>
                   </mat-cell>
                 </ng-container>
@@ -110,7 +110,7 @@
                   <mat-header-cell *matHeaderCellDef>Total Warnings</mat-header-cell>
                   <mat-cell *matCellDef="let index">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
-                      {{index.resultsSummary.total_warn}}
+                      {{ index.resultsSummary.total_warn }}
                     </a>
                   </mat-cell>
                 </ng-container>
@@ -120,7 +120,9 @@
                   <mat-cell [hidden]="!isSuperAdmin" *matCellDef="let index" (click)="$event.stopPropagation()">
                     <a [routerLink]="['/private', 'clusters', this.clusterId, 'kubebench', index.id]">
                       <div id="deleteButton">
-                        <button mat-raised-button style="background-color: maroon; color: white" (click)="deleteReport(index.id)">Delete Report</button>
+                        <button mat-raised-button style="background-color: maroon; color: white"
+                                (click)="deleteReport(index.id)">Delete Report
+                        </button>
                       </div>
                     </a>
                   </mat-cell>
@@ -141,7 +143,5 @@
         </mat-card>
       </div>
     </div>
-
   </div>
 </div>
-

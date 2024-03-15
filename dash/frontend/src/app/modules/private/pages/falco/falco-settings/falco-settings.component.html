@@ -1,104 +1,95 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="page-title-button-group-spacing">
-      <div class="page-title-div">
-            <div class="page-title"> Falco Settings</div>
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">Falco Settings</div>
+    <div class="row width-xs-100 overflow-x-xs-auto">
+      <div class="col-xs-12 col-lg-6 card-col">
+        <mat-card appearance="outlined" style="min-width: 400px;">
+          <mat-card-header>
+            <div class="font-xs-500"> Notification Settings</div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100">
+              <form [formGroup]="settingForm">
+                <div class="section-sublevel-1">
+                  <div class="row ms-xs-0">
+                    <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)"
+                                  formControlName="sendNotificationAnomaly"> Notify about Anomalies
+                    </mat-checkbox>
+                  </div>
+                  <div class="section-sublevel-2 row">
+                    <mat-form-field>
+                      <mat-label>Days between notification</mat-label>
+                      <input class="no-spin-button" matInput [readonly]="isNotifyAnomalyDisabled" type="number"
+                             formControlName="anomalyFrequency">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" [formGroup]="settingForm">
+                      <mat-label>Severity Levels to Include</mat-label>
+                      <mat-select [disabled]="isNotifyAnomalyDisabled" formControlName="selectedPriorityLevels"
+                                  multiple>
+                        <mat-option *ngFor="let level of priorityLevels" [value]="level">
+                          {{ level }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                </div>
+                <!--
+                <div class="section-sublevel-1">
+                  <div class="row">
+                    <div>
+                      <mat-checkbox (change)="enableSummarySubLevelcheckbox($event)" matInput formControlName="sendNotificationSummary" > </mat-checkbox>
+                    </div>&nbsp;&nbsp;
+                    <div>
+                      <h3>Send Summary Emails</h3>
+                    </div>
+                  </div>
+                  <div class ="section-sublevel-2">
+                    <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency" >
+                      <mat-radio-button [disabled]="isSummaryDisabled" value="daily">Daily</mat-radio-button> <br><br>
+                      <mat-radio-button [disabled]="isSummaryDisabled" (change)="enableWeeklySubLevelcheckbox($event)" value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
+
+                      <mat-select [disabled]="isWeeklyDisabled" class="weekDay" formControlName="selectedWeekDay">
+                        <mat-option *ngFor="let day of weekDays" [value]="day">
+                          {{day}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-radio-group>
+                  </div>
+                </div>
+                -->
+
+                <div class="section-sublevel-1">
+                  <mat-label>Who to Notify</mat-label>
+                  <div class="row ms-xs-0 section-sublevel-2">
+                    <mat-radio-group class="display-xs-flex flex-column" aria-label="SelectPerson"
+                                     formControlName="whoToNotify">
+                      <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">
+                        All Admins
+                      </mat-radio-button>
+                      <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)"
+                                        value="specificEmail">Specific Email List (comma separated)
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-form-field [style.display]="isSpecificEmailHidden? 'none' :'block'" class="width-xs-100">
+                      <textarea matInput formControlName="emailList"></textarea>
+                    </mat-form-field>
+                  </div>
+                  <br>
+                  <button mat-raised-button color="primary" type="submit" (click)="onClickSave()" class="ms-xs-0">Save
+                    Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-lg-6 card-col" *ngIf="clusterId">
+        <app-falco-rules-cluster-list
+          [clusterId]="clusterId"
+        ></app-falco-rules-cluster-list>
       </div>
     </div>
-    <div class="page-card">
-      <div class="row w-100">
-        <div class="col-xs-12 col-lg-6 card-col">
-          <mat-card appearance="outlined" style="min-width: 400px;">
-            <mat-card-header>
-              <div class="page-card-title"> Notification Settings </div>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="page-card-header" >
-                <div>
-                  <form [formGroup]="settingForm">
-                      <div class="section-sublevel-1">
-                        <div class="row page-card-left-align">
-                            <mat-checkbox (change)="enableAnomalySubLevelcheckbox($event)" formControlName="sendNotificationAnomaly"> Notify about Anomalies </mat-checkbox>
-                        </div>
-
-                        <div class="section-sublevel-2 row">
-                          <div class="col-xs-12">
-                            <mat-form-field>
-                              <mat-label>Days between notification</mat-label>
-                              <input class="no-spin-button" matInput [readonly]="isNotifyAnomalyDisabled" type="number" formControlName="anomalyFrequency">
-                            </mat-form-field>
-                          </div>
-                          <div class="col-xs-12">
-                            <mat-form-field appearance="fill" [formGroup]="settingForm">
-                              <mat-label>Severity Levels to Include</mat-label>
-                              <mat-select [disabled]="isNotifyAnomalyDisabled" formControlName="selectedPriorityLevels" multiple>
-                                <mat-option *ngFor="let level of priorityLevels" [value]="level">
-                                  {{level}}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                      </div>
-                      <!--
-                      <div class="section-sublevel-1">
-                        <div class="row">
-                          <div>
-                            <mat-checkbox (change)="enableSummarySubLevelcheckbox($event)" matInput formControlName="sendNotificationSummary" > </mat-checkbox>
-                          </div>&nbsp;&nbsp;
-                          <div>
-                            <h3>Send Summary Emails</h3>
-                          </div>
-                        </div>
-                        <div class ="section-sublevel-2">
-                          <mat-radio-group aria-label="SelectSummaryFrequency" formControlName="selectedSummaryFrequency" >
-                            <mat-radio-button [disabled]="isSummaryDisabled" value="daily">Daily</mat-radio-button> <br><br>
-                            <mat-radio-button [disabled]="isSummaryDisabled" (change)="enableWeeklySubLevelcheckbox($event)" value="weekly">Weekly on</mat-radio-button> &nbsp;&nbsp;
-
-                            <mat-select [disabled]="isWeeklyDisabled" class="weekDay" formControlName="selectedWeekDay">
-                              <mat-option *ngFor="let day of weekDays" [value]="day">
-                                {{day}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-radio-group>
-                        </div>
-                      </div>
-                      -->
-
-                      <div class="section-sublevel-1">
-                        <div class="col-xs-12">
-                          <mat-label>Who to Notify</mat-label>
-                        </div>
-                        <div class="row page-card-left-align section-sublevel-2">
-                          <div class="col-xs-12 w-100">
-                            <mat-radio-group class="display-flex flex-column" aria-label="SelectPerson" formControlName="whoToNotify">
-                              <mat-radio-button (change)="notEnableSpecificEmailSubLevelcheckbox($event)" value="allAdmin">All Admins</mat-radio-button>
-                              <mat-radio-button (change)="enableSpecificEmailSubLevelcheckbox($event)" value="specificEmail">Specific Email List (comma separated)</mat-radio-button>
-                            </mat-radio-group>
-                          </div>
-                          <div class="col-xs-12 w-100">
-                            <mat-form-field [style.display]="isSpecificEmailHidden? 'none' :'block'">
-                              <textarea matInput formControlName="emailList"></textarea>
-                            </mat-form-field>
-                          </div>
-                        </div>
-                        <br>
-                        <div class="page-card-left-align">
-                          <button mat-raised-button color="primary" type="submit" (click)="onClickSave()">Save Changes</button>
-                        </div>
-                      </div>
-                  </form>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="col-xs-12 col-lg-6 card-col" *ngIf="clusterId">
-          <app-falco-rules-cluster-list
-            [clusterId]="clusterId"
-          ></app-falco-rules-cluster-list>
-        </div>
-      </div>
   </div>
-</div>
 </div>

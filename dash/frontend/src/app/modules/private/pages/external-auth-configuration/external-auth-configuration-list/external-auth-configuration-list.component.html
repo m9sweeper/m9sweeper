@@ -1,12 +1,12 @@
-<div class="page-container">
-  <div class="page-container-content">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation
       [title]="subNavigationDetails.title"
       [buttonTitle]="subNavigationDetails.buttonTitle" [buttonIcon]="subNavigationDetails.buttonIcon"
       (buttonClicked)="openAddExternalAuthConfigurationDialog(null)">
     </app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
+    <mat-card>
+      <div class="overflow-x-xs-auto display-xs-flex">
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> No.</th>

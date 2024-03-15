@@ -1,70 +1,70 @@
-<div class="h-xs-100 overflow-xs-auto">
-  <div class="m-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card class="component-with-scrollable-table">
-      <div class="table-wrapper">
-        <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort id="listOfExceptions">
-          <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
-            <mat-cell *matCellDef="let exception" [matTooltip]="exception?.title">
-              <a [routerLink]="['/private', 'exceptions', exception.id]">
-                {{exception?.title}}
-              </a>
-            </mat-cell>
-          </ng-container>
+    <mat-card>
 
-          <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
-            <mat-cell *matCellDef="let exception">
-              <a [routerLink]="['/private', 'exceptions', exception.id]">
-                {{exception?.status}}
-              </a>
-            </mat-cell>
-          </ng-container>
+          <mat-table class="table-with-link-rows overflow-x-xs-auto" [dataSource]="dataSource" matSort id="listOfExceptions">
+            <ng-container matColumnDef="title">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
+              <mat-cell *matCellDef="let exception" [matTooltip]="exception?.title">
+                <a [routerLink]="['/private', 'exceptions', exception.id]">
+                  {{exception?.title}}
+                </a>
+              </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="start_date">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
-            <mat-cell *matCellDef="let exception">
-              <a [routerLink]="['/private', 'exceptions', exception.id]">
-                {{exception?.start_date | date: 'MMM dd, y'}}
-              </a>
-            </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+              <mat-cell *matCellDef="let exception">
+                <a [routerLink]="['/private', 'exceptions', exception.id]">
+                  {{exception?.status}}
+                </a>
+              </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="end_date">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
-            <mat-cell *matCellDef="let exception">
-              <a [routerLink]="['/private', 'exceptions', exception.id]">
-                {{exception?.end_date | date: 'MMM dd, y'}}
-              </a>
-            </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="start_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+              <mat-cell *matCellDef="let exception">
+                <a [routerLink]="['/private', 'exceptions', exception.id]">
+                  {{exception?.start_date | date: 'MMM dd, y'}}
+                </a>
+              </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="edit">
-            <mat-header-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matHeaderCellDef>Actions</mat-header-cell>
-            <mat-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matCellDef="let exception">
-              <a mat-icon-button [routerLink]="['/private', 'exceptions', exception?.id, 'edit']">
-                <mat-icon>create</mat-icon>
-              </a>
-            </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="end_date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
+              <mat-cell *matCellDef="let exception">
+                <a [routerLink]="['/private', 'exceptions', exception.id]">
+                  {{exception?.end_date | date: 'MMM dd, y'}}
+                </a>
+              </mat-cell>
+            </ng-container>
 
-          <ng-container matColumnDef="delete" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
-            <mat-header-cell  *matHeaderCellDef></mat-header-cell>
-            <mat-cell  *matCellDef="let exception">
-              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
-                      (click)="deleteException($event, exception?.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </mat-cell>
-          </ng-container>
+            <ng-container matColumnDef="edit">
+              <mat-header-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" *matCellDef="let exception">
+                <a mat-icon-button [routerLink]="['/private', 'exceptions', exception?.id, 'edit']">
+                  <mat-icon>create</mat-icon>
+                </a>
+              </mat-cell>
+            </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
-      </div>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+            <ng-container matColumnDef="delete" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">
+              <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+              <mat-cell  *matCellDef="let exception">
+                <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
+                        (click)="deleteException($event, exception?.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+
     </mat-card>
   </div>
 </div>

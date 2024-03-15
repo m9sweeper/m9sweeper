@@ -1,13 +1,15 @@
-<div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
-    <div class="page-title title">Kubesec</div>
-    <mat-card>
+<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mb-xs-4">
+    <p class="font-size-xs-26 vertical-align-xs-bottom">Kubesec</p>
+    <mat-card class="mb-xs-4">
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
           <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
           <div class="pod-selection-container">
-            <p class="heading">Choose a pod to scan by uploading its file or selecting an existing one already on your cluster</p>
-            <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group" [(ngModel)]="podSelectionOpt">
+            <p class="heading">Choose a pod to scan by uploading its file or selecting an existing one already on your
+              cluster</p>
+            <mat-radio-group aria-labelledby="pod-options-group-label" class="pod-options-radio-group"
+                             [(ngModel)]="podSelectionOpt">
               <mat-radio-button class="file-radio-button" [value]="1"
                                 (click)="namespaceForm.controls.namespaceFormControl.setValue(null); podForm.controls.podFormControl.setValue(null);">
                 Upload a file
@@ -21,7 +23,7 @@
               <button type="button" class="mt-half-rem" mat-raised-button color="accent" (click)="podFileInput.click()">
                 Select Pod File
               </button>
-              <p class="heading" *ngIf="podFile">You've uploaded {{podFile.name}}</p>
+              <p class="heading" *ngIf="podFile">You've uploaded {{ podFile.name }}</p>
             </div>
             <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
               <div class="row">
@@ -29,44 +31,50 @@
                   <mat-label>Select namespaces</mat-label>
                   <form [formGroup]="namespaceForm">
                     <mat-select formControlName="namespaceFormControl" multiple>
-                      <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All items</mat-option>
-                      <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name" (click)="togglePerOne(mySelBranch, true)">
-                        {{namespace.metadata.name}}
+                      <mat-option #mySelBranch [value]="'selectAll'" (click)="toggleAllSelection(mySelBranch, true)">All
+                        items
+                      </mat-option>
+                      <mat-option *ngFor="let namespace of currentNamespaces" [value]="namespace.metadata.name"
+                                  (click)="togglePerOne(mySelBranch, true)">
+                        {{ namespace.metadata.name }}
                       </mat-option>
                     </mat-select>
                   </form>
                 </mat-form-field>
               </div>
-              <div class="row" *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length && !loadingPods">
+              <div class="row"
+                   *ngIf="namespaceForm.controls.namespaceFormControl.value && currentPods && currentPods.length && !loadingPods">
                 <mat-form-field appearance="fill" class="col-xs-12 col-md-6">
                   <mat-label>Select a pod</mat-label>
                   <form [formGroup]="podForm">
                     <mat-select formControlName="podFormControl" multiple>
                       <mat-option
                         *ngIf="currentPods.length > 0"
-                        #podAll  [value]="'podAll'"
+                        #podAll [value]="'podAll'"
                         (click)="toggleAllSelection(podAll, false)">
                         All items
                       </mat-option>
-                      <mat-option *ngFor="let pod of currentPods" [value]="pod.metadata" (click)="togglePerOne(null, false)">
-                        {{pod.metadata.name}}
+                      <mat-option *ngFor="let pod of currentPods" [value]="pod.metadata"
+                                  (click)="togglePerOne(null, false)">
+                        {{ pod.metadata.name }}
                       </mat-option>
                     </mat-select>
                   </form>
                 </mat-form-field>
               </div>
-              <div class="heading mb-xs-3" *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
+              <div class="heading"
+                   *ngIf="(namespaceForm.controls.namespaceFormControl.value && namespaceForm.controls.namespaceFormControl.value.length) && (!currentPods || !currentPods.length) && !loadingPods">
                 No pods in the selected namespace(s)
               </div>
             </div>
           </div>
-          <div *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value.length)">
+          <div
+            *ngIf="podFile || (namespaceForm.controls.namespaceFormControl.value && podForm.controls.podFormControl.value)">
             <button type="button" mat-raised-button color="accent" (click)="getKubesecReport()" matStepperNext>
               Run Kubesec
             </button>
           </div>
         </mat-step>
-
         <mat-step>
           <ng-template matStepLabel>Kubesec Report</ng-template>
           <div id="singleKubesecReport" *ngIf="kubesecReports.length == 1">
@@ -82,17 +90,19 @@
               <mat-expansion-panel class="light-border">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    <div class="row w-100">
+                    <div class="row width-xs-100">
                       <div class="col-md-9 col-sm-8 col-xs-12">
                         <app-ellipsis-text
                           [clickable]="false"
                           [text]="report.object.substring(4)">
                         </app-ellipsis-text>
                       </div>
-                      <div class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
+                      <div
+                        class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
                         <span>
                         Score:
-                        <span [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
+                        <span
+                          [ngStyle]="{'background': decideScoreColor(report.score), 'margin-inline-start': '0.5em', 'padding-inline': '0.5em'}">
                           {{ report.score }}
                         </span>
                           </span>

@@ -1,15 +1,15 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                         [title]="subNavigationTitle"
                         [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         (buttonClicked)="openDockerRegistryDialog(false)"></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
+    <mat-card>
+      <div class="overflow-x-xs-auto display-xs-flex">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear
-               matSortDirection="asc">
+               matSortDirection="asc" class="display-xs-table">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</th>
             <td mat-cell *matCellDef="let dockerRegistry"> {{dockerRegistry?.name}} </td>

@@ -1,5 +1,5 @@
 <div class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
+  <div class="m-xs-3 text-align-xs-left">
     <div class="row">
       <div class=" col-xs-1">
         <button mat-icon-button class="close-button" [mat-dialog-close]="true">
@@ -11,11 +11,11 @@
     <form class="form" [formGroup]="addConstraintCriteria" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-12">
-          <mat-form-field class="full-width" appearance="fill">
+          <mat-form-field class="width-xs-100" appearance="fill">
             <mat-label>Kinds (comma separated)</mat-label>
             <input matInput type="text" formControlName="kinds">
           </mat-form-field>
-          <mat-form-field class="full-width" appearance="fill">
+          <mat-form-field class="width-xs-100" appearance="fill">
             <mat-label>Api Groups (comma seperated)</mat-label>
             <input matInput type="text" formControlName="apiGroups">
           </mat-form-field>

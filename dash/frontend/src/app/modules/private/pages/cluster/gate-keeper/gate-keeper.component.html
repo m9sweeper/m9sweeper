@@ -1,49 +1,55 @@
 <div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation title="Gatekeeper"></app-sub-navigation>
-
     <div class="row mb-xs-2">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-xs-1">
-        <mat-card class="h-100">
+        <mat-card class="h-xs-100">
           <mat-card-header>
-            <div class="page-card-title">Status:</div>
+            <div class="font-xs-500">Status:</div>
           </mat-card-header>
           <mat-card-content>
-            <h2 class="text-style-red" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{gatekeeperInstallationStatus.message}}</h2>
-            <h2 class="text-style-orange" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{gatekeeperInstallationStatus.message}}</h2>
-            <h2 class="text-style-green" *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{gatekeeperInstallationStatus.message}}</h2>
+            <h2 class="text-style-red"
+                *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{ gatekeeperInstallationStatus.message }}</h2>
+            <h2 class="text-style-orange"
+                *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{ gatekeeperInstallationStatus.message }}</h2>
+            <h2 class="text-style-green"
+                *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{ gatekeeperInstallationStatus.message }}</h2>
           </mat-card-content>
         </mat-card>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 my-xs-1">
-        <mat-card class="h-100">
+        <mat-card class="h-xs-100">
           <mat-card-header>
-            <div class="page-card-title">Recommendation:</div>
+            <div class="font-xs-500">Recommendation:</div>
           </mat-card-header>
           <mat-card-content>
             <div class="row">
-
               <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
                 <p *ngIf="gatekeeperConstraintTemplates === null; else recommendationText">
                   We recommend installing Gatekeeper to manage policies in your Kubernetes cluster.
                 </p>
                 <ng-template #recommendationText>
                   <p *ngIf="gatekeeperConstraintTemplates?.length === 0">
-                    Gatekeeper is installed, but no policies are created yet. Set up your initial policies by adding constraint templates.
+                    Gatekeeper is installed, but no policies are created yet. Set up your initial policies by adding
+                    constraint templates.
                   </p>
                   <p *ngIf="gatekeeperConstraintTemplates?.length > 0">
-                    Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the compliance of applications in your cluster.
+                    Gatekeeper is installed! We recommend you regularly review the policies in place, as well as the
+                    compliance of applications in your cluster.
                   </p>
                 </ng-template>
               </div>
 
               <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                <div class="text-align-right">
-                  <button mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" (click)="openInstallWizard()" *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
+                <div class="text-align-xs-right">
+                  <button mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                          (click)="openInstallWizard()"
+                          *ngIf="gatekeeperConstraintTemplates === null; else recommendationButton">
                     Install
                   </button>
                   <ng-template #recommendationButton>
-                    <button  mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" (click)="openAddConstraintDialog()" *ngIf="gatekeeperConstraintTemplates?.length === 0">
+                    <button mat-raised-button color="primary" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
+                            (click)="openAddConstraintDialog()" *ngIf="gatekeeperConstraintTemplates?.length === 0">
                       Setup
                     </button>
                   </ng-template>
@@ -56,10 +62,10 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <mat-card class="scrollable-table-card">
+        <mat-card>
           <mat-card-header class="row">
             <div class="col-xs-12 col-sm-3">
-              <div class="page-card-title">
+              <div class="font-xs-500">
                 Constraint Templates
               </div>
             </div>
@@ -73,53 +79,59 @@
               </button>
             </div>
           </mat-card-header>
-          <mat-card-content class="row">
-            <div class="table-wrapper">
-              <mat-table class="table-with-link-rows" id="gatekeeperExceptionsTable" [dataSource]="gatekeeperTemplates" matSort  matSortActive="name" matSortDisableClear matSortDirection="asc">
-                <ng-container matColumnDef="name">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
-                  <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.metadata.name">
-                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
-                      {{ gatekeeperTemplate.metadata.name }}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="category">
-                  <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
-                  <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.kind">
-                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
-                      {{gatekeeperTemplate.kind}}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="description">
-                  <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-                  <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.metadata.annotations.description">
-                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
-                      {{gatekeeperTemplate.metadata.annotations.description}}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="constraints">
-                  <mat-header-cell *matHeaderCellDef>Constraints</mat-header-cell>
-                  <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.constraintsCount">
-                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
-                      {{gatekeeperTemplate.constraintsCount}}
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="enforced">
-                  <mat-header-cell *matHeaderCellDef>Enforced</mat-header-cell>
-                  <mat-cell *matCellDef="let gatekeeperTemplate">
-                    <a [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
-                      <app-readonly-checkbox [checked]="gatekeeperTemplate.enforced"></app-readonly-checkbox>
-                    </a>
-                  </mat-cell>
-                </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click pointer"></mat-row>
-              </mat-table>
-            </div>
+          <mat-card-content class="row display-xs-flex overflow-x-xs-auto">
+            <mat-table class="table-with-link-rows display-xs-table" id="gatekeeperExceptionsTable"
+                       [dataSource]="gatekeeperTemplates" matSort matSortActive="name" matSortDisableClear
+                       matSortDirection="asc">
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
+                <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.metadata.name">
+                  <a
+                    [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
+                    {{ gatekeeperTemplate.metadata.name }}
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="category">
+                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.kind">
+                  <a
+                    [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
+                    {{ gatekeeperTemplate.kind }}
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                <mat-cell *matCellDef="let gatekeeperTemplate"
+                          [matTooltip]="gatekeeperTemplate.metadata.annotations.description">
+                  <a
+                    [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
+                    {{ gatekeeperTemplate.metadata.annotations.description }}
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="constraints">
+                <mat-header-cell *matHeaderCellDef>Constraints</mat-header-cell>
+                <mat-cell *matCellDef="let gatekeeperTemplate" [matTooltip]="gatekeeperTemplate.constraintsCount">
+                  <a
+                    [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
+                    {{ gatekeeperTemplate.constraintsCount }}
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="enforced">
+                <mat-header-cell *matHeaderCellDef>Enforced</mat-header-cell>
+                <mat-cell *matCellDef="let gatekeeperTemplate">
+                  <a
+                    [routerLink]="['/private', 'clusters', this.clusterId, 'gatekeeper', gatekeeperTemplate.metadata.name]">
+                    <app-readonly-checkbox [checked]="gatekeeperTemplate.enforced"></app-readonly-checkbox>
+                  </a>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click pointer"></mat-row>
+            </mat-table>
           </mat-card-content>
         </mat-card>
       </div>

@@ -1,9 +1,9 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation title="Falco Settings"></app-sub-navigation>
     <mat-card>
       <mat-card-header>
-        <mat-card-title class="row w-100">
+        <mat-card-title class="row width-xs-100 display-xs-flex">
           <div id="falcoTitle" class="col-xs-12 col-sm-9">
               Falco Rules
           </div>
@@ -21,7 +21,7 @@
           <div class="col-xs-12 col-md-6 col-lg-4" *ngFor="let rule of rules; index as idx">
               <div class="rule-container">
                 <strong>{{rule.action | titlecase}}</strong> when the following are true:
-                <div class="pl-10">
+                <div class="ps-xs-10">
                   <ng-container *ngIf="!rule.allNamespaces">
                     <p>
                       Event is from <strong>certain namespaces,</strong> including: {{ rule.namespaces | arrayText : { elements: 3, key: 'namespace'} }}
@@ -41,7 +41,7 @@
                   </p>
                   <div class="row" *ngIf="isAdmin">
                     <button mat-raised-button color="primary" (click)="openAddEditModal(rule, idx)">Edit</button>
-                    <button class="ml-10" mat-raised-button color="primary" (click)="removeRule(rule.id, idx)">Delete</button>
+                    <button class="ms-xs-10" mat-raised-button color="primary" (click)="removeRule(rule.id, idx)">Delete</button>
                   </div>
                 </div>
               </div>

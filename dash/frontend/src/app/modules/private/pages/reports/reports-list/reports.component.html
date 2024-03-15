@@ -1,22 +1,20 @@
 <div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="row page">
-      <span>Reports</span>
-    </div>
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <div class="row page">Reports</div>
     <div class="row">
-      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 card-div">
+      <div *ngFor="let reportInfo of listOfReports" class="col-xs-12 col-sm-12 col-md-6 col-lg-4 my-xs-3 ms-xs-0 me-xs-0">
         <a
           [routerLink]="reportInfo.path"
           class="report-card"
         >
-          <mat-card>
+          <mat-card class="h-xs-100">
             <mat-card-content>
-              <div class="row" style="display: flex; flex-direction: row">
+              <div class="row display-xs-flex flex-direction-xs-row">
                 <div class="report-icon">
                   <mat-icon>{{reportInfo.icon}}</mat-icon>
                 </div>
                 <div class="report-info">
-                  <p class="title-font report-title">{{reportInfo.title}}</p>
+                  <p class="font-xs-500 report-title">{{reportInfo.title}}</p>
                   <p class="report-description">{{reportInfo.description}}</p>
                 </div>
               </div>

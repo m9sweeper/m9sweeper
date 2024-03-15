@@ -1,113 +1,112 @@
 <mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin">
-    <div class="page-card-title">
-      {{isEdit ? 'Edit' : 'Add'}} Template Constraint
+  <div class="m-xs-0 text-align-xs-left">
+    <div class="font-xs-500">
+      {{ isEdit ? 'Edit' : 'Add' }} Template Constraint
     </div>
     <br>
-    <div class="col">
-      <div class="row">
-
-        <div class="col-xs-12 col-md-6 col-lg-6">
-          <div class="display-flex">
-            <h3 class="padding-top-4">Basic Details</h3>
-          </div>
-          <form class="form" [formGroup]="addTemplateConstraintForm" (ngSubmit)="onSubmit()">
-            <mat-form-field class="full-width mb-xs-3" appearance="fill" subscriptSizing="dynamic">
-              <mat-label>Name</mat-label>
-              <input matInput type="text" placeholder="Constraint Name" formControlName="name">
-              <mat-error *ngIf="addTemplateConstraintForm.controls.name.errors">Invalid constraint name.</mat-error>
-              <mat-hint *ngIf="isEdit">Constraint name cannot be changed.</mat-hint>
-            </mat-form-field>
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-label>Category</mat-label>
-              <input matInput formControlName="kind" readonly>
-            </mat-form-field>
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-label>Description</mat-label>
-              <input matInput type="text" placeholder="" formControlName="description">
-            </mat-form-field>
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-label>Excluded Namespaces</mat-label>
-              <mat-select multiple formControlName="excludedNamespaces">
-                <mat-option *ngFor="let namespace of k8sNamespaces" value="{{namespace}}">{{namespace}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="full-width" appearance="fill">
-              <mat-label>Mode</mat-label>
-              <mat-select formControlName="mode">
-                <mat-option value="dryrun">Audit</mat-option>
-                <mat-option value="deny">Enforce</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </form>
-          <button mat-raised-button color="primary" (click)="editRawKubernetesManifest()" id="edit-k8s-manifest-btn">
-            Edit Raw Kubernetes Manifest
-          </button>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-lg-6">
+        <div class="display-xs-flex">
+          <h3 class="mt-xs-3">Basic Details</h3>
         </div>
+        <form class="form" [formGroup]="addTemplateConstraintForm" (ngSubmit)="onSubmit()">
+          <mat-form-field class="width-xs-100 mb-xs-3" appearance="fill" subscriptSizing="dynamic">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" placeholder="Constraint Name" formControlName="name">
+            <mat-error *ngIf="addTemplateConstraintForm.controls.name.errors">Invalid constraint name.</mat-error>
+            <mat-hint *ngIf="isEdit">Constraint name cannot be changed.</mat-hint>
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Category</mat-label>
+            <input matInput formControlName="kind" readonly>
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput type="text" placeholder="" formControlName="description">
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Excluded Namespaces</mat-label>
+            <mat-select multiple formControlName="excludedNamespaces">
+              <mat-option *ngFor="let namespace of k8sNamespaces" value="{{namespace}}">{{ namespace }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Mode</mat-label>
+            <mat-select formControlName="mode">
+              <mat-option value="dryrun">Audit</mat-option>
+              <mat-option value="deny">Enforce</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+        <button mat-raised-button color="primary" (click)="editRawKubernetesManifest()" id="edit-k8s-manifest-btn">
+          Edit Raw Kubernetes Manifest
+        </button>
+      </div>
 
-        <div class="col-xs-12 col-md-6 col-lg-6 right-content">
-          <div style="width:100%">
+      <div class="col-xs-12 col-md-6 col-lg-6 right-content">
+        <div class="width-xs-100">
 
-            <div class="display-flex negative-margin-bottom-8">
-              <h3 class="padding-top-4">Match Criteria</h3>
-              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="AddConstraintCriteriaDialog()">
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+          <div class="display-xs-flex negative-margin-bottom-8">
+            <h3 class="padding-top-4">Match Criteria</h3>
+            <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="AddConstraintCriteriaDialog()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
 
-            <mat-card style="margin-bottom: 10px" appearance="outlined" *ngFor="let criteria of templateConstraintCriteria; index as i">
-              <mat-card-content class="padding-10">
-                <div class="row full-width" style="margin-left:1px">
+          <mat-card style="margin-bottom: 10px" appearance="outlined"
+                    *ngFor="let criteria of templateConstraintCriteria; index as i">
+            <mat-card-content class="padding-10">
+              <div class="row width-xs-100" style="margin-left:1px">
 
-                  <div class="col-xs-8 no-padding">
-                    <p>kinds: [{{criteria.kinds}}]</p>
-                    <p>apiGroups:
-                      [{{(criteria.apiGroups[0] === ' ' || criteria.apiGroups[0] === '') ? '*' : criteria.apiGroups }}]</p>
-                  </div>
-                  <div class="col-xs-4 page-card-title-button-group-right-align">
-                    <button  class="mdc-icon-button" (click)="removeCriteria(i)">
-                      <mat-icon class="close-icon" color="warn">close</mat-icon>
-                    </button>
-                  </div>
-
+                <div class="col-xs-8 no-padding">
+                  <p>kinds: [{{ criteria.kinds }}]</p>
+                  <p>apiGroups:
+                    [{{ (criteria.apiGroups[0] === ' ' || criteria.apiGroups[0] === '') ? '*' : criteria.apiGroups }}
+                    ]</p>
                 </div>
-              </mat-card-content>
-            </mat-card>
+                <div class="col-xs-4 text-align-xs-right p-xs-0">
+                  <button class="mdc-icon-button" (click)="removeCriteria(i)">
+                    <mat-icon class="close-icon" color="warn">close</mat-icon>
+                  </button>
+                </div>
 
-            <div class="padding-bottom-5px">
-              <h3>Properties</h3>
-            </div>
-            <json-schema-form #propertyFields *ngIf="generateFormFromSchema"
-                              loadExternalAssets="true"
-                              framework="material-design"
-                              [schema]="formSchema"
-                              id="schema_form"
-                              (onChanges)="saveSchemaFormValue($event)"
-            >
-            </json-schema-form>
-            <br>
-            <json-schema-form #propertyFieldsJsonData *ngIf="!generateFormFromSchema"
-                              loadExternalAssets="true"
-                              framework="material-design"
-                              [(ngModel)]="generateFormFromJsonData"
-                              id="schema_form_edit"
-                              (onChanges)="saveSchemaFormJsonValue($event)"
-                              ngDefaultControl
-            >
-            </json-schema-form>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <div class="padding-bottom-5px">
+            <h3>Properties</h3>
+          </div>
+          <json-schema-form #propertyFields *ngIf="generateFormFromSchema"
+                            loadExternalAssets="true"
+                            framework="material-design"
+                            [schema]="formSchema"
+                            id="schema_form"
+                            (onChanges)="saveSchemaFormValue($event)"
+          >
+          </json-schema-form>
+          <br>
+          <json-schema-form #propertyFieldsJsonData *ngIf="!generateFormFromSchema"
+                            loadExternalAssets="true"
+                            framework="material-design"
+                            [(ngModel)]="generateFormFromJsonData"
+                            id="schema_form_edit"
+                            (onChanges)="saveSchemaFormJsonValue($event)"
+                            ngDefaultControl
+          >
+          </json-schema-form>
 
         </div>
       </div>
     </div>
 
-      <div class="row action-button-row">
-        <div id="action-btn">
-          <button [disabled]="!addTemplateConstraintForm.valid" (click)="onSubmit()" mat-raised-button color="primary"
-                  type="submit" class="me-xs-2">
-            Save Changes
-          </button>
-          <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
-        </div>
+    <div class="row action-button-row">
+      <div id="action-btn">
+        <button [disabled]="!addTemplateConstraintForm.valid" (click)="onSubmit()" mat-raised-button color="primary"
+                type="submit" class="me-xs-2">
+          Save Changes
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>
       </div>
     </div>
   </div>

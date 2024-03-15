@@ -48,6 +48,11 @@ mat-card div div {
   }
 }
 
+#table-shadow {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.26),
+  0 1px 1px 0 rgba(0,0,0,0),
+  0 1px 3px 0 rgba(0, 0, 0, 0.09);
+}
 
 #scannerComplianceList {
   flex: 3;

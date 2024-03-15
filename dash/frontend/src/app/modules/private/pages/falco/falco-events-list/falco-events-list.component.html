@@ -1,7 +1,7 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="row page-title-button-group-spacing">
-      <div class="page-title col-xs-12 col-sm-9">Project Falco</div>
+<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mt-xs-3 mb-xs-4">
+    <div class="row">
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2 col-xs-12 col-sm-9">Project Falco</div>
       <div class="col-xs-12 col-sm-3 start-xs end-sm">
         <button mat-raised-button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" color="primary" id="installButton" (click)="openDialog()">Install</button>
         <button mat-raised-button color="primary"
@@ -11,14 +11,13 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12">
+
         <mat-card>
           <mat-card-header>
-            <div class="page-card-title">Log Filters</div>
+            <div class="font-xs-500">Log Filters</div>
           </mat-card-header>
           <mat-card-content>
-            <div class="page-card-header" style="margin-top: 20px;">
+            <div class="display-xs-flex p-xs-0 ms-xs-0 width-xs-100 mt-xs-20 mt-xs-20">
               <form (ngSubmit)="rebuildWithFilters()">
                 <div class="row report-header">
                   <div class="col-xs-12 col-sm-6 col-md-3">
@@ -81,7 +80,7 @@
                   </div>
                 </div>
                 <div>
-                  <div class="page-card-left-align">
+                  <div class="ms-xs-0">
                     <button [disabled]="!filtersValid"
                             mat-raised-button
                             color="primary"
@@ -93,15 +92,13 @@
             </div>
           </mat-card-content>
         </mat-card>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-card class="scrollable-table-card">
+
+
+        <mat-card>
           <mat-card-header class="row">
-            <div class="page-card-title col-xs-3">
-                Recent Events
+            <div class="font-xs-500 col-xs-3">
+              Recent Events
             </div>
             <div id="report-buttons" class="col-xs-9">
               <button (click)="downloadReport()"
@@ -130,5 +127,3 @@
         </mat-card>
       </div>
     </div>
-  </div>
-</div>

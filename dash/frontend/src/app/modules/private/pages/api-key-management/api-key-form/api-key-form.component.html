@@ -1,39 +1,28 @@
 <div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
-    <div class="m-xs-0 overflow-x-xs-auto">
-      <div >
-        <mat-card appearance="outlined">
-          <mat-card-content>
-            <div class="page-title-button-group-spacing">
-              <span class="page-title">{{subMenuTitle}}</span>
-            </div>
-            <form  [formGroup]="apiKeyForm">
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Name</mat-label>
-                  <input matInput placeholder="Name" type="text" formControlName="name">
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Choose User</mat-label>
-                  <mat-select formControlName="userId" [disabled]="isEdit">
-                    <mat-option *ngFor="let user of userList" [value]="user.id">{{user.fullName}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-checkbox formControlName="isActive" >Active</mat-checkbox>
-              </p>
-            </form>
-            <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" color="primary" (click)="onSubmit()" class="margin-right-10">
-              {{ isEdit ? 'Update' : 'Create'}}
-            </button>
-            <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
-
-          </mat-card-content>
-        </mat-card>
-      </div>
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <mat-card appearance="outlined">
+      <p class="font-size-xs-26 vertical-align-xs-bottom ms-xs-15 mb-xs-2">{{ subMenuTitle }}</p>
+      <mat-card-content>
+        <form [formGroup]="apiKeyForm">
+          <mat-form-field appearance="fill" class="mt-xs-15">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Name" type="text" formControlName="name">
+          </mat-form-field>
+          <mat-form-field appearance="fill" class="mt-xs-15">
+            <mat-label>Choose User</mat-label>
+            <mat-select formControlName="userId" [disabled]="isEdit">
+              <mat-option *ngFor="let user of userList" [value]="user.id">{{ user.fullName }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-checkbox formControlName="isActive" class="mt-xs-15">Active</mat-checkbox>
+        </form>
+        <button [disabled]="!apiKeyForm.valid" mat-raised-button type="button" color="primary" (click)="onSubmit()"
+                class="create-api-button mr-xs-15 mt-xs-15">
+          {{ isEdit ? 'Update' : 'Create' }}
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="cancel()" class="ms-xs-10 mt-xs-15">Cancel
+        </button>
+      </mat-card-content>
+    </mat-card>
   </div>
-</div>
 </div>

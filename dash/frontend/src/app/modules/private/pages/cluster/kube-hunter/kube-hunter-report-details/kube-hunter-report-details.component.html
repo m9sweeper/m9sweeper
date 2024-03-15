@@ -1,18 +1,18 @@
-<div class="h-xs-100 overflow-xs-auto">
-  <div class="m-xs-6">
-
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs mt-xs-6 ms-xs-7">
     <div *ngIf="report && cluster">
-      <div class="page-title"> kube-hunter Report: Cluster Vulnerabilities </div>
-
-      <p> Cluster: {{cluster.name}}</p>
+      <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">
+        kube-hunter Report: Cluster Vulnerabilities
+      </div>
+      <p class="margin-top-10"> Cluster: {{cluster.name}}</p>
       <p> Date run: {{dateRan}} </p>
     </div>
 
-    <mat-card class="scrollable-table-card" *ngFor="let data of dataSource; let i = index">
+    <mat-card *ngFor="let data of dataSource; let i = index">
       <mat-card-header>
         Location: {{location[i]}}
       </mat-card-header>
-      <div class="table-wrapper">
+      <div class="overflow-x-xs-auto display-xs-flex">
         <mat-table [dataSource]="data">
           <ng-container matColumnDef="severity">
             <mat-header-cell *matHeaderCellDef> Severity </mat-header-cell>
@@ -47,7 +47,5 @@
         </mat-table>
       </div>
     </mat-card>
-
   </div>
-
 </div>

@@ -1,96 +1,85 @@
-<div class="row h-xs-100 overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
+<div class="row mx-xs-1 h-xs-100 display-xs-block h-xs-fit overflow-xs-auto">
+  <div class="col-xs mt-xs-7 mb-xs-4">
     <app-sub-navigation [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
+    <mat-card>
       <mat-card-content>
         <form id="auditLogFilterForm">
-          <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
-                <mat-label>Entity Type</mat-label>
-                <mat-select formControlName="entityTypes">
-                  <mat-option *ngFor="let entity of entityTypes" [value]="entity.entityType">
-                    {{entity.entityType}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
-                <mat-label>Entity Id</mat-label>
-                <input matInput type="number" formControlName="entityId">
-              </mat-form-field>
-            </div>
-            <div class="col-xs-12" id="auditFilterButtons">
-              <button [disabled]="!filterAuditLogForm.valid"
-                      mat-raised-button id="submitButton"
-                      color="primary"
-                      type="submit" (click)="filterAuditLogs()">Filter
-              </button>
-
-              <button mat-raised-button id="resetButton"
-                      color="primary"
-                      type="submit" (click)="resetAuditLogs()">Reset
-              </button>
-            </div>
-          </div>
+          <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
+            <mat-label>Entity Type</mat-label>
+            <mat-select formControlName="entityTypes">
+              <mat-option *ngFor="let entity of entityTypes" [value]="entity.entityType">
+                {{ entity.entityType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill" [formGroup]="filterAuditLogForm">
+            <mat-label>Entity Id</mat-label>
+            <input matInput type="number" formControlName="entityId">
+          </mat-form-field>
+          <button [disabled]="!filterAuditLogForm.valid"
+                  mat-button color="primary"
+                  mat-raised-button id="submitButton"
+                  type="submit" (click)="filterAuditLogs()">Filter
+          </button>
+          <button mat-raised-button id="resetButton"
+                  mat-button color="primary"
+                  type="submit" (click)="resetAuditLogs()" class="ms-xs-3">Reset
+          </button>
         </form>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="scrollable-table-card" *ngIf="showAuditLogTable">
+    <mat-card *ngIf="showAuditLogTable">
       <mat-card-header id="auditLogTableHeader" class="row">
-        <div class="page-card-title col-xs-12 col-sm-9">
-          Audit logs count: {{totalAuditLogs}}
+        <div class="font-size-xs-20 line-height-xs-1 font-weight-xs-bold col-xs-12 col-sm-9">
+          Audit logs count: {{ totalAuditLogs }}
         </div>
         <div class="col-xs-12 col-sm-3 start-xs end-sm">
           <button class=button [disabled]="totalAuditLogs === 0" (click)="downloadAuditLogs()"
                   mat-raised-button
-                  color="primary"
+                  mat-button color="primary"
                   type="button">Download
           </button>
         </div>
       </mat-card-header>
-      <mat-card-content>
-        <div class="table-wrapper">
-          <mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
-                 matSortDirection="asc">
-            <ng-container matColumnDef="id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>ID</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog"> {{auditLog?.id}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="entity_type">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Entity Type</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog"> {{auditLog?.entityType}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="entity_id">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Entity Id</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog">{{auditLog?.entityId}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="event_type">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Type</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog"> {{auditLog?.eventType}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="event_time">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Time</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog"> {{auditLog.createdAt | date: 'short'}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="data">
-              <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> MetaData</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog">
-                <a style="justify-content: left;" href="javascript:void(0)" (click)="showMetaDataDetails(auditLog)">View</a>
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="user">
-              <mat-header-cell *matHeaderCellDef> User</mat-header-cell>
-              <mat-cell *matCellDef="let auditLog">{{ auditLog.fullName }}</mat-cell>
-            </ng-container>
+      <mat-card-content class="overflow-x-xs-auto display-xs-flex">
+        <mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
+                   matSortDirection="asc" class="display-xs-table">
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>ID</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog"> {{ auditLog?.id }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="entity_type">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Entity Type</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog"> {{ auditLog?.entityType }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="entity_id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Entity Id</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog">{{ auditLog?.entityId }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="event_type">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Type</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog"> {{ auditLog?.eventType }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="event_time">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Event Time</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog"> {{ auditLog.createdAt | date: 'short' }}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="data">
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> MetaData</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog">
+              <a style="justify-content: left;" href="javascript:void(0)"
+                 (click)="showMetaDataDetails(auditLog)">View</a>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="user">
+            <mat-header-cell *matHeaderCellDef> User</mat-header-cell>
+            <mat-cell *matCellDef="let auditLog">{{ auditLog.fullName }}</mat-cell>
+          </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-        </div>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
       </mat-card-content>
     </mat-card>
   </div>

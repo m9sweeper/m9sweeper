@@ -1,209 +1,208 @@
 <!-- start of the upper part of the menu-->
-<div class="h-xs-100 overflow-xs-auto background-color-xs-grey">
-  <div class="m-xs-6">
-    <div class="page-title-button-group-spacing row" id="clusterSummaryHeader">
-      <div class="col-sm-7 col-xs-12 start-xs cluster-group-name display-flex">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto background-color-xs-grey">
+  <div class="col-xs mb-xs-4">
+    <div class="row mt-xs-7" id="clusterSummaryHeader">
+      <div class="col-sm-7 col-xs-12 start-xs cluster-group-name display-xs-flex">
         {{ clusterGroupName }}
-        <button class="align-self-center" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button  (click)="editClusterGroupNameDialog()">
+        <button class="align-self-center" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
+                (click)="editClusterGroupNameDialog()">
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
-      <div class="col-sm-5 col-xs-12 start-xs end-sm display-flex flex-direction-xs-row align-items-center">
+      <div class="col-sm-5 col-xs-12 start-xs end-sm display-xs-flex flex-direction-xs-row align-items-center">
         <button
           class="margin-right-10"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="warn"
           [disabled]="!clustersList || clustersList.length || disableOnSearch"
-          (click)="deleteClusterGroup()">Delete Cluster Group</button>
+          (click)="deleteClusterGroup()">Delete Cluster Group
+        </button>
         <button
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="primary"
-          (click)="openClusterDialog()">Add Cluster</button>
+          (click)="openClusterDialog()">Add Cluster
+        </button>
       </div>
     </div>
-  <!-- start of the first row of graphs-->
-  <div class="row" id="clusterSummaryGraphs" *ngIf="clustersList && clustersList.length">
-    <div class="no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card class="overview-graph-card" id="complianceSummaryLineChartCard">
-        <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
-        <mat-card-content>
-          <div class="graph">
-            <ngx-charts-line-chart
-              [view]="complianceSummaryLineChartAttributes.view"
-              [scheme]="complianceSummaryLineChartAttributes.colorScheme"
-              [results]="complianceSummaryLineChartAttributes.results"
-              [legend]="complianceSummaryLineChartAttributes.showLegend"
-              [legendPosition]="complianceSummaryLineChartAttributes.legendPosition"
-              [gradient]="complianceSummaryLineChartAttributes.gradient"
-              [xAxis]="complianceSummaryLineChartAttributes.showXAxis"
-              [yAxis]="complianceSummaryLineChartAttributes.showYAxis"
-              [showXAxisLabel]="complianceSummaryLineChartAttributes.showXAxisLabel"
-              [showYAxisLabel]="complianceSummaryLineChartAttributes.showYAxisLabel"
-              [yAxisLabel]="complianceSummaryLineChartAttributes.yAxisLabel"
-              [xAxisLabel]="complianceSummaryLineChartAttributes.xAxisLabel"
-              [yScaleMin]="complianceSummaryLineChartAttributes.yScaleMin"
-              [yScaleMax]="complianceSummaryLineChartAttributes.yScaleMax"
-              [yAxisTicks]="complianceSummaryLineChartAttributes.yAxisTicks"
-              [xAxisTickFormatting]="scanXTickFormatting"
-              [autoScale]="complianceSummaryLineChartAttributes.autoScale">
-              <ng-template #tooltipTemplate let-model="model">
+    <!-- start of the first row of graphs-->
+    <div class="row" id="clusterSummaryGraphs" *ngIf="clustersList && clustersList.length">
+      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+        <mat-card class="overview-graph-card" id="complianceSummaryLineChartCard">
+          <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
+          <mat-card-content>
+              <ngx-charts-line-chart
+                [view]="complianceSummaryLineChartAttributes.view"
+                [scheme]="complianceSummaryLineChartAttributes.colorScheme"
+                [results]="complianceSummaryLineChartAttributes.results"
+                [legend]="complianceSummaryLineChartAttributes.showLegend"
+                [legendPosition]="complianceSummaryLineChartAttributes.legendPosition"
+                [gradient]="complianceSummaryLineChartAttributes.gradient"
+                [xAxis]="complianceSummaryLineChartAttributes.showXAxis"
+                [yAxis]="complianceSummaryLineChartAttributes.showYAxis"
+                [showXAxisLabel]="complianceSummaryLineChartAttributes.showXAxisLabel"
+                [showYAxisLabel]="complianceSummaryLineChartAttributes.showYAxisLabel"
+                [yAxisLabel]="complianceSummaryLineChartAttributes.yAxisLabel"
+                [xAxisLabel]="complianceSummaryLineChartAttributes.xAxisLabel"
+                [yScaleMin]="complianceSummaryLineChartAttributes.yScaleMin"
+                [yScaleMax]="complianceSummaryLineChartAttributes.yScaleMax"
+                [yAxisTicks]="complianceSummaryLineChartAttributes.yAxisTicks"
+                [xAxisTickFormatting]="scanXTickFormatting"
+                [autoScale]="complianceSummaryLineChartAttributes.autoScale">
+                <ng-template #tooltipTemplate let-model="model">
                 <span>
                   Date: {{ model.name | date: 'mediumDate' }}
                 </span>
-                <br/>
-                <span>Compliance: {{ model.value | number: '1.0-1' }}%</span>
-              </ng-template>
+                  <br/>
+                  <span>Compliance: {{ model.value | number: '1.0-1' }}%</span>
+                </ng-template>
 
-              <ng-template #seriesTooltipTemplate let-model="model">
+                <ng-template #seriesTooltipTemplate let-model="model">
                 <span>
                   Date: {{ model[0].name | date: 'mediumDate' }}
                 </span>
-                <br/>
-                <span>Compliance: {{ model[0].value | number: '1.0-1' }}%</span>
-              </ng-template>
+                  <br/>
+                  <span>Compliance: {{ model[0].value | number: '1.0-1' }}%</span>
+                </ng-template>
+              </ngx-charts-line-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
-            </ngx-charts-line-chart>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card class="overview-graph-card" id="lineChartCard">
-        <mat-card-title class="center-xs">Scan History</mat-card-title>
-        <mat-card-content>
-          <div class="graph">
-            <ngx-charts-line-chart
-              [view]="lineChartAttributes.view"
-              [scheme]="lineChartAttributes.colorScheme"
-              [results]="lineChartAttributes.results"
-              [legend]="lineChartAttributes.showLegend"
-              [legendPosition]="lineChartAttributes.legendPosition"
-              [gradient]="lineChartAttributes.gradient"
-              [xAxis]="lineChartAttributes.showXAxis"
-              [yAxis]="lineChartAttributes.showYAxis"
-              [showXAxisLabel]="lineChartAttributes.showXAxisLabel"
-              [showYAxisLabel]="lineChartAttributes.showYAxisLabel"
-              [yAxisLabel]="lineChartAttributes.yAxisLabel"
-              [xAxisLabel]="lineChartAttributes.xAxisLabel"
-              [yScaleMin]="lineChartAttributes.yScaleMin"
-              [yAxisTicks]="lineChartAttributes.yAxisTicks"
-              [xAxisTickFormatting]="scanXTickFormatting"
-              [autoScale]="lineChartAttributes.autoScale">
-              <ng-template #tooltipTemplate let-model="model">
+      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+        <mat-card class="overview-graph-card" id="lineChartCard">
+          <mat-card-title class="center-xs">Scan History</mat-card-title>
+          <mat-card-content>
+              <ngx-charts-line-chart
+                [view]="lineChartAttributes.view"
+                [scheme]="lineChartAttributes.colorScheme"
+                [results]="lineChartAttributes.results"
+                [legend]="lineChartAttributes.showLegend"
+                [legendPosition]="lineChartAttributes.legendPosition"
+                [gradient]="lineChartAttributes.gradient"
+                [xAxis]="lineChartAttributes.showXAxis"
+                [yAxis]="lineChartAttributes.showYAxis"
+                [showXAxisLabel]="lineChartAttributes.showXAxisLabel"
+                [showYAxisLabel]="lineChartAttributes.showYAxisLabel"
+                [yAxisLabel]="lineChartAttributes.yAxisLabel"
+                [xAxisLabel]="lineChartAttributes.xAxisLabel"
+                [yScaleMin]="lineChartAttributes.yScaleMin"
+                [yAxisTicks]="lineChartAttributes.yAxisTicks"
+                [xAxisTickFormatting]="scanXTickFormatting"
+                [autoScale]="lineChartAttributes.autoScale">
+                <ng-template #tooltipTemplate let-model="model">
                 <span>
                   Date: {{ model.name | date: 'mediumDate' }}
                 </span>
-                <br/>
-                <span>Scans: {{ model.value }}</span>
-              </ng-template>
+                  <br/>
+                  <span>Scans: {{ model.value }}</span>
+                </ng-template>
 
-              <ng-template #seriesTooltipTemplate let-model="model">
+                <ng-template #seriesTooltipTemplate let-model="model">
                 <span>
                   Date: {{ model[0].name | date: 'mediumDate' }}
                 </span>
-                <br/>
-                <span>Scans: {{ model[0].value }}</span>
-              </ng-template>
+                  <br/>
+                  <span>Scans: {{ model[0].value }}</span>
+                </ng-template>
 
-            </ngx-charts-line-chart>
-          </div>
-        </mat-card-content>
-      </mat-card>
+              </ngx-charts-line-chart>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+        <mat-card class="overview-graph-card" id="barChartCard">
+          <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
+          <mat-card-content>
+              <ngx-charts-bar-vertical-stacked
+                [view]="barChartAttributes.view"
+                [scheme]="barChartAttributes.colorScheme"
+                [results]="barChartAttributes.results"
+                [legend]="barChartAttributes.showLegend"
+                [legendPosition]="barChartAttributes.legendPosition"
+                [gradient]="barChartAttributes.gradient"
+                [xAxis]="barChartAttributes.showXAxis"
+                [yAxis]="barChartAttributes.showYAxis"
+                [barPadding]="barChartAttributes.barPadding"
+                [showXAxisLabel]="barChartAttributes.showXAxis"
+                [showYAxisLabel]="barChartAttributes.showYAxis"
+                [xAxisLabel]="barChartAttributes.xAxisLabel"
+                [yAxisLabel]="barChartAttributes.yAxisLabel"
+                [xAxisTickFormatting]="scanXTickFormatting">
+                <ng-template #tooltipTemplate let-model="model">
+                  <span>Date: {{ model.series | date: 'mediumDate' }}</span>
+                  <br/>
+                  <span>Type: {{ model.name }}</span>
+                  <br/>
+                  <span>Vulnerabilities: {{ model.value }}</span>
+                </ng-template>
+              </ngx-charts-bar-vertical-stacked>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
 
-    <div class="no-padding no-margin margin-top-10 full-height col-xs-12 col-md-6 col-lg-4">
-      <mat-card class="overview-graph-card" id="barChartCard">
-        <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
-        <mat-card-content>
-          <div class="graph">
-            <ngx-charts-bar-vertical-stacked
-              [view]="barChartAttributes.view"
-              [scheme]="barChartAttributes.colorScheme"
-              [results]="barChartAttributes.results"
-              [legend]="barChartAttributes.showLegend"
-              [legendPosition]="barChartAttributes.legendPosition"
-              [gradient]="barChartAttributes.gradient"
-              [xAxis]="barChartAttributes.showXAxis"
-              [yAxis]="barChartAttributes.showYAxis"
-              [barPadding]="barChartAttributes.barPadding"
-              [showXAxisLabel]="barChartAttributes.showXAxis"
-              [showYAxisLabel]="barChartAttributes.showYAxis"
-              [xAxisLabel]="barChartAttributes.xAxisLabel"
-              [yAxisLabel]="barChartAttributes.yAxisLabel"
-              [xAxisTickFormatting]="scanXTickFormatting">
-              <ng-template #tooltipTemplate let-model="model">
-                <span>Date: {{ model.series | date: 'mediumDate' }}</span>
-                <br/>
-                <span>Type: {{ model.name }}</span>
-                <br/>
-                <span>Vulnerabilities: {{ model.value }}</span>
-              </ng-template>
-            </ngx-charts-bar-vertical-stacked>
-          </div>
-        </mat-card-content>
-      </mat-card>
+    <!--start of the error messages-->
+    <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
+      <mat-card>No cluster added for this group</mat-card>
     </div>
-  </div>
+    <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 margin-top-10 text-center">
+      <mat-card>No cluster found.</mat-card>
+    </div>
 
-  <!--start of the error messages-->
-  <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
-    <mat-card>No cluster added for this group</mat-card>
-  </div>
-  <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 margin-top-10 text-center">
-    <mat-card>No cluster found.</mat-card>
-  </div>
-
-  <!--start of showing the clusters-->
-  <div class="row margin-bottom-20">
-    <div class="cluster-element margin-bottom-6 no-padding pointer col-xs-12 col-md-6 col-lg-4"
-         *ngFor="let cluster of clustersList; index as i">
-      <mat-card (click)="showCluster(cluster)" class="w-100"
-                [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
-        <div class="row">
-          <div class="col-xs-1 cluster-icon">
-            <div class="cluster-name-short" [ngStyle] = "{'background': calculateMenuColor(i)}">
+    <!--start of showing the clusters-->
+    <div class="row mb-xs-20">
+      <div class="cluster-element margin-bottom-6 p-xs-0 pointer col-xs-12 col-md-6 col-lg-4"
+           *ngFor="let cluster of clustersList; index as i">
+        <mat-card (click)="showCluster(cluster)" class="width-xs-100"
+                  [ngClass]="{ 'rescan': dateInMil - +cluster.lastScannedAt > 4500000 }">
+          <div class="row">
+            <div class="col-xs-1 cluster-icon">
+              <div class="cluster-name-short" [ngStyle]="{'background': calculateMenuColor(i)}">
               <span>
-                {{shortGroupName(cluster.name)}}
+                {{ shortGroupName(cluster.name) }}
               </span>
+              </div>
+            </div>
+
+            <div class="cluster-info-header col-xs">
+              <mat-card-title>
+                {{ cluster.name }}
+              </mat-card-title>
+              <mat-card-subtitle title="{{cluster.ipAddress}}">
+                {{ cluster.ipAddress }}
+              </mat-card-subtitle>
             </div>
           </div>
-
-          <div class="cluster-info-header col-xs">
-            <mat-card-title>
-              {{cluster.name}}
-            </mat-card-title>
-            <mat-card-subtitle title="{{cluster.ipAddress}}">
-              {{cluster.ipAddress}}
-            </mat-card-subtitle>
+          <div class="row">
+            <div class="col-xs">
+              <mat-card-content id="cluster-card-content"> <!-- pt-xs-0 is not working here -->
+                <p>{{ cluster.context }}</p>
+                <i *ngIf="cluster.lastScannedAt">
+                  last synced: {{ +cluster.lastScannedAt | date: 'short' }}
+                </i>
+              </mat-card-content>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-xs">
-            <mat-card-content class="no-padding">
-              <p>{{cluster.context}}</p>
-              <i *ngIf="cluster.lastScannedAt">
-                last synced: {{+cluster.lastScannedAt | date: 'short'}}
-              </i>
-            </mat-card-content>
-          </div>
-        </div>
-        <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
-        <ng-template #moreThanSixTags>
-          <mat-chip-listbox aria-label="tag list">
-            <mat-chip-option *ngFor="let tag of cluster['tags'].slice(0, 6); index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip-option>
-            <a [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]">{{limitTagList(cluster['tags'])}}</a>
-          </mat-chip-listbox>
-        </ng-template>
-        <ng-template #lessThanSixTags>
-          <mat-chip-listbox aria-label="tag list">
-            <mat-chip-option *ngFor="let tag of cluster['tags'] || []; index as i" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{truncateTagName(tag)}}</mat-chip-option>
-          </mat-chip-listbox>
-        </ng-template>
-      </mat-card>
+          <div *ngIf="cluster['tags']  && cluster['tags'].length > 6; then moreThanSixTags else lessThanSixTags"></div>
+          <ng-template #moreThanSixTags>
+            <mat-chip-listbox aria-label="tag list">
+              <mat-chip-option *ngFor="let tag of cluster['tags'].slice(0, 6); index as i"
+                               [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{ truncateTagName(tag) }}
+              </mat-chip-option>
+              <a [routerLink]="['/private', 'clusters', cluster?.id, 'info' ]">{{ limitTagList(cluster['tags']) }}</a>
+            </mat-chip-listbox>
+          </ng-template>
+          <ng-template #lessThanSixTags>
+            <mat-chip-listbox aria-label="tag list">
+              <mat-chip-option *ngFor="let tag of cluster['tags'] || []; index as i"
+                               [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">{{ truncateTagName(tag) }}
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </ng-template>
+        </mat-card>
+      </div>
     </div>
-  </div>
   </div>
 </div>

@@ -1,44 +1,26 @@
-<mat-dialog-content class="overflow-visible">
-  <form [formGroup]="createScannerForm" class="scanner-form" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput placeholder="Scanner Name" type="text" formControlName="name">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-form-field appearance="fill">
-          <mat-label>Description</mat-label>
-          <textarea matInput rows="5" placeholder="Description" type="text" formControlName="description" > </textarea>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-form-field>
-          <mat-label>Type</mat-label>
-          <mat-select formControlName="type" (valueChange)="displayTrivySettings($event)">
-            <mat-option *ngFor="let scannerType of scannerTypes" [value]="scannerType.value">
-              {{scannerType.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-checkbox formControlName="enabled" class="checkbox-margin">Active</mat-checkbox>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <mat-checkbox formControlName="required" class="checkbox-margin">Required</mat-checkbox>
-      </div>
-    </div>
+<mat-dialog-content class="overflow-xs-visible">
+  <form [formGroup]="createScannerForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Scanner Name" type="text" formControlName="name">
+    </mat-form-field>
 
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput rows="5" placeholder="Description" type="text" formControlName="description"> </textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type" (valueChange)="displayTrivySettings($event)">
+        <mat-option *ngFor="let scannerType of scannerTypes" [value]="scannerType.value">
+          {{ scannerType.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox formControlName="enabled" class="checkbox-margin">Active</mat-checkbox>
+    <br>
+    <mat-checkbox formControlName="required" class="checkbox-margin">Required</mat-checkbox>
     <ng-container *ngIf="displayTrivyVulnerabilitySettings">
       <div class="row">
         <div class="col-xs-6">

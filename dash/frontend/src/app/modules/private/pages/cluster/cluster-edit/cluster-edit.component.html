@@ -1,46 +1,52 @@
- <div class="modal-container-margin">
-  <form [formGroup]="createClusterForm" (ngSubmit)="onSubmit()">
-    <div>
-      <p>
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput placeholder="Cluster Name" type="text" formControlName="name">
-        </mat-form-field>
-      </p>
-      <!-- <p>
-        <mat-form-field>
-          <mat-label>Grace Period Days</mat-label>
-          <input matInput placeholder="0" type="text" formControlName="gracePeriodDays">
-        </mat-form-field>
-      </p> -->
+<form [formGroup]="createClusterForm" (ngSubmit)="onSubmit()">
+  <div class="row mt-xs-8 mb-xs-3">
+    <div class="col-xs">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Cluster Name" type="text" formControlName="name">
+      </mat-form-field>
     </div>
-    <mat-form-field  id="cluster-tags" style="display:none!important">
-      <mat-chip-grid #chipGrid aria-label="List of Tags">
-        <mat-chip-row *ngFor="let tag of displayedTags; index as i" [editable]="selectable"
-                   (removed)="removeTag(tag)" [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}" >
-          {{tag.name}}
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip-row>
-        <input
-               placeholder="Add/Remove Tags"
-               #tagInput
-               [matChipInputFor]="chipGrid"
-               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-               [matAutocomplete]="auto"
-               [formControl]="tagFormCtrl"
-               (matChipInputTokenEnd)="addTag($event)"
-        >
-      </mat-chip-grid>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addAutocompleteSuggestionToTags($event)">
-        <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-          {{tag.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <div class="modal-content-left-align-no-margin">
+    <!-- <p>
+      <mat-form-field>
+        <mat-label>Grace Period Days</mat-label>
+        <input matInput placeholder="0" type="text" formControlName="gracePeriodDays">
+      </mat-form-field>
+    </p> -->
+  </div>
+  <div class="row">
+    <div class="col-xs">
+      <mat-form-field id="cluster-tags" class="display-xs-none">
+        <mat-chip-grid #chipGrid aria-label="List of Tags">
+          <mat-chip-row *ngFor="let tag of displayedTags; index as i" [editable]="selectable"
+                        (removed)="removeTag(tag)"
+                        [ngStyle]="{'background': calculateMenuColor(i), 'color': '#ffffff'}">
+            {{ tag.name }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip-row>
+          <input
+            placeholder="Add/Remove Tags"
+            #tagInput
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matAutocomplete]="auto"
+            [formControl]="tagFormCtrl"
+            (matChipInputTokenEnd)="addTag($event)"
+          >
+        </mat-chip-grid>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addAutocompleteSuggestionToTags($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+            {{ tag.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row mb-xs-1">
+    <div class="col-xs start-xs">
       <button [disabled]="!createClusterForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
       &nbsp;
       <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
     </div>
-  </form>
-</div>
+  </div>
+</form>

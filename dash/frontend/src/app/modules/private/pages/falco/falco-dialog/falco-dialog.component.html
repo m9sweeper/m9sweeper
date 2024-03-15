@@ -1,29 +1,27 @@
-<div mat-dialog-content class="modal-container-margin">
-  <div class="modal-content-left-align-no-margin" id="modalContentWrapper">
+<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mt-xs-3" id="modalContentWrapper">
     <mat-form-field appearance="fill">
       <mat-label>Minimum Priority</mat-label>
       <mat-select [(value)]="level">
         <mat-option *ngFor="let level of priorityLevels"
                     [value]="level">
-          {{level}}
+          {{ level }}
         </mat-option>
       </mat-select>
-      <a class="padding-10" matIconSuffix target="_blank" href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
+      <a class="padding-10" matIconSuffix target="_blank"
+         href="https://m9sweeper.io/docs/latest/docs/concepts/falco/#minimum-priority">
         <mat-icon mat-list-item-icon>info</mat-icon>
       </a>
     </mat-form-field>
-    <div class="page-title-button-group-spacing">
-      <div class="padding-top-15">Run Falco using the following CLI command:</div>
-    </div>
-    <div>
-          <textarea
-            matInput
-            [cdkTextareaAutosize]="true"
-            #run
-            class="code-snippet my-0"
-            id="falcoInstallCommand"
-            readonly
-          >helm repo add falcosecurity https://falcosecurity.github.io/charts && \
+    <div class="ms-xs-1 mb-xs-1">Run Falco using the following CLI command:</div>
+    <textarea
+      matInput
+      [cdkTextareaAutosize]="true"
+      #run
+      class="code-snippet my-0"
+      id="falcoInstallCommand"
+      readonly
+    >helm repo add falcosecurity https://falcosecurity.github.io/charts && \
 helm repo update && \
 helm upgrade --install falco falcosecurity/falco \
   --wait --version 3.5.0 \
@@ -38,14 +36,14 @@ helm upgrade --install falco falcosecurity/falco \
   --set-string falcosidekick.config.webhook.address='{{backendUrl}}/api/falco/{{clusterId}}/create/?key={{apiKey}}' \
   --set falcosidekick.config.webhook.checkcert=true \
   --set-string falcosidekick.config.webhook.minimumpriority='{{level.toLowerCase()}}'</textarea>
-    </div>
-    <div class="modal-content-left-align-no-margin row start-sm between-xs pt-xs-2">
+
+    <div class="mb-xs-7 ms-xs-0 text-align-xs-left row start-sm between-xs pt-xs-2">
       <button mat-raised-button matDialogClose color="primary" class="me-xs-2 mb-xs-2 mb-md-0">Done</button>
       <app-copy-to-clipboard-button
         successMessage="Command copied to clipboard!"
         errorMessage="Command could not be copied"
         [text]="run.value"
-        ></app-copy-to-clipboard-button>
+      ></app-copy-to-clipboard-button>
     </div>
   </div>
 </div>

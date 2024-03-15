@@ -1,25 +1,20 @@
-<mat-dialog-content class="update-user-form-container">
-  <form class="update-user-form" [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
-    <p>
-      <mat-form-field appearance="fill">
-        <mat-label>First Name</mat-label>
-        <input matInput placeholder="Enter your first name" type="text" formControlName="firstName">
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="fill">
-        <mat-label>Last Name</mat-label>
-        <input matInput placeholder="Enter your last name" type="text" formControlName="lastName">
-      </mat-form-field>
-    </p>
-    <p>
-      <mat-form-field appearance="fill">
-        <mat-label>Phone</mat-label>
-        <input matInput
-               placeholder="Enter phone number" type="text"
-               formControlName="phone">
-      </mat-form-field>
-    </p>
+<mat-dialog-content class="display-xs-flex flex-direction-xs-row justify-content-xs-center">
+  <form class="width-xs-500px display-xs-flex flex-direction-xs-column justify-content-xs-center"
+        [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput placeholder="Enter your first name" type="text" formControlName="firstName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput placeholder="Enter your last name" type="text" formControlName="lastName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Phone</mat-label>
+      <input matInput
+             placeholder="Enter phone number" type="text"
+             formControlName="phone">
+    </mat-form-field>
     <div mat-dialog-actions>
       <button [disabled]="!updateUserForm.valid" mat-raised-button color="primary" type="submit">Submit</button>
       <button mat-raised-button color="warn" type="button" (click)="onNoClick()">Cancel</button>

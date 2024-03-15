@@ -311,8 +311,18 @@ app-private {
   margin: 20px;
   // width:fit-content;
 }
+th, mat-header-cell {
+  font-weight: 550 !important;
+}
+mat-table {
+  display: table;
+}
+mat-cell {
+  touch-action: auto !important;
+  -webkit-user-drag: auto !important;
+}
 
-.settings-card, .scrollable-table-card, .component-with-scrollable-table {
+.scrollable-table-card, .component-with-scrollable-table {
   div.table-wrapper {
     overflow-x: auto;
     display: flex;
@@ -328,6 +338,8 @@ app-private {
     -webkit-user-drag: auto !important;
   }
 }
+
+
 
 .table-with-link-rows {
   mat-cell {

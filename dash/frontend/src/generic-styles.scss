@@ -67,15 +67,8 @@ $classesToGenerate: (
     values: (
       auto: auto, unset: unset,
       fit: 'fit-content',
-      0: 0, 50: 50%, 75: 75%, 100: 100%,
+      0: 0, 50: 50%, 75: 75%, 98: 98%, 100: 100%,
     ),
-  ),
-  width: (
-    abbreviation: 'w',
-    values: (
-      auto: 'auto',
-      100: 100%
-    )
   ),
   flex-direction: (
     abbreviation: 'flex-direction',
@@ -108,6 +101,14 @@ $classesToGenerate: (
       unset: unset,
     ),
   ),
+  align-self: (
+    abbreviation: 'align-self',
+    values: (
+      auto: auto, stretch: stretch, center: center,
+      flex-start: flex-start, flex-end: flex-end,
+      baseline: baseline, initial: initial, inherit: inherit
+    )
+  ),
   justify-content: (
     abbreviation: 'justify-content',
     values: (
@@ -132,28 +133,100 @@ $classesToGenerate: (
       revert-layer: "revert-layer", unset: unset
     )
   ),
+
+  vertical-align: (
+    abbreviation: 'vertical-align',
+    values: (
+      baseline: baseline,
+      top: top,
+      middle: middle,
+      bottom: bottom,
+      sub: sub,
+      text-top: 'text-top'
+    )
+  ),
+
   overflow: (
     abbreviation: 'overflow',
     values: (
-      auto: 'auto',
-      visible: 'visible',
-      scroll: 'scroll',
-      hidden: 'hidden'
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      clip: clip,
+      visible: visible
     )
   ),
+
   overflow-x: (
     abbreviation: 'overflow-x',
     values: (
-      auto: 'auto',
-      visible: 'visible',
-      scroll: 'scroll',
-      hidden: 'hidden'
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      visible: visible
+    )
+  ),
+
+  overflow-y: (
+    abbreviation: 'overflow-x',
+    values: (
+      scroll: scroll,
+      hidden: hidden,
+      auto: auto,
+      visible: visible
+    )
+  ),
+
+  font: (
+    abbreviation: 'font',
+    values: (
+      500: '500 20px/32px Roboto,Helvetica Neue,sans-serif'
+    )
+  ),
+  font-size: (
+    abbreviation: 'font-size',
+    values: (
+      20: '20px',
+      26: '26px'
+    )
+  ),
+
+  font-weight: (
+    abbreviation: 'font-weight',
+    values: (
+      bold: bold
+    )
+  ),
+
+  line-height: (
+    abbreviation: 'line-height',
+    values: (
+      1: '1.5em',
+      2: 2,
+      20: '20px'
+    )
+  ),
+
+  width: (
+    abbreviation: 'width',
+    values: (
+      auto: auto,
+      100: 100%
+    )
+  ),
+  min-width: (
+    abbreviation: 'min-width',
+    values: (
+      3: '3rem',
+      4: '4rem',
+      8: '8rem'
     )
   ),
   background-color: (
     abbreviation: 'background-color',
     values: (
       grey: mat.get-color-from-palette(mat.$gray-palette, 300),
+      white: white
     )
   )
 );
@@ -182,7 +255,12 @@ $sides: (
     3: ($spacer),
     4: ($spacer * 1.5),
     5: ($spacer * 3),
-    6: ($spacer * 1.25),
+    6: ($spacer * 0.8),
+    7: ($spacer * 1.25),
+    8: ($spacer * 1.88),
+    9: ($spacer * 0.625),
+    10: '10px', 15: '15px',
+    20: '20px', 31: '31px'
   );
 
   @each $propertyShorthand, $property in $properties {

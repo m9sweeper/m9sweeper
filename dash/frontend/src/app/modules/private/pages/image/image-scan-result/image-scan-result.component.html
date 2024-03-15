@@ -1,5 +1,5 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <mat-card id="scanInformation" class="mb-xs-3 pt-xs-3" *ngIf="dataSource">
       <div class="row header-row m-xs-0">
         <div class="col-lg-9 col-xs-12">
@@ -32,7 +32,7 @@
           <div class="me-lg-3 me-xs-0">
           </div>
           <button type="button" color="primary" mat-raised-button
-             class="mb-half-rem"
+             class="mb-xs-2"
              (click)="downloadReport()">
             <mat-icon>print</mat-icon>
             Print Report
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="justify-content-xs-space-between overflow-x-xs-auto flex-direction-xs-row background-color-xs-grey">
-        <table class="w-100 image-details-table">
+        <table class="width-xs-100 image-details-table" id="table-shadow">
           <tr>
             <th>Compliant</th>
             <th>Last Scanned</th>
@@ -79,7 +79,7 @@
       <h3 class="error-msg" style="margin: unset; padding: 5px 10px;">Error</h3>
       <div [innerHTML]="lastScanReport?.summary" class="error-msg"></div>
     </mat-card>
-    <mat-card id="scannerComplianceList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+    <mat-card id="scannerComplianceList" class="mb-xs-3 pt-xs-3 pb-xs-4" *ngIf="displayComplianceAndIssueTable">
       <div class="row header-row m-xs-0">
         <div class="col-xs-12 col-sm-9 col-lg-10" id="compliance-report-title">
           <span matTooltip="Scanner Compliance Report">Scanner Compliance Report</span>
@@ -90,7 +90,7 @@
           </mat-select>
         </div>
       </div>
-      <div class="table-wrapper">
+      <div class="overflow-x-xs-auto display-xs-flex">
         <mat-table [dataSource]="scannerComplianceReport" #complianceSort="matSort" matSort  matSortActive="policy" matSortDisableClear matSortDirection="asc">
           <ng-container matColumnDef="policy">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear matTooltip="Policy">Policy</mat-header-cell>
@@ -144,7 +144,7 @@
         (page)="scannerPageEvent($event)"
         showFirstLastButtons #compliancePaginator></mat-paginator>
     </mat-card>
-    <mat-card id="issuesList" class="mb-xs-3 pt-xs-3 pb-xs-4 scrollable-table-card" *ngIf="displayComplianceAndIssueTable">
+    <mat-card id="issuesList" class="mb-xs-3 pt-xs-3 pb-xs-4" *ngIf="displayComplianceAndIssueTable">
       <div class="row header-row m-xs-0">
         <div class="col-xs-9 col-sm-3" id="issuesTitle">
           Issues
@@ -153,7 +153,7 @@
           <button class="display-print-none" mat-icon-button (click)="downloadCsv()"><mat-icon>download</mat-icon></button>
         </div>
       </div>
-      <div class="table-wrapper">
+      <div class="overflow-x-xs-auto display-xs-flex">
         <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
@@ -217,10 +217,10 @@
           <ng-container matColumnDef="isFixable" >
             <mat-header-cell *matHeaderCellDef mat-sort-header="is_fixable" disableClear> Fixable </mat-header-cell>
             <mat-cell *matCellDef="let issue">
-              <div class="display-flex w-100 overflow-hidden">
+              <div class="display-xs-flex width-xs-100 overflow-xs-hidden">
                 <app-readonly-checkbox [checked]="issue.isFixable"></app-readonly-checkbox>
-                <div class="overflow-hidden">
-                  <app-ellipsis-text class="w-100" *ngIf="issue.isFixable"
+                <div class="overflow-xs-hidden">
+                  <app-ellipsis-text class="width-xs-100" *ngIf="issue.isFixable"
                                      [text]="'(' + (issue.fixedVersion ? issue.fixedVersion : 'N/A') + ')'"
                   ></app-ellipsis-text>
                 </div>

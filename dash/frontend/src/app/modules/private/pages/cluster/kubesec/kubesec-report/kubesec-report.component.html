@@ -1,13 +1,12 @@
 <div class="pod-score row">
   <div class="col-xs-10 col-sm-9 pod-name first-sm">
-    <app-ellipsis-text class="w-100" [text]="'Kubesec ' + kubesecReport.object.substring(4)"></app-ellipsis-text>
-
+    <app-ellipsis-text class="width-xs-100" [text]="'Kubesec ' + kubesecReport.object.substring(4)"></app-ellipsis-text>
   </div>
   <div class="col-xs-2 col-sm-3 kubesec-score" [ngStyle]="{'background-color': decideScoreColor(kubesecReport.score)}" [matTooltip]="'Overall Score: ' + kubesecReport.score">
     {{kubesecReport.score}}
   </div>
 </div>
-<div class="message-download row mb-half-rem">
+<div class="message-download row mb-xs-2">
   <p class="col-xs-12 col-sm-8"> {{kubesecReport.message}}. </p>
   <div class="col-xs-12 col-sm-4 start-xs end-sm align-self-center">
     <a mat-raised-button color="primary"
@@ -18,8 +17,8 @@
     </a>
   </div>
 </div>
-<div class="row mb-half-rem">
-  <div class="col-xs-12 mb-half-rem">
+<div class="row mb-xs-2">
+  <div class="col-xs-12 mb-xs-2">
     Passed rules are given a positive score. Rules with critical issue are given a negative score.
   </div>
   <div class="col-xs-12">
@@ -27,7 +26,7 @@
   </div>
 </div>
 <div class="component-with-scrollable-table">
-  <div class="light-border passed-table mb-half-rem" *ngIf="passed.length > 0">
+  <div class="light-border passed-table mb-xs-2" *ngIf="passed.length > 0">
     <mat-toolbar class="row">
       <div class="col-xs-9">
         <span class="subnav-title">Passed</span>
@@ -56,7 +55,7 @@
       </mat-table>
     </div>
   </div>
-  <div class="light-border critical-table mb-half-rem" *ngIf="critical.length > 0">
+  <div class="light-border critical-table mb-xs-2" *ngIf="critical.length > 0">
     <mat-toolbar class="row">
       <div class="col-xs-9">
         <span class="subnav-title">Critical Issues</span>
@@ -84,7 +83,7 @@
       </mat-table>
     </div>
   </div>
-  <div class="light-border advise-table mb-half-rem" *ngIf="advise.length > 0">
+  <div class="light-border advise-table mb-xs-2" *ngIf="advise.length > 0">
     <mat-toolbar class="row">
       <div class="col-xs-12">
         <span class="subnav-title"> Advice </span>

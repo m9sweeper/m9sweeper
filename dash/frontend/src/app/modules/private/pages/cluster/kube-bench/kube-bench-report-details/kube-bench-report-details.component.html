@@ -1,10 +1,11 @@
-<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 mt-xs-6">
-    <div class="page-title">
+<div class="m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mt-xs-3">
+    <div class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">
       kube-bench Test Results
     </div>
-    <div *ngIf="report && report.Totals" class="page-subtitle">
-      {{report.Totals.total_pass}}/{{report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn}} Tests Passed
+    <div *ngIf="report && report.Totals" class="font-weight-xs-bold mb-xs-3">
+      {{ report.Totals.total_pass }}
+      /{{ report.Totals.total_pass + report.Totals.total_fail + report.Totals.total_warn }} Tests Passed
     </div>
 
     <div>
@@ -13,90 +14,87 @@
 
     <div *ngIf="report && report.Controls">
       <mat-accordion *ngFor="let section of report.Controls" multi class="control-accordions">
-          <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{section.id}}
-              </mat-panel-title>
-              <mat-panel-description>
-                {{section.text}} ({{section.version}} v{{section.detected_version}})
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <mat-accordion *ngFor="let test of section.tests" multi class="test-accordions">
-              <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    {{test.section}}
-                  </mat-panel-title>
-                  <mat-panel-description>
-                    {{test.desc}}
-                  </mat-panel-description>
-                </mat-expansion-panel-header>
-                <mat-accordion *ngFor="let testResult of test.results" multi
-                               class="result-accordions" id="test-result-accordion">
-                  <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        {{testResult.test_number}}
-                      </mat-panel-title>
-                      <mat-panel-description>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ section.id }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ section.text }} ({{ section.version }} v{{ section.detected_version }})
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-accordion *ngFor="let test of section.tests" multi class="test-accordions">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ test.section }}
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ test.desc }}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-accordion *ngFor="let testResult of test.results" multi
+                             class="result-accordions" id="test-result-accordion">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ testResult.test_number }}
+                    </mat-panel-title>
+                    <mat-panel-description>
                         <span>
 
                         </span>
-                        <span *ngIf="testResult.status === 'PASS'" style="color: green">
-                          {{testResult.status}}
+                      <span *ngIf="testResult.status === 'PASS'" style="color: green">
+                          {{ testResult.status }}
                         </span>
-                        <span *ngIf="testResult.status === 'FAIL'" style="color: red">
-                          {{testResult.status}}
+                      <span *ngIf="testResult.status === 'FAIL'" style="color: red">
+                          {{ testResult.status }}
                         </span>
-                        <span *ngIf="testResult.status === 'WARN'" style="color: orange">
-                          {{testResult.status}}
+                      <span *ngIf="testResult.status === 'WARN'" style="color: orange">
+                          {{ testResult.status }}
                         </span>
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <div class="row">
-                      <div class="col-xs-12 col-lg-3 test-details">
-                        <div class="test-details-title">
-                          Description:
-                        </div>
-                        <div class="test-details-content">
-                          {{ testResult.test_desc }}
-                        </div>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                    <div class="col-xs-12 col-lg-3 test-details">
+                      <div class="test-details-title">
+                        Description:
                       </div>
-                      <div class="col-xs-12 col-lg-3 test-details">
-                        <div class="test-details-title">
-                          Expected:
-                        </div>
-                        <div class="test-details-content">
-                          {{ testResult.expected_result }}
-                        </div>
-                      </div>
-                      <div class="col-xs-12 col-lg-3 test-details">
-                        <div class="test-details-title">
-                          Actual:
-                        </div>
-                        <div class="test-details-content">
-                          {{ testResult.actual_value }}
-                        </div>
-                      </div>
-                      <div class="col-xs-12 col-lg-3 test-details">
-                        <div class="test-details-title">
-                          Remediation:
-                        </div>
-                        <div class="test-details-content">
-                          {{ testResult.remediation }}
-                        </div>
+                      <div class="test-details-content">
+                        {{ testResult.test_desc }}
                       </div>
                     </div>
-                  </mat-expansion-panel>
-                </mat-accordion>
-              </mat-expansion-panel>
-            </mat-accordion>
-          </mat-expansion-panel>
+                    <div class="col-xs-12 col-lg-3 test-details">
+                      <div class="test-details-title">
+                        Expected:
+                      </div>
+                      <div class="test-details-content">
+                        {{ testResult.expected_result }}
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-3 test-details">
+                      <div class="test-details-title">
+                        Actual:
+                      </div>
+                      <div class="test-details-content">
+                        {{ testResult.actual_value }}
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-3 test-details">
+                      <div class="test-details-title">
+                        Remediation:
+                      </div>
+                      <div class="test-details-content">
+                        {{ testResult.remediation }}
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </mat-expansion-panel>
       </mat-accordion>
     </div>
-
-
-    </div>
+  </div>
 </div>
-

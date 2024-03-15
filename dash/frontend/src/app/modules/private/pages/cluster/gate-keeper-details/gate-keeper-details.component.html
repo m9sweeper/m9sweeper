@@ -1,111 +1,125 @@
-<div class="row display-xs-block h-xs-100 overflow-xs-auto">
-  <div class="col-xs m-xs-6">
-    <div class="row page-title-button-group-spacing mb-xs-2" [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'gatekeeper-details-sub-navigation'">
-      <div class="col-xs-12 col-sm-6 start-xs page-title">
-        {{templateName}}
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <div class="row mb-xs-3"
+         [ngClass]="isMobileDevice ? 'sub-navigation-in-small-device' : 'gatekeeper-details-sub-navigation'">
+      <div
+        class="col-xs-12 col-sm-6 start-xs font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">{{ templateName }}
       </div>
-      <div class="col-xs-12 col-sm-6 start-xs end-sm page-button-spacing">
-          <button [disabled]="!gatekeeperTemplate" class="me-xs-1" mat-raised-button mat-button color="primary" (click)="editTemplate()">
-            <mat-icon>{{isAdmin ? 'create' : 'visibility'}}</mat-icon>
-            {{isAdmin ? 'Edit' : 'View'}}
-          </button>
-          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="warn" (click)="destroyConstraintTemplate()">
-            <mat-icon>delete</mat-icon>
-            Delete
-          </button>
-      </div>
-    </div>
-    <div class="page-card-left-align">
-      <div class="row align-items-stretch">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
-          <mat-card class="h-xs-100">
-            <mat-card-header>
-              <div class="page-card-title">Status</div>
-            </mat-card-header>
-            <mat-card-content>
-              <h2 class="text-style-orange" *ngIf="gatekeeperTemplate && constraintCount === 0">Not Setup</h2>
-              <h2 class="text-style-green" *ngIf="gatekeeperTemplate && constraintCount > 0">Setup</h2>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
-          <mat-card class="h-xs-100">
-            <mat-card-header>
-              <div class="page-card-title">Recommendation</div>
-            </mat-card-header>
-            <mat-card-content >
-              <p *ngIf="gatekeeperTemplate && constraintCount === 0">
-                We recommend you create a constraint for this constraint template.
-              </p>
-              <p *ngIf="gatekeeperTemplate && constraintCount > 0">
-                Well done! You have set up constraints.
-              </p>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 my-xs-1">
-          <mat-card class="h-xs-100">
-            <mat-card-header>
-              <div class="page-card-title">Details</div>
-            </mat-card-header>
-            <mat-card-content>
-              <p   *ngIf="gatekeeperTemplate">
-                {{gatekeeperTemplate.metadata.annotations.description}}
-              </p>
-            </mat-card-content>
-          </mat-card>
-        </div>
+      <div class="col-xs-12 col-sm-6 start-xs end-sm display-xs-flex flex-direction-xs-row align-items-xs-flex-start">
+        <button [disabled]="!gatekeeperTemplate" class="me-xs-1" mat-raised-button mat-button color="primary"
+                (click)="editTemplate()">
+          <mat-icon>{{ isAdmin ? 'create' : 'visibility' }}</mat-icon>
+          {{ isAdmin ? 'Edit' : 'View' }}
+        </button>
+        <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button mat-button color="warn"
+                (click)="destroyConstraintTemplate()">
+          <mat-icon>delete</mat-icon>
+          Delete
+        </button>
       </div>
     </div>
-    <mat-card class="my-xs-1">
+    <div class="row align-items-xs-stretch">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
+        <mat-card class="h-xs-100">
+          <mat-card-header>
+            <div class="font-xs-500">Status</div>
+          </mat-card-header>
+          <mat-card-content>
+            <h2 class="text-style-orange" *ngIf="gatekeeperTemplate && constraintCount === 0">Not Setup</h2>
+            <h2 class="text-style-green" *ngIf="gatekeeperTemplate && constraintCount > 0">Setup</h2>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 my-xs-1">
+        <mat-card class="h-xs-100">
+          <mat-card-header>
+            <div class="font-xs-500">Recommendation</div>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="gatekeeperTemplate && constraintCount === 0">
+              We recommend you create a constraint for this constraint template.
+            </p>
+            <p *ngIf="gatekeeperTemplate && constraintCount > 0">
+              Well done! You have set up constraints.
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 my-xs-1">
+        <mat-card class="h-xs-100">
+          <mat-card-header>
+            <div class="font-xs-500">Details</div>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="gatekeeperTemplate">
+              {{ gatekeeperTemplate.metadata.annotations.description }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <mat-card class="mt-xs-3">
       <mat-card-header id="constraint-header">
-        <div class="col-xs-3 no-padding">
-          <div class="page-card-title">
+        <div class="col-xs-3 p-xs-0">
+          <div class="font-xs-500">
             Constraints
           </div>
         </div>
-        <div class="col-xs-9 page-card-title-button-group-right-align">
-          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary" (click)="openAddConstraintTemplate()"><mat-icon>add</mat-icon>Add More</button>
+        <div class="col-xs-9 text-align-xs-right p-xs-0">
+          <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-raised-button color="primary"
+                  (click)="openAddConstraintTemplate()">
+            <mat-icon>add</mat-icon>
+            Add More
+          </button>
         </div>
       </mat-card-header>
-      <mat-card-content>
-        <mat-table class="page-table" [dataSource]="constraintsList" >
+      <mat-card-content class="overflow-x-xs-auto display-xs-flex">
+        <mat-table class="display-xs-table" [dataSource]="constraintsList">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let constraint" [matTooltip]="constraint.metadata.name">{{constraint.metadata.name}}</mat-cell>
+            <mat-cell *matCellDef="let constraint"
+                      [matTooltip]="constraint.metadata.name">{{ constraint.metadata.name }}
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="description">
-            <mat-header-cell *matHeaderCellDef > Description</mat-header-cell>
-            <mat-cell *matCellDef="let constraint" [matTooltip]="constraint.metadata.annotations.description">{{constraint.metadata.annotations.description}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef> Description</mat-header-cell>
+            <mat-cell *matCellDef="let constraint"
+                      [matTooltip]="constraint.metadata.annotations.description">{{ constraint.metadata.annotations.description }}
+            </mat-cell>
           </ng-container>
           <ng-container matColumnDef="mode">
-            <mat-header-cell *matHeaderCellDef > Mode</mat-header-cell>
-            <mat-cell *matCellDef="let constraint">{{constraint.spec.enforcementAction}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef> Mode</mat-header-cell>
+            <mat-cell *matCellDef="let constraint">{{ constraint.spec.enforcementAction }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="action">
-            <mat-header-cell *matHeaderCellDef >Action</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
             <mat-cell *matCellDef="let constraint">
-              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="editTemplateConstraint(constraint)">
+              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
+                      (click)="editTemplateConstraint(constraint)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button (click)="destroyTemplateConstraint(constraint)">
+              <button [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
+                      (click)="destroyTemplateConstraint(constraint)">
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-cell>
           </ng-container>
           <ng-container matColumnDef="violations">
-            <mat-header-cell *matHeaderCellDef >Violations</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>Violations</mat-header-cell>
             <mat-cell *matCellDef="let constraint">
-              <a href="javascript:void(0);" *ngIf="constraint.status.totalViolations" (click)="showViolations(constraint)">{{constraint.status.totalViolations}}</a>
-              <a *ngIf="!constraint.status.totalViolations" >{{constraint.status.totalViolations}}</a>
+              <a href="javascript:void(0);" *ngIf="constraint.status.totalViolations"
+                 (click)="showViolations(constraint)">{{ constraint.status.totalViolations }}</a>
+              <a *ngIf="!constraint.status.totalViolations">{{ constraint.status.totalViolations }}</a>
             </mat-cell>
           </ng-container>
           <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-header-row mat-row *matRowDef="let row; columns: displayedColumns;" class="constraint-click"></mat-header-row>
+          <mat-header-row mat-row *matRowDef="let row; columns: displayedColumns;"
+                          class="constraint-click"></mat-header-row>
         </mat-table>
       </mat-card-content>
     </mat-card>
-</div>
+  </div>
 </div>

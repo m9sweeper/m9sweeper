@@ -1,71 +1,51 @@
 <div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="col-xs-12 page-title display-flex align-items-center">
-      <span>Security Audit Report</span>
-    </div>
-    <div class="vulnerability-filter-card">
-      <mat-card>
-        <mat-card-header>
-          <div class="row filter-header">
-            <div class="col-xs-12 page-card-title fix-margin">
-              <p class="title-font">Report Settings</p>
-            </div>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="vulnerability-filter-content">
-            <form class="full-width" (ngSubmit)="generatePDF()" [formGroup]="settingsForm">
-              <div class="row full-width">
-                <div class="col-lg-6 col-xs-12">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Clusters (Select none to include all)</mat-label>
-                    <mat-select formControlName="clusterIds"
-                                (selectionChange)="updateVisibleNamespaces()"
-                                multiple>
-                      <mat-option *ngFor="let cluster of clusters"
-                                  [value]="cluster.id">
-                        {{cluster.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-6 col-xs-12">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Namespaces (Select none to include all)</mat-label>
-                    <mat-select formControlName="namespaces" placeholder="All Namespaces"
-                                multiple>
-                      <mat-option *ngFor="let namespace of visibleNamespaces"
-                                  [value]="namespace">
-                        {{namespace}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-6 col-xs-12">
-                  <mat-form-field class="full-width" appearance="fill">
-                    <mat-label>Tools (Select none to include all)</mat-label>
-                    <mat-select formControlName="tools" placeholder="All Tools"
-                                multiple>
-                      <mat-option *ngFor="let tool of toolOptions"
-                                  [value]="tool.value">
-                        {{ tool.displayName }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row vulnerability-filter-button">
-                <button [disabled]="settingsForm.invalid || submitting"
-                        mat-raised-button
-                        color="primary"
-                        type="submit">Download
-                </button>
-                <mat-spinner *ngIf="submitting" class="ml-10" [diameter]="30"></mat-spinner>
-              </div>
-            </form>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <p class="font-size-xs-26 vertical-align-xs-bottom">Security Audit Report</p>
+    <mat-card>
+      <mat-card-header>
+        <p class="font-xs-500 ms-xs-6">Report Settings</p>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="mx-xs-3" (ngSubmit)="generatePDF()" [formGroup]="settingsForm">
+          <mat-form-field class="width-xs-100 " appearance="fill">
+            <mat-label>Clusters (Select none to include all)</mat-label>
+            <mat-select formControlName="clusterIds"
+                        (selectionChange)="updateVisibleNamespaces()"
+                        multiple>
+              <mat-option *ngFor="let cluster of clusters"
+                          [value]="cluster.id">
+                {{ cluster.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Namespaces (Select none to include all)</mat-label>
+            <mat-select formControlName="namespaces" placeholder="All Namespaces"
+                        multiple>
+              <mat-option *ngFor="let namespace of visibleNamespaces"
+                          [value]="namespace">
+                {{ namespace }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="width-xs-100" appearance="fill">
+            <mat-label>Tools (Select none to include all)</mat-label>
+            <mat-select formControlName="tools" placeholder="All Tools"
+                        multiple>
+              <mat-option *ngFor="let tool of toolOptions"
+                          [value]="tool.value">
+                {{ tool.displayName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button [disabled]="settingsForm.invalid || submitting"
+                  mat-raised-button
+                  color="primary"
+                  type="submit" class="start-xs ms-xs-0 mt-xs-2">Download
+          </button>
+          <mat-spinner *ngIf="submitting" class="ms-xs-10" [diameter]="30"></mat-spinner>
+        </form>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

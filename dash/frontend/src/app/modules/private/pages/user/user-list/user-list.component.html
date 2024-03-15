@@ -1,61 +1,66 @@
-<div class="h-xs-100 overflow-xs-auto">
-  <div class="m-xs-6">
+<div class="row mx-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
+  <div class="col-xs mt-xs-3 mb-xs-4">
     <app-sub-navigation [title]="subNavigationTitle" [buttonTitle]="subNavigationButtonTitle" buttonIcon="add"
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
-        <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear matSortDirection="asc">
-          <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> No.</th>
-            <td mat-cell *matCellDef="let user"> {{user?.id}} </td>
-          </ng-container>
-          <ng-container matColumnDef="first_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> First Name</th>
-            <td mat-cell *matCellDef="let user"> {{user?.firstName}} </td>
-          </ng-container>
-          <ng-container matColumnDef="last_name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Last Name</th>
-            <td mat-cell *matCellDef="let user">{{user?.lastName}}</td>
-          </ng-container>
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Email</th>
-            <td mat-cell *matCellDef="let user"> {{user?.email}} </td>
-          </ng-container>
-          <ng-container matColumnDef="phone">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Phone</th>
-            <td mat-cell *matCellDef="let user"> {{user?.phone}} </td>
-          </ng-container>
-          <ng-container matColumnDef="authorities">
-            <th mat-header-cell *matHeaderCellDef> Authorities</th>
-            <td mat-cell *matCellDef="let users">
+    <mat-card>
+      <mat-card-content>
+        <div class="display-xs-flex overflow-x-xs-auto">
+          <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
+                 matSortDirection="asc">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> No.</th>
+              <td mat-cell *matCellDef="let user"> {{ user?.id }}</td>
+            </ng-container>
+            <ng-container matColumnDef="first_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> First Name</th>
+              <td mat-cell *matCellDef="let user"> {{ user?.firstName }}</td>
+            </ng-container>
+            <ng-container matColumnDef="last_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Last Name</th>
+              <td mat-cell *matCellDef="let user">{{ user?.lastName }}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Email</th>
+              <td mat-cell *matCellDef="let user"> {{ user?.email }}</td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Phone</th>
+              <td mat-cell *matCellDef="let user"> {{ user?.phone }}</td>
+            </ng-container>
+            <ng-container matColumnDef="authorities">
+              <th mat-header-cell *matHeaderCellDef> Authorities</th>
+              <td mat-cell *matCellDef="let users">
              <span *ngFor="let authority of users.authorities; let isLast = last">
-               {{ authority.type }} {{isLast? '': ', '}}
+               {{ authority.type }} {{ isLast ? '' : ', ' }}
              </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="sourceSystem">
-            <th mat-header-cell *matHeaderCellDef > Source System</th>
-            <td mat-cell *matCellDef="let user"> {{user?.sourceSystem?.type}} </td>
-          </ng-container>
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let user">
-              <a mat-icon-button
-                      [routerLink]="['/private', 'users', 'edit', user?.id]">
-                <mat-icon>create</mat-icon>
-              </a>
-            </td>
-          </ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="sourceSystem">
+              <th mat-header-cell *matHeaderCellDef> Source System</th>
+              <td mat-cell *matCellDef="let user"> {{ user?.sourceSystem?.type }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let user">
+                <a mat-icon-button
+                   [routerLink]="['/private', 'users', 'edit', user?.id]">
+                  <mat-icon>create</mat-icon>
+                </a>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </div>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-                     [length]="totalCount"
-                     [pageSize]="limit"
-                     (page)="pageEvent($event)"
-                     showFirstLastButtons></mat-paginator>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+                       [length]="totalCount"
+                       [pageSize]="limit"
+                       (page)="pageEvent($event)"
+                       showFirstLastButtons></mat-paginator>
+
+      </mat-card-content>
+
     </mat-card>
   </div>
 </div>
