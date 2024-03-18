@@ -1,0 +1,75 @@
+{
+  "_from": "xng-breadcrumb@10.0.2",
+  "_id": "xng-breadcrumb@10.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-wa+/7O8hDIXOovN0a6iVH87W29GsEFf4qU0gr0mH7Q+Jz4egBm3HuWnKAiD6UKDaZqFIjDL5bIorMOPBgYDMmg==",
+  "_location": "/xng-breadcrumb",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "xng-breadcrumb@10.0.2",
+    "name": "xng-breadcrumb",
+    "escapedName": "xng-breadcrumb",
+    "rawSpec": "10.0.2",
+    "saveSpec": null,
+    "fetchSpec": "10.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/xng-breadcrumb/-/xng-breadcrumb-10.0.2.tgz",
+  "_shasum": "150d419407d480454cefd2200eb617767d01dc69",
+  "_spec": "xng-breadcrumb@10.0.2",
+  "_where": "/Users/beckysaunders/projects/Minesweeper/monorepo/dash/frontend",
+  "author": {
+    "name": "Uday Vunnam",
+    "email": "uday4vunnam@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/udayvunnam/xng-breadcrumb/issues",
+    "email": "uday4vunnam@gmail.com"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "deprecated": false,
+  "description": "A declarative and reactive breadcrumb approach for Angular 6 and beyond https://www.npmjs.com/package/xng-breadcrumb",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/xng-breadcrumb.mjs",
+      "esm": "./esm2022/xng-breadcrumb.mjs",
+      "default": "./fesm2022/xng-breadcrumb.mjs"
+    }
+  },
+  "homepage": "https://github.com/udayvunnam/xng-breadcrumb",
+  "keywords": [
+    "angular",
+    "ng-breadcrumb",
+    "ngx-breadcrumb",
+    "breadcrumb",
+    "ngx"
+  ],
+  "license": "MIT",
+  "module": "fesm2022/xng-breadcrumb.mjs",
+  "name": "xng-breadcrumb",
+  "peerDependencies": {
+    "@angular/common": "^16.0.0",
+    "@angular/core": "^16.0.0",
+    "@angular/router": "^16.0.0",
+    "rxjs": "~7.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udayvunnam/xng-breadcrumb.git"
+  },
+  "sideEffects": false,
+  "typings": "index.d.ts",
+  "version": "10.0.2"
+}

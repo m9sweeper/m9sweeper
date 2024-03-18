@@ -1,0 +1,8 @@
+/*
+ * Public API Surface of xng-breadcrumb
+ */
+export * from './lib/breadcrumb-item.directive';
+export * from './lib/breadcrumb.component';
+export * from './lib/breadcrumb.module';
+export * from './lib/breadcrumb.service';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9saWJzL3huZy1icmVhZGNydW1iL3NyYy9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7R0FFRztBQUVILGNBQWMsaUNBQWlDLENBQUM7QUFDaEQsY0FBYyw0QkFBNEIsQ0FBQztBQUMzQyxjQUFjLHlCQUF5QixDQUFDO0FBQ3hDLGNBQWMsMEJBQTBCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKlxuICogUHVibGljIEFQSSBTdXJmYWNlIG9mIHhuZy1icmVhZGNydW1iXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9saWIvYnJlYWRjcnVtYi1pdGVtLmRpcmVjdGl2ZSc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9icmVhZGNydW1iLmNvbXBvbmVudCc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9icmVhZGNydW1iLm1vZHVsZSc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9icmVhZGNydW1iLnNlcnZpY2UnO1xuIl19
