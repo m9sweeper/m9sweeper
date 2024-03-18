@@ -44,6 +44,7 @@
     "rxjs": "~6.6.7",
     "tslib": "~2.6.1",
     "url-shim": "file:vendor/url-shim",
+    "xng-breadcrumb": "^10.0.2",
     "yaml": "^2.3.4",
     "zone.js": "^0.14.3"
   },
