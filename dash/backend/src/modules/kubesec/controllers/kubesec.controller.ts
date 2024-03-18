@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
+import {Body, Controller, Get, InternalServerErrorException, Param, Post, Query, UploadedFile, UseGuards, UseInterceptors} from '@nestjs/common';
 import {KubesecService} from "../services/kubesec.service";
 import {AllowedAuthorityLevels} from "../../../decorators/allowed-authority-levels.decorator";
 import {Authority} from "../../user/enum/Authority";
@@ -19,16 +19,32 @@ export class KubesecController {
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
     async listNamespaces(@Query('cluster') clusterId: number): Promise<V1NamespaceList> {
-        return await this.kubesecService.listNamespaces(clusterId);
+        return await this.kubesecService.listNamespaces(clusterId).catch((err) => {
+            console.log(err);
+            throw new InternalServerErrorException();
+        });
     }
 
     @Get('/listpods')
     @AllowedAuthorityLevels(Authority.SUPER_ADMIN, Authority.ADMIN, Authority.READ_ONLY)
     @UseGuards(AuthGuard, AuthorityGuard)
-    async listPods(@Query('cluster') clusterId: number,
-                   @Query('namespaces') namespaces: string[]): Promise<V1PodList[]> {
+    async listPods(
+      @Query('cluster') clusterId: number,
+      @Query('namespaces') namespaces: string[]
+    ): Promise<(V1PodList)[]> {
         if (namespaces) {
-            return await this.kubesecService.listPods(clusterId, namespaces);
+            // remove "selectAll" (it's not a namespace, it's a value that tells it to return all ns)
+            const index = namespaces.indexOf("selectAll");
+            if (index !== -1) {
+                namespaces.splice(index, 1);
+            }
+            // TODO: if it's "selectAll", use kubectl get pods --all-namespaces instead of individual calls
+
+            const response =  await this.kubesecService.listPods(clusterId, namespaces);
+            if (response.errors.length) {
+              console.log({ method: "KubesecController.listPods", errors: response.errors });
+            }
+            return response.podList;
         } else {
             return [];
         }

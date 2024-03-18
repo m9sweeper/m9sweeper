@@ -83,6 +83,8 @@ export class KubesecComponent implements OnInit, OnDestroy {
       } else {
         this.alertService.danger('Could not get namespaces');
       }
+    }, error => {
+      this.alertService.danger('Could not get namespaces');
     });
   }
 
