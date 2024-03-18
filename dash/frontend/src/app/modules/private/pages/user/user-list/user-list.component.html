@@ -6,7 +6,7 @@
       <mat-card-content>
         <div class="display-xs-flex overflow-x-xs-auto">
           <table mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
-                 matSortDirection="asc">
+                 matSortDirection="asc" class="display-xs-table">
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> No.</th>
               <td mat-cell *matCellDef="let user"> {{ user?.id }}</td>

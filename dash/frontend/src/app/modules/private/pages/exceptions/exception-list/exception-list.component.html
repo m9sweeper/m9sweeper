@@ -4,7 +4,7 @@
                         [buttonUrl]="subNavigationButtonUrl"></app-sub-navigation>
     <mat-card>
 
-          <mat-table class="table-with-link-rows overflow-x-xs-auto" [dataSource]="dataSource" matSort id="listOfExceptions">
+          <mat-table class="table-with-link-rows overflow-x-xs-auto display-xs-table" [dataSource]="dataSource" matSort id="listOfExceptions">
             <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Title</mat-header-cell>
               <mat-cell *matCellDef="let exception" [matTooltip]="exception?.title">

@@ -8,7 +8,7 @@
 </div>
 <div class="message-download row mb-xs-2">
   <p class="col-xs-12 col-sm-8"> {{kubesecReport.message}}. </p>
-  <div class="col-xs-12 col-sm-4 start-xs end-sm align-self-center">
+  <div class="col-xs-12 col-sm-4 start-xs end-sm align-self-xs-center">
     <a mat-raised-button color="primary"
        class="download-report"
        download="kubesec-report.json"
@@ -36,7 +36,7 @@
       </div>
     </mat-toolbar>
     <div class="table-wrapper">
-      <mat-table [dataSource]="passedDataSource">
+      <mat-table [dataSource]="passedDataSource" class="display-xs-table">
         <ng-container matColumnDef="passedId">
           <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
           <mat-cell *matCellDef="let pass" [matTooltip]="pass?.id"> {{pass?.id}} </mat-cell>
@@ -65,7 +65,7 @@
       </div>
     </mat-toolbar>
     <div class="table-wrapper">
-      <mat-table [dataSource]="criticalDataSource">
+      <mat-table [dataSource]="criticalDataSource" class="display-xs-table">
         <ng-container matColumnDef="criticalId">
           <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
           <mat-cell *matCellDef="let criticalIssues" [matTooltip]="criticalIssues?.id"> {{criticalIssues?.id}} </mat-cell>
@@ -90,7 +90,7 @@
       </div>
     </mat-toolbar>
     <div class="table-wrapper">
-      <mat-table [dataSource]="adviseDataSource">
+      <mat-table [dataSource]="adviseDataSource" class="display-xs-table">
         <ng-container matColumnDef="adviseId">
           <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
           <mat-cell *matCellDef="let advice" [matTooltip]="advice?.id"> {{advice?.id}} </mat-cell>

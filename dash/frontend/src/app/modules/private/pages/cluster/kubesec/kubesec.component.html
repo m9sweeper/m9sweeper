@@ -1,7 +1,7 @@
-<div class="row m-xs-1 h-xs-100 display-xs-block overflow-xs-auto">
-  <div class="col-xs mb-xs-4">
-    <p class="font-size-xs-26 vertical-align-xs-bottom">Kubesec</p>
-    <mat-card class="mb-xs-4">
+<div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
+  <div class="col-xs ms-xs-7 mt-xs-7">
+    <p class="font-size-xs-26 vertical-align-xs-bottom my-xs-7 title-print-view">Kubesec</p>
+    <mat-card class="mt-xs-1 mb-xs-4">
       <mat-horizontal-stepper linear>
         <mat-step [editable]="isCompleted">
           <ng-template matStepLabel>Choose Or Upload A Pod</ng-template>
@@ -20,12 +20,12 @@
             </mat-radio-group>
             <div class="upload-file-content" *ngIf="podSelectionOpt === 1">
               <input type="file" style="display: none;" #podFileInput (change)="onFileChange($event)"/>
-              <button type="button" class="mt-half-rem" mat-raised-button color="accent" (click)="podFileInput.click()">
+              <button type="button" class="mt-xs-2" mat-raised-button color="accent" (click)="podFileInput.click()">
                 Select Pod File
               </button>
               <p class="heading" *ngIf="podFile">You've uploaded {{ podFile.name }}</p>
             </div>
-            <div class="select-pod-content mt-half-rem" *ngIf="podSelectionOpt === 2">
+            <div class="select-pod-content mt-xs-2" *ngIf="podSelectionOpt === 2">
               <div class="row">
                 <mat-form-field appearance="fill" class="col-xs-12 col-md-6" *ngIf="currentNamespaces">
                   <mat-label>Select namespaces</mat-label>
@@ -98,7 +98,7 @@
                         </app-ellipsis-text>
                       </div>
                       <div
-                        class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-center text-align-xs-left text-align-sm-right">
+                        class="col-md-3 col-sm-4 col-xs-12 text-right-xs align-self-xs-center text-align-xs-left text-align-sm-right">
                         <span>
                         Score:
                         <span

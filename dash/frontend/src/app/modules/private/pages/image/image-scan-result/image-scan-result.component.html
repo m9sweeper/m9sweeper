@@ -51,7 +51,7 @@
             <th>{{VulnerabilitySeverity.LOW | titlecase}}</th>
             <th>{{VulnerabilitySeverity.NEGLIGIBLE | titlecase}}</th>
           </tr>
-          <tr class="text-align-center">
+          <tr class="text-align-xs-center">
             <td>
               <app-readonly-checkbox [checked]="scanResultText === 'Compliant'"></app-readonly-checkbox>
             </td>
@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="overflow-x-xs-auto display-xs-flex">
-        <mat-table [dataSource]="scannerComplianceReport" #complianceSort="matSort" matSort  matSortActive="policy" matSortDisableClear matSortDirection="asc">
+        <mat-table [dataSource]="scannerComplianceReport" #complianceSort="matSort" matSort  matSortActive="policy" matSortDisableClear matSortDirection="asc" class="display-xs-table">
           <ng-container matColumnDef="policy">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear matTooltip="Policy">Policy</mat-header-cell>
             <mat-cell *matCellDef="let result"> {{result.policyName}} </mat-cell>
@@ -154,7 +154,7 @@
         </div>
       </div>
       <div class="overflow-x-xs-auto display-xs-flex">
-        <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc">
+        <mat-table [dataSource]="imageScanResultIssueData" id="issuesTable" #issueSort="matSort" matSort matSortActive="severity" matSortDisableClear matSortDirection="desc" class="display-xs-table">
           <ng-container matColumnDef="scanner">
             <mat-header-cell *matHeaderCellDef mat-sort-header="scanner" disableClear> Scanner</mat-header-cell>
             <mat-cell *matCellDef="let issue">

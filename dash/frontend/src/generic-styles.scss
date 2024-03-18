@@ -228,6 +228,14 @@ $classesToGenerate: (
       grey: mat.get-color-from-palette(mat.$gray-palette, 300),
       white: white
     )
+  ),
+  color: (
+    abbreviation: 'color',
+    values: (
+      red: 'red',
+      orange: 'orange',
+      green: 'green'
+    )
   )
 );
 
@@ -260,7 +268,7 @@ $sides: (
     8: ($spacer * 1.88),
     9: ($spacer * 0.625),
     10: '10px', 15: '15px',
-    20: '20px', 31: '31px'
+    20: '20px', 30: '30px', 31: '31px'
   );
 
   @each $propertyShorthand, $property in $properties {

@@ -1,4 +1,4 @@
-<mat-stepper [orientation]="isSmallScreen ? 'vertical' : 'horizontal'" class="no-padding" mat-dialog-content linear
+<mat-stepper [orientation]="isSmallScreen ? 'vertical' : 'horizontal'" class="p-xs-0" mat-dialog-content linear
              #stepper>
   <mat-step [editable]="isCompleted" [stepControl]="createClusterForm" class="mt-xs-3 text-align-xs-left">
     <ng-template matStepLabel>Setup Cluster</ng-template>
@@ -170,7 +170,7 @@
       <div *ngIf="installWebhook === 'manually'">
         <label>Install enforcement webhook</label>
         <textarea #defaultWebhookTextArea [cdkTextareaAutosize]="true" class="width-xs-100 code-snippet" matInput></textarea>
-        <div class="text-align-right">
+        <div class="text-align-xs-right">
           <app-copy-to-clipboard-button
             [text]="defaultWebhookTextArea.value"
             successMessage="Command copied to clipboard!"

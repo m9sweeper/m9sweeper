@@ -1,6 +1,6 @@
 <div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
   <div class="col-xs my-xs-7 ms-xs-7">
-    <span class="font-size-xs-26 vertical-align-xs-bottom line-height-xs-2">kube-bench</span>
+    <span class="page-title">kube-bench</span>
     <div class="stats-row row">
       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
         <mat-card>
@@ -8,7 +8,7 @@
             <div class="font-xs-500">CIS Benchmark Status:</div>
           </mat-card-header>
           <mat-card-content>
-            <h3 [ngClass]="statusInvalid ? 'text-style-red' : 'text-style-green'">{{ benchmarkStatus }}</h3>
+            <h3 [ngClass]="statusInvalid ? 'color-xs-red' : 'color-xs-green'">{{ benchmarkStatus }}</h3>
           </mat-card-content>
         </mat-card>
       </div>

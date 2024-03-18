@@ -2,7 +2,7 @@
   <div class="col-xs my-xs-7 ms-xs-7">
     <mat-card>
       <mat-card-content>
-        <div class="font-size-xs-26 line-height-xs-2">{{ subMenuTitle }}</div>
+        <div class="page-title">{{ subMenuTitle }}</div>
         <form [formGroup]="policyForm">
           <mat-form-field appearance="fill">
             <mat-label>Name</mat-label>
@@ -74,7 +74,7 @@
         </div>
         <div class="row display-xs-flex p-xs-0 ms-xs-0 width-xs-100">
           <div id="policyRequirementsTable" class="overflow-x-xs-auto display-xs-flex" *ngIf="dataSource?.data?.length">
-            <mat-table [dataSource]="dataSource">
+            <mat-table [dataSource]="dataSource" class="display-xs-table">
               <ng-container matColumnDef="enabled">
                 <mat-header-cell *matHeaderCellDef>Active</mat-header-cell>
                 <mat-cell *matCellDef="let scanner">

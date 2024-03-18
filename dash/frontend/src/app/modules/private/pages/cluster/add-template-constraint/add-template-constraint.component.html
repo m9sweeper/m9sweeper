@@ -1,4 +1,4 @@
-<mat-dialog-content class="modal-container-margin">
+<mat-dialog-content class="p-xs-30">
   <div class="m-xs-0 text-align-xs-left">
     <div class="font-xs-500">
       {{ isEdit ? 'Edit' : 'Add' }} Template Constraint
@@ -55,10 +55,10 @@
 
           <mat-card style="margin-bottom: 10px" appearance="outlined"
                     *ngFor="let criteria of templateConstraintCriteria; index as i">
-            <mat-card-content class="padding-10">
+            <mat-card-content class="p-xs-10">
               <div class="row width-xs-100" style="margin-left:1px">
 
-                <div class="col-xs-8 no-padding">
+                <div class="col-xs-8 p-xs-0">
                   <p>kinds: [{{ criteria.kinds }}]</p>
                   <p>apiGroups:
                     [{{ (criteria.apiGroups[0] === ' ' || criteria.apiGroups[0] === '') ? '*' : criteria.apiGroups }}

@@ -8,11 +8,11 @@
             <div class="font-xs-500">Status:</div>
           </mat-card-header>
           <mat-card-content>
-            <h2 class="text-style-red"
+            <h2 class="color-xs-red"
                 *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Installed'">{{ gatekeeperInstallationStatus.message }}</h2>
-            <h2 class="text-style-orange"
+            <h2 class="color-xs-orange"
                 *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Not Setup'">{{ gatekeeperInstallationStatus.message }}</h2>
-            <h2 class="text-style-green"
+            <h2 class="color-xs-green"
                 *ngIf="gatekeeperStatusLoaded && gatekeeperInstallationStatus.message==='Setup'">{{ gatekeeperInstallationStatus.message }}</h2>
           </mat-card-content>
         </mat-card>

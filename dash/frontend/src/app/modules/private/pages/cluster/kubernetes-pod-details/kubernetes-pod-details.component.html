@@ -32,7 +32,7 @@
       </div>
     </div>
     <mat-card class="display-xs-auto display-xs-flex">
-      <mat-table class="table-with-link-rows" [dataSource]="dataSource" matSort>
+      <mat-table class="table-with-link-rows display-xs-table" [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Name</mat-header-cell>
           <mat-cell *matCellDef="let element">

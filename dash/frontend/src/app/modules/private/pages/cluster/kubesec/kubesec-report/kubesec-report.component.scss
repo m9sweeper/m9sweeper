@@ -34,3 +34,7 @@ mat-toolbar {
 .mat-column-criticalReason, .mat-column-adviseReason, .mat-column-passedReason {
   min-width: 500px
 }
+
+.light-border {
+  border: rgba(0, 0, 0, 0.12) solid 1px;
+}

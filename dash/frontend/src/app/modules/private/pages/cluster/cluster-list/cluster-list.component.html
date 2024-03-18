@@ -4,14 +4,14 @@
     <div class="row mt-xs-7" id="clusterSummaryHeader">
       <div class="col-sm-7 col-xs-12 start-xs cluster-group-name display-xs-flex">
         {{ clusterGroupName }}
-        <button class="align-self-center" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
+        <button class="align-self-xs-center" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" mat-icon-button
                 (click)="editClusterGroupNameDialog()">
           <mat-icon class="edit-cluster-group-icon">create</mat-icon>
         </button>
       </div>
-      <div class="col-sm-5 col-xs-12 start-xs end-sm display-xs-flex flex-direction-xs-row align-items-center">
+      <div class="col-sm-5 col-xs-12 start-xs end-sm display-xs-flex flex-direction-xs-row align-items-xs-center">
         <button
-          class="margin-right-10"
+          class="me-xs-10"
           [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
           mat-raised-button
           color="warn"
@@ -28,7 +28,7 @@
     </div>
     <!-- start of the first row of graphs-->
     <div class="row" id="clusterSummaryGraphs" *ngIf="clustersList && clustersList.length">
-      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 m-xs-0 mt-xs-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card" id="complianceSummaryLineChartCard">
           <mat-card-title class="center-xs">Compliance Summary</mat-card-title>
           <mat-card-content>
@@ -70,7 +70,7 @@
         </mat-card>
       </div>
 
-      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 m-xs-0 mt-xs-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card" id="lineChartCard">
           <mat-card-title class="center-xs">Scan History</mat-card-title>
           <mat-card-content>
@@ -111,7 +111,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="p-xs-0 m-xs-0 margin-top-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
+      <div class="p-xs-0 m-xs-0 mt-xs-10 h-xs-100 col-xs-12 col-md-6 col-lg-4">
         <mat-card class="overview-graph-card" id="barChartCard">
           <mat-card-title class="center-xs">Historical Vulnerability Summary</mat-card-title>
           <mat-card-content>
@@ -144,10 +144,10 @@
     </div>
 
     <!--start of the error messages-->
-    <div *ngIf="clustersList === null" class="margin-left-7 margin-top-10 text-center">
+    <div *ngIf="clustersList === null" class="margin-left-7 mt-xs-10 text-center">
       <mat-card>No cluster added for this group</mat-card>
     </div>
-    <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 margin-top-10 text-center">
+    <div *ngIf="clustersList && !clustersList.length" class="margin-left-7 mt-xs-10 text-center">
       <mat-card>No cluster found.</mat-card>
     </div>
 

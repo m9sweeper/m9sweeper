@@ -24,7 +24,7 @@
     <div class="row">
       <div class="col-xs">
                 <textarea matInput [cdkTextareaAutosize]="true" #run
-                          class="code-snippet width-xs-100 m-xs-3 text-align-xs-left modal-content-no-right-margin margin-top-1em"
+                          class="code-snippet width-xs-100 m-xs-3 text-align-xs-left me-xs-0 mt-xs-3"
                           readonly>
 helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
 helm install gatekeeper/gatekeeper --name-template=gatekeeper \
@@ -34,12 +34,12 @@ helm install gatekeeper/gatekeeper --name-template=gatekeeper \
   --set-string replicas=1</textarea>
       </div>
     </div>
-    <div class="padding-top-15">Note: You may need to adjust the GateKeeper version depending on your Kubernetes
+    <div class="pt-xs-15">Note: You may need to adjust the GateKeeper version depending on your Kubernetes
       version.
     </div>
     <div class="row">
       <div class="col-xs">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 my-xs-3 display-xs-table">
           <!-- Kubernetes Version Column -->
           <ng-container matColumnDef="k8sVersion">
             <th mat-header-cell *matHeaderCellDef>Kubernetes Version</th>
