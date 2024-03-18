@@ -1,6 +1,13 @@
 <div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
   <div class="col-xs ms-xs-6 mt-xs-6 h-xs-fit">
-    <app-breadcrumbs [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+    <xng-breadcrumb [separator]="iconTemplate">
+      <ng-container *xngBreadcrumbItem="let breadcrumb">
+        <ng-container>{{ breadcrumb | titlecase }}</ng-container>
+      </ng-container>
+    </xng-breadcrumb>
+    <ng-template #iconTemplate>
+      <mat-icon>arrow_right</mat-icon>
+    </ng-template>
     <div class="page-title-button-group-spacing adjust-height">
       <div class="page-title">Pods in {{namespace}}</div>
       <div class="calendar-date-picker">

@@ -25,6 +25,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {BreadcrumbModule} from 'xng-breadcrumb';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#326ce5',
@@ -78,6 +79,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     NgxUiLoaderHttpModule.forRoot({loaderId: 'http-loader'}),
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     OverlayModule,
+    BreadcrumbModule,
   ],
   providers: [
     {

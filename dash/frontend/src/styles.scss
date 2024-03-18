@@ -813,6 +813,18 @@ app-datepicker-component {
   overflow: hidden!important;
 }
 
+.xng-breadcrumb-root {
+  padding: 4px 8px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #e4e5e5;
+  font-size: 13px;
+}
+
+.xng-breadcrumb-separator {
+  padding: 0 4px;
+}
+
 @media print {
   @page {
     size: landscape;
