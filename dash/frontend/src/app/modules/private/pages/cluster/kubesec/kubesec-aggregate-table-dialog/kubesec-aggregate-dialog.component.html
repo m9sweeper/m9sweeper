@@ -1,11 +1,11 @@
-<div class="kubesec-popup" *ngIf="kubesecReport">
+<div *ngIf="kubesecReport">
   <div class="mat-elevation-z8 report-tables">
     <mat-toolbar>
       <div>
-        <span class="subnav-title">Reports</span>
+        <span class="font-size-xs-26 font-weight-xs-normal">Reports</span>
       </div>
     </mat-toolbar>
-    <mat-table [dataSource]="dataSource">
+    <mat-table [dataSource]="dataSource" class="display-xs-table">
       <ng-container matColumnDef="podNames">
         <mat-header-cell *matHeaderCellDef disableClear> Pod </mat-header-cell>
         <mat-cell *matCellDef="let report">

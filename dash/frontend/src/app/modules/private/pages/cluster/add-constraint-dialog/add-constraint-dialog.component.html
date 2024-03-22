@@ -4,7 +4,7 @@
   </button>
   <h3 [ngClass]="isHandsetOrXS ? 'px-xs-0' : 'px-xs-2'">Constraint Templates</h3>
 </mat-toolbar>
-<mat-dialog-content class="modal-container-margin no-padding">
+<mat-dialog-content class="p-xs-30 p-xs-0">
   <mat-drawer-container class="constraint-template-container" autosize>
     <mat-drawer
       #sidenav
@@ -17,7 +17,7 @@
         No templates available
       </div>
       <div *ngFor="let dir of topDirs">
-        <mat-expansion-panel class="no-padding no-box-shadow">
+        <mat-expansion-panel class="p-xs-0 no-box-shadow">
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-icon>home</mat-icon>
@@ -28,7 +28,7 @@
           </mat-expansion-panel-header>
 
             <div *ngFor="let subDir of dirStructure[dir]" class="submenu-color">
-              <mat-checkbox class="no-padding"
+              <mat-checkbox class="p-xs-0"
                             id="checkbox-{{dir}}-{{subDir}}"
                             (change)="loadTemplate(dir, subDir, $event)">{{subDir}}</mat-checkbox>
             </div>
@@ -59,10 +59,10 @@
                 <mat-card-title>{{template.selectedTemplateName}}</mat-card-title>
               </div>
               <div class="col-xs-12 col-md-11 col-md-offset-1 ps-md-0">
-                <div class="category-text mb-half-rem"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
+                <div class="category-text mb-xs-2"><strong>Category: </strong>{{template.selectedTemplate.kind}}</div>
                 <strong>Description: </strong>
-                <p class="my-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
-                <div id="btn" class="mt-half-rem">
+                <p class="my-xs-0">{{template.selectedTemplate.metadata.annotations.description}}</p>
+                <div id="btn" class="mt-xs-2">
                   <button mat-raised-button color="primary"
                           (click)="openK8sManifest(i)">Review or Edit Kubernetes Manifest</button>
                 </div>
@@ -76,7 +76,7 @@
   </mat-drawer-container>
 </mat-dialog-content>
 <mat-dialog-actions class="mat-row action-btn">
-  <div class="margin-right-10">
+  <div class="me-xs-10">
     <button [disabled]="currentlySelectedTemplates.length === 0"
             mat-raised-button
             color="primary"

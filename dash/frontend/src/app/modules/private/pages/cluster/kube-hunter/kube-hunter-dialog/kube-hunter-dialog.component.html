@@ -1,104 +1,87 @@
 <mat-horizontal-stepper #stepper>
   <mat-step>
     <ng-template matStepLabel>Create Job</ng-template>
+    <h3 class="text-align-xs-left">Choose whether to run kube-hunter periodically or manually</h3>
+    <mat-radio-group aria-labelledby="cronjob-options-group-label" [(ngModel)]="cronjobOpt">
+      <mat-radio-button [value]="true">
+        Run on a schedule
+      </mat-radio-button>
+      <mat-radio-button [value]="false">
+        Run one time
+      </mat-radio-button>
+    </mat-radio-group>
 
-    <div class="modal-content-left-align-no-margin">
-      <h3>Choose whether to run kube-hunter periodically or manually</h3>
-      <mat-radio-group aria-labelledby="cronjob-options-group-label"  [(ngModel)]="cronjobOpt">
-        <mat-radio-button [value]="true">
-          Run on a schedule
-        </mat-radio-button>
-        <mat-radio-button  [value]="false">
-          Run one time
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="modal-content-left-align-no-margin">
-
-      <div *ngIf="cronjobOpt === false">
-        <div class="page-title-button-group-spacing align-items-center mb-xs-3">
-          <div> Run kube-hunter using the following CLI command:</div>
-          <div class="text-align-right">
-            <app-copy-to-clipboard-button
-              successMessage="Command copied to clipboard!"
-              errorMessage="Command could not be copied."
-              [text]="run.value"
-              [responsive]="true"
-            ></app-copy-to-clipboard-button>
-          </div>
+    <div *ngIf="cronjobOpt === false" class="m-xs-0 text-align-xs-left">
+      <div class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row align-items-xs-center mb-xs-3">
+        <div> Run kube-hunter using the following CLI command:</div>
+        <div class="text-align-xs-right">
+          <app-copy-to-clipboard-button
+            successMessage="Command copied to clipboard!"
+            errorMessage="Command could not be copied."
+            [text]="run.value"
+            [responsive]="true"
+          ></app-copy-to-clipboard-button>
         </div>
-
-        <div >
-          <textarea #run class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+      </div>
+      <div>
+          <textarea #run class="code-snippet width-xs-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
 helm repo update && \
 helm upgrade --install kube-hunter m9sweeper/kube-hunter \
   -n m9sweeper-system --create-namespace \
   --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
   --set cronjob.enabled=false</textarea>
-        </div>
       </div>
+    </div>
 
-      <div *ngIf="cronjobOpt === true">
-        <div >
-          <h3>Choose whether to run kube-hunter daily, weekly, or monthly</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>Choose</mat-label>
-            <mat-select [(ngModel)]="cronjobTime">
-              <mat-option [value]="'daily'">Daily</mat-option>
-              <mat-option [value]="'weekly'">Weekly</mat-option>
-              <mat-option [value]="'monthly'">Monthly</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'daily'">Choosing daily means kube-hunter will run at 12 am every day</span>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'weekly'">Choosing weekly means kube-hunter will run at 12 am every Sunday</span>
-          <span class="padding-top-bot-16" *ngIf="cronjobTime === 'monthly'">Choosing monthly means kube-hunter will run at 12 am every first day of the month</span>
-        </div>
-        <br>
-        <div *ngIf="cronjobTime">
-          <div class="page-title-button-group-spacing align-items-center mb-xs-3">
-            <div> Run kube-hunter using the following CLI command.</div>
-            <div class="text-align-right"><app-copy-to-clipboard-button
-              successMessage="Command copied to clipboard!"
-              errorMessage="Command could not be copied."
-              [responsive]="true"
-              [text]="run.value"
-            ></app-copy-to-clipboard-button>
-            </div>
-          </div>
-        </div>
-
-        <div >
-          <textarea #run class="code-snippet w-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
+    <div *ngIf="cronjobOpt === true">
+      <h3>Choose whether to run kube-hunter daily, weekly, or monthly</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose</mat-label>
+        <mat-select [(ngModel)]="cronjobTime">
+          <mat-option [value]="'daily'">Daily</mat-option>
+          <mat-option [value]="'weekly'">Weekly</mat-option>
+          <mat-option [value]="'monthly'">Monthly</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="py-xs-3"
+            *ngIf="cronjobTime === 'daily'">Choosing daily means kube-hunter will run at 12 am every day</span>
+      <span class="py-xs-3" *ngIf="cronjobTime === 'weekly'">Choosing weekly means kube-hunter will run at 12 am every Sunday</span>
+      <span class="py-xs-3" *ngIf="cronjobTime === 'monthly'">Choosing monthly means kube-hunter will run at 12 am every first day of the month</span>
+      <br>
+      <br>
+      <div *ngIf="cronjobTime"
+           class="display-xs-flex justify-content-xs-space-between flex-direction-xs-row align-items-xs-center mb-xs-3">
+        <div> Run kube-hunter using the following CLI command.</div>
+        <app-copy-to-clipboard-button
+          successMessage="Command copied to clipboard!"
+          errorMessage="Command could not be copied."
+          [responsive]="true"
+          [text]="run.value" class="text-align-xs-right"
+        ></app-copy-to-clipboard-button>
+      </div>
+      <textarea #run class="code-snippet width-xs-100" readonly matInput [cdkTextareaAutosize]="true">helm repo add m9sweeper https://m9sweeper.github.io/m9sweeper && \
 helm repo update && \
 helm upgrade --install kube-hunter m9sweeper/kube-hunter \
   -n m9sweeper-system --create-namespace \
   --set-string dispatchUrl='{{backendUrl}}/api/kubehunter/hunter/{{clusterId}}/?key={{apiKey}}' \
   --set-string cronjob.schedule="{{cronjobScheduleOpts[cronjobTime]}}" \
   --set cronjob.enabled=true</textarea>
-        </div>
-
-      </div>
     </div>
-
-    <div class="next-button">
+    <div class="display-xs-flex justify-content-xs-flex-end start-xs">
       <button mat-raised-button color="primary" matStepperNext>Next</button>
     </div>
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Getting Results</ng-template>
-    <div class="modal-content-left-align-no-margin">
-    <h3> After running the CLI command, kube-hunter will start its testing. If you have a smaller cluster, kube-hunter will
-      take a shorter length of time to complete, but if you have a larger cluster, the report will not be ready for quite
+    <h3 class="text-align-xs-left"> After running the CLI command, kube-hunter will start its testing. If you have a
+      smaller cluster, kube-hunter will
+      take a shorter length of time to complete, but if you have a larger cluster, the report will not be ready for
+      quite
       some time. Feel free to check back whenever you remember.</h3>
-    <div class="row" *ngIf="report">
-      <div class="col-xs-12 text-center">
-        <button mat-raised-button color="primary" (click)="viewReport(report.id)">View Report</button>
-      </div>
-    </div>
-    </div>
+    <button mat-raised-button color="primary" *ngIf="report" (click)="viewReport(report.id)"
+            class="text-align-xs-center">View Report
+    </button>
   </mat-step>
 
 </mat-horizontal-stepper>
-

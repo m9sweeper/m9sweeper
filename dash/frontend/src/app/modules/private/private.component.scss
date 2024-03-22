@@ -58,8 +58,11 @@ mat-toolbar.fixed {
   }
 }
 .main-content{
-  margin-top: 50px;
+  // margin-top: 50px;
   overflow-x: hidden;
+  flex: 1;
+  height: auto;
+  margin-top: 0 !important
   //height: 100%;
 }
 

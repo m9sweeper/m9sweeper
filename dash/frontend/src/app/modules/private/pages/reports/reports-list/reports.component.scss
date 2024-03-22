@@ -10,16 +10,11 @@
 .mat-mdc-card:hover {
   background-color: #F2F2F2;
 }
-
-.card-div {
-  margin: 1em 0 1em 0;
-
-  .report-card {
-    color: black;
-    text-decoration: none;
-    mat-card {
-      height: 100%;
-    }
+.report-card {
+  color: black;
+  text-decoration: none;
+  mat-card {
+    height: 100%;
   }
 }
 

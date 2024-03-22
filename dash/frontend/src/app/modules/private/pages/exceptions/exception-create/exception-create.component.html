@@ -1,150 +1,147 @@
-<div class="row display-xs-block h-xs-100 overflow-xs-auto me-xs-1">
-  <div class="col-xs ms-xs-6 my-xs-6">
-    <div class="page-card">
-      <div >
-        <mat-card appearance="outlined">
-          <mat-card-content>
-            <div class="page-title-button-group-spacing">
-              <span class="page-title">{{subMenuTitle}}</span>
-            </div>
-            <form  [formGroup]="exceptionForm">
-              <p>
-                <mat-form-field appearance="fill">
-                <mat-label>Title</mat-label>
-                <input matInput placeholder="Exception Title" type="text" formControlName="title" required>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Type</mat-label>
-                  <mat-select formControlName="type" required>
-                    <mat-option value="policy">Policy</mat-option>
-                    <mat-option value="gatekeeper">GateKeeper</mat-option>
-                    <mat-option value="override">Override</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p *ngIf="exceptionForm.value.type == 'override'">
-                <mat-form-field appearance="fill">
-                  <mat-label>Alternate Severity</mat-label>
-                  <mat-select formControlName="altSeverity">
-                   <mat-option *ngFor="let severityLevel of severityLevels" [value]="severityLevel"> {{severityLevel}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label #issueIdentifierLabel>Issue</mat-label>
-                  <input
-                    matInput
-                    placeholder="Issue"
-                    type="text"
-                    formControlName="issueIdentifier"
-                    [matAutocomplete]="autocomplete"
-                  >
-                  <mat-autocomplete #autocomplete="matAutocomplete">
-                    <mat-option *ngFor="let constraint of filteredGatekeeperConstraints | async" [value]="constraint.metadata.name">
-                        {{constraint.metadata.name}}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-error *ngIf="issueIdentifier.errors?.gatekeeperAndClusterSelected"> Please select a cluster to select a gatekeeper constraint. </mat-error>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Reason</mat-label>
-                  <textarea matInput placeholder="Reason" type="text" formControlName="reason"></textarea>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Start Date</mat-label>
-                  <input matInput placeholder="Start Date" [matDatepicker]="startDatePicker" formControlName="startDate" [readonly]="editMode"  required>
-                  <mat-datepicker-toggle matPrefix [for]="startDatePicker" [disabled]="editMode"></mat-datepicker-toggle>
-                  <mat-datepicker #startDatePicker></mat-datepicker>
-                  <mat-error *ngIf="startDate.errors?.inputDateIsToday">Start date must be current date or a future date.</mat-error>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>End Date</mat-label>
-                  <input matInput placeholder="End Date" [matDatepicker]="endDatePicker" formControlName="endDate">
-                  <mat-datepicker-toggle matPrefix [for]="endDatePicker"></mat-datepicker-toggle>
-                  <mat-datepicker #endDatePicker></mat-datepicker>
-                  <mat-error *ngIf="exceptionForm.errors?.checkEndDateIsGreaterThanStartDate">End date must be greater than Start Date.</mat-error>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Exception Status</mat-label>
-                  <mat-select formControlName="status" required>
-                    <mat-option  value="review">In Review</mat-option>
-                    <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="active">Active</mat-option>
-                    <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="inactive">Inactive</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p *ngIf="scannersLoaded && exceptionForm.value.type !== 'gatekeeper'">
-                <mat-form-field appearance="fill">
-                  <mat-label>Scanner</mat-label>
-                  <mat-select formControlName="scannerId" [value]="origException?.scanner?.id.toString()">
-                    <mat-option value="">Any Scanner</mat-option>
-                    <mat-option *ngFor="let scanner of scanners" value="{{scanner.id}}" matTooltip="{{scanner.description}}">{{scanner.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p *ngIf="policiesLoaded && exceptionForm.value.type !== 'gatekeeper'">
-                <mat-form-field appearance="fill">
-                  <mat-label>Policies (Select none if exception applies to all)</mat-label>
-                  <mat-select formControlName="policies" multiple>
-                    <mat-option *ngFor="let policy of policies" value="{{policy.id}}">{{policy.name}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p *ngIf="clustersLoaded">
-                <mat-form-field appearance="fill">
-                  <mat-label>Clusters (Select none if exception applies to all)</mat-label>
-                  <mat-select formControlName="clusters"
-                              (selectionChange)="onClusterChange($event)"
-                              multiple>
-                    <mat-option
-                      *ngFor="let cluster of clusters"
-                      value="{{cluster.id}}"
-                    >
-                      {{cluster.name}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p *ngIf="namespacesLoaded && exceptionForm.value.type !== 'override'">
-                <mat-form-field appearance="fill">
-                  <mat-label>Namespaces (Select none if exception applies to all)</mat-label>
-                  <mat-select formControlName="namespaces" multiple>
-                    <mat-select-trigger>
-                      {{formatNamespaceDisplay()}}
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let namespace of namespacesToBeDisplayed" value="{{ namespace.name + ':' + namespace.clusterId}}">{{namespace.name}}<i style="font-size: x-small"> (cluster: {{namespace.clusterName}})</i></mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </p>
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Image Pattern</mat-label>
-                  <input matInput type="text" formControlName="imageMatch">
-                  <mat-hint>JavaScript regular expression body</mat-hint>
-                </mat-form-field>
-              </p>
-            </form>
-            <div mat-dialog-actions>
-              <button  [class.spinner]="loading" [disabled]="!exceptionForm.valid || loading" mat-raised-button color="primary" type="submit"
-                      (click)="onSubmit()"> {{submitButtonText}}
-              </button>
-              &nbsp;
-              <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-</div>
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="font-size-xs-26 line-height-xs-2">{{ subMenuTitle }}</div>
+        <form [formGroup]="exceptionForm">
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Title</mat-label>
+            <input matInput placeholder="Exception Title" type="text" formControlName="title" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option value="policy">Policy</mat-option>
+              <mat-option value="gatekeeper">GateKeeper</mat-option>
+              <mat-option value="override">Override</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="exceptionForm.value.type == 'override'" class="mt-xs-3">
+            <mat-label>Alternate Severity</mat-label>
+            <mat-select formControlName="altSeverity">
+              <mat-option *ngFor="let severityLevel of severityLevels" [value]="severityLevel"> {{ severityLevel }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label #issueIdentifierLabel>Issue</mat-label>
+            <input
+              matInput
+              placeholder="Issue"
+              type="text"
+              formControlName="issueIdentifier"
+              [matAutocomplete]="autocomplete"
+            >
+            <mat-autocomplete #autocomplete="matAutocomplete">
+              <mat-option *ngFor="let constraint of filteredGatekeeperConstraints | async"
+                          [value]="constraint.metadata.name">
+                {{ constraint.metadata.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="issueIdentifier.errors?.gatekeeperAndClusterSelected"> Please select a cluster to select a
+              gatekeeper constraint.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Reason</mat-label>
+            <textarea matInput placeholder="Reason" type="text" formControlName="reason"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Start Date</mat-label>
+            <input matInput placeholder="Start Date" [matDatepicker]="startDatePicker" formControlName="startDate"
+                   [readonly]="editMode" required>
+            <mat-datepicker-toggle matPrefix [for]="startDatePicker" [disabled]="editMode"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error *ngIf="startDate.errors?.inputDateIsToday">Start date must be current date or a future date.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>End Date</mat-label>
+            <input matInput placeholder="End Date" [matDatepicker]="endDatePicker" formControlName="endDate">
+            <mat-datepicker-toggle matPrefix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-error *ngIf="exceptionForm.errors?.checkEndDateIsGreaterThanStartDate">End date must be greater than
+              Start Date.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Exception Status</mat-label>
+            <mat-select formControlName="status" required>
+              <mat-option value="review">In Review</mat-option>
+              <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="active">Active</mat-option>
+              <mat-option [allowedRoles]="['ADMIN', 'SUPER_ADMIN']" value="inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="scannersLoaded && exceptionForm.value.type !== 'gatekeeper'"
+                          class="mt-xs-3">
+            <mat-label>Scanner</mat-label>
+            <mat-select formControlName="scannerId" [value]="origException?.scanner?.id.toString()">
+              <mat-option value="">Any Scanner</mat-option>
+              <mat-option *ngFor="let scanner of scanners" value="{{scanner.id}}"
+                          matTooltip="{{scanner.description}}">{{ scanner.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="policiesLoaded && exceptionForm.value.type !== 'gatekeeper'"
+                          class="mt-xs-3">
+            <mat-label>Policies (Select none if exception applies to all)</mat-label>
+            <mat-select formControlName="policies" multiple>
+              <mat-option *ngFor="let policy of policies" value="{{policy.id}}">{{ policy.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="clustersLoaded" class="mt-xs-3">
+            <mat-label>Clusters (Select none if exception applies to all)</mat-label>
+            <mat-select formControlName="clusters"
+                        (selectionChange)="onClusterChange($event)"
+                        multiple>
+              <mat-option
+                *ngFor="let cluster of clusters"
+                value="{{cluster.id}}"
+              >
+                {{ cluster.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" *ngIf="namespacesLoaded && exceptionForm.value.type !== 'override'"
+                          class="mt-xs-3">
+            <mat-label>Namespaces (Select none if exception applies to all)</mat-label>
+            <mat-select formControlName="namespaces" multiple>
+              <mat-select-trigger>
+                {{ formatNamespaceDisplay() }}
+              </mat-select-trigger>
+              <mat-option *ngFor="let namespace of namespacesToBeDisplayed"
+                          value="{{ namespace.name + ':' + namespace.clusterId}}">{{ namespace.name }}<i
+                style="font-size: x-small"> (cluster: {{ namespace.clusterName }})</i></mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="mt-xs-3">
+            <mat-label>Image Pattern</mat-label>
+            <input matInput type="text" formControlName="imageMatch">
+            <mat-hint>JavaScript regular expression body</mat-hint>
+          </mat-form-field>
+
+        </form>
+        <div class="mt-xs-3" mat-dialog-actions>
+          <button [class.spinner]="loading" [disabled]="!exceptionForm.valid || loading" mat-raised-button
+                  color="primary" type="submit"
+                  (click)="onSubmit()"> {{ submitButtonText }}
+          </button>
+          &nbsp;
+          <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

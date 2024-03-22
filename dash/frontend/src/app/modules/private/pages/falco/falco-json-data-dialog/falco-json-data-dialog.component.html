@@ -5,26 +5,24 @@
   <div class="col-xs-12 col-sm-3 start-xs end-sm" id="falco-dialog-buttons">
     <a mat-raised-button mat-dialog-close color="primary"
        [routerLink]="['/private', 'clusters', this.data.clusterId, 'falco', 'more', this.data.id, 'signature', this.data.anomalySignature]"
-     >More</a>
+    >More</a>
     <button mat-raised-button mat-dialog-close color="accent">Close</button>
   </div>
 </div>
 <mat-dialog-content>
-  <div class="scrollable-table-card">
-    <div class="table-wrapper" id="event-details-wrapper">
-      <mat-table [dataSource]="eventDetails" id="event-details-table">
-        <ng-container matColumnDef="title">
-          <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-          <mat-cell *matCellDef="let detail"><b>{{detail.title}}</b></mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="value">
-          <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
-          <mat-cell *matCellDef="let detail"  [matTooltip]="detail.value">{{detail.value}}</mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="['title', 'value']" ></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['title', 'value']"></mat-row>
-      </mat-table>
-    </div>
+  <div class="table-wrapper" id="event-details-wrapper">
+    <mat-table [dataSource]="eventDetails" class="display-xs-table" id="event-details-table">
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell *matCellDef="let detail"><b>{{ detail.title }}</b></mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+        <mat-cell *matCellDef="let detail" [matTooltip]="detail.value">{{ detail.value }}</mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="['title', 'value']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['title', 'value']"></mat-row>
+    </mat-table>
   </div>
 
   <div id="full-message-div">
@@ -33,19 +31,18 @@
         <mat-expansion-panel-header>
           <mat-panel-title><b>Full Message</b></mat-panel-title>
         </mat-expansion-panel-header>
-        <div>{{data.message}}</div>
+        <div>{{ data.message }}</div>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
 
   <h3 id="related-events-title">Related Events</h3>
 
-  <div class="scrollable-table-card">
-    <app-falco-related-events-table
-      [clusterId]="data.clusterId"
-      [currentEventLogId]="data.id"
-      [filters]="{ signature: data.anomalySignature }"
-      (recentEventClicked)="displayEventDetails($event)"
-    ></app-falco-related-events-table>
-  </div>
+  <app-falco-related-events-table
+    [clusterId]="data.clusterId"
+    [currentEventLogId]="data.id"
+    [filters]="{ signature: data.anomalySignature }"
+    (recentEventClicked)="displayEventDetails($event)"
+  ></app-falco-related-events-table>
+
 </mat-dialog-content>

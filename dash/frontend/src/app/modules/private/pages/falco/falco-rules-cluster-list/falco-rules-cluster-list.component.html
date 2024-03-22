@@ -1,7 +1,7 @@
 <mat-card class="card">
   <mat-card-header class="title-with-button">
     <mat-card-title class="title-with-button">
-        <div class="page-card-title">Rules</div>
+        <div class="font-xs-500">Rules</div>
         <button mat-raised-button color="primary"
         [routerLink]="['/private','falco']">
           Manage Falco Rules
@@ -10,10 +10,10 @@
   </mat-card-header>
   <mat-card-content class="falco-rule-card-content">
     <div class="row">
-      <div class="col w-100" *ngFor="let rule of rules; index as idx">
+      <div class="col width-xs-100" *ngFor="let rule of rules; index as idx">
       <div class="rule-container">
         <strong>{{rule.action | titlecase}}</strong> when the following are true:
-        <div class="pl-10">
+        <div class="ps-xs-10">
           <ng-container *ngIf="!rule.allNamespaces">
             <p>
               Event is from <strong>certain namespaces,</strong> including: {{ rule.namespaces | arrayText : { elements: 3, key: 'namespace'} }}

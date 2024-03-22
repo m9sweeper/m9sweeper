@@ -1,5 +1,5 @@
-<div class="row h-xs-100 display-xs-block me-xs-1 overflow-xs-auto">
-  <div class="col-xs ms-xs-6 my-xs-6">
+<div class="row h-xs-100 display-xs-block overflow-xs-auto me-xs-1">
+  <div class="col-xs my-xs-7 ms-xs-7">
     <app-sub-navigation *ngIf="isAdmin" [allowedRoles]="['ADMIN', 'SUPER_ADMIN']"
                         [title]="subNavigationTitle"
                         [buttonTitle]="subNavigationButtonTitle"
@@ -8,25 +8,26 @@
     ></app-sub-navigation>
     <app-sub-navigation *ngIf="!isAdmin" [allowedRoles]="['READ_ONLY']"
                         [title]="subNavigationTitle"></app-sub-navigation>
-    <mat-card class="settings-card">
-      <div class="table-wrapper">
-        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="w-100"
-               matSortDirection="desc">
+    <mat-card>
+      <div class="display-xs-flex overflow-x-xs-auto">
+        <mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDisableClear class="display-xs-table"
+                   matSortDirection="desc">
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Name</mat-header-cell>
-            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.name"> {{policy?.name}} </mat-cell>
+            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.name"> {{ policy?.name }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="description">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Description</mat-header-cell>
-            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.description">{{policy?.description}}</mat-cell>
+            <mat-cell *matCellDef="let policy" [matTooltip]="policy?.description">{{ policy?.description }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="new_scan_grace_period">
-            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Temp Exceptions Grace Period</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{policy?.newScanGracePeriod || 'None'}}</mat-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Temp Exceptions Grace Period
+            </mat-header-cell>
+            <mat-cell *matCellDef="let policy">{{ policy?.newScanGracePeriod || 'None' }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="rescan_grace_period">
             <mat-header-cell *matHeaderCellDef mat-sort-header disableClear>Automatic Rescan Period</mat-header-cell>
-            <mat-cell *matCellDef="let policy">{{policy?.rescanGracePeriod || 'None'}}</mat-cell>
+            <mat-cell *matCellDef="let policy">{{ policy?.rescanGracePeriod || 'None' }}</mat-cell>
           </ng-container>
           <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef [allowedRoles]="['ADMIN', 'SUPER_ADMIN']">Actions</mat-header-cell>
@@ -54,6 +55,7 @@
                      [pageSize]="limit"
                      (page)="pageEvent($event)"
                      showFirstLastButtons></mat-paginator>
+
     </mat-card>
   </div>
 </div>

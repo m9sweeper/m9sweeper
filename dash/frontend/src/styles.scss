@@ -55,13 +55,6 @@ mat-mdc-card {
   }
 }
 
-.graph-card {
-  padding-bottom: 20px;
-  mat-card {
-    overflow: auto;
-  }
-}
-
 $danger-palette: mat.define-palette(mat.$deep-orange-palette, 800, 300, 900);
 .error-text {
   color: map-get($danger-palette, "default") !important;
@@ -167,112 +160,7 @@ button {
 }
 
 // organization menu text
-.organization-settings-text {
-  font-size: 16px !important;
-  vertical-align: center;
-  text-align: center;
-  margin: 8px;
 
-}
-
-@media print {
-  html, body {
-    height: auto;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust:exact !important
-  }
-}
-
-.no-padding {
-  padding: 0!important;
-}
-
-.margin-top-10{
-  margin-top: 10px;
-}
-
-.padding-top-10{
-  padding-top: 10px;
-}
-.padding-top-15 {
-  padding-top:15px;
-  padding-left: 0;
-}
-.padding-left-3 {
-  padding-left: 3%;
-}
-
-.negative-margin-bottom-20{
-  margin-bottom: -20px;
-}
-
-.margin-right-10{
-  margin-right: 10px;
-}
-
-.text-align-center {
-  text-align: center;
-}
-
-.text-align-right{
-  text-align: right;
-}
-
-.margin-bottom-20{
-  margin-bottom: 20px;
-}
-
-.margin-bottom-2{
-  margin-bottom: 2px;
-}
-
-.negative-margin-bottom-8 {
-  margin-bottom: -8px;
-}
-
-.font-size-20{
-  font-size: 20px;
-}
-
-.margin-left-7{
-  margin-left: 7px;
-}
-
-.justify-content-center{
-  justify-content: center;
-}
-
-.justify-content-right {
-  justify-content: right!important;
-}
-
-.margin-bottom-6{
-  margin-bottom: 6px;
-}
-
-.image-id-tooltip {
-  word-break: break-all !important;
-  white-space: normal !important;
-}
-
-.table-format table {
-  width: 100%;
-  border: 1px #AAA solid ;
-  border-collapse: collapse
-}
-
-.table-format td, .table-format th {
-  border: 1px #AAA solid ;
-  margin: 0;
-  padding: 2px;
-  border-collapse: collapse;
-  vertical-align: baseline;
-}
-.mat-icon{
-  //vertical-align: bottom;
-  //padding-left: 10px;
-  // margin:10px;
-}
 .mat-mdc-icon-button{
   margin: 5px;
 }
@@ -286,12 +174,6 @@ app-private {
   height: 100%
 }
 
-.main-content {
-  flex: 1;
-  height: auto;
-  margin-top: 0 !important
-}
-
 // Org setting pages uses app-sub-navigation for titles and buttons
 // The following are for lining up other page elements
 //.mat-mdc-card-header{
@@ -299,34 +181,14 @@ app-private {
 //  padding: 0;
 //  margin-left: 0;
 //}
-.page-container {
-  height: 100%;
-  display: block;
-  flex: 1;
-  width: 100%;
-  overflow: auto;
-  background-color: mat.get-color-from-palette(mat.$gray-palette, 300); // for containers without theme applied
-}
-.page-container-content{
-  margin: 20px;
-  // width:fit-content;
+
+th, mat-header-cell {
+  font-weight: 550 !important;
 }
 
-.settings-card, .scrollable-table-card, .component-with-scrollable-table {
-  div.table-wrapper {
-    overflow-x: auto;
-    display: flex;
-  }
-  th, mat-header-cell {
-    font-weight: 550 !important;
-  }
-  mat-table {
-    display: table;
-  }
-  mat-cell {
-    touch-action: auto !important;
-    -webkit-user-drag: auto !important;
-  }
+mat-cell {
+  touch-action: auto !important;
+  -webkit-user-drag: auto !important;
 }
 
 .table-with-link-rows {
@@ -349,38 +211,6 @@ app-private {
   }
 }
 
-.page-card {
-  margin: 0;
-  overflow-x: auto;
-}
-.page-card-header{
-  display:flex;
-  padding:0;
-  margin-left: 0;
-  width: 100%;
-}
-.page-card-title{
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 1.5em;
-}
-.page-card-content{
-  margin-bottom: 30px;
-}
-.page-card-line-content {
-  display: flex;
-}
-.page-card-title-button-group-right-align{
-  text-align: right;
-  padding: 0;
-}
-.page-card-left-align {
-  margin-left: 0;
-}
-.page-table-container-with-paginator{
-  width: fit-content; // align paginator with table width
-  overflow: auto;
-}
 .mat-mdc-paginator{
   .mat-mdc-paginator-outer-container {
     .mat-mdc-paginator-container {
@@ -391,41 +221,14 @@ app-private {
 
 
 // cluster details pages - page, card, title, button
-.page-title-div{
-  display: flex;
-  flex-direction: column;
-}
 
-.page-title{
+.page-title {
   font-size: 26px;
   vertical-align: bottom;
   line-height: 2;
 }
-.page-title-button-group-spacing {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-}
-.page-button-spacing{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
+
 // dialog line up
-.modal-container-margin{
-  padding: 30px;
-}
-.modal-content-left-align-no-margin{
-  margin: 0;
-  text-align: left;
-}
-.modal-content-right-align-no-margin{
-  margin: 0;
-  text-align: right;
-}
-.modal-content-no-right-margin{
-  margin-right: 0;
-}
 
 .table-row {
   &:hover {
@@ -441,18 +244,6 @@ app-private {
   cursor: pointer;
 }
 
-.text-style-red {
-  color: red;
-}
-.text-style-orange {
-  color: orange;
-}
-.text-style-green {
-  color: green;
-}
-.full-width {
-  width: 100%;
-}
 .code-snippet {
   width: -webkit-fill-available;
   max-height: 400px;
@@ -474,40 +265,7 @@ mat-form-field {
   width: 100%;
 }
 
-.padding-top-bot-16 {
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
-.next-button {
-  display: flex;
-  justify-content: flex-end;
-}
-
-
 // Styles for the pages contains table
-
-.page-table {
-  // flex: 1;
-  overflow: auto;
-  background: #F9F9F9;
-
-  mat-table {
-    min-width: 800px;
-
-    mat-row {
-      height: unset !important;  // overrides the height imposition set by the generic data table template
-    }
-
-    mat-cell, mat-header-cell, mat-footer-cell {
-      overflow: visible;
-      word-break: break-word;
-      overflow-wrap: break-word;
-      padding-left: 10px;
-      padding-right: 10px;
-      margin-right: unset;
-    }
-  }
-}
 
 .subnav-title {
   font-size: 26px;
@@ -525,64 +283,15 @@ mat-form-field {
   }
 }
 
-.main-container {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-}
-
 // CSS for Report pages [Start]
-
-.title-font {
-  font: 500 20px/32px Roboto,Helvetica Neue,sans-serif;
-}
-
-.title-margin {
-  margin-left: 31px;
-}
-
-.vulnerability-filter-card {
-  margin-bottom: 15px;
-  margin-top: 10px;
-}
-
-.vulnerability-filter-content {
-  display: flex;
-  width: 100%;
-  padding-left: 15px;
-}
 
 .vulnerability-filter-button {
   justify-content: left;
   padding-left: 15px;
 }
 
-.vulnerability-download-button {
-  display: flex;
-  justify-content: right;
-  padding-right: 15px;
-  align-content: center;
-  align-items: center;
-}
-
-.vulnerability-count {
-  display: flex;
-  justify-content: left;
-  align-content: center;
-  padding-left: 0;
-}
-
-.vulnerability-card {
-  min-width: 300px;
-  padding-bottom: 20px;
-}
-
 .mat-mdc-form-field {
   margin-right: 10px;
-}
-
-.fix-margin {
-  margin-left: 18px;
 }
 
 // CSS for Report pages [END]
@@ -609,9 +318,6 @@ div.create-cluster-group { // left nav 1)
   }
 }
 
-span.plus-button{
-
-}
 span.add-cluster-group{
   height: 35px;
 }
@@ -626,10 +332,6 @@ div.cluster-item { // left nav 2)
       background-color: #e3dede;
     }
   }
-}
-span.cluster-group-name-full {
-  padding-left: 10px;
-  vertical-align: text-bottom;
 }
 
 div.cluster-group-name {
@@ -703,53 +405,6 @@ div.cluster-dashboard.responsive {
 
 // CSS for left nav [end]
 
-.padding-bottom-5px {
-  padding-bottom: 5px;
-}
-
-.display-flex {
-  display: flex !important;
-}
-
-.flex-column {
-  flex-direction: column;
-}
-
-.light-border {
-  border: rgba(0, 0, 0, 0.12) solid 1px;
-}
-
-.padding-10 {
-  padding: 10px!important;
-}
-
-.padding-top-4 {
-  padding-top: 4px;
-}
-
-.padding-left-10 {
-  padding-left: 10px;
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.h-100 {
-  height: 100%;
-}
-
-.align-items-center {
-  align-items: center!important;
-}
-.align-self-center {
-  align-self: center !important;
-}
-
-.align-items-stretch {
-  align-items: stretch;
-}
-
 /** Hides the increment/decrement arrows on number inputs */
 input[type=number].no-spin-button {
   -moz-appearance:textfield; /* Firefox */
@@ -766,51 +421,10 @@ app-datepicker-component {
   margin-left: 20px;
 }
 
-.mt-half-rem {
-  margin-top: 0.5rem;
-}
-
-.mb-half-rem {
-  margin-bottom: 0.5rem;
-}
-
-.mb-1-rem {
-  margin-bottom: 1rem;
-}
-
-.my-0 {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.min-width-8 {
-  min-width: 8rem;
-}
-
-.min-width-4 {
-  min-width: 4rem;
-}
-
-.min-width-3 {
-  min-width: 3rem;
-}
-
-.height-30 {
-  height: 30rem;
-}
-
 .ngx-charts .bar,
 .ngx-charts .bar,
 .ngx-charts .circle {
   cursor: default !important; // disable ngx-chart's default behavior of changing the cursor to a pointer on hover
-}
-
-.overflow-visible {
-  overflow: visible!important;
-}
-
-.overflow-hidden {
-  overflow: hidden!important;
 }
 
 @media print {
@@ -828,7 +442,12 @@ app-datepicker-component {
   mat-card.mat-mdc-card {
     box-shadow: unset !important;
   }
-  .page-title {
+  .page-title, .title-print-view {
     margin-left: 14px;
+  }
+  html, body {
+    height: auto;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust:exact !important
   }
 }

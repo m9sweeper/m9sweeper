@@ -1,8 +1,33 @@
 .mat-mdc-card {
   max-width: 2000px;
 }
+
+.vulnerability-filter-card {
+  margin-bottom: 15px;
+  margin-top: 10px;
+  mat-row {
+
+  }
+}
 .vulnerability-filter-card mat-row {
   height: unset;
+}
+.vulnerability-filter-content {
+  display: flex;
+  width: 100%;
+  padding-left: 15px;
+}
+
+.min-width-4 {
+  min-width: 4rem;
+}
+
+.min-width-3 {
+  min-width: 3rem;
+}
+
+.min-width-8 {
+  min-width: 8rem;
 }
 
 #vulnerabilitiesTable {

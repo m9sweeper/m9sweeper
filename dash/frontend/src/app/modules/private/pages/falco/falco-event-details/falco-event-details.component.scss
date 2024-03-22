@@ -47,3 +47,17 @@
     text-align: left;
   }
 }
+
+.table-format table {
+  width: 100%;
+  border: 1px #AAA solid ;
+  border-collapse: collapse
+}
+
+.table-format td, .table-format th {
+  border: 1px #AAA solid ;
+  margin: 0;
+  padding: 2px;
+  border-collapse: collapse;
+  vertical-align: baseline;
+}

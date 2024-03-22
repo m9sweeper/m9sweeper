@@ -1,5 +1,5 @@
-<div class="table-wrapper" [ngClass]="stylingOptions.tableBorder ? 'include-table-border' : ''">
-  <mat-table [dataSource]="relatedEventsTableData" id="related-events-table">
+<div class="table-wrapper overflow-x-xs-auto display-xs-auto" [ngClass]="stylingOptions.tableBorder ? 'include-table-border' : ''">
+  <mat-table [dataSource]="relatedEventsTableData" id="related-events-table" class="display-xs-table">
     <ng-container matColumnDef="is-current">
       <mat-header-cell *matHeaderCellDef>Current Log?</mat-header-cell>
       <mat-cell *matCellDef="let log" class="">
